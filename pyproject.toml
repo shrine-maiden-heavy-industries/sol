@@ -16,7 +16,7 @@ ziglang = "^0.8.0"
 amaranth = {git = "https://github.com/amaranth-lang/amaranth.git", branch="main"}
 amaranth-soc = {git = "https://github.com/amaranth-lang/amaranth-soc.git", branch="main"}
 amaranth-boards = {git = "https://github.com/amaranth-lang/amaranth-boards.git", branch="main"}
-usb-protocol = {git = "https://github.com/usb-tools/python-usb-protocol"}
+usb-protocol = {git = "https://github.com/shrine-maiden-heavy-industries/python-usb-protocol", branch="main"}
 
 [tool.poetry.dev-dependencies]
 tox = "^3.22.0"
