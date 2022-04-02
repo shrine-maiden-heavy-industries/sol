@@ -9,7 +9,7 @@ license = "BSD"
 python = "^3.7"
 pyserial = "^3.5"
 pyusb = "^1.1.1"
-pyvcd = "^0.2.4"
+pyvcd = "^0.3.0"
 libusb1 = "^1.9.2"
 apollo-fpga = "^0.0.5"
 ziglang = "^0.8.0"
@@ -22,7 +22,7 @@ usb-protocol = {git = "https://github.com/shrine-maiden-heavy-industries/python-
 tox = "^3.22.0"
 minerva = {git = "https://github.com/lambdaconcept/minerva.git"}
 amaranth-stdio = {git = "https://github.com/amaranth-lang/amaranth-stdio.git", branch="main"}
-lambdasoc = {git = "https://github.com/ktemkin/lambdasoc.git"}
+lambdasoc = {git = "https://github.com/shrine-maiden-heavy-industries/lambdasoc.git"}
 prompt-toolkit = "^3.0.16"
 
 [build-system]
