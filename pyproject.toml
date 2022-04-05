@@ -22,7 +22,7 @@ usb-protocol = {git = "https://github.com/shrine-maiden-heavy-industries/python-
 tox = "^3.22.0"
 minerva = {git = "https://github.com/lambdaconcept/minerva.git"}
 amaranth-stdio = {git = "https://github.com/amaranth-lang/amaranth-stdio.git", branch="main"}
-lambdasoc = {git = "https://github.com/shrine-maiden-heavy-industries/lambdasoc.git", branch="main"}
+lambdasoc = {git = "https://github.com/shrine-maiden-heavy-industries/lambdasoc", branch="main"}
 prompt-toolkit = "^3.0.16"
 
 [build-system]
