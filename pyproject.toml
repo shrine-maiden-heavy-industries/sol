@@ -11,7 +11,7 @@ pyserial = "^3.5"
 pyusb = "^1.1.1"
 pyvcd = "^0.3.0"
 libusb1 = "^1.9.2"
-apollo-fpga = "^0.0.5"
+apollo-fpga = {git = "https://github.com/shrine-maiden-heavy-industries/apollo", branch="main"}
 ziglang = "^0.8.0"
 amaranth = {git = "https://github.com/amaranth-lang/amaranth.git", branch="main"}
 amaranth-soc = {git = "https://github.com/amaranth-lang/amaranth-soc.git", branch="main"}
@@ -22,7 +22,7 @@ usb-protocol = {git = "https://github.com/shrine-maiden-heavy-industries/python-
 tox = "^3.22.0"
 minerva = {git = "https://github.com/lambdaconcept/minerva.git"}
 amaranth-stdio = {git = "https://github.com/amaranth-lang/amaranth-stdio.git", branch="main"}
-lambdasoc = {git = "https://github.com/shrine-maiden-heavy-industries/lambdasoc.git"}
+lambdasoc = {git = "https://github.com/shrine-maiden-heavy-industries/lambdasoc.git", branch="main"}
 prompt-toolkit = "^3.0.16"
 
 [build-system]
