@@ -44,11 +44,11 @@ setup(
 			'tox~=3.22.0'
 		],
 		'soc': [
-			'labmdasoc @ git+https://github.com/shrine-maiden-heavy-industries/lambdasoc.git@main',
+			'lambdasoc @ git+https://github.com/shrine-maiden-heavy-industries/lambdasoc.git@main',
 			'minerva @ git+https://github.com/lambdaconcept/minerva.git'
 		],
 		'platform': [
-			'pyusb~=1.1.1',
+			'pyusb~=1.2.0',
 			'libusb1~=1.9.2',
 			'apollo-fpga @ git+https://github.com/shrine-maiden-heavy-industries/apollo@main',
 			'prompt-toolkit~=3.0.16',
