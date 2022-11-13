@@ -15,44 +15,53 @@ def vcs_ver():
 	}
 
 setup(
-	name            = 'luna',
+	name            = 'sol',
 	use_scm_version = vcs_ver(),
 	author          = 'Katherine Temkin',
 	author_email    = 'k@ktemkin.com',
+	maintainer      = [
+		'Aki Van Ness',
+		'Rachel Mant',
+	],
+	maintainer_email= [
+		'aki@lethalbit.net',
+		'git@dragonmux.network',
+	],
 	license         = 'BSD-3-Clause',
 	description     = 'Amaranth HDL framework for FPGA-based USB solutions',
-	python_requires = '~=3.8',
+	python_requires = '~=3.9',
 	packages        = find_packages(),
 	setup_requires  = [
 		'wheel',
 		'setuptools',
-		'setuptools_scm'
+		'setuptools_scm',
 	],
 
 	install_requires = [
 		'pyserial~=3.5',
 		'pyvcd>=0.2.2,<0.4',
 
-		'usb_protocol @ git+https://github.com/shrine-maiden-heavy-industries/python-usb-protocol@main',
+		'usb-construct @ git+https://github.com/shrine-maiden-heavy-industries/usb-construct@main',
 		'amaranth @ git+https://github.com/amaranth-lang/amaranth.git@main',
 		'amaranth-boards @ git+https://github.com/amaranth-lang/amaranth-boards.git@main',
 		'amaranth-soc @ git+https://github.com/amaranth-lang/amaranth-soc.git@main',
 		'amaranth-stdio @ git+https://github.com/amaranth-lang/amaranth-stdio.git@main',
 	],
+
 	extras_require = {
 		'dev': [
-			'tox~=3.22.0'
+			'tox~=3.22.0',
 		],
 		'soc': [
 			'lambdasoc @ git+https://github.com/shrine-maiden-heavy-industries/lambdasoc.git@main',
-			'minerva @ git+https://github.com/lambdaconcept/minerva.git'
+			'minerva @ git+https://github.com/lambdaconcept/minerva.git',
 		],
 		'platform': [
 			'pyusb~=1.2.0',
 			'libusb1~=1.9.2',
 			'apollo-fpga @ git+https://github.com/shrine-maiden-heavy-industries/apollo@main',
 			'prompt-toolkit~=3.0.16',
-			'ziglang ~=0.8.0'
+			'ziglang~=0.8.0',
 		]
 	}
 )
