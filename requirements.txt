@@ -5,7 +5,7 @@ pyusb
 -e git+https://github.com/amaranth-lang/amaranth-boards.git#egg=amaranth_boards
 -e git+https://github.com/lambdaconcept/minerva.git#egg=minerva
 -e git+https://github.com/shrine-maiden-heavy-industries/lambdasoc.git#egg=lambdasoc
--e git+https://github.com/shrine-maiden-heavy-industries/python-usb-protocol.git@main#egg=usb_protocol
+-e git+https://github.com/shrine-maiden-heavy-industries/usb-construct.git@main#egg=usb-construct
 -e git+https://github.com/greatscottgadgets/apollo.git#egg=apollo-fpga
 pyvcd
 pyserial~=3.4
