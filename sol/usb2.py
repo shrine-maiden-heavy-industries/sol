@@ -16,8 +16,8 @@ from .gateware.usb.usb2.endpoints.status      import USBSignalInEndpoint
 from .gateware.usb.usb2.endpoints.isochronous import USBIsochronousInEndpoint
 
 __all__ = [
-    'USBDevice',
-    'EndpointInterface', 'RequestHandlerInterface',
-    'USBStreamInEndpoint', 'USBStreamOutEndpoint', 'USBMultibyteStreamInEndpoint',
-    'USBSignalInEndpoint',
+	'USBDevice',
+	'EndpointInterface', 'RequestHandlerInterface',
+	'USBStreamInEndpoint', 'USBStreamOutEndpoint', 'USBMultibyteStreamInEndpoint',
+	'USBSignalInEndpoint',
 ]

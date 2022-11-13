@@ -10,8 +10,8 @@ author = 'Katherine J. Temkin'
 master_doc = 'index'
 
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon'
+	'sphinx.ext.autodoc',
+	'sphinx.ext.napoleon'
 ]
 
 templates_path = ['_templates']
@@ -29,10 +29,10 @@ html_css_files = ['status.css']
 
 # Skip documenting Tests.
 def autodoc_skip_member_handler(app, what, name, obj, skip, options):
-    return \
-        name.endswith("Test") or \
-        name.startswith('_')  or \
-        (name == "elaborate")
+	return \
+		name.endswith("Test") or \
+		name.startswith('_')  or \
+		(name == "elaborate")
 
 def setup(app):
-    app.connect('autodoc-skip-member', autodoc_skip_member_handler)
+	app.connect('autodoc-skip-member', autodoc_skip_member_handler)

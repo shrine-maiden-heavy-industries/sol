@@ -20,53 +20,53 @@ from apollo_fpga                           import create_ila_frontend
 # Can be modified to test at faster or slower frequencies.
 #
 CLOCK_FREQUENCIES = {
-    "fast": 240,
-    "sync": 120,
-    "usb":  60
+	"fast": 240,
+	"sync": 120,
+	"usb":  60
 }
 
 class ILAExample(Elaboratable):
-    """ Gateware module that demonstrates use of the internal ILA. """
+	""" Gateware module that demonstrates use of the internal ILA. """
 
-    def __init__(self):
-        self.counter = Signal(28)
-        self.ila  = SyncSerialILA(signals=[self.counter], sample_depth=32, domain='fast')
-
-
-    def interactive_display(self):
-        frontend = create_ila_frontend(self.ila)
-        frontend.interactive_display()
+	def __init__(self):
+		self.counter = Signal(28)
+		self.ila  = SyncSerialILA(signals=[self.counter], sample_depth=32, domain='fast')
 
 
-    def elaborate(self, platform):
-        m = Module()
-        m.submodules += self.ila
+	def interactive_display(self):
+		frontend = create_ila_frontend(self.ila)
+		frontend.interactive_display()
 
-        # Generate our clock domains.
-        clocking = LunaECP5DomainGenerator(clock_frequencies=CLOCK_FREQUENCIES)
-        m.submodules.clocking = clocking
 
-        # Clock divider / counter.
-        m.d.fast += self.counter.eq(self.counter + 1)
+	def elaborate(self, platform):
+		m = Module()
+		m.submodules += self.ila
 
-        # Set our ILA to trigger each time the counter is at a random value.
-        # This shows off our example a bit better than counting at zero.
-        m.d.comb += self.ila.trigger.eq(self.counter == 7)
+		# Generate our clock domains.
+		clocking = LunaECP5DomainGenerator(clock_frequencies=CLOCK_FREQUENCIES)
+		m.submodules.clocking = clocking
 
-        # Grab our I/O connectors.
-        leds    = [platform.request("led", i, dir="o") for i in range(0, 6)]
-        spi_bus = synchronize(m, platform.request('debug_spi'), o_domain='fast')
+		# Clock divider / counter.
+		m.d.fast += self.counter.eq(self.counter + 1)
 
-        # Attach the LEDs and User I/O to the MSBs of our counter.
-        m.d.comb += Cat(leds).eq(self.counter[-7:-1])
+		# Set our ILA to trigger each time the counter is at a random value.
+		# This shows off our example a bit better than counting at zero.
+		m.d.comb += self.ila.trigger.eq(self.counter == 7)
 
-        # Connect our ILA up to our board's aux SPI.
-        m.d.comb += self.ila.spi.connect(spi_bus)
+		# Grab our I/O connectors.
+		leds    = [platform.request("led", i, dir="o") for i in range(0, 6)]
+		spi_bus = synchronize(m, platform.request('debug_spi'), o_domain='fast')
 
-        # Return our elaborated module.
-        return m
+		# Attach the LEDs and User I/O to the MSBs of our counter.
+		m.d.comb += Cat(leds).eq(self.counter[-7:-1])
+
+		# Connect our ILA up to our board's aux SPI.
+		m.d.comb += self.ila.spi.connect(spi_bus)
+
+		# Return our elaborated module.
+		return m
 
 
 if __name__ == "__main__":
-    example = top_level_cli(ILAExample)
-    example.interactive_display()
+	example = top_level_cli(ILAExample)
+	example.interactive_display()

@@ -16,21 +16,21 @@ from sol.gateware.interface.serdes_phy.backends.ecp5 import LunaECP5SerDes
 from sol.gateware.interface.serdes_phy.phy           import SerDesPHY
 
 class PIPEPhyExample(Elaboratable):
-    """ Hardware module that demonstrates grabbing a PHY resource with gearing. """
+	""" Hardware module that demonstrates grabbing a PHY resource with gearing. """
 
-    def elaborate(self, platform):
-        m = Module()
+	def elaborate(self, platform):
+		m = Module()
 
-        # Generate our domain clocks/resets.
-        m.submodules.car = platform.clock_domain_generator()
+		# Generate our domain clocks/resets.
+		m.submodules.car = platform.clock_domain_generator()
 
-        # Create our core PIPE PHY. Since PHY configuration is per-board, we'll just ask
-        # our platform for a pre-configured USB3 PHY.
-        m.submodules.phy = phy = platform.create_usb3_phy()
+		# Create our core PIPE PHY. Since PHY configuration is per-board, we'll just ask
+		# our platform for a pre-configured USB3 PHY.
+		m.submodules.phy = phy = platform.create_usb3_phy()
 
-        # Return our elaborated module.
-        return m
+		# Return our elaborated module.
+		return m
 
 
 if __name__ == "__main__":
-    top_level_cli(PIPEPhyExample)
+	top_level_cli(PIPEPhyExample)

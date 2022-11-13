@@ -20,33 +20,33 @@ from ...request    import SetupPacket
 
 
 class DataHeaderReceiver(Elaboratable):
-    """ Gateware that handles received Data Header packets.
+	""" Gateware that handles received Data Header packets.
 
-    Attributes
-    -----------
-    header_sink: HeaderQueue(), input stream
-        Stream that brings up header packets for handling.
-    """
+	Attributes
+	-----------
+	header_sink: HeaderQueue(), input stream
+		Stream that brings up header packets for handling.
+	"""
 
-    def __init__(self):
+	def __init__(self):
 
-        #
-        # I/O port
-        #
-        self.header_sink   = HeaderQueue()
+		#
+		# I/O port
+		#
+		self.header_sink   = HeaderQueue()
 
 
-    def elaborate(self, platform):
-        m = Module()
+	def elaborate(self, platform):
+		m = Module()
 
-        # We handle Data Packets specially, passing their header data in conjunction with
-        # the packets themselves; but the header packets are still handled like other header
-        # packets, and must be explicitly consumed by the protocol layer.
-        #
-        # We'll consume all of them here, since we don't have any direct use for their data.
-        new_packet = self.header_sink.valid
-        is_for_us  = self.header_sink.get_type() == HeaderPacketType.DATA
-        with m.If(new_packet & is_for_us):
-            m.d.comb += self.header_sink.ready.eq(1)
+		# We handle Data Packets specially, passing their header data in conjunction with
+		# the packets themselves; but the header packets are still handled like other header
+		# packets, and must be explicitly consumed by the protocol layer.
+		#
+		# We'll consume all of them here, since we don't have any direct use for their data.
+		new_packet = self.header_sink.valid
+		is_for_us  = self.header_sink.get_type() == HeaderPacketType.DATA
+		with m.If(new_packet & is_for_us):
+			m.d.comb += self.header_sink.ready.eq(1)
 
-        return m
+		return m

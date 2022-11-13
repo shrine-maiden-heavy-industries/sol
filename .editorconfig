@@ -12,7 +12,7 @@ max_line_length = 120
 
 # Use python standard indentation for python files.
 [*.py]
-indent_style = space
+indent_style = tab
 
 # Use tabs for our C files, to match coding conventions of our submodues.
 [*.{c,h}]

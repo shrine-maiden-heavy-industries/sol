@@ -14,37 +14,37 @@ from sol.gateware.interface.spi import SPIDeviceInterface, SPIBus
 
 
 class DebugSPIExample(Elaboratable):
-    """ Hardware meant to demonstrate use of the Debug Controller's SPI interface. """
+	""" Hardware meant to demonstrate use of the Debug Controller's SPI interface. """
 
 
-    def __init__(self):
+	def __init__(self):
 
-        # Base ourselves around an SPI command interface.
-        self.interface = SPIDeviceInterface(clock_phase=1)
+		# Base ourselves around an SPI command interface.
+		self.interface = SPIDeviceInterface(clock_phase=1)
 
 
-    def elaborate(self, platform):
-        m = Module()
-        board_spi = platform.request("debug_spi")
+	def elaborate(self, platform):
+		m = Module()
+		board_spi = platform.request("debug_spi")
 
-        # Use our command interface.
-        m.submodules.interface = self.interface
+		# Use our command interface.
+		m.submodules.interface = self.interface
 
-        #
-        # Synchronize and connect our SPI.
-        #
-        spi = synchronize(m, board_spi)
-        m.d.comb  += self.interface.spi.connect(spi)
+		#
+		# Synchronize and connect our SPI.
+		#
+		spi = synchronize(m, board_spi)
+		m.d.comb  += self.interface.spi.connect(spi)
 
-        # Turn on a single LED, just to show something's running.
-        led = platform.request('led', 0)
-        m.d.comb += led.eq(1)
+		# Turn on a single LED, just to show something's running.
+		led = platform.request('led', 0)
+		m.d.comb += led.eq(1)
 
-        # Echo back the last received data.
-        m.d.comb += self.interface.word_out.eq(self.interface.word_in)
+		# Echo back the last received data.
+		m.d.comb += self.interface.word_out.eq(self.interface.word_in)
 
-        return m
+		return m
 
 
 if __name__ == "__main__":
-    top_level_cli(DebugSPIExample)
+	top_level_cli(DebugSPIExample)

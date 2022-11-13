@@ -16,98 +16,98 @@ from sol.usb2               import USBDevice, USBStreamOutEndpoint, USBStreamInE
 
 
 class USBStreamOutDeviceExample(Elaboratable):
-    """ Simple device that demonstrates use of a bulk-OUT endpoint.
+	""" Simple device that demonstrates use of a bulk-OUT endpoint.
 
-    Captures streaming data, and outputs it over the User I/O.
-    """
+	Captures streaming data, and outputs it over the User I/O.
+	"""
 
-    BULK_ENDPOINT_NUMBER = 1
-    MAX_BULK_PACKET_SIZE = 512
+	BULK_ENDPOINT_NUMBER = 1
+	MAX_BULK_PACKET_SIZE = 512
 
-    def create_descriptors(self):
-        """ Create the descriptors we want to use for our device. """
+	def create_descriptors(self):
+		""" Create the descriptors we want to use for our device. """
 
-        descriptors = DeviceDescriptorCollection()
+		descriptors = DeviceDescriptorCollection()
 
-        #
-        # We'll add the major components of the descriptors we we want.
-        # The collection we build here will be necessary to create a standard endpoint.
-        #
+		#
+		# We'll add the major components of the descriptors we we want.
+		# The collection we build here will be necessary to create a standard endpoint.
+		#
 
-        # We'll need a device descriptor...
-        with descriptors.DeviceDescriptor() as d:
-            d.idVendor           = 0x16d0
-            d.idProduct          = 0xf3b
+		# We'll need a device descriptor...
+		with descriptors.DeviceDescriptor() as d:
+			d.idVendor           = 0x16d0
+			d.idProduct          = 0xf3b
 
-            d.iManufacturer      = "LUNA"
-            d.iProduct           = "User IO streamer"
-            d.iSerialNumber      = "no serial"
+			d.iManufacturer      = "LUNA"
+			d.iProduct           = "User IO streamer"
+			d.iSerialNumber      = "no serial"
 
-            d.bNumConfigurations = 1
-
-
-        # ... and a description of the USB configuration we'll provide.
-        with descriptors.ConfigurationDescriptor() as c:
-
-            with c.InterfaceDescriptor() as i:
-                i.bInterfaceNumber = 0
-
-                with i.EndpointDescriptor() as e:
-                    e.bEndpointAddress = self.BULK_ENDPOINT_NUMBER
-                    e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
-
-                with i.EndpointDescriptor() as e:
-                    e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
-                    e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
+			d.bNumConfigurations = 1
 
 
-        return descriptors
+		# ... and a description of the USB configuration we'll provide.
+		with descriptors.ConfigurationDescriptor() as c:
+
+			with c.InterfaceDescriptor() as i:
+				i.bInterfaceNumber = 0
+
+				with i.EndpointDescriptor() as e:
+					e.bEndpointAddress = self.BULK_ENDPOINT_NUMBER
+					e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
+
+				with i.EndpointDescriptor() as e:
+					e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
+					e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
 
 
-    def elaborate(self, platform):
-        m = Module()
+		return descriptors
 
-        # Generate our domain clocks/resets.
-        m.submodules.car = platform.clock_domain_generator()
 
-        # Create our USB device interface...
-        ulpi = platform.request(platform.default_usb_connection)
-        m.submodules.usb = usb = USBDevice(bus=ulpi)
+	def elaborate(self, platform):
+		m = Module()
 
-        # Add our standard control endpoint to the device.
-        descriptors = self.create_descriptors()
-        usb.add_standard_control_endpoint(descriptors)
+		# Generate our domain clocks/resets.
+		m.submodules.car = platform.clock_domain_generator()
 
-        # Add a stream endpoint to our device.
-        stream_out_ep = USBStreamOutEndpoint(
-            endpoint_number=self.BULK_ENDPOINT_NUMBER,
-            max_packet_size=self.MAX_BULK_PACKET_SIZE,
-        )
-        usb.add_endpoint(stream_out_ep)
+		# Create our USB device interface...
+		ulpi = platform.request(platform.default_usb_connection)
+		m.submodules.usb = usb = USBDevice(bus=ulpi)
 
-        # Add a stream endpoint to our device.
-        stream_in_ep = USBStreamInEndpoint(
-            endpoint_number=self.BULK_ENDPOINT_NUMBER,
-            max_packet_size=self.MAX_BULK_PACKET_SIZE
-        )
-        usb.add_endpoint(stream_in_ep)
+		# Add our standard control endpoint to the device.
+		descriptors = self.create_descriptors()
+		usb.add_standard_control_endpoint(descriptors)
 
-        # Connect our endpoints together.
-        stream_in = stream_in_ep.stream
-        stream_out = stream_out_ep.stream
+		# Add a stream endpoint to our device.
+		stream_out_ep = USBStreamOutEndpoint(
+			endpoint_number=self.BULK_ENDPOINT_NUMBER,
+			max_packet_size=self.MAX_BULK_PACKET_SIZE,
+		)
+		usb.add_endpoint(stream_out_ep)
 
-        m.d.comb += [
-            stream_in.payload           .eq(stream_out.payload),
-            stream_in.valid             .eq(stream_out.valid),
-            stream_in.first             .eq(stream_out.first),
-            stream_in.last              .eq(stream_out.last),
-            stream_out.ready            .eq(stream_in.ready),
+		# Add a stream endpoint to our device.
+		stream_in_ep = USBStreamInEndpoint(
+			endpoint_number=self.BULK_ENDPOINT_NUMBER,
+			max_packet_size=self.MAX_BULK_PACKET_SIZE
+		)
+		usb.add_endpoint(stream_in_ep)
 
-            usb.connect                 .eq(1)
-        ]
+		# Connect our endpoints together.
+		stream_in = stream_in_ep.stream
+		stream_out = stream_out_ep.stream
 
-        return m
+		m.d.comb += [
+			stream_in.payload           .eq(stream_out.payload),
+			stream_in.valid             .eq(stream_out.valid),
+			stream_in.first             .eq(stream_out.first),
+			stream_in.last              .eq(stream_out.last),
+			stream_out.ready            .eq(stream_in.ready),
+
+			usb.connect                 .eq(1)
+		]
+
+		return m
 
 
 if __name__ == "__main__":
-    top_level_cli(USBStreamOutDeviceExample)
+	top_level_cli(USBStreamOutDeviceExample)

@@ -124,322 +124,322 @@ __version__ = "20070611"
 
 
 class CrcAlgorithm:
-    """
-    Represents the parameters of a CRC algorithm.
-    """
+	"""
+	Represents the parameters of a CRC algorithm.
+	"""
 
-    # FIXME: Instances are supposed to be immutable, but attributes are
-    # writable.
+	# FIXME: Instances are supposed to be immutable, but attributes are
+	# writable.
 
-    def __init__(self,
-                 width,
-                 polynomial,
-                 name=None,
-                 seed=0,
-                 lsbFirst=False,
-                 lsbFirstData=None,
-                 xorMask=0):
-        """
-        :param width:
+	def __init__(self,
+				 width,
+				 polynomial,
+				 name=None,
+				 seed=0,
+				 lsbFirst=False,
+				 lsbFirstData=None,
+				 xorMask=0):
+		"""
+		:param width:
 
-          The number of bits in the CRC register, or equivalently, the
-          degree of the polynomial.
+		  The number of bits in the CRC register, or equivalently, the
+		  degree of the polynomial.
 
-        :type width:
+		:type width:
 
-          an integer
+		  an integer
 
-        :param polynomial:
+		:param polynomial:
 
-          The generator polynomial as a sequence of exponents
+		  The generator polynomial as a sequence of exponents
 
-        :type polynomial:
+		:type polynomial:
 
-          sequence or integer
+		  sequence or integer
 
-        :param name:
+		:param name:
 
-          A name identifying algorithm.
+		  A name identifying algorithm.
 
-        :type name:
+		:type name:
 
-          *str*
+		  *str*
 
-        :param seed:
+		:param seed:
 
-          The initial value to load into the register.  (This is the
-          value without *xorMask* applied.)
+		  The initial value to load into the register.  (This is the
+		  value without *xorMask* applied.)
 
-        :type seed:
+		:type seed:
 
-          an integer
+		  an integer
 
-        :param lsbFirst:
+		:param lsbFirst:
 
-          If ``true``, the register shifts toward the
-          least-significant bit (sometimes called the *reflected* or
-          *reversed* algorithim).  Otherwise, the register shifts
-          toward the most-significant bit.
+		  If ``true``, the register shifts toward the
+		  least-significant bit (sometimes called the *reflected* or
+		  *reversed* algorithim).  Otherwise, the register shifts
+		  toward the most-significant bit.
 
-        :type lsbFirst:
+		:type lsbFirst:
 
-          *bool*
+		  *bool*
 
-        :param lsbFirstData:
+		:param lsbFirstData:
 
-          If ``true``, input data is taken least-significant bit
-          first.  Otherwise, data is taken most-significant bit first.
-          If ``None`` or not given, the value of *lsbFirst* is used.
+		  If ``true``, input data is taken least-significant bit
+		  first.  Otherwise, data is taken most-significant bit first.
+		  If ``None`` or not given, the value of *lsbFirst* is used.
 
-        :type lsbFirstData:
+		:type lsbFirstData:
 
-          *bool*
+		  *bool*
 
-        :param xorMask:
+		:param xorMask:
 
-          An integer mask indicating which bits should be inverted
-          when returning the final result.  This is also used for the
-          input value if provided.
+		  An integer mask indicating which bits should be inverted
+		  when returning the final result.  This is also used for the
+		  input value if provided.
 
-        :type xorMask:
+		:type xorMask:
 
-          an integer
-        """
+		  an integer
+		"""
 
-        if width > 0:
-            try:
-                polyMask = int(polynomial)
-            except TypeError:
-                # Guess it is already a sequence of exponents.
-                polynomial = list(polynomial)
-                polynomial.sort()
-                polynomial.reverse()
-                polynomial = tuple(polynomial)
-            else:
-                # Convert a mask to a tuple of exponents.
-                if lsbFirst:
-                    polyMask = reflect(polyMask, width)
-                polynomial = (width, )
-                for i in range(width - 1, -1, -1):
-                    if (polyMask >> i) & 1:
-                        polynomial += (i, )
+		if width > 0:
+			try:
+				polyMask = int(polynomial)
+			except TypeError:
+				# Guess it is already a sequence of exponents.
+				polynomial = list(polynomial)
+				polynomial.sort()
+				polynomial.reverse()
+				polynomial = tuple(polynomial)
+			else:
+				# Convert a mask to a tuple of exponents.
+				if lsbFirst:
+					polyMask = reflect(polyMask, width)
+				polynomial = (width, )
+				for i in range(width - 1, -1, -1):
+					if (polyMask >> i) & 1:
+					    polynomial += (i, )
 
-            if polynomial[:1] != (width, ):
-                ValueError("mismatch between width and polynomial degree")
+			if polynomial[:1] != (width, ):
+				ValueError("mismatch between width and polynomial degree")
 
-        self.width = width
-        self.polynomial = polynomial
-        self.name = name
-        self.seed = seed
-        self.lsbFirst = lsbFirst
-        self.lsbFirstData = lsbFirstData
-        self.xorMask = xorMask
+		self.width = width
+		self.polynomial = polynomial
+		self.name = name
+		self.seed = seed
+		self.lsbFirst = lsbFirst
+		self.lsbFirstData = lsbFirstData
+		self.xorMask = xorMask
 
-        if not hasattr(width, "__rlshift__"):
-            raise ValueError
+		if not hasattr(width, "__rlshift__"):
+			raise ValueError
 
-        # FIXME: Need more checking of parameters.
+		# FIXME: Need more checking of parameters.
 
-    def __repr__(self):
-        info = ""
-        if self.name is not None:
-            info = ' "%s"' % str(self.name)
-        result = "<%s.%s%s @ %#x>" % (self.__class__.__module__,
-                                      self.__class__.__name__, info, id(self))
-        return result
+	def __repr__(self):
+		info = ""
+		if self.name is not None:
+			info = ' "%s"' % str(self.name)
+		result = "<%s.%s%s @ %#x>" % (self.__class__.__module__,
+					                  self.__class__.__name__, info, id(self))
+		return result
 
-    def calcString(self, s, value=None):
-        """
-        Calculate the CRC of the 8-bit string *s*.
-        """
-        r = CrcRegister(self, value)
-        r.takeString(s)
-        return r.getFinalValue()
+	def calcString(self, s, value=None):
+		"""
+		Calculate the CRC of the 8-bit string *s*.
+		"""
+		r = CrcRegister(self, value)
+		r.takeString(s)
+		return r.getFinalValue()
 
-    def calcWord(self, word, width, value=None):
-        """
-        Calculate the CRC of the integer *word* as a sequence of
-        *width* bits.
-        """
-        r = CrcRegister(self, value)
-        r.takeWord(word, width)
-        return r.getFinalValue()
+	def calcWord(self, word, width, value=None):
+		"""
+		Calculate the CRC of the integer *word* as a sequence of
+		*width* bits.
+		"""
+		r = CrcRegister(self, value)
+		r.takeWord(word, width)
+		return r.getFinalValue()
 
-    def reflect(self):
-        """
-        Return the algorithm with the bit-order reversed.
-        """
-        ca = CrcAlgorithm(0, 0)
-        ca._initFromOther(self)
-        ca.lsbFirst = not self.lsbFirst
-        if self.lsbFirstData is not None:
-            ca.lsbFirstData = not self.lsbFirstData
-        if ca.name:
-            ca.name += " reflected"
-        return ca
+	def reflect(self):
+		"""
+		Return the algorithm with the bit-order reversed.
+		"""
+		ca = CrcAlgorithm(0, 0)
+		ca._initFromOther(self)
+		ca.lsbFirst = not self.lsbFirst
+		if self.lsbFirstData is not None:
+			ca.lsbFirstData = not self.lsbFirstData
+		if ca.name:
+			ca.name += " reflected"
+		return ca
 
-    def reverse(self):
-        """
-        Return the algorithm with the reverse polynomial.
-        """
-        ca = CrcAlgorithm(0, 0)
-        ca._initFromOther(self)
-        ca.polynomial = [(self.width - e) for e in self.polynomial]
-        ca.polynomial.sort()
-        ca.polynomial.reverse()
-        ca.polynomial = tuple(ca.polynomial)
-        if ca.name:
-            ca.name += " reversed"
-        return ca
+	def reverse(self):
+		"""
+		Return the algorithm with the reverse polynomial.
+		"""
+		ca = CrcAlgorithm(0, 0)
+		ca._initFromOther(self)
+		ca.polynomial = [(self.width - e) for e in self.polynomial]
+		ca.polynomial.sort()
+		ca.polynomial.reverse()
+		ca.polynomial = tuple(ca.polynomial)
+		if ca.name:
+			ca.name += " reversed"
+		return ca
 
-    def _initFromOther(self, other):
-        self.width = other.width
-        self.polynomial = other.polynomial
-        self.name = other.name
-        self.seed = other.seed
-        self.lsbFirst = other.lsbFirst
-        self.lsbFirstData = other.lsbFirstData
-        self.xorMask = other.xorMask
+	def _initFromOther(self, other):
+		self.width = other.width
+		self.polynomial = other.polynomial
+		self.name = other.name
+		self.seed = other.seed
+		self.lsbFirst = other.lsbFirst
+		self.lsbFirstData = other.lsbFirstData
+		self.xorMask = other.xorMask
 
 
 class CrcRegister:
-    """
-    Holds the intermediate state of the CRC algorithm.
-    """
-    def __init__(self, crcAlgorithm, value=None):
-        """
-        :param crcAlgorithm:
+	"""
+	Holds the intermediate state of the CRC algorithm.
+	"""
+	def __init__(self, crcAlgorithm, value=None):
+		"""
+		:param crcAlgorithm:
 
-          The CRC algorithm to use.
+		  The CRC algorithm to use.
 
-        :type crcAlgorithm:
+		:type crcAlgorithm:
 
-          `CrcAlgorithm`
+		  `CrcAlgorithm`
 
-        :param value:
+		:param value:
 
-          The initial register value to use.  The result previous of a
-          previous CRC calculation, can be used here to continue
-          calculation with more data.  If this parameter is ``None``
-          or not given, the register will be initialized with
-          algorithm's default seed value.
+		  The initial register value to use.  The result previous of a
+		  previous CRC calculation, can be used here to continue
+		  calculation with more data.  If this parameter is ``None``
+		  or not given, the register will be initialized with
+		  algorithm's default seed value.
 
-        :type value:
+		:type value:
 
-          an integer
-        """
+		  an integer
+		"""
 
-        self.crcAlgorithm = crcAlgorithm
-        p = crcAlgorithm
+		self.crcAlgorithm = crcAlgorithm
+		p = crcAlgorithm
 
-        self.bitMask = (1 << p.width) - 1
+		self.bitMask = (1 << p.width) - 1
 
-        word = 0
-        for n in p.polynomial:
-            word |= 1 << n
-        self.polyMask = word & self.bitMask
+		word = 0
+		for n in p.polynomial:
+			word |= 1 << n
+		self.polyMask = word & self.bitMask
 
-        if p.lsbFirst:
-            self.polyMask = reflect(self.polyMask, p.width)
+		if p.lsbFirst:
+			self.polyMask = reflect(self.polyMask, p.width)
 
-        if p.lsbFirst:
-            self.inBitMask = 1 << (p.width - 1)
-            self.outBitMask = 1
-        else:
-            self.inBitMask = 1
-            self.outBitMask = 1 << (p.width - 1)
+		if p.lsbFirst:
+			self.inBitMask = 1 << (p.width - 1)
+			self.outBitMask = 1
+		else:
+			self.inBitMask = 1
+			self.outBitMask = 1 << (p.width - 1)
 
-        if p.lsbFirstData is not None:
-            self.lsbFirstData = p.lsbFirstData
-        else:
-            self.lsbFirstData = p.lsbFirst
+		if p.lsbFirstData is not None:
+			self.lsbFirstData = p.lsbFirstData
+		else:
+			self.lsbFirstData = p.lsbFirst
 
-        self.reset()
+		self.reset()
 
-        if value is not None:
-            self.value = value ^ p.xorMask
+		if value is not None:
+			self.value = value ^ p.xorMask
 
-    def __str__(self):
-        return formatBinaryString(self.value, self.crcAlgorithm.width)
+	def __str__(self):
+		return formatBinaryString(self.value, self.crcAlgorithm.width)
 
-    def reset(self):
-        """
-        Reset the state of the register with the default seed value.
-        """
-        self.value = int(self.crcAlgorithm.seed)
+	def reset(self):
+		"""
+		Reset the state of the register with the default seed value.
+		"""
+		self.value = int(self.crcAlgorithm.seed)
 
-    def takeBit(self, bit):
-        """
-        Process a single input bit.
-        """
-        outBit = ((self.value & self.outBitMask) != 0)
-        if self.crcAlgorithm.lsbFirst:
-            self.value >>= 1
-        else:
-            self.value <<= 1
-        self.value &= self.bitMask
-        if outBit ^ bool(bit):
-            self.value ^= self.polyMask
+	def takeBit(self, bit):
+		"""
+		Process a single input bit.
+		"""
+		outBit = ((self.value & self.outBitMask) != 0)
+		if self.crcAlgorithm.lsbFirst:
+			self.value >>= 1
+		else:
+			self.value <<= 1
+		self.value &= self.bitMask
+		if outBit ^ bool(bit):
+			self.value ^= self.polyMask
 
-    def takeWord(self, word, width=8):
-        """
-        Process a binary input word.
+	def takeWord(self, word, width=8):
+		"""
+		Process a binary input word.
 
-        :param word:
+		:param word:
 
-          The input word.  Since this can be a Python ``long``, there
-          is no coded limit to the number of bits the word can
-          represent.
+		  The input word.  Since this can be a Python ``long``, there
+		  is no coded limit to the number of bits the word can
+		  represent.
 
-        :type word:
+		:type word:
 
-          an integer
+		  an integer
 
-        :param width:
+		:param width:
 
-          The number of bits *word* represents.
+		  The number of bits *word* represents.
 
-        :type width:
+		:type width:
 
-          an integer
-        """
-        if self.lsbFirstData:
-            bitList = list(range(0, width))
-        else:
-            bitList = list(range(width - 1, -1, -1))
-        for n in bitList:
-            self.takeBit((word >> n) & 1)
+		  an integer
+		"""
+		if self.lsbFirstData:
+			bitList = list(range(0, width))
+		else:
+			bitList = list(range(width - 1, -1, -1))
+		for n in bitList:
+			self.takeBit((word >> n) & 1)
 
-    def takeString(self, s):
-        """
-        Process a string as input.  It is handled as a sequence of
-        8-bit integers.
-        """
-        for c in s:
-            self.takeWord(ord(c))
+	def takeString(self, s):
+		"""
+		Process a string as input.  It is handled as a sequence of
+		8-bit integers.
+		"""
+		for c in s:
+			self.takeWord(ord(c))
 
-    def getValue(self):
-        """
-        Return the current value of the register as an integer.
-        """
-        return self.value
+	def getValue(self):
+		"""
+		Return the current value of the register as an integer.
+		"""
+		return self.value
 
-    def getFinalValue(self):
-        """
-        Return the current value of the register as an integer with
-        *xorMask* applied.  This can be used after all input data is
-        processed to obtain the final result.
-        """
-        p = self.crcAlgorithm
-        return self.value ^ p.xorMask
+	def getFinalValue(self):
+		"""
+		Return the current value of the register as an integer with
+		*xorMask* applied.  This can be used after all input data is
+		processed to obtain the final result.
+		"""
+		p = self.crcAlgorithm
+		return self.value ^ p.xorMask
 
 
 def reflect(value, width):
-    return sum(((value >> x) & 1) << (width - 1 - x) for x in range(width))
+	return sum(((value >> x) & 1) << (width - 1 - x) for x in range(width))
 
 
 def formatBinaryString(value, width):
-    return "".join("01" [(value >> i) & 1] for i in range(width - 1, -1, -1))
+	return "".join("01" [(value >> i) & 1] for i in range(width - 1, -1, -1))
 
 
 # Some standard algorithms are defined here.  I believe I was able to
@@ -448,92 +448,92 @@ def formatBinaryString(value, width):
 
 #: Same CRC algorithm as Python's zlib.crc32
 CRC32 = CrcAlgorithm(name="CRC-32",
-                     width=32,
-                     polynomial=(32, 26, 23, 22, 16, 12, 11, 10, 8, 7, 5, 4, 2,
-                                 1, 0),
-                     seed=0xFFFFFFFF,
-                     lsbFirst=True,
-                     xorMask=0xFFFFFFFF)
+					 width=32,
+					 polynomial=(32, 26, 23, 22, 16, 12, 11, 10, 8, 7, 5, 4, 2,
+					             1, 0),
+					 seed=0xFFFFFFFF,
+					 lsbFirst=True,
+					 xorMask=0xFFFFFFFF)
 
 CRC16 = CrcAlgorithm(name="CRC-16",
-                     width=16,
-                     polynomial=(16, 15, 2, 0),
-                     seed=0x0000,
-                     lsbFirst=True,
-                     xorMask=0x0000)
+					 width=16,
+					 polynomial=(16, 15, 2, 0),
+					 seed=0x0000,
+					 lsbFirst=True,
+					 xorMask=0x0000)
 
 #: Used in USB data packets.
 CRC16_USB = CrcAlgorithm(name="CRC-16-USB",
-                         width=16,
-                         polynomial=(16, 15, 2, 0),
-                         seed=0xFFFF,
-                         lsbFirst=True,
-                         xorMask=0xFFFF)
+					     width=16,
+					     polynomial=(16, 15, 2, 0),
+					     seed=0xFFFF,
+					     lsbFirst=True,
+					     xorMask=0xFFFF)
 
 CRC_CCITT = CrcAlgorithm(name="CRC-CCITT",
-                         width=16,
-                         polynomial=(16, 12, 5, 0),
-                         seed=0xFFFF,
-                         lsbFirst=False,
-                         xorMask=0x0000)
+					     width=16,
+					     polynomial=(16, 12, 5, 0),
+					     seed=0xFFFF,
+					     lsbFirst=False,
+					     xorMask=0x0000)
 
 #: This is the algorithm used in X.25 and for the HDLC 2-byte FCS.
 CRC_HDLC = CrcAlgorithm(name="CRC-HDLC",
-                        width=16,
-                        polynomial=(16, 12, 5, 0),
-                        seed=0xFFFF,
-                        lsbFirst=True,
-                        xorMask=0xFFFF)
+					    width=16,
+					    polynomial=(16, 12, 5, 0),
+					    seed=0xFFFF,
+					    lsbFirst=True,
+					    xorMask=0xFFFF)
 
 #: Used in ATM HEC and SMBus.
 CRC8_SMBUS = CrcAlgorithm(name="CRC-8-SMBUS",
-                          width=8,
-                          polynomial=(8, 2, 1, 0),
-                          seed=0,
-                          lsbFirst=False,
-                          xorMask=0)
+					      width=8,
+					      polynomial=(8, 2, 1, 0),
+					      seed=0,
+					      lsbFirst=False,
+					      xorMask=0)
 
 #: Used in RFC-2440 and MIL STD 188-184.
 CRC24 = CrcAlgorithm(name="CRC-24",
-                     width=24,
-                     polynomial=(24, 23, 18, 17, 14, 11, 10, 7, 6, 5, 4, 3, 1,
-                                 0),
-                     seed=0xB704CE,
-                     lsbFirst=False,
-                     xorMask=0)
+					 width=24,
+					 polynomial=(24, 23, 18, 17, 14, 11, 10, 7, 6, 5, 4, 3, 1,
+					             0),
+					 seed=0xB704CE,
+					 lsbFirst=False,
+					 xorMask=0)
 
 #: Used in Controller Area Network frames.
 CRC15 = CrcAlgorithm(name="CRC-15",
-                     width=15,
-                     polynomial=(15, 14, 10, 8, 7, 4, 3, 0),
-                     seed=0,
-                     lsbFirst=False,
-                     xorMask=0)
+					 width=15,
+					 polynomial=(15, 14, 10, 8, 7, 4, 3, 0),
+					 seed=0,
+					 lsbFirst=False,
+					 xorMask=0)
 
 #: Used in iSCSI (RFC-3385); usually credited to Guy Castagnoli.
 CRC32C = CrcAlgorithm(name="CRC-32C",
-                      width=32,
-                      polynomial=(32, 28, 27, 26, 25, 23, 22, 20, 19, 18, 14,
-                                  13, 11, 10, 9, 8, 6, 0),
-                      seed=0xFFFFFFFF,
-                      lsbFirst=True,
-                      xorMask=0xFFFFFFFF)
+					  width=32,
+					  polynomial=(32, 28, 27, 26, 25, 23, 22, 20, 19, 18, 14,
+					              13, 11, 10, 9, 8, 6, 0),
+					  seed=0xFFFFFFFF,
+					  lsbFirst=True,
+					  xorMask=0xFFFFFFFF)
 
 #: CRC used in USB Token and Start-Of-Frame packets
 CRC5_USB = CrcAlgorithm(name="CRC-5-USB",
-                        width=5,
-                        polynomial=(5, 2, 0),
-                        seed=0x1F,
-                        lsbFirst=True,
-                        xorMask=0x1F)
+					    width=5,
+					    polynomial=(5, 2, 0),
+					    seed=0x1F,
+					    lsbFirst=True,
+					    xorMask=0x1F)
 
 #: ISO 3309
 CRC64 = CrcAlgorithm(name="CRC-64",
-                     width=64,
-                     polynomial=(64, 4, 3, 1, 0),
-                     seed=0,
-                     lsbFirst=True,
-                     xorMask=0)
+					 width=64,
+					 polynomial=(64, 4, 3, 1, 0),
+					 seed=0,
+					 lsbFirst=True,
+					 xorMask=0)
 
 #: This is just to show off the ability to handle a very wide CRC.
 # If this is a standard, I don't know where it is from.  I found the
@@ -541,12 +541,12 @@ CRC64 = CrcAlgorithm(name="CRC-64",
 # <http://www.volny.cz/lk77/crc256mmx/>.
 POLYNOM256 = 0x82E2443E6320383A20B8A2A0A1EA91A3CCA99A30C5205038349C82AAA3A8FD27
 CRC256 = CrcAlgorithm(
-    name="CRC-256",
-    width=256,
-    polynomial=POLYNOM256,
-    seed=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
-    lsbFirst=True,
-    xorMask=0)
+	name="CRC-256",
+	width=256,
+	polynomial=POLYNOM256,
+	seed=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
+	lsbFirst=True,
+	xorMask=0)
 
 # For the following I haven't found complete information and/or have
 # no way to verify the result.  I started with the list on Wikipedia
@@ -644,27 +644,26 @@ CRC256 = CrcAlgorithm(
 
 
 def _callCalcString123456789(v):
-    return v.calcString('123456789')
+	return v.calcString('123456789')
 
 
 def _printResults(fn=_callCalcString123456789):
-    import sys
-    d = sys.modules[__name__].__dict__
-    algorithms = sorted(
-        (v for (k, v) in d.items() if isinstance(v, CrcAlgorithm)),
-        key=lambda v: (v.width, v.name))
-    for a in algorithms:
-        format = ("%%0%dX" % ((a.width + 3) // 4))
-        print("%s:" % a.name, end=' ')
-        print(format % fn(a))
+	import sys
+	d = sys.modules[__name__].__dict__
+	algorithms = sorted(
+		(v for (k, v) in d.items() if isinstance(v, CrcAlgorithm)),
+		key=lambda v: (v.width, v.name))
+	for a in algorithms:
+		format = ("%%0%dX" % ((a.width + 3) // 4))
+		print("%s:" % a.name, end=' ')
+		print(format % fn(a))
 
 
 def _test():
-    import doctest
-    import sys
-    return doctest.testmod(sys.modules[__name__])
+	import doctest
+	import sys
+	return doctest.testmod(sys.modules[__name__])
 
 
 if __name__ == "__main__":
-    _test()
-
+	_test()
