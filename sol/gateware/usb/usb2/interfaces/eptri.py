@@ -8,7 +8,7 @@
 
 Equivalent (but not binary-compatbile) implementation of ValentyUSB's ``eptri``.
 
-For an example, see ``examples/usb/eptri`` or TinyUSB's ``luna/dcd_eptri.c``.
+For an example, see ``examples/usb/eptri`` or TinyUSB's ``sol/dcd_eptri.c``.
 """
 
 from amaranth           import *
@@ -18,7 +18,7 @@ from amaranth.hdl.xfrm  import ResetInserter, DomainRenamer
 
 from ..endpoint         import EndpointInterface
 from ....soc.peripheral import Peripheral
-from luna.gateware.usb.usb2 import endpoint
+from sol.gateware.usb.usb2 import endpoint
 
 
 class SetupFIFOInterface(Peripheral, Elaboratable):

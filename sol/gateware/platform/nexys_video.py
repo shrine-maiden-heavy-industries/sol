@@ -7,7 +7,7 @@
 
 This is an unsupported platform. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.nexys_video:NexysVideoPlatform"
+    > export LUNA_PLATFORM="sol.gateware.platform.nexys_video:NexysVideoPlatform"
 
 This platform has no built-in USB resources; but has a FMC that can be used to connect up
 TUSB1310A PHYs, which offer ULPI USB2 and PIPE USB3. They also have pmods, which can be
@@ -591,5 +591,3 @@ class NexysVideoPlatform(Xilinx7SeriesPlatform, LUNAPlatform):
                 "-f", config_filename,
                 "-c", "transport select jtag; init; fpga_program; pld load 0 {}; exit".format(bitstream_filename)
             ])
-
-

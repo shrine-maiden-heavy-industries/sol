@@ -10,9 +10,9 @@ from functools import reduce
 from amaranth import Signal, Elaboratable, Module, Cat, ClockDomain, ClockSignal, ResetInserter
 from amaranth.lib.cdc import FFSynchronizer
 
-from luna.gateware.utils.cdc       import synchronize
-from luna.gateware.interface.spi   import SPIRegisterInterface
-from luna.gateware.interface.flash import ECP5ConfigurationFlashInterface
+from sol.gateware.utils.cdc       import synchronize
+from sol.gateware.interface.spi   import SPIRegisterInterface
+from sol.gateware.interface.flash import ECP5ConfigurationFlashInterface
 
 REGISTER_ID             = 1
 
@@ -67,4 +67,3 @@ class DebugControllerFlashBridge(Elaboratable):
         ]
 
         return m
-

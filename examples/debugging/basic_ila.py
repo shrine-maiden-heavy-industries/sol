@@ -10,10 +10,10 @@ import sys
 from amaranth                import *
 from apollo_fpga                  import create_ila_frontend
 
-from luna                    import top_level_cli
-from luna.gateware.platform  import NullPin
-from luna.gateware.utils.cdc import synchronize
-from luna.gateware.debug.ila import SyncSerialILA
+from sol                    import top_level_cli
+from sol.gateware.platform  import NullPin
+from sol.gateware.utils.cdc import synchronize
+from sol.gateware.debug.ila import SyncSerialILA
 
 
 class ILAExample(Elaboratable):
@@ -56,4 +56,3 @@ class ILAExample(Elaboratable):
 if __name__ == "__main__":
     example = top_level_cli(ILAExample)
     example.emit_analysis_vcd()
-

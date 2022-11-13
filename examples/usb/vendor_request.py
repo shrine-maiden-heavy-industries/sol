@@ -9,10 +9,10 @@ from amaranth                       import Elaboratable, Module, Cat
 from usb_construct.types             import USBRequestType
 from usb_construct.emitters          import DeviceDescriptorCollection
 
-from luna                           import top_level_cli
-from luna.gateware.platform         import NullPin
-from luna.gateware.usb.usb2.device  import USBDevice
-from luna.gateware.usb.usb2.request import USBRequestHandler
+from sol                           import top_level_cli
+from sol.gateware.platform         import NullPin
+from sol.gateware.usb.usb2.device  import USBDevice
+from sol.gateware.usb.usb2.request import USBRequestHandler
 
 
 class LEDRequestHandler(USBRequestHandler):

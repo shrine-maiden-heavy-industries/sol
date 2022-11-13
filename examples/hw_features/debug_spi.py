@@ -8,9 +8,9 @@
 from amaranth import Signal, Elaboratable, Module
 from amaranth.lib.cdc import FFSynchronizer
 
-from luna import top_level_cli
-from luna.gateware.utils.cdc import synchronize
-from luna.gateware.interface.spi import SPIDeviceInterface, SPIBus
+from sol import top_level_cli
+from sol.gateware.utils.cdc import synchronize
+from sol.gateware.interface.spi import SPIDeviceInterface, SPIBus
 
 
 class DebugSPIExample(Elaboratable):

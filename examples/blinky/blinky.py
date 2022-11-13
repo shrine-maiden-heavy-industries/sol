@@ -9,8 +9,8 @@ import sys
 
 from amaranth import Signal, Module, Elaboratable, ClockDomain, ClockSignal, Cat
 
-from luna import top_level_cli
-from luna.gateware.platform import NullPin
+from sol import top_level_cli
+from sol.gateware.platform import NullPin
 
 class Blinky(Elaboratable):
     """ Hardware module that validates basic LUNA functionality. """

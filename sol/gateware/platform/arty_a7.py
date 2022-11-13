@@ -8,7 +8,7 @@
 The full Arty A7 does not have an explicit USB port. Instead, you'll need to connect a USB breakout.
 The Arty A7 is an -unsupported- platform! To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.arty_a7:ArtyA7Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.arty_a7:ArtyA7Platform"
 """
 
 import os

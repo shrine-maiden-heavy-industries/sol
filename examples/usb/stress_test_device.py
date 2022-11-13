@@ -10,9 +10,9 @@ import os
 from amaranth                        import Elaboratable, Module, Signal
 from usb_construct.emitters           import DeviceDescriptorCollection
 
-from luna                            import top_level_cli
-from luna.gateware.usb.usb2.device   import USBDevice
-from luna.gateware.usb.usb2.endpoint import EndpointInterface
+from sol                            import top_level_cli
+from sol.gateware.usb.usb2.device   import USBDevice
+from sol.gateware.usb.usb2.endpoint import EndpointInterface
 
 
 BULK_ENDPOINT_NUMBER = 1

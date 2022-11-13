@@ -15,11 +15,11 @@ from amaranth.hdl.rec                        import Record
 from lambdasoc.periph.serial                 import AsyncSerialPeripheral
 from lambdasoc.periph.timer                  import TimerPeripheral
 
-from luna                                    import top_level_cli
-from luna.gateware.soc                       import SimpleSoC
+from sol                                    import top_level_cli
+from sol.gateware.soc                       import SimpleSoC
 
-from luna.gateware.usb.usb2.device           import USBDevice, USBDeviceController
-from luna.gateware.usb.usb2.interfaces.eptri import SetupFIFOInterface, InFIFOInterface, OutFIFOInterface
+from sol.gateware.usb.usb2.device           import USBDevice, USBDeviceController
+from sol.gateware.usb.usb2.interfaces.eptri import SetupFIFOInterface, InFIFOInterface, OutFIFOInterface
 
 
 CLOCK_FREQUENCIES_MHZ = {

@@ -10,8 +10,8 @@ such as https://www.waveshare.com/wiki/USB3300_USB_HS_Board.
 See the pin definitions below for connection information (ULPIResource).
 
 The DE0 Nano is an -unsupported- platform! To use it, you'll need to set your LUNA_PLATFORM variable:
-    > export LUNA_PLATFORM="luna.gateware.platform.de0_nano:DE0NanoPlatform"
-"""    
+    > export LUNA_PLATFORM="sol.gateware.platform.de0_nano:DE0NanoPlatform"
+"""
 
 import os
 import logging

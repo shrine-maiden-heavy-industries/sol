@@ -9,8 +9,8 @@
 
 This is a non-core platform. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.ecpix5:ECPIX5_45F_Platform"
-    > export LUNA_PLATFORM="luna.gateware.platform.ecpix5:ECPIX5_85F_Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.ecpix5:ECPIX5_45F_Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.ecpix5:ECPIX5_85F_Platform"
 """
 
 from amaranth import *

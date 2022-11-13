@@ -8,12 +8,12 @@
 
 from amaranth import *
 
-from luna                          import top_level_cli
-from luna.gateware.platform        import NullPin
-from luna.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
+from sol                          import top_level_cli
+from sol.gateware.platform        import NullPin
+from sol.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
 
-from luna.gateware.interface.serdes_phy.backends.ecp5 import LunaECP5SerDes
-from luna.gateware.interface.serdes_phy.phy           import SerDesPHY
+from sol.gateware.interface.serdes_phy.backends.ecp5 import LunaECP5SerDes
+from sol.gateware.interface.serdes_phy.phy           import SerDesPHY
 
 class PIPEPhyExample(Elaboratable):
     """ Hardware module that demonstrates grabbing a PHY resource with gearing. """

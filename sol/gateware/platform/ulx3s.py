@@ -9,10 +9,10 @@
 This is a non-core platform. To use it, you'll need to set your LUNA_PLATFORM variable,
 as appropriate:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.ulx3s:ULX3S_12F_Platform"
-    > export LUNA_PLATFORM="luna.gateware.platform.ulx3s:ULX3S_25F_Platform"
-    > export LUNA_PLATFORM="luna.gateware.platform.ulx3s:ULX3S_45F_Platform"
-    > export LUNA_PLATFORM="luna.gateware.platform.ulx3s:ULX3S_85F_Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.ulx3s:ULX3S_12F_Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.ulx3s:ULX3S_25F_Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.ulx3s:ULX3S_45F_Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.ulx3s:ULX3S_85F_Platform"
 """
 
 import os

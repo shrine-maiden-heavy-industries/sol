@@ -8,10 +8,10 @@
 import sys
 from amaranth import Signal, Module, Elaboratable, ClockDomain, ClockSignal, Cat
 
-from luna                             import top_level_cli
-from luna.gateware.utils.cdc          import synchronize
-from luna.gateware.debug.ila          import SyncSerialILA
-from luna.gateware.architecture.car   import LunaECP5DomainGenerator
+from sol                             import top_level_cli
+from sol.gateware.utils.cdc          import synchronize
+from sol.gateware.debug.ila          import SyncSerialILA
+from sol.gateware.architecture.car   import LunaECP5DomainGenerator
 
 from apollo_fpga                           import create_ila_frontend
 
@@ -70,4 +70,3 @@ class ILAExample(Elaboratable):
 if __name__ == "__main__":
     example = top_level_cli(ILAExample)
     example.interactive_display()
-

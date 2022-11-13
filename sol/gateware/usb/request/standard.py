@@ -11,7 +11,7 @@ import unittest
 import functools
 from typing import Iterable, Callable
 
-from luna.gateware.test import utils
+from sol.gateware.test import utils
 
 from amaranth               import *
 from amaranth.hdl.ast       import Value, Const
@@ -22,7 +22,7 @@ from ..usb2.request         import RequestHandlerInterface, USBRequestHandler
 from ..usb2.descriptor      import GetDescriptorHandlerDistributed, GetDescriptorHandlerBlock
 from ..stream               import USBInStreamInterface
 from ...stream.generator    import StreamSerializer
-from luna.gateware.usb.usb2 import descriptor
+from sol.gateware.usb.usb2 import descriptor
 from .                      import SetupPacket
 from .control               import ControlRequestHandler
 

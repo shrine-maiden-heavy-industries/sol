@@ -13,8 +13,8 @@ and you should see "Hello World" 'typed' repeatedly.
 
 from amaranth import Signal, Elaboratable, Module, Array, Cat
 
-from luna import top_level_cli
-from luna.gateware.interface.uart import UARTTransmitter
+from sol import top_level_cli
+from sol.gateware.interface.uart import UARTTransmitter
 
 
 class UARTBridgeExample(Elaboratable):

@@ -10,11 +10,11 @@ from amaranth.hdl.ast import Fell
 
 from usb_construct.emitters         import SuperSpeedDeviceDescriptorCollection
 
-from luna                          import top_level_cli
-from luna.gateware.platform        import NullPin
-from luna.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
+from sol                          import top_level_cli
+from sol.gateware.platform        import NullPin
+from sol.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
 
-from luna.usb3                     import USBSuperSpeedDevice
+from sol.usb3                     import USBSuperSpeedDevice
 
 
 class USBSuperSpeedExample(Elaboratable):

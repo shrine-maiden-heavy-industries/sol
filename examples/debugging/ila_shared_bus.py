@@ -14,11 +14,11 @@ import time
 from amaranth import Signal, Elaboratable, Module, Cat, ClockDomain, ClockSignal, ResetInserter
 from amaranth.lib.cdc import FFSynchronizer
 
-from luna                          import top_level_cli
+from sol                          import top_level_cli
 from apollo_fpga                        import ApolloDebugger, ApolloILAFrontend
-from luna.gateware.utils.cdc       import synchronize
-from luna.gateware.interface.spi   import SPIRegisterInterface, SPIMultiplexer, SPIBus
-from luna.gateware.debug.ila       import SyncSerialILA
+from sol.gateware.utils.cdc       import synchronize
+from sol.gateware.interface.spi   import SPIRegisterInterface, SPIMultiplexer, SPIBus
+from sol.gateware.debug.ila       import SyncSerialILA
 
 REGISTER_ID  = 1
 REGISTER_ILA = 2

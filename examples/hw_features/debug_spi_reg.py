@@ -8,11 +8,11 @@
 from amaranth import Signal, Elaboratable, Module, Cat
 from amaranth.lib.cdc import FFSynchronizer
 
-from luna import top_level_cli
+from sol import top_level_cli
 
-from luna.gateware.utils.cdc     import synchronize
-from luna.gateware.interface.spi import SPIRegisterInterface
-from luna.gateware.platform      import NullPin
+from sol.gateware.utils.cdc     import synchronize
+from sol.gateware.interface.spi import SPIRegisterInterface
+from sol.gateware.platform      import NullPin
 
 class DebugSPIRegisterExample(Elaboratable):
     """ Gateware meant to demonstrate use of the Debug Controller's register interface. """

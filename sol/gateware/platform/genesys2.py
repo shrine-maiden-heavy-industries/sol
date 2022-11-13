@@ -7,7 +7,7 @@
 
 This is an unsupported platform. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.genesys2:Genesys2Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.genesys2:Genesys2Platform"
 
 This platform has no built-in USB3 resources; but has a FMC that can be used to connect up
 TUSB1310A PHYs, which offer ULPI USB2 and PIPE USB3. A ULPI PHY is provided on-board for USB2;
@@ -765,6 +765,3 @@ class Genesys2Platform(_CoreGenesys2Platform, LUNAPlatform):
         # Add our additional resources.
         self.add_resources(self.additional_resources)
         self.add_connectors(self.additional_connectors)
-
-
-

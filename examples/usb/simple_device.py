@@ -10,9 +10,9 @@ import os
 from amaranth                       import Elaboratable, Module
 from usb_construct.emitters          import DeviceDescriptorCollection
 
-from luna                           import top_level_cli
-from luna.gateware.platform         import NullPin
-from luna.gateware.usb.usb2.device  import USBDevice
+from sol                           import top_level_cli
+from sol.gateware.platform         import NullPin
+from sol.gateware.usb.usb2.device  import USBDevice
 
 
 class USBDeviceExample(Elaboratable):

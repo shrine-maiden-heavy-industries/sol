@@ -14,10 +14,10 @@ import importlib.util
 from amaranth import Record
 from amaranth.vendor.lattice_ecp5 import LatticeECP5Platform
 
-from .luna_r0_1 import LUNAPlatformRev0D1
-from .luna_r0_2 import LUNAPlatformRev0D2
-from .luna_r0_3 import LUNAPlatformRev0D3
-from .luna_r0_4 import LUNAPlatformRev0D4
+from .sol_r0_1 import LUNAPlatformRev0D1
+from .sol_r0_2 import LUNAPlatformRev0D2
+from .sol_r0_3 import LUNAPlatformRev0D3
+from .sol_r0_4 import LUNAPlatformRev0D4
 from .daisho    import DaishoPlatform
 from .amalthea  import AmaltheaPlatformRev0D1
 
@@ -53,7 +53,7 @@ def _get_platform_from_string(platform):
     if os.path.isfile(module_path):
 
         # Get a reference to the platform module to be loaded...
-        import_path     = "luna.gateware.platform.dynamic"
+        import_path     = "sol.gateware.platform.dynamic"
         spec            = importlib.util.spec_from_file_location(import_path, module_path)
         platform_module = importlib.util.module_from_spec(spec)
 

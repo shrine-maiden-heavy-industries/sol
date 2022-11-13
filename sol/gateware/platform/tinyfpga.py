@@ -9,7 +9,7 @@
 
 This is a non-core platform. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.tinyfpga:TinyFPGABxPlatform"
+    > export LUNA_PLATFORM="sol.gateware.platform.tinyfpga:TinyFPGABxPlatform"
 """
 
 import os

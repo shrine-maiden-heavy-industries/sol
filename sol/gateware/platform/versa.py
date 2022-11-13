@@ -8,7 +8,7 @@
 
 This is a non-core platform. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.versa:ECP5Versa_5G_Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.versa:ECP5Versa_5G_Platform"
 """
 
 from amaranth import *

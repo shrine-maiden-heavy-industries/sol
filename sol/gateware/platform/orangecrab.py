@@ -8,8 +8,8 @@
 
 This is a non-core platform. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.orangecrab:OrangeCrabPlatformR0D1"
-    > export LUNA_PLATFORM="luna.gateware.platform.orangecrab:OrangeCrabPlatformR0D2"
+    > export LUNA_PLATFORM="sol.gateware.platform.orangecrab:OrangeCrabPlatformR0D1"
+    > export LUNA_PLATFORM="sol.gateware.platform.orangecrab:OrangeCrabPlatformR0D2"
 """
 
 import os

@@ -12,9 +12,9 @@ from lambdasoc.periph             import Peripheral
 from lambdasoc.periph.serial      import AsyncSerialPeripheral
 from lambdasoc.periph.timer       import TimerPeripheral
 
-from luna                         import top_level_cli
-from luna.gateware.soc            import SimpleSoC
-from luna.gateware.interface.uart import UARTTransmitterPeripheral
+from sol                         import top_level_cli
+from sol.gateware.soc            import SimpleSoC
+from sol.gateware.interface.uart import UARTTransmitterPeripheral
 
 
 class LEDPeripheral(Peripheral, Elaboratable):

@@ -11,12 +11,12 @@ from functools import reduce
 from amaranth import Signal, Elaboratable, Module, Cat, ClockDomain, ClockSignal, ResetSignal
 from amaranth.lib.cdc import FFSynchronizer
 
-from luna                             import top_level_cli
-from luna.gateware.utils.cdc          import synchronize
-from luna.gateware.architecture.car   import LunaECP5DomainGenerator
-from luna.gateware.interface.jtag     import JTAGRegisterInterface
-from luna.gateware.interface.ulpi     import ULPIRegisterWindow
-from luna.gateware.interface.psram    import HyperRAMInterface
+from sol                             import top_level_cli
+from sol.gateware.utils.cdc          import synchronize
+from sol.gateware.architecture.car   import LunaECP5DomainGenerator
+from sol.gateware.interface.jtag     import JTAGRegisterInterface
+from sol.gateware.interface.ulpi     import ULPIRegisterWindow
+from sol.gateware.interface.psram    import HyperRAMInterface
 
 from apollo_fpga.support.selftest          import ApolloSelfTestCase, named_test
 

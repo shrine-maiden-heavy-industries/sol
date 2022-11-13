@@ -13,11 +13,11 @@ from prompt_toolkit import print_formatted_text as pprint
 
 from amaranth import Signal, Elaboratable, Module
 
-from luna                             import top_level_cli
+from sol                             import top_level_cli
 from apollo_fpga                      import ApolloDebugger
-from luna.gateware.interface.jtag     import JTAGRegisterInterface
-from luna.gateware.architecture.car   import LunaECP5DomainGenerator
-from luna.gateware.interface.psram    import HyperRAMInterface
+from sol.gateware.interface.jtag     import JTAGRegisterInterface
+from sol.gateware.architecture.car   import LunaECP5DomainGenerator
+from sol.gateware.interface.psram    import HyperRAMInterface
 
 REGISTER_RAM_REG_ADDR   = 2
 REGISTER_RAM_VALUE      = 3

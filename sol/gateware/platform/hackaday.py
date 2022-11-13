@@ -8,7 +8,7 @@
 
 This is an -unsupported- platform! To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.hackaday:Supercon19BadgePlatform"
+    > export LUNA_PLATFORM="sol.gateware.platform.hackaday:Supercon19BadgePlatform"
 
 This board is not routinely tested, and performance is not guaranteed.
 """

@@ -20,17 +20,17 @@ from amaranth                          import Signal, Elaboratable, Module
 from usb_construct.emitters             import DeviceDescriptorCollection
 from usb_construct.types                import USBRequestType
 
-from luna.gateware.platform            import get_appropriate_platform
-from luna.usb2                         import USBDevice, USBStreamInEndpoint
+from sol.gateware.platform            import get_appropriate_platform
+from sol.usb2                         import USBDevice, USBStreamInEndpoint
 
-from luna.gateware.usb.request.control import ControlRequestHandler
-from luna.gateware.usb.stream          import USBInStreamInterface
-from luna.gateware.stream.generator    import StreamSerializer
-from luna.gateware.utils.cdc           import synchronize
-from luna.gateware.architecture.car    import LunaECP5DomainGenerator
+from sol.gateware.usb.request.control import ControlRequestHandler
+from sol.gateware.usb.stream          import USBInStreamInterface
+from sol.gateware.stream.generator    import StreamSerializer
+from sol.gateware.utils.cdc           import synchronize
+from sol.gateware.architecture.car    import LunaECP5DomainGenerator
 
-from luna.gateware.interface.ulpi      import UTMITranslator
-from luna.gateware.usb.analyzer        import USBAnalyzer
+from sol.gateware.interface.ulpi      import UTMITranslator
+from sol.gateware.usb.analyzer        import USBAnalyzer
 
 
 USB_SPEED_HIGH       = 0b00

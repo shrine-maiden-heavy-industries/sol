@@ -21,7 +21,7 @@ class USBAnalyzer(Elaboratable):
     one of the DRAM-based ringbuffer variants (which are currently forthcoming).
 
     If you're looking to use this with a ULPI PHY, rather than the FPGA-convenient UTMI interface,
-    grab the UTMITranslator from `luna.gateware.interface.ulpi`.
+    grab the UTMITranslator from `sol.gateware.interface.ulpi`.
 
     Attributes
     ----------

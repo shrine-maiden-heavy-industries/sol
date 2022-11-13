@@ -8,10 +8,10 @@
 
 This is a non-core platform. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.lambdaconcept:USB2SnifferPlatform"
+    > export LUNA_PLATFORM="sol.gateware.platform.lambdaconcept:USB2SnifferPlatform"
 or
 
-    > export LUNA_PLATFORM="luna.gateware.platform.lambdaconcept:ECPIX5PlatformRev02"
+    > export LUNA_PLATFORM="sol.gateware.platform.lambdaconcept:ECPIX5PlatformRev02"
 """
 
 import os

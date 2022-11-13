@@ -8,12 +8,12 @@
 
 The iCEBreaker Bitsy is a non-core board. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.icebreaker:IceBreakerBitsyPlatform"
+    > export LUNA_PLATFORM="sol.gateware.platform.icebreaker:IceBreakerBitsyPlatform"
 
 The full size iCEBreaker does not have an explicit USB port. Instead, you'll need to connect a USB breakout.
 The full iCEBreaker is an -unsupported- platform! To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.icebreaker:IceBreakerPlatform"
+    > export LUNA_PLATFORM="sol.gateware.platform.icebreaker:IceBreakerPlatform"
 """
 
 import os

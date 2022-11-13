@@ -85,7 +85,7 @@ class USBSerialDevice(Elaboratable):
     ----------
     bus: Record()
         The raw input record that provides our USB connection. Should be a connection to a USB PHY,
-        SerDes, or raw USB lines as described at: https://luna.readthedocs.io/en/latest/custom_hardware.html.
+        SerDes, or raw USB lines as described at: https://sol.readthedocs.io/en/latest/custom_hardware.html.
     idVendor: int, <65536
         The Vendor ID that should be presented for the relevant USB device.
     idProduct: int, <65536

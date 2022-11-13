@@ -7,7 +7,7 @@
 
 This is a non-core platform. To use it, you'll need to set your LUNA_PLATFORM variable:
 
-    > export LUNA_PLATFORM="luna.gateware.platform.netv2:NeTV2Platform"
+    > export LUNA_PLATFORM="sol.gateware.platform.netv2:NeTV2Platform"
 
 The NeTV2 has a fixed pull-up resistor on D-; which prevents it from being used as a
 FS device. To use the platform for full-speed USB, you'll need to move the resistor
@@ -247,5 +247,3 @@ class NeTV2Platform(Xilinx7SeriesPlatform, LUNAPlatform):
         xc3sprog = os.environ.get("XC3SPROG", "xc3sprog")
         with products.extract("{}.bit".format(name)) as bitstream_file:
             subprocess.check_call([xc3sprog, "-c", "ft4232h", bitstream_file])
-
-

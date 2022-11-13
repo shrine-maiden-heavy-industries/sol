@@ -16,9 +16,9 @@ import usb1
 from amaranth                import *
 from usb_construct.emitters   import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
 
-from luna                    import top_level_cli, configure_default_logging
-from luna.usb2               import USBDevice, USBStreamInEndpoint
-from luna.usb3               import USBSuperSpeedDevice, SuperSpeedStreamInEndpoint
+from sol                    import top_level_cli, configure_default_logging
+from sol.usb2               import USBDevice, USBStreamInEndpoint
+from sol.usb3               import USBSuperSpeedDevice, SuperSpeedStreamInEndpoint
 
 
 VENDOR_ID  = 0x16d0

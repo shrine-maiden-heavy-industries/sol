@@ -8,9 +8,9 @@
 import sys
 from amaranth import Signal, Module, Elaboratable, ClockDomain, ClockSignal, Cat, Array
 
-from luna                          import top_level_cli
-from luna.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer
-from luna.gateware.usb.devices.ila import USBIntegratedLogicAnalyzerFrontend
+from sol                          import top_level_cli
+from sol.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer
+from sol.gateware.usb.devices.ila import USBIntegratedLogicAnalyzerFrontend
 
 
 class ILAExample(Elaboratable):
@@ -64,4 +64,3 @@ class ILAExample(Elaboratable):
 if __name__ == "__main__":
     example = top_level_cli(ILAExample)
     example.interactive_display()
-

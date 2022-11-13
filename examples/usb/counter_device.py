@@ -10,8 +10,8 @@ import os
 from amaranth                import Elaboratable, Module, Signal
 from usb_construct.emitters   import DeviceDescriptorCollection
 
-from luna                    import top_level_cli
-from luna.usb2               import USBDevice, USBStreamInEndpoint
+from sol                    import top_level_cli
+from sol.usb2               import USBDevice, USBStreamInEndpoint
 
 
 class USBCounterDeviceExample(Elaboratable):

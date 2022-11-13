@@ -7,8 +7,8 @@
 
 from amaranth            import Elaboratable, Module
 
-from luna                import top_level_cli
-from luna.full_devices   import USBSerialDevice
+from sol                import top_level_cli
+from sol.full_devices   import USBSerialDevice
 
 
 class USBSerialDeviceExample(Elaboratable):

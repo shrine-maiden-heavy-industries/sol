@@ -15,17 +15,17 @@ from prompt_toolkit import print_formatted_text as pprint
 from amaranth import Signal, Elaboratable, Module, Cat, ClockDomain, ClockSignal, ResetInserter
 from amaranth.lib.cdc import FFSynchronizer
 
-from luna                             import top_level_cli
+from sol                             import top_level_cli
 
 from apollo_fpga                           import ApolloDebugger, ApolloILAFrontend
-from luna.gateware.debug.ila          import SyncSerialILA
+from sol.gateware.debug.ila          import SyncSerialILA
 
 
-from luna.gateware.utils.cdc          import synchronize
-from luna.gateware.architecture.car   import LunaECP5DomainGenerator
-from luna.gateware.interface.spi      import SPIRegisterInterface, SPIMultiplexer, SPIBus
-from luna.gateware.interface.ulpi     import UTMITranslator
-from luna.gateware.usb.analyzer       import USBAnalyzer
+from sol.gateware.utils.cdc          import synchronize
+from sol.gateware.architecture.car   import LunaECP5DomainGenerator
+from sol.gateware.interface.spi      import SPIRegisterInterface, SPIMultiplexer, SPIBus
+from sol.gateware.interface.ulpi     import UTMITranslator
+from sol.gateware.usb.analyzer       import USBAnalyzer
 
 
 DATA_AVAILABLE  = 1
@@ -147,6 +147,3 @@ if __name__ == "__main__":
         #byte = get_next_byte()
         #print(f"{byte:02x} ", end="")
         #sys.stdout.flush()
-
-
-

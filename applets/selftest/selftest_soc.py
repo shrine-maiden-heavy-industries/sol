@@ -11,10 +11,10 @@ from amaranth.hdl.xfrm             import DomainRenamer
 from lambdasoc.periph              import Peripheral
 from lambdasoc.periph.timer        import TimerPeripheral
 
-from luna                          import top_level_cli
-from luna.gateware.soc             import SimpleSoC, UARTPeripheral
-from luna.gateware.interface.ulpi  import ULPIRegisterWindow
-from luna.gateware.interface.psram import HyperRAMInterface
+from sol                          import top_level_cli
+from sol.gateware.soc             import SimpleSoC, UARTPeripheral
+from sol.gateware.interface.ulpi  import ULPIRegisterWindow
+from sol.gateware.interface.psram import HyperRAMInterface
 
 
 # Run our tests at a slower clock rate, for now.
