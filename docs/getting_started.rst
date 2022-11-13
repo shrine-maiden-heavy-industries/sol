@@ -5,14 +5,14 @@ Getting Started
 Setting up a Build Environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This guide highlights the installation / setup process for the ``luna``
+This guide highlights the installation / setup process for the ``sol``
 gateware library. It focuses on getting the Python module (and
 prerequisites) up and running.
 
 Prerequisites
 -------------
 
--  Python 3.7, or later.
+-  Python 3.9, or later.
 -  A working FPGA toolchain. We only officially support a toolchain
    composed of the `Project
    Trellis <https://github.com/YosysHQ/prjtrellis>`__ ECP5 tools, the
@@ -26,7 +26,7 @@ Installation
 ------------
 
 Currently, the LUNA library is considered a “work-in-progress”; and
-thus it’s assumed you’ll want to use a local copy of LUNA for
+thus it's assumed you'll want to use a local copy of LUNA for
 development.
 
 The easiest way to set this up is to install the distribution in a virtual environment.
@@ -72,9 +72,9 @@ program gateware using Amaranth HDL; so they can be run like any other script:
 The ``apollo`` utility.
 -------------------------
 
-The ``luna`` distribution depends on ``apollo``, which includes a utility
+The ``sol`` distribution depends on ``apollo``, which includes a utility
 that can be used to perform various simple functions useful in development;
-including simple JTAG operations, SVF playback, manipulating the board’s flash,
+including simple JTAG operations, SVF playback, manipulating the board's flash,
 and debug comms.
 
 .. code:: sh
@@ -98,6 +98,6 @@ and debug comms.
      [argument]  the argument to the given command; often a filename
      [value]     the value to a register write command
 
-To have easy access to the ``apollo`` command, you’ll need to ensure
+To have easy access to the ``apollo`` command, you'll need to ensure
 that your python binary directory is in your ``PATH``. For macOS/Linux,
 this often means adding ``~/.local/bin`` to your ``PATH``.

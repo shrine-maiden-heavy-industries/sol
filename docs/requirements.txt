@@ -5,6 +5,6 @@ pyusb
 -e git://github.com/amaranth-lang/amaranth-boards.git#egg=amaranth_boards
 -e git://github.com/lambdaconcept/minerva.git#egg=minerva
 -e git://github.com/shrine-maiden-heavy-industries/usb-construct.git@main#egg=usb-construct
--e git://github.com/greatscottgadgets/luna.git#egg=luna
+-e git://github.com/shrine-maiden-heavy-industries/sol.git#egg=sol
 pyvcd
 pyserial~=3.4

@@ -32,5 +32,5 @@ Some things you'll be able to use LUNA for in the future:
   backend for tools like `FaceDancer <https://github.com/usb-tools/facedancer>`__; allowing easily
   emulation and rapid prototyping of compliant and non-compliant USB devices.
 
-More detail on these features is covered in `the source <https://github.com/greatscottgadgets/luna>`__, and in
+More detail on these features is covered in `the source <https://github.com/shrine-maiden-heavy-industries/sol>`__, and in
 the remainder of this documentation.

@@ -2,9 +2,9 @@
 Self-made Hardware Bringup
 ==========================
 
-This guide is intended to help you bring up a LUNA board you’ve built
-yourself. If you’ve received your board from Great Scott Gadgets, it
-should already be set up, and you shouldn’t need to follow these steps.
+This guide is intended to help you bring up a LUNA board you've built
+yourself. If you've received your board from Great Scott Gadgets, it
+should already be set up, and you shouldn't need to follow these steps.
 
 Prerequisites
 -------------
@@ -21,7 +21,7 @@ Prerequisites
 -  A toolchain capable of building binaries for Cortex-M0 processors,
    such as the `GNU Arm
    Embedded <https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm>`__
-   toolchain. If you’re using Linux or macOS, you’ll likely want to
+   toolchain. If you're using Linux or macOS, you'll likely want to
    fetch this using a package manager; a suitable toolchain may be
    called something like ``arm-none-eabi-gcc``.
 -  A DFU programming utility, such as
@@ -37,14 +37,14 @@ The high-level process for bringing up your board is as follows:
 2. Compile and upload the *Apollo* Debug Controller firmware, which
    allows FPGA configuration & flashing; and provides debug interfaces
    for working with the FPGA.
-3. Install the ``luna`` tools, and run through the self-test procedures
+3. Install the ``sol`` tools, and run through the self-test procedures
    to validate that your board is working.
 
 Build/upload Saturn-V
 ---------------------
 
 The “recovery mode (RVM)” bootloader for LUNA boards is named
-*Saturn-V*; as it’s the first stage in “getting to LUNA”. The bootloader
+*Saturn-V*; as it's the first stage in “getting to LUNA”. The bootloader
 is located in [in its own repository](https://github.com/greatscottgadgets/saturn-v).
 
 You can clone the bootloader using `git`:
@@ -69,7 +69,7 @@ the board you're building for:
 .. code:: sh
 
    $ cd saturn-v
-   $ make BOARD=luna_d21
+   $ make BOARD=sol_d21
 
 
 The build should yield two useful build products: ``bootloader.elf`` and
@@ -77,7 +77,7 @@ The build should yield two useful build products: ``bootloader.elf`` and
 two files.
 
 Next, connect your SWD programmer to the header labeled ``uC``, and
-upload bootloader image. If you’re using the Black Magic Probe, this
+upload bootloader image. If you're using the Black Magic Probe, this
 might look like:
 
 .. code:: sh
@@ -104,7 +104,7 @@ You can verify that the board is DFU-programmable by running
 
    $ dfu-util --list
 
-If your device shows up as a LUNA board, congratulations! You’re ready
+If your device shows up as a LUNA board, congratulations! You're ready
 to move on to the next step.
 
 Optional: Bootloader Locking
@@ -123,7 +123,7 @@ Build/upload Apollo
 -------------------
 
 The next bringup step is to upload the *Apollo* Debug Controller
-firmware, which will provide an easy way to interface with the board’s
+firmware, which will provide an easy way to interface with the board's
 FPGA and any gateware running on it. The Apollo source is located
 [in its own repository](https://github.com/greatscottgadgets/apollo).
 
@@ -136,14 +136,14 @@ You can clone the bootloader using `git`:
 
 
 You can build and run the firmware in one step by invoking ``make``. In
-order to ensure your firmware matches the hardware it’s running on,
-you’ll need to provide the hardware revision using the
+order to ensure your firmware matches the hardware it's running on,
+you'll need to provide the hardware revision using the
 ``BOARD_REVISION_MAJOR`` and ``BOARD_REVISION_MINOR`` make variables.
 
-The board’s hardware revision is printed on its silkscreen in a
+The board's hardware revision is printed on its silkscreen in a
 ``r(MAJOR).(MINOR)`` format. Board ``r0.2`` would have a
 ``BOARD_REVISION_MAJOR=0`` and a ``BOARD_REVISION_MINOR=2``. If your
-board’s revision ends in a ``+``, do not include it in the revision
+board's revision ends in a ``+``, do not include it in the revision
 number.
 
 An example invocation for a ``r0.2`` board might be:
@@ -159,10 +159,10 @@ Running Self-Tests
 ------------------
 
 The final step of bringup is to validate the functionality of your
-hardware. This is most easily accomplished by running LUNA’s interactive
+hardware. This is most easily accomplished by running LUNA's interactive
 self-test applet.
 
-Before you can run the applet, you’ll need to have a working ``luna``
+Before you can run the applet, you'll need to have a working ``sol``
 development environment. See [[Setting up the development environment]]
 to get your environment set up.
 
@@ -177,7 +177,7 @@ detected devices:
        Hardware: LUNA r0.2
        Serial number: <snip>
 
-Once you’ve validated connectivity, you’re ready to try running the
+Once you've validated connectivity, you're ready to try running the
 ``interactive-test`` applet. From the root of the repository:
 
 .. code:: sh
@@ -202,5 +202,5 @@ submodules. You can pull down the relevant submodules using ``git``:
 On Linux, this can be caused by a permissions issue. Check first for the
 presence of your device using ``lsusb``; if you see a device with the
 VID/PID ``1d50:615c``, your board is present – and you likely have a
-permissions issue. You’ll likely need to install permission-granting
+permissions issue. You'll likely need to install permission-granting
 udev rules.

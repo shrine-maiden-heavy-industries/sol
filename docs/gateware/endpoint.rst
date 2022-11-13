@@ -34,7 +34,7 @@ interface handles a given endpoint or request type.
 ``usb2.endpoint`` Components
 ----------------------------
 
-.. automodule :: luna.gateware.usb.usb2.endpoint
+.. automodule :: sol.gateware.usb.usb2.endpoint
   :members:
   :show-inheritance:
 
@@ -55,7 +55,7 @@ The LUNA library ships with a few provided endpoint interfaces. These include:
 ``usb2.control`` Components
 ---------------------------
 
-.. automodule :: luna.gateware.usb.usb2.control
+.. automodule :: sol.gateware.usb.usb2.control
   :members:
   :show-inheritance:
 
@@ -64,7 +64,7 @@ The LUNA library ships with a few provided endpoint interfaces. These include:
 ``usb2.interfaces.eptri`` Components
 ------------------------------------
 
-.. automodule :: luna.gateware.usb.usb2.interfaces.eptri
+.. automodule :: sol.gateware.usb.usb2.interfaces.eptri
   :members:
   :show-inheritance:
 
@@ -72,7 +72,7 @@ The LUNA library ships with a few provided endpoint interfaces. These include:
 Bulk Endpoint Helpers / ``usb2.endpoints.stream`` Components
 ------------------------------------------------------------
 
-.. automodule :: luna.gateware.usb.usb2.endpoints.stream
+.. automodule :: sol.gateware.usb.usb2.endpoints.stream
   :members:
   :show-inheritance:
 
@@ -80,6 +80,6 @@ Bulk Endpoint Helpers / ``usb2.endpoints.stream`` Components
 Interrupt Endpoint Helpers / ``usb2.endpoints.status`` Components
 -----------------------------------------------------------------
 
-.. automodule :: luna.gateware.usb.usb2.endpoints.status
+.. automodule :: sol.gateware.usb.usb2.endpoints.status
   :members:
   :show-inheritance:

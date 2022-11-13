@@ -124,7 +124,7 @@ The sequencer:
 ``usb2.device`` Components
 --------------------------
 
-.. automodule :: luna.gateware.usb.usb2.device
+.. automodule :: sol.gateware.usb.usb2.device
   :members:
   :show-inheritance:
 
@@ -132,7 +132,7 @@ The sequencer:
 ``usb2.packet`` Components
 --------------------------
 
-.. automodule :: luna.gateware.usb.usb2.packet
+.. automodule :: sol.gateware.usb.usb2.packet
   :members:
   :show-inheritance:
 
@@ -140,8 +140,6 @@ The sequencer:
 ``usb2.reset`` Components
 --------------------------
 
-.. automodule :: luna.gateware.usb.usb2.reset
+.. automodule :: sol.gateware.usb.usb2.reset
   :members:
   :show-inheritance:
-
-
