@@ -11,7 +11,7 @@ the link layer; and the generation of our packets is handled by our endpoint.
 """
 
 from amaranth import *
-from usb_protocol.types.superspeed import HeaderPacketType
+from usb_construct.types.superspeed import HeaderPacketType
 
 from ..link.header import HeaderQueue
 from ..link.data   import DataHeaderPacket
@@ -50,5 +50,3 @@ class DataHeaderReceiver(Elaboratable):
             m.d.comb += self.header_sink.ready.eq(1)
 
         return m
-
-

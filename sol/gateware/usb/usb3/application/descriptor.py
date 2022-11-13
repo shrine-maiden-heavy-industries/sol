@@ -6,7 +6,7 @@
 """ Utilities for building USB3 descriptors into gateware. """
 
 from amaranth                          import *
-from usb_protocol.emitters.descriptors import DeviceDescriptorCollection
+from usb_construct.emitters.descriptors import DeviceDescriptorCollection
 
 from ...stream                         import SuperSpeedStreamInterface
 from ....stream.generator              import ConstantStreamGenerator

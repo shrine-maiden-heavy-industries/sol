@@ -11,7 +11,7 @@ connecting streams to USB endpoints.
 """
 
 from amaranth import *
-from usb_protocol.types import USBDirection
+from usb_construct.types import USBDirection
 
 from ...stream                import SuperSpeedStreamInterface
 from ..protocol.endpoint      import SuperSpeedEndpointInterface

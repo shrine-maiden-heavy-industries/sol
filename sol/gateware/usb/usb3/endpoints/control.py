@@ -7,8 +7,8 @@
 
 from amaranth import *
 
-from usb_protocol.emitters    import DeviceDescriptorCollection
-from usb_protocol.types       import USBRequestType, USBDirection
+from usb_construct.emitters    import DeviceDescriptorCollection
+from usb_construct.types       import USBRequestType, USBDirection
 
 from ..protocol.endpoint      import SuperSpeedEndpointInterface
 from ..application.request    import SuperSpeedRequestHandlerInterface, SuperSpeedSetupDecoder

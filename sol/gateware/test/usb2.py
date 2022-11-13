@@ -6,7 +6,7 @@
 
 """ Full-device test harnesses for USB2. """
 
-from usb_protocol.types import USBStandardRequests, USBPacketID
+from usb_construct.types import USBStandardRequests, USBPacketID
 
 from .                  import LunaGatewareTestCase
 

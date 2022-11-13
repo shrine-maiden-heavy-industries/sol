@@ -8,7 +8,7 @@
 import unittest
 
 from amaranth               import *
-from usb_protocol.types     import USBRequestType, USBRequestRecipient
+from usb_construct.types     import USBRequestType, USBRequestRecipient
 
 from ...request             import SetupPacket
 from ...stream              import SuperSpeedStreamInterface

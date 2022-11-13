@@ -14,9 +14,9 @@ from ..usb2.device                     import USBDevice
 from ..usb2.request                    import USBRequestHandler, StallOnlyRequestHandler
 from ..usb2.endpoints.stream           import USBMultibyteStreamInEndpoint
 
-from usb_protocol.types                import USBRequestType
-from usb_protocol.emitters             import DeviceDescriptorCollection
-from usb_protocol.emitters.descriptors import cdc
+from usb_construct.types                import USBRequestType
+from usb_construct.emitters             import DeviceDescriptorCollection
+from usb_construct.emitters.descriptors import cdc
 
 
 class USBIntegratedLogicAnalyzer(Elaboratable):

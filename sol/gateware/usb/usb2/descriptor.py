@@ -10,8 +10,8 @@ import unittest
 import functools
 
 from amaranth                                import *
-from usb_protocol.emitters.descriptors       import DeviceDescriptorCollection
-from usb_protocol.types.descriptors.standard import StandardDescriptorNumbers
+from usb_construct.emitters.descriptors       import DeviceDescriptorCollection
+from usb_construct.types.descriptors.standard import StandardDescriptorNumbers
 
 from ..stream                                import USBInStreamInterface
 from ...stream.generator                     import ConstantStreamGenerator

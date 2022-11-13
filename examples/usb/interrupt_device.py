@@ -8,8 +8,8 @@
 import os
 
 from amaranth                       import Elaboratable, Module, Signal
-from usb_protocol.types             import USBTransferType
-from usb_protocol.emitters          import DeviceDescriptorCollection
+from usb_construct.types             import USBTransferType
+from usb_construct.emitters          import DeviceDescriptorCollection
 
 from luna                           import top_level_cli
 from luna.usb2                      import USBDevice, USBSignalInEndpoint

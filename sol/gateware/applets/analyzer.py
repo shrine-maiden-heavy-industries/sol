@@ -17,8 +17,8 @@ from datetime import datetime
 from enum import IntEnum
 
 from amaranth                          import Signal, Elaboratable, Module
-from usb_protocol.emitters             import DeviceDescriptorCollection
-from usb_protocol.types                import USBRequestType
+from usb_construct.emitters             import DeviceDescriptorCollection
+from usb_construct.types                import USBRequestType
 
 from luna.gateware.platform            import get_appropriate_platform
 from luna.usb2                         import USBDevice, USBStreamInEndpoint

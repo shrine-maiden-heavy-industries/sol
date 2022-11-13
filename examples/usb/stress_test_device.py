@@ -8,7 +8,7 @@
 import os
 
 from amaranth                        import Elaboratable, Module, Signal
-from usb_protocol.emitters           import DeviceDescriptorCollection
+from usb_construct.emitters           import DeviceDescriptorCollection
 
 from luna                            import top_level_cli
 from luna.gateware.usb.usb2.device   import USBDevice

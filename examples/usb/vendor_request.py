@@ -6,8 +6,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 from amaranth                       import Elaboratable, Module, Cat
-from usb_protocol.types             import USBRequestType
-from usb_protocol.emitters          import DeviceDescriptorCollection
+from usb_construct.types             import USBRequestType
+from usb_construct.emitters          import DeviceDescriptorCollection
 
 from luna                           import top_level_cli
 from luna.gateware.platform         import NullPin

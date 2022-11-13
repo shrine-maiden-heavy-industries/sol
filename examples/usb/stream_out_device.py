@@ -8,7 +8,7 @@
 import os
 
 from amaranth                import Elaboratable, Module, Cat
-from usb_protocol.emitters   import DeviceDescriptorCollection
+from usb_construct.emitters   import DeviceDescriptorCollection
 
 from luna                    import top_level_cli
 from luna.usb2               import USBDevice, USBStreamOutEndpoint

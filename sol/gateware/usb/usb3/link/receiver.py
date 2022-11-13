@@ -10,7 +10,7 @@ import unittest
 from amaranth                      import *
 from amaranth.hdl.ast              import Fell
 
-from usb_protocol.types.superspeed import LinkCommand
+from usb_construct.types.superspeed import LinkCommand
 
 from .header                       import HeaderPacket, HeaderQueue
 from .crc                          import compute_usb_crc5, HeaderPacketCRC

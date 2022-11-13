@@ -15,8 +15,8 @@ from luna.gateware.test import utils
 
 from amaranth               import *
 from amaranth.hdl.ast       import Value, Const
-from usb_protocol.types     import USBStandardRequests, USBRequestType
-from usb_protocol.emitters  import DeviceDescriptorCollection
+from usb_construct.types     import USBStandardRequests, USBRequestType
+from usb_construct.emitters  import DeviceDescriptorCollection
 
 from ..usb2.request         import RequestHandlerInterface, USBRequestHandler
 from ..usb2.descriptor      import GetDescriptorHandlerDistributed, GetDescriptorHandlerBlock

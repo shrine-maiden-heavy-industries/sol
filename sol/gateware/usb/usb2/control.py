@@ -8,8 +8,8 @@
 import unittest
 
 from amaranth              import Signal, Module, Elaboratable
-from usb_protocol.emitters import DeviceDescriptorCollection
-from usb_protocol.types    import USBRequestType
+from usb_construct.emitters import DeviceDescriptorCollection
+from usb_construct.types    import USBRequestType
 
 from .packet               import DataCRCInterface, USBDataPacketCRC, USBInterpacketTimer
 from .packet               import USBTokenDetector, TokenDetectorInterface

@@ -9,8 +9,8 @@ import unittest
 
 from amaranth import *
 
-from usb_protocol.types import USBDirection
-from usb_protocol.types.superspeed import HeaderPacketType
+from usb_construct.types import USBDirection
+from usb_construct.types.superspeed import HeaderPacketType
 
 from .crc              import HeaderPacketCRC, DataPacketPayloadCRC, compute_usb_crc5
 from .header           import HeaderPacket, HeaderQueue

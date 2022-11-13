@@ -14,7 +14,7 @@ import time
 import usb1
 
 from amaranth                import *
-from usb_protocol.emitters   import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
+from usb_construct.emitters   import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
 
 from luna                    import top_level_cli, configure_default_logging
 from luna.usb2               import USBDevice, USBStreamInEndpoint

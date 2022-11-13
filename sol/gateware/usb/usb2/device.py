@@ -11,8 +11,8 @@ to your own designs; including the core :class:`USBDevice` class.
 import unittest
 
 from amaranth                  import Signal, Module, Elaboratable, Const
-from usb_protocol.types        import DescriptorTypes
-from usb_protocol.emitters     import DeviceDescriptorCollection
+from usb_construct.types        import DescriptorTypes
+from usb_construct.emitters     import DeviceDescriptorCollection
 
 from ...interface.ulpi         import UTMITranslator
 from ...interface.utmi         import UTMIInterfaceMultiplexer

@@ -6,7 +6,7 @@
 """ Packet transmission handling gateware. """
 
 from amaranth                      import *
-from usb_protocol.types.superspeed import LinkCommand, HeaderPacketType
+from usb_construct.types.superspeed import LinkCommand, HeaderPacketType
 
 from .header                       import HeaderPacket, HeaderQueue
 from .crc                          import compute_usb_crc5, HeaderPacketCRC, DataPacketPayloadCRC

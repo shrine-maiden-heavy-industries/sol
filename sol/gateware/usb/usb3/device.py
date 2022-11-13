@@ -12,7 +12,7 @@ import logging
 
 from amaranth import *
 
-from usb_protocol.emitters import DeviceDescriptorCollection
+from usb_construct.emitters import DeviceDescriptorCollection
 
 # USB3 Protocol Stack
 from .physical             import USB3PhysicalLayer

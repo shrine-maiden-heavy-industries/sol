@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 from amaranth import Module, Signal
-from usb_protocol.types import USBRequestType, USBRequestRecipient
-from usb_protocol.types.descriptors.microsoft import MicrosoftRequests
-from usb_protocol.emitters.descriptors.microsoft import PlatformDescriptorCollection
+from usb_construct.types import USBRequestType, USBRequestRecipient
+from usb_construct.types.descriptors.microsoft import MicrosoftRequests
+from usb_construct.emitters.descriptors.microsoft import PlatformDescriptorCollection
 from ...usb2.request import USBRequestHandler, SetupPacket
 
 from .descriptorSet import GetDescriptorSetHandler
@@ -28,7 +28,7 @@ class WindowsRequestHandler(USBRequestHandler):
 	`Microsoft OS 2.0 Descriptors Specification <https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/microsoft-os-2-0-descriptors-specification>`_.
 
 	The main thing this handler has to deal with are the vendor requests to the device as the
-	:py:class:`usb_protocol.emitters.descriptors.microsoft.PlatformDescriptorCollection` and
+	:py:class:`usb_construct.emitters.descriptors.microsoft.PlatformDescriptorCollection` and
 	descriptor system deals with the the rest of the spec.
 
 	To this end, when triggered, the handler works as follows:

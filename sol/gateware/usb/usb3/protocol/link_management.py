@@ -6,7 +6,7 @@
 """ Link Management Packet (LMP) -related gateware. """
 
 from amaranth import *
-from usb_protocol.types.superspeed import HeaderPacketType, LinkManagementPacketSubtype
+from usb_construct.types.superspeed import HeaderPacketType, LinkManagementPacketSubtype
 
 from ..link.header import HeaderQueue, HeaderPacket
 

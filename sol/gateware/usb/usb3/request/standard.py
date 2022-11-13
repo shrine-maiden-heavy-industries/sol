@@ -9,8 +9,8 @@ import unittest
 
 from amaranth                 import *
 
-from usb_protocol.types       import USBStandardRequests, USBRequestType
-from usb_protocol.emitters    import DeviceDescriptorCollection
+from usb_construct.types       import USBStandardRequests, USBRequestType
+from usb_construct.emitters    import DeviceDescriptorCollection
 
 from ..application.request    import SuperSpeedRequestHandlerInterface
 from ..application.descriptor import GetDescriptorHandler
@@ -254,4 +254,3 @@ class StandardRequestHandler(Elaboratable):
 
 if __name__ == "__main__":
     unittest.main(warnings="ignore")
-

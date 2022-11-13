@@ -6,7 +6,7 @@
 """ Isochronous Timestamp Packet (ITP)-related gateware. """
 
 from amaranth import *
-from usb_protocol.types.superspeed import HeaderPacketType
+from usb_construct.types.superspeed import HeaderPacketType
 
 from ..link.header import HeaderQueue, HeaderPacket
 
