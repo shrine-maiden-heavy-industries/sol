@@ -1,8 +1,0 @@
-tox
-pyusb
--e git+https://github.com/amaranth-lang/amaranth.git#egg=amaranth
--e git+https://github.com/amaranth-lang/amaranth-soc.git#egg=amaranth-soc
--e git+https://github.com/amaranth-lang/amaranth-boards.git#egg=amaranth_boards
--e git+https://github.com/shrine-maiden-heavy-industries/usb-construct.git#egg=usb-construct
-pyvcd
-pyserial~=3.4
