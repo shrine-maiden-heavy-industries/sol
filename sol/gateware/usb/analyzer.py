@@ -173,9 +173,9 @@ class USBAnalyzer(Elaboratable):
 				with m.Elif(self.utmi.rx_active):
 					m.next = "CAPTURE"
 					m.d.usb += [
-					    header_location  .eq(write_location),
-					    write_location   .eq(write_location + self.HEADER_SIZE_BYTES),
-					    packet_size      .eq(0),
+						header_location  .eq(write_location),
+						write_location   .eq(write_location + self.HEADER_SIZE_BYTES),
+						packet_size      .eq(0),
 					]
 
 
@@ -195,14 +195,14 @@ class USBAnalyzer(Elaboratable):
 				# Advance the write pointer each time we receive a bit.
 				with m.If(byte_received):
 					m.d.usb += [
-					    write_location  .eq(write_location + 1),
-					    packet_size     .eq(packet_size + 1)
+						write_location  .eq(write_location + 1),
+						packet_size     .eq(packet_size + 1)
 					]
 
 					# If this would be filling up our data memory,
 					# move to the OVERRUN state.
 					with m.If(fifo_count == self.mem_size - 1 - self.HEADER_SIZE_BYTES):
-					    m.next = "OVERRUN"
+						m.next = "OVERRUN"
 
 				# If we've stopped receiving, move to the "finalize" state.
 				with m.If(~self.utmi.rx_active):
@@ -211,12 +211,12 @@ class USBAnalyzer(Elaboratable):
 					# Optimization: if we didn't receive any data, there's no need
 					# to create a packet. Clear our header from the FIFO and disarm.
 					with m.If(packet_size == 0):
-					    m.next = "START"
-					    m.d.usb += [
-					        write_location.eq(header_location)
-					    ]
+						m.next = "START"
+						m.d.usb += [
+							write_location.eq(header_location)
+						]
 					with m.Else():
-					    m.next = "EOP_1"
+						m.next = "EOP_1"
 
 			# EOP: handle the end of the relevant packet.
 			with m.State("EOP_1"):
@@ -257,7 +257,10 @@ class USBAnalyzer(Elaboratable):
 
 			with m.State("OVERRUN"):
 				# TODO: we should probably set an overrun flag and then emit an EOP, here?
-				pass
+
+				# If capture is stopped by the host, reset back to the ready state.
+				with m.If(~self.capture_enable):
+					m.next = "START"
 
 
 		return m

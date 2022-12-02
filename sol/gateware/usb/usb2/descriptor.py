@@ -42,9 +42,9 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 
 	I/O port:
 		I: value[16]  -- The value field associated with the Get Descriptor request.
-					     Contains the descriptor type and index.
+		                 Contains the descriptor type and index.
 		I: length[16] -- The length field associated with the Get Descriptor request.
-					     Determines the maximum amount allowed in a response.
+		                 Determines the maximum amount allowed in a response.
 
 		I: start      -- Strobe that indicates when a descriptor should be transmitted.
 
@@ -56,7 +56,7 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 		"""
 		Parameteres:
 			descriptor_collection -- The DeviceDescriptorCollection containing the descriptors
-					                 to use for this device.
+			                         to use for this device.
 		"""
 
 		self._descriptors = descriptor_collection
@@ -147,9 +147,9 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 	I/O port:
 		I: value[16]      -- The value field associated with the Get Descriptor request.
-					         Contains the descriptor type and index.
+		                     Contains the descriptor type and index.
 		I: length[16]     -- The length field associated with the Get Descriptor request.
-					         Determines the maximum amount allowed in a response.
+		                     Determines the maximum amount allowed in a response.
 
 		I: start          -- Strobe that indicates when a descriptor should be transmitted.
 		I: start_position -- Specifies the starting position of the descriptor data to be transmitted.
@@ -398,7 +398,10 @@ class GetDescriptorHandlerBlock(Elaboratable):
 			m.d.sync += length.eq(self._max_packet_length)
 
 		# Register that stores our current position in the stream.
-		position_in_stream = Signal(range(descriptor_max_length))
+		# We still want to be able to store a position beyond bounds (+1),
+		# this is required for descriptors length multiple of the maximum packet size.
+		# Like this we do not overflow our position and are able to send a ZLP on the next request.
+		position_in_stream = Signal(range(descriptor_max_length + 1))
 		bytes_sent = Signal.like(length)
 
 		# Registers that store descriptor length and data base address.
@@ -467,9 +470,9 @@ class GetDescriptorHandlerBlock(Elaboratable):
 				with m.Else():
 					m.d.comb += rom_read_port.addr.eq(rom_element_pointer + index)
 					with m.If(length == 0):
-					    m.next = 'SEND_ZLP'
+						m.next = 'SEND_ZLP'
 					with m.Else():
-					    m.next = 'LOOKUP_DESCRIPTOR'
+						m.next = 'LOOKUP_DESCRIPTOR'
 
 
 			# LOOKUP_DESCRIPTOR -- we've now fetched from ROM the location of the descriptor in memory.
@@ -488,7 +491,13 @@ class GetDescriptorHandlerBlock(Elaboratable):
 					descriptor_length             .eq(rom_element_count),
 				]
 
-				m.next = 'SEND_DESCRIPTOR'
+				# Our current position may point out of bounds in case our descriptor length is a multiple
+				# of the maximum packet size. We must send a ZLP now so the host knows the previous
+				# packet was the end of the descriptor.
+				with m.If(position_in_stream >= rom_element_count):
+					m.next = 'SEND_ZLP'
+				with m.Else():
+					m.next = 'SEND_DESCRIPTOR'
 
 
 			# SEND_DESCRIPTOR -- we finally are actively streaming our descriptor; which we'll complete until
@@ -514,20 +523,20 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 					# If we're not yet done, move to the next byte in the stream.
 					with m.If(~on_last_packet):
-					    m.d.sync += [
-					        position_in_stream  .eq(position_in_stream + 1),
-					        bytes_sent          .eq(bytes_sent + 1),
-					    ]
-					    m.d.comb += rom_read_port.addr.eq(descriptor_data_base_address+(position_in_stream + 1).bit_select(2, position_in_stream.width - 2)),
+						m.d.sync += [
+							position_in_stream  .eq(position_in_stream + 1),
+							bytes_sent          .eq(bytes_sent + 1),
+						]
+						m.d.comb += rom_read_port.addr.eq(descriptor_data_base_address+(position_in_stream + 1).bit_select(2, position_in_stream.width - 2)),
 
 					# Otherwise, we've finished! Return to IDLE.
 					with m.Else():
-					    # Reset some values, might not be really required
-					    m.d.sync += [
-					        descriptor_length             .eq(0),
-					        descriptor_data_base_address  .eq(0)
-					    ]
-					    m.next = 'IDLE'
+						# Reset some values, might not be really required
+						m.d.sync += [
+							descriptor_length             .eq(0),
+							descriptor_data_base_address  .eq(0)
+						]
+						m.next = 'IDLE'
 
 			# SEND_ZLP -- we've had an empty descriptor request, or a request that ended on a packet boundary.
 			# Send a zero-length packet to end the transaction.
