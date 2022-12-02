@@ -8,8 +8,8 @@ exclude =
 	_build,
 	deps
 
-max-line-length = 135
-indent-size = 1
+max-line-length = 120
+indent-size = 4
 statistics = True
 ignore =
 	E124,
