@@ -41,7 +41,7 @@ class USBAnalyzer(Elaboratable):
 	----------
 	utmi_interface: UTMIInterface()
 		The UTMI interface that carries the data to be analyzed.
-	mem_depth: int, default=8192
+	mem_depth: int, default = 8192
 		The depth of the analyzer's local ringbuffer, in bytes.
 		Must be a power of 2.
 	'''
@@ -53,7 +53,7 @@ class USBAnalyzer(Elaboratable):
 	# Support a maximum payload size of 1024B, plus a 1-byte PID and a 2-byte CRC16.
 	MAX_PACKET_SIZE_BYTES = 1024 + 1 + 2
 
-	def __init__(self, *, utmi_interface, mem_depth=65536):
+	def __init__(self, *, utmi_interface, mem_depth = 65536):
 		'''
 		Parameters:
 			utmi_interface -- A record or elaboratable that presents a UTMI interface.
@@ -64,7 +64,7 @@ class USBAnalyzer(Elaboratable):
 		assert (mem_depth % 2) == 0, 'mem_depth must be a power of 2'
 
 		# Internal storage memory.
-		self.mem = Memory(width=8, depth=mem_depth, name='analysis_ringbuffer')
+		self.mem = Memory(width = 8, depth = mem_depth, name = 'analysis_ringbuffer')
 		self.mem_size = mem_depth
 
 		#
@@ -85,8 +85,8 @@ class USBAnalyzer(Elaboratable):
 		m = Module()
 
 		# Memory read and write ports.
-		m.submodules.read  = mem_read_port  = self.mem.read_port(domain='usb')
-		m.submodules.write = mem_write_port = self.mem.write_port(domain='usb')
+		m.submodules.read  = mem_read_port  = self.mem.read_port(domain = 'usb')
+		m.submodules.write = mem_write_port = self.mem.write_port(domain = 'usb')
 
 		# Store the memory address of our active packet header, which will store
 		# packet metadata like the packet size.
@@ -95,7 +95,7 @@ class USBAnalyzer(Elaboratable):
 
 		# Read FIFO status.
 		read_location   = Signal.like(mem_read_port.addr)
-		fifo_count      = Signal.like(mem_read_port.addr, reset=0)
+		fifo_count      = Signal.like(mem_read_port.addr, reset = 0)
 		fifo_new_data   = Signal()
 
 		# Current receive status.
@@ -153,7 +153,7 @@ class USBAnalyzer(Elaboratable):
 		#
 		# Core analysis FSM.
 		#
-		with m.FSM(domain='usb') as f:
+		with m.FSM(domain = 'usb') as f:
 			m.d.comb += [
 				self.idle      .eq(f.ongoing('START') | f.ongoing('IDLE')),
 				self.overrun   .eq(f.ongoing('OVERRUN')),
@@ -282,7 +282,7 @@ class USBAnalyzerTest(SolGatewareTestCase):
 			('rx_error',    1),
 			('rx_complete', 1),
 		])
-		self.analyzer = USBAnalyzer(utmi_interface=self.utmi, mem_depth=128)
+		self.analyzer = USBAnalyzer(utmi_interface = self.utmi, mem_depth = 128)
 		return self.analyzer
 
 
@@ -414,8 +414,8 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 		# Create a stack of our UTMITranslator and our USBAnalyzer.
 		# We'll wrap the both in a module to establish a synthetic hierarchy.
 		m = Module()
-		m.submodules.translator = self.translator = UTMITranslator(ulpi=self.ulpi, handle_clocking=False)
-		m.submodules.analyzer   = self.analyzer   = USBAnalyzer(utmi_interface=self.translator, mem_depth=128)
+		m.submodules.translator = self.translator = UTMITranslator(ulpi = self.ulpi, handle_clocking = False)
+		m.submodules.analyzer   = self.analyzer   = USBAnalyzer(utmi_interface = self.translator, mem_depth = 128)
 		return m
 
 

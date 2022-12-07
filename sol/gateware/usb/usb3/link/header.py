@@ -50,7 +50,7 @@ class HeaderPacket(Record):
 
 
 	def __init__(self):
-		super().__init__(self.get_layout(), name=self.__class__.__name__)
+		super().__init__(self.get_layout(), name = self.__class__.__name__)
 
 
 
@@ -67,12 +67,12 @@ class HeaderQueue(Record):
 		Strobed by the consumer to indicate that it has accepted the given header.
 	'''
 
-	def __init__(self, *, header_type=HeaderPacket):
+	def __init__(self, *, header_type = HeaderPacket):
 		super().__init__([
 			('valid', 1),
 			('header', header_type.get_layout()),
 			('ready', 1),
-		], name='HeaderQueue')
+		], name = 'HeaderQueue')
 
 
 	def get_type(self):
@@ -107,7 +107,7 @@ class HeaderQueueArbiter(StreamArbiter):
 	'''
 
 	def __init__(self):
-		super().__init__(stream_type=HeaderQueue, domain='ss')
+		super().__init__(stream_type = HeaderQueue, domain = 'ss')
 
 
 	def add_producer(self, interface: HeaderQueue):

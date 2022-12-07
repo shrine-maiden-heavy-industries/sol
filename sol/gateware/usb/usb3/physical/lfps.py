@@ -17,7 +17,7 @@ a 'slow' clock is generated (between 10M-50MHz) for a specific duration and with
 period. After the burst, the transceiver is put in electrical idle mode (same electrical level on
 P/N pairs while in nominal mode P/N pairs always have an opposite level):
 
-Transceiver level/mode: _=0, -=1 x=electrical idle
+Transceiver level/mode: _ = 0, - = 1 x = electrical idle
 |-_-_-_-xxxxxxxxxxxxxxxxxxxx|-_-_-_-xxxxxxxxxxxxxxxxxxxx|...
 |<burst>                    |<burst>                    |...
 |<-----repeat period------->|<-----repeat period------->|...
@@ -48,7 +48,7 @@ __all__ = (
 class LFPSTiming:
 	'''LPFS timings with typical, minimum and maximum timing values.'''
 
-	def __init__(self, t_typ=None, t_min=None, t_max=None):
+	def __init__(self, t_typ = None, t_min = None, t_max = None):
 		self.t_typ = t_typ
 		self.t_min = t_min
 		self.t_max = t_max
@@ -61,7 +61,7 @@ class LFPSTiming:
 class LFPS:
 	'''LPFS patterns with burst and repeat timings.'''
 
-	def __init__(self, burst, repeat=None, cycles=None):
+	def __init__(self, burst, repeat = None, cycles = None):
 		self.burst  = burst
 		self.repeat = repeat
 		self.cycles = None
@@ -70,12 +70,12 @@ class LFPS:
 # Our actual pattern constants; as specified by the USB3 specification.
 # [USB 3.2r1: Table 6-30]
 
-_PollingLFPSBurst  = LFPSTiming(t_typ=1.0e-6,  t_min=0.6e-6, t_max=1.4e-6)
-_PollingLFPSRepeat = LFPSTiming(t_typ=10.0e-6, t_min=6.0e-6, t_max=14.0e-6)
-_PollingLFPS       = LFPS(burst=_PollingLFPSBurst, repeat=_PollingLFPSRepeat)
+_PollingLFPSBurst  = LFPSTiming(t_typ = 1.0e-6,  t_min = 0.6e-6, t_max = 1.4e-6)
+_PollingLFPSRepeat = LFPSTiming(t_typ = 10.0e-6, t_min = 6.0e-6, t_max = 14.0e-6)
+_PollingLFPS       = LFPS(burst = _PollingLFPSBurst, repeat = _PollingLFPSRepeat)
 
-_ResetLFPSBurst    = LFPSTiming(t_typ=100.0e-3, t_min=80.0e-3,  t_max=120.0e-3)
-_ResetLFPS         = LFPS(burst=_ResetLFPSBurst)
+_ResetLFPSBurst    = LFPSTiming(t_typ = 100.0e-3, t_min = 80.0e-3,  t_max = 120.0e-3)
+_ResetLFPS         = LFPS(burst = _ResetLFPSBurst)
 
 
 #
@@ -96,7 +96,7 @@ class LFPSDetector(Elaboratable):
 	detect: Signal(), output
 		Strobes high when a valid LFPS burst is detected.
 	'''
-	def __init__(self, lfps_pattern, ss_clk_frequency=125e6):
+	def __init__(self, lfps_pattern, ss_clk_frequency = 125e6):
 		self._pattern              = lfps_pattern
 		self._clock_frequency      = ss_clk_frequency
 
@@ -111,7 +111,7 @@ class LFPSDetector(Elaboratable):
 		m = Module()
 
 		# Create an in-domain version of our square-wave-detector signal.
-		present = synchronize(m, self.signaling_received, o_domain='ss')
+		present = synchronize(m, self.signaling_received, o_domain = 'ss')
 
 		# Figure out how large of a counter we're going to need...
 		burst_cycles_min    = ceil(self._clock_frequency * self._pattern.burst.t_min)
@@ -136,7 +136,7 @@ class LFPSDetector(Elaboratable):
 		#
 		# Detector state machine.
 		#
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# WAIT_FOR_NEXT_BURST -- we're not currently in a measurement; but are waiting for a
 			# burst to begin, so we can perform a full measurement.
@@ -144,7 +144,7 @@ class LFPSDetector(Elaboratable):
 				m.d.ss += last_iteration_matched.eq(0)
 
 				# If we've just seen the start of a burst, start measuring it.
-				with m.If(rising_edge_detected(m, present, domain='ss')):
+				with m.If(rising_edge_detected(m, present, domain = 'ss')):
 					m.d.ss += count.eq(1),
 					m.next = 'MEASURE_BURST'
 
@@ -250,7 +250,7 @@ class LFPSGenerator(Elaboratable):
 		count = Signal(range(0, repeat_cycles))
 		m.d.ss += count.eq(count + 1)
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# IDLE -- wait for an LFPS burst request.
 			with m.State('IDLE'):
@@ -347,7 +347,7 @@ class LFPSTransceiver(Elaboratable):
 		Strobes high when Reset LFPS is detected.
 	'''
 
-	def __init__(self, ss_clk_freq=125e6):
+	def __init__(self, ss_clk_freq = 125e6):
 		self._clock_frequency      = ss_clk_freq
 
 		#

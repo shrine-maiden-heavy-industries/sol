@@ -55,7 +55,7 @@ class USBSuperSpeedExample(Elaboratable):
 			with c.InterfaceDescriptor() as i:
 				i.bInterfaceNumber = 0
 
-				with i.EndpointDescriptor(add_default_superspeed=True) as e:
+				with i.EndpointDescriptor(add_default_superspeed = True) as e:
 					e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
 					e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
 
@@ -73,7 +73,7 @@ class USBSuperSpeedExample(Elaboratable):
 		m.submodules.phy = phy = platform.create_usb3_phy()
 
 		# Create our core SuperSpeed device.
-		m.submodules.usb = usb = USBSuperSpeedDevice(phy=phy)
+		m.submodules.usb = usb = USBSuperSpeedDevice(phy = phy)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()
@@ -81,8 +81,8 @@ class USBSuperSpeedExample(Elaboratable):
 
 		# Create our example bulk endpoint.
 		stream_in_ep = SuperSpeedStreamInEndpoint(
-			endpoint_number=self.BULK_ENDPOINT_NUMBER,
-			max_packet_size=self.MAX_BULK_PACKET_SIZE
+			endpoint_number = self.BULK_ENDPOINT_NUMBER,
+			max_packet_size = self.MAX_BULK_PACKET_SIZE
 		)
 		usb.add_endpoint(stream_in_ep)
 

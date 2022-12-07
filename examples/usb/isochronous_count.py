@@ -74,7 +74,7 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 
 		# Create our USB device interface...
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.usb = usb = USBDevice(bus=ulpi)
+		m.submodules.usb = usb = USBDevice(bus = ulpi)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()
@@ -82,8 +82,8 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 
 		# Add a stream endpoint to our device.
 		iso_ep = USBIsochronousInEndpoint(
-			endpoint_number=self.ISO_ENDPOINT_NUMBER,
-			max_packet_size=self.MAX_ISO_PACKET_SIZE
+			endpoint_number = self.ISO_ENDPOINT_NUMBER,
+			max_packet_size = self.MAX_ISO_PACKET_SIZE
 		)
 		usb.add_endpoint(iso_ep)
 

@@ -68,7 +68,7 @@ class USBDeviceExample(Elaboratable):
 
 		# Create our USB device interface...
 		bus = platform.request(platform.default_usb_connection)
-		m.submodules.usb = usb = USBDevice(bus=bus)
+		m.submodules.usb = usb = USBDevice(bus = bus)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()
@@ -82,9 +82,9 @@ class USBDeviceExample(Elaboratable):
 
 		# ... and for now, attach our LEDs to our most recent control request.
 		m.d.comb += [
-			platform.request_optional('led', 0, default=NullPin()).o  .eq(usb.tx_activity_led),
-			platform.request_optional('led', 1, default=NullPin()).o  .eq(usb.rx_activity_led),
-			platform.request_optional('led', 2, default=NullPin()).o  .eq(usb.suspended),
+			platform.request_optional('led', 0, default = NullPin()).o  .eq(usb.tx_activity_led),
+			platform.request_optional('led', 1, default = NullPin()).o  .eq(usb.rx_activity_led),
+			platform.request_optional('led', 2, default = NullPin()).o  .eq(usb.suspended),
 		]
 
 		return m

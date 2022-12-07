@@ -90,7 +90,7 @@ class RawHeaderPacketReceiver(Elaboratable):
 		#
 		# Receiver Sequencing
 		#
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# WAIT_FOR_HPSTART -- we're currently waiting for HPSTART framing, which indicates
 			# that the following 16 symbols (4 words) will be a header packet.
@@ -321,7 +321,7 @@ class HeaderPacketReceiver(Elaboratable):
 
 	SEQUENCE_NUMBER_WIDTH = 3
 
-	def __init__(self, *, buffer_count=4, downstream_facing=False):
+	def __init__(self, *, buffer_count = 4, downstream_facing = False):
 		self._buffer_count = buffer_count
 		self._is_downstream_facing = downstream_facing
 
@@ -369,7 +369,7 @@ class HeaderPacketReceiver(Elaboratable):
 
 		# ... and which header we'll need to ACK next.
 		# We'll start with the maximum number, so our first advertisement wraps us back around to zero.
-		next_header_to_ack       = Signal.like(expected_sequence_number, reset=-1)
+		next_header_to_ack       = Signal.like(expected_sequence_number, reset = -1)
 
 
 		#
@@ -377,7 +377,7 @@ class HeaderPacketReceiver(Elaboratable):
 		#
 
 		# Keep track of how many header received acknowledgements (LGOODs) we need to send.
-		acks_to_send      = Signal(range(self._buffer_count + 1), reset=1)
+		acks_to_send      = Signal(range(self._buffer_count + 1), reset = 1)
 		enqueue_ack       = Signal()
 		dequeue_ack       = Signal()
 
@@ -390,7 +390,7 @@ class HeaderPacketReceiver(Elaboratable):
 		# Keep track of how many link credits we've yet to free.
 		# We'll start with every one of our buffers marked as 'pending free'; this ensures
 		# we perform our credit restoration properly.
-		credits_to_issue  = Signal.like(acks_to_send, reset=self._buffer_count)
+		credits_to_issue  = Signal.like(acks_to_send, reset = self._buffer_count)
 		enqueue_credit_issue = Signal()
 		dequeue_credit_issue = Signal()
 
@@ -434,7 +434,7 @@ class HeaderPacketReceiver(Elaboratable):
 		write_pointer     = Signal.like(read_pointer)
 
 		# Track how many buffers we currently have in use.
-		buffers_filled    = Signal.like(credits_to_issue, reset=0)
+		buffers_filled    = Signal.like(credits_to_issue, reset = 0)
 		reserve_buffer    = Signal()
 		release_buffer    = Signal()
 
@@ -560,7 +560,7 @@ class HeaderPacketReceiver(Elaboratable):
 		]
 
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# DISPATCH_COMMAND -- the state in which we identify any pending link commands necessary,
 			# and then move to the state in which we'll send them.

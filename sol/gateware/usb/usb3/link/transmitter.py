@@ -109,7 +109,7 @@ class RawPacketTransmitter(Elaboratable):
 		# Store whether our packet is a ZLP.
 		packet_is_zlp = Signal()
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# IDLE -- wait for a generate command
 			with m.State('IDLE'):
@@ -329,14 +329,14 @@ class RawPacketTransmitter(Elaboratable):
 					# Same, but for 2B valid and 2B CRC
 					with m.Case(0b0011):
 						m.d.comb += [
-							source.data  .eq(Cat(crc32.crc[16:32], END.value_const(repeat=2))),
+							source.data  .eq(Cat(crc32.crc[16:32], END.value_const(repeat = 2))),
 							source.ctrl  .eq(0b1100),
 						]
 
 					# Same, but for 1B valid and 3B CRC
 					with m.Case(0b0001):
 						m.d.comb += [
-							source.data  .eq(Cat(crc32.crc[24:32], END.value_const(repeat=3))),
+							source.data  .eq(Cat(crc32.crc[24:32], END.value_const(repeat = 3))),
 							source.ctrl  .eq(0b1110),
 						]
 
@@ -452,7 +452,7 @@ class PacketTransmitter(Elaboratable):
 
 	CREDIT_TIMEOUT = 5e-3
 
-	def __init__(self, *, buffer_count=4, ss_clock_frequency=125e6):
+	def __init__(self, *, buffer_count = 4, ss_clock_frequency = 125e6):
 		self._buffer_count    = buffer_count
 		self._clock_frequency = ss_clock_frequency
 
@@ -609,7 +609,7 @@ class PacketTransmitter(Elaboratable):
 			m.d.ss += retry_pending.eq(1)
 
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# DISPATCH_PACKET -- wait packet transmissions to be scheduled, and prepare
 			# our local transmitter with the proper data to send them.
@@ -674,7 +674,7 @@ class PacketTransmitter(Elaboratable):
 		next_expected_credit = Signal(range(self._buffer_count))
 
 		# Keep track of what sequence number we expect to have ACK'd next.
-		next_expected_ack_number = Signal(self.SEQUENCE_NUMBER_WIDTH, reset=-1)
+		next_expected_ack_number = Signal(self.SEQUENCE_NUMBER_WIDTH, reset = -1)
 
 		# Handle link commands as we receive them.
 		with m.If(lc_detector.new_command):

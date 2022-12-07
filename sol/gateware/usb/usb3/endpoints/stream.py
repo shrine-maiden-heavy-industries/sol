@@ -52,7 +52,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 	SEQUENCE_NUMBER_BITS = 5
 
 
-	def __init__(self, *, endpoint_number, max_packet_size=1024):
+	def __init__(self, *, endpoint_number, max_packet_size = 1024):
 		self._endpoint_number = endpoint_number
 		self._max_packet_size = max_packet_size
 
@@ -103,7 +103,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		# 2) we must be able to re-transmit data if a given packet is not ACK'd.
 		#
 		# Accordingly, we'll buffer a full USB packet of data, and then transmit
-		# it once either a) our buffer is full, or 2) the transfer ends (last=1).
+		# it once either a) our buffer is full, or 2) the transfer ends (last = 1).
 		#
 		# This implementation is double buffered; so a buffer fill can be pipelined
 		# with a transmit.
@@ -113,16 +113,16 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		# We'll create two buffers; so we can fill one as we empty the other.
 		# Since each buffer will be used for every other transaction, we'll use a simple flag to identify
 		# which of our 'ping-pong' buffers is currently being targeted.
-		buffer = Array(Memory(width=data_width, depth=buffer_depth, name=f'transmit_buffer_{i}') for i in range(2))
-		buffer_write_ports = Array(buffer[i].write_port(domain='ss') for i in range(2))
-		buffer_read_ports  = Array(buffer[i].read_port(domain='ss', transparent=False) for i in range(2))
+		buffer = Array(Memory(width = data_width, depth = buffer_depth, name = f'transmit_buffer_{i}') for i in range(2))
+		buffer_write_ports = Array(buffer[i].write_port(domain = 'ss') for i in range(2))
+		buffer_read_ports  = Array(buffer[i].read_port(domain = 'ss', transparent = False) for i in range(2))
 
 		m.submodules.read_port_0,  m.submodules.read_port_1  = buffer_read_ports
 		m.submodules.write_port_0, m.submodules.write_port_1 = buffer_write_ports
 
 		# Create values equivalent to the buffer numbers for our read and write buffer; which switch
 		# whenever we swap our two buffers.
-		write_buffer_number =  ping_pong_toggle
+		write_buffer_number = ping_pong_toggle
 		read_buffer_number  = ~ping_pong_toggle
 
 		# Create a shorthand that refers to the buffer to be filled; and the buffer to send from.
@@ -137,7 +137,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		#   ``generate_zlps`` is enabled, is used to determine if the given buffer should end in
 		#   a short packet; which determines whether ZLPs are emitted.
 		buffer_fill_count   = Array(Signal(range(0, self._max_packet_size + 1)) for _ in range(2))
-		buffer_stream_ended = Array(Signal(name=f'stream_ended_in_buffer{i}') for i in range(2))
+		buffer_stream_ended = Array(Signal(name = f'stream_ended_in_buffer{i}') for i in range(2))
 
 		# Create shortcuts to active fill_count / stream_ended signals for the buffer being written.
 		write_fill_count   = buffer_fill_count[write_buffer_number]
@@ -214,7 +214,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		ack_received      = handshakes_in.ack_received & is_to_us
 		in_token_received = ack_received & is_in_token
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# WAIT_FOR_DATA -- We don't yet have a full packet to transmit, so  we'll capture data
 			# to fill the our buffer. At full throughput, this state will never be reached after

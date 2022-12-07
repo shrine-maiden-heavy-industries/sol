@@ -87,7 +87,7 @@ class USB3PhysicalLayer(Elaboratable):
 		#
 		# PHY reset & power management.
 		#
-		m.submodules.reset_controller = reset_controller = PHYResetController(sync_frequency=self._sync_frequency)
+		m.submodules.reset_controller = reset_controller = PHYResetController(sync_frequency = self._sync_frequency)
 		m.d.comb += [
 			phy.reset                       .eq(reset_controller.reset),
 			reset_controller.phy_status     .eq(phy.phy_status),
@@ -145,10 +145,10 @@ class USB3PhysicalLayer(Elaboratable):
 		#
 
 		# Scramble our data before transmitting it, if scrambling is enabled.
-		m.submodules.scrambler = scrambler = Scrambler(initial_value=0xffff)
+		m.submodules.scrambler = scrambler = Scrambler(initial_value = 0xffff)
 		m.d.comb += [
 			scrambler.enable      .eq(self.enable_scrambling),
-			scrambler.sink        .stream_eq(self.sink, omit={'valid'}),
+			scrambler.sink        .stream_eq(self.sink, omit = {'valid'}),
 			scrambler.sink.valid  .eq(1)
 		]
 

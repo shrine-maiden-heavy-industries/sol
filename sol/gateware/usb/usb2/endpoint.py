@@ -102,8 +102,8 @@ class EndpointInterface:
 		self.tx                    = USBInStreamInterface()
 		self.tx_pid_toggle         = Signal(2)
 
-		self.handshakes_in         = HandshakeExchangeInterface(is_detector=True)
-		self.handshakes_out        = HandshakeExchangeInterface(is_detector=False)
+		self.handshakes_in         = HandshakeExchangeInterface(is_detector = True)
+		self.handshakes_out        = HandshakeExchangeInterface(is_detector = False)
 		self.issue_stall           = Signal()
 
 
@@ -141,7 +141,7 @@ class USBEndpointMultiplexer(Elaboratable):
 		self._interfaces.append(interface)
 
 
-	def _multiplex_signals(self, m, *, when, multiplex, sub_bus=None):
+	def _multiplex_signals(self, m, *, when, multiplex, sub_bus = None):
 		''' Helper that creates a simple priority-encoder multiplexer.
 
 		Parmeters
@@ -233,20 +233,20 @@ class USBEndpointMultiplexer(Elaboratable):
 		# Multiplex the signals being routed -from- our pre-mux interface.
 		#
 		self._multiplex_signals(m,
-			when='address_changed',
-			multiplex=['address_changed', 'new_address']
+			when = 'address_changed',
+			multiplex = ['address_changed', 'new_address']
 		)
 		self._multiplex_signals(m,
-			when='config_changed',
-			multiplex=['config_changed', 'new_config']
+			when = 'config_changed',
+			multiplex = ['config_changed', 'new_config']
 		)
 
 		# Connect up our transmit interface.
 		m.submodules.tx_mux = tx_mux = OneHotMultiplexer(
-			interface_type=USBInStreamInterface,
-			mux_signals=('payload',),
-			or_signals=('valid', 'first', 'last'),
-			pass_signals=('ready',)
+			interface_type = USBInStreamInterface,
+			mux_signals = ('payload',),
+			or_signals = ('valid', 'first', 'last'),
+			pass_signals = ('ready',)
 		)
 		tx_mux.add_interfaces(i.tx for i in self._interfaces)
 		m.d.comb += self.shared.tx.stream_eq(tx_mux.output)
@@ -267,7 +267,7 @@ class USBEndpointMultiplexer(Elaboratable):
 
 		# We'll connect our PID toggle to whichever interface has a valid transmission going.
 		for interface in self._interfaces:
-			with conditional(interface.tx.valid | Past(interface.tx.valid, domain='usb')):
+			with conditional(interface.tx.valid | Past(interface.tx.valid, domain = 'usb')):
 				m.d.comb += shared.tx_pid_toggle.eq(interface.tx_pid_toggle)
 
 			conditional = m.Elif

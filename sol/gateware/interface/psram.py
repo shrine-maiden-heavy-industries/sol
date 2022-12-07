@@ -62,7 +62,7 @@ class HyperRAMInterface(Elaboratable):
 	LOW_LATENCY_EDGES  = 6
 	HIGH_LATENCY_EDGES = 14
 
-	def __init__(self, *, bus, in_skew=None, out_skew=None, clock_skew=None):
+	def __init__(self, *, bus, in_skew = None, out_skew = None, clock_skew = None):
 		'''
 		Parmeters:
 			bus           -- The RAM record that should be connected to this RAM chip.
@@ -113,7 +113,7 @@ class HyperRAMInterface(Elaboratable):
 		data_oe = self.bus.dq.oe
 		if self.out_skew is not None:
 			data_out = Signal.like(self.bus.dq.o)
-			delay(m, data_out, self.out_skew, out=self.bus.dq.o)
+			delay(m, data_out, self.out_skew, out = self.bus.dq.o)
 		else:
 			data_out = self.bus.dq.o
 
@@ -126,7 +126,7 @@ class HyperRAMInterface(Elaboratable):
 
 		if self.clock_skew is not None:
 			out_clock = Signal()
-			delay(m, out_clock, self.clock_skew, out=self.bus.clk)
+			delay(m, out_clock, self.clock_skew, out = self.bus.clk)
 		else:
 			out_clock = self.bus.clk
 
@@ -209,7 +209,7 @@ class HyperRAMInterface(Elaboratable):
 			# the next edge can occur.
 			with m.State('LATCH_RWDS'):
 				m.d.sync += extra_latency.eq(self.bus.rwds.i),
-				m.next='SHIFT_COMMAND0'
+				m.next = 'SHIFT_COMMAND0'
 
 
 			# Commands, in order of bytes sent:
@@ -400,10 +400,10 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 		])
 
 		# Create our HyperRAM interface...
-		return HyperRAMInterface(bus=self.ram_signals)
+		return HyperRAMInterface(bus = self.ram_signals)
 
 
-	def assert_clock_pulses(self, times=1):
+	def assert_clock_pulses(self, times = 1):
 		''' Function that asserts we get a specified number of clock pulses. '''
 
 		for _ in range(times):

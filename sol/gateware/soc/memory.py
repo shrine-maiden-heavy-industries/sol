@@ -34,12 +34,12 @@ class WishboneRAM(Elaboratable):
 		bytes_per_chunk = data_width // granularity
 
 		words = (value[pos:pos + bytes_per_chunk] for pos in range(0, len(value), bytes_per_chunk))
-		return [int.from_bytes(word, byteorder=byteorder) for word in words]
+		return [int.from_bytes(word, byteorder = byteorder) for word in words]
 
 
 
-	def __init__(self, *, addr_width, data_width=32, granularity=8, init=None,
-			read_only=False, byteorder='little', name='ram'):
+	def __init__(self, *, addr_width, data_width = 32, granularity = 8, init = None,
+			read_only = False, byteorder = 'little', name = 'ram'):
 		'''
 		Parameters:
 			addr_width  -- The -bus- address width for the relevant memory. Determines the size
@@ -81,9 +81,9 @@ class WishboneRAM(Elaboratable):
 		# Create our wishbone interface.
 		# Note that we provide the -local- address to the Interface object; as it automatically factors
 		# in our extra bits as it computes our granularity.
-		self.bus = wishbone.Interface(addr_width=self.local_addr_width, data_width=data_width, granularity=granularity)
-		self.bus.memory_map = memory.MemoryMap(addr_width=self.bus_addr_width, data_width=granularity)
-		self.bus.memory_map.add_resource(self, size=2 ** addr_width)
+		self.bus = wishbone.Interface(addr_width = self.local_addr_width, data_width = data_width, granularity = granularity)
+		self.bus.memory_map = memory.MemoryMap(addr_width = self.bus_addr_width, data_width = granularity)
+		self.bus.memory_map.add_resource(self, size = 2 ** addr_width)
 
 
 	def elaborate(self, platform):
@@ -94,7 +94,7 @@ class WishboneRAM(Elaboratable):
 
 		# Create the the memory used to store our data.
 		memory_depth = 2 ** self.local_addr_width
-		memory = Memory(width=self.data_width, depth=memory_depth, init=initial_value, name=self.name)
+		memory = Memory(width = self.data_width, depth = memory_depth, init = initial_value, name = self.name)
 
 		# Grab a reference to the bits of our Wishbone bus that are relevant to us.
 		local_address_bits = self.bus.adr[:self.local_addr_width]
@@ -108,7 +108,7 @@ class WishboneRAM(Elaboratable):
 
 		# If this is a read/write memory, create a write port, as well.
 		if not self.read_only:
-			m.submodules.wrport = write_port = memory.write_port(granularity=self.granularity)
+			m.submodules.wrport = write_port = memory.write_port(granularity = self.granularity)
 			m.d.comb += [
 				write_port.addr.eq(local_address_bits),
 				write_port.data.eq(self.bus.dat_w)
@@ -138,7 +138,7 @@ class WishboneRAM(Elaboratable):
 class WishboneROM(WishboneRAM):
 	''' Wishbone-attached ROM. '''
 
-	def __init__(self, data, *, addr_width, data_width=32, granularity=8, name='rom'):
+	def __init__(self, data, *, addr_width, data_width = 32, granularity = 8, name = 'rom'):
 		'''
 		Parameters:
 			data -- The data to fill the ROM with.
@@ -151,10 +151,10 @@ class WishboneROM(WishboneRAM):
 		'''
 
 		super().__init__(
-			addr_width=addr_width,
-			data_width=data_width,
-			granularity=8,
-			init=data,
-			read_only=True,
-			name=name
+			addr_width = addr_width,
+			data_width = data_width,
+			granularity = 8,
+			init = data,
+			read_only = True,
+			name = name
 		)

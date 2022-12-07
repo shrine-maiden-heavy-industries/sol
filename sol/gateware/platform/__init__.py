@@ -102,7 +102,7 @@ def get_appropriate_platform() -> LatticeECP5Platform:
 class NullPin(Record):
 	''' Stand-in for a I/O record. '''
 
-	def __init__(self, size=1):
+	def __init__(self, size = 1):
 		super().__init__([
 			('i', size),
 			('o', size),

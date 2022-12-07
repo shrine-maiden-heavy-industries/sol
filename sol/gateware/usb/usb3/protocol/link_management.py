@@ -125,7 +125,7 @@ class LinkManagementPacketHandler(Elaboratable):
 				m.next = 'LINK_DOWN'
 
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# LINK_DOWN -- our link is not yet ready to exchange packets; we'll wait until
 			# it's come up to the point where we can exchange header packets.

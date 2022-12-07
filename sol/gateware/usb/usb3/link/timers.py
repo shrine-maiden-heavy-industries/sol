@@ -47,7 +47,7 @@ class LinkMaintenanceTimers(Elaboratable):
 	RECOVERY_TIMEOUT  = 1e-3
 
 
-	def __init__(self, *, ss_clock_frequency=125e6):
+	def __init__(self, *, ss_clock_frequency = 125e6):
 		self._clock_frequency = ss_clock_frequency
 
 		#

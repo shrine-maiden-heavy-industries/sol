@@ -44,7 +44,7 @@ class ULPIDiagnostic(Elaboratable):
 
 		# Create our UTMI translator.
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.utmi = utmi = UTMITranslator(ulpi=ulpi)
+		m.submodules.utmi = utmi = UTMITranslator(ulpi = ulpi)
 
 
 		# Strap our power controls to be in VBUS passthrough by default,
@@ -78,11 +78,11 @@ class ULPIDiagnostic(Elaboratable):
 		read_strobe = Signal()
 
 		# Create a USB analyzer, and connect a register up to its output.
-		m.submodules.analyzer = analyzer = USBAnalyzer(utmi_interface=utmi)
+		m.submodules.analyzer = analyzer = USBAnalyzer(utmi_interface = utmi)
 
 		# Provide registers that indicate when there's data ready, and what the result is.
-		spi_registers.add_read_only_register(DATA_AVAILABLE,  read=analyzer.data_available)
-		spi_registers.add_read_only_register(ANALYZER_RESULT, read=analyzer.data_out, read_strobe=read_strobe)
+		spi_registers.add_read_only_register(DATA_AVAILABLE,  read = analyzer.data_available)
+		spi_registers.add_read_only_register(ANALYZER_RESULT, read = analyzer.data_out, read_strobe = read_strobe)
 
 		m.d.comb += [
 			platform.request('led', 0).o  .eq(analyzer.capturing),
@@ -95,10 +95,10 @@ class ULPIDiagnostic(Elaboratable):
 
 		# Debug output.
 		m.d.comb += [
-			platform.request('user_io', 0, dir='o') .eq(ClockSignal('usb')),
-			platform.request('user_io', 1, dir='o') .eq(ulpi.dir),
-			platform.request('user_io', 2, dir='o') .eq(ulpi.nxt),
-			platform.request('user_io', 3, dir='o') .eq(analyzer.sampling),
+			platform.request('user_io', 0, dir = 'o') .eq(ClockSignal('usb')),
+			platform.request('user_io', 1, dir = 'o') .eq(ulpi.dir),
+			platform.request('user_io', 2, dir = 'o') .eq(ulpi.nxt),
+			platform.request('user_io', 3, dir = 'o') .eq(analyzer.sampling),
 		]
 
 
@@ -137,5 +137,5 @@ if __name__ == '__main__':
 		print(f'{packet_as_string}: {packet_hex}')
 
 		#byte = get_next_byte()
-		#print(f'{byte:02x} ', end=')
+		#print(f'{byte:02x} ', end = ')
 		#sys.stdout.flush()

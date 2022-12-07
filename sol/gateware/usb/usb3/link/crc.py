@@ -70,7 +70,7 @@ class HeaderPacketCRC(Elaboratable):
 			The initial value of the CRC shift register; the USB default is used if not provided.
 	'''
 
-	def __init__(self, initial_value=0xFFFF):
+	def __init__(self, initial_value = 0xFFFF):
 		self._initial_value = initial_value
 
 		#
@@ -81,7 +81,7 @@ class HeaderPacketCRC(Elaboratable):
 		self.data_input  = Signal(32)
 		self.advance_crc = Signal()
 
-		self.crc   = Signal(16, reset=initial_value)
+		self.crc   = Signal(16, reset = initial_value)
 
 
 	def _generate_next_crc(self, current_crc, data_in):
@@ -138,7 +138,7 @@ class HeaderPacketCRC(Elaboratable):
 		m = Module()
 
 		# Register that contains the running CRCs.
-		crc = Signal(16, reset=self._initial_value)
+		crc = Signal(16, reset = self._initial_value)
 
 		# If we're clearing our CRC in progress, move our holding register back to
 		# our initial value.
@@ -197,7 +197,7 @@ class DataPacketPayloadCRC(Elaboratable):
 			The initial value of the CRC shift register; the USB default is used if not provided.
 	'''
 
-	def __init__(self, initial_value=0xFFFFFFFF):
+	def __init__(self, initial_value = 0xFFFFFFFF):
 		self._initial_value = initial_value
 
 		#
@@ -396,7 +396,7 @@ class DataPacketPayloadCRC(Elaboratable):
 		m = Module()
 
 		# Register that contains the running CRCs.
-		crc         = Signal(32, reset=self._initial_value)
+		crc         = Signal(32, reset = self._initial_value)
 
 		# Internal signals representing our next internal state given various input sizes.
 		next_crc_3B = Signal.like(crc)
@@ -448,7 +448,7 @@ class DataPacketPayloadCRCTest(SolSSGatewareTestCase):
 
 		for i in (0x02000112, 0x40000000):
 			yield dut.data_input.eq(i)
-			yield from self.pulse(dut.advance_word, step_after=False)
+			yield from self.pulse(dut.advance_word, step_after = False)
 
 		self.assertEqual((yield dut.crc), 0x34984B13)
 
@@ -469,7 +469,7 @@ class DataPacketPayloadCRCTest(SolSSGatewareTestCase):
 		# Present the aligned section...
 		for i in aligned_section:
 			yield dut.data_input.eq(i)
-			yield from self.pulse(dut.advance_word, step_after=False)
+			yield from self.pulse(dut.advance_word, step_after = False)
 
 		# ... and then our unaligned data.
 		yield dut.data_input.eq(0x0000_0103)

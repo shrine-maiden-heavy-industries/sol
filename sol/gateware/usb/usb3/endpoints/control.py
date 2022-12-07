@@ -40,7 +40,7 @@ class USB3ControlEndpoint(Elaboratable):
 			be) zero.
 	'''
 
-	def __init__(self, *, endpoint_number=0):
+	def __init__(self, *, endpoint_number = 0):
 		self._endpoint_number = endpoint_number
 
 		# List of the modules that will handle control requests.

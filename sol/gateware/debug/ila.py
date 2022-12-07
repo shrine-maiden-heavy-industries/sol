@@ -67,7 +67,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		on the rising edge of the clock.
 	'''
 
-	def __init__(self, *, signals, sample_depth, domain='sync', sample_rate=60e6, samples_pretrigger=1):
+	def __init__(self, *, signals, sample_depth, domain = 'sync', sample_rate = 60e6, samples_pretrigger = 1):
 		self.domain             = domain
 		self.signals            = signals
 		self.inputs             = Cat(*signals)
@@ -80,7 +80,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		#
 		# Create a backing store for our samples.
 		#
-		self.mem = Memory(width=self.sample_width, depth=sample_depth, name='ila_buffer')
+		self.mem = Memory(width = self.sample_width, depth = sample_depth, name = 'ila_buffer')
 
 
 		#
@@ -99,14 +99,14 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 		# Memory ports.
 		write_port = self.mem.write_port()
-		read_port  = self.mem.read_port(domain='sync')
+		read_port  = self.mem.read_port(domain = 'sync')
 		m.submodules += [write_port, read_port]
 
 		# If necessary, create synchronized versions of the relevant signals.
 		if self.samples_pretrigger >= 2:
 			delayed_inputs = Signal.like(self.inputs)
 			m.submodules += FFSynchronizer(self.inputs,  delayed_inputs,
-				stages=self.samples_pretrigger)
+				stages = self.samples_pretrigger)
 		elif self.samples_pretrigger == 1:
 			delayed_inputs = Signal.like(self.inputs)
 			m.d.sync += delayed_inputs.eq(self.inputs)
@@ -129,7 +129,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		# Don't sample unless our FSM asserts our sample signal explicitly.
 		m.d.sync += write_port.en.eq(0)
 
-		with m.FSM(name='ila_state') as fsm:
+		with m.FSM(name = 'ila_state') as fsm:
 
 			m.d.comb += self.sampling.eq(~fsm.ongoing('IDLE'))
 
@@ -181,7 +181,7 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 		self.input_c = Signal()
 
 		return IntegratedLogicAnalyzer(
-			signals=[self.input_a, self.input_b, self.input_c],
+			signals = [self.input_a, self.input_b, self.input_c],
 			sample_depth = 32
 		)
 
@@ -242,7 +242,7 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 
 		# Finally, trigger the capture.
 		yield from self.provide_all_signals(sample_value(0))
-		yield from self.pulse(self.dut.trigger, step_after=False)
+		yield from self.pulse(self.dut.trigger, step_after = False)
 
 		yield from self.provide_all_signals(sample_value(1))
 		yield
@@ -314,13 +314,13 @@ class SyncSerialILA(Elaboratable):
 	clock_phase: int, 0 or 1
 		Clock phase for the output SPI transciever. Optional.
 	cs_idles_high: bool, optional
-		If True, the CS line will be assumed to be asserted when cs=0.
-		If False or not provided, the CS line will be assumed to be asserted when cs=1.
+		If True, the CS line will be assumed to be asserted when cs = 0.
+		If False or not provided, the CS line will be assumed to be asserted when cs = 1.
 		This can be used to share a simple two-device SPI bus, so two internal endpoints
 		can use the same CS line, with two opposite polarities.
 	'''
 
-	def __init__(self, *, signals, sample_depth, clock_polarity=0, clock_phase=1, cs_idles_high=False, **kwargs):
+	def __init__(self, *, signals, sample_depth, clock_polarity = 0, clock_phase = 1, cs_idles_high = False, **kwargs):
 
 		#
 		# I/O port
@@ -342,8 +342,8 @@ class SyncSerialILA(Elaboratable):
 
 		# Create our core integrated logic analyzer.
 		self.ila = IntegratedLogicAnalyzer(
-			signals=signals,
-			sample_depth=sample_depth,
+			signals = signals,
+			sample_depth = sample_depth,
 			**kwargs)
 
 		# Copy some core parameters from our inner ILA.
@@ -379,9 +379,9 @@ class SyncSerialILA(Elaboratable):
 
 		# Connect up our SPI transciever to our public interface.
 		interface = SPIDeviceInterface(
-			word_size=self.bits_per_word,
-			clock_polarity=self.clock_polarity,
-			clock_phase=self.clock_phase
+			word_size = self.bits_per_word,
+			clock_polarity = self.clock_polarity,
+			clock_phase = self.clock_phase
 		)
 		m.submodules.spi = interface
 		m.d.comb += [
@@ -432,10 +432,10 @@ class SyncSerialReadoutILATest(SPIGatewareTestCase):
 	def instantiate_dut(self):
 		self.input_signal = Signal(12)
 		return SyncSerialILA(
-			signals=[self.input_signal],
-			sample_depth=16,
-			clock_polarity=1,
-			clock_phase=0
+			signals = [self.input_signal],
+			sample_depth = 16,
+			clock_polarity = 1,
+			clock_phase = 0
 		)
 
 	def initialize_signals(self):
@@ -447,7 +447,7 @@ class SyncSerialReadoutILATest(SPIGatewareTestCase):
 
 		# Trigger the test while offering our first sample.
 		yield
-		yield from self.pulse(self.dut.trigger, step_after=False)
+		yield from self.pulse(self.dut.trigger, step_after = False)
 
 		# Provide the remainder of our samples.
 		for i in range(1, 16):
@@ -519,7 +519,7 @@ class StreamILA(Elaboratable):
 		are allowed if this number is >= 2.
 	'''
 
-	def __init__(self, *, signals, sample_depth, o_domain=None, **kwargs):
+	def __init__(self, *, signals, sample_depth, o_domain = None, **kwargs):
 		# Extract the domain from our keyword arguments, and then translate it to sync
 		# before we pass it back below. We'll use a DomainRenamer at the boundary to
 		# handle non-sync domains.
@@ -530,8 +530,8 @@ class StreamILA(Elaboratable):
 
 		# Create our core integrated logic analyzer.
 		self.ila = IntegratedLogicAnalyzer(
-			signals=signals,
-			sample_depth=sample_depth,
+			signals = signals,
+			sample_depth = sample_depth,
 			**kwargs)
 
 		# Copy some core parameters from our inner ILA.
@@ -548,7 +548,7 @@ class StreamILA(Elaboratable):
 		#
 		# I/O port
 		#
-		self.stream  = StreamInterface(payload_width=self.bits_per_sample)
+		self.stream  = StreamInterface(payload_width = self.bits_per_sample)
 		self.trigger = Signal()
 
 
@@ -564,7 +564,7 @@ class StreamILA(Elaboratable):
 		if self._o_domain == self.domain:
 			in_domain_stream = self.stream
 		else:
-			in_domain_stream = StreamInterface(payload_width=self.bits_per_sample)
+			in_domain_stream = StreamInterface(payload_width = self.bits_per_sample)
 
 		# Count where we are in the current transmission.
 		current_sample_number = Signal(range(0, ila.sample_depth))
@@ -606,7 +606,7 @@ class StreamILA(Elaboratable):
 			# SENDING -- we now have a valid buffer of samples to send up to the host;
 			# we'll transmit them over our stream interface.
 			with m.State('SENDING'):
-				data_valid = Signal(reset=1)
+				data_valid = Signal(reset = 1)
 				m.d.comb += [
 					# While we're sending, we're always providing valid data to the UART.
 					in_domain_stream.valid  .eq(data_valid),
@@ -647,10 +647,10 @@ class StreamILA(Elaboratable):
 
 			# Create our async FIFO...
 			m.submodules.cdc = fifo = AsyncFIFOBuffered(
-				width=len(in_domain_signals),
-				depth=16,
-				w_domain='sync',
-				r_domain=self._o_domain
+				width = len(in_domain_signals),
+				depth = 16,
+				w_domain = 'sync',
+				r_domain = self._o_domain
 			)
 
 			m.d.comb += [
@@ -676,8 +676,8 @@ class StreamILATest(SolGatewareTestCase):
 	def instantiate_dut(self):
 		self.input_signal = Signal(12)
 		return StreamILA(
-			signals=[self.input_signal],
-			sample_depth=16
+			signals = [self.input_signal],
+			sample_depth = 16
 		)
 
 	def initialize_signals(self):
@@ -690,7 +690,7 @@ class StreamILATest(SolGatewareTestCase):
 
 		# Trigger the ILA with the first sample
 		yield
-		yield from self.pulse(self.dut.trigger, step_after=False)
+		yield from self.pulse(self.dut.trigger, step_after = False)
 
 		# Fill up the ILA with the remaining samples
 		for i in range(1, 16):
@@ -772,8 +772,8 @@ class AsyncSerialILA(Elaboratable):
 
 		# Create our core integrated logic analyzer.
 		self.ila = StreamILA(
-			signals=signals,
-			sample_depth=sample_depth,
+			signals = signals,
+			sample_depth = sample_depth,
 			**kwargs)
 
 		# Copy some core parameters from our inner ILA.
@@ -797,10 +797,10 @@ class AsyncSerialILA(Elaboratable):
 
 		# Create our UART transmitter, and connect it to our stream interface.
 		m.submodules.uart = uart = UARTMultibyteTransmitter(
-			byte_width=self.bytes_per_sample,
-			divisor=self.divisor
+			byte_width = self.bytes_per_sample,
+			divisor = self.divisor
 		)
-		m.d.comb +=[
+		m.d.comb + = [
 			uart.stream  .stream_eq(ila.stream),
 			self.tx      .eq(uart.tx)
 		]
@@ -814,7 +814,7 @@ class AsyncSerialILA(Elaboratable):
 
 
 
-class ILAFrontend(metaclass=ABCMeta):
+class ILAFrontend(metaclass = ABCMeta):
 	''' Class that communicates with an ILA module and emits useful output. '''
 
 	def __init__(self, ila):
@@ -884,7 +884,7 @@ class ILAFrontend(metaclass=ABCMeta):
 
 
 
-	def emit_vcd(self, filename, *, gtkw_filename=None, add_clock=True):
+	def emit_vcd(self, filename, *, gtkw_filename = None, add_clock = True):
 		''' Emits a VCD file containing the ILA samples.
 
 		Parameters:
@@ -905,7 +905,7 @@ class ILAFrontend(metaclass=ABCMeta):
 			close_after = True
 
 		# Create our basic VCD.
-		with VCDWriter(stream, timescale='1 ns', date='today') as writer:
+		with VCDWriter(stream, timescale = '1 ns', date = 'today') as writer:
 			first_timestamp = math.inf
 			last_timestamp  = 0
 
@@ -914,11 +914,11 @@ class ILAFrontend(metaclass=ABCMeta):
 			# If we're adding a clock...
 			if add_clock:
 				clock_value  = 1
-				clock_signal = writer.register_var('ila', 'ila_clock', 'integer', size=1, init=clock_value ^ 1)
+				clock_signal = writer.register_var('ila', 'ila_clock', 'integer', size = 1, init = clock_value ^ 1)
 
 			# Create named values for each of our signals.
 			for signal in self.ila.signals:
-				signals[signal.name] = writer.register_var('ila', signal.name, 'integer', size=len(signal))
+				signals[signal.name] = writer.register_var('ila', signal.name, 'integer', size = len(signal))
 
 			# Dump the each of our samples into the VCD.
 			clock_time = 0
@@ -941,10 +941,10 @@ class ILAFrontend(metaclass=ABCMeta):
 		# If we're generating a GTKW, delegate that to our helper function.
 		if gtkw_filename:
 			assert(filename != '-')
-			self._emit_gtkw(gtkw_filename, filename, add_clock=add_clock)
+			self._emit_gtkw(gtkw_filename, filename, add_clock = add_clock)
 
 
-	def _emit_gtkw(self, filename, dump_filename, *, add_clock=True):
+	def _emit_gtkw(self, filename, dump_filename, *, add_clock = True):
 		''' Emits a GTKWave save file to accompany a generated VCD.
 
 		Parameters:
@@ -970,7 +970,7 @@ class ILAFrontend(metaclass=ABCMeta):
 				gtkw.trace(f'ila.{signal.name}')
 
 
-	def interactive_display(self, *, add_clock=True):
+	def interactive_display(self, *, add_clock = True):
 		''' Attempts to spawn a GTKWave instance to display the ILA results interactively. '''
 
 		# Hack: generate files in a way that doesn't trip macOS's fancy guards.
@@ -978,7 +978,7 @@ class ILAFrontend(metaclass=ABCMeta):
 			vcd_filename = os.path.join(tempfile.gettempdir(), os.urandom(24).hex() + '.vcd')
 			gtkw_filename = os.path.join(tempfile.gettempdir(), os.urandom(24).hex() + '.gtkw')
 
-			self.emit_vcd(vcd_filename, gtkw_filename=gtkw_filename)
+			self.emit_vcd(vcd_filename, gtkw_filename = gtkw_filename)
 			subprocess.run(['gtkwave', '-f', vcd_filename, '-a', gtkw_filename])
 		finally:
 			os.remove(vcd_filename)
@@ -1016,7 +1016,7 @@ class AsyncSerialILAFrontend(ILAFrontend):
 			raw_sample    = all_samples[i:i + sample_width_bytes]
 			sample_length = len(Cat(self.ila.signals))
 
-			yield bits.from_bytes(raw_sample, length=sample_length, byteorder='big')
+			yield bits.from_bytes(raw_sample, length = sample_length, byteorder = 'big')
 
 
 	def _read_samples(self):

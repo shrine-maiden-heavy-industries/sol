@@ -53,7 +53,7 @@ class UARTTransmitter(Elaboratable):
 		#
 		# I/O port
 		#
-		self.tx              = Signal(reset=1)
+		self.tx              = Signal(reset = 1)
 		self.driving         = Signal()
 		self.stream          = StreamInterface()
 
@@ -139,7 +139,7 @@ class UARTTransmitterTest(SolGatewareTestCase):
 	DIVISOR = 10
 
 	FRAGMENT_UNDER_TEST = UARTTransmitter
-	FRAGMENT_ARGUMENTS = dict(divisor=DIVISOR)
+	FRAGMENT_ARGUMENTS = dict(divisor = DIVISOR)
 
 
 	def advance_half_bit(self):
@@ -233,8 +233,8 @@ class UARTTransmitterPeripheral(Elaboratable):
 		# I/O port
 		#
 		self.tx  = Signal()
-		self.bus = wishbone.Interface(addr_width=0, data_width=8)
-		self.bus.memory_map = memory.MemoryMap(addr_width=1, data_width=8)
+		self.bus = wishbone.Interface(addr_width = 0, data_width = 8)
+		self.bus.memory_map = memory.MemoryMap(addr_width = 1, data_width = 8)
 
 
 	def elaborate(self, platform):
@@ -242,7 +242,7 @@ class UARTTransmitterPeripheral(Elaboratable):
 
 		# Create our UART transmitter, and connect it directly to our
 		# wishbone bus.
-		m.submodules.tx = tx = UARTTransmitter(divisor=self.divisor)
+		m.submodules.tx = tx = UARTTransmitter(divisor = self.divisor)
 		m.d.comb += [
 			tx.stream.valid    .eq(self.bus.cyc & self.bus.stb & self.bus.we),
 			tx.stream.payload  .eq(self.bus.dat_w),
@@ -289,8 +289,8 @@ class UARTMultibyteTransmitter(Elaboratable):
 		#
 		# I/O port
 		#
-		self.tx              = Signal(reset=1)
-		self.stream          = StreamInterface(payload_width=byte_width * 8)
+		self.tx              = Signal(reset = 1)
+		self.stream          = StreamInterface(payload_width = byte_width * 8)
 
 		self.idle            = Signal()
 
@@ -299,7 +299,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 		m = Module()
 
 		# Create our core UART transmitter.
-		m.submodules.uart = uart = UARTTransmitter(divisor=self.divisor)
+		m.submodules.uart = uart = UARTTransmitter(divisor = self.divisor)
 
 		# We'll put each word to be sent through an shift register
 		# that shifts out words a byte at a time.
@@ -372,7 +372,7 @@ class UARTMultibyteTransmitterTest(SolGatewareTestCase):
 	DIVISOR = 10
 
 	FRAGMENT_UNDER_TEST = UARTMultibyteTransmitter
-	FRAGMENT_ARGUMENTS = dict(divisor=DIVISOR, byte_width=4)
+	FRAGMENT_ARGUMENTS = dict(divisor = DIVISOR, byte_width = 4)
 
 
 	def advance_half_bit(self):

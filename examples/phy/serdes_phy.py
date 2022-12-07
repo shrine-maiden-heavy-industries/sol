@@ -27,20 +27,20 @@ class PIPEPhyExample(Elaboratable):
 			self.rx_gpio   = Signal()
 
 			self.ila = USBIntegratedLogicAnalyzer(
-				bus='usb',
-				domain='ss',
-				signals=[
+				bus = 'usb',
+				domain = 'ss',
+				signals = [
 					self.serdes_rx,
 					self.ctrl,
 					self.valid,
 					self.rx_gpio,
 				],
-				sample_depth=128,
-				max_packet_size=64
+				sample_depth = 128,
+				max_packet_size = 64
 			)
 
 	def emit(self):
-		frontend = USBIntegratedLogicAnalyzerFrontend(ila=self.ila)
+		frontend = USBIntegratedLogicAnalyzerFrontend(ila = self.ila)
 		frontend.emit_vcd('/tmp/output.vcd')
 
 	def elaborate(self, platform):

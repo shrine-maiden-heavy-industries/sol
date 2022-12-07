@@ -94,7 +94,7 @@ class TxShifter(Elaboratable):
 		m = Module()
 
 		shifter = Signal(self._width)
-		pos = Signal(self._width, reset=0b1)
+		pos = Signal(self._width, reset = 0b1)
 
 
 		with m.If(self.i_enable):
@@ -191,7 +191,7 @@ class TxNRZIEncoder(Elaboratable):
 		oe = Signal()
 
 		# wait for new packet to start
-		with m.FSM(domain='usb_io'):
+		with m.FSM(domain = 'usb_io'):
 			with m.State('IDLE'):
 				m.d.comb += [
 					usbp.eq(1),
@@ -327,7 +327,7 @@ class TxBitstuffer(Elaboratable):
 		m = Module()
 		stuff_bit = Signal()
 
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			for i in range(5):
 
@@ -416,7 +416,7 @@ class TxPipeline(Elaboratable):
 		#
 		# Transmit gearing.
 		#
-		m.submodules.shifter = shifter = TxShifter(width=8)
+		m.submodules.shifter = shifter = TxShifter(width = 8)
 		m.d.comb += [
 			shifter.i_data    .eq(self.i_data_payload),
 
@@ -475,7 +475,7 @@ class TxPipeline(Elaboratable):
 		]
 
 
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			with m.State('IDLE'):
 				with m.If(self.i_oe):
@@ -520,8 +520,8 @@ class TxPipeline(Elaboratable):
 		nrzi_oe = Signal()
 
 		# Cross the data from the 12MHz domain to the 48MHz domain
-		cdc_dat = FFSynchronizer(self.fit_dat, nrzi_dat, o_domain='usb_io', stages=3)
-		cdc_oe  = FFSynchronizer(self.fit_oe, nrzi_oe, o_domain='usb_io', stages=3)
+		cdc_dat = FFSynchronizer(self.fit_dat, nrzi_dat, o_domain = 'usb_io', stages = 3)
+		cdc_oe  = FFSynchronizer(self.fit_oe, nrzi_oe, o_domain = 'usb_io', stages = 3)
 		m.submodules += [cdc_dat, cdc_oe]
 
 		m.d.comb += [

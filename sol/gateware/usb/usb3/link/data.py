@@ -138,7 +138,7 @@ class DataPacketReceiver(Elaboratable):
 		#
 		# Receiver Sequencing
 		#
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# WAIT_FOR_HPSTART -- we're currently waiting for HPSTART framing, which indicates
 			# that the following 16 symbols (4 words) will be a header packet.
@@ -477,11 +477,11 @@ class DataPacketTransmitter(Elaboratable):
 		# We'll keep this architecture; as later code is likely to want to more actively
 		# control when data is passed through to the transmitter.
 		with m.If(~data_source.valid.any() | data_source.ready):
-			m.d.ss   += data_source.stream_eq(data_sink, omit={'ready'})
+			m.d.ss   += data_source.stream_eq(data_sink, omit = {'ready'})
 			m.d.comb += data_sink.ready.eq(1)
 
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# WAIT_FOR_DATA -- we're idly waiting for our input data stream to become valid.
 			with m.State('WAIT_FOR_DATA'):

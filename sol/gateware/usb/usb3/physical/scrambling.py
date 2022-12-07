@@ -46,7 +46,7 @@ class ScramblerLFSR(Elaboratable):
 	initial_value: 32-bit int, optional
 		The initial value for the LFSR. Optional; defaults to all 1's, per the USB3 spec.
 	'''
-	def __init__(self, initial_value=0xffff):
+	def __init__(self, initial_value = 0xffff):
 		self._initial_value = initial_value
 
 		#
@@ -61,7 +61,7 @@ class ScramblerLFSR(Elaboratable):
 		m = Module()
 
 		next_value       = Signal(16)
-		current_value    = Signal(16, reset=self._initial_value)
+		current_value    = Signal(16, reset = self._initial_value)
 
 		def xor_bits(*indices):
 			bits = (current_value[i] for i in indices)
@@ -180,7 +180,7 @@ class Scrambler(Elaboratable):
 	initial_value: 32-bit int, optional
 		The initial value for the LFSR. Optional.
 	'''
-	def __init__(self, initial_value=0x7dbd):
+	def __init__(self, initial_value = 0x7dbd):
 		self._initial_value = initial_value
 
 		#
@@ -204,10 +204,10 @@ class Scrambler(Elaboratable):
 		source = self.source
 
 		# Detect when we're sending a comma; which should reset our scrambling LFSR.
-		comma_present = stream_word_matches_symbol(sink, 0, symbol=COM)
+		comma_present = stream_word_matches_symbol(sink, 0, symbol = COM)
 
 		# Create our inner LFSR, which should advance whenever our input streams do.
-		m.submodules.lfsr = lfsr = ScramblerLFSR(initial_value=self._initial_value)
+		m.submodules.lfsr = lfsr = ScramblerLFSR(initial_value = self._initial_value)
 		m.d.comb += [
 			lfsr.clear    .eq(self.clear | comma_present),
 			lfsr.advance  .eq(sink.valid & source.ready & ~self.hold)
@@ -265,9 +265,9 @@ class Descrambler(Scrambler):
 		The initial value for the LFSR. Optional.
 
 	'''
-	def __init__(self, initial_value=0xffff):
+	def __init__(self, initial_value = 0xffff):
 		self._initial_value = initial_value
-		super().__init__(initial_value=initial_value)
+		super().__init__(initial_value = initial_value)
 
 
 if __name__ == '__main__':

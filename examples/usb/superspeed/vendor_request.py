@@ -28,7 +28,7 @@ class LEDRequestHandler(SuperSpeedRequestHandler):
 		setup             = self.interface.setup
 
 		# Grab a reference to the board's LEDs.
-		leds  = Cat(platform.request_optional('led', i, default=NullPin()).o for i in range(32))
+		leds  = Cat(platform.request_optional('led', i, default = NullPin()).o for i in range(32))
 
 		#
 		# Vendor request handlers.
@@ -142,7 +142,7 @@ class SuperSpeedVendorDeviceExample(Elaboratable):
 		m.submodules.phy = phy = platform.create_usb3_phy()
 
 		# Create our core SuperSpeed device.
-		m.submodules.usb = usb = USBSuperSpeedDevice(phy=phy)
+		m.submodules.usb = usb = USBSuperSpeedDevice(phy = phy)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()

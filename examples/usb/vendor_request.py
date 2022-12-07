@@ -29,7 +29,7 @@ class LEDRequestHandler(USBRequestHandler):
 		setup             = self.interface.setup
 
 		# Grab a reference to the board's LEDs.
-		leds  = Cat(platform.request_optional('led', i, default=NullPin()).o for i in range(8))
+		leds  = Cat(platform.request_optional('led', i, default = NullPin()).o for i in range(8))
 
 		#
 		# Vendor request handlers.
@@ -120,7 +120,7 @@ class USBVendorDeviceExample(Elaboratable):
 
 		# Create our USB device interface...
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.usb = usb = USBDevice(bus=ulpi)
+		m.submodules.usb = usb = USBDevice(bus = ulpi)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()

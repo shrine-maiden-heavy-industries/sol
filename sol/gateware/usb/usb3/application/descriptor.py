@@ -47,7 +47,7 @@ class GetDescriptorHandler(Elaboratable):
 	'''
 
 	def __init__(self, descriptor_collection: DeviceDescriptorCollection, *,
-		usb_domain='ss', stream_type=SuperSpeedStreamInterface):
+		usb_domain = 'ss', stream_type = SuperSpeedStreamInterface):
 		'''
 		Parameters
 		----------
@@ -88,7 +88,7 @@ class GetDescriptorHandler(Elaboratable):
 
 			# Create the generator...
 			generator = ConstantStreamGenerator(raw_descriptor,
-				domain=self._domain, stream_type=self._stream_type, max_length_width=16)
+				domain = self._domain, stream_type = self._stream_type, max_length_width = 16)
 			descriptor_generators[(type_number, index)] = generator
 
 			# ... and attach it to this module.
@@ -116,7 +116,7 @@ class GetDescriptorHandler(Elaboratable):
 					# Buffer the output stream to improve timings.
 					with m.If(~self.tx.valid.any() | self.tx.ready):
 						m.d.sync += [
-							self.tx               .stream_eq(generator.stream, omit={'ready'}),
+							self.tx               .stream_eq(generator.stream, omit = {'ready'}),
 							self.tx_length        .eq(generator.output_length)
 						]
 						m.d.comb += [

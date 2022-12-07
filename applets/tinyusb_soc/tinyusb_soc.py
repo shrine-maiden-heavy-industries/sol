@@ -37,7 +37,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		self._output    = bank.csr(6, 'w')
 
 		# ... and convert our register into a Wishbone peripheral.
-		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
+		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 
 
@@ -78,28 +78,28 @@ class TinyUSBSoC(Elaboratable):
 
 		# Create our SoC...
 		self.soc = soc = SimpleSoC()
-		soc.add_bios_and_peripherals(uart_pins=self.uart_pins, fixed_addresses=True)
+		soc.add_bios_and_peripherals(uart_pins = self.uart_pins, fixed_addresses = True)
 
 		# ... add some bulk RAM ...
-		soc.add_ram(self.RAM_SIZE, addr=self.RAM_ADDRESS)
+		soc.add_ram(self.RAM_SIZE, addr = self.RAM_ADDRESS)
 
 		# ... a core USB controller ...
 		self.usb_device_controller = USBDeviceController()
-		soc.add_peripheral(self.usb_device_controller, addr=self.USB_CORE_ADDRESS)
+		soc.add_peripheral(self.usb_device_controller, addr = self.USB_CORE_ADDRESS)
 
 		# ... our eptri peripherals.
 		self.usb_setup = SetupFIFOInterface()
-		soc.add_peripheral(self.usb_setup, as_submodule=False, addr=self.USB_SETUP_ADDRESS)
+		soc.add_peripheral(self.usb_setup, as_submodule = False, addr = self.USB_SETUP_ADDRESS)
 
 		self.usb_in_ep = InFIFOInterface()
-		soc.add_peripheral(self.usb_in_ep, as_submodule=False, addr=self.USB_IN_ADDRESS)
+		soc.add_peripheral(self.usb_in_ep, as_submodule = False, addr = self.USB_IN_ADDRESS)
 
 		self.usb_out_ep = OutFIFOInterface()
-		soc.add_peripheral(self.usb_out_ep, as_submodule=False, addr=self.USB_OUT_ADDRESS)
+		soc.add_peripheral(self.usb_out_ep, as_submodule = False, addr = self.USB_OUT_ADDRESS)
 
 		# ... and our LED peripheral, for simple output.
 		leds = LEDPeripheral()
-		soc.add_peripheral(leds, addr=self.LEDS_ADDRESS)
+		soc.add_peripheral(leds, addr = self.LEDS_ADDRESS)
 
 
 	def elaborate(self, platform):
@@ -107,7 +107,7 @@ class TinyUSBSoC(Elaboratable):
 		m.submodules.soc = self.soc
 
 		# Generate our domain clocks/resets.
-		m.submodules.car = platform.clock_domain_generator(clock_frequencies=CLOCK_FREQUENCIES_MHZ)
+		m.submodules.car = platform.clock_domain_generator(clock_frequencies = CLOCK_FREQUENCIES_MHZ)
 
 		# Connect up our UART.
 		uart_io = platform.request('uart', 0)
@@ -121,7 +121,7 @@ class TinyUSBSoC(Elaboratable):
 
 		# Create our USB device.
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.usb = usb = USBDevice(bus=ulpi)
+		m.submodules.usb = usb = USBDevice(bus = ulpi)
 
 		# Connect up our device controller.
 		m.d.comb += self.usb_device_controller.attach(usb)
@@ -135,4 +135,4 @@ class TinyUSBSoC(Elaboratable):
 
 if __name__ == '__main__':
 	design = TinyUSBSoC()
-	cli(design, cli_soc=design.soc)
+	cli(design, cli_soc = design.soc)

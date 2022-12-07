@@ -246,7 +246,7 @@ class TransactionPacketGenerator(Elaboratable):
 
 
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# DISPATCH_REQUESTS -- we're actively waiting for any generation requests that come in;
 			# and preparing to handle them.

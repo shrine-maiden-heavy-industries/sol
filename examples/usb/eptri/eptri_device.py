@@ -47,7 +47,7 @@ class EptriDeviceExample(Elaboratable):
 		soc.add_ram(0x4000)
 
 		# ... add a UART ...
-		self.uart = uart = AsyncSerialPeripheral(divisor=int(60e6 // 115200), pins=self.uart_pins)
+		self.uart = uart = AsyncSerialPeripheral(divisor = int(60e6 // 115200), pins = self.uart_pins)
 		soc.add_peripheral(uart)
 
 		# ... add a timer, to control our LED blinkies...
@@ -61,13 +61,13 @@ class EptriDeviceExample(Elaboratable):
 
 		# ... and add our eptri peripherals.
 		self.setup = SetupFIFOInterface()
-		soc.add_peripheral(self.setup, as_submodule=False)
+		soc.add_peripheral(self.setup, as_submodule = False)
 
 		self.in_ep = InFIFOInterface()
-		soc.add_peripheral(self.in_ep, as_submodule=False)
+		soc.add_peripheral(self.in_ep, as_submodule = False)
 
 		self.out_ep = OutFIFOInterface()
-		soc.add_peripheral(self.out_ep, as_submodule=False)
+		soc.add_peripheral(self.out_ep, as_submodule = False)
 
 
 
@@ -81,7 +81,7 @@ class EptriDeviceExample(Elaboratable):
 			sys.exit(-1)
 
 		# Generate our domain clocks/resets.
-		m.submodules.car = platform.clock_domain_generator(clock_frequencies=CLOCK_FREQUENCIES_MHZ)
+		m.submodules.car = platform.clock_domain_generator(clock_frequencies = CLOCK_FREQUENCIES_MHZ)
 
 		# Connect up our UART.
 		uart_io = platform.request('uart', 0)
@@ -92,7 +92,7 @@ class EptriDeviceExample(Elaboratable):
 
 		# Create our USB device.
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.usb = usb = USBDevice(bus=ulpi)
+		m.submodules.usb = usb = USBDevice(bus = ulpi)
 
 		# Connect up our device controller.
 		m.d.comb += self.controller.attach(usb)
@@ -107,4 +107,4 @@ class EptriDeviceExample(Elaboratable):
 if __name__ == '__main__':
 
 	design = EptriDeviceExample()
-	cli(design, cli_soc=design.soc)
+	cli(design, cli_soc = design.soc)

@@ -20,5 +20,5 @@ class Processor(Minerva):
 		super().__init__(*args, **kwargs)
 
 		# ... and replace its Record-based busses with torii-soc ones.
-		self.ibus = wishbone.Interface(addr_width=30, data_width=32, features=self.MINERVA_BUS_FEATURES)
-		self.dbus = wishbone.Interface(addr_width=30, data_width=32, features=self.MINERVA_BUS_FEATURES)
+		self.ibus = wishbone.Interface(addr_width = 30, data_width = 32, features = self.MINERVA_BUS_FEATURES)
+		self.dbus = wishbone.Interface(addr_width = 30, data_width = 32, features = self.MINERVA_BUS_FEATURES)

@@ -43,7 +43,7 @@ class StandardRequestHandler(ControlRequestHandler):
 
 	'''
 
-	def __init__(self, descriptors: DeviceDescriptorCollection, max_packet_size=64, avoid_blockram=None, blacklist: Iterable[Callable[[SetupPacket], Value]] = ()):
+	def __init__(self, descriptors: DeviceDescriptorCollection, max_packet_size = 64, avoid_blockram = None, blacklist: Iterable[Callable[[SetupPacket], Value]] = ()):
 		self.descriptors      = descriptors
 		self._max_packet_size = max_packet_size
 		self._avoid_blockram  = avoid_blockram
@@ -83,14 +83,14 @@ class StandardRequestHandler(ControlRequestHandler):
 
 		# Handler for various small-constant-response requests (GET_CONFIGURATION, GET_STATUS).
 		m.submodules.transmitter = transmitter = \
-			StreamSerializer(data_length=2, domain='usb', stream_type=USBInStreamInterface, max_length_width=2)
+			StreamSerializer(data_length = 2, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 2)
 
 
 		#
 		# Handlers.
 		#
 		with m.If(setup.type == USBRequestType.STANDARD):
-			with m.FSM(domain='usb'):
+			with m.FSM(domain = 'usb'):
 
 				# IDLE -- not handling any active request
 				with m.State('IDLE'):
@@ -132,7 +132,7 @@ class StandardRequestHandler(ControlRequestHandler):
 				with m.State('GET_STATUS'):
 					# TODO: handle reporting endpoint stall status
 					# TODO: copy the remote wakeup and bus-powered attributes from bmAttributes of the relevant descriptor?
-					self.handle_simple_data_request(m, transmitter, 0, length=2)
+					self.handle_simple_data_request(m, transmitter, 0, length = 2)
 
 
 				# SET_ADDRESS -- The host is trying to assign us an address.
@@ -210,4 +210,4 @@ class StandardRequestHandler(ControlRequestHandler):
 
 
 if __name__ == '__main__':
-	unittest.main(warnings='ignore')
+	unittest.main(warnings = 'ignore')

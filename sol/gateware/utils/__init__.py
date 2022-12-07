@@ -15,7 +15,7 @@ __all__ = [
 ]
 
 
-def _single_edge_detector(m, signal, *, domain, edge='rising'):
+def _single_edge_detector(m, signal, *, domain, edge = 'rising'):
 	''' Generates and returns a signal that goes high for a cycle upon a given edge of a given signal. '''
 
 	# Create a one-cycle delayed version of our input signal.
@@ -46,16 +46,16 @@ def past_value_of(m, signal, *, domain):
 	return delayed
 
 
-def rising_edge_detected(m, signal, *, domain='sync'):
+def rising_edge_detected(m, signal, *, domain = 'sync'):
 	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
-	return _single_edge_detector(m, signal, edge='rising', domain=domain)
+	return _single_edge_detector(m, signal, edge = 'rising', domain = domain)
 
 
-def falling_edge_detected(m, signal, *, domain='sync'):
+def falling_edge_detected(m, signal, *, domain = 'sync'):
 	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
-	return _single_edge_detector(m, signal, edge='falling', domain=domain)
+	return _single_edge_detector(m, signal, edge = 'falling', domain = domain)
 
 
-def any_edge_detected(m, signal, *, domain='sync'):
+def any_edge_detected(m, signal, *, domain = 'sync'):
 	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
-	return _single_edge_detector(m, signal, edge='any', domain=domain)
+	return _single_edge_detector(m, signal, edge = 'any', domain = domain)

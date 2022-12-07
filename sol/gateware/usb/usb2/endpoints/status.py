@@ -48,7 +48,7 @@ class USBSignalInEndpoint(Elaboratable):
 		'usb', the signal will automatically be synchronized to the USB clock domain.
 	'''
 
-	def __init__(self, *, width, endpoint_number, endianness='little', signal_domain='usb'):
+	def __init__(self, *, width, endpoint_number, endianness = 'little', signal_domain = 'usb'):
 		self._width           = width
 		self._endpoint_number = endpoint_number
 		self._signal_domain   = signal_domain
@@ -79,7 +79,7 @@ class USBSignalInEndpoint(Elaboratable):
 		if self._signal_domain == 'usb':
 			target_signal = self.signal
 		else:
-			target_signal = synchronize(m, self.signal, o_domain='usb')
+			target_signal = synchronize(m, self.signal, o_domain = 'usb')
 
 
 		# Store a latched version of our signal, captured before we start a transmission.
@@ -116,7 +116,7 @@ class USBSignalInEndpoint(Elaboratable):
 		packet_requested         = targeting_endpoint & tokenizer.ready_for_response
 
 
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			# IDLE -- we've not yet gotten an token requesting data. Wait for one.
 			with m.State('IDLE'):

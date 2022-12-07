@@ -92,12 +92,12 @@ class USBInTransferManager(Elaboratable):
 
 		# Note: we'll start with DATA1 in our register; as we'll toggle our data PID
 		# before we send.
-		self.data_pid         = Signal(2, reset=1)
+		self.data_pid         = Signal(2, reset = 1)
 		self.buffer_toggle    = Signal()
 
 		self.tokenizer        = TokenDetectorInterface()
-		self.handshakes_in    = HandshakeExchangeInterface(is_detector=True)
-		self.handshakes_out   = HandshakeExchangeInterface(is_detector=False)
+		self.handshakes_in    = HandshakeExchangeInterface(is_detector = True)
+		self.handshakes_out   = HandshakeExchangeInterface(is_detector = False)
 
 		self.generate_zlps    = Signal()
 		self.start_with_data1 = Signal()
@@ -127,23 +127,23 @@ class USBInTransferManager(Elaboratable):
 		# 2) we must be able to re-transmit data if a given packet is not ACK'd.
 		#
 		# Accordingly, we'll buffer a full USB packet of data, and then transmit
-		# it once either a) our buffer is full, or 2) the transfer ends (last=1).
+		# it once either a) our buffer is full, or 2) the transfer ends (last = 1).
 		#
 		# This implementation is double buffered; so a buffer fill can be pipelined
 		# with a transmit.
 		#
 
 		# We'll create two buffers; so we can fill one as we empty the other.
-		buffer = Array(Memory(width=8, depth=self._max_packet_size, name=f'transmit_buffer_{i}') for i in range(2))
-		buffer_write_ports = Array(buffer[i].write_port(domain='usb') for i in range(2))
-		buffer_read_ports  = Array(buffer[i].read_port(domain='usb') for i in range(2))
+		buffer = Array(Memory(width = 8, depth = self._max_packet_size, name = f'transmit_buffer_{i}') for i in range(2))
+		buffer_write_ports = Array(buffer[i].write_port(domain = 'usb') for i in range(2))
+		buffer_read_ports  = Array(buffer[i].read_port(domain = 'usb') for i in range(2))
 
 		m.submodules.read_port_0,  m.submodules.read_port_1  = buffer_read_ports
 		m.submodules.write_port_0, m.submodules.write_port_1 = buffer_write_ports
 
 		# Create values equivalent to the buffer numbers for our read and write buffer; which switch
 		# whenever we swap our two buffers.
-		write_buffer_number =  self.buffer_toggle
+		write_buffer_number = self.buffer_toggle
 		read_buffer_number  = ~self.buffer_toggle
 
 		# Create a shorthand that refers to the buffer to be filled; and the buffer to send from.
@@ -158,7 +158,7 @@ class USBInTransferManager(Elaboratable):
 		#   ``generate_zlps`` is enabled, is used to determine if the given buffer should end in
 		#   a short packet; which determines whether ZLPs are emitted.
 		buffer_fill_count   = Array(Signal(range(0, self._max_packet_size + 1)) for _ in range(2))
-		buffer_stream_ended = Array(Signal(name=f'stream_ended_in_buffer{i}') for i in range(2))
+		buffer_stream_ended = Array(Signal(name = f'stream_ended_in_buffer{i}') for i in range(2))
 
 		# Create shortcuts to active fill_count / stream_ended signals for the buffer being written.
 		write_fill_count   = buffer_fill_count[write_buffer_number]
@@ -222,7 +222,7 @@ class USBInTransferManager(Elaboratable):
 		# Pulses high an interpacket delay after receiving an IN token.
 		in_token_received = self.active & self.tokenizer.is_in & self.tokenizer.ready_for_response
 
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			# WAIT_FOR_DATA -- We don't yet have a full packet to transmit, so  we'll capture data
 			# to fill the our buffer. At full throughput, this state will never be reached after
@@ -436,7 +436,7 @@ class USBInTransferManagerTest(SolGatewareTestCase):
 		yield
 
 		# ... we should see the same data transmitted again, with the same PID.
-		yield from self.pulse(dut.tokenizer.ready_for_response, step_after=False)
+		yield from self.pulse(dut.tokenizer.ready_for_response, step_after = False)
 		yield self.assertEqual((yield dut.data_pid), 0)
 
 		for value in [0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88]:
@@ -451,7 +451,7 @@ class USBInTransferManagerTest(SolGatewareTestCase):
 		yield self.assertEqual((yield transfer_stream.ready), 1)
 
 		#  ... and we should get our second packet.
-		yield from self.pulse(dut.tokenizer.ready_for_response, step_after=True)
+		yield from self.pulse(dut.tokenizer.ready_for_response, step_after = True)
 		for value in [0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x00]:
 			self.assertEqual((yield packet_stream.payload), value)
 			yield
@@ -465,7 +465,7 @@ class USBInTransferManagerTest(SolGatewareTestCase):
 		self.assertEqual((yield dut.handshakes_out.nak), 0)
 
 		# ... but if we get an IN token we're not ready for...
-		yield from self.pulse(dut.tokenizer.ready_for_response, step_after=False)
+		yield from self.pulse(dut.tokenizer.ready_for_response, step_after = False)
 
 		# ... we should see one cycle of NAK.
 		self.assertEqual((yield dut.handshakes_out.nak), 1)
@@ -524,7 +524,7 @@ class USBInTransferManagerTest(SolGatewareTestCase):
 		yield from self.pulse(dut.handshakes_in.ack)
 
 		# ... followed by a ZLP.
-		yield from self.pulse(dut.tokenizer.ready_for_response, step_after=False)
+		yield from self.pulse(dut.tokenizer.ready_for_response, step_after = False)
 		self.assertEqual((yield packet_stream.last), 1)
 		self.assertEqual((yield dut.data_pid), 0)
 		yield from self.pulse(dut.handshakes_in.ack)

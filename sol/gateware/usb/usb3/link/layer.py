@@ -30,7 +30,7 @@ class USB3LinkLayer(Elaboratable):
 
 	'''
 
-	def __init__(self, *, physical_layer, ss_clock_frequency=125e6):
+	def __init__(self, *, physical_layer, ss_clock_frequency = 125e6):
 		self._physical_layer  = physical_layer
 		self._clock_frequency = ss_clock_frequency
 
@@ -100,13 +100,13 @@ class USB3LinkLayer(Elaboratable):
 		#
 		# U0 Maintenance Timers
 		#
-		m.submodules.timers = timers = LinkMaintenanceTimers(ss_clock_frequency=self._clock_frequency)
+		m.submodules.timers = timers = LinkMaintenanceTimers(ss_clock_frequency = self._clock_frequency)
 
 
 		#
 		# Link Training and Status State Machine (LTSSM)
 		#
-		m.submodules.ltssm = ltssm = LTSSMController(ss_clock_frequency=self._clock_frequency)
+		m.submodules.ltssm = ltssm = LTSSMController(ss_clock_frequency = self._clock_frequency)
 
 		m.d.comb += [
 			ltssm.phy_ready                      .eq(physical_layer.ready),

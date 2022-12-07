@@ -63,12 +63,12 @@ class UARTPeripheral(Peripheral, Elaboratable):
 	irq : :class:`IRQLine`
 		Interrupt request line.
 	'''
-	def __init__(self, *, rx_depth=16, tx_depth=16, **kwargs):
+	def __init__(self, *, rx_depth = 16, tx_depth = 16, **kwargs):
 		super().__init__()
 
 		self._phy       = AsyncSerial(**kwargs)
-		self._rx_fifo   = SyncFIFO(width=self._phy.rx.data.width, depth=rx_depth)
-		self._tx_fifo   = SyncFIFO(width=self._phy.tx.data.width, depth=tx_depth)
+		self._rx_fifo   = SyncFIFO(width = self._phy.rx.data.width, depth = rx_depth)
+		self._tx_fifo   = SyncFIFO(width = self._phy.tx.data.width, depth = tx_depth)
 
 		bank            = self.csr_bank()
 		self._enabled   = bank.csr(1, 'w')
@@ -79,11 +79,11 @@ class UARTPeripheral(Peripheral, Elaboratable):
 		self._tx_data   = bank.csr(self._phy.tx.data.width, 'w')
 		self._tx_rdy    = bank.csr(1, 'r')
 
-		self._rx_rdy_ev = self.event(mode='level')
-		self._rx_err_ev = self.event(mode='rise')
-		self._tx_mty_ev = self.event(mode='rise')
+		self._rx_rdy_ev = self.event(mode = 'level')
+		self._rx_err_ev = self.event(mode = 'rise')
+		self._tx_mty_ev = self.event(mode = 'rise')
 
-		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
+		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 		self.irq        = self._bridge.irq
 

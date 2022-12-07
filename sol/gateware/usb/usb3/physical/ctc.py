@@ -84,7 +84,7 @@ class CTCSkipRemover(Elaboratable):
 		# Identify the locations of any SKP symbols present in the stream.
 		skp_locations = Signal(bytes_in_stream)
 		for i in range(bytes_in_stream):
-			m.d.comb += skp_locations[i].eq(stream_word_matches_symbol(sink, i, symbol=SKP))
+			m.d.comb += skp_locations[i].eq(stream_word_matches_symbol(sink, i, symbol = SKP))
 
 		# If we've found one, indicate that we're removing it.
 		skip_found = self.sink.valid & self.sink.ready & (skp_locations != 0)

@@ -31,35 +31,35 @@ def D(x, y):
 class NamedSymbol:
 	''' Simple encapsulation of a USB3 symbol, with simple metadata. '''
 
-	def __init__(self, name, value, description='', is_data=False):
+	def __init__(self, name, value, description = '', is_data = False):
 		self.name        = name
 		self.value       = value
 		self.description = description
 		self.ctrl        = 0 if is_data else 1
 
-	def value_const(self, *, repeat=1):
+	def value_const(self, *, repeat = 1):
 		''' Returns this symbol's data value as an Torii const. '''
 		value = Const(self.value, 8)
 		return Repl(value, repeat)
 
 
-	def ctrl_const(self, *, repeat=1):
+	def ctrl_const(self, *, repeat = 1):
 		''' Returns this symbol's ctrl value as an Torii const. '''
-		ctrl =  Const(self.ctrl, 1)
+		ctrl = Const(self.ctrl, 1)
 		return Repl(ctrl, repeat)
 
 
-SKP =  NamedSymbol('SKP', K(28, 1), 'Skip')                              # 3c
-SDP =  NamedSymbol('SDP', K(28, 2), 'Start Data Packet')                 # 5c
-EDB =  NamedSymbol('EDB', K(28, 3), 'End Bad')                           # 7c
-SUB =  NamedSymbol('SUB', K(28, 4), 'Decode Error Substitution')         # 9c
-COM =  NamedSymbol('COM', K(28, 5), 'Comma')                             # bc
-RSD =  NamedSymbol('RSD', K(28, 6), 'Reserved')                          # dc
-SHP =  NamedSymbol('SHP', K(27, 7), 'Start Header Packet')               # fb
-END =  NamedSymbol('END', K(29, 7), 'End')                               # fd
-SLC =  NamedSymbol('SLC', K(30, 7), 'Start Link Command')                # fe
-EPF =  NamedSymbol('EPF', K(23, 7), 'End Packet Framing')                # f7
-IDL =  NamedSymbol('IDL', D(0, 0),  'Logical Idle', is_data=True)        # 00
+SKP = NamedSymbol('SKP', K(28, 1), 'Skip')                              # 3c
+SDP = NamedSymbol('SDP', K(28, 2), 'Start Data Packet')                 # 5c
+EDB = NamedSymbol('EDB', K(28, 3), 'End Bad')                           # 7c
+SUB = NamedSymbol('SUB', K(28, 4), 'Decode Error Substitution')         # 9c
+COM = NamedSymbol('COM', K(28, 5), 'Comma')                             # bc
+RSD = NamedSymbol('RSD', K(28, 6), 'Reserved')                          # dc
+SHP = NamedSymbol('SHP', K(27, 7), 'Start Header Packet')               # fb
+END = NamedSymbol('END', K(29, 7), 'End')                               # fd
+SLC = NamedSymbol('SLC', K(30, 7), 'Start Link Command')                # fe
+EPF = NamedSymbol('EPF', K(23, 7), 'End Packet Framing')                # f7
+IDL = NamedSymbol('IDL', D(0, 0),  'Logical Idle', is_data = True)        # 00
 
 symbols = [SKP, SDP, EDB, SUB, COM, RSD, SHP, END, SLC, EPF]
 
@@ -74,7 +74,7 @@ def get_word_for_symbols(*target_symbols):
 	return target_data, target_ctrl
 
 
-def stream_matches_symbols(stream, *target_symbols, include_ready=False):
+def stream_matches_symbols(stream, *target_symbols, include_ready = False):
 	''' Returns an Torii conditional that evaluates true when a stream contains the given four symbols.
 
 	Notes:

@@ -30,7 +30,7 @@ class ILAExample(Elaboratable):
 
 	def __init__(self):
 		self.counter = Signal(28)
-		self.ila  = SyncSerialILA(signals=[self.counter], sample_depth=32, domain='fast')
+		self.ila  = SyncSerialILA(signals = [self.counter], sample_depth = 32, domain = 'fast')
 
 
 	def interactive_display(self):
@@ -43,7 +43,7 @@ class ILAExample(Elaboratable):
 		m.submodules += self.ila
 
 		# Generate our clock domains.
-		clocking = SolECP5DomainGenerator(clock_frequencies=CLOCK_FREQUENCIES)
+		clocking = SolECP5DomainGenerator(clock_frequencies = CLOCK_FREQUENCIES)
 		m.submodules.clocking = clocking
 
 		# Clock divider / counter.
@@ -54,8 +54,8 @@ class ILAExample(Elaboratable):
 		m.d.comb += self.ila.trigger.eq(self.counter == 7)
 
 		# Grab our I/O connectors.
-		leds    = [platform.request('led', i, dir='o') for i in range(0, 6)]
-		spi_bus = synchronize(m, platform.request('debug_spi'), o_domain='fast')
+		leds    = [platform.request('led', i, dir = 'o') for i in range(0, 6)]
+		spi_bus = synchronize(m, platform.request('debug_spi'), o_domain = 'fast')
 
 		# Attach the LEDs and User I/O to the MSBs of our counter.
 		m.d.comb += Cat(leds).eq(self.counter[-7:-1])

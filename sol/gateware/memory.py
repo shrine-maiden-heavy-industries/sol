@@ -79,7 +79,7 @@ class TransactionalizedFIFO(Elaboratable):
 		The name of the domain this module should exist in.
 	'''
 
-	def __init__(self, *, width, depth, name=None, domain='sync'):
+	def __init__(self, *, width, depth, name = None, domain = 'sync'):
 		self.width  = width
 		self.depth  = depth
 		self.name   = name
@@ -112,7 +112,7 @@ class TransactionalizedFIFO(Elaboratable):
 		#
 		# Core internal 'backing store'.
 		#
-		memory = Memory(width=self.width, depth=self.depth + 1, name=self.name)
+		memory = Memory(width = self.width, depth = self.depth + 1, name = self.name)
 		m.submodules.read_port  = read_port  = memory.read_port()
 		m.submodules.write_port = write_port = memory.write_port()
 

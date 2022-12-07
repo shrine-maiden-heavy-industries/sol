@@ -77,10 +77,10 @@ class UTMIInterfaceMultiplexer(OneHotMultiplexer):
 
 	def __init__(self):
 		super().__init__(
-			interface_type=UTMITransmitInterface,
+			interface_type = UTMITransmitInterface,
 			mux_signals= ('data',),
-			or_signals=  ('valid',),
-			pass_signals=('ready',)
+			or_signals= ('valid',),
+			pass_signals = ('ready',)
 		)
 
 

@@ -56,16 +56,16 @@ class USBPacketID(IntFlag):
 
 
 	@classmethod
-	def from_byte(cls, byte, skip_checks=False):
+	def from_byte(cls, byte, skip_checks = False):
 		''' Creates a PID object from a byte. '''
 
 		# Convert the raw PID to an integer.
-		pid_as_int = int.from_bytes(byte, byteorder='little')
-		return cls.from_int(pid_as_int, skip_checks=skip_checks)
+		pid_as_int = int.from_bytes(byte, byteorder = 'little')
+		return cls.from_int(pid_as_int, skip_checks = skip_checks)
 
 
 	@classmethod
-	def from_int(cls, value, skip_checks=True):
+	def from_int(cls, value, skip_checks = True):
 		''' Create a PID object from an integer. '''
 
 		PID_MASK           = 0b1111

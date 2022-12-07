@@ -35,20 +35,20 @@ class HyperRAMDiagnostic(Elaboratable):
 		m.submodules.clocking = clocking
 
 		# Create a set of registers...
-		registers = JTAGRegisterInterface(address_size=7, default_read_value=0xDEADBEEF)
+		registers = JTAGRegisterInterface(address_size = 7, default_read_value = 0xDEADBEEF)
 		m.submodules.registers = registers
 
 		#
 		# HyperRAM test connections.
 		#
 		ram_bus = platform.request('ram')
-		psram = HyperRAMInterface(bus=ram_bus, **platform.ram_timings)
+		psram = HyperRAMInterface(bus = ram_bus, **platform.ram_timings)
 		m.submodules += psram
 
 		psram_address_changed = Signal()
-		psram_address = registers.add_register(REGISTER_RAM_REG_ADDR, write_strobe=psram_address_changed)
+		psram_address = registers.add_register(REGISTER_RAM_REG_ADDR, write_strobe = psram_address_changed)
 
-		registers.add_sfr(REGISTER_RAM_VALUE, read=psram.read_data)
+		registers.add_sfr(REGISTER_RAM_VALUE, read = psram.read_data)
 
 		# Hook up our PSRAM.
 		m.d.comb += [
@@ -96,10 +96,10 @@ if __name__ == '__main__':
 		for i in range(iterations):
 
 			if test():
-				pprint('.', end='')
+				pprint('.', end = '')
 				passes += 1
 			else:
-				pprint('✗', end='')
+				pprint('✗', end = '')
 
 				failures += 1
 				failed_tests.add(test)

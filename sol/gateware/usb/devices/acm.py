@@ -107,9 +107,9 @@ class USBSerialDevice(Elaboratable):
 	_DATA_ENDPOINT_NUMBER   = 4
 
 	def __init__(self, *, bus, idVendor, idProduct,
-			manufacturer_string='SOL',
-			product_string='USB-to-serial',
-			serial_number=None, max_packet_size=64):
+			manufacturer_string = 'SOL',
+			product_string = 'USB-to-serial',
+			serial_number = None, max_packet_size = 64):
 
 		self._bus                 = bus
 		self._idVendor            = idVendor
@@ -203,7 +203,7 @@ class USBSerialDevice(Elaboratable):
 		m = Module()
 
 		# Create our core USB device, and add a standard control endpoint.
-		m.submodules.usb = usb = USBDevice(bus=self._bus)
+		m.submodules.usb = usb = USBDevice(bus = self._bus)
 		control_ep = usb.add_standard_control_endpoint(self.create_descriptors())
 
 		# Attach our class request handlers.
@@ -219,22 +219,22 @@ class USBSerialDevice(Elaboratable):
 		# Create our status/communications endpoint; but don't ever drive its stream.
 		# This should be optimized down to an endpoint that always NAKs.
 		serial_status_ep = USBStreamInEndpoint(
-			endpoint_number=self._STATUS_ENDPOINT_NUMBER,
-			max_packet_size=self._max_packet_size
+			endpoint_number = self._STATUS_ENDPOINT_NUMBER,
+			max_packet_size = self._max_packet_size
 		)
 		usb.add_endpoint(serial_status_ep)
 
 		# Create an endpoint for serial rx...
 		serial_rx_endpoint = USBStreamOutEndpoint(
-			endpoint_number=self._DATA_ENDPOINT_NUMBER,
-			max_packet_size=self._max_packet_size,
+			endpoint_number = self._DATA_ENDPOINT_NUMBER,
+			max_packet_size = self._max_packet_size,
 		)
 		usb.add_endpoint(serial_rx_endpoint)
 
 		# ... and one for serial tx.
 		serial_tx_endpoint = USBStreamInEndpoint(
-			endpoint_number=self._DATA_ENDPOINT_NUMBER,
-			max_packet_size=self._max_packet_size
+			endpoint_number = self._DATA_ENDPOINT_NUMBER,
+			max_packet_size = self._max_packet_size
 		)
 		usb.add_endpoint(serial_tx_endpoint)
 

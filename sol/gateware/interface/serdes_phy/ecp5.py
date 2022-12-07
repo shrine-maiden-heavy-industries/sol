@@ -79,7 +79,7 @@ class ECP5SerDesConfigInterface(Elaboratable):
 			self.sci_wdata.eq(self.dat_w)
 		]
 
-		with m.FSM(domain='pipe'):
+		with m.FSM(domain = 'pipe'):
 
 			with m.State('IDLE'):
 				m.d.comb += self.done.eq(1)
@@ -128,7 +128,7 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 		data  = Signal(8)
 
 
-		with m.FSM(domain='pipe'):
+		with m.FSM(domain = 'pipe'):
 
 			with m.State('IDLE'):
 				m.d.pipe += first.eq(1)
@@ -354,8 +354,8 @@ class ECP5SerDesEqualizer(Elaboratable):
 		# Equalizer interface.
 		#
 		m.submodules.interface = interface = ECP5SerDesEqualizerInterface(
-			sci=self._sci,
-			serdes_channel=self._channel
+			sci = self._sci,
+			serdes_channel = self._channel
 		)
 
 		#
@@ -445,10 +445,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 		self.rx_coding_err  = Signal()
 
 		# Reset out.
-		self.tx_pll_reset   = Signal(reset=1)
-		self.tx_pcs_reset   = Signal(reset=1)
-		self.rx_cdr_reset   = Signal(reset=1)
-		self.rx_pcs_reset   = Signal(reset=1)
+		self.tx_pll_reset   = Signal(reset = 1)
+		self.tx_pcs_reset   = Signal(reset = 1)
+		self.rx_cdr_reset   = Signal(reset = 1)
+		self.rx_pcs_reset   = Signal(reset = 1)
 
 		# Status out.
 		self.tx_pcs_ready   = Signal()
@@ -477,10 +477,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 		rx_cdr_locked = Signal()
 		rx_coding_err = Signal()
 		m.submodules += [
-			FFSynchronizer(self.tx_pll_locked, tx_pll_locked, o_domain='ss'),
-			FFSynchronizer(self.rx_has_signal, rx_has_signal, o_domain='ss'),
-			FFSynchronizer(self.rx_cdr_locked, rx_cdr_locked, o_domain='ss'),
-			FFSynchronizer(self.rx_coding_err, rx_coding_err, o_domain='ss'),
+			FFSynchronizer(self.tx_pll_locked, tx_pll_locked, o_domain = 'ss'),
+			FFSynchronizer(self.rx_has_signal, rx_has_signal, o_domain = 'ss'),
+			FFSynchronizer(self.rx_cdr_locked, rx_cdr_locked, o_domain = 'ss'),
+			FFSynchronizer(self.rx_coding_err, rx_coding_err, o_domain = 'ss'),
 		]
 
 
@@ -502,19 +502,19 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 		timer = Signal(range(max(self.RESET_CYCLES, self.RX_LOS_CYCLES, self.RX_LOL_CYCLES)))
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# Hold everything in reset, initially.
 			with m.State('INITIAL_RESET'):
-				apply_resets(m, tx_pll=1, tx_pcs=1, rx_cdr=1, rx_pcs=1)
-				apply_readys(m, tx_pcs=0, rx_pcs=0)
+				apply_resets(m, tx_pll = 1, tx_pcs = 1, rx_cdr = 1, rx_pcs = 1)
+				apply_readys(m, tx_pcs = 0, rx_pcs = 0)
 
 				m.next = 'WAIT_FOR_TXPLL_LOCK'
 
 			# Deassert Tx PLL reset, and wait for it to start up.
 			with m.State('WAIT_FOR_TXPLL_LOCK'):
-				apply_resets(m, tx_pll=0, tx_pcs=1, rx_cdr=1, rx_pcs=1)
-				apply_readys(m, tx_pcs=0, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 1, rx_cdr = 1, rx_pcs = 1)
+				apply_readys(m, tx_pcs = 0, rx_pcs = 0)
 
 				with m.If(tx_pll_locked):
 					m.d.ss += timer.eq(0)
@@ -522,8 +522,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 			# Reset Tx PCS.
 			with m.State('APPLY_TXPCS_RESET'):
-				apply_resets(m, tx_pll=0, tx_pcs=1, rx_cdr=1, rx_pcs=1)
-				apply_readys(m, tx_pcs=0, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 1, rx_cdr = 1, rx_pcs = 1)
+				apply_readys(m, tx_pcs = 0, rx_pcs = 0)
 
 				with m.If(timer + 1 != self.RESET_CYCLES):
 					m.d.ss += timer.eq(timer + 1)
@@ -535,8 +535,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 			with m.State('WAIT_FOR_RX_SIGNAL'):
 				# CDR reset implies LOS reset; and must be deasserted for LOS to go low.
 				# This is not documented in [TN1261], and contradicts [FPGA-PB-02001].
-				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=1)
-				apply_readys(m, tx_pcs=1, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 0, rx_cdr = 0, rx_pcs = 1)
+				apply_readys(m, tx_pcs = 1, rx_pcs = 0)
 
 				with m.If(~rx_has_signal):
 					m.d.ss += timer.eq(0)
@@ -552,8 +552,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 			# Reset CDR.
 			with m.State('APPLY_CDR_RESET'):
-				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=1, rx_pcs=1)
-				apply_readys(m, tx_pcs=1, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 0, rx_cdr = 1, rx_pcs = 1)
+				apply_readys(m, tx_pcs = 1, rx_pcs = 0)
 
 				with m.If(timer + 1 != self.RESET_CYCLES):
 					m.d.ss += timer.eq(timer + 1)
@@ -563,8 +563,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 			# Deassert CDR reset, and wait until CDR had some time to lock (to embedded Rx clock).
 			with m.State('DELAY_FOR_CDR_LOCK'):
-				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=1)
-				apply_readys(m, tx_pcs=1, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 0, rx_cdr = 0, rx_pcs = 1)
+				apply_readys(m, tx_pcs = 1, rx_pcs = 0)
 
 				with m.If(timer + 1 != self.RX_LOL_CYCLES):
 					m.d.ss += timer.eq(timer + 1)
@@ -579,8 +579,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 			# Wait until CDR has been locked for a while; and if it lost lock, reset it.
 			with m.State('CHECK_FOR_CDR_LOCK'):
-				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=1)
-				apply_readys(m, tx_pcs=1, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 0, rx_cdr = 0, rx_pcs = 1)
+				apply_readys(m, tx_pcs = 1, rx_pcs = 0)
 
 				with m.If(~rx_cdr_locked):
 					m.d.ss += timer.eq(0)
@@ -599,8 +599,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 			# Reset Rx PCS.
 			with m.State('APPLY_RXPCS_RESET'):
-				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=1)
-				apply_readys(m, tx_pcs=1, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 0, rx_cdr = 0, rx_pcs = 1)
+				apply_readys(m, tx_pcs = 1, rx_pcs = 0)
 
 				with m.If(timer + 1 != self.RESET_CYCLES):
 					m.d.ss += timer.eq(timer + 1)
@@ -610,8 +610,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 			# Deassert Rx PCS reset, and wait until PCS had some time to lock (to a K28.5 comma).
 			with m.State('DELAY_FOR_RXPCS_LOCK'):
-				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=0)
-				apply_readys(m, tx_pcs=1, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 0, rx_cdr = 0, rx_pcs = 0)
+				apply_readys(m, tx_pcs = 1, rx_pcs = 0)
 
 				with m.If(timer + 1 != self.RX_ERR_CYCLES):
 					m.d.ss += timer.eq(timer + 1)
@@ -626,8 +626,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 			# Wait until Rx PCS has been locked for a while; and if it lost lock, reset it.
 			with m.State('CHECK_FOR_RXPCS_LOCK'):
-				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=0)
-				apply_readys(m, tx_pcs=1, rx_pcs=0)
+				apply_resets(m, tx_pll = 0, tx_pcs = 0, rx_cdr = 0, rx_pcs = 0)
+				apply_readys(m, tx_pcs = 1, rx_pcs = 0)
 
 				with m.If(rx_coding_err):
 					m.d.ss += timer.eq(0)
@@ -646,8 +646,8 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 			# Everything is okay; monitor for errors, and restart the reset sequence if necessary.
 			with m.State('IDLE'):
-				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=0)
-				apply_readys(m, tx_pcs=1, rx_pcs=1)
+				apply_resets(m, tx_pll = 0, tx_pcs = 0, rx_cdr = 0, rx_pcs = 0)
+				apply_readys(m, tx_pcs = 1, rx_pcs = 1)
 
 				with m.If(rx_coding_err):
 					m.next = 'APPLY_RXPCS_RESET'
@@ -662,7 +662,7 @@ class ECP5SerDesResetSequencer(Elaboratable):
 class ECP5SerDes(Elaboratable):
 	''' Abstraction layer for working with the ECP5 SerDes. '''
 
-	def __init__(self, pll_config, tx_pads, rx_pads, dual=0, channel=0):
+	def __init__(self, pll_config, tx_pads, rx_pads, dual = 0, channel = 0):
 		assert dual    in [0, 1]
 		assert channel in [0, 1]
 
@@ -965,8 +965,8 @@ class ECP5SerDes(Elaboratable):
 			p_CHX_CC_MATCH_2        = '0x13c',   # K28.1 1+8b code
 			p_CHX_CC_MATCH_3        = '0x13c',   # K28.1 1+8b code
 			p_CHX_CC_MATCH_4        = '0x13c',   # K28.1 1+8b code
-			p_D_LOW_MARK            = '0d4',    # CTC FIFO low  water mark (mean=8)
-			p_D_HIGH_MARK           = '0d12',   # CTC FIFO high water mark (mean=8)
+			p_D_LOW_MARK            = '0d4',    # CTC FIFO low  water mark (mean = 8)
+			p_D_HIGH_MARK           = '0d12',   # CTC FIFO high water mark (mean = 8)
 
 			# The CTC FIFO underrun and overrun flags are 'sticky'; once the condition occurs, the flag
 			# remains set until the RX PCS is reset. This affects the PIPE RxStatus output as well; to
@@ -1132,8 +1132,8 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 		This output is not implemented. External logic may drive it if necessary.
 	'''
 
-	def __init__(self, *, tx_pads, rx_pads, channel=0, dual=0, refclk_frequency):
-		super().__init__(width=2)
+	def __init__(self, *, tx_pads, rx_pads, channel = 0, dual = 0, refclk_frequency):
+		super().__init__(width = 2)
 
 		self._tx_pads                 = tx_pads
 		self._rx_pads                 = rx_pads
@@ -1162,7 +1162,7 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 
 		# Our soft PHY includes some logic that needs to run synchronously to the PIPE clock; create
 		# a local clock domain to drive it.
-		m.domains.pipe = ClockDomain(local=True, async_reset=True)
+		m.domains.pipe = ClockDomain(local = True, async_reset = True)
 		m.d.comb += [
 			ClockSignal('pipe')     .eq(serdes.pclk),
 		]

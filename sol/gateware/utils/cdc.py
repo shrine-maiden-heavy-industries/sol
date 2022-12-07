@@ -19,7 +19,7 @@ from torii.lib.io  import Pin
 from ..test import SolGatewareTestCase, sync_test_case
 
 
-def synchronize(m, signal, *, output=None, o_domain='sync', stages=2):
+def synchronize(m, signal, *, output = None, o_domain = 'sync', stages = 2):
 	''' Convenience function. Synchronizes a signal, or equivalent collection.
 
 	Parameters:
@@ -37,7 +37,7 @@ def synchronize(m, signal, *, output=None, o_domain='sync', stages=2):
 
 	# Quick function to create a synchronizer with our domain and stages.
 	def create_synchronizer(signal, output):
-		return FFSynchronizer(signal, output, o_domain=o_domain, stages=stages)
+		return FFSynchronizer(signal, output, o_domain = o_domain, stages = stages)
 
 	if output is None:
 		if isinstance(signal, Signal):
@@ -47,7 +47,7 @@ def synchronize(m, signal, *, output=None, o_domain='sync', stages=2):
 
 	# If the object knows how to synchronize itself, let it.
 	if hasattr(signal, '_synchronize_'):
-		signal._synchronize_(m, output, o_domain=o_domain, stages=stages)
+		signal._synchronize_(m, output, o_domain = o_domain, stages = stages)
 		return output
 
 	# Trivial case: if this element doesn't have a layout,
@@ -62,8 +62,8 @@ def synchronize(m, signal, *, output=None, o_domain='sync', stages=2):
 
 		# If this is a record itself, we'll need to recurse.
 		if isinstance(signal[name], (Record, Pin)):
-			synchronize(m, signal[name], output=output[name],
-					o_domain=o_domain, stages=stages)
+			synchronize(m, signal[name], output = output[name],
+					o_domain = o_domain, stages = stages)
 			continue
 
 		# Skip any output elements, as they're already
@@ -106,7 +106,7 @@ class SynchronizedTest(TestCase):
 		synchronize(m, record)
 
 
-def stretch_strobe_signal(m, strobe, *, to_cycles, output=None, domain=None, allow_delay=False):
+def stretch_strobe_signal(m, strobe, *, to_cycles, output = None, domain = None, allow_delay = False):
 	''' Stretches a given strobe to the given number of cycles.
 
 	Parameters:
@@ -157,7 +157,7 @@ class StrobeStretcherTest(SolGatewareTestCase):
 
 		# Create a module that only has our stretched strobe signal.
 		m.strobe_in = Signal()
-		m.stretched_strobe = stretch_strobe_signal(m, m.strobe_in, to_cycles=2)
+		m.stretched_strobe = stretch_strobe_signal(m, m.strobe_in, to_cycles = 2)
 
 		return m
 

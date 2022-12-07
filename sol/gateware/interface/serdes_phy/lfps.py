@@ -26,7 +26,7 @@ __all__ = (
 
 
 # From [USB3.2: Table 6-29]; the maximum and minimum
-_LFPS_PERIOD_MIN =  20e-9 # seconds
+_LFPS_PERIOD_MIN = 20e-9 # seconds
 _LFPS_PERIOD_MAX = 100e-9
 
 
@@ -44,7 +44,7 @@ class LFPSSquareWaveDetector(Elaboratable):
 		High whenever we detect an LFPS toggling.
 	'''
 
-	def __init__(self, pipe_clock_frequency=250e6):
+	def __init__(self, pipe_clock_frequency = 250e6):
 
 		# Compute the minimum and maximum cycles we're allowed to see.
 		# Our multipliers allow for up to a 10% devication in duty cycle.
@@ -65,7 +65,7 @@ class LFPSSquareWaveDetector(Elaboratable):
 
 		# Synchronize the GPIO to our clock domain.
 		rx_gpio = Signal()
-		m.submodules += FFSynchronizer(self.rx_gpio, rx_gpio, o_domain='pipe')
+		m.submodules += FFSynchronizer(self.rx_gpio, rx_gpio, o_domain = 'pipe')
 
 		# Our mechanism is simple: we measure the length of any periods of consecutive highs and lows
 		# we see, and then check to see when they're both in acceptable ranges. Theoretically, we should

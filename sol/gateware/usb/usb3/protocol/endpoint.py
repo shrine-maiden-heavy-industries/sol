@@ -76,7 +76,7 @@ class SuperSpeedEndpointInterface:
 		self.tx_length             = Signal(range(1024 + 1))
 		self.tx_endpoint_number    = Signal(4)
 		self.tx_sequence_number    = Signal(5)
-		self.tx_direction          = Signal(reset=1)
+		self.tx_direction          = Signal(reset = 1)
 
 		# Handshaking / transaction packet exchange.
 		self.handshakes_out        = HandshakeGeneratorInterface()
@@ -228,12 +228,12 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 		# Multiplex the signals being routed -from- our pre-mux interface.
 		#
 		self._multiplex_signals(m,
-			when='address_changed',
-			multiplex=['address_changed', 'new_address']
+			when = 'address_changed',
+			multiplex = ['address_changed', 'new_address']
 		)
 		self._multiplex_signals(m,
-			when='config_changed',
-			multiplex=['config_changed', 'new_config']
+			when = 'config_changed',
+			multiplex = ['config_changed', 'new_config']
 		)
 
 

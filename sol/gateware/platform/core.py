@@ -15,7 +15,7 @@ from torii.build.res import ResourceError
 class NullPin(Record):
 	''' Stand-in for a I/O record. '''
 
-	def __init__(self, size=1):
+	def __init__(self, size = 1):
 		super().__init__([
 			('i', size),
 			('o', size),
@@ -39,7 +39,7 @@ class SOLPlatform:
 		return self.default_usb3_phy(self)
 
 
-	def get_led(self, m, index=0):
+	def get_led(self, m, index = 0):
 		''' Attempts to get an LED for the given platform, where possible.
 
 		If no LED is available, returns a NullPin, so the design can still be generated
@@ -69,7 +69,7 @@ class SOLPlatform:
 		return NullPin()
 
 
-	def request_optional(self, name, number=0, *args, default, expected=False, **kwargs):
+	def request_optional(self, name, number = 0, *args, default, expected = False, **kwargs):
 		''' Specialized version of .request() for 'optional' I/O.
 
 		If the platform has the a resource with the given name, it is requested
@@ -107,7 +107,7 @@ class LUNAApolloPlatform(SOLPlatform):
 		debugger = ApolloDebugger()
 
 		# Grab our generated bitstream, and upload it to the FPGA.
-		bitstream =  products.get(f'{name}.bit')
+		bitstream = products.get(f'{name}.bit')
 		with debugger.jtag as jtag:
 			programmer = ECP5_JTAGProgrammer(jtag)
 			programmer.configure(bitstream)
@@ -123,7 +123,7 @@ class LUNAApolloPlatform(SOLPlatform):
 			programmer.unconfigure()
 
 
-	def toolchain_flash(self, products, name='top'):
+	def toolchain_flash(self, products, name = 'top'):
 		''' Programs the LUNA board's flash via its sideband connection. '''
 
 		from apollo_fpga import ApolloDebugger
@@ -134,7 +134,7 @@ class LUNAApolloPlatform(SOLPlatform):
 		self._ensure_unconfigured(debugger)
 
 		# Grab our generated bitstream, and upload it to the .
-		bitstream =  products.get(f'{name}.bit')
+		bitstream = products.get(f'{name}.bit')
 		with debugger.jtag as jtag:
 			programmer = ECP5_JTAGProgrammer(jtag)
 			programmer.flash(bitstream)

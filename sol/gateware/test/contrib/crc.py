@@ -132,11 +132,11 @@ class CrcAlgorithm:
 	def __init__(self,
 				 width,
 				 polynomial,
-				 name=None,
-				 seed=0,
-				 lsbFirst=False,
-				 lsbFirstData=None,
-				 xorMask=0):
+				 name = None,
+				 seed = 0,
+				 lsbFirst = False,
+				 lsbFirstData = None,
+				 xorMask = 0):
 		'''
 		:param width:
 
@@ -246,7 +246,7 @@ class CrcAlgorithm:
 									  self.__class__.__name__, info, id(self))
 		return result
 
-	def calcString(self, s, value=None):
+	def calcString(self, s, value = None):
 		'''
 		Calculate the CRC of the 8-bit string *s*.
 		'''
@@ -254,7 +254,7 @@ class CrcAlgorithm:
 		r.takeString(s)
 		return r.getFinalValue()
 
-	def calcWord(self, word, width, value=None):
+	def calcWord(self, word, width, value = None):
 		'''
 		Calculate the CRC of the integer *word* as a sequence of
 		*width* bits.
@@ -304,7 +304,7 @@ class CrcRegister:
 	'''
 	Holds the intermediate state of the CRC algorithm.
 	'''
-	def __init__(self, crcAlgorithm, value=None):
+	def __init__(self, crcAlgorithm, value = None):
 		'''
 		:param crcAlgorithm:
 
@@ -379,7 +379,7 @@ class CrcRegister:
 		if outBit ^ bool(bit):
 			self.value ^= self.polyMask
 
-	def takeWord(self, word, width=8):
+	def takeWord(self, word, width = 8):
 		'''
 		Process a binary input word.
 
@@ -445,93 +445,93 @@ def formatBinaryString(value, width):
 # existing implementation or sample data with a known result).
 
 #: Same CRC algorithm as Python's zlib.crc32
-CRC32 = CrcAlgorithm(name='CRC-32',
-					 width=32,
-					 polynomial=(32, 26, 23, 22, 16, 12, 11, 10, 8, 7, 5, 4, 2,
+CRC32 = CrcAlgorithm(name = 'CRC-32',
+					 width = 32,
+					 polynomial = (32, 26, 23, 22, 16, 12, 11, 10, 8, 7, 5, 4, 2,
 								 1, 0),
-					 seed=0xFFFFFFFF,
-					 lsbFirst=True,
-					 xorMask=0xFFFFFFFF)
+					 seed = 0xFFFFFFFF,
+					 lsbFirst = True,
+					 xorMask = 0xFFFFFFFF)
 
-CRC16 = CrcAlgorithm(name='CRC-16',
-					 width=16,
-					 polynomial=(16, 15, 2, 0),
-					 seed=0x0000,
-					 lsbFirst=True,
-					 xorMask=0x0000)
+CRC16 = CrcAlgorithm(name = 'CRC-16',
+					 width = 16,
+					 polynomial = (16, 15, 2, 0),
+					 seed = 0x0000,
+					 lsbFirst = True,
+					 xorMask = 0x0000)
 
 #: Used in USB data packets.
-CRC16_USB = CrcAlgorithm(name='CRC-16-USB',
-						 width=16,
-						 polynomial=(16, 15, 2, 0),
-						 seed=0xFFFF,
-						 lsbFirst=True,
-						 xorMask=0xFFFF)
+CRC16_USB = CrcAlgorithm(name = 'CRC-16-USB',
+						 width = 16,
+						 polynomial = (16, 15, 2, 0),
+						 seed = 0xFFFF,
+						 lsbFirst = True,
+						 xorMask = 0xFFFF)
 
-CRC_CCITT = CrcAlgorithm(name='CRC-CCITT',
-						 width=16,
-						 polynomial=(16, 12, 5, 0),
-						 seed=0xFFFF,
-						 lsbFirst=False,
-						 xorMask=0x0000)
+CRC_CCITT = CrcAlgorithm(name = 'CRC-CCITT',
+						 width = 16,
+						 polynomial = (16, 12, 5, 0),
+						 seed = 0xFFFF,
+						 lsbFirst = False,
+						 xorMask = 0x0000)
 
 #: This is the algorithm used in X.25 and for the HDLC 2-byte FCS.
-CRC_HDLC = CrcAlgorithm(name='CRC-HDLC',
-						width=16,
-						polynomial=(16, 12, 5, 0),
-						seed=0xFFFF,
-						lsbFirst=True,
-						xorMask=0xFFFF)
+CRC_HDLC = CrcAlgorithm(name = 'CRC-HDLC',
+						width = 16,
+						polynomial = (16, 12, 5, 0),
+						seed = 0xFFFF,
+						lsbFirst = True,
+						xorMask = 0xFFFF)
 
 #: Used in ATM HEC and SMBus.
-CRC8_SMBUS = CrcAlgorithm(name='CRC-8-SMBUS',
-						  width=8,
-						  polynomial=(8, 2, 1, 0),
-						  seed=0,
-						  lsbFirst=False,
-						  xorMask=0)
+CRC8_SMBUS = CrcAlgorithm(name = 'CRC-8-SMBUS',
+						  width = 8,
+						  polynomial = (8, 2, 1, 0),
+						  seed = 0,
+						  lsbFirst = False,
+						  xorMask = 0)
 
 #: Used in RFC-2440 and MIL STD 188-184.
-CRC24 = CrcAlgorithm(name='CRC-24',
-					 width=24,
-					 polynomial=(24, 23, 18, 17, 14, 11, 10, 7, 6, 5, 4, 3, 1,
+CRC24 = CrcAlgorithm(name = 'CRC-24',
+					 width = 24,
+					 polynomial = (24, 23, 18, 17, 14, 11, 10, 7, 6, 5, 4, 3, 1,
 								 0),
-					 seed=0xB704CE,
-					 lsbFirst=False,
-					 xorMask=0)
+					 seed = 0xB704CE,
+					 lsbFirst = False,
+					 xorMask = 0)
 
 #: Used in Controller Area Network frames.
-CRC15 = CrcAlgorithm(name='CRC-15',
-					 width=15,
-					 polynomial=(15, 14, 10, 8, 7, 4, 3, 0),
-					 seed=0,
-					 lsbFirst=False,
-					 xorMask=0)
+CRC15 = CrcAlgorithm(name = 'CRC-15',
+					 width = 15,
+					 polynomial = (15, 14, 10, 8, 7, 4, 3, 0),
+					 seed = 0,
+					 lsbFirst = False,
+					 xorMask = 0)
 
 #: Used in iSCSI (RFC-3385); usually credited to Guy Castagnoli.
-CRC32C = CrcAlgorithm(name='CRC-32C',
-					  width=32,
-					  polynomial=(32, 28, 27, 26, 25, 23, 22, 20, 19, 18, 14,
+CRC32C = CrcAlgorithm(name = 'CRC-32C',
+					  width = 32,
+					  polynomial = (32, 28, 27, 26, 25, 23, 22, 20, 19, 18, 14,
 								  13, 11, 10, 9, 8, 6, 0),
-					  seed=0xFFFFFFFF,
-					  lsbFirst=True,
-					  xorMask=0xFFFFFFFF)
+					  seed = 0xFFFFFFFF,
+					  lsbFirst = True,
+					  xorMask = 0xFFFFFFFF)
 
 #: CRC used in USB Token and Start-Of-Frame packets
-CRC5_USB = CrcAlgorithm(name='CRC-5-USB',
-						width=5,
-						polynomial=(5, 2, 0),
-						seed=0x1F,
-						lsbFirst=True,
-						xorMask=0x1F)
+CRC5_USB = CrcAlgorithm(name = 'CRC-5-USB',
+						width = 5,
+						polynomial = (5, 2, 0),
+						seed = 0x1F,
+						lsbFirst = True,
+						xorMask = 0x1F)
 
 #: ISO 3309
-CRC64 = CrcAlgorithm(name='CRC-64',
-					 width=64,
-					 polynomial=(64, 4, 3, 1, 0),
-					 seed=0,
-					 lsbFirst=True,
-					 xorMask=0)
+CRC64 = CrcAlgorithm(name = 'CRC-64',
+					 width = 64,
+					 polynomial = (64, 4, 3, 1, 0),
+					 seed = 0,
+					 lsbFirst = True,
+					 xorMask = 0)
 
 #: This is just to show off the ability to handle a very wide CRC.
 # If this is a standard, I don't know where it is from.  I found the
@@ -539,12 +539,12 @@ CRC64 = CrcAlgorithm(name='CRC-64',
 # <http://www.volny.cz/lk77/crc256mmx/>.
 POLYNOM256 = 0x82E2443E6320383A20B8A2A0A1EA91A3CCA99A30C5205038349C82AAA3A8FD27
 CRC256 = CrcAlgorithm(
-	name='CRC-256',
-	width=256,
-	polynomial=POLYNOM256,
-	seed=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
-	lsbFirst=True,
-	xorMask=0)
+	name = 'CRC-256',
+	width = 256,
+	polynomial = POLYNOM256,
+	seed = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
+	lsbFirst = True,
+	xorMask = 0)
 
 # For the following I haven't found complete information and/or have
 # no way to verify the result.  I started with the list on Wikipedia
@@ -645,15 +645,15 @@ def _callCalcString123456789(v):
 	return v.calcString('123456789')
 
 
-def _printResults(fn=_callCalcString123456789):
+def _printResults(fn = _callCalcString123456789):
 	import sys
 	d = sys.modules[__name__].__dict__
 	algorithms = sorted(
 		(v for (k, v) in d.items() if isinstance(v, CrcAlgorithm)),
-		key=lambda v: (v.width, v.name))
+		key = lambda v: (v.width, v.name))
 	for a in algorithms:
 		format = ('%%0%dX' % ((a.width + 3) // 4))
-		print('%s:' % a.name, end=' ')
+		print('%s:' % a.name, end = ' ')
 		print(format % fn(a))
 
 

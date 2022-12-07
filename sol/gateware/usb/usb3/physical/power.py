@@ -138,7 +138,7 @@ class LinkPartnerDetector(Elaboratable):
 		#
 		self.request_detection = Signal()
 
-		self.power_state       = Signal(2, reset=2)
+		self.power_state       = Signal(2, reset = 2)
 		self.detection_control = Signal()
 		self.phy_status        = Signal()
 		self.rx_status         = Signal(3)
@@ -155,7 +155,7 @@ class LinkPartnerDetector(Elaboratable):
 		# after a detection completes.
 		PARTNER_PRESENT_STATUS = 0b011
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# IDLE_P2 -- our post-startup state; represents when we're IDLE but in P2.
 			# This is typically only seen at board startup.

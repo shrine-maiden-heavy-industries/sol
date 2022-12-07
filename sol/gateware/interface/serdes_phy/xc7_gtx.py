@@ -346,8 +346,8 @@ class GTXChannel(Elaboratable):
 		# clock to drive the CTC FIFO in the transceiver, which will compensate for the difference.
 		txoutclk = Signal()
 		m.submodules += Instance('BUFG',
-			i_I=txoutclk,
-			o_O=self.pclk
+			i_I = txoutclk,
+			o_O = self.pclk
 		)
 		platform.add_clock_constraint(self.pclk, 250e6)
 
@@ -385,10 +385,10 @@ class GTXChannel(Elaboratable):
 		# Dynamic reconfiguration.
 		#
 		rx_termination = Signal()
-		m.submodules += FFSynchronizer(self.rx_termination, rx_termination, o_domain='ss')
+		m.submodules += FFSynchronizer(self.rx_termination, rx_termination, o_domain = 'ss')
 
 		m.submodules.rx_term = rx_term = DRPFieldController(
-			addr=0x0011, bits=slice(4, 6), reset=0b10) # RX_CM_SEL
+			addr = 0x0011, bits = slice(4, 6), reset = 0b10) # RX_CM_SEL
 		m.d.comb += [
 			rx_term.value.eq(Mux(self.rx_termination,
 								 0b11,    # Programmable
@@ -1024,7 +1024,7 @@ class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
 	'''
 
 	def __init__(self, *, tx_pads, rx_pads, refclk_frequency, ss_clock_frequency):
-		super().__init__(width=2)
+		super().__init__(width = 2)
 
 		self._tx_pads            = tx_pads
 		self._rx_pads            = rx_pads
@@ -1052,7 +1052,7 @@ class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
 
 		# Our soft PHY includes some logic that needs to run synchronously to the PIPE clock; create
 		# a local clock domain to drive it.
-		m.domains.pipe = ClockDomain(local=True, async_reset=True)
+		m.domains.pipe = ClockDomain(local = True, async_reset = True)
 		m.d.comb += [
 			ClockSignal('pipe')     .eq(serdes.pclk),
 		]

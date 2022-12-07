@@ -77,11 +77,11 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 
 		# Transmitter for small-constant-response requests
 		m.submodules.transmitter = transmitter = \
-			StreamSerializer(data_length=1, domain='usb', stream_type=USBInStreamInterface, max_length_width=1)
+			StreamSerializer(data_length = 1, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 1)
 
 		# Handle vendor requests
 		with m.If(setup.type == USBRequestType.VENDOR):
-			with m.FSM(domain='usb'):
+			with m.FSM(domain = 'usb'):
 
 				# IDLE -- not handling any active request
 				with m.State('IDLE'):
@@ -102,7 +102,7 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 
 				# GET_STATE -- Fetch the device's state
 				with m.State('GET_STATE'):
-					self.handle_simple_data_request(m, transmitter, self.state.current, length=1)
+					self.handle_simple_data_request(m, transmitter, self.state.current, length = 1)
 
 				# SET_STATE -- The host is trying to set our state
 				with m.State('SET_STATE'):
@@ -128,7 +128,7 @@ class USBAnalyzerApplet(Elaboratable):
 	'''
 
 
-	def __init__(self, usb_speed=USB_SPEED_FULL):
+	def __init__(self, usb_speed = USB_SPEED_FULL):
 		self.usb_speed = usb_speed
 
 
@@ -180,7 +180,7 @@ class USBAnalyzerApplet(Elaboratable):
 
 		# Create our UTMI translator.
 		ulpi = platform.request('target_phy')
-		m.submodules.utmi = utmi = UTMITranslator(ulpi=ulpi)
+		m.submodules.utmi = utmi = UTMITranslator(ulpi = ulpi)
 
 		# Strap our power controls to be in VBUS passthrough by default,
 		# on the target port.
@@ -205,7 +205,7 @@ class USBAnalyzerApplet(Elaboratable):
 
 		# Create our USB uplink interface...
 		uplink_ulpi = platform.request('host_phy')
-		m.submodules.usb = usb = USBDevice(bus=uplink_ulpi)
+		m.submodules.usb = usb = USBDevice(bus = uplink_ulpi)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()
@@ -217,13 +217,13 @@ class USBAnalyzerApplet(Elaboratable):
 
 		# Add a stream endpoint to our device.
 		stream_ep = USBStreamInEndpoint(
-			endpoint_number=BULK_ENDPOINT_NUMBER,
-			max_packet_size=MAX_BULK_PACKET_SIZE
+			endpoint_number = BULK_ENDPOINT_NUMBER,
+			max_packet_size = MAX_BULK_PACKET_SIZE
 		)
 		usb.add_endpoint(stream_ep)
 
 		# Create a USB analyzer, and connect a register up to its output.
-		m.submodules.analyzer = analyzer = USBAnalyzer(utmi_interface=utmi)
+		m.submodules.analyzer = analyzer = USBAnalyzer(utmi_interface = utmi)
 
 		m.d.comb += [
 			# Connect enable signal to host-controlled state register.
@@ -271,12 +271,12 @@ class USBAnalyzerConnection:
 		''' Builds the SOL analyzer applet and configures the FPGA with it. '''
 
 		# Create the USBAnalyzer we want to work with.
-		analyzer = USBAnalyzerApplet(usb_speed=capture_speed)
+		analyzer = USBAnalyzerApplet(usb_speed = capture_speed)
 
 		# Build and upload the analyzer.
 		# FIXME: use a temporary build directory
 		platform = get_appropriate_platform()
-		platform.build(analyzer, do_program=True)
+		platform.build(analyzer, do_program = True)
 
 		time.sleep(3)
 
@@ -287,7 +287,7 @@ class USBAnalyzerConnection:
 			if time.time() > end_time:
 				raise RuntimeError('Timeout! The analyzer device did not show up.')
 
-			self._device = usb.core.find(idVendor=USB_VENDOR_ID, idProduct=USB_PRODUCT_ID)
+			self._device = usb.core.find(idVendor = USB_VENDOR_ID, idProduct = USB_PRODUCT_ID)
 
 	def start_capture(self):
 		self._device.ctrl_transfer(
@@ -296,7 +296,7 @@ class USBAnalyzerConnection:
 			1,
 			0,
 			b'',
-			timeout=5,
+			timeout = 5,
 		)
 
 	def _fetch_data_into_buffer(self):

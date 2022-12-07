@@ -20,7 +20,7 @@ class DebugSPIExample(Elaboratable):
 	def __init__(self):
 
 		# Base ourselves around an SPI command interface.
-		self.interface = SPIDeviceInterface(clock_phase=1)
+		self.interface = SPIDeviceInterface(clock_phase = 1)
 
 
 	def elaborate(self, platform):

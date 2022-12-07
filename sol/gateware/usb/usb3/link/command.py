@@ -70,7 +70,7 @@ class LinkCommandDetector(Elaboratable):
 		# Assume we don't have a new command, unless asserted below.
 		m.d.ss += self.new_command.eq(0)
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# WAIT_FOR_LCSTART -- we're currently waiting for LCSTART framing, which indicates
 			# that the following word is a link command.
@@ -170,7 +170,7 @@ class LinkCommandGenerator(Elaboratable):
 		latched_subtype = Signal.like(self.subtype)
 
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# IDLE -- we're currently waiting to generate a link command
 			with m.State('IDLE'):

@@ -54,7 +54,7 @@ class LTSSMController(Elaboratable):
 		to make things work a little more easily on a variety of PHYs and setups.
 	'''
 
-	def __init__(self, ss_clock_frequency=125e6, *, loosen_requirements=True):
+	def __init__(self, ss_clock_frequency = 125e6, *, loosen_requirements = True):
 		self._clock_frequency = ss_clock_frequency
 		self._loosen_requirements = loosen_requirements
 
@@ -281,7 +281,7 @@ class LTSSMController(Elaboratable):
 		#
 		# Main Link Training and Status State Machine
 		#
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# Rx.Detect.Reset -- we've just started link bringup post-reset; and are ready to
 			# perform any necessary link configuration.
@@ -329,7 +329,7 @@ class LTSSMController(Elaboratable):
 				# SuperSpeed after we see eight of them.
 
 				# After 12ms, try again.
-				transition_on_timeout(12e-3, to='Rx.Detect.Active')
+				transition_on_timeout(12e-3, to = 'Rx.Detect.Active')
 
 
 			# Polling.LFPS -- now that we know there's someone listening on the other side, we'll
@@ -376,9 +376,9 @@ class LTSSMController(Elaboratable):
 
 				# If we've never seen polling, we'll exit to Compliance once this passes. [USB 3.2r1: 7.5.4.3]
 				with m.If(~polling_seen):
-					transition_on_timeout(360e-3, to='Compliance')
+					transition_on_timeout(360e-3, to = 'Compliance')
 				with m.Else():
-					transition_on_timeout(360e-3, to='SS.Disabled.Default')
+					transition_on_timeout(360e-3, to = 'SS.Disabled.Default')
 
 
 
@@ -412,7 +412,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll start our process again from the beginning.
-				transition_on_timeout(12e-3, to='Rx.Detect.Active')
+				transition_on_timeout(12e-3, to = 'Rx.Detect.Active')
 
 				#
 				# The specification allows us to move on to Polling.Configuration as soon as we
@@ -453,7 +453,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll start our process again from the beginning.
-				transition_on_timeout(12e-3, to='Rx.Detect.Active')
+				transition_on_timeout(12e-3, to = 'Rx.Detect.Active')
 
 				# If we've finished sending the requisite amount of TS2s and we've seen TS2s from the
 				# other side, we know that both sides are finished with the core link training.
@@ -509,7 +509,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't see that logical idle within 2ms, something's gone wrong. We'll need to
 				# start our connection process from the beginning.
-				transition_on_timeout(2e-3, to='Rx.Detect.Reset')
+				transition_on_timeout(2e-3, to = 'Rx.Detect.Reset')
 
 
 			# U0 -- our primary active USB state, in which we've completed link bringup and now are
@@ -550,7 +550,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll assume our link is no longer recoverable, and move to inactive.
-				transition_on_timeout(12e-3, to='SS.Inactive.Quiet')
+				transition_on_timeout(12e-3, to = 'SS.Inactive.Quiet')
 
 				# We need to at least one burst with the Reset bit set; and then drop out of hot reset.
 				with m.If(self.ts_burst_complete):
@@ -582,7 +582,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't complete our Idle handshake within 2ms, something's gone wrong.
 				# We'll consider our link irrecoverable.
-				transition_on_timeout(2e-3, to='SS.Inactive.Quiet')
+				transition_on_timeout(2e-3, to = 'SS.Inactive.Quiet')
 
 
 			# Recovery.Active -- our link is no longer in a reliably usable state; we'll need
@@ -597,7 +597,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll assume our link is no longer recoverable, and move to inactive.
-				transition_on_timeout(12e-3, to='SS.Inactive.Quiet')
+				transition_on_timeout(12e-3, to = 'SS.Inactive.Quiet')
 
 				#
 				# The specification allows us to move on to Polling.Configuration as soon as we
@@ -625,7 +625,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll assume our link is no longer up, and move to inactive.
-				transition_on_timeout(12e-3, to='SS.Inactive.Quiet')
+				transition_on_timeout(12e-3, to = 'SS.Inactive.Quiet')
 
 				# If we've finished sending the requisite amount of TS2s and we've seen TS2s from the
 				# other side, we know that both sides are finished with the core link training.
@@ -678,7 +678,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't see that logical idle within 2ms, something's gone wrong. We'll
 				# assume we've lost our link partner, and move to SS.Inactive.
-				transition_on_timeout(2e-3, to='SS.Inactive.Quiet')
+				transition_on_timeout(2e-3, to = 'SS.Inactive.Quiet')
 
 
 			# Compliance -- we've failed link training in such a way as to believe we're in the
@@ -710,7 +710,7 @@ class LTSSMController(Elaboratable):
 				handle_warm_resets()
 
 				m.d.comb += self.tx_electrical_idle.eq(1),
-				transition_on_timeout(12e-3, to='SS.Inactive.Disconnect.Detect')
+				transition_on_timeout(12e-3, to = 'SS.Inactive.Disconnect.Detect')
 
 
 			# SS.Inactive.Disconnect.Detect  -- our best case scenario is that we become disconnected,

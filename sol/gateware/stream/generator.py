@@ -61,8 +61,8 @@ class ConstantStreamGenerator(Elaboratable):
 	'''
 
 
-	def __init__(self, constant_data, domain='sync', stream_type=StreamInterface,
-			max_length_width=None, data_width=None, data_endianness='little'):
+	def __init__(self, constant_data, domain = 'sync', stream_type = StreamInterface,
+			max_length_width = None, data_width = None, data_endianness = 'little'):
 
 		self._domain           = domain
 		self._data             = constant_data
@@ -78,7 +78,7 @@ class ConstantStreamGenerator(Elaboratable):
 
 		# If we have a data width, apply it to our stream type; otherwise, use its defaults.
 		if data_width:
-			self.stream      = stream_type(payload_width=data_width)
+			self.stream      = stream_type(payload_width = data_width)
 			self._data_width = data_width
 		else:
 			self.stream      = stream_type()
@@ -137,7 +137,7 @@ class ConstantStreamGenerator(Elaboratable):
 			del in_data[0:datum_width_bytes]
 
 			# ... convert it into an integer ...
-			datum = int.from_bytes(datum, byteorder=self._endianness)
+			datum = int.from_bytes(datum, byteorder = self._endianness)
 
 			# ... and squish it into our output.
 			out_data.append(datum)
@@ -162,8 +162,8 @@ class ConstantStreamGenerator(Elaboratable):
 		data_initializer, valid_bits_last_word = self._get_initializer_value()
 		data_length = len(data_initializer)
 
-		rom = Memory(width=self._data_width, depth=data_length, init=data_initializer)
-		m.submodules.rom_read_port = rom_read_port = rom.read_port(transparent=False)
+		rom = Memory(width = self._data_width, depth = data_length, init = data_initializer)
+		m.submodules.rom_read_port = rom_read_port = rom.read_port(transparent = False)
 
 		if self._max_length_width:
 			# Register maximum length, to improve timing.
@@ -221,7 +221,7 @@ class ConstantStreamGenerator(Elaboratable):
 		#
 		# Controller.
 		#
-		with m.FSM(domain=self._domain) as fsm:
+		with m.FSM(domain = self._domain) as fsm:
 			m.d.comb += self.stream.valid.eq(fsm.ongoing('STREAMING'))
 
 			# IDLE -- we're not actively transmitting.
@@ -538,13 +538,13 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# and we should see our first byte of data.
 		yield from self.pulse(dut.start)
 		self.assertEqual((yield dut.stream.valid),   0b1111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   1)
 
 		# That data should remain there until we accept it.
 		yield from self.advance_cycles(10)
 		self.assertEqual((yield dut.stream.valid),   0b1111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder = 'little'))
 
 		# Once we indicate that we're accepting data...
 		yield dut.stream.ready.eq(1)
@@ -553,13 +553,13 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# ... we should start seeing the remainder of our transmission.
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b1111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'O WO', byteorder='little'))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'O WO', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   0)
 
 
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'RLD', byteorder='little'))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'RLD', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   0)
 
 
@@ -583,13 +583,13 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# and we should see our first byte of data.
 		yield from self.pulse(dut.start)
 		self.assertEqual((yield dut.stream.valid),   0b1111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   1)
 
 		# We should then see only two bytes of our remainder.
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b0011)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'O WO', byteorder='little'))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'O WO', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   0)
 		self.assertEqual((yield dut.stream.last),    1)
 
@@ -605,7 +605,7 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# and we should see our first word of data.
 		yield from self.pulse(dut.start)
 		self.assertEqual((yield dut.stream.valid),   0b0011)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   1)
 		self.assertEqual((yield dut.stream.last),    1)
 
@@ -613,7 +613,7 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		yield dut.stream.ready.eq(1)
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b0011)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   1)
 		self.assertEqual((yield dut.stream.last),    1)
 
@@ -638,7 +638,7 @@ class StreamSerializer(Elaboratable):
 
 	'''
 
-	def __init__(self, data_length, domain='sync', data_width=8, stream_type=StreamInterface, max_length_width=None):
+	def __init__(self, data_length, domain = 'sync', data_width = 8, stream_type = StreamInterface, max_length_width = None):
 		'''
 		Parameters:
 			data_length        -- The length of the data to be transmitted.
@@ -659,8 +659,8 @@ class StreamSerializer(Elaboratable):
 		self.start       = Signal()
 		self.done        = Signal()
 
-		self.data        = Array(Signal(data_width, name=f'datum_{i}') for i in range(data_length))
-		self.stream      = stream_type(payload_width=data_width)
+		self.data        = Array(Signal(data_width, name = f'datum_{i}') for i in range(data_length))
+		self.stream      = stream_type(payload_width = data_width)
 
 
 		# If we have a maximum length width, include it in our I/O port.
@@ -694,7 +694,7 @@ class StreamSerializer(Elaboratable):
 		#
 		# Controller.
 		#
-		with m.FSM(domain=self.domain) as fsm:
+		with m.FSM(domain = self.domain) as fsm:
 			m.d.comb += self.stream.valid.eq(fsm.ongoing('STREAMING'))
 
 			# IDLE -- we're not actively transmitting.

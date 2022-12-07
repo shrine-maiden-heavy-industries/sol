@@ -41,7 +41,7 @@ class StreamInterface(Record):
 		Similar to a record's layout field; but cannot be nested.
 	'''
 
-	def __init__(self, payload_width=8, valid_width=1, extra_fields=None):
+	def __init__(self, payload_width = 8, valid_width = 1, extra_fields = None):
 		'''
 		Parameter:
 			payload_width -- The width of the payload packets.
@@ -67,7 +67,7 @@ class StreamInterface(Record):
 		])
 
 
-	def attach(self, interface, omit=None):
+	def attach(self, interface, omit = None):
 		# Create lists of fields to be copied -to- the interface (RHS fields),
 		# and lists of fields to be copied -from- the interface (LHS fields).
 		rhs_fields = ['valid', 'first', 'last', 'payload', *self._extra_fields]
@@ -89,24 +89,24 @@ class StreamInterface(Record):
 
 		return assignments
 
-	def connect(self, interface, omit=None):
-		return self.attach(interface, omit=omit)
+	def connect(self, interface, omit = None):
+		return self.attach(interface, omit = omit)
 
 
-	def stream_eq(self, interface, *, omit=None):
+	def stream_eq(self, interface, *, omit = None):
 		''' A hopefully more clear version of .connect() that more clearly indicates data_flow direction.
 
 		This will either solve a common footgun or introduce a new one. We'll see and adapt accordingly.
 		'''
-		return interface.attach(self, omit=omit)
+		return interface.attach(self, omit = omit)
 
 
-	def tap(self, interface, *, tap_ready=False, **kwargs):
+	def tap(self, interface, *, tap_ready = False, **kwargs):
 		''' Simple extension to stream_eq() that captures a read-only view of the stream.
 
 		This connects all signals from ``interface`` to their equivalents in this stream.
 		'''
-		core = self.stream_eq(interface, omit={'ready'}, **kwargs)
+		core = self.stream_eq(interface, omit = {'ready'}, **kwargs)
 
 		if tap_ready:
 			core.append(self.ready.eq(interface.ready))

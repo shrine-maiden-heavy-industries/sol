@@ -27,7 +27,7 @@ class OneHotMultiplexer(Elaboratable):
 		O*: output -- Our output interface; carries the signal merged from all input busses.
 	'''
 
-	def __init__(self, *, interface_type, valid_field='valid', mux_signals=(), or_signals=(), pass_signals=()):
+	def __init__(self, *, interface_type, valid_field = 'valid', mux_signals = (), or_signals = (), pass_signals = ()):
 		'''
 		Parameters:
 			interface_type  -- The type of interface we'll be multiplexing.

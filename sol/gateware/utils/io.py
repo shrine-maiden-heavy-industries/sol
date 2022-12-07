@@ -12,7 +12,7 @@ from torii import Cat, Instance, Signal
 
 
 # FIXME: move this out of here and into an ECP5-specific set of functionality
-def delay(m, signal, interval, *, out=None):
+def delay(m, signal, interval, *, out = None):
 	''' Creates a delayed copy of a given I/O signal.
 
 	Currently only works at the FPGA's I/O boundary, and only on ECP5s.
@@ -44,15 +44,15 @@ def delay(m, signal, interval, *, out=None):
 		if isinstance(interval, int):
 			interval = [interval] * len(signal)
 
-		return Cat(delay(m, s, d, out=o) for s, d, o in zip(signal, interval, out))
+		return Cat(delay(m, s, d, out = o) for s, d, o in zip(signal, interval, out))
 
 	#
 	# Base case: create a delayed version of the relevant signal.
 	#
 	m.submodules += Instance('DELAYG',
-		i_A=signal,
-		o_Z=out,
-		p_DEL_VALUE=interval
+		i_A = signal,
+		o_Z = out,
+		p_DEL_VALUE = interval
 	)
 
 	return out

@@ -32,7 +32,7 @@ class ILASharedBusExample(Elaboratable):
 	def __init__(self):
 		self.counter = Signal(28)
 		self.toggle  = Signal()
-		self.ila  = SyncSerialILA(signals=[self.counter, self.toggle], sample_depth=32)
+		self.ila  = SyncSerialILA(signals = [self.counter, self.toggle], sample_depth = 32)
 
 
 	def elaborate(self, platform):
@@ -76,17 +76,17 @@ class ILASharedBusExample(Elaboratable):
 		m.d.comb += m.submodules.mux.shared_lines.connect(board_spi)
 
 		# Add a simple ID register to demonstrate our registers.
-		spi_registers.add_read_only_register(REGISTER_ID, read=0xDEADBEEF)
+		spi_registers.add_read_only_register(REGISTER_ID, read = 0xDEADBEEF)
 
 		# Create a simple SFR that will trigger an ILA capture when written,
 		# and which will display our sample status read.
 		spi_registers.add_sfr(REGISTER_ILA,
-			read=self.ila.complete,
-			write_strobe=self.ila.trigger
+			read = self.ila.complete,
+			write_strobe = self.ila.trigger
 		)
 
 		# Attach the LEDs and User I/O to the MSBs of our counter.
-		leds    = [platform.request('led', i, dir='o') for i in range(0, 6)]
+		leds    = [platform.request('led', i, dir = 'o') for i in range(0, 6)]
 		m.d.comb += Cat(leds).eq(self.counter[-7:-1])
 
 		# Return our elaborated module.
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 
 	# Create a debug and ILA connection.
 	debugger = ApolloDebugger()
-	ila      = ApolloILAFrontend(debugger, ila=example.ila, use_inverted_cs=True)
+	ila      = ApolloILAFrontend(debugger, ila = example.ila, use_inverted_cs = True)
 
 	# Trigger an ILA capture.
 	debugger.spi.register_write(REGISTER_ILA, 0)

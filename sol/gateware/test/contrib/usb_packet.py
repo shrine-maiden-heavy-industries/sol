@@ -69,8 +69,8 @@ def encode_pid(value):
 	return encode_data([value.byte()])
 
 
-# width=5 poly=0x05 init=0x1f refin=true refout=true xorout=0x1f check=0x19
-# residue=0x06 name='CRC-5/USB'
+# width = 5 poly = 0x05 init = 0x1f refin = true refout = true xorout = 0x1f check = 0x19
+# residue = 0x06 name = 'CRC-5/USB'
 def crc5(nibbles):
 	'''
 	>>> hex(crc5([0, 0]))
@@ -114,8 +114,8 @@ def crc5_sof(v):
 
 
 def crc16(input_data):
-	# width=16 poly=0x8005 init=0xffff refin=true refout=true xorout=0xffff
-	# check=0xb4c8 residue=0xb001 name='CRC-16/USB'
+	# width = 16 poly = 0x8005 init = 0xffff refin = true refout = true xorout = 0xffff
+	# check = 0xb4c8 residue = 0xb001 name = 'CRC-16/USB'
 	# CRC appended low byte first.
 	reg = crc.CrcRegister(crc.CRC16_USB)
 	for d in input_data:
@@ -125,7 +125,7 @@ def crc16(input_data):
 	return [crc16 & 0xff, (crc16 >> 8) & 0xff]
 
 
-def nrzi(data, cycles=4, init='J'):
+def nrzi(data, cycles = 4, init = 'J'):
 	'''Converts string of 0s and 1s into NRZI encoded string.
 
 	>>> nrzi('11 00000001', 1)
@@ -197,16 +197,16 @@ def eop():
 	return '__j'
 
 
-def wrap_packet(data, cycles=4):
+def wrap_packet(data, cycles = 4):
 	'''Add the sync + eop sections and do nrzi encoding.
 
-	>>> wrap_packet(handshake_packet(PID.ACK), cycles=1)
+	>>> wrap_packet(handshake_packet(PID.ACK), cycles = 1)
 	'KJKJKJKKJJKJJKKK__J'
-	>>> wrap_packet(token_packet(PID.SETUP, 0, 0), cycles=1)
+	>>> wrap_packet(token_packet(PID.SETUP, 0, 0), cycles = 1)
 	'KJKJKJKKKJJJKKJKJKJKJKJKJKJKKJKJ__J'
-	>>> wrap_packet(data_packet(PID.DATA0, [5, 6]), cycles=1)
+	>>> wrap_packet(data_packet(PID.DATA0, [5, 6]), cycles = 1)
 	'KJKJKJKKKKJKJKKKKJJKJKJKJJJKJKJKKJJJJJJKKJJJJKJK__J'
-	>>> wrap_packet(data_packet(PID.DATA0, [0x1]), cycles=1)
+	>>> wrap_packet(data_packet(PID.DATA0, [0x1]), cycles = 1)
 	'KJKJKJKKKKJKJKKKKJKJKJKJJKJKJKJJJJJJJKKKJ__J'
 
 	'''
@@ -371,7 +371,7 @@ def undiff(usbp, usbn):
 	...   #KJKJKJKKJJKJJKKK__J - ACK handshake packet
 	...   '0101010011011000001', # p
 	...   '1010101100100111000', # n
-	... ), cycles=1))
+	... ), cycles = 1))
 	-
 	K 1 Sync
 	J 2 Sync

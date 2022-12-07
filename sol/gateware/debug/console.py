@@ -17,7 +17,7 @@ class DebugConsole(Elaboratable):
 
 	'''
 
-	def __init__(self, *, max_line_length=128):
+	def __init__(self, *, max_line_length = 128):
 
 		self.line_in     = Array(Signal(8) for _ in range(max_line_length))
 		self.line_length = Signal(range(0, max_line_length + 1))

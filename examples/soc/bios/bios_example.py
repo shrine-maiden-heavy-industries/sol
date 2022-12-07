@@ -30,7 +30,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		self._output    = bank.csr(6, 'w')
 
 		# ... and convert our register into a Wishbone peripheral.
-		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
+		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 
 
@@ -61,7 +61,7 @@ class SolCPUExample(Elaboratable):
 
 		# Create our SoC...
 		self.soc = soc = SimpleSoC()
-		soc.add_bios_and_peripherals(uart_pins=self.uart_pins)
+		soc.add_bios_and_peripherals(uart_pins = self.uart_pins)
 
 		# ... add some bulk RAM ...
 		soc.add_ram(0x4000)
@@ -91,4 +91,4 @@ class SolCPUExample(Elaboratable):
 
 if __name__ == '__main__':
 	design = SolCPUExample()
-	cli(design, cli_soc=design.soc)
+	cli(design, cli_soc = design.soc)

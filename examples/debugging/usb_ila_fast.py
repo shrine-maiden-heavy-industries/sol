@@ -22,16 +22,16 @@ class ILAExample(Elaboratable):
 		self.hello   = Signal(8)
 
 		self.ila = USBIntegratedLogicAnalyzer(
-			signals=[
+			signals = [
 				self.counter,
 				self.hello
 			],
-			sample_depth=32,
+			sample_depth = 32,
 		)
 
 
 	def interactive_display(self):
-		frontend = USBIntegratedLogicAnalyzerFrontend(ila=self.ila)
+		frontend = USBIntegratedLogicAnalyzerFrontend(ila = self.ila)
 		frontend.interactive_display()
 
 

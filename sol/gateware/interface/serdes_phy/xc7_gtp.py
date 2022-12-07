@@ -24,7 +24,7 @@ Open = Signal
 
 
 class GTPQuadPLL(Elaboratable):
-	def __init__(self, refclk, refclk_freq, linerate, channel=0):
+	def __init__(self, refclk, refclk_freq, linerate, channel = 0):
 		assert channel in [0, 1]
 		self.channel     = channel
 
@@ -235,8 +235,8 @@ class GTPChannel(Elaboratable):
 		# clock to drive the CTC FIFO in the transceiver, which will compensate for the difference.
 		txoutclk = Signal()
 		m.submodules += Instance('BUFG',
-			i_I=txoutclk,
-			o_O=self.pclk
+			i_I = txoutclk,
+			o_O = self.pclk
 		)
 		platform.add_clock_constraint(self.pclk, 250e6)
 
@@ -280,10 +280,10 @@ class GTPChannel(Elaboratable):
 		# Dynamic reconfiguration.
 		#
 		rx_termination = Signal()
-		m.submodules += FFSynchronizer(self.rx_termination, rx_termination, o_domain='ss')
+		m.submodules += FFSynchronizer(self.rx_termination, rx_termination, o_domain = 'ss')
 
 		m.submodules.rx_term = rx_term = DRPFieldController(
-			addr=0x0011, bits=slice(4, 6), reset=0b10) # RX_CM_SEL
+			addr = 0x0011, bits = slice(4, 6), reset = 0b10) # RX_CM_SEL
 		m.d.comb += [
 			rx_term.value.eq(Mux(rx_termination,
 								 0b11,    # Programmable
@@ -631,8 +631,8 @@ class GTPChannel(Elaboratable):
 			i_PLL0REFCLK            = qpll.refclk if qpll.channel == 0 else 0,
 			i_PLL1CLK               = qpll.clk    if qpll.channel == 1 else 0,
 			i_PLL1REFCLK            = qpll.refclk if qpll.channel == 1 else 0,
-			i_RXSYSCLKSEL           =        0b00 if qpll.channel == 0 else 0b11,
-			i_TXSYSCLKSEL           =        0b00 if qpll.channel == 0 else 0b11,
+			i_RXSYSCLKSEL           = 0b00 if qpll.channel == 0 else 0b11,
+			i_TXSYSCLKSEL           = 0b00 if qpll.channel == 0 else 0b11,
 
 			# Loopback Ports
 			i_LOOPBACK              = 0b000,
@@ -966,7 +966,7 @@ class XC7GTPSerDesPIPE(PIPEInterface, Elaboratable):
 		This output is not implemented. External logic may drive it if necessary.
 	'''
 	def __init__(self, *, tx_pads, rx_pads, refclk_frequency, ss_clock_frequency):
-		super().__init__(width=2)
+		super().__init__(width = 2)
 
 		self._tx_pads            = tx_pads
 		self._rx_pads            = rx_pads
@@ -994,7 +994,7 @@ class XC7GTPSerDesPIPE(PIPEInterface, Elaboratable):
 
 		# Our soft PHY includes some logic that needs to run synchronously to the PIPE clock; create
 		# a local clock domain to drive it.
-		m.domains.pipe = ClockDomain(local=True, async_reset=True)
+		m.domains.pipe = ClockDomain(local = True, async_reset = True)
 		m.d.comb += [
 			ClockSignal('pipe')     .eq(serdes.pclk),
 		]

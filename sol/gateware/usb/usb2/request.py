@@ -77,9 +77,9 @@ class RequestHandlerInterface:
 		self.rx_ready_for_response = Signal()
 
 		self.tx                    = USBInStreamInterface()
-		self.handshakes_out        = HandshakeExchangeInterface(is_detector=True)
-		self.handshakes_in         = HandshakeExchangeInterface(is_detector=False)
-		self.tx_data_pid           = Signal(reset=1)
+		self.handshakes_out        = HandshakeExchangeInterface(is_detector = True)
+		self.handshakes_in         = HandshakeExchangeInterface(is_detector = False)
+		self.tx_data_pid           = Signal(reset = 1)
 
 
 
@@ -129,7 +129,7 @@ class USBSetupDecoder(Elaboratable):
 	'''
 	SETUP_PID = 0b1101
 
-	def __init__(self, *, utmi, standalone=False):
+	def __init__(self, *, utmi, standalone = False):
 		'''
 		Paremeters:
 			utmi           -- The UTMI bus we'll monitor for data. We'll consider this read-only.
@@ -161,7 +161,7 @@ class USBSetupDecoder(Elaboratable):
 		if self.standalone:
 
 			# Create our tokenizer...
-			m.submodules.tokenizer = tokenizer = USBTokenDetector(utmi=self.utmi)
+			m.submodules.tokenizer = tokenizer = USBTokenDetector(utmi = self.utmi)
 			m.d.comb += tokenizer.interface.connect(self.tokenizer)
 
 			# ... and our timer.
@@ -174,7 +174,7 @@ class USBSetupDecoder(Elaboratable):
 		# Create a data-packet-deserializer, which we'll use to capture the
 		# contents of the setup data packets.
 		m.submodules.data_handler = data_handler = \
-			USBDataPacketDeserializer(utmi=self.utmi, max_packet_size=8, create_crc_generator=self.standalone)
+			USBDataPacketDeserializer(utmi = self.utmi, max_packet_size = 8, create_crc_generator = self.standalone)
 		m.d.comb += self.data_crc.connect(data_handler.data_crc)
 
 		# Instruct our interpacket timer to begin counting when we complete receiving
@@ -187,7 +187,7 @@ class USBSetupDecoder(Elaboratable):
 		]
 
 
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			# IDLE -- we haven't yet detected a SETUP transaction directed at us
 			with m.State('IDLE'):
@@ -403,7 +403,7 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 		self._interfaces.append(interface)
 
 
-	def _multiplex_signals(self, m, *, when, multiplex, sub_bus=None):
+	def _multiplex_signals(self, m, *, when, multiplex, sub_bus = None):
 		''' Helper that creates a simple priority-encoder multiplexer.
 
 		Parmeters:
@@ -472,21 +472,21 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 		# Multiplex the signals being routed -from- our pre-mux interface.
 		#
 		self._multiplex_signals(m,
-			when='address_changed',
-			multiplex=['address_changed', 'new_address']
+			when = 'address_changed',
+			multiplex = ['address_changed', 'new_address']
 		)
 
 		self._multiplex_signals(m,
-			when='config_changed',
-			multiplex=['config_changed', 'new_config']
+			when = 'config_changed',
+			multiplex = ['config_changed', 'new_config']
 		)
 
 		# Connect up our transmit interface.
 		m.submodules.tx_mux = tx_mux = OneHotMultiplexer(
-			interface_type=USBInStreamInterface,
-			mux_signals=('payload',),
-			or_signals=('valid', 'first', 'last'),
-			pass_signals=('ready',)
+			interface_type = USBInStreamInterface,
+			mux_signals = ('payload',),
+			or_signals = ('valid', 'first', 'last'),
+			pass_signals = ('ready',)
 		)
 		tx_mux.add_interfaces(i.tx for i in self._interfaces)
 		m.d.comb += self.shared.tx.stream_eq(tx_mux.output)
@@ -550,4 +550,4 @@ class StallOnlyRequestHandler(Elaboratable):
 
 
 if __name__ == '__main__':
-	unittest.main(warnings='ignore')
+	unittest.main(warnings = 'ignore')

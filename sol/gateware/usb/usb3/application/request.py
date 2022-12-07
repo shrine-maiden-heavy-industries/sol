@@ -155,7 +155,7 @@ class SuperSpeedSetupDecoder(Elaboratable):
 		# Keep our 'received' flag low unless explicitly driven.
 		m.d.ss += self.packet.received.eq(0)
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# WAIT_FOR_FIRST -- we're waiting for the first word of a setup packet;
 			# which we'll handle on receipt.
@@ -288,7 +288,7 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 		self._interfaces.append(interface)
 
 
-	def _multiplex_signals(self, m, *, when, multiplex, sub_bus=None):
+	def _multiplex_signals(self, m, *, when, multiplex, sub_bus = None):
 		''' Helper that creates a simple priority-encoder multiplexer.
 
 		Parmeters:
@@ -360,13 +360,13 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 		# Multiplex the signals being routed -from- our pre-mux interface.
 		#
 		self._multiplex_signals(m,
-			when='address_changed',
-			multiplex=['address_changed', 'new_address']
+			when = 'address_changed',
+			multiplex = ['address_changed', 'new_address']
 		)
 
 		self._multiplex_signals(m,
-			when='config_changed',
-			multiplex=['config_changed', 'new_config']
+			when = 'config_changed',
+			multiplex = ['config_changed', 'new_config']
 		)
 
 		#
@@ -432,7 +432,7 @@ class StallOnlyRequestHandler(Elaboratable):
 		interface = self.interface
 
 		# If we have the opportunity to stall ...
-		data_received = falling_edge_detected(m, interface.rx.valid, domain='ss')
+		data_received = falling_edge_detected(m, interface.rx.valid, domain = 'ss')
 		with m.If(interface.data_requested | interface.status_requested | data_received):
 
 			# ... and our stall condition is met ...

@@ -42,9 +42,9 @@ def _generate_wide_incrementer(m, platform, adder_input):
 		o_O      = output,
 
 		p_TOPADDSUB_UPPERINPUT =0b1,  # Use as a normal adder
-		p_TOPADDSUB_CARRYSELECT=0b11, # Connect our top and bottom adders together.
+		p_TOPADDSUB_CARRYSELECT = 0b11, # Connect our top and bottom adders together.
 		p_BOTADDSUB_UPPERINPUT =0b1,  # Use as a normal adder.
-		p_BOTADDSUB_CARRYSELECT=0b01  # Always increment.
+		p_BOTADDSUB_CARRYSELECT = 0b01  # Always increment.
 	)
 
 	return output
@@ -83,7 +83,7 @@ class USBResetSequencer(Elaboratable):
 	operating_mode: Signal(2), output
 		The current UTMI operating mode. Used to select whether we're driving the USB bus directly;
 		or whether we're letting the PHY handle NRZI/bit-stuffing.
-	termination_select: Signal(), output, default=1
+	termination_select: Signal(), output, default = 1
 		Determines the bus termination mode. In LS/FS, this determines the presence of our presence-detect
 		pull-up. In HS mode, this determines whether the USB high-speed termination is present (0), or
 		whether we're in chirp mode (1).
@@ -129,9 +129,9 @@ class USBResetSequencer(Elaboratable):
 		self.bus_reset          = Signal()
 		self.suspended          = Signal()
 
-		self.current_speed      = Signal(2, reset=USBSpeed.FULL)
-		self.operating_mode     = Signal(2, reset=UTMIOperatingMode.NORMAL)
-		self.termination_select = Signal(1, reset=1)
+		self.current_speed      = Signal(2, reset = USBSpeed.FULL)
+		self.operating_mode     = Signal(2, reset = UTMIOperatingMode.NORMAL)
+		self.termination_select = Signal(1, reset = 1)
 
 		self.tx                 = UTMITransmitInterface()
 
@@ -180,7 +180,7 @@ class USBResetSequencer(Elaboratable):
 		#
 		# Core reset sequences.
 		#
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			# INITIALIZE -- we're immediately post-reset; we'll perform some minor setup
 			with m.State('INITIALIZE'):

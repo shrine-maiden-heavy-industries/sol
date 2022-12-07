@@ -27,15 +27,15 @@ CLOCK_FREQUENCIES_MHZ = {
 class LEDPeripheral(Peripheral, Elaboratable):
 	''' Simple peripheral that controls the board's LEDs. '''
 
-	def __init__(self, name='leds'):
-		super().__init__(name=name)
+	def __init__(self, name = 'leds'):
+		super().__init__(name = name)
 
 		# Create our LED register.
 		bank            = self.csr_bank()
 		self._output    = bank.csr(6, 'rw')
 
 		# ... and convert our register into a Wishbone peripheral.
-		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
+		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 
 
@@ -60,8 +60,8 @@ class LEDPeripheral(Peripheral, Elaboratable):
 class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 	''' Peripheral that provides access to a ULPI PHY, and its registers. '''
 
-	def __init__(self, name='ulpi', io_resource_name='usb'):
-		super().__init__(name=name)
+	def __init__(self, name = 'ulpi', io_resource_name = 'usb'):
+		super().__init__(name = name)
 		self._io_resource = io_resource_name
 
 		# Create our registers...
@@ -71,7 +71,7 @@ class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 		self._busy      = bank.csr(1, 'r')
 
 		# ... and convert our register into a Wishbone peripheral.
-		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
+		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 
 
@@ -137,8 +137,8 @@ class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 	''' Peripheral that provides access to a ULPI PHY, and its registers. '''
 
-	def __init__(self, name='ram'):
-		super().__init__(name=name)
+	def __init__(self, name = 'ram'):
+		super().__init__(name = name)
 
 		# Create our registers...
 		bank            = self.csr_bank()
@@ -147,7 +147,7 @@ class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 		self._busy      = bank.csr(1,  'r')
 
 		# ... and convert our register into a Wishbone peripheral.
-		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
+		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 
 
@@ -159,7 +159,7 @@ class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 		# HyperRAM interface window.
 		#
 		ram_bus = platform.request('ram')
-		m.submodules.psram = psram = HyperRAMInterface(bus=ram_bus, clock_skew=platform.ram_timings['clock_skew'])
+		m.submodules.psram = psram = HyperRAMInterface(bus = ram_bus, clock_skew = platform.ram_timings['clock_skew'])
 
 		# Hook up our PSRAM.
 		m.d.comb += [
@@ -210,13 +210,13 @@ class SelftestCore(Elaboratable):
 		self.soc = soc = SimpleSoC()
 
 		# ... add a ROM for firmware...
-		soc.add_rom('selftest.bin', size=0x4000)
+		soc.add_rom('selftest.bin', size = 0x4000)
 
 		# ... and a RAM for execution.
 		soc.add_ram(0x4000)
 
 		# ...  add our UART peripheral...
-		self.uart = uart = UARTPeripheral(divisor=int(clock_freq // 115200))
+		self.uart = uart = UARTPeripheral(divisor = int(clock_freq // 115200))
 		soc.add_peripheral(uart)
 
 		# ... add a timer, so our software can get precise timing.
@@ -225,11 +225,11 @@ class SelftestCore(Elaboratable):
 
 		# ... and add our peripherals under test.
 		peripherals = (
-			LEDPeripheral(name='leds'),
-			ULPIRegisterPeripheral(name='target_ulpi',   io_resource_name='target_phy'),
-			ULPIRegisterPeripheral(name='host_ulpi',     io_resource_name='host_phy'),
-			ULPIRegisterPeripheral(name='sideband_ulpi', io_resource_name='sideband_phy'),
-			PSRAMRegisterPeripheral(name='psram'),
+			LEDPeripheral(name = 'leds'),
+			ULPIRegisterPeripheral(name = 'target_ulpi',   io_resource_name = 'target_phy'),
+			ULPIRegisterPeripheral(name = 'host_ulpi',     io_resource_name = 'host_phy'),
+			ULPIRegisterPeripheral(name = 'sideband_ulpi', io_resource_name = 'sideband_phy'),
+			PSRAMRegisterPeripheral(name = 'psram'),
 		)
 
 		for peripheral in peripherals:
@@ -240,7 +240,7 @@ class SelftestCore(Elaboratable):
 	def elaborate(self, platform):
 		m = Module()
 
-		m.submodules.car = platform.clock_domain_generator(clock_frequencies=CLOCK_FREQUENCIES_MHZ)
+		m.submodules.car = platform.clock_domain_generator(clock_frequencies = CLOCK_FREQUENCIES_MHZ)
 
 		# Add our SoC to the design...
 		m.submodules.soc = self.soc
@@ -260,4 +260,4 @@ class SelftestCore(Elaboratable):
 
 if __name__ == '__main__':
 	design = SelftestCore()
-	cli(design, cli_soc=design.soc)
+	cli(design, cli_soc = design.soc)

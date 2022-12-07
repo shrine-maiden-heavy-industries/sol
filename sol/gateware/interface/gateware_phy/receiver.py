@@ -104,8 +104,8 @@ class RxClockDataRecovery(Elaboratable):
 		# Synchronize the USB signals at our I/O boundary.
 		# Despite the assumptions made in ValentyUSB, this line rate recovery FSM
 		# isn't enough to properly synchronize these inputs. We'll explicitly synchronize.
-		sync_dp = synchronize(m, self._usbp, o_domain='usb_io')
-		sync_dn = synchronize(m, self._usbn, o_domain='usb_io')
+		sync_dp = synchronize(m, self._usbp, o_domain = 'usb_io')
+		sync_dn = synchronize(m, self._usbn, o_domain = 'usb_io')
 
 		#######################################################################
 		# Line State Recovery State Machine
@@ -120,12 +120,12 @@ class RxClockDataRecovery(Elaboratable):
 		# the line then the data may be corrupted and the packet will fail the
 		# data integrity checks.
 		#
-		dpair =  Cat(sync_dp, sync_dn)
+		dpair = Cat(sync_dp, sync_dn)
 
 		# output signals for use by the clock recovery stage
 		line_state_in_transition = Signal()
 
-		with m.FSM(domain='usb_io') as fsm:
+		with m.FSM(domain = 'usb_io') as fsm:
 			m.d.usb_io += [
 				self.line_state_se0  .eq(fsm.ongoing('SE0')),
 				self.line_state_se1  .eq(fsm.ongoing('SE1')),
@@ -350,7 +350,7 @@ class RxPacketDetect(Elaboratable):
 		pkt_active = Signal()
 		pkt_end = Signal()
 
-		with m.FSM(domain='usb_io'):
+		with m.FSM(domain = 'usb_io'):
 
 			for i in range(5):
 
@@ -441,7 +441,7 @@ class RxBitstuffRemover(Elaboratable):
 		# pass all of the outputs through a pipe stage
 		self.o_data = Signal()
 		self.o_error = Signal()
-		self.o_stall = Signal(reset=1)
+		self.o_stall = Signal(reset = 1)
 
 
 	def elaborate(self, platform):
@@ -454,7 +454,7 @@ class RxBitstuffRemover(Elaboratable):
 		drop_bit = Signal(1)
 
 
-		with m.FSM(domain='usb_io'):
+		with m.FSM(domain = 'usb_io'):
 
 			for i in range(6):
 				with m.State(f'D{i}'):
@@ -538,7 +538,7 @@ class RxShifter(Elaboratable):
 
 		# Instead of using a counter, we will use a sentinel bit in the shift
 		# register to indicate when it is full.
-		shift_reg = Signal(width+1, reset=0b1)
+		shift_reg = Signal(width+1, reset = 0b1)
 
 		m.d.comb += self.o_data.eq(shift_reg[0:width])
 		m.d.usb_io += self.o_put.eq(shift_reg[width-1] & ~shift_reg[width] & self.i_valid),
@@ -564,8 +564,8 @@ class RxPipeline(Elaboratable):
 		self.o_bit_strobe = Signal()
 
 		# Reset state is J
-		self.i_usbp = Signal(reset=1)
-		self.i_usbn = Signal(reset=0)
+		self.i_usbp = Signal(reset = 1)
+		self.i_usbn = Signal(reset = 0)
 
 		self.o_data_strobe = Signal()
 		self.o_data_payload = Signal(8)
@@ -622,11 +622,11 @@ class RxPipeline(Elaboratable):
 		#
 		# 1bit->8bit (1byte) gearing
 		#
-		m.submodules.shifter = shifter = RxShifter(width=8)
+		m.submodules.shifter = shifter = RxShifter(width = 8)
 		m.d.comb += [
 			shifter.reset.eq(detect.o_pkt_end),
 			shifter.i_data.eq(bitstuff.o_data),
-			shifter.i_valid.eq(~bitstuff.o_stall & Past(detect.o_pkt_active, domain='usb_io')),
+			shifter.i_valid.eq(~bitstuff.o_stall & Past(detect.o_pkt_active, domain = 'usb_io')),
 		]
 
 		#
@@ -635,7 +635,7 @@ class RxPipeline(Elaboratable):
 		flag_start  = Signal()
 		flag_end    = Signal()
 		flag_valid  = Signal()
-		m.submodules.payload_fifo = payload_fifo = AsyncFIFOBuffered(width=8, depth=4, r_domain='usb', w_domain='usb_io')
+		m.submodules.payload_fifo = payload_fifo = AsyncFIFOBuffered(width = 8, depth = 4, r_domain = 'usb', w_domain = 'usb_io')
 		m.d.comb += [
 			payload_fifo.w_data  .eq(shifter.o_data[::-1]),
 			payload_fifo.w_en    .eq(shifter.o_put),
@@ -644,7 +644,7 @@ class RxPipeline(Elaboratable):
 			payload_fifo.r_en    .eq(1)
 		]
 
-		m.submodules.flags_fifo = flags_fifo = AsyncFIFOBuffered(width=2, depth=4, r_domain='usb', w_domain='usb_io')
+		m.submodules.flags_fifo = flags_fifo = AsyncFIFOBuffered(width = 2, depth = 4, r_domain = 'usb', w_domain = 'usb_io')
 		m.d.comb += [
 			flags_fifo.w_data[1]  .eq(detect.o_pkt_start),
 			flags_fifo.w_data[0]  .eq(detect.o_pkt_end),

@@ -26,7 +26,7 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 
 	BULK_ENDPOINT_NUMBER = 1
 
-	def __init__(self, *args, bus=None, delayed_connect=False, max_packet_size=512, **kwargs):
+	def __init__(self, *args, bus = None, delayed_connect = False, max_packet_size = 512, **kwargs):
 		self._delayed_connect = delayed_connect
 		self._max_packet_size = max_packet_size
 
@@ -108,7 +108,7 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 		if self._bus is None:
 			self._bus = platform.request(platform.default_usb_connection)
 
-		m.submodules.usb = usb = USBDevice(bus=self._bus)
+		m.submodules.usb = usb = USBDevice(bus = self._bus)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()
@@ -116,9 +116,9 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 
 		# Add a stream endpoint to our device.
 		stream_ep = USBMultibyteStreamInEndpoint(
-			endpoint_number=self.BULK_ENDPOINT_NUMBER,
-			max_packet_size=self._max_packet_size,
-			byte_width=self.ila.bytes_per_sample
+			endpoint_number = self.BULK_ENDPOINT_NUMBER,
+			max_packet_size = self._max_packet_size,
+			byte_width = self.ila.bytes_per_sample
 		)
 		usb.add_endpoint(stream_ep)
 
@@ -152,7 +152,7 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 		The ILA object to work with.
 	'''
 
-	def __init__(self, *args, ila, delay=3, **kwargs):
+	def __init__(self, *args, ila, delay = 3, **kwargs):
 		import time
 
 		import usb
@@ -162,7 +162,7 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 			time.sleep(delay)
 
 		# Create our USB connection the device
-		self._device = usb.core.find(idVendor=0x16d0, idProduct=0x5a5)
+		self._device = usb.core.find(idVendor = 0x16d0, idProduct = 0x5a5)
 
 
 		super().__init__(ila)
@@ -179,7 +179,7 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 			raw_sample    = all_samples[i:i + sample_width_bytes]
 			sample_length = len(Cat(self.ila.signals))
 
-			yield bits.from_bytes(raw_sample, length=sample_length, byteorder='little')
+			yield bits.from_bytes(raw_sample, length = sample_length, byteorder = 'little')
 
 
 	def _read_samples(self):
@@ -189,5 +189,5 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 		total_to_read      = self.ila.sample_depth * sample_width_bytes
 
 		# Fetch all of our samples from the given device.
-		all_samples = self._device.read(0x81, total_to_read, timeout=0)
+		all_samples = self._device.read(0x81, total_to_read, timeout = 0)
 		return list(self._split_samples(all_samples))

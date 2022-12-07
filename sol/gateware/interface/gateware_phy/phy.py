@@ -54,7 +54,7 @@ class GatewarePHY(Elaboratable):
 
 	line_state: Signal(2), output
 		Indicates the current state of the D+ and D- lines. Matches the UTMI specification values,
-		where 0 = SE0, 1=K, and 2=J.
+		where 0 = SE0, 1 = K, and 2 = J.
 	vbus_valid: Signal(), output
 		Indicates that a valid VBUS signal is present. This signal is valid iff the I/O parameter
 		contains a ``vbus_valid`` element; otherwise it is hard connected to '1'

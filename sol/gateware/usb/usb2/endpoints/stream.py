@@ -147,7 +147,7 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 		#
 		# I/O port
 		#
-		self.stream          = StreamInterface(payload_width=byte_width * 8)
+		self.stream          = StreamInterface(payload_width = byte_width * 8)
 		self.interface       = EndpointInterface()
 
 
@@ -156,8 +156,8 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 
 		# Create our core, single-byte-wide endpoint, and attach it directly to our interface.
 		m.submodules.stream_ep = stream_ep = USBStreamInEndpoint(
-			endpoint_number=self._endpoint_number,
-			max_packet_size=self._max_packet_size
+			endpoint_number = self._endpoint_number,
+			max_packet_size = self._max_packet_size
 		)
 		stream_ep.interface = self.interface
 
@@ -181,7 +181,7 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 		m.d.comb += byte_stream.payload.eq(data_shift[0:8])
 
 
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			# IDLE: transmitter is waiting for input
 			with m.State('IDLE'):
@@ -271,7 +271,7 @@ class USBStreamOutEndpoint(Elaboratable):
 	'''
 
 
-	def __init__(self, *, endpoint_number, max_packet_size, buffer_size=None):
+	def __init__(self, *, endpoint_number, max_packet_size, buffer_size = None):
 		self._endpoint_number = endpoint_number
 		self._max_packet_size = max_packet_size
 		self._buffer_size = buffer_size if (buffer_size is not None) else (self._max_packet_size * 2 - 1)
@@ -324,7 +324,7 @@ class USBStreamOutEndpoint(Elaboratable):
 		rx_last  = boundary_detector.last
 
 		# Create a Rx FIFO.
-		m.submodules.fifo = fifo = TransactionalizedFIFO(width=10, depth=self._buffer_size, name='rx_fifo', domain='usb')
+		m.submodules.fifo = fifo = TransactionalizedFIFO(width = 10, depth = self._buffer_size, name = 'rx_fifo', domain = 'usb')
 
 
 		#

@@ -79,7 +79,7 @@ class USBInterruptExample(Elaboratable):
 
 		# Create our USB device interface...
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.usb = usb = USBDevice(bus=ulpi)
+		m.submodules.usb = usb = USBDevice(bus = ulpi)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()
@@ -87,7 +87,7 @@ class USBInterruptExample(Elaboratable):
 
 		# Create an interrupt endpoint which will carry the value of our counter to the host
 		# each time our interrupt EP is polled.
-		status_ep = USBSignalInEndpoint(width=32, endpoint_number=1, endianness='big')
+		status_ep = USBSignalInEndpoint(width = 32, endpoint_number = 1, endianness = 'big')
 		usb.add_endpoint(status_ep)
 		m.d.comb += status_ep.signal.eq(counter)
 

@@ -27,7 +27,7 @@ from .protocol.endpoint     import SuperSpeedEndpointMultiplexer
 class USBSuperSpeedDevice(Elaboratable):
 	''' Core gateware common to all SOL USB3 devices. '''
 
-	def __init__(self, *, phy, sync_frequency=None):
+	def __init__(self, *, phy, sync_frequency = None):
 		self._phy = phy
 		self._sync_frequency = sync_frequency
 
@@ -99,10 +99,10 @@ class USBSuperSpeedDevice(Elaboratable):
 		#
 
 		# Stores the device's current address. Used to identify which packets are for us.
-		address       = Signal(7, reset=0)
+		address       = Signal(7, reset = 0)
 
 		# Stores the device's current configuration. Defaults to unconfigured.
-		configuration = Signal(8, reset=0)
+		configuration = Signal(8, reset = 0)
 
 
 		#
@@ -116,7 +116,7 @@ class USBSuperSpeedDevice(Elaboratable):
 		#
 		# Link layer.
 		#
-		m.submodules.link = link = USB3LinkLayer(physical_layer=physical)
+		m.submodules.link = link = USB3LinkLayer(physical_layer = physical)
 		m.d.comb += [
 			self.link_trained     .eq(link.trained),
 			self.link_in_reset    .eq(link.in_reset),
@@ -127,7 +127,7 @@ class USBSuperSpeedDevice(Elaboratable):
 		#
 		# Protocol layer.
 		#
-		m.submodules.protocol = protocol = USB3ProtocolLayer(link_layer=link)
+		m.submodules.protocol = protocol = USB3ProtocolLayer(link_layer = link)
 		m.d.comb += [
 			protocol.current_address        .eq(address),
 			protocol.current_configuration  .eq(configuration)
@@ -204,7 +204,7 @@ class USBSuperSpeedDevice(Elaboratable):
 			self.rx_data_tap   .tap(physical.source),
 			self.tx_data_tap   .tap(physical.sink),
 
-			self.ep_tx_stream  .tap(protocol.endpoint_interface.tx, tap_ready=True),
+			self.ep_tx_stream  .tap(protocol.endpoint_interface.tx, tap_ready = True),
 			self.ep_tx_length  .eq(protocol.endpoint_interface.tx_length)
 		]
 

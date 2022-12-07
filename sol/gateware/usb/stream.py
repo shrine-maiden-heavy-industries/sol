@@ -64,7 +64,7 @@ class USBOutStreamInterface(Record):
 
 	'''
 
-	def __init__(self, payload_width=8):
+	def __init__(self, payload_width = 8):
 		'''
 		Parameter:
 			payload_width -- The width of the payload packets.
@@ -134,7 +134,7 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 		The name of the domain the stream belongs to; defaults to 'usb'.
 	'''
 
-	def __init__(self, domain='usb'):
+	def __init__(self, domain = 'usb'):
 
 		self._domain = domain
 
@@ -167,7 +167,7 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 		buffered_complete = Signal()
 		buffered_invalid  = Signal()
 
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			# WAIT_FOR_FIRST_BYTE -- we're not actively receiving data, yet. Wait for the
 			# first byte of a new packet.
@@ -335,16 +335,16 @@ class USBRawSuperSpeedStream(StreamInterface):
 		The number of payload words (1 byte data, 1 bit control) to include in the current stream.
 	'''
 
-	def __init__(self, payload_words=4):
-		super().__init__(payload_width=8 * payload_words, extra_fields=[('ctrl', payload_words)])
+	def __init__(self, payload_words = 4):
+		super().__init__(payload_width = 8 * payload_words, extra_fields = [('ctrl', payload_words)])
 
 
-	def stream_eq(self, interface, *, endian_swap=False, omit=None, **kwargs):
+	def stream_eq(self, interface, *, endian_swap = False, omit = None, **kwargs):
 		''' Extend the global ``stream_eq`` operator to swap endianness. '''
 
 		# If we're not performing an endian swap, delegate directly to our parent.
 		if endian_swap == False:
-			return super().stream_eq(interface, omit=omit, **kwargs)
+			return super().stream_eq(interface, omit = omit, **kwargs)
 
 		# Otherwise, perform our full endian swap.
 
@@ -356,7 +356,7 @@ class USBRawSuperSpeedStream(StreamInterface):
 		omit = [*omit, 'code', 'data']
 
 		# Gather the operations used to perform the basic ``stream_eq``...
-		operations = super().stream_eq(interface, omit=omit, **kwargs)
+		operations = super().stream_eq(interface, omit = omit, **kwargs)
 
 		# ... and then add the operations necessary to connect our data/ctrl,
 		# with endianness swaps.
@@ -385,14 +385,14 @@ class SuperSpeedStreamArbiter(StreamArbiter):
 	''' Convenience variant of our StreamArbiter that operates SuperSpeed streams in the ``ss`` domain. '''
 
 	def __init__(self):
-		super().__init__(stream_type=USBRawSuperSpeedStream, domain='ss')
+		super().__init__(stream_type = USBRawSuperSpeedStream, domain = 'ss')
 
 
 class SuperSpeedStreamInterface(StreamInterface):
 	''' Convenience variant of our StreamInterface sized to work with SuperSpeed streams. '''
 
 	def __init__(self):
-		super().__init__(payload_width=32, valid_width=4)
+		super().__init__(payload_width = 32, valid_width = 4)
 
 
 

@@ -73,7 +73,7 @@ class USBCounterDeviceExample(Elaboratable):
 
 		# Create our USB device interface...
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.usb = usb = USBDevice(bus=ulpi)
+		m.submodules.usb = usb = USBDevice(bus = ulpi)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()
@@ -81,8 +81,8 @@ class USBCounterDeviceExample(Elaboratable):
 
 		# Add a stream endpoint to our device.
 		stream_ep = USBStreamInEndpoint(
-			endpoint_number=self.BULK_ENDPOINT_NUMBER,
-			max_packet_size=self.MAX_BULK_PACKET_SIZE
+			endpoint_number = self.BULK_ENDPOINT_NUMBER,
+			max_packet_size = self.MAX_BULK_PACKET_SIZE
 		)
 		usb.add_endpoint(stream_ep)
 

@@ -96,7 +96,7 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		#
 
 		# Create a clock domain clocked from our JTAG clock.
-		m.domains.jtag = ClockDomain(local=True, clk_edge='neg')
+		m.domains.jtag = ClockDomain(local = True, clk_edge = 'neg')
 		m.d.comb += ClockSignal('jtag').eq(jtck)
 
 		# Create our chip selects. Note that these are based on two conditions:
@@ -129,14 +129,14 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		}[key]
 
 
-	def _synchronize_(self, m, output, o_domain='sync', stages=2):
+	def _synchronize_(self, m, output, o_domain = 'sync', stages = 2):
 		''' Creates a synchronized copy of this interface's I/O. '''
 
 		# Synchronize our inputs...
 		m.submodules += [
-			FFSynchronizer(self.sck, output.sck, o_domain=o_domain, stages=stages),
-			FFSynchronizer(self.sdi, output.sdi, o_domain=o_domain, stages=stages),
-			FFSynchronizer(self.cs,  output.cs,  o_domain=o_domain, stages=stages),
+			FFSynchronizer(self.sck, output.sck, o_domain = o_domain, stages = stages),
+			FFSynchronizer(self.sdi, output.sdi, o_domain = o_domain, stages = stages),
+			FFSynchronizer(self.cs,  output.cs,  o_domain = o_domain, stages = stages),
 		]
 
 		# ... and connect our output directly through.
@@ -168,7 +168,7 @@ class JTAGCommandInterface(Elaboratable):
 		The word to be transmitted; latched in on next word_complete and while cs is low
 	'''
 
-	def __init__(self, command_size=8, word_size=32, output_domain='sync'):
+	def __init__(self, command_size = 8, word_size = 32, output_domain = 'sync'):
 		self.command_size   = command_size
 		self.word_size      = word_size
 		self._output_domain = output_domain
@@ -199,8 +199,8 @@ class JTAGCommandInterface(Elaboratable):
 		#
 		ir_size              = self.command_size + 1
 		dr_size              = self.word_size + 1
-		instruction_register = Signal(ir_size, reset=(2 ** ir_size - 1))
-		data_register        = Signal(dr_size, reset=(2 ** dr_size - 1))
+		instruction_register = Signal(ir_size, reset = (2 ** ir_size - 1))
+		data_register        = Signal(dr_size, reset = (2 ** dr_size - 1))
 
 		#
 		# JTAG interface.
@@ -222,7 +222,7 @@ class JTAGCommandInterface(Elaboratable):
 		# Instantiate our core JTAG interface, and hook it up to our signals.
 		# This essentially grabs a connection to the ECP5's JTAG data chain when the ER1 or ER2
 		# instructions are loaded into its instruction register.
-		m.submodules.jtag =  Instance('JTAGG',
+		m.submodules.jtag = Instance('JTAGG',
 			o_JTCK    = jtag_clk,
 			o_JTDI    = jtag_tdi,
 			i_JTDO1   = jtag_tdo_instruction,
@@ -302,7 +302,7 @@ class JTAGRegisterInterface(SPIRegisterInterface):
 	''' JTAG-carried version of our SPI register interface. '''
 
 
-	def __init__(self, address_size=15, register_size=32, default_read_value=0, support_size_autonegotiation=True):
+	def __init__(self, address_size = 15, register_size = 32, default_read_value = 0, support_size_autonegotiation = True):
 		'''
 		Parameters:
 			address_size       -- the size of an address, in bits; recommended to be one bit
@@ -331,7 +331,7 @@ class JTAGRegisterInterface(SPIRegisterInterface):
 		#
 
 		# Instantiate an SPI command transciever submodule.
-		self.interface = JTAGCommandInterface(command_size=address_size + 1, word_size=register_size)
+		self.interface = JTAGCommandInterface(command_size = address_size + 1, word_size = register_size)
 
 		# Create a new, empty dictionary mapping registers to their signals.
 		self.registers = {}

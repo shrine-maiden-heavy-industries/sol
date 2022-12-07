@@ -83,7 +83,7 @@ if os.getenv('SOL_SUPERSPEED'):
 				with c.InterfaceDescriptor() as i:
 					i.bInterfaceNumber = 0
 
-					with i.EndpointDescriptor(add_default_superspeed=True) as e:
+					with i.EndpointDescriptor(add_default_superspeed = True) as e:
 						e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
 						e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
 
@@ -101,7 +101,7 @@ if os.getenv('SOL_SUPERSPEED'):
 			m.submodules.phy = phy = platform.create_usb3_phy()
 
 			# Create our core SuperSpeed device.
-			m.submodules.usb = usb = USBSuperSpeedDevice(phy=phy)
+			m.submodules.usb = usb = USBSuperSpeedDevice(phy = phy)
 
 			# Add our standard control endpoint to the device.
 			descriptors = self.create_descriptors()
@@ -109,8 +109,8 @@ if os.getenv('SOL_SUPERSPEED'):
 
 			# Create our example bulk endpoint.
 			stream_in_ep = SuperSpeedStreamInEndpoint(
-				endpoint_number=self.BULK_ENDPOINT_NUMBER,
-				max_packet_size=self.MAX_BULK_PACKET_SIZE
+				endpoint_number = self.BULK_ENDPOINT_NUMBER,
+				max_packet_size = self.MAX_BULK_PACKET_SIZE
 			)
 			usb.add_endpoint(stream_in_ep)
 
@@ -187,7 +187,7 @@ else:
 
 			# Create our USB device interface...
 			ulpi = platform.request(platform.default_usb_connection)
-			m.submodules.usb = usb = USBDevice(bus=ulpi)
+			m.submodules.usb = usb = USBDevice(bus = ulpi)
 
 			assert not usb.always_fs or os.getenv('SOL_FULL_ONLY'), \
 				   'SOL_FULL_ONLY must be set for devices with a full speed only PHY'
@@ -198,8 +198,8 @@ else:
 
 			# Add a stream endpoint to our device.
 			stream_ep = USBStreamInEndpoint(
-				endpoint_number=BULK_ENDPOINT_NUMBER,
-				max_packet_size=MAX_BULK_PACKET_SIZE
+				endpoint_number = BULK_ENDPOINT_NUMBER,
+				max_packet_size = MAX_BULK_PACKET_SIZE
 			)
 			usb.add_endpoint(stream_ep)
 
@@ -276,7 +276,7 @@ def run_speed_test():
 
 			# Allocate the transfer...
 			transfer = device.getTransfer()
-			transfer.setBulk(0x80 | BULK_ENDPOINT_NUMBER, TEST_TRANSFER_SIZE, callback=_transfer_completed, timeout=1000)
+			transfer.setBulk(0x80 | BULK_ENDPOINT_NUMBER, TEST_TRANSFER_SIZE, callback = _transfer_completed, timeout = 1000)
 
 			# ... and store it.
 			active_transfers.append(transfer)

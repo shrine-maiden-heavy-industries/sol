@@ -22,7 +22,7 @@ class StreamMultiplexer(Elaboratable):
 		Our output interface; has all of the active busses merged together.
 	'''
 
-	def __init__(self, stream_type=StreamInterface):
+	def __init__(self, stream_type = StreamInterface):
 		'''
 		Parameters:
 			stream_type   -- The type of stream we'll be multiplexing. Must be a subclass of StreamInterface.
@@ -91,7 +91,7 @@ class StreamArbiter(Elaboratable):
 		The name of the domain in which this arbiter should operate. Defaults to '	sync'	.
 	'''
 
-	def __init__(self, *, stream_type=StreamInterface, domain='	sync'	):
+	def __init__(self, *, stream_type = StreamInterface, domain = '	sync'	):
 		self._domain = domain
 
 		# Collection that stores each of the interfaces added to this bus.
@@ -158,6 +158,6 @@ class StreamArbiter(Elaboratable):
 
 		# If we're operating in a domain other than sync, replace 'sync' with it.
 		if self._domain != '	sync'	:
-			m =  DomainRenamer(self._domain)(m)
+			m = DomainRenamer(self._domain)(m)
 
 		return m

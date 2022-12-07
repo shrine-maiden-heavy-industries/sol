@@ -32,7 +32,7 @@ class StandardRequestHandler(Elaboratable):
 
 
 
-	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition=0):
+	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition = 0):
 		''' Fills in the current state with a request handler meant to set a register.
 
 		Parameters
@@ -63,7 +63,7 @@ class StandardRequestHandler(Elaboratable):
 			m.next = 'IDLE'
 
 
-	def handle_simple_data_request(self, m, data, *, length=1):
+	def handle_simple_data_request(self, m, data, *, length = 1):
 		''' Fills in a given current state with a request that returns a given short piece of data.
 
 		For e.g. GET_CONFIGURATION and GET_STATUS requests. The relevant data must fit within a word.
@@ -118,7 +118,7 @@ class StandardRequestHandler(Elaboratable):
 		handshake_generator = interface.handshakes_out
 
 		# For all of our handshakes, set our next-sequence-number to one; as we never receive
-		# packets, and ACKs should be seq=1.
+		# packets, and ACKs should be seq = 1.
 		m.d.comb += handshake_generator.next_sequence.eq(1)
 
 
@@ -141,7 +141,7 @@ class StandardRequestHandler(Elaboratable):
 		## Handlers.
 		##
 		with m.If(setup.type == USBRequestType.STANDARD):
-			with m.FSM(domain='ss'):
+			with m.FSM(domain = 'ss'):
 
 				# IDLE -- not handling any active request
 				with m.State('IDLE'):
@@ -175,7 +175,7 @@ class StandardRequestHandler(Elaboratable):
 				with m.State('GET_STATUS'):
 					# TODO: handle reporting endpoint stall status
 					# TODO: copy the remote wakeup and bus-powered attributes from bmAttributes of the relevant descriptor?
-					self.handle_simple_data_request(m, 0, length=2)
+					self.handle_simple_data_request(m, 0, length = 2)
 
 
 				# SET_ADDRESS -- The host is trying to assign us an address.
@@ -229,7 +229,7 @@ class StandardRequestHandler(Elaboratable):
 					# TODO: use the actual latencies once we support USB3 power states
 
 					# ACK the data that's coming in, once we get it; but ignore it for now
-					data_received = falling_edge_detected(m, interface.rx.valid, domain='ss')
+					data_received = falling_edge_detected(m, interface.rx.valid, domain = 'ss')
 					with m.If(data_received):
 						m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
 
@@ -244,7 +244,7 @@ class StandardRequestHandler(Elaboratable):
 				with m.State('UNHANDLED'):
 
 					# When we next have an opportunity to stall, do so, and then return to idle.
-					data_received = falling_edge_detected(m, interface.rx.valid, domain='ss')
+					data_received = falling_edge_detected(m, interface.rx.valid, domain = 'ss')
 					with m.If(interface.data_requested | interface.status_requested | data_received):
 						m.d.comb += handshake_generator.send_stall.eq(1)
 						m.next = 'IDLE'
@@ -253,4 +253,4 @@ class StandardRequestHandler(Elaboratable):
 
 
 if __name__ == '__main__':
-	unittest.main(warnings='ignore')
+	unittest.main(warnings = 'ignore')

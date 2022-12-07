@@ -92,14 +92,14 @@ class USBDevice(Elaboratable):
 
 	'''
 
-	def __init__(self, *, bus, handle_clocking=True):
+	def __init__(self, *, bus, handle_clocking = True):
 		'''
 		Parameters:
 		'''
 
 		# If this looks more like a ULPI bus than a UTMI bus, translate it.
 		if hasattr(bus, 'dir'):
-			self.utmi       = UTMITranslator(ulpi=bus, handle_clocking=handle_clocking)
+			self.utmi       = UTMITranslator(ulpi = bus, handle_clocking = handle_clocking)
 			self.bus_busy   = self.utmi.busy
 			self.translator = self.utmi
 			self.always_fs  = False
@@ -108,7 +108,7 @@ class USBDevice(Elaboratable):
 		# If this looks more like raw I/O connections than a UTMI bus, create a pure-gatware
 		# PHY to drive the raw I/O signals.
 		elif hasattr(bus, 'd_n'):
-			self.utmi       = GatewarePHY(io=bus)
+			self.utmi       = GatewarePHY(io = bus)
 			self.bus_busy   = Const(0)
 			self.translator = self.utmi
 			self.always_fs  = True
@@ -171,7 +171,7 @@ class USBDevice(Elaboratable):
 		-------
 		Returns the endpoint object for the control endpoint.
 		'''
-		control_endpoint = USBControlEndpoint(utmi=self.utmi)
+		control_endpoint = USBControlEndpoint(utmi = self.utmi)
 		self.add_endpoint(control_endpoint)
 
 		return control_endpoint
@@ -188,7 +188,7 @@ class USBDevice(Elaboratable):
 		'''
 
 		# Create our endpoint, and add standard descriptors to it.
-		control_endpoint = USBControlEndpoint(utmi=self.utmi)
+		control_endpoint = USBControlEndpoint(utmi = self.utmi)
 		control_endpoint.add_standard_request_handlers(descriptors, **kwargs)
 		self.add_endpoint(control_endpoint)
 
@@ -209,10 +209,10 @@ class USBDevice(Elaboratable):
 		#
 
 		# Stores the device's current address. Used to identify which packets are for us.
-		address       = Signal(7, reset=0)
+		address       = Signal(7, reset = 0)
 
 		# Stores the device's current configuration. Defaults to unconfigured.
-		configuration = Signal(8, reset=0)
+		configuration = Signal(8, reset = 0)
 
 
 		#
@@ -240,14 +240,14 @@ class USBDevice(Elaboratable):
 		# - A data CRC16 handler, which will compute data packet CRCs.
 		# - An interpacket delay timer, which will enforce interpacket delays.
 		m.submodules.token_detector      = token_detector      = \
-			USBTokenDetector(utmi=self.utmi, domain_clock=self.data_clock, fs_only=self.always_fs)
+			USBTokenDetector(utmi = self.utmi, domain_clock = self.data_clock, fs_only = self.always_fs)
 		m.submodules.transmitter         = transmitter         = USBDataPacketGenerator()
-		m.submodules.receiver            = receiver            = USBDataPacketReceiver(utmi=self.utmi)
+		m.submodules.receiver            = receiver            = USBDataPacketReceiver(utmi = self.utmi)
 		m.submodules.handshake_generator = handshake_generator = USBHandshakeGenerator()
-		m.submodules.handshake_detector  = handshake_detector  = USBHandshakeDetector(utmi=self.utmi)
+		m.submodules.handshake_detector  = handshake_detector  = USBHandshakeDetector(utmi = self.utmi)
 		m.submodules.data_crc            = data_crc            = USBDataPacketCRC()
 		m.submodules.timer               = timer               = \
-			USBInterpacketTimer(domain_clock=self.data_clock, fs_only=self.always_fs)
+			USBInterpacketTimer(domain_clock = self.data_clock, fs_only = self.always_fs)
 
 		# Connect our transmitter/receiver to our CRC generator.
 		data_crc.add_interface(transmitter.crc)
@@ -484,23 +484,23 @@ class FullDeviceTest(USBDeviceTest):
 		# - Read config descriptor (without subordinates).
 		# - Read language descriptor.
 		# - Read Windows extended descriptors. [optional]
-		# - Read string descriptors from device descriptor (wIndex=language id).
+		# - Read string descriptors from device descriptor (wIndex = language id).
 		# - Set configuration.
 		# - Read back configuration number and validate.
 
 
 		# Read 8 bytes of our device descriptor.
-		handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE, length=8)
+		handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE, length = 8)
 		self.assertEqual(handshake, USBPacketID.ACK)
 		self.assertEqual(bytes(data), self.descriptors.get_descriptor_bytes(DescriptorTypes.DEVICE)[0:8])
 
 		# Read 64 bytes of our device descriptor, no matter its length.
-		handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE, length=64)
+		handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE, length = 64)
 		self.assertEqual(handshake, USBPacketID.ACK)
 		self.assertEqual(bytes(data), self.descriptors.get_descriptor_bytes(DescriptorTypes.DEVICE))
 
 		# Send a nonsense request, and validate that it's stalled.
-		handshake, data = yield from self.control_request_in(0x80, 30, length=10)
+		handshake, data = yield from self.control_request_in(0x80, 30, length = 10)
 		self.assertEqual(handshake, USBPacketID.STALL)
 
 		# Send a set-address request; we'll apply an arbitrary address 0x31.
@@ -508,30 +508,30 @@ class FullDeviceTest(USBDeviceTest):
 		self.assertEqual(self.address, 0x31)
 
 		# Read our device descriptor.
-		handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE, length=18)
+		handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE, length = 18)
 		self.assertEqual(handshake, USBPacketID.ACK)
 		self.assertEqual(bytes(data), self.descriptors.get_descriptor_bytes(DescriptorTypes.DEVICE))
 
 		# Read our device qualifier descriptor.
 		for _ in range(3):
-			handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE_QUALIFIER, length=10)
+			handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE_QUALIFIER, length = 10)
 			self.assertEqual(handshake, USBPacketID.STALL)
 
 		# Read our configuration descriptor (no subordinates).
-		handshake, data = yield from self.get_descriptor(DescriptorTypes.CONFIGURATION, length=9)
+		handshake, data = yield from self.get_descriptor(DescriptorTypes.CONFIGURATION, length = 9)
 		self.assertEqual(handshake, USBPacketID.ACK)
 		self.assertEqual(bytes(data), self.descriptors.get_descriptor_bytes(DescriptorTypes.CONFIGURATION)[0:9])
 
 		# Read our configuration descriptor (with subordinates).
-		handshake, data = yield from self.get_descriptor(DescriptorTypes.CONFIGURATION, length=32)
+		handshake, data = yield from self.get_descriptor(DescriptorTypes.CONFIGURATION, length = 32)
 		self.assertEqual(handshake, USBPacketID.ACK)
 		self.assertEqual(bytes(data), self.descriptors.get_descriptor_bytes(DescriptorTypes.CONFIGURATION))
 
 		# Read our string descriptors.
 		for i in range(4):
-			handshake, data = yield from self.get_descriptor(DescriptorTypes.STRING, index=i, length=255)
+			handshake, data = yield from self.get_descriptor(DescriptorTypes.STRING, index = i, length = 255)
 			self.assertEqual(handshake, USBPacketID.ACK)
-			self.assertEqual(bytes(data), self.descriptors.get_descriptor_bytes(DescriptorTypes.STRING, index=i))
+			self.assertEqual(bytes(data), self.descriptors.get_descriptor_bytes(DescriptorTypes.STRING, index = i))
 
 		# Set our configuration...
 		status_pid = yield from self.set_configuration(1)
@@ -598,7 +598,7 @@ class LongDescriptorTest(USBDeviceTest):
 		descriptor = self.descriptors.get_descriptor_bytes(DescriptorTypes.CONFIGURATION)
 
 		# Read our configuration descriptor (no subordinates).
-		handshake, data = yield from self.get_descriptor(DescriptorTypes.CONFIGURATION, length=len(descriptor))
+		handshake, data = yield from self.get_descriptor(DescriptorTypes.CONFIGURATION, length = len(descriptor))
 		self.assertEqual(handshake, USBPacketID.ACK)
 		self.assertEqual(bytes(data), descriptor)
 		self.assertEqual(len(data), len(descriptor))
@@ -616,7 +616,7 @@ class LongDescriptorTest(USBDeviceTest):
 		# Try requesting a single and three max-sized packet.
 		for factor in [1, 3]:
 			request_length = self.max_packet_size_ep0 * factor
-			handshake, data = yield from self.get_descriptor(DescriptorTypes.CONFIGURATION, length=request_length)
+			handshake, data = yield from self.get_descriptor(DescriptorTypes.CONFIGURATION, length = request_length)
 			self.assertEqual(handshake, USBPacketID.ACK)
 			self.assertEqual(bytes(data), descriptor[0:request_length])
 			self.assertEqual(len(data), request_length)
@@ -654,7 +654,7 @@ try:
 			#
 			# I/O port
 			#
-			self.connect   = Signal(reset=1)
+			self.connect   = Signal(reset = 1)
 			self.bus_reset = Signal()
 
 
@@ -663,21 +663,21 @@ try:
 			#
 
 			regs = self.csr_bank()
-			self._connect = regs.csr(1, 'rw', desc='''
+			self._connect = regs.csr(1, 'rw', desc = '''
 				Set this bit to '1' to allow the associated USB device to connect to a host.
 			''')
 
-			self._speed = regs.csr(2, 'r', desc='''
+			self._speed = regs.csr(2, 'r', desc = '''
 				Indicates the current speed of the USB device. 0 indicates High; 1 => Full,
 				2 => Low, and 3 => SuperSpeed (incl SuperSpeed+).
 			''')
 
-			self._reset_irq = self.event(name='reset', desc='''
+			self._reset_irq = self.event(name = 'reset', desc = '''
 				Interrupt that occurs when a USB bus reset is received.
 			''')
 
 			# Wishbone connection.
-			self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
+			self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 			self.bus        = self._bridge.bus
 			self.irq        = self._bridge.irq
 

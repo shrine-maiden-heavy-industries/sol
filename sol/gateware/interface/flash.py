@@ -25,7 +25,7 @@ class ECP5ConfigurationFlashInterface(Elaboratable):
 		I: cs  -- Active-high chip select line.
 	'''
 
-	def __init__(self, *, bus, use_cs=False):
+	def __init__(self, *, bus, use_cs = False):
 		''' Params:
 			bus    -- The SPI bus object to connect to.
 			use_cs -- Whether or not the CS line should be passed through to the target device.
@@ -48,7 +48,7 @@ class ECP5ConfigurationFlashInterface(Elaboratable):
 
 		# Get the ECP5 block that's responsible for driving the MCLK pin,
 		# and drive it using our SCK line.
-		user_mclk = Instance('USRMCLK', i_USRMCLKI=self.sck, i_USRMCLKTS=0)
+		user_mclk = Instance('USRMCLK', i_USRMCLKI = self.sck, i_USRMCLKTS = 0)
 		m.submodules += user_mclk
 
 		# Connect up each of our other signals.

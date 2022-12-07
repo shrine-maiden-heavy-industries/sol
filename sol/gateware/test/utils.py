@@ -15,7 +15,7 @@ from torii     import Signal
 from torii.sim import Simulator
 
 
-def sync_test_case(process_function, *, domain='sync'):
+def sync_test_case(process_function, *, domain = 'sync'):
 	''' Decorator that converts a function into a simple synchronous-process test case. '''
 
 	#
@@ -35,8 +35,8 @@ def sync_test_case(process_function, *, domain='sync'):
 
 		self.domain = domain
 		self._ensure_clocks_present()
-		self.sim.add_sync_process(test_case, domain=domain)
-		self.simulate(vcd_suffix=process_function.__name__)
+		self.sim.add_sync_process(test_case, domain = domain)
+		self.simulate(vcd_suffix = process_function.__name__)
 
 	return run_test
 
@@ -46,7 +46,7 @@ def usb_domain_test_case(process_function):
 	Decorator that converts a function into a simple synchronous-process
 	test case in the USB domain.
 	'''
-	return sync_test_case(process_function, domain='usb')
+	return sync_test_case(process_function, domain = 'usb')
 
 
 def fast_domain_test_case(process_function):
@@ -54,7 +54,7 @@ def fast_domain_test_case(process_function):
 	Decorator that converts a function into a simple synchronous-process
 	test case in the fast domain.
 	'''
-	return sync_test_case(process_function, domain='fast')
+	return sync_test_case(process_function, domain = 'fast')
 
 
 def ss_domain_test_case(process_function):
@@ -62,7 +62,7 @@ def ss_domain_test_case(process_function):
 	Decorator that converts a function into a simple synchronous-process
 	test case in the SuperSpeed domain.
 	'''
-	return sync_test_case(process_function, domain='ss')
+	return sync_test_case(process_function, domain = 'ss')
 
 
 
@@ -101,13 +101,13 @@ class SolGatewareTestCase(unittest.TestCase):
 		self.sim = Simulator(self.dut)
 
 		if self.USB_CLOCK_FREQUENCY:
-			self.sim.add_clock(1 / self.USB_CLOCK_FREQUENCY, domain='usb')
+			self.sim.add_clock(1 / self.USB_CLOCK_FREQUENCY, domain = 'usb')
 		if self.SYNC_CLOCK_FREQUENCY:
-			self.sim.add_clock(1 / self.SYNC_CLOCK_FREQUENCY, domain='sync')
+			self.sim.add_clock(1 / self.SYNC_CLOCK_FREQUENCY, domain = 'sync')
 		if self.FAST_CLOCK_FREQUENCY:
-			self.sim.add_clock(1 / self.FAST_CLOCK_FREQUENCY, domain='fast')
+			self.sim.add_clock(1 / self.FAST_CLOCK_FREQUENCY, domain = 'fast')
 		if self.SS_CLOCK_FREQUENCY:
-			self.sim.add_clock(1 / self.SS_CLOCK_FREQUENCY, domain='ss')
+			self.sim.add_clock(1 / self.SS_CLOCK_FREQUENCY, domain = 'ss')
 
 
 	def initialize_signals(self):
@@ -120,11 +120,11 @@ class SolGatewareTestCase(unittest.TestCase):
 		return ()
 
 
-	def simulate(self, *, vcd_suffix=None):
+	def simulate(self, *, vcd_suffix = None):
 		''' Runs our core simulation. '''
 
 		# If we're generating VCDs, run the test under a VCD writer.
-		if os.getenv('GENERATE_VCDS', default=False):
+		if os.getenv('GENERATE_VCDS', default = False):
 
 			# Figure out the name of our VCD files...
 			vcd_name = self.get_vcd_name()
@@ -133,7 +133,7 @@ class SolGatewareTestCase(unittest.TestCase):
 
 			# ... and run the simulation while writing them.
 			traces = self.traces_of_interest()
-			with self.sim.write_vcd(vcd_name + '.vcd', vcd_name + '.gtkw', traces=traces):
+			with self.sim.write_vcd(vcd_name + '.vcd', vcd_name + '.gtkw', traces = traces):
 				self.sim.run()
 
 		else:
@@ -141,7 +141,7 @@ class SolGatewareTestCase(unittest.TestCase):
 
 
 	@staticmethod
-	def pulse(signal, *, step_after=True):
+	def pulse(signal, *, step_after = True):
 		''' Helper method that asserts a signal for a cycle. '''
 		yield signal.eq(1)
 		yield
@@ -160,7 +160,7 @@ class SolGatewareTestCase(unittest.TestCase):
 
 
 	@staticmethod
-	def wait_until(strobe, *, timeout=None):
+	def wait_until(strobe, *, timeout = None):
 		''' Helper method that advances time until a strobe signal becomes true. '''
 
 		cycles_passed = 0

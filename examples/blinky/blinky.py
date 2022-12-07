@@ -21,8 +21,8 @@ class Blinky(Elaboratable):
 		m = Module()
 
 		# Grab our I/O connectors.
-		leds    = [platform.request_optional('led', i, default=NullPin()).o for i in range(0, 8)]
-		user_io = [platform.request_optional('user_io', i, default=NullPin()).o for i in range(0, 8)]
+		leds    = [platform.request_optional('led', i, default = NullPin()).o for i in range(0, 8)]
+		user_io = [platform.request_optional('user_io', i, default = NullPin()).o for i in range(0, 8)]
 
 		# Clock divider / counter.
 		counter = Signal(28)

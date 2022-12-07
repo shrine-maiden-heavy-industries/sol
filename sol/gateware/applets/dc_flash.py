@@ -21,11 +21,11 @@ class DebugControllerFlashBridge(Elaboratable):
 
 		# Create a set of registers, and expose them over SPI.
 		board_spi = platform.request('debug_spi')
-		spi_registers = SPIRegisterInterface(default_read_value=-1)
+		spi_registers = SPIRegisterInterface(default_read_value = -1)
 		m.submodules.spi_registers = spi_registers
 
 		# Identify ourselves as the SPI flash bridge.
-		spi_registers.add_read_only_register(REGISTER_ID, read=0x53504946)
+		spi_registers.add_read_only_register(REGISTER_ID, read = 0x53504946)
 
 
 		#
@@ -34,7 +34,7 @@ class DebugControllerFlashBridge(Elaboratable):
 		flash_sdo = Signal()
 
 		spi_flash_bus = platform.request('spi_flash')
-		spi_flash_passthrough = ECP5ConfigurationFlashInterface(bus=spi_flash_bus)
+		spi_flash_passthrough = ECP5ConfigurationFlashInterface(bus = spi_flash_bus)
 
 		m.submodules += spi_flash_passthrough
 		m.d.comb += [

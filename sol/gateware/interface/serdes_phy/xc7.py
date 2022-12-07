@@ -13,13 +13,13 @@ class DRPInterface:
 	''' Dynamic Reconfiguration Port interface for Xilinx FPGAs. '''
 
 	def __init__(self):
-		self.lock = Signal(1,   name='drp_lock')
-		self.addr = Signal(9,   name='drp_addr')
-		self.di   = Signal(16,  name='drp_di')
-		self.do   = Signal(16,  name='drp_do')
-		self.we   = Signal(1,   name='drp_we')
-		self.en   = Signal(1,   name='drp_en')
-		self.rdy  = Signal(1,   name='drp_rdy')
+		self.lock = Signal(1,   name = 'drp_lock')
+		self.addr = Signal(9,   name = 'drp_addr')
+		self.di   = Signal(16,  name = 'drp_di')
+		self.do   = Signal(16,  name = 'drp_do')
+		self.we   = Signal(1,   name = 'drp_we')
+		self.en   = Signal(1,   name = 'drp_en')
+		self.rdy  = Signal(1,   name = 'drp_rdy')
 
 
 class _DRPInterfaceBuffer(Elaboratable):
@@ -77,7 +77,7 @@ class DRPArbiter(Elaboratable):
 		current_idx = Signal(range(len(buffers)))
 		current_buf = buffers[current_idx]
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			with m.State('IDLE'):
 				for idx in range(len(buffers)):
@@ -115,13 +115,13 @@ class DRPArbiter(Elaboratable):
 class DRPFieldController(Elaboratable):
 	''' Gateware that atomically updates part of a word via DRP. '''
 
-	def __init__(self, *, addr: int, bits: slice, reset=0):
+	def __init__(self, *, addr: int, bits: slice, reset = 0):
 		self._addr = addr
 		self._bits = bits
 
 		self.drp = DRPInterface()
 
-		self.value = Signal(bits.stop - bits.start, reset=reset)
+		self.value = Signal(bits.stop - bits.start, reset = reset)
 
 
 	def elaborate(self, platform):
@@ -134,7 +134,7 @@ class DRPFieldController(Elaboratable):
 
 		current_val = Signal.like(self.drp.do)
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 			with m.State('READ'):
 				m.d.comb += [
 					self.drp.en.eq(1)
@@ -195,7 +195,7 @@ class GTResetDeferrer(Elaboratable):
 		timer  = Signal(range(cycles))
 
 		# Defer reset immediately after configuration; and never again, even if our domain is reset.
-		defer  = Signal(reset=1, reset_less=True)
+		defer  = Signal(reset = 1, reset_less = True)
 
 		with m.If(defer):
 			m.d.ss += timer.eq(timer + 1)
@@ -236,7 +236,7 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 
 		saved_val = Signal.like(self.drp.do)
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 			with m.State('IDLE'):
 				m.d.comb += [
 					self.drp.lock.eq(0),
@@ -339,7 +339,7 @@ class GTOOBClockDivider(Elaboratable):
 	# be demodulated by the OOB detector; RXELECIDLE will be low during the burst, and
 	# high during the remainder of the repeat period.
 
-	def __init__(self, ss_clock_frequency, max_pulse_period=_LFPS_PERIOD_MAX):
+	def __init__(self, ss_clock_frequency, max_pulse_period = _LFPS_PERIOD_MAX):
 		# The generated clock must sample each half-period less than three times;
 		# so that no matter how the OOB detector clock aligns with the LFPS waveform,
 		# there would always be a transition.

@@ -65,7 +65,7 @@ class TSBurstDetector(Elaboratable):
 		Strobe; pulses high when a burst of ordered sets has been received.
 	'''
 
-	def __init__(self, *, set_data, first_word_ctrl=0b1111, sets_in_burst=1, include_config=False):
+	def __init__(self, *, set_data, first_word_ctrl = 0b1111, sets_in_burst = 1, include_config = False):
 		self._set_data            = set_data
 		self._first_word_ctrl     = first_word_ctrl
 		self._detection_threshold = sets_in_burst
@@ -98,7 +98,7 @@ class TSBurstDetector(Elaboratable):
 		ctrl  = self.sink.ctrl
 
 
-		def advance_on_match(count, target_ctrl=0b0000, fail_state='NONE_DETECTED'):
+		def advance_on_match(count, target_ctrl = 0b0000, fail_state = 'NONE_DETECTED'):
 			data_matches = (data == self._set_data[count])
 			ctrl_matches = (ctrl == target_ctrl)
 
@@ -113,7 +113,7 @@ class TSBurstDetector(Elaboratable):
 
 
 		last_state_number = len(self._set_data)
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# NONE_DETECTED -- we haven't seen any parts of our ordered set;
 			# we're waiting for the first one.
@@ -123,7 +123,7 @@ class TSBurstDetector(Elaboratable):
 
 			# WAIT_FOR_FIRST -- we're waiting to see the first word of our sequence
 			with m.State('WAIT_FOR_FIRST'):
-				advance_on_match(0, target_ctrl=self._first_word_ctrl, fail_state='WAIT_FOR_FIRST')
+				advance_on_match(0, target_ctrl = self._first_word_ctrl, fail_state = 'WAIT_FOR_FIRST')
 
 			# 1_DETECTED -- we're parsing the first data word; which we'll do slightly differently,
 			# as it can contain a variable configuration field.
@@ -178,7 +178,7 @@ class TSBurstDetector(Elaboratable):
 					m.d.ss += consecutive_set_count.eq(consecutive_set_count + 1)
 
 				with m.If(self.sink.valid):
-					advance_on_match(0, target_ctrl=self._first_word_ctrl)
+					advance_on_match(0, target_ctrl = self._first_word_ctrl)
 				with m.Else():
 					m.next = 'WAIT_FOR_FIRST'
 
@@ -197,7 +197,7 @@ class TSEmitter(Elaboratable):
 	on the last cycle of the generation. Training config can also be transmitted for TS1/TS2 Ordered
 	Sets.
 	'''
-	def __init__(self, *, set_data, first_word_ctrl=0b1111, transmit_burst_length=1, include_config=False):
+	def __init__(self, *, set_data, first_word_ctrl = 0b1111, transmit_burst_length = 1, include_config = False):
 		self._set_data          = set_data
 		self._first_word_ctrl   = first_word_ctrl
 		self._total_to_transmit = transmit_burst_length
@@ -224,7 +224,7 @@ class TSEmitter(Elaboratable):
 		# Keep track of how many ordered sets we've sent.
 		sent_ordered_sets = Signal(range(self._total_to_transmit))
 
-		with m.FSM(domain='ss'):
+		with m.FSM(domain = 'ss'):
 
 			# IDLE - we're currently waiting for a ``start`` request.=
 			with m.State('IDLE'):

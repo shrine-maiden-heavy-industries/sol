@@ -100,7 +100,7 @@ class ULPIRegisterWindow(Elaboratable):
 			self.done        .eq(0)
 		]
 
-		with m.FSM(domain='usb') as fsm:
+		with m.FSM(domain = 'usb') as fsm:
 
 			# We're busy whenever we're not IDLE; indicate so.
 			m.d.comb += self.busy.eq(~fsm.ongoing('IDLE'))
@@ -531,7 +531,7 @@ class ULPIRxEventDecoderTest(SolGatewareTestCase):
 			])
 		])
 
-		return ULPIRxEventDecoder(ulpi_bus=self.ulpi)
+		return ULPIRxEventDecoder(ulpi_bus = self.ulpi)
 
 
 	def initialize_signals(self):
@@ -608,7 +608,7 @@ class ULPIControlTranslator(Elaboratable):
 		O: busy           -- true iff the control translator is actively performing an operation
 	'''
 
-	def __init__(self, *, register_window, own_register_window=False):
+	def __init__(self, *, register_window, own_register_window = False):
 		'''
 		Parmaeters:
 			register_window     -- The ULPI register window to work with.
@@ -625,14 +625,14 @@ class ULPIControlTranslator(Elaboratable):
 		# I/O port
 		#
 		self.bus_idle      = Signal()
-		self.xcvr_select   = Signal(2, reset=0b01)
+		self.xcvr_select   = Signal(2, reset = 0b01)
 		self.term_select   = Signal()
 		self.op_mode       = Signal(2)
 		self.suspend       = Signal()
 
 		self.id_pullup     = Signal()
-		self.dp_pulldown   = Signal(reset=1)
-		self.dm_pulldown   = Signal(reset=1)
+		self.dp_pulldown   = Signal(reset = 1)
+		self.dm_pulldown   = Signal(reset = 1)
 
 		self.chrg_vbus     = Signal()
 		self.dischrg_vbus  = Signal()
@@ -640,7 +640,7 @@ class ULPIControlTranslator(Elaboratable):
 		self.busy          = Signal()
 
 		# Extra/non-UTMI properties.
-		self.use_external_vbus_indicator = Signal(reset=1)
+		self.use_external_vbus_indicator = Signal(reset = 1)
 
 		#
 		# Internal variables.
@@ -648,7 +648,7 @@ class ULPIControlTranslator(Elaboratable):
 		self._register_signals = {}
 
 
-	def add_composite_register(self, m, address, value, *, reset_value=0):
+	def add_composite_register(self, m, address, value, *, reset_value = 0):
 		''' Adds a ULPI register that's composed of multiple control signals.
 
 		Params:
@@ -660,12 +660,12 @@ class ULPIControlTranslator(Elaboratable):
 						-- of the given register; allowing us to avoid an initial write.
 		'''
 
-		current_register_value = Signal(8, reset=reset_value, name=f'current_register_value_{address:02x}')
+		current_register_value = Signal(8, reset = reset_value, name = f'current_register_value_{address:02x}')
 
 		# Create internal signals that request register updates.
-		write_requested = Signal(name=f'write_requested_{address:02x}')
-		write_value     = Signal(8, name=f'write_value_{address:02x}')
-		write_done      = Signal(name=f'write_done_{address:02x}')
+		write_requested = Signal(name = f'write_requested_{address:02x}')
+		write_value     = Signal(8, name = f'write_value_{address:02x}')
+		write_done      = Signal(name = f'write_done_{address:02x}')
 
 		self._register_signals[address] = {
 			'write_requested': write_requested,
@@ -689,14 +689,14 @@ class ULPIControlTranslator(Elaboratable):
 
 		# Function control.
 		function_control = Cat(self.xcvr_select, self.term_select, self.op_mode, Const(0), ~self.suspend, Const(0))
-		self.add_composite_register(m, 0x04, function_control, reset_value=0b01000001)
+		self.add_composite_register(m, 0x04, function_control, reset_value = 0b01000001)
 
 		# OTG control.
 		otg_control = Cat(
 			self.id_pullup, self.dp_pulldown, self.dm_pulldown, self.dischrg_vbus,
 			self.chrg_vbus, Const(0), Const(0), self.use_external_vbus_indicator
 		)
-		self.add_composite_register(m, 0x0A, otg_control, reset_value=0b00000110)
+		self.add_composite_register(m, 0x0A, otg_control, reset_value = 0b00000110)
 
 
 	def elaborate(self, platform):
@@ -759,7 +759,7 @@ class ControlTranslatorTest(SolGatewareTestCase):
 
 	def instantiate_dut(self):
 		self.reg_window = ULPIRegisterWindow()
-		return ULPIControlTranslator(register_window=self.reg_window, own_register_window=True)
+		return ULPIControlTranslator(register_window = self.reg_window, own_register_window = True)
 
 
 	def initialize_signals(self):
@@ -795,7 +795,7 @@ class ControlTranslatorTest(SolGatewareTestCase):
 
 		# which should occur until the data and address are accepted.
 		yield self.reg_window.ulpi_next.eq(1)
-		yield from self.wait_until(self.reg_window.done, timeout=10)
+		yield from self.wait_until(self.reg_window.done, timeout = 10)
 		yield
 		yield
 
@@ -805,7 +805,7 @@ class ControlTranslatorTest(SolGatewareTestCase):
 
 		# Wait for that action to complete..
 		yield self.reg_window.ulpi_next.eq(1)
-		yield from self.wait_until(self.reg_window.done, timeout=10)
+		yield from self.wait_until(self.reg_window.done, timeout = 10)
 		yield
 		yield
 
@@ -870,7 +870,7 @@ class ULPITransmitTranslator(Elaboratable):
 		m = Module()
 		bit_stuffing_disabled = (self.op_mode == self.OP_MODE_NO_BIT_STUFFING)
 
-		with m.FSM(domain='usb') as fsm:
+		with m.FSM(domain = 'usb') as fsm:
 
 			# Mark ourselves as busy whenever we're not in idle.
 			m.d.comb += self.busy.eq(~fsm.ongoing('IDLE'))
@@ -941,8 +941,8 @@ class ULPITransmitTranslator(Elaboratable):
 
 
 class ULPITransmitTranslatorTest(SolGatewareTestCase):
-	USB_CLOCK_FREQUENCY=60e6
-	SYNC_CLOCK_FREQUENCY=None
+	USB_CLOCK_FREQUENCY = 60e6
+	SYNC_CLOCK_FREQUENCY = None
 
 	FRAGMENT_UNDER_TEST = ULPITransmitTranslator
 
@@ -1095,7 +1095,7 @@ class UTMITranslator(Elaboratable):
 		return properties
 
 
-	def __init__(self, *, ulpi, use_platform_registers=True, handle_clocking=True):
+	def __init__(self, *, ulpi, use_platform_registers = True, handle_clocking = True):
 		''' Params:
 
 			ulpi                   -- The ULPI bus to communicate with.
@@ -1134,11 +1134,11 @@ class UTMITranslator(Elaboratable):
 
 		# RxEvent-based flags.
 		for signal_name, size in self.RXEVENT_STATUS_SIGNALS:
-			self.__dict__[signal_name] = Signal(size, name=signal_name)
+			self.__dict__[signal_name] = Signal(size, name = signal_name)
 
 		# Control signals.
 		for signal_name, size in self.CONTROL_SIGNALS:
-			self.__dict__[signal_name] = Signal(size, name=signal_name)
+			self.__dict__[signal_name] = Signal(size, name = signal_name)
 
 		# Diagnostic I/O.
 		self.last_rx_command = Signal(8)
@@ -1151,7 +1151,7 @@ class UTMITranslator(Elaboratable):
 		self._extra_registers = {}
 
 
-	def add_extra_register(self, write_address, write_value, *, default_value=None):
+	def add_extra_register(self, write_address, write_value, *, default_value = None):
 		''' Adds logic to configure an extra ULPI register. Useful for configuring vendor registers.
 
 		Params:
@@ -1181,8 +1181,8 @@ class UTMITranslator(Elaboratable):
 
 		# Create the component parts of our ULPI interfacing hardware.
 		m.submodules.register_window     = register_window     = ULPIRegisterWindow()
-		m.submodules.control_translator  = control_translator  = ULPIControlTranslator(register_window=register_window)
-		m.submodules.rxevent_decoder     = rxevent_decoder     = ULPIRxEventDecoder(ulpi_bus=self.ulpi)
+		m.submodules.control_translator  = control_translator  = ULPIControlTranslator(register_window = register_window)
+		m.submodules.rxevent_decoder     = rxevent_decoder     = ULPIRxEventDecoder(ulpi_bus = self.ulpi)
 		m.submodules.transmit_translator = transmit_translator = ULPITransmitTranslator()
 
 		# If we're choosing to honor any registers defined in the platform file, apply those
@@ -1201,7 +1201,7 @@ class UTMITranslator(Elaboratable):
 
 		# Add any extra registers provided by the user to our control translator.
 		for address, values in self._extra_registers.items():
-			control_translator.add_composite_register(m, address, values['value'], reset_value=values['default'])
+			control_translator.add_composite_register(m, address, values['value'], reset_value = values['default'])
 
 		# Keep track of when any of our components are busy
 		any_busy = \
@@ -1298,7 +1298,7 @@ class UTMITranslator(Elaboratable):
 		# A transmission starts when DIR goes high with NXT, or when an RxEvent indicates
 		# a switch from RxActive = 0 to RxActive = 1. A transmission stops when DIR drops low,
 		# or when the RxEvent RxActive bit drops from 1 to 0, or an error occurs.A
-		dir_rising_edge = Rose(self.ulpi.dir.i, domain='usb')
+		dir_rising_edge = Rose(self.ulpi.dir.i, domain = 'usb')
 		dir_based_start = dir_rising_edge & self.ulpi.nxt
 
 

@@ -49,7 +49,7 @@ class USBControlEndpoint(Elaboratable):
 			and timer should be set to None; and will be ignored.
 	'''
 
-	def __init__(self, *, utmi, endpoint_number=0, standalone=False, max_packet_size=64):
+	def __init__(self, *, utmi, endpoint_number = 0, standalone = False, max_packet_size = 64):
 		self.utmi             = utmi
 		self._standalone      = standalone
 		self._endpoint_number = endpoint_number
@@ -85,7 +85,7 @@ class USBControlEndpoint(Elaboratable):
 
 		Parameters will be passed on to StandardRequestHandler.
 		'''
-		handler = StandardRequestHandler(descriptors, max_packet_size=self._max_packet_size, **kwargs)
+		handler = StandardRequestHandler(descriptors, max_packet_size = self._max_packet_size, **kwargs)
 		self._request_handlers.append(handler)
 
 
@@ -125,7 +125,7 @@ class USBControlEndpoint(Elaboratable):
 			]
 
 			# ... and our tokenizer.
-			m.submodules.token_detector = tokenizer = USBTokenDetector(utmi=self.utmi)
+			m.submodules.token_detector = tokenizer = USBTokenDetector(utmi = self.utmi)
 			m.d.comb += tokenizer.interface.connect(interface.tokenizer)
 
 
@@ -148,7 +148,7 @@ class USBControlEndpoint(Elaboratable):
 		#
 
 		# Create our SETUP packet decoder.
-		m.submodules.setup_decoder = setup_decoder = USBSetupDecoder(utmi=self.utmi)
+		m.submodules.setup_decoder = setup_decoder = USBSetupDecoder(utmi = self.utmi)
 		m.d.comb += [
 			interface.data_crc   .connect(setup_decoder.data_crc),
 			interface.tokenizer  .connect(setup_decoder.tokenizer),
@@ -211,7 +211,7 @@ class USBControlEndpoint(Elaboratable):
 		# Behavior dictated by [USB2, 8.5.3].
 		#
 		endpoint_targeted = (self.interface.tokenizer.endpoint == self._endpoint_number)
-		with m.FSM(domain='usb'):
+		with m.FSM(domain = 'usb'):
 
 			# SETUP -- The 'SETUP' phase of a control request. We'll wait here
 			# until the SetupDetector detects a valid setup packet for us.

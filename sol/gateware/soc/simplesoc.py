@@ -44,7 +44,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 	BUS_ADDRESS_WIDTH = 30
 
-	def __init__(self, clock_frequency=int(60e6)):
+	def __init__(self, clock_frequency = int(60e6)):
 		'''
 		Parameters:
 			clock_frequency -- The frequency of our `sync` domain, in MHz.
@@ -72,18 +72,18 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		#
 
 		# Create our CPU.
-		self.cpu = MinervaCPU(with_debug=False)
+		self.cpu = MinervaCPU(with_debug = False)
 
 		# Create our interrupt controller.
-		self.intc = GenericInterruptController(width=32)
+		self.intc = GenericInterruptController(width = 32)
 
 		# Create our bus decoder and set up our memory map.
-		self.bus_decoder = wishbone.Decoder(addr_width=30, data_width=32, granularity=8, features={'cti', 'bte'})
+		self.bus_decoder = wishbone.Decoder(addr_width = 30, data_width = 32, granularity = 8, features = {'cti', 'bte'})
 		self.memory_map  = self.bus_decoder.bus.memory_map
 
 
 
-	def add_rom(self, data, size, addr=0, is_main_rom=True):
+	def add_rom(self, data, size, addr = 0, is_main_rom = True):
 		''' Creates a simple ROM and adds it to the design.
 
 		Parameters:
@@ -95,11 +95,11 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		# Figure out how many address bits we'll need to address the given memory size.
 		addr_width = (size - 1).bit_length()
 
-		rom = WishboneROM(data, addr_width=addr_width)
+		rom = WishboneROM(data, addr_width = addr_width)
 		if self._main_rom is None and is_main_rom:
 			self._main_rom = rom
 
-		return self.add_peripheral(rom, addr=addr)
+		return self.add_peripheral(rom, addr = addr)
 
 
 	def add_ram(self, size: int, addr: int = None, is_main_mem: bool = True):
@@ -114,14 +114,14 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		addr_width = (size - 1).bit_length()
 
 		# ... and add it as a peripheral.
-		ram = WishboneRAM(addr_width=addr_width)
+		ram = WishboneRAM(addr_width = addr_width)
 		if self._main_ram is None and is_main_mem:
 			self._main_ram = ram
 
-		return self.add_peripheral(ram, addr=addr)
+		return self.add_peripheral(ram, addr = addr)
 
 
-	def add_peripheral(self, p, *, as_submodule=True, **kwargs):
+	def add_peripheral(self, p, *, as_submodule = True, **kwargs):
 		''' Adds a peripheral to the SoC.
 
 		For now, this is identical to adding a peripheral to the SoC's wishbone bus.
@@ -157,7 +157,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		self._auto_debug = True
 
 
-	def add_bios_and_peripherals(self, uart_pins, uart_baud_rate=115200, fixed_addresses=False):
+	def add_bios_and_peripherals(self, uart_pins, uart_baud_rate = 115200, fixed_addresses = False):
 		''' Adds a simple BIOS that allows loading firmware, and the requisite peripherals.
 
 		Automatically adds the following peripherals:
@@ -181,22 +181,22 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		# as that's what the lambdasoc BIOS expects. These are effectively internal.
 		#
 		addr = 0x0000_0000 if fixed_addresses else None
-		self.rom = SRAMPeripheral(size=0x4000, writable=False)
-		self.add_peripheral(self.rom, addr=addr)
+		self.rom = SRAMPeripheral(size = 0x4000, writable = False)
+		self.add_peripheral(self.rom, addr = addr)
 
 		addr = 0x0001_0000 if fixed_addresses else None
-		self.ram = SRAMPeripheral(size=0x1000)
-		self.add_peripheral(self.ram, addr=addr)
+		self.ram = SRAMPeripheral(size = 0x1000)
+		self.add_peripheral(self.ram, addr = addr)
 
 		# Add our UART and Timer.
 		# Again, names are fixed.
 		addr = 0x0002_0000 if fixed_addresses else None
-		self.timer = TimerPeripheral(width=32)
-		self.add_peripheral(self.timer, addr=addr)
+		self.timer = TimerPeripheral(width = 32)
+		self.add_peripheral(self.timer, addr = addr)
 
 		addr = 0x0003_0000 if fixed_addresses else None
-		self.uart = AsyncSerialPeripheral(divisor=int(self.clk_freq // uart_baud_rate), pins=uart_pins)
-		self.add_peripheral(self.uart, addr=addr)
+		self.uart = AsyncSerialPeripheral(divisor = int(self.clk_freq // uart_baud_rate), pins = uart_pins)
+		self.add_peripheral(self.uart, addr = addr)
 
 
 
@@ -221,7 +221,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		# to an arbiter, so they both share use of the single bus.
 
 		# Create the arbiter around our main bus...
-		m.submodules.bus_arbiter = arbiter = wishbone.Arbiter(addr_width=30, data_width=32, granularity=8, features={'cti', 'bte'})
+		m.submodules.bus_arbiter = arbiter = wishbone.Arbiter(addr_width = 30, data_width = 32, granularity = 8, features = {'cti', 'bte'})
 		m.d.comb += arbiter.bus.connect(self.bus_decoder.bus)
 
 		# ... and connect it to the CPU instruction and data busses.
@@ -234,17 +234,17 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		# If we're automatically creating a debug connection, do so.
 		if self._auto_debug:
 			m.d.comb += [
-				self.cpu._cpu.jtag.tck  .eq(synchronize(m, platform.request('user_io', 0, dir='i').i)),
-				self.cpu._cpu.jtag.tms  .eq(synchronize(m, platform.request('user_io', 1, dir='i').i)),
-				self.cpu._cpu.jtag.tdi  .eq(synchronize(m, platform.request('user_io', 2, dir='i').i)),
-				platform.request('user_io', 3, dir='o').o  .eq(self.cpu._cpu.jtag.tdo)
+				self.cpu._cpu.jtag.tck  .eq(synchronize(m, platform.request('user_io', 0, dir = 'i').i)),
+				self.cpu._cpu.jtag.tms  .eq(synchronize(m, platform.request('user_io', 1, dir = 'i').i)),
+				self.cpu._cpu.jtag.tdi  .eq(synchronize(m, platform.request('user_io', 2, dir = 'i').i)),
+				platform.request('user_io', 3, dir = 'o').o  .eq(self.cpu._cpu.jtag.tdo)
 			]
 
 		return m
 
 
 
-	def resources(self, omit_bios_mem=True):
+	def resources(self, omit_bios_mem = True):
 		''' Creates an iterator over each of the device's addressable resources.
 
 		Yields (resource, address, size) for each resource.
@@ -274,7 +274,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 				yield resource, peripheral_start + register_offset, size
 
 
-	def build(self, name=None, build_dir='build'):
+	def build(self, name = None, build_dir = 'build'):
 		''' Builds any internal artifacts necessary to create our CPU.
 
 		This is usually used for e.g. building our BIOS.
@@ -288,7 +288,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		# If we're building a BIOS, let our superclass build a BIOS for us.
 		if self._build_bios:
 			log.info('Building SoC BIOS...')
-			super().build(name=name, build_dir=os.path.join(build_dir, 'soc'), do_build=True, do_init=True)
+			super().build(name = name, build_dir = os.path.join(build_dir, 'soc'), do_build = True, do_init = True)
 			log.info('BIOS build complete. Continuing with SoC build.')
 
 		self.log_resources()
@@ -326,7 +326,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 		emit('#ifndef read_csr')
 		emit('#define read_csr(reg) ({ unsigned long __tmp; \\')
-		emit('  asm volatile ("csrr %0, " #reg : "=r"(__tmp)); \\')
+		emit('  asm volatile ("csrr %0, " #reg : " = r"(__tmp)); \\')
 		emit('  __tmp; })')
 		emit('#endif')
 		emit('')
@@ -337,13 +337,13 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		emit('')
 		emit('#ifndef set_csr')
 		emit('#define set_csr(reg, bit) ({ unsigned long __tmp; \\')
-		emit('  asm volatile ("csrrs %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); \\')
+		emit('  asm volatile ("csrrs %0, " #reg ", %1" : " = r"(__tmp) : "rK"(bit)); \\')
 		emit('  __tmp; })')
 		emit('#endif')
 		emit('')
 		emit('#ifndef clear_csr')
 		emit('#define clear_csr(reg, bit) ({ unsigned long __tmp; \\')
-		emit('  asm volatile ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); \\')
+		emit('  asm volatile ("csrrc %0, " #reg ", %1" : " = r"(__tmp) : "rK"(bit)); \\')
 		emit('  __tmp; })')
 		emit('#endif')
 		emit('')
@@ -389,7 +389,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 
-	def generate_c_header(self, macro_name='SOC_RESOURCES', file=None, platform_name='Generic Platform'):
+	def generate_c_header(self, macro_name = 'SOC_RESOURCES', file = None, platform_name = 'Generic Platform'):
 		''' Generates a C header file that simplifies access to the platform's resources.
 
 		Parameters:
@@ -400,7 +400,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 		def emit(content):
 			''' Utility function that emits a string to the targeted file. '''
-			print(content, file=file)
+			print(content, file = file)
 
 		# Create a mapping that maps our register sizes to C types.
 		types_for_size = {
@@ -491,7 +491,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		emit('')
 
 
-	def generate_ld_script(self, file=None):
+	def generate_ld_script(self, file = None):
 		''' Generates an ldscript that holds our primary RAM and ROM regions.
 
 		Parameters:
@@ -501,7 +501,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 		def emit(content):
 			''' Utility function that emits a string to the targeted file. '''
-			print(content, file=file)
+			print(content, file = file)
 
 
 		# Insert our automatically generated header.

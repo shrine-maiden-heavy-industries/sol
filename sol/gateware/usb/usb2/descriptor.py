@@ -35,7 +35,7 @@ class USBDescriptorStreamGenerator(ConstantStreamGenerator):
 		# Always create USB descriptors in the USB domain; always have a maximum length field that can
 		# be up to 16 bits wide, and always use USBInStream's. These allow us to tie easily to our request
 		# handlers.
-		super().__init__(data, domain='usb', stream_type=USBInStreamInterface, max_length_width=16)
+		super().__init__(data, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 16)
 
 
 
@@ -56,7 +56,7 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 		O: stall      -- Pulsed if a STALL handshake should be generated, instead of a response.
 	'''
 
-	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length=64):
+	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length = 64):
 		'''
 		Parameteres:
 			descriptor_collection -- The DeviceDescriptorCollection containing the descriptors
@@ -116,7 +116,7 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 			]
 
 			# ... and attach it to this module.
-			type_ref =  type_number.name if isinstance(type_number, StandardDescriptorNumbers) else type_number
+			type_ref = type_number.name if isinstance(type_number, StandardDescriptorNumbers) else type_number
 			setattr(m.submodules, f'USBDescriptorStreamGenerator({type_ref},{index})', generator)
 
 
@@ -167,7 +167,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 	COUNT_SIZE_BITS   = 16
 	ADDRESS_SIZE_BITS = 16
 
-	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length=64, domain='usb'):
+	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length = 64, domain = 'usb'):
 		'''
 		Parameters
 		----------
@@ -371,8 +371,8 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		#
 		rom_content, descriptor_max_length, max_type_index = self.generate_rom_content()
 
-		rom = Memory(width=32, depth=len(rom_content), init=rom_content)
-		m.submodules.rom_read_port = rom_read_port = rom.read_port(transparent=False)
+		rom = Memory(width = 32, depth = len(rom_content), init = rom_content)
+		m.submodules.rom_read_port = rom_read_port = rom.read_port(transparent = False)
 
 		# Create convenience aliases to the upper and lower half of the ROM.
 		rom_upper_half = rom_read_port.data.word_select(1, 16)
@@ -590,7 +590,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 		return (dut.value, dut.length, dut.start_position, dut.start, dut.stall,
 				dut.tx.ready, dut.tx.first, dut.tx.last, dut.tx.payload, dut.tx.valid)
 
-	def _test_descriptor(self, type_number, index, raw_descriptor, start_position, max_length, delay_ready=0):
+	def _test_descriptor(self, type_number, index, raw_descriptor, start_position, max_length, delay_ready = 0):
 		''' Triggers a read and checks if correct data is transmitted. '''
 
 		# Set a defined start before starting
@@ -608,7 +608,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 
 		yield self.dut.start.eq(0)
 
-		yield from self.wait_until(self.dut.tx.valid, timeout=100)
+		yield from self.wait_until(self.dut.tx.valid, timeout = 100)
 
 		if delay_ready > 0:
 			for _ in range(delay_ready-1):
@@ -666,7 +666,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 	def test_all_descriptors(self):
 		for type_number, index, raw_descriptor in self.descriptors:
 			yield from self._test_descriptor(type_number, index, raw_descriptor, 0, len(raw_descriptor))
-			yield from self._test_descriptor(type_number, index, raw_descriptor, 0, len(raw_descriptor), delay_ready=10)
+			yield from self._test_descriptor(type_number, index, raw_descriptor, 0, len(raw_descriptor), delay_ready = 10)
 
 	@usb_domain_test_case
 	def test_all_descriptors_with_offset(self):
@@ -679,7 +679,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 		for type_number, index, raw_descriptor in self.descriptors:
 			if len(raw_descriptor) > 1:
 				yield from self._test_descriptor(type_number, index, raw_descriptor, 0, min(8, len(raw_descriptor)-1))
-				yield from self._test_descriptor(type_number, index, raw_descriptor, 0, min(8, len(raw_descriptor)-1), delay_ready=10)
+				yield from self._test_descriptor(type_number, index, raw_descriptor, 0, min(8, len(raw_descriptor)-1), delay_ready = 10)
 
 	@usb_domain_test_case
 	def test_all_descriptors_with_offset_and_length(self):

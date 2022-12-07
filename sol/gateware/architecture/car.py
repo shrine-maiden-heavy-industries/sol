@@ -26,7 +26,7 @@ class PHYResetController(Elaboratable):
 		O: phy_reset -- The signal to be delivered to the target PHY.
 	'''
 
-	def __init__(self, *, clock_frequency=60e6, reset_length=2e-6, stop_length=2e-6, power_on_reset=True):
+	def __init__(self, *, clock_frequency = 60e6, reset_length = 2e-6, stop_length = 2e-6, power_on_reset = True):
 		''' Params:
 
 			reset_length   -- The length of a reset pulse, in seconds.
@@ -59,7 +59,7 @@ class PHYResetController(Elaboratable):
 		cycles_in_reset = Signal(range(0, self.reset_length_cycles))
 
 		reset_state = 'RESETTING' if self.power_on_reset else 'IDLE'
-		with m.FSM(reset=reset_state, domain='sync') as fsm:
+		with m.FSM(reset = reset_state, domain = 'sync') as fsm:
 
 			# Drive the PHY reset whenever we're in the RESETTING cycle.
 			m.d.comb += [
@@ -130,7 +130,7 @@ class PHYResetControllerTest(SolGatewareTestCase):
 
 
 
-class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
+class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
 	''' Helper that generates the clock domains used in a SOL board.
 
 	Note that this module should create three in-phase clocks; so these domains
@@ -144,7 +144,7 @@ class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
 							and thus we should avoid transactions with the external PHY.
 	'''
 
-	def __init__(self, *, clock_signal_name=None, clock_signal_frequency=60.0):
+	def __init__(self, *, clock_signal_name = None, clock_signal_frequency = 60.0):
 		'''
 		Parameters:
 			clock_signal_name      = The clock signal name to use; or None to use the platform's default clock.
@@ -214,9 +214,9 @@ class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
 			self.clk_sync                  .eq(self.generate_sync_clock(m, platform)),
 			self.clk_fast                  .eq(self.generate_fast_clock(m, platform)),
 
-			ClockSignal(domain='fast')     .eq(self.clk_fast),
-			ClockSignal(domain='sync')     .eq(self.clk_sync),
-			ClockSignal(domain='usb')      .eq(self.clk_usb),
+			ClockSignal(domain = 'fast')     .eq(self.clk_fast),
+			ClockSignal(domain = 'sync')     .eq(self.clk_sync),
+			ClockSignal(domain = 'usb')      .eq(self.clk_usb),
 		]
 
 		# Call the hook that will connect up our reset signals.
@@ -241,7 +241,7 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		'usb':  60
 	}
 
-	def __init__(self, *, clock_frequencies=None, clock_signal_name=None):
+	def __init__(self, *, clock_frequencies = None, clock_signal_name = None):
 		'''
 		Parameters:
 			clock_frequencies -- A dictionary mapping 'fast', 'sync', and 'usb' to the clock
@@ -250,7 +250,7 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 								 assumed to be 240, sync will assumed to be 120, and usb will
 								 be assumed to be a standard 60.
 		'''
-		super().__init__(clock_signal_name=clock_signal_name)
+		super().__init__(clock_signal_name = clock_signal_name)
 		self.clock_frequencies = clock_frequencies
 
 
@@ -292,7 +292,7 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 			log.warning('USB communication won\'t work for f_OSC != 60MHz.')
 
 			input_clock = Signal()
-			m.submodules += Instance('OSCG', p_DIV=self.OSCG_DIV, o_OSC=input_clock)
+			m.submodules += Instance('OSCG', p_DIV = self.OSCG_DIV, o_OSC = input_clock)
 			clock_frequency = 62.0
 		else:
 			input_clock = platform.request(clock_name)
@@ -318,76 +318,76 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		m.submodules.pll = Instance('EHXPLLL',
 
 				# Clock in.
-				i_CLKI=input_clock,
+				i_CLKI = input_clock,
 
 				# Generated clock outputs.
-				o_CLKOP=self._clk_240MHz,
-				o_CLKOS=self._clk_120MHz,
-				o_CLKOS2=self._clk_60MHz,
+				o_CLKOP = self._clk_240MHz,
+				o_CLKOS = self._clk_120MHz,
+				o_CLKOS2 = self._clk_60MHz,
 
 				# Status.
-				o_LOCK=self._pll_lock,
+				o_LOCK = self._pll_lock,
 
 				# PLL parameters...
-				p_PLLRST_ENA='DISABLED',
-				p_INTFB_WAKE='DISABLED',
-				p_STDBY_ENABLE='DISABLED',
-				p_DPHASE_SOURCE='DISABLED',
-				p_CLKOS3_FPHASE=0,
-				p_CLKOS3_CPHASE=0,
-				p_CLKOS2_FPHASE=0,
-				p_CLKOS2_CPHASE=7,
-				p_CLKOS_FPHASE=0,
-				p_CLKOS_CPHASE=3,
-				p_CLKOP_FPHASE=0,
-				p_CLKOP_CPHASE=1,
-				p_PLL_LOCK_MODE=0,
-				p_CLKOS_TRIM_DELAY='0',
-				p_CLKOS_TRIM_POL='FALLING',
-				p_CLKOP_TRIM_DELAY='0',
-				p_CLKOP_TRIM_POL='FALLING',
-				p_OUTDIVIDER_MUXD='DIVD',
-				p_CLKOS3_ENABLE='DISABLED',
-				p_OUTDIVIDER_MUXC='DIVC',
-				p_CLKOS2_ENABLE='ENABLED',
-				p_OUTDIVIDER_MUXB='DIVB',
-				p_CLKOS_ENABLE='ENABLED',
-				p_OUTDIVIDER_MUXA='DIVA',
-				p_CLKOP_ENABLE='ENABLED',
-				p_CLKOS3_DIV=1,
-				p_CLKOS2_DIV=8,
-				p_CLKOS_DIV=4,
-				p_CLKOP_DIV=2,
-				p_CLKFB_DIV=pll_params['CLKFB_DIV'],
-				p_CLKI_DIV=1,
-				p_FEEDBK_PATH='CLKOP',
+				p_PLLRST_ENA = 'DISABLED',
+				p_INTFB_WAKE = 'DISABLED',
+				p_STDBY_ENABLE = 'DISABLED',
+				p_DPHASE_SOURCE = 'DISABLED',
+				p_CLKOS3_FPHASE = 0,
+				p_CLKOS3_CPHASE = 0,
+				p_CLKOS2_FPHASE = 0,
+				p_CLKOS2_CPHASE = 7,
+				p_CLKOS_FPHASE = 0,
+				p_CLKOS_CPHASE = 3,
+				p_CLKOP_FPHASE = 0,
+				p_CLKOP_CPHASE = 1,
+				p_PLL_LOCK_MODE = 0,
+				p_CLKOS_TRIM_DELAY = '0',
+				p_CLKOS_TRIM_POL = 'FALLING',
+				p_CLKOP_TRIM_DELAY = '0',
+				p_CLKOP_TRIM_POL = 'FALLING',
+				p_OUTDIVIDER_MUXD = 'DIVD',
+				p_CLKOS3_ENABLE = 'DISABLED',
+				p_OUTDIVIDER_MUXC = 'DIVC',
+				p_CLKOS2_ENABLE = 'ENABLED',
+				p_OUTDIVIDER_MUXB = 'DIVB',
+				p_CLKOS_ENABLE = 'ENABLED',
+				p_OUTDIVIDER_MUXA = 'DIVA',
+				p_CLKOP_ENABLE = 'ENABLED',
+				p_CLKOS3_DIV = 1,
+				p_CLKOS2_DIV = 8,
+				p_CLKOS_DIV = 4,
+				p_CLKOP_DIV = 2,
+				p_CLKFB_DIV = pll_params['CLKFB_DIV'],
+				p_CLKI_DIV = 1,
+				p_FEEDBK_PATH = 'CLKOP',
 
 				# Internal feedback.
-				i_CLKFB=self._clk_240MHz,
+				i_CLKFB = self._clk_240MHz,
 
 				# Control signals.
-				i_RST=0,
-				i_PHASESEL0=0,
-				i_PHASESEL1=0,
-				i_PHASEDIR=0,
-				i_PHASESTEP=0,
-				i_PHASELOADREG=0,
-				i_STDBY=0,
-				i_PLLWAKESYNC=0,
+				i_RST = 0,
+				i_PHASESEL0 = 0,
+				i_PHASESEL1 = 0,
+				i_PHASEDIR = 0,
+				i_PHASESTEP = 0,
+				i_PHASELOADREG = 0,
+				i_STDBY = 0,
+				i_PLLWAKESYNC = 0,
 
 				# Output Enables.
-				i_ENCLKOP=0,
-				i_ENCLKOS=0,
-				i_ENCLKOS2=0,
-				i_ENCLKOS3=0,
+				i_ENCLKOP = 0,
+				i_ENCLKOS = 0,
+				i_ENCLKOS2 = 0,
+				i_ENCLKOS3 = 0,
 
 				# Synthesis attributes.
-				a_FREQUENCY_PIN_CLKI='60.000000',
-				a_FREQUENCY_PIN_CLKOS2='60.000000',
-				a_FREQUENCY_PIN_CLKOS='120.000000',
-				a_FREQUENCY_PIN_CLKOP='240.000000',
-				a_ICP_CURRENT='9',
-				a_LPF_RESISTOR='8'
+				a_FREQUENCY_PIN_CLKI = '60.000000',
+				a_FREQUENCY_PIN_CLKOS2 = '60.000000',
+				a_FREQUENCY_PIN_CLKOS = '120.000000',
+				a_FREQUENCY_PIN_CLKOP = '240.000000',
+				a_ICP_CURRENT = '9',
+				a_LPF_RESISTOR = '8'
 		)
 
 
@@ -410,7 +410,7 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		return self._clock_options[self.clock_frequencies['fast']]
 
 
-	def stretch_sync_strobe_to_usb(self, m, strobe, output=None, allow_delay=False):
+	def stretch_sync_strobe_to_usb(self, m, strobe, output = None, allow_delay = False):
 		'''
 		Helper that stretches a strobe from the `sync` domain to communicate with the `usn` domain.
 		Works for any chosen frequency in which f(usb) < f(sync).
@@ -418,4 +418,4 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 
 		# TODO: replace with Torii's pulsesynchronizer?
 		to_cycles = self.clock_frequencies['sync'] // self.clock_frequencies['usb']
-		return stretch_strobe_signal(m, strobe, output=output, to_cycles=to_cycles, allow_delay=allow_delay)
+		return stretch_strobe_signal(m, strobe, output = output, to_cycles = to_cycles, allow_delay = allow_delay)

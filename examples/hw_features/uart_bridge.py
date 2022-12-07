@@ -28,7 +28,7 @@ class UARTBridgeExample(Elaboratable):
 		char_freq  = int(6e6)
 
 		# Create our UART transmitter.
-		transmitter = UARTTransmitter(divisor=int(clock_freq // 115200))
+		transmitter = UARTTransmitter(divisor = int(clock_freq // 115200))
 		m.submodules.transmitter = transmitter
 		stream = transmitter.stream
 

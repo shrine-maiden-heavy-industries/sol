@@ -87,18 +87,18 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		m = Module()
 
 		# Generate our clock domains.
-		clocking = SolECP5DomainGenerator(clock_frequencies=CLOCK_FREQUENCIES)
+		clocking = SolECP5DomainGenerator(clock_frequencies = CLOCK_FREQUENCIES)
 		m.submodules.clocking = clocking
 
-		registers = JTAGRegisterInterface(default_read_value=0xDEADBEEF)
+		registers = JTAGRegisterInterface(default_read_value = 0xDEADBEEF)
 		m.submodules.registers = registers
 
 		# Simple applet ID register.
-		registers.add_read_only_register(REGISTER_ID, read=0x54455354)
+		registers.add_read_only_register(REGISTER_ID, read = 0x54455354)
 
 		# LED test register.
-		led_reg = registers.add_register(REGISTER_LEDS, size=6, name='leds', reset=0b111111)
-		led_out   = Cat([platform.request('led', i, dir='o') for i in range(0, 6)])
+		led_reg = registers.add_register(REGISTER_LEDS, size = 6, name = 'leds', reset = 0b111111)
+		led_out   = Cat([platform.request('led', i, dir = 'o') for i in range(0, 6)])
 		m.d.comb += led_out.eq(led_reg)
 
 		#
@@ -113,9 +113,9 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		power_test_write_strobe = Signal()
 		power_test_write_value  = Signal(2)
 		registers.add_sfr(REGISTER_TARGET_POWER,
-			read=power_test_reg,
-			write_strobe=power_test_write_strobe,
-			write_signal=power_test_write_value
+			read = power_test_reg,
+			write_strobe = power_test_write_strobe,
+			write_signal = power_test_write_value
 		)
 
 		# Store the values for our enable bits.
@@ -146,14 +146,14 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		#
 
 		# Data direction register.
-		user_io_dir = registers.add_register(REGISTER_USER_IO_DIR, size=2)
+		user_io_dir = registers.add_register(REGISTER_USER_IO_DIR, size = 2)
 
 		# Pin (input) state register.
 		user_io_in  = Signal(2)
-		registers.add_sfr(REGISTER_USER_IO_IN, read=user_io_in)
+		registers.add_sfr(REGISTER_USER_IO_IN, read = user_io_in)
 
 		# Output value register.
-		user_io_out = registers.add_register(REGISTER_USER_IO_OUT, size=2)
+		user_io_out = registers.add_register(REGISTER_USER_IO_OUT, size = 2)
 
 		# Grab and connect each of our user-I/O ports our GPIO registers.
 		for i in range(2):
@@ -169,16 +169,16 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		# ULPI PHY windows
 		#
 		self.add_ulpi_registers(m, platform,
-			ulpi_bus='target_phy',
-			register_base=REGISTER_TARGET_ADDR
+			ulpi_bus = 'target_phy',
+			register_base = REGISTER_TARGET_ADDR
 		)
 		self.add_ulpi_registers(m, platform,
-			ulpi_bus='host_phy',
-			register_base=REGISTER_HOST_ADDR
+			ulpi_bus = 'host_phy',
+			register_base = REGISTER_HOST_ADDR
 		)
 		self.add_ulpi_registers(m, platform,
-			ulpi_bus='sideband_phy',
-			register_base=REGISTER_SIDEBAND_ADDR
+			ulpi_bus = 'sideband_phy',
+			register_base = REGISTER_SIDEBAND_ADDR
 		)
 
 
@@ -186,13 +186,13 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		# HyperRAM test connections.
 		#
 		ram_bus = platform.request('ram')
-		psram = HyperRAMInterface(bus=ram_bus, **platform.ram_timings)
+		psram = HyperRAMInterface(bus = ram_bus, **platform.ram_timings)
 		m.submodules += psram
 
 		psram_address_changed = Signal()
-		psram_address = registers.add_register(REGISTER_RAM_REG_ADDR, write_strobe=psram_address_changed)
+		psram_address = registers.add_register(REGISTER_RAM_REG_ADDR, write_strobe = psram_address_changed)
 
-		registers.add_sfr(REGISTER_RAM_VALUE, read=psram.read_data)
+		registers.add_sfr(REGISTER_RAM_VALUE, read = psram.read_data)
 
 		# Hook up our PSRAM.
 		m.d.comb += [
@@ -234,24 +234,24 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		# ULPI register address.
 		registers = m.submodules.registers
 		registers.add_register(register_base + 0,
-			write_strobe=register_address_change,
-			value_signal=ulpi_reg_window.address,
-			size=6
+			write_strobe = register_address_change,
+			value_signal = ulpi_reg_window.address,
+			size = 6
 		)
 		m.submodules.clocking.stretch_sync_strobe_to_usb(m,
-			strobe=register_address_change,
-			output=ulpi_reg_window.read_request,
+			strobe = register_address_change,
+			output = ulpi_reg_window.read_request,
 		)
 
 		# ULPI register value.
 		registers.add_sfr(register_base + 1,
-			read=ulpi_reg_window.read_data,
-			write_signal=ulpi_reg_window.write_data,
-			write_strobe=register_value_change
+			read = ulpi_reg_window.read_data,
+			write_signal = ulpi_reg_window.write_data,
+			write_strobe = register_value_change
 		)
 		m.submodules.clocking.stretch_sync_strobe_to_usb(m,
-			strobe=register_value_change,
-			output=ulpi_reg_window.write_request
+			strobe = register_value_change,
+			output = ulpi_reg_window.write_request
 		)
 
 
@@ -326,7 +326,7 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		self.dut.registers.register_write(REGISTER_RAM_REG_ADDR, address)
 		self.dut.registers.register_write(REGISTER_RAM_REG_ADDR, address)
-		actual_value =  self.dut.registers.register_read(REGISTER_RAM_VALUE)
+		actual_value = self.dut.registers.register_read(REGISTER_RAM_VALUE)
 
 		if actual_value not in expected_values:
 			raise AssertionError(f'RAM register {address} was {actual_value}, not one of expected {expected_values}')

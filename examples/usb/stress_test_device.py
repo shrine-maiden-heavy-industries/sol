@@ -61,7 +61,7 @@ class StressTestEndpoint(Elaboratable):
 		tx        = interface.tx
 
 		# Counter that stores how many bytes we have left to send.
-		bytes_to_send = Signal(range(0, self._max_packet_size + 1), reset=0)
+		bytes_to_send = Signal(range(0, self._max_packet_size + 1), reset = 0)
 
 		# True iff we're the active endpoint.
 		endpoint_selected = \
@@ -160,7 +160,7 @@ class USBStressTest(Elaboratable):
 
 		# Create our USB device interface...
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.usb = usb = USBDevice(bus=ulpi)
+		m.submodules.usb = usb = USBDevice(bus = ulpi)
 
 		# Add our standard control endpoint to the device.
 		descriptors = self.create_descriptors()
@@ -168,9 +168,9 @@ class USBStressTest(Elaboratable):
 
 		# Add our endpoint.
 		test_ep = StressTestEndpoint(
-			endpoint_number=BULK_ENDPOINT_NUMBER,
-			max_packet_size=MAX_BULK_PACKET_SIZE,
-			constant=CONSTANT_TO_SEND
+			endpoint_number = BULK_ENDPOINT_NUMBER,
+			max_packet_size = MAX_BULK_PACKET_SIZE,
+			constant = CONSTANT_TO_SEND
 		)
 		usb.add_endpoint(test_ep)
 

@@ -17,7 +17,7 @@ class ControlRequestHandler(USBRequestHandler):
 	''' Pure-gateware USB control request handler. '''
 
 
-	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition=0):
+	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition = 0):
 		''' Fills in the current state with a request handler meant to set a register.
 
 		Parameters:
@@ -47,7 +47,7 @@ class ControlRequestHandler(USBRequestHandler):
 			m.next = 'IDLE'
 
 
-	def handle_simple_data_request(self, m, transmitter, data, length=1):
+	def handle_simple_data_request(self, m, transmitter, data, length = 1):
 		''' Fills in a given current state with a request that returns a given piece of data.
 
 		For e.g. GET_CONFIGURATION and GET_STATUS requests.
@@ -75,4 +75,4 @@ class ControlRequestHandler(USBRequestHandler):
 
 
 if __name__ == '__main__':
-	unittest.main(warnings='ignore')
+	unittest.main(warnings = 'ignore')
