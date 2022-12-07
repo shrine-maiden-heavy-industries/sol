@@ -456,14 +456,14 @@ class SimpleSoC(CPUSoC, Elaboratable):
 				if resource.access.readable():
 					emit(f'static inline {c_type} {name}_read(void) {{')
 					emit(f'    volatile {c_type} *reg = ({c_type} *){name.upper()}_ADDRESS;')
-					emit(f'    return *reg;')
+					emit('    return *reg;')
 					emit('}')
 
 				# ... and a write stub.
 				if resource.access.writable():
 					emit(f'static inline void {name}_write({c_type} value) {{')
 					emit(f'    volatile {c_type} *reg = ({c_type} *){name.upper()}_ADDRESS;')
-					emit(f'    *reg = value;')
+					emit('    *reg = value;')
 					emit('}')
 
 			emit('')

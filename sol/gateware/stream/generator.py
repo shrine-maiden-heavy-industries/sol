@@ -121,7 +121,7 @@ class ConstantStreamGenerator(Elaboratable):
 
 		# If our width isn't evenly divisible by 8, we can't accept bytes.
 		if (self._data_width % 8):
-			raise ValueError('Can't initialize with bytes unless data_width is divisible by 8!')
+			raise ValueError('Can''t initialize with bytes unless data_width is divisible by 8!')
 
 		# Figure out how wide each datum will be in bytes.
 		datum_width_bytes = self._data_width // 8

@@ -307,7 +307,7 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		}
 
 		if not str(clock_frequency) in pll_params_per_freq:
-			raise ValueError('Unsupported clock frequency {}MHz'.format(clock_frequency/1e6))
+			raise ValueError(f'Unsupported clock frequency {clock_frequency/1e6}MHz')
 
 		pll_params = pll_params_per_freq[str(clock_frequency)]
 

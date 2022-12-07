@@ -660,7 +660,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 
 			cycles_passed += 1
 			if timeout and cycles_passed > timeout:
-				raise RuntimeError(f'Timeout waiting for stall!')
+				raise RuntimeError('Timeout waiting for stall!')
 
 	@usb_domain_test_case
 	def test_all_descriptors(self):

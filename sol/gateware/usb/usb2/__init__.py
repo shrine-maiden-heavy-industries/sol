@@ -153,7 +153,7 @@ class USBPacketID(IntFlag):
 		name = core_pid.name
 
 		if self.is_invalid():
-			return "{} (check-nibble invalid)".format(name)
+			return f'{name} (check-nibble invalid)'
 		else:
 			return name
 

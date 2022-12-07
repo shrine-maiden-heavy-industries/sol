@@ -95,7 +95,7 @@ def get_appropriate_platform() -> LatticeECP5Platform:
 	except apollo_fpga.DebuggerNotFound:
 		platform = LATEST_PLATFORM()
 
-		log.warning(f'Couldn't auto-detect connected platform. Assuming {platform.name}.')
+		log.warning(f'Couldn\'t auto-detect connected platform. Assuming {platform.name}.')
 		return platform
 
 

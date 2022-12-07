@@ -139,7 +139,7 @@ class TSBurstDetector(Elaboratable):
 
 					# ... advance if that word matches; or move to our 'fail state' otherwise.
 					with m.If(data_matches & ctrl_matches):
-						m.next = f'2_DETECTED'
+						m.next = '2_DETECTED'
 
 						# If we're including a configuration field, parse it before we continue.
 						if self._include_config:

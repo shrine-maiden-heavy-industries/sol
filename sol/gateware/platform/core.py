@@ -107,7 +107,7 @@ class LUNAApolloPlatform(SOLPlatform):
 		debugger = ApolloDebugger()
 
 		# Grab our generated bitstream, and upload it to the FPGA.
-		bitstream =  products.get('{}.bit'.format(name))
+		bitstream =  products.get(f'{name}.bit')
 		with debugger.jtag as jtag:
 			programmer = ECP5_JTAGProgrammer(jtag)
 			programmer.configure(bitstream)
@@ -134,7 +134,7 @@ class LUNAApolloPlatform(SOLPlatform):
 		self._ensure_unconfigured(debugger)
 
 		# Grab our generated bitstream, and upload it to the .
-		bitstream =  products.get('{}.bit'.format(name))
+		bitstream =  products.get(f'{name}.bit')
 		with debugger.jtag as jtag:
 			programmer = ECP5_JTAGProgrammer(jtag)
 			programmer.flash(bitstream)

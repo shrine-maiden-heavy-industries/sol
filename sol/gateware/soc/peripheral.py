@@ -75,7 +75,7 @@ class Peripheral:
 	'''
 	def __init__(self, name=None, src_loc_at=1):
 		if name is not None and not isinstance(name, str):
-			raise TypeError('Name must be a string, not {!r}'.format(name))
+			raise TypeError(f'Name must be a string, not {name!r}')
 		self.name      = name or tracer.get_var_name(depth=2 + src_loc_at).lstrip('_')
 
 		self._csr_banks = []
@@ -98,15 +98,13 @@ class Peripheral:
 		Raises :exn:`NotImplementedError` if the peripheral does not have a Wishbone bus.
 		'''
 		if self._bus is None:
-			raise NotImplementedError('Peripheral {!r} does not have a bus interface'
-									  .format(self))
+			raise NotImplementedError(f'Peripheral {self!r} does not have a bus interface')
 		return self._bus
 
 	@bus.setter
 	def bus(self, bus):
 		if not isinstance(bus, wishbone.Interface):
-			raise TypeError('Bus interface must be an instance of wishbone.Interface, not {!r}'
-							.format(bus))
+			raise TypeError(f'Bus interface must be an instance of wishbone.Interface, not {bus!r}')
 		self._bus = bus
 
 	@property
@@ -122,15 +120,13 @@ class Peripheral:
 		Raises :exn:`NotImplementedError` if the peripheral does not have an IRQ line.
 		'''
 		if self._irq is None:
-			raise NotImplementedError('Peripheral {!r} does not have an IRQ line'
-									  .format(self))
+			raise NotImplementedError(f'Peripheral {self!r} does not have an IRQ line')
 		return self._irq
 
 	@irq.setter
 	def irq(self, irq):
 		if not isinstance(irq, IRQLine):
-			raise TypeError('IRQ line must be an instance of IRQLine, not {!r}'
-							.format(irq))
+			raise TypeError(f'IRQ line must be an instance of IRQLine, not {irq!r}')
 		self._irq = irq
 
 	def csr_bank(self, *, addr=None, alignment=None, desc=None):
@@ -239,7 +235,7 @@ class CSRBank:
 	name_prefix : str
 		Name prefix of the bank registers.
 	'''
-	def __init__(self, *, name_prefix='):
+	def __init__(self, *, name_prefix=''):
 		self._name_prefix = name_prefix
 		self._csr_regs    = []
 
@@ -270,10 +266,10 @@ class CSRBank:
 		An instance of :class:`torii.lib.soc.csr.Element`.
 		'''
 		if name is not None and not isinstance(name, str):
-			raise TypeError('Name must be a string, not {!r}'.format(name))
+			raise TypeError(f'Name must be a string, not {name!r}')
 		name = name or tracer.get_var_name(depth=2 + src_loc_at).lstrip('_')
 
-		elem_name = '{}_{}'.format(self._name_prefix, name)
+		elem_name = f'{self._name_prefix}_{name}'
 		elem = csr.Element(width, access, name=elem_name)
 		self._csr_regs.append((elem, addr, alignment))
 		return elem
@@ -320,8 +316,7 @@ class PeripheralBridge(Elaboratable):
 	'''
 	def __init__(self, periph, *, data_width, granularity, features, alignment):
 		if not isinstance(periph, Peripheral):
-			raise TypeError('Peripheral must be an instance of Peripheral, not {!r}'
-							.format(periph))
+			raise TypeError(f'Peripheral must be an instance of Peripheral, not {periph!r}')
 
 		self._wb_decoder = wishbone.Decoder(addr_width=1, data_width=data_width,
 											granularity=granularity,
@@ -347,7 +342,7 @@ class PeripheralBridge(Elaboratable):
 
 		events = list(periph.iter_events())
 		if len(events) > 0:
-			self._int_src = InterruptSource(events, name='{}_ev'.format(periph.name))
+			self._int_src = InterruptSource(events, name=f'{periph.name}_ev')
 			self.irq      = self._int_src.irq
 
 			csr_mux = csr.Multiplexer(addr_width=1, data_width=8, alignment=alignment)
@@ -368,8 +363,8 @@ class PeripheralBridge(Elaboratable):
 		m = Module()
 
 		for i, (csr_mux, csr_bridge) in enumerate(self._csr_subs):
-			m.submodules[   'csr_mux_{}'.format(i)] = csr_mux
-			m.submodules['csr_bridge_{}'.format(i)] = csr_bridge
+			m.submodules[   f'csr_mux_{i}'] = csr_mux
+			m.submodules[f'csr_bridge_{i}'] = csr_bridge
 
 		if self._int_src is not None:
 			m.submodules._int_src = self._int_src

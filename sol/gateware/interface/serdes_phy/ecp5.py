@@ -36,8 +36,7 @@ class ECP5SerDesPLLConfiguration:
 					'refck_freq': refclk_freq,
 					'linerate':   linerate,
 				}
-		msg = 'No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate.'
-		raise ValueError(msg.format(refclk_freq/1e6, linerate/1e9))
+		raise ValueError(f'No config found for {refclk_freq/1e6:3.2f} MHz refclk / {linerate/1e9:3.2f} Gbps linerate.')
 
 
 
@@ -1051,8 +1050,8 @@ class ECP5SerDes(Elaboratable):
 		m.submodules.serdes = serdes = Instance('DCUA', **serdes_params)
 
 		# Bind our SerDes to the correct location inside the FPGA.
-		serdes.attrs['LOC'] = 'DCU{}'.format(self._dual)
-		serdes.attrs['CHAN'] = 'CH{}'.format(self._channel)
+		serdes.attrs['LOC'] = f'DCU{self._dual}'
+		serdes.attrs['CHAN'] = f'CH{self._channel}'
 
 		# SerDes decodes invalid 10b symbols to 0xEE with control bit set, which is not a part
 		# of the 8b10b encoding space. We use it to drive the comma aligner and reset sequencer.

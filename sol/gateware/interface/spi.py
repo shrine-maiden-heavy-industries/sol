@@ -205,7 +205,7 @@ class SPIGatewareTestCase(SolGatewareTestCase):
 	def spi_exchange_byte(self, datum, *, msb_first=True):
 		''' Sends a by over the virtual SPI bus. '''
 
-		bits = '{:08b}'.format(datum)
+		bits = f'{datum:08b}'
 		data_received = ''
 
 		if not msb_first:
@@ -519,7 +519,7 @@ class SPIRegisterInterface(Elaboratable):
 		''' Checks to make sure a register address isn't in use before issuing it. '''
 
 		if address in self.registers:
-			raise ValueError('can\'t add more than one register with address 0x{:x}!'.format(address))
+			raise ValueError(f'can\'t add more than one register with address 0x{address:x}!')
 
 
 	def support_size_autonegotiation(self):
@@ -600,7 +600,7 @@ class SPIRegisterInterface(Elaboratable):
 		self._ensure_register_is_unused(address)
 
 		# Generate a name for the register, if we don't already have one.
-		name = name if name else 'register_{:x}'.format(address)
+		name = name if name else f'register_{address:x}'
 
 		# Generate a backing store for the register, if we don't already have one.
 		if value_signal is None:
@@ -639,7 +639,7 @@ class SPIRegisterInterface(Elaboratable):
 		#
 
 		# Create a signal that goes high iff the given register is selected.
-		register_selected = Signal(name='register_address_matches_{:x}'.format(register_address))
+		register_selected = Signal(name=f'register_address_matches_{register_address:x}')
 		m.d.comb += register_selected.eq(self._address == register_address)
 
 		# Our write signal is always connected to word_received; but it's only meaningful

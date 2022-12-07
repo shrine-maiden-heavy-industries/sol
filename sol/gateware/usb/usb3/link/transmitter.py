@@ -189,7 +189,7 @@ class RawPacketTransmitter(Elaboratable):
 					# Otherwise, we're done!
 					with m.Else():
 						m.d.comb += self.done.eq(1)
-						m.next = f'IDLE'
+						m.next = 'IDLE'
 
 
 			# START_DPP -- we'll start our data packet payload with our framing;

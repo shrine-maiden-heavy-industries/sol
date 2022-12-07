@@ -47,16 +47,15 @@ class EventSource:
 	'''
 	def __init__(self, *, mode='level', name=None, src_loc_at=0):
 		if name is not None and not isinstance(name, str):
-			raise TypeError('Name must be a string, not {!r}'.format(name))
+			raise TypeError(f'Name must be a string, not {name!r}')
 
 		choices = ('level', 'rise', 'fall')
 		if mode not in choices:
-			raise ValueError('Invalid trigger mode {!r}; must be one of {}'
-							 .format(mode, ', '.join(choices)))
+			raise ValueError(f'Invalid trigger mode {mode!r}; must be one of {", ".join(choices)}')
 
 		self.name = name or tracer.get_var_name(depth=2 + src_loc_at)
 		self.mode = mode
-		self.stb  = Signal(name='{}_stb'.format(self.name))
+		self.stb  = Signal(name=f'{self.name}_stb')
 
 
 
@@ -94,21 +93,20 @@ class InterruptSource(Elaboratable):
 	'''
 	def __init__(self, events, *, name=None, src_loc_at=0):
 		if name is not None and not isinstance(name, str):
-			raise TypeError('Name must be a string, not {!r}'.format(name))
+			raise TypeError(f'Name must be a string, not {name!r}')
 		self.name = name or tracer.get_var_name(depth=2 + src_loc_at)
 
 		for event in events:
 			if not isinstance(event, EventSource):
-				raise TypeError('Event source must be an instance of EventSource, not {!r}'
-								.format(event))
+				raise TypeError(f'Event source must be an instance of EventSource, not {event!r}')
 		self._events = list(events)
 
 		width = len(events)
-		self.status  = csr.Element(width, 'r',  name='{}_status'.format(self.name))
-		self.pending = csr.Element(width, 'rw', name='{}_pending'.format(self.name))
-		self.enable  = csr.Element(width, 'rw', name='{}_enable'.format(self.name))
+		self.status  = csr.Element(width, 'r',  name=f'{self.name}_status')
+		self.pending = csr.Element(width, 'rw', name=f'{self.name}_pending')
+		self.enable  = csr.Element(width, 'rw', name=f'{self.name}_enable')
 
-		self.irq = IRQLine(name='{}_irq'.format(self.name))
+		self.irq = IRQLine(name=f'{self.name}_irq')
 
 	def elaborate(self, platform):
 		m = Module()
@@ -126,7 +124,7 @@ class InterruptSource(Elaboratable):
 				event_stb_r = Signal.like(event.stb, name_suffix='_r')
 				m.d.sync += event_stb_r.eq(event.stb)
 
-			event_trigger = Signal(name='{}_trigger'.format(event.name))
+			event_trigger = Signal(name=f'{event.name}_trigger')
 			if event.mode == 'level':
 				m.d.comb += event_trigger.eq(event.stb)
 			elif event.mode == 'rise':

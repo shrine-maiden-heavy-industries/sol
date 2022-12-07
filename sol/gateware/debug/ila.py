@@ -212,8 +212,7 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 
 		# Generate an appropriate exception.
 		actual_value = (yield self.dut.captured_sample)
-		message = 'assertion failed: at address 0x{:08x}: {:08x} != {:08x} (expected)'.format(address, actual_value, value)
-		raise AssertionError(message)
+		raise AssertionError(f'assertion failed: at address 0x{address:08x}: {actual_value:08x} != {value:08x} (expected)')
 
 
 	@sync_test_case
@@ -906,7 +905,7 @@ class ILAFrontend(metaclass=ABCMeta):
 			close_after = True
 
 		# Create our basic VCD.
-		with VCDWriter(stream, timescale=f'1 ns', date='today') as writer:
+		with VCDWriter(stream, timescale='1 ns', date='today') as writer:
 			first_timestamp = math.inf
 			last_timestamp  = 0
 
