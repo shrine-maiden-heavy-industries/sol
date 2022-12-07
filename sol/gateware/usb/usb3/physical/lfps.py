@@ -162,19 +162,19 @@ class LFPSDetector(Elaboratable):
 					# Failing case: if our burst is over, but we've not yet reached our minimum burst time,
 					# then this isn't a relevant burst. We'll wait for the next one.
 					with m.If(count < burst_cycles_min):
-					    m.next = 'WAIT_FOR_NEXT_BURST'
+						m.next = 'WAIT_FOR_NEXT_BURST'
 
 					# If our burst ended within a reasonable span, we can move on.
 					with m.Else():
 
-					    # If we don't have a repeat interval, we're done!
-					    if self._pattern.repeat is None:
-					        m.d.comb += self.detect.eq(1)
-					        m.next = "WAIT_FOR_NEXT_BURST"
+						# If we don't have a repeat interval, we're done!
+						if self._pattern.repeat is None:
+							m.d.comb += self.detect.eq(1)
+							m.next = "WAIT_FOR_NEXT_BURST"
 
-					    # Otherwise, we'll need to check the repeat interval, as well.
-					    else:
-					        m.next = "MEASURE_REPEAT"
+						# Otherwise, we'll need to check the repeat interval, as well.
+						else:
+							m.next = "MEASURE_REPEAT"
 
 			if self._pattern.repeat is not None:
 
@@ -185,23 +185,23 @@ class LFPSDetector(Elaboratable):
 					# Failing case: if our counter has gone longer than our maximum burst time, this isn't
 					# a relevant burst. We'll wait for the next one.
 					with m.If(count == repeat_cycles_max):
-					    m.next = 'WAIT_FOR_NEXT_BURST'
+						m.next = 'WAIT_FOR_NEXT_BURST'
 
 					# Once we see another potential burst, we'll start our detection back from the top.
 					with m.If(present):
-					    m.d.ss += count.eq(1)
-					    m.next = 'MEASURE_BURST'
+						m.d.ss += count.eq(1)
+						m.next = 'MEASURE_BURST'
 
-					    # If this lasted for a reasonable repeat interval, we've seen a correct burst!
-					    with m.If(count >= repeat_cycles_min):
+						# If this lasted for a reasonable repeat interval, we've seen a correct burst!
+						with m.If(count >= repeat_cycles_min):
 
-					        # Mark this as a correct iteration, and if the previous iteration was also
-					        # a correct one, indicate that we've detected our output.
-					        m.d.ss   += last_iteration_matched.eq(1)
-					        m.d.comb += self.detect.eq(last_iteration_matched)
+							# Mark this as a correct iteration, and if the previous iteration was also
+							# a correct one, indicate that we've detected our output.
+							m.d.ss   += last_iteration_matched.eq(1)
+							m.d.comb += self.detect.eq(last_iteration_matched)
 
-					    with m.Else():
-					        m.d.ss   += last_iteration_matched.eq(0)
+						with m.Else():
+							m.d.ss   += last_iteration_matched.eq(0)
 
 		return m
 

@@ -160,15 +160,15 @@ class DataPacketReceiver(Elaboratable):
 				with m.State(f"RECEIVE_DW{n}"):
 
 					with m.If(sink.valid):
-					    m.d.comb += crc16.advance_crc.eq(1)
-					    m.d.ss += header[f'dw{n}'].eq(sink.data)
-					    m.next = f"RECEIVE_DW{n+1}"
+						m.d.comb += crc16.advance_crc.eq(1)
+						m.d.ss += header[f'dw{n}'].eq(sink.data)
+						m.next = f"RECEIVE_DW{n+1}"
 
-					    # Extra check for our first packet; we'll make sure this of -data- type;
-					    # and bail out, otherwise.
-					    if n == 0:
-					        with m.If(sink.data[0:5] != HeaderPacketType.DATA):
-					            m.next = "WAIT_FOR_HPSTART"
+						# Extra check for our first packet; we'll make sure this of -data- type;
+						# and bail out, otherwise.
+						if n == 0:
+							with m.If(sink.data[0:5] != HeaderPacketType.DATA):
+								m.next = "WAIT_FOR_HPSTART"
 
 
 			# RECEIVE_DW3 -- we'll receive and parse our final data word, which contains the fields
@@ -177,17 +177,17 @@ class DataPacketReceiver(Elaboratable):
 
 				with m.If(sink.valid):
 					m.d.ss += [
-					    # Collect the fields from the DW...
-					    header.crc16            .eq(sink.data[ 0:16]),
-					    header.sequence_number  .eq(sink.data[16:19]),
-					    header.dw3_reserved     .eq(sink.data[19:22]),
-					    header.hub_depth        .eq(sink.data[22:25]),
-					    header.delayed          .eq(sink.data[25]),
-					    header.deferred         .eq(sink.data[26]),
-					    header.crc5             .eq(sink.data[27:32]),
+						# Collect the fields from the DW...
+						header.crc16            .eq(sink.data[ 0:16]),
+						header.sequence_number  .eq(sink.data[16:19]),
+						header.dw3_reserved     .eq(sink.data[19:22]),
+						header.hub_depth        .eq(sink.data[22:25]),
+						header.delayed          .eq(sink.data[25]),
+						header.deferred         .eq(sink.data[26]),
+						header.crc5             .eq(sink.data[27:32]),
 
-					    # ... and pipeline a CRC of the to the link control word.
-					    expected_crc5           .eq(compute_usb_crc5(sink.data[16:27]))
+						# ... and pipeline a CRC of the to the link control word.
+						expected_crc5           .eq(compute_usb_crc5(sink.data[16:27]))
 					]
 
 					m.next = "CHECK_HEADER"
@@ -204,15 +204,15 @@ class DataPacketReceiver(Elaboratable):
 				# Otherwise, if we have a data packet header, move to capturing our data.
 				with m.Elif(stream_matches_symbols(sink, SDP, SDP, SDP, EPF)):
 					m.d.ss += [
-					    # Update the header associated with the active packet.
-					    self.header           .eq(header),
-					    self.new_header       .eq(1),
+						# Update the header associated with the active packet.
+						self.header           .eq(header),
+						self.new_header       .eq(1),
 
-					    # Read the data length from our header, in preparation to receive it.
-					    data_bytes_remaining  .eq(header.dw1[16:]),
+						# Read the data length from our header, in preparation to receive it.
+						data_bytes_remaining  .eq(header.dw1[16:]),
 
-					    # Mark the next packet as the first packet in our stream.
-					    source.first          .eq(1)
+						# Mark the next packet as the first packet in our stream.
+						source.first          .eq(1)
 					]
 
 					# Move to receiving data.
@@ -254,24 +254,24 @@ class DataPacketReceiver(Elaboratable):
 					# valid data; as we always expect our data packet payload to be followed by
 					# and "end of packet" set of control codes.
 					with m.If((sink.ctrl & source.valid) != 0):
-					    m.d.comb += self.packet_bad.eq(1)
-					    m.next = "WAIT_FOR_HPSTART"
+						m.d.comb += self.packet_bad.eq(1)
+						m.next = "WAIT_FOR_HPSTART"
 
 					# Capture the current word and valid value, so we can refer to them in
 					# future states. This is necessary for CRC validation when we have a data payload
 					# that's not evenly divisible into words; see the instantiation of ``previous_word``.
 					m.d.ss += [
-					    previous_word   .eq(source.data),
-					    previous_valid  .eq(source.valid)
+						previous_word   .eq(source.data),
+						previous_valid  .eq(source.valid)
 					]
 
 					# If we have another word to receive after this, decrement our count,
 					# and continue.
 					with m.If(data_bytes_remaining > 4):
-					    m.d.ss += data_bytes_remaining.eq(data_bytes_remaining - 4)
+						m.d.ss += data_bytes_remaining.eq(data_bytes_remaining - 4)
 
 					with m.Else():
-					    m.next = "CHECK_CRC32"
+						m.next = "CHECK_CRC32"
 
 
 			# CHECK_CRC32 -- we've received the end of our packet; and we're ready to decide if the
@@ -287,20 +287,20 @@ class DataPacketReceiver(Elaboratable):
 					# If our data packet was word aligned, all of our CRC bytes are currently present.
 					# We'll use our current word directly.
 					with m.Case(0b1111):
-					    m.d.comb += data_to_check.eq(sink.data)
+						m.d.comb += data_to_check.eq(sink.data)
 
 					# If we had three valid bytes of data last time, one byte of our CRC was in the previous
 					# word. We'll grab it, and stick it onto the three bytes we're seeing.
 					with m.Case(0b0111):
-					    m.d.comb += data_to_check.eq(Cat(previous_word[24:32], sink.data[0:24]))
+						m.d.comb += data_to_check.eq(Cat(previous_word[24:32], sink.data[0:24]))
 
 					# Same, but for 2B in the previous word and 2B in the current.
 					with m.Case(0b0011):
-					    m.d.comb += data_to_check.eq(Cat(previous_word[16:32], sink.data[0:16]))
+						m.d.comb += data_to_check.eq(Cat(previous_word[16:32], sink.data[0:16]))
 
 					# Same, but for 3B in the previous word and 1B in the current.
 					with m.Case(0b0001):
-					    m.d.comb += data_to_check.eq(Cat(previous_word[8:32], sink.data[0:8]))
+						m.d.comb += data_to_check.eq(Cat(previous_word[8:32], sink.data[0:8]))
 
 				# Check our CRC based on the word we've extracted, and strobe either ``packet_good``
 				# or ``packet_bad``, depending on its validity.

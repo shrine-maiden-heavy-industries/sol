@@ -183,10 +183,10 @@ class LinkPartnerDetector(Elaboratable):
 					# When our detection is complete...
 					with m.If(self.phy_status):
 
-					    # ... capture the results, but don't mark ourselves as complete, yet, as we're
-					    # still in P2. We'll need to move to operational state.
-					    m.d.ss += self.partner_present.eq(self.rx_status == PARTNER_PRESENT_STATUS)
-					    m.next = "MOVE_TO_P0"
+						# ... capture the results, but don't mark ourselves as complete, yet, as we're
+						# still in P2. We'll need to move to operational state.
+						m.d.ss += self.partner_present.eq(self.rx_status == PARTNER_PRESENT_STATUS)
+						m.next = "MOVE_TO_P0"
 
 
 			# MOVE_TO_P0 -- we've completed a detection, and now are ready to move (back) into our

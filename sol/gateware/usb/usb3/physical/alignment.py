@@ -97,8 +97,8 @@ class RxWordAligner(Elaboratable):
 				with m.If(self.word_meets_alignment_criteria(shifted_data, shifted_ctrl)):
 					m.d.ss   += shift_to_apply.eq(i)
 					m.d.comb += [
-					    changing_shift  .eq(shift_to_apply != i),
-					    new_shift       .eq(i)
+						changing_shift  .eq(shift_to_apply != i),
+						new_shift       .eq(i)
 					]
 
 

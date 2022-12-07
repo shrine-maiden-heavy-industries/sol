@@ -139,23 +139,23 @@ class TSBurstDetector(Elaboratable):
 
 					# ... advance if that word matches; or move to our "fail state" otherwise.
 					with m.If(data_matches & ctrl_matches):
-					    m.next = f"2_DETECTED"
+						m.next = f"2_DETECTED"
 
-					    # If we're including a configuration field, parse it before we continue.
-					    if self._include_config:
-					        m.d.ss += [
-					            # Bit 0 of Symbol 5 => Hot Reset
-					            self.hot_reset           .eq(data.word_select(1, 8)[0]),
+						# If we're including a configuration field, parse it before we continue.
+						if self._include_config:
+							m.d.ss += [
+								# Bit 0 of Symbol 5 => Hot Reset
+								self.hot_reset           .eq(data.word_select(1, 8)[0]),
 
-					            # Bit 2 of Symbol 5 => Requests Loopback Mode
-					            self.loopback_requested  .eq(data.word_select(1, 8)[2]),
+								# Bit 2 of Symbol 5 => Requests Loopback Mode
+								self.loopback_requested  .eq(data.word_select(1, 8)[2]),
 
-					            # Bit 3 of Symbol 5 = > Requests we not use scrambling.
-					            self.scrambling_disabled .eq(data.word_select(1, 8)[3]),
-					        ]
+								# Bit 3 of Symbol 5 = > Requests we not use scrambling.
+								self.scrambling_disabled .eq(data.word_select(1, 8)[3]),
+							]
 
 					with m.Else():
-					    m.next = "NONE_DETECTED"
+						m.next = "NONE_DETECTED"
 
 
 			for i in range(2, last_state_number):
@@ -169,8 +169,8 @@ class TSBurstDetector(Elaboratable):
 				# and indicate that we've completed a detection.
 				with m.If(consecutive_set_count + 1 == self._detection_threshold):
 					m.d.ss   += [
-					    consecutive_set_count  .eq(0),
-					    self.detected          .eq(1)
+						consecutive_set_count  .eq(0),
+						self.detected          .eq(1)
 					]
 
 				# Otherwise, increase the number of consecutive sets seen.
@@ -238,48 +238,48 @@ class TSEmitter(Elaboratable):
 				with m.State(f"WORD_{i}"):
 					is_last_word = (i + 1 == len(self._set_data))
 					m.d.comb += [
-					    self.source.valid  .eq(1),
-					    self.source.data   .eq(self._set_data[i]),
-					    self.source.ctrl   .eq(self._first_word_ctrl if i == 0 else 0b0000),
-					    self.source.first  .eq(i == 0),
-					    self.source.last   .eq(is_last_word)
+						self.source.valid  .eq(1),
+						self.source.data   .eq(self._set_data[i]),
+						self.source.ctrl   .eq(self._first_word_ctrl if i == 0 else 0b0000),
+						self.source.first  .eq(i == 0),
+						self.source.last   .eq(is_last_word)
 					]
 
 					# If this is the first data word of our Training Set, we'll optionally set
 					# our control fields.
 					if self._include_config and (i == 1):
-					    with m.If(self.request_hot_reset):
-					        m.d.comb += self.source.data.word_select(1, 8)[0].eq(1)
-					    with m.If(self.request_loopback):
-					        m.d.comb += self.source.data.word_select(1, 8)[2].eq(1)
-					    with m.If(self.request_no_scrambling):
-					        m.d.comb += self.source.data.word_select(1, 8)[3].eq(1)
+						with m.If(self.request_hot_reset):
+							m.d.comb += self.source.data.word_select(1, 8)[0].eq(1)
+						with m.If(self.request_loopback):
+							m.d.comb += self.source.data.word_select(1, 8)[2].eq(1)
+						with m.If(self.request_no_scrambling):
+							m.d.comb += self.source.data.word_select(1, 8)[3].eq(1)
 
 
 					with m.If(self.source.ready):
-					    # If we're generating the state for the last word,
-					    # we also have to handle our count.
-					    if is_last_word:
-					        # If we've just reached the total number of sets, we're done!
-					        # Reset our count to zero, and indicate done-ness.
-					        with m.If(sent_ordered_sets + 1 == self._total_to_transmit):
-					            m.d.comb += self.done.eq(1)
-					            m.d.ss   += sent_ordered_sets.eq(0)
+						# If we're generating the state for the last word,
+						# we also have to handle our count.
+						if is_last_word:
+							# If we've just reached the total number of sets, we're done!
+							# Reset our count to zero, and indicate done-ness.
+							with m.If(sent_ordered_sets + 1 == self._total_to_transmit):
+								m.d.comb += self.done.eq(1)
+								m.d.ss   += sent_ordered_sets.eq(0)
 
-					            # If we're still requesting data be sent, restart from the first word.
-					            with m.If(self.start):
-					                m.next = "WORD_0"
-					            # Otherwise, return to idle until we receive ``start`` again`.
-					            with m.Else():
-					                m.next = "IDLE"
+								# If we're still requesting data be sent, restart from the first word.
+								with m.If(self.start):
+									m.next = "WORD_0"
+								# Otherwise, return to idle until we receive ``start`` again`.
+								with m.Else():
+									m.next = "IDLE"
 
-					        # If we're not yet done transmitting our full set, continue.
-					        with m.Else():
-					            m.d.ss += sent_ordered_sets.eq(sent_ordered_sets + 1)
-					            m.next = "WORD_0"
+							# If we're not yet done transmitting our full set, continue.
+							with m.Else():
+								m.d.ss += sent_ordered_sets.eq(sent_ordered_sets + 1)
+								m.next = "WORD_0"
 
-					    else:
-					        m.next = f"WORD_{i+1}"
+						else:
+							m.next = f"WORD_{i+1}"
 
 		return m
 

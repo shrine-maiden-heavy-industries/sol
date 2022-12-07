@@ -176,19 +176,19 @@ class SuperSpeedSetupDecoder(Elaboratable):
 
 					# This should be our last word; parse it.
 					with m.If(self.sink.last):
-					    m.d.ss += packet.word_select(1, 32).eq(self.sink.data)
-					    m.next = "WAIT_FOR_VALID"
+						m.d.ss += packet.word_select(1, 32).eq(self.sink.data)
+						m.next = "WAIT_FOR_VALID"
 
 					# If this wasn't our last word, something's gone very wrong.
 					# We'll ignore this packet.
 					with m.Else():
-					    m.next = "WAIT_FOR_FIRST"
+						m.next = "WAIT_FOR_FIRST"
 
 				# If we see :attr:``rx_bad``, this means our packet aborted early,
 				# and thus isn't a valid setup packet. Ignore it, and go back to waiting
 				# for our first packet.
 				with m.If(self.rx_bad):
-					    m.next = "WAIT_FOR_FIRST"
+						m.next = "WAIT_FOR_FIRST"
 
 			# WAIT_FOR_VALID -- we've now received all of our data; and we're just waiting
 			# for an indication of  whether the data is good or bad.
@@ -198,11 +198,11 @@ class SuperSpeedSetupDecoder(Elaboratable):
 				# We'll output it, and indicate that we've received a new packet.
 				with m.If(self.rx_good):
 					m.d.ss += [
-					    # Output our stored packet...
-					    self.packet           .eq(packet),
+						# Output our stored packet...
+						self.packet           .eq(packet),
 
-					    # ... but strobe its received flag for a cycle.
-					    self.packet.received  .eq(1)
+						# ... but strobe its received flag for a cycle.
+						self.packet.received  .eq(1)
 					]
 					m.next = "WAIT_FOR_FIRST"
 
@@ -293,8 +293,8 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 
 		Parmeters:
 			when      -- The name of the interface signal that indicates that the `multiplex` signals
-					     should be selected for output. If this signals should be multiplex, it
-					     should be included in `multiplex`.
+						 should be selected for output. If this signals should be multiplex, it
+						 should be included in `multiplex`.
 			multiplex -- The names of the interface signals to be multiplexed.
 		"""
 
@@ -409,14 +409,14 @@ class StallOnlyRequestHandler(Elaboratable):
 
 	I/O port:
 		*: interface -- The RequestHandlerInterface used to handle requests.
-					    See its record definition for signal definitions.
+						See its record definition for signal definitions.
 	"""
 
 	def __init__(self, stall_condition):
 		"""
 		Parameters:
 			stall_condition -- A function that accepts a SetupRequest packet, and returns
-					           an Torii conditional indicating whether we should stall.
+							   an Torii conditional indicating whether we should stall.
 		"""
 
 		self.condition = stall_condition

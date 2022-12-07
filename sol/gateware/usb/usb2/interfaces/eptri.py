@@ -376,11 +376,11 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 					# STALL it, if the endpoint is STALL'd...
 					with m.If(stalled):
-					    m.d.comb += handshakes_out.stall.eq(1)
+						m.d.comb += handshakes_out.stall.eq(1)
 
 					# Otherwise, NAK.
 					with m.Else():
-					    m.d.comb += handshakes_out.nak.eq(1)
+						m.d.comb += handshakes_out.nak.eq(1)
 
 
 				# If the user request that we send data, "prime" the endpoint.
@@ -400,23 +400,23 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 					# If the target endpoint is STALL'd, reply with STALL no matter what.
 					with m.If(stalled):
-					    m.d.comb += handshakes_out.stall.eq(1)
+						m.d.comb += handshakes_out.stall.eq(1)
 
 					# If we have a new IN token to our endpoint, move to responding to it.
 					with m.Elif(endpoint_matches):
 
-					    # If there's no data in our endpoint, send a ZLP.
-					    with m.If(~fifo.r_rdy):
-					        m.next = "SEND_ZLP"
+						# If there's no data in our endpoint, send a ZLP.
+						with m.If(~fifo.r_rdy):
+							m.next = "SEND_ZLP"
 
-					    # Otherwise, send our data, starting with our first byte.
-					    with m.Else():
-					        m.d.usb += tx.first.eq(1)
-					        m.next = "SEND_DATA"
+						# Otherwise, send our data, starting with our first byte.
+						with m.Else():
+							m.d.usb += tx.first.eq(1)
+							m.next = "SEND_DATA"
 
 					# Otherwise, we don't have a response; NAK the packet.
 					with m.Else():
-					    m.d.comb += handshakes_out.nak.eq(1)
+						m.d.comb += handshakes_out.nak.eq(1)
 
 				# Always return to IDLE on reset.
 				with m.If(self.reset.w_stb):

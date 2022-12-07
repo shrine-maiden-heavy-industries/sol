@@ -275,56 +275,56 @@ class ConstantStreamGenerator(Elaboratable):
 					# bytes in our data stream.
 					with m.If(on_last_packet):
 
-					    # If we're not enforcing a max length, always use our leftover bits-per-word.
-					    if not self._max_length_width:
-					        m.d.comb += self.stream.valid.eq(Repl(Const(1), valid_bits_last_word))
+						# If we're not enforcing a max length, always use our leftover bits-per-word.
+						if not self._max_length_width:
+							m.d.comb += self.stream.valid.eq(Repl(Const(1), valid_bits_last_word))
 
-					    # Otherwise, do our complex case.
-					    else:
-					        # Figure out if we're ending due to the length of data we have, or due to a
-					        # maximum-to-send restriction...
-					        ending_due_to_data_length = (position_in_stream == (data_length - 1))
-					        ending_due_to_max_length  = (bytes_sent + bytes_per_word >= max_length)
+						# Otherwise, do our complex case.
+						else:
+							# Figure out if we're ending due to the length of data we have, or due to a
+							# maximum-to-send restriction...
+							ending_due_to_data_length = (position_in_stream == (data_length - 1))
+							ending_due_to_max_length  = (bytes_sent + bytes_per_word >= max_length)
 
-					        # ... and figure out the valid bits based us running out of data...
-					        valid_due_to_data_length  = Repl(Const(1), valid_bits_last_word)
+							# ... and figure out the valid bits based us running out of data...
+							valid_due_to_data_length  = Repl(Const(1), valid_bits_last_word)
 
-					        # ... and due to our maximum length. Finding this arithmetically creates
-					        # difficult-to-optimize code, and bytes_per_word is going to be small, so
-					        # we'll figure this out enumeratively.
-					        bytes_left_over         = Signal(range(bytes_per_word + 1))
-					        valid_due_to_max_length = Signal.like(self.stream.valid)
-					        m.d.comb += bytes_left_over.eq(max_length - bytes_sent)
+							# ... and due to our maximum length. Finding this arithmetically creates
+							# difficult-to-optimize code, and bytes_per_word is going to be small, so
+							# we'll figure this out enumeratively.
+							bytes_left_over         = Signal(range(bytes_per_word + 1))
+							valid_due_to_max_length = Signal.like(self.stream.valid)
+							m.d.comb += bytes_left_over.eq(max_length - bytes_sent)
 
-					        # Generate a case for every possibly number of bytes left over...
-					        with m.Switch(bytes_left_over):
-					            for i in range(1, bytes_per_word + 1):
+							# Generate a case for every possibly number of bytes left over...
+							with m.Switch(bytes_left_over):
+								for i in range(1, bytes_per_word + 1):
 
-					                # ... with the appropriate amount of valid bits.
-					                with m.Case(i):
-					                    m.d.comb += valid_due_to_max_length.eq(Repl(Const(1), i))
+									# ... with the appropriate amount of valid bits.
+									with m.Case(i):
+										m.d.comb += valid_due_to_max_length.eq(Repl(Const(1), i))
 
 
-					        # Our most complex logic is when both of our end conditions are met; we'll need
-					        # to take the lesser of the two validities. AND'ing these will work to accept the
-					        # lesser of the two validities.
-					        with m.If(ending_due_to_data_length & ending_due_to_max_length):
-					            m.d.comb += self.stream.valid.eq(valid_due_to_data_length & valid_due_to_max_length)
+							# Our most complex logic is when both of our end conditions are met; we'll need
+							# to take the lesser of the two validities. AND'ing these will work to accept the
+							# lesser of the two validities.
+							with m.If(ending_due_to_data_length & ending_due_to_max_length):
+								m.d.comb += self.stream.valid.eq(valid_due_to_data_length & valid_due_to_max_length)
 
-					        # If we're ending due to the length of data we have, use our normal logic.
-					        with m.Elif(ending_due_to_data_length):
-					            m.d.comb += self.stream.valid.eq(valid_due_to_data_length)
+							# If we're ending due to the length of data we have, use our normal logic.
+							with m.Elif(ending_due_to_data_length):
+								m.d.comb += self.stream.valid.eq(valid_due_to_data_length)
 
-					        # Otherwise, we're endign due to our maximum length requirement. We'll apply the
-					        # appropriate valid mask.
-					        with m.Else():
-					            m.d.comb += self.stream.valid.eq(valid_due_to_max_length)
+							# Otherwise, we're endign due to our maximum length requirement. We'll apply the
+							# appropriate valid mask.
+							with m.Else():
+								m.d.comb += self.stream.valid.eq(valid_due_to_max_length)
 
 
 					# If we're not on our last word, every valid bit should be set.
 					with m.Else():
-					    valid_bits = len(self.stream.valid)
-					    m.d.comb += self.stream.valid.eq(Repl(Const(1), valid_bits))
+						valid_bits = len(self.stream.valid)
+						m.d.comb += self.stream.valid.eq(Repl(Const(1), valid_bits))
 
 
 				# If the current data byte is accepted, move past it.
@@ -332,15 +332,15 @@ class ConstantStreamGenerator(Elaboratable):
 
 					# If there's still data left to transmit, move forward.
 					with m.If(~on_last_packet):
-					    m.d.sync += position_in_stream.eq(position_in_stream + 1)
-					    m.d.comb += rom_read_port.addr.eq(position_in_stream + 1)
+						m.d.sync += position_in_stream.eq(position_in_stream + 1)
+						m.d.comb += rom_read_port.addr.eq(position_in_stream + 1)
 
-					    if self._max_length_width:
-					        m.d.sync += bytes_sent.eq(bytes_sent + bytes_per_word)
+						if self._max_length_width:
+							m.d.sync += bytes_sent.eq(bytes_sent + bytes_per_word)
 
 					# Otherwise, we've finished streaming. Return to IDLE.
 					with m.Else():
-					    m.next = 'DONE'
+						m.next = 'DONE'
 
 			# DONE -- report our completion; and then return to idle
 			with m.State('DONE'):
@@ -632,7 +632,7 @@ class StreamSerializer(Elaboratable):
 
 		I: data[]       -- The data stream to be sent out. Length is set by the data_length initializer argument.
 		I: max_length[] -- The maximum length to be sent. Defaults to the length of the stream.
-					       Only present if the `max_length_width` parameter is provided on creation.
+						   Only present if the `max_length_width` parameter is provided on creation.
 
 		*: stream       -- The generated stream interface.
 
@@ -646,7 +646,7 @@ class StreamSerializer(Elaboratable):
 			data_width         -- The width of the constant payload
 			stream_type        -- The type of stream we'll be multiplexing. Must be a subclass of StreamInterface.
 			max_length_width   -- If provided, a `max_length` signal will be present that can limit the total length
-					              transmitted.
+								  transmitted.
 		"""
 
 		self.domain      = domain
@@ -716,16 +716,16 @@ class StreamSerializer(Elaboratable):
 				with m.If(self.stream.ready):
 
 					should_continue = \
-					    ((position_in_stream + 1) < self.max_length) & \
-					    ((position_in_stream + 1) < self.data_length)
+						((position_in_stream + 1) < self.max_length) & \
+						((position_in_stream + 1) < self.data_length)
 
 					# If there's still data left to transmit, move forward.
 					with m.If(should_continue):
-					    m.d.sync += position_in_stream.eq(position_in_stream + 1)
+						m.d.sync += position_in_stream.eq(position_in_stream + 1)
 
 					# Otherwise, we've finished streaming. Return to IDLE.
 					with m.Else():
-					    m.next = 'DONE'
+						m.next = 'DONE'
 
 			# DONE -- report our completion; and then return to idle
 			with m.State('DONE'):

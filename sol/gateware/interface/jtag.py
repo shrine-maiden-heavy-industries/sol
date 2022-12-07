@@ -306,8 +306,8 @@ class JTAGRegisterInterface(SPIRegisterInterface):
 		"""
 		Parameters:
 			address_size       -- the size of an address, in bits; recommended to be one bit
-					              less than a binary number, as the write command is formed by adding a one-bit
-					              write flag to the start of every address
+								  less than a binary number, as the write command is formed by adding a one-bit
+								  write flag to the start of every address
 			register_size      -- The size of any given register, in bits.
 			default_read_value -- The read value read from a non-existent or write-only register.
 

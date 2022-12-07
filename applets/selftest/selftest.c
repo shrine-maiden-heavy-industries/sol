@@ -118,7 +118,7 @@ bool ram_tests(void)
 	// Check that the ULPI PHY matches the VID/PID for a Winbond or Cypress PSRAM.
 	//
 	const uint32_t psram_id = read_psram_register(0);
-	const bool id_matches = 
+	const bool id_matches =
 		(psram_id == 0x0c81) ||
 		(psram_id == 0x0c86);
 
@@ -229,7 +229,7 @@ int main(void)
 					// ... and turn on the red LED.
 					leds_output_write(0b100000);
 				}
-				
+
 				else {
 					// Indicate success, and turn on the green LED.
 					leds_output_write(0b000100);
@@ -248,4 +248,3 @@ int main(void)
 
 	}
 }
-

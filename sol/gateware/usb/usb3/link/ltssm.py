@@ -350,19 +350,19 @@ class LTSSMController(Elaboratable):
 					# If we see a TS1, and we're not in strict mode, move forward without
 					# necessarily seeing a LFPS burst ourselves.
 					with m.If(self._loosen_requirements & self.ts1_detected):
-					        transition_to_state("Polling.RxEQ")
+							transition_to_state("Polling.RxEQ")
 
 					# If this is the first burst we've seen, move our target forward;
 					# so we can meet our second condition.
 					with m.If(self.lfps_polling_detected & ~lfps_burst_seen):
-					    m.d.ss += [
-					        lfps_burst_seen    .eq(1),
-					        target_lfps_count  .eq(self.lfps_cycles_sent + 4)
-					    ]
+						m.d.ss += [
+							lfps_burst_seen    .eq(1),
+							target_lfps_count  .eq(self.lfps_cycles_sent + 4)
+						]
 
 					# If we've sent enough, -and- we meet our condition, move forward.
 					with m.If(lfps_burst_seen):
-					        transition_to_state("Polling.RxEQ")
+							transition_to_state("Polling.RxEQ")
 
 
 				# If we haven't yet sent 16 bursts, track how many bursts we have sent.
@@ -370,7 +370,7 @@ class LTSSMController(Elaboratable):
 					m.d.ss += lfps_burst_seen.eq(1)
 
 					with m.If(self.lfps_cycles_sent > 12):
-					    m.d.ss += target_lfps_count.eq(self.lfps_cycles_sent + 4)
+						m.d.ss += target_lfps_count.eq(self.lfps_cycles_sent + 4)
 
 
 
@@ -430,16 +430,16 @@ class LTSSMController(Elaboratable):
 					# training data until we're sure our link partner has completed training; so we'll
 					# move to Polling.Configuration to await completion of the other side.
 					with m.If(self.ts1_detected | self.ts2_detected):
-					    m.d.ss += self.invert_rx_polarity.eq(0),
-					    transition_to_state("Polling.Configuration")
+						m.d.ss += self.invert_rx_polarity.eq(0),
+						transition_to_state("Polling.Configuration")
 
 
 					# If we see a long enough burst of -inverted- training sets, we're also satisfied
 					# with our link training; but we know that the receive differential pair is inverted.
 					# We'll continue, but ask our physical layer to invert our received data.
 					with m.If(self.inverted_ts1_detected):
-					    m.d.ss += self.invert_rx_polarity.eq(1),
-					    transition_to_state("Polling.Configuration")
+						m.d.ss += self.invert_rx_polarity.eq(1),
+						transition_to_state("Polling.Configuration")
 
 
 			# Polling.Configuration -- we're now satisfied with our link training; we'll need to communicate
@@ -612,7 +612,7 @@ class LTSSMController(Elaboratable):
 
 					# Once we see enough TS1s from the other side; or see TS2s, we'll move into our next step.
 					with m.If(self.ts1_detected | self.ts2_detected):
-					    transition_to_state("Recovery.Configuration")
+						transition_to_state("Recovery.Configuration")
 
 
 			# Recovery.Configuration -- we're now satisfied with our link training; we'll need to communicate

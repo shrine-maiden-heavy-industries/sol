@@ -141,13 +141,13 @@ class GTXQuadPLL(Elaboratable):
 					vco_band = None
 				if vco_band is not None:
 					for d in 1, 2, 4, 8, 16:
-					    current_linerate = (vco_freq/2)*2/d
-					    if current_linerate == linerate:
-					        return {"n": n, "nr": 0 if n == 66 else 1, "m": m, "d": d,
-					                "vco_freq": vco_freq,
-					                "vco_band": vco_band,
-					                "clkin": refclk_freq,
-					                "linerate": linerate}
+						current_linerate = (vco_freq/2)*2/d
+						if current_linerate == linerate:
+							return {"n": n, "nr": 0 if n == 66 else 1, "m": m, "d": d,
+									"vco_freq": vco_freq,
+									"vco_band": vco_band,
+									"clkin": refclk_freq,
+									"linerate": linerate}
 		msg = "No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate."
 		raise ValueError(msg.format(refclk_freq/1e6, linerate/1e9))
 
@@ -170,9 +170,9 @@ CLKIN +---> /M  +-->       Charge Pump         +->    VCO     +-> /2 +--> CLKOUT
 	   |             +----+ /N  <----------------------+               |
 	   |                  +-----+                                      |
 	   +---------------------------------------------------------------+
-					        +-------+
+							+-------+
 				   CLKOUT +->  2/D  +-> LINERATE
-					        +-------+
+							+-------+
   config:
   -------
 	CLKIN    = {clkin}MHz
@@ -215,13 +215,13 @@ class GTXChannelPLL(Elaboratable):
 				for n1 in 4, 5:
 					vco_freq = refclk_freq*(n1*n2)/m
 					if 1.6e9 <= vco_freq <= 3.3e9:
-					    for d in 1, 2, 4, 8, 16:
-					        current_linerate = vco_freq*2/d
-					        if current_linerate == linerate:
-					            return {"n1": n1, "n2": n2, "m": m, "d": d,
-					                    "vco_freq": vco_freq,
-					                    "clkin": refclk_freq,
-					                    "linerate": linerate}
+						for d in 1, 2, 4, 8, 16:
+							current_linerate = vco_freq*2/d
+							if current_linerate == linerate:
+								return {"n1": n1, "n2": n2, "m": m, "d": d,
+										"vco_freq": vco_freq,
+										"clkin": refclk_freq,
+										"linerate": linerate}
 		msg = "No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate."
 		raise ValueError(msg.format(refclk_freq/1e6, linerate/1e9))
 
@@ -244,9 +244,9 @@ CLKIN +----> /M  +-->       Charge Pump         +-> VCO +---> CLKOUT
 	   |              +----+  /N2  <----+  /N1  <----+    |
 	   |                   +-------+    +-------+         |
 	   +--------------------------------------------------+
-					        +-------+
+							+-------+
 				   CLKOUT +->  2/D  +-> LINERATE
-					        +-------+
+							+-------+
   config:
   -------
 	CLKIN    = {clkin}MHz
@@ -391,8 +391,8 @@ class GTXChannel(Elaboratable):
 			addr=0x0011, bits=slice(4, 6), reset=0b10) # RX_CM_SEL
 		m.d.comb += [
 			rx_term.value.eq(Mux(self.rx_termination,
-					             0b11,    # Programmable
-					             0b10)),  # Floating
+								 0b11,    # Programmable
+								 0b10)),  # Floating
 		]
 
 		m.submodules.drp_arbiter = drp_arbiter = DRPArbiter()

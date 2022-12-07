@@ -224,7 +224,7 @@ def token_packet(pid, addr, endp):
 	 PPPPPPPP                 - 8 bits - PID
 			 AAAAAAA          - 7 bits - ADDR
 					EEEE      - 4 bits - EP
-					    CCCCC - 5 bits - CRC
+						CCCCC - 5 bits - CRC
 
 	>>> token_packet(PID.IN, 0x3, 0x0) # 0x0A
 	'100101101100000000001010'
@@ -244,7 +244,7 @@ def token_packet(pid, addr, endp):
 	 PPPPPPPP                 - 8 bits - PID
 			 AAAAAAA          - 7 bits - ADDR
 					EEEE      - 4 bits - EP
-					    CCCCC - 5 bits - CRC
+						CCCCC - 5 bits - CRC
 	"""
 	assert addr < 128, addr
 	assert endp < 2**4, endp

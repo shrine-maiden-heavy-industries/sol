@@ -260,7 +260,7 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		Parameters:
 			phy_register_base -- The base address of the PHY window in the debug SPI
-					             address range.
+								 address range.
 			register          -- The PHY register to check.
 			value             -- The expected value of the relevant PHY register.
 		"""
@@ -282,7 +282,7 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		Parameters:
 			phy_register_base -- The base address of the PHY window in the debug SPI
-					             address range.
+								 address range.
 			value             -- The value written to the scratch register.
 		"""
 

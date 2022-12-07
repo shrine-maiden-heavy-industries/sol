@@ -16,7 +16,7 @@ class SetupPacket(Record):
 
 	Components (O = output from setup parser; read-only input to others):
 		O: received      -- Strobe; indicates that a new setup packet has been received,
-					        and thus this data has been updated.
+							and thus this data has been updated.
 
 		O: is_in_request -- High if the current request is an 'in' request.
 		O: type[2]       -- Request type for the current request.

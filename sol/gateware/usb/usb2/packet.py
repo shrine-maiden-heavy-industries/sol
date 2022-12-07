@@ -370,12 +370,12 @@ class USBTokenDetector(Elaboratable):
 					# Note that we have two categories of token we'll accept: normal tokens (IN, OUT, SETUP, SOF),
 					# and our SPECIAL category tokens (e.g. PING), which have a separate PID suffix.
 					with m.If((is_normal_token | is_ping_token) & is_valid_pid):
-					    m.d.usb += current_pid.eq(self.utmi.rx_data)
-					    m.next = "READ_TOKEN_0"
+						m.d.usb += current_pid.eq(self.utmi.rx_data)
+						m.next = "READ_TOKEN_0"
 
 					# Otherwise, ignore this packet as a non-token.
 					with m.Else():
-					    m.next = "IRRELEVANT"
+						m.next = "IRRELEVANT"
 
 
 			with m.State("READ_TOKEN_0"):
@@ -401,17 +401,17 @@ class USBTokenDetector(Elaboratable):
 				# we can validate our checksum and handle it.
 				with m.Elif(self.utmi.rx_valid):
 					expected_crc = self._generate_crc_for_token(
-					    Cat(token_data[0:8], self.utmi.rx_data[0:3]))
+						Cat(token_data[0:8], self.utmi.rx_data[0:3]))
 
 					# If the token has a valid CRC, capture it...
 					with m.If(self.utmi.rx_data[3:8] == expected_crc):
-					    m.d.usb += token_data[8:].eq(self.utmi.rx_data)
-					    m.next = "TOKEN_COMPLETE"
+						m.d.usb += token_data[8:].eq(self.utmi.rx_data)
+						m.next = "TOKEN_COMPLETE"
 
 					# ... otherwise, we'll ignore the whole token, as we can't tell
 					# if this token was meant for us.
 					with m.Else():
-					    m.next = "IRRELEVANT"
+						m.next = "IRRELEVANT"
 
 			# TOKEN_COMPLETE: we've received a full token; and now need to wait
 			# for the packet to be complete.
@@ -426,32 +426,32 @@ class USBTokenDetector(Elaboratable):
 					# the frame number from this, rather than our typical
 					# token fields.
 					with m.If(current_pid == self.SOF_PID):
-					    m.d.usb += [
-					        self.interface.frame      .eq(token_data),
-					        self.interface.new_frame  .eq(1),
-					    ]
+						m.d.usb += [
+							self.interface.frame      .eq(token_data),
+							self.interface.new_frame  .eq(1),
+						]
 
 					# Otherwise, extract the address and endpoint from the token,
 					# and report the captured pid.
 					with m.Else():
 
-					    # If we're filtering by address, only count this token if it's releveant to our address.
-					    # Otherwise, always count tokens -- we'll report the address on the output.
-					    token_applicable = (token_data[0:7] == self.address) if self.filter_by_address else True
-					    with m.If(token_applicable):
-					        m.d.usb += [
-					            self.interface.pid        .eq(current_pid),
-					            self.interface.new_token  .eq(1),
+						# If we're filtering by address, only count this token if it's releveant to our address.
+						# Otherwise, always count tokens -- we'll report the address on the output.
+						token_applicable = (token_data[0:7] == self.address) if self.filter_by_address else True
+						with m.If(token_applicable):
+							m.d.usb += [
+								self.interface.pid        .eq(current_pid),
+								self.interface.new_token  .eq(1),
 
-					            Cat(self.interface.address, self.interface.endpoint).eq(token_data)
-					        ]
+								Cat(self.interface.address, self.interface.endpoint).eq(token_data)
+							]
 
-					        # Start our interpacket-delay timer.
-					        m.d.comb += timer.start.eq(1)
+							# Start our interpacket-delay timer.
+							m.d.comb += timer.start.eq(1)
 
-					    # If we don't count the token, clear the state so we don't act on following packets.
-					    with m.Else():
-					        m.d.usb += self.interface.pid.eq(0)
+						# If we don't count the token, clear the state so we don't act on following packets.
+						with m.Else():
+							m.d.usb += self.interface.pid.eq(0)
 
 
 				# Otherwise, if we get more data, we've received a malformed
@@ -594,12 +594,12 @@ class USBHandshakeDetector(Elaboratable):
 
 					# If we have a valid PID, move to capture it.
 					with m.If(is_valid_pid):
-					    m.d.usb += active_pid.eq(self.utmi.rx_data)
-					    m.next = "AWAIT_COMPLETION"
+						m.d.usb += active_pid.eq(self.utmi.rx_data)
+						m.next = "AWAIT_COMPLETION"
 
 					# Otherwise, ignore this packet as a non-token.
 					with m.Else():
-					    m.next = "IRRELEVANT"
+						m.next = "IRRELEVANT"
 
 
 			# TOKEN_COMPLETE: we've received a full token; and now need to wait
@@ -610,10 +610,10 @@ class USBHandshakeDetector(Elaboratable):
 				# and identify the event.
 				with m.If(~self.utmi.rx_active):
 					m.d.usb += [
-					    self.detected.ack    .eq(active_pid == self.ACK_PID),
-					    self.detected.nak    .eq(active_pid == self.NAK_PID),
-					    self.detected.stall  .eq(active_pid == self.STALL_PID),
-					    self.detected.nyet   .eq(active_pid == self.NYET_PID),
+						self.detected.ack    .eq(active_pid == self.ACK_PID),
+						self.detected.nak    .eq(active_pid == self.NAK_PID),
+						self.detected.stall  .eq(active_pid == self.STALL_PID),
+						self.detected.nyet   .eq(active_pid == self.NYET_PID),
 					]
 					m.next="IDLE"
 
@@ -920,12 +920,12 @@ class USBDataPacketReceiver(Elaboratable):
 
 					# If this is a data packet, capture its PID.
 					with m.If(is_valid_pid & is_data):
-					    m.d.usb += self.active_pid.eq(self.utmi.rx_data),
-					    m.next = "RECEIVE_FIRST_BYTE"
+						m.d.usb += self.active_pid.eq(self.utmi.rx_data),
+						m.next = "RECEIVE_FIRST_BYTE"
 
 					# Otherwise, ignore this packet.
 					with m.Else():
-					    m.next = "IRRELEVANT"
+						m.next = "IRRELEVANT"
 
 
 			# RECEIVE_FIRST_BYTE -- capture the first byte into our pipeline.
@@ -935,8 +935,8 @@ class USBDataPacketReceiver(Elaboratable):
 
 				with m.If(self.utmi.rx_valid):
 					m.d.usb += [
-					    data_pipeline[8:]  .eq(self.utmi.rx_data),
-					    last_byte_crc       .eq(self.data_crc.crc)
+						data_pipeline[8:]  .eq(self.utmi.rx_data),
+						last_byte_crc       .eq(self.data_crc.crc)
 					]
 					m.next = 'RECEIVE_SECOND_BYTE'
 
@@ -951,11 +951,11 @@ class USBDataPacketReceiver(Elaboratable):
 
 				with m.If(self.utmi.rx_valid):
 					m.d.usb += [
-					    data_pipeline[8:]   .eq(self.utmi.rx_data),
-					    data_pipeline[0:8]  .eq(data_pipeline[8:]),
+						data_pipeline[8:]   .eq(self.utmi.rx_data),
+						data_pipeline[0:8]  .eq(data_pipeline[8:]),
 
-					    last_byte_crc       .eq(self.data_crc.crc),
-					    last_word_crc       .eq(last_byte_crc),
+						last_byte_crc       .eq(self.data_crc.crc),
+						last_word_crc       .eq(last_byte_crc),
 					]
 					m.next = 'RECEIVE_AND_EMIT'
 
@@ -974,20 +974,20 @@ class USBDataPacketReceiver(Elaboratable):
 				with m.If(self.utmi.rx_valid):
 
 					m.d.comb += [
-					    # Emit the current packet...
-					    self.stream.payload  .eq(data_pipeline[0:8]),
-					    self.stream.next     .eq(1),
+						# Emit the current packet...
+						self.stream.payload  .eq(data_pipeline[0:8]),
+						self.stream.next     .eq(1),
 					]
 
 					m.d.usb += [
 
-					    # ... capture the incoming one...
-					    data_pipeline[8:]   .eq(self.utmi.rx_data),
-					    data_pipeline[0:8]  .eq(data_pipeline[8:]),
+						# ... capture the incoming one...
+						data_pipeline[8:]   .eq(self.utmi.rx_data),
+						data_pipeline[0:8]  .eq(data_pipeline[8:]),
 
-					    # ... and update our cached CRCs.
-					    last_byte_crc       .eq(self.data_crc.crc),
-					    last_word_crc       .eq(last_byte_crc),
+						# ... and update our cached CRCs.
+						last_byte_crc       .eq(self.data_crc.crc),
+						last_word_crc       .eq(last_byte_crc),
 					]
 
 
@@ -997,29 +997,29 @@ class USBDataPacketReceiver(Elaboratable):
 					# If our CRC matches, this is a valid packet!
 					with m.If(last_word_crc == data_pipeline):
 
-					    # Indicate so...
-					    m.d.usb += [
-					        self.packet_id       .eq(self.active_pid),
-					        self.packet_complete .eq(1)
-					    ]
+						# Indicate so...
+						m.d.usb += [
+							self.packet_id       .eq(self.active_pid),
+							self.packet_complete .eq(1)
+						]
 
-					    # ... start counting our interpacket delay...
-					    m.d.comb += [
-					        self.timer.start  .eq(1)
-					    ]
+						# ... start counting our interpacket delay...
+						m.d.comb += [
+							self.timer.start  .eq(1)
+						]
 
-					    # ... and wait for it to complete.
-					    m.next = 'INTERPACKET_DELAY'
+						# ... and wait for it to complete.
+						m.next = 'INTERPACKET_DELAY'
 
 
 					# Otherwise, flag this as a CRC mismatch.
 					with m.Else():
-					    m.d.usb += [
-					        self.crc_mismatch    .eq(1)
-					    ]
+						m.d.usb += [
+							self.crc_mismatch    .eq(1)
+						]
 
-					    # ... and return to IDLE.
-					    m.next = "IDLE"
+						# ... and return to IDLE.
+						m.next = "IDLE"
 
 
 			# INTERPACKET_DELAY -- we've received a valid packet; wait for an
@@ -1241,15 +1241,15 @@ class USBDataPacketDeserializer(Elaboratable):
 
 					# If this is a data packet, capture it.
 					with m.If(is_valid_pid & is_data):
-					    m.d.usb += [
-					        active_pid          .eq(self.utmi.rx_data),
-					        position_in_packet  .eq(0)
-					    ]
-					    m.next = "CAPTURE_DATA"
+						m.d.usb += [
+							active_pid          .eq(self.utmi.rx_data),
+							position_in_packet  .eq(0)
+						]
+						m.next = "CAPTURE_DATA"
 
 					# Otherwise, ignore this packet.
 					with m.Else():
-					    m.next = "IRRELEVANT"
+						m.next = "IRRELEVANT"
 
 
 			with m.State("CAPTURE_DATA"):
@@ -1259,35 +1259,35 @@ class USBDataPacketDeserializer(Elaboratable):
 
 					# If this would over-fill our internal buffer, fail out.
 					with m.If(position_in_packet >= max_size_with_crc):
-					    # TODO: potentially signal the babble?
-					    m.next = "IRRELEVANT"
+						# TODO: potentially signal the babble?
+						m.next = "IRRELEVANT"
 
 					with m.Else():
-					    m.d.usb += [
-					        active_packet[position_in_packet]  .eq(self.utmi.rx_data),
-					        position_in_packet                 .eq(position_in_packet + 1),
+						m.d.usb += [
+							active_packet[position_in_packet]  .eq(self.utmi.rx_data),
+							position_in_packet                 .eq(position_in_packet + 1),
 
-					        last_word     .eq(Cat(last_word[8:], self.utmi.rx_data)),
+							last_word     .eq(Cat(last_word[8:], self.utmi.rx_data)),
 
-					        last_word_crc .eq(last_byte_crc),
-					        last_byte_crc .eq(self.data_crc.crc),
-					    ]
+							last_word_crc .eq(last_byte_crc),
+							last_byte_crc .eq(self.data_crc.crc),
+						]
 
 
 				# If this is the end of our packet, validate our CRC and finish.
 				with m.If(~self.utmi.rx_active):
 
 					with m.If(last_word_crc == last_word):
-					    m.d.usb += [
-					        self.packet_id   .eq(active_pid),
-					        self.length      .eq(position_in_packet - 2),
-					        self.new_packet  .eq(1)
-					    ]
+						m.d.usb += [
+							self.packet_id   .eq(active_pid),
+							self.length      .eq(position_in_packet - 2),
+							self.new_packet  .eq(1)
+						]
 
-					    for i in range(self._max_packet_size):
-					        m.d.usb += self.packet[i].eq(active_packet[i]),
+						for i in range(self._max_packet_size):
+							m.d.usb += self.packet[i].eq(active_packet[i]),
 
-					    m.next = "IDLE"
+						m.next = "IDLE"
 
 			# IRRELEVANT -- we've encountered a malformed or non-handshake packet
 			with m.State("IRRELEVANT"):
@@ -1468,11 +1468,11 @@ class USBDataPacketGenerator(Elaboratable):
 					# If this is a ZLP, we don't have a payload to send.
 					# Skip directly to sending our CRC.
 					with m.If(is_zlp):
-					    m.next = 'SEND_CRC_FIRST'
+						m.next = 'SEND_CRC_FIRST'
 
 					# Otherwise, we have a payload. Send it.
 					with m.Else():
-					    m.next = 'SEND_PAYLOAD'
+						m.next = 'SEND_PAYLOAD'
 
 
 			# SEND_PAYLOAD -- send the data payload for our stream

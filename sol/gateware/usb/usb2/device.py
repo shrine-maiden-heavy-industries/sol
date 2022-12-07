@@ -584,12 +584,12 @@ class LongDescriptorTest(USBDeviceTest):
 				for n in range(15):
 
 					with i.EndpointDescriptor() as e:
-					    e.bEndpointAddress = n
-					    e.wMaxPacketSize   = 512
+						e.bEndpointAddress = n
+						e.wMaxPacketSize   = 512
 
 					with i.EndpointDescriptor() as e:
-					    e.bEndpointAddress = 0x80 | n
-					    e.wMaxPacketSize   = 512
+						e.bEndpointAddress = 0x80 | n
+						e.wMaxPacketSize   = 512
 
 		dut.add_standard_control_endpoint(descriptors)
 

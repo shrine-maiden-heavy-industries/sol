@@ -237,13 +237,13 @@ class USBInTransferManager(Elaboratable):
 					m.next = "WAIT_TO_SEND"
 					m.d.usb += [
 
-					    # We're now ready to take the data we've captured and _transmit_ it.
-					    # We'll swap our read and write buffers, and toggle our data PID.
-					    self.buffer_toggle  .eq(~self.buffer_toggle),
-					    self.data_pid[0]    .eq(~self.data_pid[0]),
+						# We're now ready to take the data we've captured and _transmit_ it.
+						# We'll swap our read and write buffers, and toggle our data PID.
+						self.buffer_toggle  .eq(~self.buffer_toggle),
+						self.data_pid[0]    .eq(~self.data_pid[0]),
 
-					    # Mark our current stream as no longer having ended.
-					    read_stream_ended  .eq(0)
+						# Mark our current stream as no longer having ended.
+						read_stream_ended  .eq(0)
 					]
 
 
@@ -257,19 +257,19 @@ class USBInTransferManager(Elaboratable):
 
 					# If we have a packet to send, send it.
 					with m.If(read_fill_count):
-					    m.next = "SEND_PACKET"
-					    m.d.usb += out_stream.first  .eq(1)
+						m.next = "SEND_PACKET"
+						m.d.usb += out_stream.first  .eq(1)
 
 					# Otherwise, we entered a transmit path without any data in the buffer.
 					with m.Else():
-					    m.d.comb += [
-					        # Send a ZLP...
-					        out_stream.valid  .eq(1),
-					        out_stream.last   .eq(1),
-					    ]
-					    # ... and clear the need to follow up with one, since we've just sent a short packet.
-					    m.d.usb += read_stream_ended.eq(0)
-					    m.next = "WAIT_FOR_ACK"
+						m.d.comb += [
+							# Send a ZLP...
+							out_stream.valid  .eq(1),
+							out_stream.last   .eq(1),
+						]
+						# ... and clear the need to follow up with one, since we've just sent a short packet.
+						m.d.usb += read_stream_ended.eq(0)
+						m.next = "WAIT_FOR_ACK"
 
 
 			with m.State("SEND_PACKET"):
@@ -288,11 +288,11 @@ class USBInTransferManager(Elaboratable):
 				with m.If(out_stream.ready):
 
 					m.d.usb += [
-					    # ... move to the next byte in our packet ...
-					    send_position     .eq(send_position + 1),
+						# ... move to the next byte in our packet ...
+						send_position     .eq(send_position + 1),
 
-					    # ... and mark our packet as no longer the first.
-					    out_stream.first  .eq(0)
+						# ... and mark our packet as no longer the first.
+						out_stream.first  .eq(0)
 					]
 
 					# Move our memory pointer to its next position.
@@ -301,7 +301,7 @@ class USBInTransferManager(Elaboratable):
 					# If we've just sent our last packet, we're now ready to wait for a
 					# response from our host.
 					with m.If(last_packet):
-					    m.next = 'WAIT_FOR_ACK'
+						m.next = 'WAIT_FOR_ACK'
 
 
 			# WAIT_FOR_ACK -- We've just sent a packet; but don't know if the host has
@@ -317,30 +317,30 @@ class USBInTransferManager(Elaboratable):
 					# we'll make sure we end on a short packet. If this is max-packet-size packet _and_ our
 					# transfer ended with this packet; we'll need to inject a ZLP.
 					follow_up_with_zlp = \
-					    self.generate_zlps & (read_fill_count == self._max_packet_size) & read_stream_ended
+						self.generate_zlps & (read_fill_count == self._max_packet_size) & read_stream_ended
 
 					# If we're following up with a ZLP, move back to our "wait to send" state.
 					# Since we've now cleared our fill count; this next go-around will emit a ZLP.
 					with m.If(follow_up_with_zlp):
-					    m.d.usb += self.data_pid[0].eq(~self.data_pid[0]),
-					    m.next = "WAIT_TO_SEND"
+						m.d.usb += self.data_pid[0].eq(~self.data_pid[0]),
+						m.next = "WAIT_TO_SEND"
 
 					# Otherwise, there's a possibility we already have a packet-worth of data waiting
 					# for us in our "write buffer", which we've been filling in the background.
 					# If this is the case, we'll flip which buffer we're working with, toggle our data pid,
 					# and then ready ourselves for transmit.
 					with m.Elif(~in_stream.ready | packet_ready):
-					    m.next = "WAIT_TO_SEND"
-					    m.d.usb += [
-					        self.buffer_toggle .eq(~self.buffer_toggle),
-					        self.data_pid[0]   .eq(~self.data_pid[0]),
-					        read_stream_ended  .eq(0)
-					    ]
+						m.next = "WAIT_TO_SEND"
+						m.d.usb += [
+							self.buffer_toggle .eq(~self.buffer_toggle),
+							self.data_pid[0]   .eq(~self.data_pid[0]),
+							read_stream_ended  .eq(0)
+						]
 
 					# If neither of the above conditions are true; we now don't have enough data to send.
 					# We'll wait for enough data to transmit.
 					with m.Else():
-					    m.next = "WAIT_FOR_DATA"
+						m.next = "WAIT_FOR_DATA"
 
 
 				# If the host starts a new packet without ACK'ing, we'll need to retransmit.

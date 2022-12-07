@@ -19,7 +19,7 @@ class StreamDeserializer(Elaboratable):
 
 		O: data         -- The data stream receieved. Length is set by the dataLength initializer argument.
 		I: maxLength[] -- The maximum length to be received. Defaults to the length of the stream.
-					       Only present if the `maxLengthWidth` parameter is provided on creation.
+						   Only present if the `maxLengthWidth` parameter is provided on creation.
 
 		*: stream       -- The stream being consumed.
 
@@ -33,7 +33,7 @@ class StreamDeserializer(Elaboratable):
 			dataWidth       -- The width of the data chunks
 			streamType      -- The stream we'll be consuming. Must be a subclass of USBOutStreamInterface
 			maxLengthWidth  -- If provided, a `maxLength` signal will be present that can limit the total length
-					           consumed from the stream.
+							   consumed from the stream.
 		"""
 
 		self.domain = domain
@@ -82,10 +82,10 @@ class StreamDeserializer(Elaboratable):
 
 					# Update the counter if we need to continue
 					with m.If(shouldContinue):
-					    m.d.sync += positionInData.eq(positionInData + 1)
+						m.d.sync += positionInData.eq(positionInData + 1)
 					# Otherwise go back to idle
 					with m.Else():
-					    m.next = 'DONE'
+						m.next = 'DONE'
 			# DONE -- report our completion then go to idle
 			with m.State('DONE'):
 				m.d.comb += self.done.eq(1)

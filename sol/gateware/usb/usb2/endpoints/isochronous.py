@@ -150,12 +150,12 @@ class USBIsochronousInEndpoint(Elaboratable):
 
 					# If we have data to send, send it.
 					with m.If(bytes_left_in_frame):
-					    m.d.usb += out_stream.first.eq(1)
-					    m.next = "SEND_DATA"
+						m.d.usb += out_stream.first.eq(1)
+						m.next = "SEND_DATA"
 
 					# Otherwise, we'll send a ZLP.
 					with m.Else():
-					    m.next = "SEND_ZLP"
+						m.next = "SEND_ZLP"
 
 
 			# SEND_DATA -- our primary data-transmission state; handles packet transmission
@@ -185,8 +185,8 @@ class USBIsochronousInEndpoint(Elaboratable):
 
 					# Mark the relevant byte as sent...
 					m.d.usb += [
-					    bytes_left_in_frame   .eq(bytes_left_in_frame  - 1),
-					    bytes_left_in_packet  .eq(bytes_left_in_packet - 1),
+						bytes_left_in_frame   .eq(bytes_left_in_frame  - 1),
+						bytes_left_in_packet  .eq(bytes_left_in_packet - 1),
 					]
 
 					# ... and advance to the next address.
@@ -195,16 +195,16 @@ class USBIsochronousInEndpoint(Elaboratable):
 					# If we've just completed transmitting a packet, or we've
 					# just transmitted a full frame, end our transmission.
 					with m.If(byte_terminates_send):
-					    m.d.usb += [
-					        # Move to the next DATA pid, which is always one DATA PID less.
-					        # [USB2.0: 5.9.2]. We'll reset this back to its maximum value when
-					        # the next frame starts.
-					        next_data_pid        .eq(next_data_pid - 1),
+						m.d.usb += [
+							# Move to the next DATA pid, which is always one DATA PID less.
+							# [USB2.0: 5.9.2]. We'll reset this back to its maximum value when
+							# the next frame starts.
+							next_data_pid        .eq(next_data_pid - 1),
 
-					        # Mark our next packet as being a full one.
-					        bytes_left_in_packet .eq(self._max_packet_size)
-					    ]
-					    m.next = "IDLE"
+							# Mark our next packet as being a full one.
+							bytes_left_in_packet .eq(self._max_packet_size)
+						]
+						m.next = "IDLE"
 
 
 			# SEND_ZLP -- sends a zero-length packet, and then return to idle.

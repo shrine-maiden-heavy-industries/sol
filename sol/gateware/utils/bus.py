@@ -33,14 +33,14 @@ class OneHotMultiplexer(Elaboratable):
 			interface_type  -- The type of interface we'll be multiplexing.
 			valid_field     -- The name of the field that indicates the relevant object's validity.
 			mux_signals     -- An iterable of {signal names to be multiplexed, or functions that
-					           accept instances of the relevant interface type and return a Signal}.
-					           Signals listed here are passed through iff their one-hot `valid` signal is high.
+							   accept instances of the relevant interface type and return a Signal}.
+							   Signals listed here are passed through iff their one-hot `valid` signal is high.
 			or_signals      -- An itereable of {signals names to be multiplexed, or functions that accept
-					           an instance of the relevant interface type and return a Signal}. Signals listed
-					           here are OR'd together without multiplexing; it's expected that these signals will
-					           only be high when their corresponding `valid` signal is high.
+							   an instance of the relevant interface type and return a Signal}. Signals listed
+							   here are OR'd together without multiplexing; it's expected that these signals will
+							   only be high when their corresponding `valid` signal is high.
 			pass_signals    -- A list of signals that should be passed back from the output interface to each
-					           of our input interfaces.
+							   of our input interfaces.
 		"""
 
 		self._valid_field  = valid_field
@@ -80,7 +80,7 @@ class OneHotMultiplexer(Elaboratable):
 		Parameter:
 			interface        -- The interface to fetch the relevant signal from.
 			name_or_function -- The name of the signal to retrieve; or a function that
-					            returns the relevant signal given the interface.
+								returns the relevant signal given the interface.
 		 """
 
 		if callable(name_or_function):
@@ -116,10 +116,10 @@ class OneHotMultiplexer(Elaboratable):
 				with m.Case(index):
 					for identifier in self._mux_signals:
 
-					    # ... connect all of its muxed signals through to the output.
-					    output_signal = self._get_signal(self.output, identifier)
-					    input_signal  = self._get_signal(interface,   identifier)
-					    m.d.comb += output_signal.eq(input_signal)
+						# ... connect all of its muxed signals through to the output.
+						output_signal = self._get_signal(self.output, identifier)
+						input_signal  = self._get_signal(interface,   identifier)
+						m.d.comb += output_signal.eq(input_signal)
 
 
 		# Create the OR'ing logic for each of or or_signals.

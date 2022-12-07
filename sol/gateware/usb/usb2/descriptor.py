@@ -46,9 +46,9 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 
 	I/O port:
 		I: value[16]  -- The value field associated with the Get Descriptor request.
-		                 Contains the descriptor type and index.
+						 Contains the descriptor type and index.
 		I: length[16] -- The length field associated with the Get Descriptor request.
-		                 Determines the maximum amount allowed in a response.
+						 Determines the maximum amount allowed in a response.
 
 		I: start      -- Strobe that indicates when a descriptor should be transmitted.
 
@@ -60,7 +60,7 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 		"""
 		Parameteres:
 			descriptor_collection -- The DeviceDescriptorCollection containing the descriptors
-			                         to use for this device.
+									 to use for this device.
 		"""
 
 		self._descriptors = descriptor_collection
@@ -151,9 +151,9 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 	I/O port:
 		I: value[16]      -- The value field associated with the Get Descriptor request.
-		                     Contains the descriptor type and index.
+							 Contains the descriptor type and index.
 		I: length[16]     -- The length field associated with the Get Descriptor request.
-		                     Determines the maximum amount allowed in a response.
+							 Determines the maximum amount allowed in a response.
 
 		I: start          -- Strobe that indicates when a descriptor should be transmitted.
 		I: start_position -- Specifies the starting position of the descriptor data to be transmitted.

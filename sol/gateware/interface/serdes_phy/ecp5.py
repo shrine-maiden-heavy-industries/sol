@@ -146,8 +146,8 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 				with m.If(~first & sci.done):
 					m.d.comb += sci.re.eq(0)
 					m.d.pipe += [
-					    data.eq(sci.dat_r),
-					    first.eq(1)
+						data.eq(sci.dat_r),
+						first.eq(1)
 					]
 					m.next = "WRITE-CH_01"
 
@@ -410,8 +410,8 @@ class ECP5SerDesEqualizer(Elaboratable):
 				# ... and if this is a new best, store it.
 				with m.If(bit_errors_seen < best_bit_error_count):
 					m.d.pipe += [
-					    best_bit_error_count    .eq(bit_errors_seen),
-					    best_equalizer_setting  .eq(current_settings)
+						best_bit_error_count    .eq(bit_errors_seen),
+						best_equalizer_setting  .eq(current_settings)
 					]
 
 		# If we're not currently in training, always apply our known best settings.
@@ -543,10 +543,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 					m.d.ss += timer.eq(0)
 				with m.Else():
 					with m.If(timer + 1 != self.RX_LOS_CYCLES):
-					    m.d.ss += timer.eq(timer + 1)
+						m.d.ss += timer.eq(timer + 1)
 					with m.Else():
-					    m.d.ss += timer.eq(0)
-					    m.next = "APPLY_CDR_RESET"
+						m.d.ss += timer.eq(0)
+						m.next = "APPLY_CDR_RESET"
 
 				with m.If(~tx_pll_locked):
 					m.next = "WAIT_FOR_TXPLL_LOCK"
@@ -588,10 +588,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 					m.next = "APPLY_CDR_RESET"
 				with m.Else():
 					with m.If(timer + 1 != self.RX_LOL_CYCLES):
-					    m.d.ss += timer.eq(timer + 1)
+						m.d.ss += timer.eq(timer + 1)
 					with m.Else():
-					    m.d.ss += timer.eq(0)
-					    m.next = "APPLY_RXPCS_RESET"
+						m.d.ss += timer.eq(0)
+						m.next = "APPLY_RXPCS_RESET"
 
 				with m.If(~rx_has_signal):
 					m.next = "WAIT_FOR_RX_SIGNAL"
@@ -635,10 +635,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 					m.next = "APPLY_RXPCS_RESET"
 				with m.Else():
 					with m.If(timer + 1 != self.RX_ERR_CYCLES):
-					    m.d.ss += timer.eq(timer + 1)
+						m.d.ss += timer.eq(timer + 1)
 					with m.Else():
-					    m.d.ss += timer.eq(0)
-					    m.next = "IDLE"
+						m.d.ss += timer.eq(0)
+						m.next = "IDLE"
 
 				with m.If(~rx_has_signal):
 					m.next = "WAIT_FOR_RX_SIGNAL"

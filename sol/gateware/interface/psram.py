@@ -49,7 +49,7 @@ class HyperRAMInterface(Elaboratable):
 		I: perform_write    -- When set to 1, a transfer request is viewed as a write, rather than a read.
 		I: single_page      -- If set, data accesses will wrap around to the start of the current page when done.
 		I: start_transfer   -- Strobe that goes high for 1-8 cycles to request a read operation.
-					           [This added duration allows other clock domains to easily perform requests.]
+							   [This added duration allows other clock domains to easily perform requests.]
 		I: final_word       -- Flag that indicates the current word is the last word of the transaction.
 
 		O: read_data[16]    -- word that holds the 16 bits most recently read from the PSRAM
@@ -67,8 +67,8 @@ class HyperRAMInterface(Elaboratable):
 		Parmeters:
 			bus           -- The RAM record that should be connected to this RAM chip.
 			data_skews    -- If provided, adds an input delay to each line of the data input.
-					         Can be provided as a single delay number, or an interable of eight
-					         delays to separately delay each of the input lines.
+							 Can be provided as a single delay number, or an interable of eight
+							 delays to separately delay each of the input lines.
 		"""
 
 		self.in_skew    = in_skew
@@ -193,10 +193,10 @@ class HyperRAMInterface(Elaboratable):
 					m.next = 'LATCH_RWDS'
 
 					m.d.sync += [
-					    is_read             .eq(~self.perform_write),
-					    is_register         .eq(self.register_space),
-					    is_multipage        .eq(~self.single_page),
-					    current_address     .eq(self.address),
+						is_read             .eq(~self.perform_write),
+						is_register         .eq(self.register_space),
+						is_multipage        .eq(~self.single_page),
+						current_address     .eq(self.address),
 					]
 
 				with m.Else():
@@ -294,9 +294,9 @@ class HyperRAMInterface(Elaboratable):
 					m.next = "HANDLE_LATENCY"
 
 					with m.If(extra_latency):
-					    m.d.sync += latency_edges_remaining.eq(self.HIGH_LATENCY_EDGES)
+						m.d.sync += latency_edges_remaining.eq(self.HIGH_LATENCY_EDGES)
 					with m.Else():
-					    m.d.sync += latency_edges_remaining.eq(self.LOW_LATENCY_EDGES)
+						m.d.sync += latency_edges_remaining.eq(self.LOW_LATENCY_EDGES)
 
 
 			# HANDLE_LATENCY -- applies clock edges until our latency period is over.
@@ -305,9 +305,9 @@ class HyperRAMInterface(Elaboratable):
 
 				with m.If(latency_edges_remaining == 0):
 					with m.If(is_read):
-					    m.next = 'READ_DATA_MSB'
+						m.next = 'READ_DATA_MSB'
 					with m.Else():
-					    m.next = 'WRITE_DATA_MSB'
+						m.next = 'WRITE_DATA_MSB'
 
 
 			# STREAM_DATA_MSB -- scans in or out the first byte of data
@@ -326,18 +326,18 @@ class HyperRAMInterface(Elaboratable):
 				# Sample it, and indicate that we now have a valid piece of new data.
 				with m.If(self.bus.rwds.i != last_rwds):
 					m.d.sync += [
-					    self.read_data[0:8]  .eq(data_in),
-					    new_data_ready       .eq(1)
+						self.read_data[0:8]  .eq(data_in),
+						new_data_ready       .eq(1)
 					]
 
 					# If our controller is done with the transcation, end it.
 					with m.If(self.final_word):
-					    m.next = 'RECOVERY'
-					    m.d.sync += advance_clock.eq(0)
+						m.next = 'RECOVERY'
+						m.d.sync += advance_clock.eq(0)
 
 					with m.Else():
-					    #m.next = 'READ_DATA_MSB'
-					    m.next = 'RECOVERY'
+						#m.next = 'READ_DATA_MSB'
+						m.next = 'RECOVERY'
 
 
 			# WRITE_DATA_MSB -- write the first of our two bytes of data to the to the PSRAM

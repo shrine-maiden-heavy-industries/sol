@@ -32,7 +32,7 @@ __attribute__((naked,section(".init"))) void _start(void)
 		/* Enable interrupts. */
 		"li t0, 0x800\n\t"
 		"csrs mie, t0\n\t"
-	
+
 		/* Finally, start our main routine. */
 		"jal zero, main \n\t"
 	);

@@ -1,5 +1,5 @@
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 
 TARGET      = eptri_example

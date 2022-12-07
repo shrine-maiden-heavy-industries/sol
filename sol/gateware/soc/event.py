@@ -52,7 +52,7 @@ class EventSource:
 		choices = ("level", "rise", "fall")
 		if mode not in choices:
 			raise ValueError("Invalid trigger mode {!r}; must be one of {}"
-					         .format(mode, ", ".join(choices)))
+							 .format(mode, ", ".join(choices)))
 
 		self.name = name or tracer.get_var_name(depth=2 + src_loc_at)
 		self.mode = mode
@@ -100,7 +100,7 @@ class InterruptSource(Elaboratable):
 		for event in events:
 			if not isinstance(event, EventSource):
 				raise TypeError("Event source must be an instance of EventSource, not {!r}"
-					            .format(event))
+								.format(event))
 		self._events = list(events)
 
 		width = len(events)

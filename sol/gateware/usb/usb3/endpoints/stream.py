@@ -235,24 +235,24 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 					# If we've just finished a packet, we now have data we can send!
 					with m.If(packet_complete | in_stream.last):
-					    m.d.ss += [
+						m.d.ss += [
 
-					        # We're now ready to take the data we've captured and _transmit_ it.
-					        # We'll swap our read and write buffers.
-					        ping_pong_toggle.eq(~ping_pong_toggle),
+							# We're now ready to take the data we've captured and _transmit_ it.
+							# We'll swap our read and write buffers.
+							ping_pong_toggle.eq(~ping_pong_toggle),
 
-					        # Mark our current stream as no longer having ended.
-					        read_stream_ended  .eq(0)
-					    ]
+							# Mark our current stream as no longer having ended.
+							read_stream_ended  .eq(0)
+						]
 
-					    # If we've already sent an NRDY token, we'll need to request an IN token
-					    # before the host will be willing to send us one.
-					    with m.If(erdy_required | in_token_received):
-					        m.next = "REQUEST_IN_TOKEN"
+						# If we've already sent an NRDY token, we'll need to request an IN token
+						# before the host will be willing to send us one.
+						with m.If(erdy_required | in_token_received):
+							m.next = "REQUEST_IN_TOKEN"
 
-					    # Otherwise, we can wait for an IN token directly.
-					    with m.Else():
-					        m.next = "WAIT_TO_SEND"
+						# Otherwise, we can wait for an IN token directly.
+						with m.Else():
+							m.next = "WAIT_TO_SEND"
 
 
 			# REQUEST_IN_TOKEN -- we now have at least a buffer full of data to send; but
@@ -277,24 +277,24 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 					# If we have a packet to send, send it.
 					with m.If(read_fill_count):
-					    m.next = "SEND_PACKET"
-					    m.d.ss += [
-					        last_packet_was_zlp  .eq(0)
-					    ]
+						m.next = "SEND_PACKET"
+						m.d.ss += [
+							last_packet_was_zlp  .eq(0)
+						]
 
 					# Otherwise, we entered a transmit path without any data in the buffer.
 					with m.Else():
-					    # ... send a ZLP...
-					    m.d.comb += interface.tx_zlp.eq(1)
+						# ... send a ZLP...
+						m.d.comb += interface.tx_zlp.eq(1)
 
-					    # ... and clear the need to follow up with one, since we've just sent a short packet.
-					    m.d.ss += [
-					        read_stream_ended    .eq(0),
-					        last_packet_was_zlp  .eq(1)
-					    ]
+						# ... and clear the need to follow up with one, since we've just sent a short packet.
+						m.d.ss += [
+							read_stream_ended    .eq(0),
+							last_packet_was_zlp  .eq(1)
+						]
 
-					    # We've now completed a packet send; so wait for it to be acknowledged.
-					    m.next = "WAIT_FOR_ACK"
+						# We've now completed a packet send; so wait for it to be acknowledged.
+						m.next = "WAIT_FOR_ACK"
 
 
 			# SEND_PACKET -- we now have enough data to send _and_ have received an IN token.
@@ -319,13 +319,13 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 					last_word  = ((send_position + 1) << 2 >= read_fill_count)
 
 					m.d.ss += [
-					    # Block RAM often has a large clock-to-dout delay; register the output to
-					    # improve timings.
-					    out_stream.payload        .eq(buffer_read.data),
+						# Block RAM often has a large clock-to-dout delay; register the output to
+						# improve timings.
+						out_stream.payload        .eq(buffer_read.data),
 
-					    # Let our transmitter know the packet boundaries.
-					    out_stream.first          .eq(first_word),
-					    out_stream.last           .eq(last_word),
+						# Let our transmitter know the packet boundaries.
+						out_stream.first          .eq(first_word),
+						out_stream.last           .eq(last_word),
 					]
 
 					# Figure out which bytes of our stream are valid. Normally; this is all of them,
@@ -333,31 +333,31 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 					# many bytes we expect to be valid in the word.
 					with m.If(last_word):
 
-					    # We can figure out how many bytes are valid by looking at the last two bits of our
-					    # count; which happen to be the mod-4 remainder.
-					    with m.Switch(read_fill_count[0:2]):
+						# We can figure out how many bytes are valid by looking at the last two bits of our
+						# count; which happen to be the mod-4 remainder.
+						with m.Switch(read_fill_count[0:2]):
 
-					        # If we're evenly divisible by four, all four bytes are valid.
-					        with m.Case(0):
-					            m.d.ss += out_stream.valid.eq(0b1111)
+							# If we're evenly divisible by four, all four bytes are valid.
+							with m.Case(0):
+								m.d.ss += out_stream.valid.eq(0b1111)
 
-					        # Otherwise, our remainder tells os how many bytes are valid.
-					        with m.Case(1):
-					            m.d.ss += out_stream.valid.eq(0b0001)
-					        with m.Case(2):
-					            m.d.ss += out_stream.valid.eq(0b0011)
-					        with m.Case(3):
-					            m.d.ss += out_stream.valid.eq(0b0111)
+							# Otherwise, our remainder tells os how many bytes are valid.
+							with m.Case(1):
+								m.d.ss += out_stream.valid.eq(0b0001)
+							with m.Case(2):
+								m.d.ss += out_stream.valid.eq(0b0011)
+							with m.Case(3):
+								m.d.ss += out_stream.valid.eq(0b0111)
 
 
 					# For every word that's not the last one, we know that all bytes are valid.
 					with m.Else():
-					    m.d.ss += out_stream.valid.eq(0b1111)
+						m.d.ss += out_stream.valid.eq(0b1111)
 
 					# If we've just sent our last word, we're now ready to wait for a response
 					# from our host.
 					with m.If(last_word):
-					    m.next = 'WAIT_FOR_ACK'
+						m.next = 'WAIT_FOR_ACK'
 
 
 			# WAIT_FOR_ACK -- We've just sent a packet; but don't know if the host has
@@ -383,82 +383,82 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 					# as an indication that we need to re-try the given packet.
 					with m.If(handshakes_in.retry_required | ~sequence_advancing):
 
-					    # In this case, we'll re-transmit the relevant data, either by sending another ZLP...
-					    with m.If(last_packet_was_zlp):
-					        m.d.comb += [
-					            interface.tx_zlp.eq(1),
-					            advance_sequence.eq(1),
-					        ]
+						# In this case, we'll re-transmit the relevant data, either by sending another ZLP...
+						with m.If(last_packet_was_zlp):
+							m.d.comb += [
+								interface.tx_zlp.eq(1),
+								advance_sequence.eq(1),
+							]
 
-					    # ... or by moving right back into sending a data packet.
-					    with m.Else():
-					        m.next = 'SEND_PACKET'
+						# ... or by moving right back into sending a data packet.
+						with m.Else():
+							m.next = 'SEND_PACKET'
 
 
 					# Otherwise, if our ACK contains the next sequence number, then this is an acknowledgement
 					# of the previous packet [USB3.2r1: 8.12.1.2].
 					with m.Else():
 
-					    # We no longer need to keep the data that's been acknowledged; clear it.
-					    m.d.ss += read_fill_count.eq(0)
+						# We no longer need to keep the data that's been acknowledged; clear it.
+						m.d.ss += read_fill_count.eq(0)
 
-					    # Figure out if we'll need to follow up with a ZLP. If we have ZLP generation enabled,
-					    # we'll make sure we end on a short packet. If this is max-packet-size packet _and_ our
-					    # transfer ended with this packet; we'll need to inject a ZLP.
-					    follow_up_with_zlp = \
-					        (read_fill_count == self._max_packet_size) & read_stream_ended
+						# Figure out if we'll need to follow up with a ZLP. If we have ZLP generation enabled,
+						# we'll make sure we end on a short packet. If this is max-packet-size packet _and_ our
+						# transfer ended with this packet; we'll need to inject a ZLP.
+						follow_up_with_zlp = \
+							(read_fill_count == self._max_packet_size) & read_stream_ended
 
-					    # If we're following up with a ZLP, we have two cases, depending on whether this ACK
-					    # is also requesting another packet.
-					    with m.If(follow_up_with_zlp):
+						# If we're following up with a ZLP, we have two cases, depending on whether this ACK
+						# is also requesting another packet.
+						with m.If(follow_up_with_zlp):
 
-					        # If we are requesting another packet immediately, we can said ZLP our immediately,
-					        # and then continue waiting for the next ACK.
-					        with m.If(is_in_token):
+							# If we are requesting another packet immediately, we can said ZLP our immediately,
+							# and then continue waiting for the next ACK.
+							with m.If(is_in_token):
 
-					            # ... send a ZLP...
-					            m.d.comb += [
-					                interface.tx_zlp.eq(1),
-					                advance_sequence.eq(1),
-					            ]
+								# ... send a ZLP...
+								m.d.comb += [
+									interface.tx_zlp.eq(1),
+									advance_sequence.eq(1),
+								]
 
-					            # ... and clear the need to follow up with one, since we've just sent a short packet.
-					            m.d.ss += [
-					                read_stream_ended    .eq(0),
-					                last_packet_was_zlp  .eq(1)
-					            ]
+								# ... and clear the need to follow up with one, since we've just sent a short packet.
+								m.d.ss += [
+									read_stream_ended    .eq(0),
+									last_packet_was_zlp  .eq(1)
+								]
 
-					        # Otherwise, we'll wait for an attempt to send data before we generate a ZLP.
-					        with m.Else():
-					            m.next = "WAIT_TO_SEND"
+							# Otherwise, we'll wait for an attempt to send data before we generate a ZLP.
+							with m.Else():
+								m.next = "WAIT_TO_SEND"
 
 
-					    # Otherwise, there's a possibility we already have a packet-worth of data waiting
-					    # for us in our "write buffer", which we've been filling in the background.
-					    # If this is the case, we'll flip which buffer we're working with, and then
-					    # ready ourselves for transmit.
-					    packet_completing = in_stream.valid & (write_fill_count + 4 >= self._max_packet_size)
-					    with m.Elif(~in_stream.ready | packet_completing):
-					        m.d.comb += [
-					            advance_sequence   .eq(1),
-					        ]
-					        m.d.ss += [
-					            ping_pong_toggle   .eq(~ping_pong_toggle),
-					            read_stream_ended  .eq(0),
-					        ]
+						# Otherwise, there's a possibility we already have a packet-worth of data waiting
+						# for us in our "write buffer", which we've been filling in the background.
+						# If this is the case, we'll flip which buffer we're working with, and then
+						# ready ourselves for transmit.
+						packet_completing = in_stream.valid & (write_fill_count + 4 >= self._max_packet_size)
+						with m.Elif(~in_stream.ready | packet_completing):
+							m.d.comb += [
+								advance_sequence   .eq(1),
+							]
+							m.d.ss += [
+								ping_pong_toggle   .eq(~ping_pong_toggle),
+								read_stream_ended  .eq(0),
+							]
 
-					        with m.If(is_in_token):
-					            m.d.ss += [
-					                last_packet_was_zlp  .eq(0)
-					            ]
-					            m.next = "SEND_PACKET"
+							with m.If(is_in_token):
+								m.d.ss += [
+									last_packet_was_zlp  .eq(0)
+								]
+								m.next = "SEND_PACKET"
 
-					        with m.Else():
-					            m.next = "WAIT_TO_SEND"
+							with m.Else():
+								m.next = "WAIT_TO_SEND"
 
-					    # If neither of the above conditions are true; we now don't have enough data to send.
-					    # We'll wait for enough data to transmit.
-					    with m.Else():
-					        m.next = "WAIT_FOR_DATA"
+						# If neither of the above conditions are true; we now don't have enough data to send.
+						# We'll wait for enough data to transmit.
+						with m.Else():
+							m.next = "WAIT_FOR_DATA"
 
 		return m

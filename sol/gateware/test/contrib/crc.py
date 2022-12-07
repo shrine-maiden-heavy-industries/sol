@@ -222,7 +222,7 @@ class CrcAlgorithm:
 				polynomial = (width, )
 				for i in range(width - 1, -1, -1):
 					if (polyMask >> i) & 1:
-					    polynomial += (i, )
+						polynomial += (i, )
 
 			if polynomial[:1] != (width, ):
 				ValueError("mismatch between width and polynomial degree")
@@ -245,7 +245,7 @@ class CrcAlgorithm:
 		if self.name is not None:
 			info = ' "%s"' % str(self.name)
 		result = "<%s.%s%s @ %#x>" % (self.__class__.__module__,
-					                  self.__class__.__name__, info, id(self))
+									  self.__class__.__name__, info, id(self))
 		return result
 
 	def calcString(self, s, value=None):
@@ -450,7 +450,7 @@ def formatBinaryString(value, width):
 CRC32 = CrcAlgorithm(name="CRC-32",
 					 width=32,
 					 polynomial=(32, 26, 23, 22, 16, 12, 11, 10, 8, 7, 5, 4, 2,
-					             1, 0),
+								 1, 0),
 					 seed=0xFFFFFFFF,
 					 lsbFirst=True,
 					 xorMask=0xFFFFFFFF)
@@ -464,40 +464,40 @@ CRC16 = CrcAlgorithm(name="CRC-16",
 
 #: Used in USB data packets.
 CRC16_USB = CrcAlgorithm(name="CRC-16-USB",
-					     width=16,
-					     polynomial=(16, 15, 2, 0),
-					     seed=0xFFFF,
-					     lsbFirst=True,
-					     xorMask=0xFFFF)
+						 width=16,
+						 polynomial=(16, 15, 2, 0),
+						 seed=0xFFFF,
+						 lsbFirst=True,
+						 xorMask=0xFFFF)
 
 CRC_CCITT = CrcAlgorithm(name="CRC-CCITT",
-					     width=16,
-					     polynomial=(16, 12, 5, 0),
-					     seed=0xFFFF,
-					     lsbFirst=False,
-					     xorMask=0x0000)
+						 width=16,
+						 polynomial=(16, 12, 5, 0),
+						 seed=0xFFFF,
+						 lsbFirst=False,
+						 xorMask=0x0000)
 
 #: This is the algorithm used in X.25 and for the HDLC 2-byte FCS.
 CRC_HDLC = CrcAlgorithm(name="CRC-HDLC",
-					    width=16,
-					    polynomial=(16, 12, 5, 0),
-					    seed=0xFFFF,
-					    lsbFirst=True,
-					    xorMask=0xFFFF)
+						width=16,
+						polynomial=(16, 12, 5, 0),
+						seed=0xFFFF,
+						lsbFirst=True,
+						xorMask=0xFFFF)
 
 #: Used in ATM HEC and SMBus.
 CRC8_SMBUS = CrcAlgorithm(name="CRC-8-SMBUS",
-					      width=8,
-					      polynomial=(8, 2, 1, 0),
-					      seed=0,
-					      lsbFirst=False,
-					      xorMask=0)
+						  width=8,
+						  polynomial=(8, 2, 1, 0),
+						  seed=0,
+						  lsbFirst=False,
+						  xorMask=0)
 
 #: Used in RFC-2440 and MIL STD 188-184.
 CRC24 = CrcAlgorithm(name="CRC-24",
 					 width=24,
 					 polynomial=(24, 23, 18, 17, 14, 11, 10, 7, 6, 5, 4, 3, 1,
-					             0),
+								 0),
 					 seed=0xB704CE,
 					 lsbFirst=False,
 					 xorMask=0)
@@ -514,18 +514,18 @@ CRC15 = CrcAlgorithm(name="CRC-15",
 CRC32C = CrcAlgorithm(name="CRC-32C",
 					  width=32,
 					  polynomial=(32, 28, 27, 26, 25, 23, 22, 20, 19, 18, 14,
-					              13, 11, 10, 9, 8, 6, 0),
+								  13, 11, 10, 9, 8, 6, 0),
 					  seed=0xFFFFFFFF,
 					  lsbFirst=True,
 					  xorMask=0xFFFFFFFF)
 
 #: CRC used in USB Token and Start-Of-Frame packets
 CRC5_USB = CrcAlgorithm(name="CRC-5-USB",
-					    width=5,
-					    polynomial=(5, 2, 0),
-					    seed=0x1F,
-					    lsbFirst=True,
-					    xorMask=0x1F)
+						width=5,
+						polynomial=(5, 2, 0),
+						seed=0x1F,
+						lsbFirst=True,
+						xorMask=0x1F)
 
 #: ISO 3309
 CRC64 = CrcAlgorithm(name="CRC-64",

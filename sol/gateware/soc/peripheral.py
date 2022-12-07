@@ -99,14 +99,14 @@ class Peripheral:
 		"""
 		if self._bus is None:
 			raise NotImplementedError("Peripheral {!r} does not have a bus interface"
-					                  .format(self))
+									  .format(self))
 		return self._bus
 
 	@bus.setter
 	def bus(self, bus):
 		if not isinstance(bus, wishbone.Interface):
 			raise TypeError("Bus interface must be an instance of wishbone.Interface, not {!r}"
-					        .format(bus))
+							.format(bus))
 		self._bus = bus
 
 	@property
@@ -123,14 +123,14 @@ class Peripheral:
 		"""
 		if self._irq is None:
 			raise NotImplementedError("Peripheral {!r} does not have an IRQ line"
-					                  .format(self))
+									  .format(self))
 		return self._irq
 
 	@irq.setter
 	def irq(self, irq):
 		if not isinstance(irq, IRQLine):
 			raise TypeError("IRQ line must be an instance of IRQLine, not {!r}"
-					        .format(irq))
+							.format(irq))
 		self._irq = irq
 
 	def csr_bank(self, *, addr=None, alignment=None, desc=None):
@@ -167,10 +167,10 @@ class Peripheral:
 		An instance of :class:`torii.lib.soc.wishbone.Interface`.
 		"""
 		window = wishbone.Interface(addr_width=addr_width, data_width=data_width,
-					                granularity=granularity, features=features)
+									granularity=granularity, features=features)
 		granularity_bits = log2_int(data_width // window.granularity)
 		window.memory_map = MemoryMap(addr_width=addr_width + granularity_bits,
-					                  data_width=window.granularity, alignment=alignment)
+									  data_width=window.granularity, alignment=alignment)
 		self._windows.append((window, addr, sparse))
 		return window
 
@@ -197,7 +197,7 @@ class Peripheral:
 		A :class:`PeripheralBridge` providing access to local resources.
 		"""
 		return PeripheralBridge(self, data_width=data_width, granularity=granularity,
-					            features=features, alignment=alignment)
+								features=features, alignment=alignment)
 
 	def iter_csr_banks(self):
 		"""Iterate requested CSR banks and their parameters.
@@ -321,11 +321,11 @@ class PeripheralBridge(Elaboratable):
 	def __init__(self, periph, *, data_width, granularity, features, alignment):
 		if not isinstance(periph, Peripheral):
 			raise TypeError("Peripheral must be an instance of Peripheral, not {!r}"
-					        .format(periph))
+							.format(periph))
 
 		self._wb_decoder = wishbone.Decoder(addr_width=1, data_width=data_width,
-					                        granularity=granularity,
-					                        features=features, alignment=alignment)
+											granularity=granularity,
+											features=features, alignment=alignment)
 
 		self._csr_subs = []
 

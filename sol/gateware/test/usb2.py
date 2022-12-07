@@ -129,7 +129,7 @@ class USBDeviceTest(LunaGatewareTestCase):
 			pid      -- The PID of the packet to be sent.
 			endpoint -- The endpoint on which the token should be sent.
 			address  -- The address of the device to be targeted.
-					    If omitted, the most recently set-address'd address is used.
+						If omitted, the most recently set-address'd address is used.
 		"""
 
 		# Grab the raw bits that make up our token from the Antmicro library...

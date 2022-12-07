@@ -24,7 +24,7 @@ class ControlRequestHandler(USBRequestHandler):
 			new_value_signal -- The signal to receive the new value to be applied to the relevant register.
 			write_strobe     -- The signal which will be pulsed when new_value_signal contains a update.
 			stall_condition  -- If provided, if this condition is true, the request will be STALL'd instead
-					            of acknowledged.
+								of acknowledged.
 			"""
 
 		# Provide an response to the STATUS stage.

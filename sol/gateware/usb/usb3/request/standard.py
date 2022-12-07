@@ -149,25 +149,25 @@ class StandardRequestHandler(Elaboratable):
 					# If we've received a new setup packet, handle it.
 					with m.If(setup.received):
 
-					    # Select which standard packet we're going to handler.
-					    with m.Switch(setup.request):
+						# Select which standard packet we're going to handler.
+						with m.Switch(setup.request):
 
-					        with m.Case(USBStandardRequests.GET_STATUS):
-					            m.next = 'GET_STATUS'
-					        with m.Case(USBStandardRequests.SET_ADDRESS):
-					            m.next = 'SET_ADDRESS'
-					        with m.Case(USBStandardRequests.SET_CONFIGURATION):
-					            m.next = 'SET_CONFIGURATION'
-					        with m.Case(USBStandardRequests.GET_DESCRIPTOR):
-					            m.next = 'GET_DESCRIPTOR'
-					        with m.Case(USBStandardRequests.GET_CONFIGURATION):
-					            m.next = 'GET_CONFIGURATION'
-					        with m.Case(USBStandardRequests.SET_ISOCH_DELAY):
-					            m.next = 'SET_ISOCH_DELAY'
-					        with m.Case(USBStandardRequests.SET_SEL):
-					            m.next = 'SET_SEL'
-					        with m.Case():
-					            m.next = 'UNHANDLED'
+							with m.Case(USBStandardRequests.GET_STATUS):
+								m.next = 'GET_STATUS'
+							with m.Case(USBStandardRequests.SET_ADDRESS):
+								m.next = 'SET_ADDRESS'
+							with m.Case(USBStandardRequests.SET_CONFIGURATION):
+								m.next = 'SET_CONFIGURATION'
+							with m.Case(USBStandardRequests.GET_DESCRIPTOR):
+								m.next = 'GET_DESCRIPTOR'
+							with m.Case(USBStandardRequests.GET_CONFIGURATION):
+								m.next = 'GET_CONFIGURATION'
+							with m.Case(USBStandardRequests.SET_ISOCH_DELAY):
+								m.next = 'SET_ISOCH_DELAY'
+							with m.Case(USBStandardRequests.SET_SEL):
+								m.next = 'SET_SEL'
+							with m.Case():
+								m.next = 'UNHANDLED'
 
 
 				# GET_STATUS -- Fetch the device's status.
@@ -192,20 +192,20 @@ class StandardRequestHandler(Elaboratable):
 				# GET_DESCRIPTOR -- The host is asking for a USB descriptor -- for us to "self describe".
 				with m.State('GET_DESCRIPTOR'):
 					m.d.comb += [
-					    interface.tx                    .stream_eq(get_descriptor_handler.tx),
-					    interface.tx_length             .eq(get_descriptor_handler.tx_length),
+						interface.tx                    .stream_eq(get_descriptor_handler.tx),
+						interface.tx_length             .eq(get_descriptor_handler.tx_length),
 
-					    handshake_generator.send_stall  .eq(get_descriptor_handler.stall)
+						handshake_generator.send_stall  .eq(get_descriptor_handler.stall)
 					]
 
 					# Respond to our data stage with a descriptor...
 					with m.If(interface.data_requested):
-					    m.d.comb += get_descriptor_handler.start  .eq(1),
+						m.d.comb += get_descriptor_handler.start  .eq(1),
 
 					# ... and ACK our status stage.
 					with m.If(interface.status_requested):
-					    m.d.comb += handshake_generator.send_ack.eq(1)
-					    m.next = 'IDLE'
+						m.d.comb += handshake_generator.send_ack.eq(1)
+						m.next = 'IDLE'
 
 
 				# GET_CONFIGURATION -- The host is asking for the active configuration number.
@@ -220,8 +220,8 @@ class StandardRequestHandler(Elaboratable):
 
 					# ACK our status stage, when appropriate.
 					with m.If(self.interface.status_requested):
-					    m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
-					    m.next = 'IDLE'
+						m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
+						m.next = 'IDLE'
 
 
 				# SET_SEL -- set our System Exit Latencies
@@ -231,13 +231,13 @@ class StandardRequestHandler(Elaboratable):
 					# ACK the data that's coming in, once we get it; but ignore it for now
 					data_received = falling_edge_detected(m, interface.rx.valid, domain="ss")
 					with m.If(data_received):
-					    m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
+						m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
 
 
 					# ACK our status stage, when appropriate.
 					with m.If(self.interface.status_requested):
-					    m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
-					    m.next = 'IDLE'
+						m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
+						m.next = 'IDLE'
 
 
 				# UNHANDLED -- we've received a request we're not prepared to handle
@@ -246,8 +246,8 @@ class StandardRequestHandler(Elaboratable):
 					# When we next have an opportunity to stall, do so, and then return to idle.
 					data_received = falling_edge_detected(m, interface.rx.valid, domain="ss")
 					with m.If(interface.data_requested | interface.status_requested | data_received):
-					    m.d.comb += handshake_generator.send_stall.eq(1)
-					    m.next = 'IDLE'
+						m.d.comb += handshake_generator.send_stall.eq(1)
+						m.next = 'IDLE'
 
 		return m
 

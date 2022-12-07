@@ -73,7 +73,7 @@ class SPIDeviceInterface(Elaboratable):
 
 		Returns:
 			sample_edge, output_edge -- signals that pulse high for a single cycle when we should
-					                    sample and change our outputs, respectively
+										sample and change our outputs, respectively
 		"""
 
 		# Select whether we're working with an inverted or un-inverted serial clock.
@@ -146,8 +146,8 @@ class SPIDeviceInterface(Elaboratable):
 				# If we're just completing a word, handle I/O.
 				with m.If(bit_count + 1 == self.word_size):
 					m.d.sync += [
-					    self.word_accepted .eq(1),
-					    current_tx         .eq(self.word_out)
+						self.word_accepted .eq(1),
+						current_tx         .eq(self.word_out)
 					]
 
 
@@ -388,17 +388,17 @@ class SPICommandInterface(Elaboratable):
 				# Continue shifting in data until we have a full command.
 				with m.If(bit_count < self.command_size):
 					with m.If(sample_edge):
-					    m.d.sync += [
-					        bit_count       .eq(bit_count + 1),
-					        current_command .eq(Cat(spi.sdi, current_command[:-1]))
-					    ]
+						m.d.sync += [
+							bit_count       .eq(bit_count + 1),
+							current_command .eq(Cat(spi.sdi, current_command[:-1]))
+						]
 
 				# ... and then pass that command out to our controller.
 				with m.Else():
 					m.d.sync += [
-					    bit_count          .eq(0),
-					    self.command_ready .eq(1),
-					    self.command       .eq(current_command)
+						bit_count          .eq(0),
+						self.command_ready .eq(1),
+						self.command       .eq(current_command)
 					]
 					m.next = 'PROCESSING'
 
@@ -426,17 +426,17 @@ class SPICommandInterface(Elaboratable):
 				# Continue shifting data until we have a full word.
 				with m.If(bit_count < self.word_size):
 					with m.If(sample_edge):
-					    m.d.sync += [
-					        bit_count    .eq(bit_count + 1),
-					        current_word .eq(Cat(spi.sdi, current_word[:-1]))
-					    ]
+						m.d.sync += [
+							bit_count    .eq(bit_count + 1),
+							current_word .eq(Cat(spi.sdi, current_word[:-1]))
+						]
 
 				# ... and then output that word on our bus.
 				with m.Else():
 					m.d.sync += [
-					    bit_count          .eq(0),
-					    self.word_complete .eq(1),
-					    self.word_received .eq(current_word)
+						bit_count          .eq(0),
+						self.word_complete .eq(1),
+						self.word_received .eq(current_word)
 					]
 
 					# Stay in the stall state until CS is de-asserted.
@@ -474,8 +474,8 @@ class SPIRegisterInterface(Elaboratable):
 		"""
 		Parameters:
 			address_size       -- the size of an address, in bits; recommended to be one bit
-					              less than a binary number, as the write command is formed by adding a one-bit
-					              write flag to the start of every address
+								  less than a binary number, as the write command is formed by adding a one-bit
+								  write flag to the start of every address
 			register_size      -- The size of any given register, in bits.
 			default_read_value -- The read value read from a non-existent or write-only register.
 
@@ -543,12 +543,12 @@ class SPIRegisterInterface(Elaboratable):
 		Parameters:
 			address       -- the register's address, as a big-endian integer
 			read          -- a Signal or integer constant representing the
-					         value to be read at the given address; if not provided, the default
-					         value will be read
+							 value to be read at the given address; if not provided, the default
+							 value will be read
 			read_strobe   -- a Signal that is asserted when a read is completed; if not provided,
-					         the relevant strobe will be left unconnected
+							 the relevant strobe will be left unconnected
 			write_signal  -- a Signal set to the value to be written when a write is requested;
-					         if not provided, writes will be ignored
+							 if not provided, writes will be ignored
 			wrote_strobe  -- a Signal that goes high when a value is available for a write request
 		 """
 
@@ -571,10 +571,10 @@ class SPIRegisterInterface(Elaboratable):
 		Parameters:
 			address       -- the register's address, as a big-endian integer
 			read          -- a Signal or integer constant representing the
-					         value to be read at the given address; if not provided, the default
-					         value will be read
+							 value to be read at the given address; if not provided, the default
+							 value will be read
 			read_strobe   -- a Signal that is asserted when a read is completed; if not provided,
-					         the relevant strobe will be left unconnected
+							 the relevant strobe will be left unconnected
 		"""
 		self.add_sfr(address, read=read, read_strobe=read_strobe)
 
@@ -587,7 +587,7 @@ class SPIRegisterInterface(Elaboratable):
 			Parameters:
 				address       -- the register's address, as a big-endian integer
 				value_signal  -- the signal that will store the register's value; if omitted
-					             a storage register will be created automatically
+								 a storage register will be created automatically
 				size          -- if value_signal isn't provided, this sets the size of the created register
 				reset         -- if value_signal isn't provided, this sets the reset value of the created register
 				read_strobe   -- a Signal to be asserted when the register is read; ignored if not provided
@@ -595,7 +595,7 @@ class SPIRegisterInterface(Elaboratable):
 
 			Returns:
 				value_signal  -- a signal that stores the register's value; which may be the value_signal arg,
-					             or may be a signal created during execution
+								 or may be a signal created during execution
 		"""
 		self._ensure_register_is_unused(address)
 
@@ -788,7 +788,7 @@ class SPIMultiplexer(Elaboratable):
 		"""
 		Parameters:
 			multiplexed_busses -- A list of SPI busses to be multiplexed. The active bus will
-					              be selected based on each bus's chip-select signals.
+								  be selected based on each bus's chip-select signals.
 		"""
 		self.multiplexed_busses = multiplexed_busses
 

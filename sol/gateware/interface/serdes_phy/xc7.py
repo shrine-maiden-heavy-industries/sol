@@ -82,8 +82,8 @@ class DRPArbiter(Elaboratable):
 			with m.State("IDLE"):
 				for idx in range(len(buffers)):
 					with m.If(buffers[idx].en_latch):
-					    m.d.ss += current_idx.eq(idx)
-					    m.next = "REQUEST"
+						m.d.ss += current_idx.eq(idx)
+						m.next = "REQUEST"
 
 			with m.State("REQUEST"):
 				m.d.comb += [
@@ -105,9 +105,9 @@ class DRPArbiter(Elaboratable):
 				]
 				with m.If(self.shared.rdy):
 					with m.If(current_buf.intf.lock):
-					    m.next = "REQUEST"
+						m.next = "REQUEST"
 					with m.Else():
-					    m.next = "IDLE"
+						m.next = "IDLE"
 
 		return m
 
@@ -144,8 +144,8 @@ class DRPFieldController(Elaboratable):
 			with m.State("READ-WAIT"):
 				with m.If(self.drp.rdy):
 					m.d.ss += [
-					    current_val.eq(self.drp.do),
-					    current_val[self._bits].eq(self.value)
+						current_val.eq(self.drp.do),
+						current_val[self._bits].eq(self.value)
 					]
 					m.next = "WRITE"
 
@@ -257,7 +257,7 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 				]
 				with m.If(self.drp.rdy):
 					m.d.ss += [
-					    saved_val.eq(self.drp.do)
+						saved_val.eq(self.drp.do)
 					]
 					m.next = "WRITE"
 
@@ -296,9 +296,9 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 			with m.State("RESTORE"):
 				with m.If(~self.rxpmaresetdone):
 					m.d.comb += [
-					    self.drp.di.eq(saved_val),
-					    self.drp.we.eq(1),
-					    self.drp.en.eq(1),
+						self.drp.di.eq(saved_val),
+						self.drp.we.eq(1),
+						self.drp.en.eq(1),
 					]
 					m.next = "RESTORE-WAIT"
 				with m.If(self.i):

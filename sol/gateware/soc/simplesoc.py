@@ -251,7 +251,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 		Parameters:
 			omit_bios_mem -- If True, BIOS-related memories are skipped when generating our
-					         resource listings. This hides BIOS resources from the application.
+							 resource listings. This hides BIOS resources from the application.
 		"""
 
 		# Grab the memory map for this SoC...
@@ -267,7 +267,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 				if self._build_bios and omit_bios_mem:
 					# If we're omitting bios resources, skip the BIOS ram/rom.
 					if (self.ram._mem is resource) or (self.rom._mem is resource):
-					    continue
+						continue
 
 				# ... and extract the peripheral's range/vitals...
 				size = register_end_offset - register_offset
@@ -282,7 +282,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		Parmeters:
 			name      -- The name for the SoC design.
 			build_dir -- The directory where our main Torii build is being performed.
-					     We'll build in a subdirectory of it.
+						 We'll build in a subdirectory of it.
 		"""
 
 		# If we're building a BIOS, let our superclass build a BIOS for us.
@@ -395,7 +395,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		Parameters:
 			macro_name -- Optional. The name of the guard macro for the C header, as a string without spaces.
 			file       -- Optional. If provided, this will be treated as the file= argument to the print()
-					      function. This can be used to generate file content instead of printing to the terminal.
+						  function. This can be used to generate file content instead of printing to the terminal.
 		"""
 
 		def emit(content):
@@ -496,7 +496,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 		Parameters:
 			file       -- Optional. If provided, this will be treated as the file= argument to the print()
-					      function. This can be used to generate file content instead of printing to the terminal.
+						  function. This can be used to generate file content instead of printing to the terminal.
 		"""
 
 		def emit(content):

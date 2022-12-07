@@ -104,15 +104,15 @@ class LinkCommandDetector(Elaboratable):
 
 					# If we have a word that matches -all- of these criteria, accept it as a new command.
 					with m.If(contains_only_data & redundancy_matches & crc_matches):
-					    m.d.ss += [
+						m.d.ss += [
 
-					        # Copy our fields out of the link command...
-					        self.command      .eq(link_command_word[7:11]),
-					        self.subtype      .eq(link_command_word[0: 4]),
+							# Copy our fields out of the link command...
+							self.command      .eq(link_command_word[7:11]),
+							self.subtype      .eq(link_command_word[0: 4]),
 
-					        # ... and indicate that we've received a new command
-					        self.new_command  .eq(1)
-					    ]
+							# ... and indicate that we've received a new command
+							self.new_command  .eq(1)
+						]
 
 					# No matter the word's validity, we'll move back to waiting for a new command header;
 					# as we can't do anything about invalid commands.
@@ -180,8 +180,8 @@ class LinkCommandGenerator(Elaboratable):
 
 					# ... latch in our command and subtype ...
 					m.d.ss += [
-					    latched_command  .eq(self.command),
-					    latched_subtype  .eq(self.subtype)
+						latched_command  .eq(self.command),
+						latched_subtype  .eq(self.subtype)
 					]
 					m.next = "TRANSMIT_HEADER"
 

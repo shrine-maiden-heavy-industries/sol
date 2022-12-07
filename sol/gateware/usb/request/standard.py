@@ -41,7 +41,7 @@ class StandardRequestHandler(ControlRequestHandler):
 	avoid_blockram: int, optional
 		If True, placing data into block RAM will be avoided.
 
-	 """
+	"""
 
 	def __init__(self, descriptors: DeviceDescriptorCollection, max_packet_size=64, avoid_blockram=None, blacklist: Iterable[Callable[[SetupPacket], Value]] = ()):
 		self.descriptors      = descriptors
@@ -96,35 +96,35 @@ class StandardRequestHandler(ControlRequestHandler):
 				with m.State('IDLE'):
 
 					m.d.usb += [
-					    # Start at the beginning of our next / fresh GET_DESCRIPTOR request.
-					    get_descriptor_handler.start_position  .eq(0),
+						# Start at the beginning of our next / fresh GET_DESCRIPTOR request.
+						get_descriptor_handler.start_position  .eq(0),
 
-					    # Always start our responses with DATA1 pids, per [USB 2.0: 8.5.3].
-					    self.interface.tx_data_pid             .eq(1)
+						# Always start our responses with DATA1 pids, per [USB 2.0: 8.5.3].
+						self.interface.tx_data_pid             .eq(1)
 					]
 
 					# If we've received a new setup packet, handle it.
 					with m.If(setup.received):
 
-					    # Only handle setup packet if not blacklisted
-					    blacklisted = functools.reduce(operator.__or__, (f(setup) for f in self._blacklist), Const(0))
-					    with m.If(~blacklisted):
+						# Only handle setup packet if not blacklisted
+						blacklisted = functools.reduce(operator.__or__, (f(setup) for f in self._blacklist), Const(0))
+						with m.If(~blacklisted):
 
-					        # Select which standard packet we're going to handler.
-					        with m.Switch(setup.request):
+							# Select which standard packet we're going to handler.
+							with m.Switch(setup.request):
 
-					            with m.Case(USBStandardRequests.GET_STATUS):
-					                m.next = 'GET_STATUS'
-					            with m.Case(USBStandardRequests.SET_ADDRESS):
-					                m.next = 'SET_ADDRESS'
-					            with m.Case(USBStandardRequests.SET_CONFIGURATION):
-					                m.next = 'SET_CONFIGURATION'
-					            with m.Case(USBStandardRequests.GET_DESCRIPTOR):
-					                m.next = 'GET_DESCRIPTOR'
-					            with m.Case(USBStandardRequests.GET_CONFIGURATION):
-					                m.next = 'GET_CONFIGURATION'
-					            with m.Case():
-					                m.next = 'UNHANDLED'
+								with m.Case(USBStandardRequests.GET_STATUS):
+									m.next = 'GET_STATUS'
+								with m.Case(USBStandardRequests.SET_ADDRESS):
+									m.next = 'SET_ADDRESS'
+								with m.Case(USBStandardRequests.SET_CONFIGURATION):
+									m.next = 'SET_CONFIGURATION'
+								with m.Case(USBStandardRequests.GET_DESCRIPTOR):
+									m.next = 'GET_DESCRIPTOR'
+								with m.Case(USBStandardRequests.GET_CONFIGURATION):
+									m.next = 'GET_CONFIGURATION'
+								with m.Case():
+									m.next = 'UNHANDLED'
 
 
 				# GET_STATUS -- Fetch the device's status.
@@ -152,45 +152,45 @@ class StandardRequestHandler(ControlRequestHandler):
 					expecting_ack = Signal()
 
 					m.d.comb += [
-					    get_descriptor_handler.tx  .attach(tx),
-					    handshake_generator.stall  .eq(get_descriptor_handler.stall)
+						get_descriptor_handler.tx  .attach(tx),
+						handshake_generator.stall  .eq(get_descriptor_handler.stall)
 					]
 
 					# Respond to our data stage with a descriptor...
 					with m.If(interface.data_requested):
-					    m.d.comb += get_descriptor_handler.start.eq(1)
-					    m.d.usb += expecting_ack.eq(1)
+						m.d.comb += get_descriptor_handler.start.eq(1)
+						m.d.usb += expecting_ack.eq(1)
 
 					# Each time we receive an ACK, advance in our descriptor.
 					# This allows us to send descriptors with >64B of content.
 					with m.If(interface.handshakes_in.ack & expecting_ack):
 
-					    # NOTE: this logic might need to be scaled by bytes-per-word for USB3, if it's ever used.
-					    # For now, we're not using it on USB3 at all, since we assume descriptors always fit in a
-					    # USB3 packet.
-					    next_start_position = get_descriptor_handler.start_position + self._max_packet_size
-					    m.d.usb += [
+						# NOTE: this logic might need to be scaled by bytes-per-word for USB3, if it's ever used.
+						# For now, we're not using it on USB3 at all, since we assume descriptors always fit in a
+						# USB3 packet.
+						next_start_position = get_descriptor_handler.start_position + self._max_packet_size
+						m.d.usb += [
 
-					        # We've received an ACK; so mark the section we've sent of the descriptor as
-					        # received, and move forward...
-					        get_descriptor_handler.start_position  .eq(next_start_position),
+							# We've received an ACK; so mark the section we've sent of the descriptor as
+							# received, and move forward...
+							get_descriptor_handler.start_position  .eq(next_start_position),
 
-					        # ... and toggle our data PID.
-					        self.interface.tx_data_pid             .eq(~self.interface.tx_data_pid),
+							# ... and toggle our data PID.
+							self.interface.tx_data_pid             .eq(~self.interface.tx_data_pid),
 
-					        # We've got the ACK we expected.
-					        expecting_ack                          .eq(0),
-					    ]
+							# We've got the ACK we expected.
+							expecting_ack                          .eq(0),
+						]
 
 					# ... and ACK our status stage.
 					with m.If(interface.status_requested):
-					    m.d.comb += handshake_generator.ack.eq(1)
-					    m.next = 'IDLE'
+						m.d.comb += handshake_generator.ack.eq(1)
+						m.next = 'IDLE'
 
 					# If the requested descriptor doesn't exist, the request is terminated by STALLing the data stage.
 					with m.If(get_descriptor_handler.stall):
-					    m.d.usb += expecting_ack.eq(0)
-					    m.next = 'IDLE'
+						m.d.usb += expecting_ack.eq(0)
+						m.next = 'IDLE'
 
 				# GET_CONFIGURATION -- The host is asking for the active configuration number.
 				with m.State('GET_CONFIGURATION'):
@@ -203,8 +203,8 @@ class StandardRequestHandler(ControlRequestHandler):
 					# When we next have an opportunity to stall, do so,
 					# and then return to idle.
 					with m.If(interface.data_requested | interface.status_requested):
-					    m.d.comb += handshake_generator.stall.eq(1)
-					    m.next = 'IDLE'
+						m.d.comb += handshake_generator.stall.eq(1)
+						m.next = 'IDLE'
 
 		return m
 

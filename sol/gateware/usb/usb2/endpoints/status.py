@@ -125,11 +125,11 @@ class USBSignalInEndpoint(Elaboratable):
 				with m.If(packet_requested):
 
 					m.d.usb += [
-					    # ... clear our transmit counter ...
-					    bytes_transmitted  .eq(0),
+						# ... clear our transmit counter ...
+						bytes_transmitted  .eq(0),
 
-					    # ... latch in our response...
-					    latched_signal     .eq(self.signal),
+						# ... latch in our response...
+						latched_signal     .eq(self.signal),
 					]
 
 					# ...  and start transmitting it.
@@ -153,7 +153,7 @@ class USBSignalInEndpoint(Elaboratable):
 
 					# If this is the last byte to be transmitted, move to waiting for an ACK.
 					with m.If(is_last_byte):
-					    m.next = "WAIT_FOR_ACK"
+						m.next = "WAIT_FOR_ACK"
 
 
 			# WAIT_FOR_ACK -- we've now transmitted our full packet; we need to wait for the host to ACK it

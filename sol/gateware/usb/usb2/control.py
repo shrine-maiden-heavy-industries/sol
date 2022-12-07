@@ -224,17 +224,17 @@ class USBControlEndpoint(Elaboratable):
 					# move to the DATA stage. Otherwise, move directly to the status stage [8.5.3].
 					with m.If(setup_decoder.packet.length):
 
-					    # If this is an device -> host request, expect an IN packet.
-					    with m.If(setup_decoder.packet.is_in_request):
-					        m.next = 'DATA_IN'
+						# If this is an device -> host request, expect an IN packet.
+						with m.If(setup_decoder.packet.is_in_request):
+							m.next = 'DATA_IN'
 
-					    # Otherwise, expect an OUT one.
-					    with m.Else():
-					        m.next = 'DATA_OUT'
+						# Otherwise, expect an OUT one.
+						with m.Else():
+							m.next = 'DATA_OUT'
 
 					with m.Else():
-					    # If we don't have a data phase, our status phase is always an IN [USB2.0: 8.5.3]
-					    m.next = 'STATUS_IN'
+						# If we don't have a data phase, our status phase is always an IN [USB2.0: 8.5.3]
+						m.next = 'STATUS_IN'
 
 
 			with m.State('DATA_IN'):
@@ -261,8 +261,8 @@ class USBControlEndpoint(Elaboratable):
 				# the request handler logic significantly.
 				with m.If(endpoint_targeted & interface.tokenizer.is_out):
 					m.d.comb += [
-					    interface.rx                           .connect(request_handler.rx),
-					    request_handler.rx_ready_for_response  .eq(interface.rx_ready_for_response)
+						interface.rx                           .connect(request_handler.rx),
+						request_handler.rx_ready_for_response  .eq(interface.rx_ready_for_response)
 					]
 
 				# Once we get an IN token, we should move on to the STATUS stage. [USB2, 8.5.3]

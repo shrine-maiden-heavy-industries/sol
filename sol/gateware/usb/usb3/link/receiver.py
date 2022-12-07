@@ -109,9 +109,9 @@ class RawHeaderPacketReceiver(Elaboratable):
 				with m.State(f"RECEIVE_DW{n}"):
 
 					with m.If(sink.valid):
-					    m.d.comb += crc16.advance_crc.eq(1)
-					    m.d.ss += packet[f'dw{n}'].eq(sink.data)
-					    m.next = f"RECEIVE_DW{n+1}"
+						m.d.comb += crc16.advance_crc.eq(1)
+						m.d.ss += packet[f'dw{n}'].eq(sink.data)
+						m.next = f"RECEIVE_DW{n+1}"
 
 			# RECEIVE_DW3 -- we'll receive and parse our final data word, which contains the fields
 			# relevant to the link layer.
@@ -119,17 +119,17 @@ class RawHeaderPacketReceiver(Elaboratable):
 
 				with m.If(sink.valid):
 					m.d.ss += [
-					    # Collect the fields from the DW...
-					    packet.crc16            .eq(sink.data[ 0:16]),
-					    packet.sequence_number  .eq(sink.data[16:19]),
-					    packet.dw3_reserved     .eq(sink.data[19:22]),
-					    packet.hub_depth        .eq(sink.data[22:25]),
-					    packet.delayed          .eq(sink.data[25]),
-					    packet.deferred         .eq(sink.data[26]),
-					    packet.crc5             .eq(sink.data[27:32]),
+						# Collect the fields from the DW...
+						packet.crc16            .eq(sink.data[ 0:16]),
+						packet.sequence_number  .eq(sink.data[16:19]),
+						packet.dw3_reserved     .eq(sink.data[19:22]),
+						packet.hub_depth        .eq(sink.data[22:25]),
+						packet.delayed          .eq(sink.data[25]),
+						packet.deferred         .eq(sink.data[26]),
+						packet.crc5             .eq(sink.data[27:32]),
 
-					    # ... and pipeline a CRC of the to the link control word.
-					    expected_crc5           .eq(compute_usb_crc5(sink.data[16:27]))
+						# ... and pipeline a CRC of the to the link control word.
+						expected_crc5           .eq(compute_usb_crc5(sink.data[16:27]))
 					]
 
 					m.next = "CHECK_PACKET"
@@ -155,8 +155,8 @@ class RawHeaderPacketReceiver(Elaboratable):
 				# We'll output our packet, and then return to IDLE.
 				with m.Else():
 					m.d.ss += [
-					    self.new_packet  .eq(1),
-					    self.packet      .eq(packet)
+						self.new_packet  .eq(1),
+						self.packet      .eq(packet)
 					]
 
 				m.next = "WAIT_FOR_HPSTART"
@@ -573,27 +573,27 @@ class HeaderPacketReceiver(Elaboratable):
 					#   sent to the other side for the LBAD to have the correct semantic meaning.
 
 					with m.If(lrty_pending):
-					    m.next = "SEND_LRTY"
+						m.next = "SEND_LRTY"
 
 					# If we have acknowledgements to send, send them.
 					with m.Elif(acks_to_send):
-					    m.next = "SEND_ACKS"
+						m.next = "SEND_ACKS"
 
 					# If we have link credits to issue, move to issuing them to the other side.
 					with m.Elif(credits_to_issue):
-					    m.next = "ISSUE_CREDITS"
+						m.next = "ISSUE_CREDITS"
 
 					# If we need to send an LBAD, do so.
 					with m.Elif(lbad_pending):
-					    m.next = "SEND_LBAD"
+						m.next = "SEND_LBAD"
 
 					# If we need to send a link power-state command, do so.
 					with m.Elif(lxu_pending):
-					    m.next = "SEND_LXU"
+						m.next = "SEND_LXU"
 
 					# If we need to send a keepalive, do so.
 					with m.Elif(keepalive_pending):
-					    m.next = "SEND_KEEPALIVE"
+						m.next = "SEND_KEEPALIVE"
 
 
 
@@ -601,37 +601,37 @@ class HeaderPacketReceiver(Elaboratable):
 				# This means preparing for our advertisement, by:
 				with m.If(Fell(self.enable) | self.usb_reset):
 					m.d.ss += [
-					    # -Resetting our pending ACKs to 1, so we perform an sequence number advertisement
-					    #  when we're next enabled.
-					    acks_to_send          .eq(1),
+						# -Resetting our pending ACKs to 1, so we perform an sequence number advertisement
+						#  when we're next enabled.
+						acks_to_send          .eq(1),
 
-					    # -Decreasing our next sequence number; so we maintain a continuity of sequence numbers
-					    #  without counting the advertising one. This doesn't seem to be be strictly necessary
-					    #  per the spec; but seem to make analyzers happier, so we'll go with it.
-					    next_header_to_ack    .eq(next_header_to_ack - 1),
+						# -Decreasing our next sequence number; so we maintain a continuity of sequence numbers
+						#  without counting the advertising one. This doesn't seem to be be strictly necessary
+						#  per the spec; but seem to make analyzers happier, so we'll go with it.
+						next_header_to_ack    .eq(next_header_to_ack - 1),
 
-					    # - Clearing all of our buffers.
-					    read_pointer          .eq(0),
-					    write_pointer         .eq(0),
-					    buffers_filled        .eq(0),
+						# - Clearing all of our buffers.
+						read_pointer          .eq(0),
+						write_pointer         .eq(0),
+						buffers_filled        .eq(0),
 
-					    # - Preparing to re-issue all of our buffer credits.
-					    next_credit_to_issue  .eq(0),
-					    credits_to_issue      .eq(self._buffer_count),
+						# - Preparing to re-issue all of our buffer credits.
+						next_credit_to_issue  .eq(0),
+						credits_to_issue      .eq(self._buffer_count),
 
-					    # - Clear our pending events.
-					    lrty_pending          .eq(0),
-					    lbad_pending          .eq(0),
-					    keepalive_pending     .eq(0),
-					    ignore_packets        .eq(0)
+						# - Clear our pending events.
+						lrty_pending          .eq(0),
+						lbad_pending          .eq(0),
+						keepalive_pending     .eq(0),
+						ignore_packets        .eq(0)
 					]
 
 					# If this is a USB Reset, also reset our sequences.
 					with m.If(self.usb_reset):
-					    m.d.ss += [
-					        expected_sequence_number  .eq(0),
-					        next_header_to_ack        .eq(-1)
-					    ]
+						m.d.ss += [
+							expected_sequence_number  .eq(0),
+							next_header_to_ack        .eq(-1)
+						]
 
 
 			# SEND_ACKS -- a valid header packet has been received, or we're advertising
@@ -654,7 +654,7 @@ class HeaderPacketReceiver(Elaboratable):
 
 					# If this was the last ACK we had to send, move back to our dispatch state.
 					with m.If(acks_to_send == 1):
-					    m.next = "DISPATCH_COMMAND"
+						m.next = "DISPATCH_COMMAND"
 
 
 			# ISSUE_CREDITS -- header packet buffers have been freed; and we now need to notify the
@@ -676,7 +676,7 @@ class HeaderPacketReceiver(Elaboratable):
 
 					# If this was the last credit we had to issue, move back to our dispatch state.
 					with m.If(credits_to_issue == 1):
-					    m.next = "DISPATCH_COMMAND"
+						m.next = "DISPATCH_COMMAND"
 
 
 			# SEND_LBAD -- we've received a bad header packet; we'll need to let the other side know.

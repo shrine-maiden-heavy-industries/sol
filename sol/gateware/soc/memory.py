@@ -43,16 +43,16 @@ class WishboneRAM(Elaboratable):
 		"""
 		Parameters:
 			addr_width  -- The -bus- address width for the relevant memory. Determines the size
-					       of the memory.
+						   of the memory.
 			data_width  -- The width of each memory word.
 			granularity -- The number of bits of data per each address.
 			init        -- Optional. The initial value of the relevant memory. Should be an array of integers, a
-					       filename, or a bytes-like object. If bytes are provided, the byteorder parametera allows
-					       control over their interpretation. If a filename is provided, this filename will not be read
-					       until elaboration; this allows reading the file to be deferred until the very last minute in
-					       e.g. systems that generate the relevant file during build.
+						   filename, or a bytes-like object. If bytes are provided, the byteorder parametera allows
+						   control over their interpretation. If a filename is provided, this filename will not be read
+						   until elaboration; this allows reading the file to be deferred until the very last minute in
+						   e.g. systems that generate the relevant file during build.
 			read_only   -- If true, this will ignore writes to this memory, so it effectively
-					       acts as a ROM fixed to its initialization value.
+						   acts as a ROM fixed to its initialization value.
 			byteorder   -- Sets the byte order of the initializer value. Ignored unless a bytes-type initializer is provided.
 			name        -- A descriptive name for the given memory.
 		"""
@@ -144,7 +144,7 @@ class WishboneROM(WishboneRAM):
 			data -- The data to fill the ROM with.
 
 			addr_width  -- The -bus- address width for the relevant memory. Determines the address size of the memory.
-					       Physical size is based on the data provided, as unused elements will be optimized away.
+						   Physical size is based on the data provided, as unused elements will be optimized away.
 			data_width  -- The width of each memory word.
 			granularity -- The number of bits of data per each address.
 			name        -- A descriptive name for the ROM.

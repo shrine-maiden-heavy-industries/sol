@@ -142,8 +142,8 @@ class ULPIRegisterWindow(Elaboratable):
 
 					# Once it is, start sending our command.
 					m.d.usb += [
-					    self.ulpi_data_out .eq(self.COMMAND_REG_READ | self.address),
-					    self.ulpi_out_req  .eq(1)
+						self.ulpi_data_out .eq(self.COMMAND_REG_READ | self.address),
+						self.ulpi_out_req  .eq(1)
 					]
 
 
@@ -165,8 +165,8 @@ class ULPIRegisterWindow(Elaboratable):
 				# request, so the next cycle can properly act as a bus turnaround.
 				with m.Elif(self.ulpi_next):
 					m.d.usb += [
-					    self.ulpi_out_req  .eq(0),
-					    self.ulpi_data_out .eq(0),
+						self.ulpi_out_req  .eq(0),
+						self.ulpi_data_out .eq(0),
 					]
 					m.next = 'READ_TURNAROUND'
 
@@ -201,8 +201,8 @@ class ULPIRegisterWindow(Elaboratable):
 
 					# Once it is, start sending our command.
 					m.d.usb += [
-					    self.ulpi_data_out .eq(self.COMMAND_REG_WRITE | self.address),
-					    self.ulpi_out_req  .eq(1)
+						self.ulpi_data_out .eq(self.COMMAND_REG_WRITE | self.address),
+						self.ulpi_out_req  .eq(1)
 					]
 
 			# SEND_WRITE_ADDRESS: Continue sending the write address until the
@@ -236,8 +236,8 @@ class ULPIRegisterWindow(Elaboratable):
 				# Once it has, pulse STP for a cycle to complete the transaction.
 				with m.Elif(self.ulpi_next):
 					m.d.usb += [
-					    self.ulpi_data_out.eq(0),
-					    self.ulpi_stop.eq(1),
+						self.ulpi_data_out.eq(0),
+						self.ulpi_stop.eq(1),
 					]
 					m.next = 'STOPPING'
 
@@ -252,8 +252,8 @@ class ULPIRegisterWindow(Elaboratable):
 
 				with m.Else():
 					m.d.usb += [
-					    self.ulpi_out_req.eq(0),
-					    self.done.eq(1)
+						self.ulpi_out_req.eq(0),
+						self.done.eq(1)
 					]
 					m.next = 'IDLE'
 
@@ -589,13 +589,13 @@ class ULPIControlTranslator(Elaboratable):
 
 	I/O port:
 		I: bus_idle       -- Indicates that the ULPI bus is idle, and thus capable of
-					         performing register writes.
+							 performing register writes.
 
 		I: xcvr_select[2] -- selects the operating speed of the transciever;
-					         00 = HS, 01 = FS, 10 = LS, 11 = LS on FS bus
+							 00 = HS, 01 = FS, 10 = LS, 11 = LS on FS bus
 		I: term_select    -- enables termination for the given operating mode; see spec
 		I: op_mode        -- selects the operating mode of the transciever;
-					         00 = normal, 01 = non-driving, 10 = disable bit-stuff/NRZI
+							 00 = normal, 01 = non-driving, 10 = disable bit-stuff/NRZI
 		I: suspend        -- places the transceiver into suspend mode; active high
 
 		I: id_pullup      -- when set, places a 100kR pull-up on the ID pin
@@ -613,9 +613,9 @@ class ULPIControlTranslator(Elaboratable):
 		Parmaeters:
 			register_window     -- The ULPI register window to work with.
 			own_register_window -- True iff we're the owner of this register window.
-					               Typically, we'll use the register window for a broader controller;
-					               but this can be set to True to indicate that we need to consider this
-					               register window our own, and thus a submodule.
+								   Typically, we'll use the register window for a broader controller;
+								   but this can be set to True to indicate that we need to consider this
+								   register window our own, and thus a submodule.
 		"""
 
 		self.register_window     = register_window
@@ -654,10 +654,10 @@ class ULPIControlTranslator(Elaboratable):
 		Params:
 			address      -- The register number in the ULPI register space.
 			value       -- An 8-bit signal composing the bits that should be placed in
-					       the given register.
+						   the given register.
 
 			reset_value -- If provided, the given value will be assumed as the reset value
-					    -- of the given register; allowing us to avoid an initial write.
+						-- of the given register; allowing us to avoid an initial write.
 		"""
 
 		current_register_value = Signal(8, reset=reset_value, name=f"current_register_value_{address:02x}")
@@ -825,7 +825,7 @@ class ULPITransmitTranslator(Elaboratable):
 		O: tx_ready        -- Driven high when a given byte will be accepted on tx_data on the next clock edge.
 
 		I: op_mode[2]      -- The UTMI operating mode. Used to determine when NOPID commands should be issued;
-					          and when to force transmit errors.
+							  and when to force transmit errors.
 
 		I: bus_idle        -- Should be asserted when the transmitter is able to control the bus.
 
@@ -886,26 +886,26 @@ class ULPITransmitTranslator(Elaboratable):
 					# In this case, we'll never accept the first byte (as we're not ready to transmit it, yet),
 					# and thus TxReady will always be 0.
 					with m.If(bit_stuffing_disabled):
-					    m.d.usb  += self.ulpi_out_req.eq(1),
-					    m.d.comb += [
-					        self.ulpi_data_out .eq(self.TRANSMIT_COMMAND),
-					        self.tx_ready      .eq(0)
-					    ]
+						m.d.usb  += self.ulpi_out_req.eq(1),
+						m.d.comb += [
+							self.ulpi_data_out .eq(self.TRANSMIT_COMMAND),
+							self.tx_ready      .eq(0)
+						]
 
 					# Otherwise, this transmission starts with a PID. Extract the PID from the first data byte
 					# and present it as part of the Transmit Command. In this case, the NXT signal is
 					# has the same meaning as the UTMI TxReady signal; and can be passed along directly.
 					with m.Else():
-					    m.d.usb  += self.ulpi_out_req.eq(1),
-					    m.d.comb += [
-					        self.ulpi_data_out .eq(self.TRANSMIT_COMMAND | self.tx_data[0:4]),
-					        self.tx_ready      .eq(self.ulpi_nxt)
-					    ]
+						m.d.usb  += self.ulpi_out_req.eq(1),
+						m.d.comb += [
+							self.ulpi_data_out .eq(self.TRANSMIT_COMMAND | self.tx_data[0:4]),
+							self.tx_ready      .eq(self.ulpi_nxt)
+						]
 
 
 					# Once the PHY has accepted the command byte, we're ready to move into our main transmit state.
 					with m.If(self.ulpi_nxt):
-					    m.next = 'TRANSMIT'
+						m.next = 'TRANSMIT'
 
 
 			# TRANSMIT: we're in the body of a transmit; the UTMI and ULPI interface signals
@@ -929,12 +929,12 @@ class ULPITransmitTranslator(Elaboratable):
 					# If we've disabled bit stuffing, we'll want to termainate by generating a bit-stuff error.
 					with m.If(bit_stuffing_disabled):
 
-					    # Drive 0xFF as we stop, to generate a bit-stuff error. [ULPI: 3.8.2.3]
-					    m.d.comb += self.ulpi_data_out .eq(0xFF)
+						# Drive 0xFF as we stop, to generate a bit-stuff error. [ULPI: 3.8.2.3]
+						m.d.comb += self.ulpi_data_out .eq(0xFF)
 
 					# Otherwise, we'll generate a normal stop.
 					with m.Else():
-					    m.d.comb += self.ulpi_data_out .eq(0)
+						m.d.comb += self.ulpi_data_out .eq(0)
 
 
 		return m
@@ -1037,23 +1037,23 @@ class UTMITranslator(Elaboratable):
 	I/O port:
 
 		O: busy          -- signal that's true iff the ULPI interface is being used
-					        for a register or transmit command
+							for a register or transmit command
 
 		# See the UTMI specification for most signals.
 
 		# Data signals:
 		I: tx_data[8]  -- data to be transmitted; valid when tx_valid is asserted
 		I: tx_valid    -- set to true when data is to be transmitted; indicates the data_in
-					      byte is valid; de-asserting this line terminates the transmission
+						  byte is valid; de-asserting this line terminates the transmission
 		O: tx_ready    -- indicates the the PHY is ready to accept a new byte of data, and that the
-					      transmitter should move on to the next byte after the given cycle
+						  transmitter should move on to the next byte after the given cycle
 
 		O: rx_data[8]  -- data received from the PHY; valid when rx_valid is asserted
 		O: rx_valid    -- indicates that the data present on rx_data is new and valid data;
-					      goes high for a single ULPI clock cycle to indicate new data is ready
+						  goes high for a single ULPI clock cycle to indicate new data is ready
 
 		O: rx_active   -- indicates that the PHY is actively receiving data from the host; data is
-					      slewed on rx_data by rx_valid
+						  slewed on rx_data by rx_valid
 		O: rx_error    -- indicates that an error has occurred in the current transmission
 
 		# Extra signals:
@@ -1100,12 +1100,12 @@ class UTMITranslator(Elaboratable):
 
 			ulpi                   -- The ULPI bus to communicate with.
 			use_platform_registers -- If True (or not provided), any extra registers writes provided in
-					                  the platform definition will be applied automatically.
+									  the platform definition will be applied automatically.
 			handle_clocking        -- True iff we should attempt to automatically handle ULPI clocking. If
-					                  the `clk` ULPI signal is an input, it will be used to provide the 'usb'
-					                  domain clock. If the ULPI signal is an output, it will driven with our
-					                  'usb' domain clock. If False, it will be the user's responsibility to
-					                  handle clocking.
+									  the `clk` ULPI signal is an input, it will be used to provide the 'usb'
+									  domain clock. If the ULPI signal is an output, it will driven with our
+									  'usb' domain clock. If False, it will be the user's responsibility to
+									  handle clocking.
 
 			Note that it's recommended that multi-PHY systems either use a single clock for all PHYs
 			(assuming the PHYs support clock input), or that individual clock domains be created for each
@@ -1157,11 +1157,11 @@ class UTMITranslator(Elaboratable):
 		Params:
 			write_address -- The write address of the target ULPI register.
 			write_value   -- The value to be written. If a Signal is provided; the given register will be
-					         set post-reset, if necessary; and then dynamically updated each time the signal changes.
-					         If an integer constant is provided, this value will be written once upon startup.
+							 set post-reset, if necessary; and then dynamically updated each time the signal changes.
+							 If an integer constant is provided, this value will be written once upon startup.
 			default_value -- The default value the register is expected to have post-reset; used to determine
-					         if the value needs to be updated post-reset. If a Signal is provided for write_value,
-					         this must be provided; if an integer is provided for write_value, this is optional.
+							 if the value needs to be updated post-reset. If a Signal is provided for write_value,
+							 this must be provided; if an integer is provided for write_value, this is optional.
 		"""
 
 		# Ensure we have a default_value if we have a Signal(); as this will determine

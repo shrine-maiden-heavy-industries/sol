@@ -216,9 +216,9 @@ class LinkManagementPacketHandler(Elaboratable):
 					# For now, we only support Gen1 / 5Gbps, so we'll accept only links
 					# with that speed selected.
 					with m.If(configuration.link_speed == self.LINK_SPEED_5GBPS):
-					    m.d.ss += pending_configuration_result.eq(self.CONFIGURATION_ACCEPTED)
+						m.d.ss += pending_configuration_result.eq(self.CONFIGURATION_ACCEPTED)
 					with m.Else():
-					    m.d.ss += pending_configuration_result.eq(self.CONFIGURATION_REJECTED)
+						m.d.ss += pending_configuration_result.eq(self.CONFIGURATION_REJECTED)
 
 
 				# TODO: handle any invalid packet types?

@@ -141,10 +141,10 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 					# Grab a sample as our trigger is asserted.
 					m.d.sync += [
-					    write_port.en  .eq(1),
-					    write_position .eq(0),
+						write_port.en  .eq(1),
+						write_position .eq(0),
 
-					    self.complete  .eq(0),
+						self.complete  .eq(0),
 					]
 
 			# SAMPLE: do our sampling
@@ -161,8 +161,8 @@ class IntegratedLogicAnalyzer(Elaboratable):
 					m.next = "IDLE"
 
 					m.d.sync += [
-					    self.complete .eq(1),
-					    write_port.en .eq(0)
+						self.complete .eq(1),
+						write_port.en .eq(0)
 					]
 
 
@@ -307,8 +307,8 @@ class SyncSerialILA(Elaboratable):
 		The clock domain in which the ILA should operate.
 	samples_pretrigger: int
 		The number of our samples which should be captured _before_ the trigger.
-					              This also can act like an implicit synchronizer; so asynchronous inputs
-					              are allowed if this number is >= 2.
+								  This also can act like an implicit synchronizer; so asynchronous inputs
+								  are allowed if this number is >= 2.
 
 	clock_polarity: int, 0 or 1
 		Clock polarity for the output SPI transciever. Optional.
@@ -598,8 +598,8 @@ class StreamILA(Elaboratable):
 				# Once our ILA has finished sampling, prepare to read out our samples.
 				with m.If(self.ila.complete):
 					m.d.sync += [
-					    current_sample_number  .eq(0),
-					    in_domain_stream.first      .eq(1)
+						current_sample_number  .eq(0),
+						in_domain_stream.first      .eq(1)
 					]
 					m.next = "SENDING"
 
@@ -619,17 +619,17 @@ class StreamILA(Elaboratable):
 				# Each time the UART accepts a valid word, move on to the next one.
 				with m.If(in_domain_stream.ready):
 					with m.If(data_valid):
-					    m.d.sync += [
-					        current_sample_number   .eq(current_sample_number + 1),
-					        data_valid              .eq(0),
-					        in_domain_stream.first  .eq(0)
-					    ]
+						m.d.sync += [
+							current_sample_number   .eq(current_sample_number + 1),
+							data_valid              .eq(0),
+							in_domain_stream.first  .eq(0)
+						]
 
-					    # If this was the last sample, we're done! Move back to idle.
-					    with m.If(in_domain_stream.last):
-					        m.next = "IDLE"
+						# If this was the last sample, we're done! Move back to idle.
+						with m.If(in_domain_stream.last):
+							m.next = "IDLE"
 					with m.Else():
-					    m.d.sync += data_valid.eq(1)
+						m.d.sync += data_valid.eq(1)
 
 
 		# If we're not streaming out of the same domain we're capturing from,
@@ -891,10 +891,10 @@ class ILAFrontend(metaclass=ABCMeta):
 		Parameters:
 			filename      -- The filename to write to, or '-' to write to stdout.
 			gtkw_filename -- If provided, a gtkwave save file will be generated that
-					         automatically displays all of the relevant signals in the
-					         order provided to the ILA.
+							 automatically displays all of the relevant signals in the
+							 order provided to the ILA.
 			add_clock     -- If true or not provided, adds a replica of the ILA's sample
-					         clock to make change points easier to see.
+							 clock to make change points easier to see.
 		"""
 
 		# Select the file-like object we're working with.
@@ -929,11 +929,11 @@ class ILAFrontend(metaclass=ABCMeta):
 					# If we're adding a clock signal, add any changes necessary since
 					# the last value-change.
 					if add_clock:
-					    while clock_time < timestamp:
-					        writer.change(clock_signal, clock_time / 1e-9, clock_value)
+						while clock_time < timestamp:
+							writer.change(clock_signal, clock_time / 1e-9, clock_value)
 
-					        clock_value ^= 1
-					        clock_time  += (self.ila.sample_period / 2)
+							clock_value ^= 1
+							clock_time  += (self.ila.sample_period / 2)
 
 					# Register the signal change.
 					writer.change(signals[signal_name], timestamp / 1e-9, signal_value.to_int())

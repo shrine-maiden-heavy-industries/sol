@@ -119,23 +119,23 @@ class CTCSkipRemover(Elaboratable):
 					# relevant position.
 					for position in range(bytes_in_stream):
 
-					    # If this case would have a valid byte at the given position, grab it.
-					    position_mask = 1 << position
-					    if (position_mask & skip_mask) == 0:
-					        data_signal_at_position = sink.data.word_select(position, 8)
-					        ctrl_signal_at_position = sink.ctrl[position]
-					        data_fragments.append(data_signal_at_position)
-					        ctrl_fragments.append(ctrl_signal_at_position)
+						# If this case would have a valid byte at the given position, grab it.
+						position_mask = 1 << position
+						if (position_mask & skip_mask) == 0:
+							data_signal_at_position = sink.data.word_select(position, 8)
+							ctrl_signal_at_position = sink.ctrl[position]
+							data_fragments.append(data_signal_at_position)
+							ctrl_fragments.append(ctrl_signal_at_position)
 
 
 					# If there are any valid data signals associated with the given position,
 					# coalesce the data and control signals into a single word, which we'll handle below.
 					if data_fragments:
-					    m.d.comb += [
-					        valid_data.eq(Cat(*data_fragments)),
-					        valid_ctrl.eq(Cat(*ctrl_fragments)),
-					        valid_byte_count.eq(len(data_fragments)),
-					    ]
+						m.d.comb += [
+							valid_data.eq(Cat(*data_fragments)),
+							valid_ctrl.eq(Cat(*ctrl_fragments)),
+							valid_byte_count.eq(len(data_fragments)),
+						]
 
 		#
 		# Elastic Buffer / Valid Data Coalescence
@@ -181,11 +181,11 @@ class CTCSkipRemover(Elaboratable):
 				for i in range(1, bytes_in_stream + 1):
 					with m.Case(i):
 
-					    # Grab our existing data, and stick it onto the end of the shift register.
-					    m.d.ss += [
-					        data_buffer  .eq(Cat(data_buffer[8*i:], valid_data[0:8*i])),
-					        ctrl_buffer  .eq(Cat(ctrl_buffer[1*i:], valid_ctrl[0:1*i])),
-					    ]
+						# Grab our existing data, and stick it onto the end of the shift register.
+						m.d.ss += [
+							data_buffer  .eq(Cat(data_buffer[8*i:], valid_data[0:8*i])),
+							ctrl_buffer  .eq(Cat(ctrl_buffer[1*i:], valid_ctrl[0:1*i])),
+						]
 
 		# If we're not receiving data, but we -are- removing it, we'll just update our total
 		# valid data counter to account for the removal.
@@ -209,8 +209,8 @@ class CTCSkipRemover(Elaboratable):
 					# Grab the relevant word from the end of the buffer.
 					word_position = 8 - i
 					m.d.comb += [
-					    source.data.eq(data_buffer[8 * word_position : 8 * (word_position + bytes_in_stream)]),
-					    source.ctrl.eq(ctrl_buffer[1 * word_position : 1 * (word_position + bytes_in_stream)]),
+						source.data.eq(data_buffer[8 * word_position : 8 * (word_position + bytes_in_stream)]),
+						source.ctrl.eq(ctrl_buffer[1 * word_position : 1 * (word_position + bytes_in_stream)]),
 					]
 
 		#

@@ -190,11 +190,11 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 				# Once we get a send request, fill in our shift register, and start shifting.
 				with m.If(word_stream.valid):
 					m.d.usb += [
-					    data_shift         .eq(word_stream.payload),
-					    first_latched      .eq(word_stream.first),
-					    last_latched       .eq(word_stream.last),
+						data_shift         .eq(word_stream.payload),
+						first_latched      .eq(word_stream.first),
+						last_latched       .eq(word_stream.last),
 
-					    bytes_to_send      .eq(self._byte_width - 1),
+						bytes_to_send      .eq(self._byte_width - 1),
 					]
 					m.next = "TRANSMIT"
 
@@ -211,34 +211,34 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 					# Pass through our First and Last signals, but only on the first and
 					# last bytes of our word, respectively.
 					m.d.comb += [
-					    byte_stream.first  .eq(first_latched & is_first_byte),
-					    byte_stream.last   .eq(last_latched  & is_last_byte)
+						byte_stream.first  .eq(first_latched & is_first_byte),
+						byte_stream.last   .eq(last_latched  & is_last_byte)
 					]
 
 					# ... if we have bytes left to send, move to the next one.
 					with m.If(bytes_to_send > 0):
-					    m.d.usb += [
-					        bytes_to_send .eq(bytes_to_send - 1),
-					        data_shift    .eq(data_shift[8:]),
-					    ]
+						m.d.usb += [
+							bytes_to_send .eq(bytes_to_send - 1),
+							data_shift    .eq(data_shift[8:]),
+						]
 
 					# Otherwise, complete the frame.
 					with m.Else():
-					    m.d.comb += word_stream.ready.eq(1)
+						m.d.comb += word_stream.ready.eq(1)
 
-					    # If we still have data to send, move to the next byte...
-					    with m.If(self.stream.valid):
-					        m.d.usb += [
-					            data_shift     .eq(word_stream.payload),
-					            first_latched  .eq(word_stream.first),
-					            last_latched   .eq(word_stream.last),
+						# If we still have data to send, move to the next byte...
+						with m.If(self.stream.valid):
+							m.d.usb += [
+								data_shift     .eq(word_stream.payload),
+								first_latched  .eq(word_stream.first),
+								last_latched   .eq(word_stream.last),
 
-					            bytes_to_send  .eq(self._byte_width - 1),
-					        ]
+								bytes_to_send  .eq(self._byte_width - 1),
+							]
 
-					    # ... otherwise, move to our idle state.
-					    with m.Else():
-					        m.next = "IDLE"
+						# ... otherwise, move to our idle state.
+						with m.Else():
+							m.next = "IDLE"
 
 
 		return m

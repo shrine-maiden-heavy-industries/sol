@@ -17,5 +17,5 @@ all: ${PROJ}.svf ${PROJ}.bit
 
 prog: ${PROJ}.bit
 	tinyprog -p $<
-	
+
 .PRECIOUS: ${PROJ}.json ${PROJ}_out.config

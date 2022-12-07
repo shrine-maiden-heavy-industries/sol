@@ -84,8 +84,8 @@ if os.getenv('LUNA_SUPERSPEED'):
 					i.bInterfaceNumber = 0
 
 					with i.EndpointDescriptor(add_default_superspeed=True) as e:
-					    e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
-					    e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
+						e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
+						e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
 
 			return descriptors
 
@@ -172,8 +172,8 @@ else:
 					i.bInterfaceNumber = 0
 
 					with i.EndpointDescriptor() as e:
-					    e.bEndpointAddress = 0x80 | BULK_ENDPOINT_NUMBER
-					    e.wMaxPacketSize   = MAX_BULK_PACKET_SIZE
+						e.bEndpointAddress = 0x80 | BULK_ENDPOINT_NUMBER
+						e.wMaxPacketSize   = MAX_BULK_PACKET_SIZE
 
 
 			return descriptors

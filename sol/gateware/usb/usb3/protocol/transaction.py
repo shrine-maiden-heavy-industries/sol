@@ -368,11 +368,11 @@ class TransactionPacketReceiver(Elaboratable):
 					m.d.comb += status_packet.eq(header_sink.header)
 
 					m.d.comb += [
-					    # ... fill the fields out in our interface...
-					    interface.endpoint_number  .eq(status_packet.endpoint_number),
+						# ... fill the fields out in our interface...
+						interface.endpoint_number  .eq(status_packet.endpoint_number),
 
-					    # ... and report the event.
-					    interface.status_received  .eq(1)
+						# ... and report the event.
+						interface.status_received  .eq(1)
 					]
 
 
@@ -387,17 +387,17 @@ class TransactionPacketReceiver(Elaboratable):
 					m.d.comb += ack_packet.eq(header_sink.header)
 
 					m.d.comb += [
-					    # ... fill the fields out in our interface...
-					    interface.endpoint_number    .eq(ack_packet.endpoint_number),
-					    interface.retry_required     .eq(ack_packet.retry),
-					    interface.next_sequence      .eq(ack_packet.data_sequence),
-					    interface.packets_pending    .eq(ack_packet.packets_pending),
-					    interface.direction          .eq(ack_packet.direction),
-					    interface.host_error         .eq(ack_packet.host_error),
-					    interface.number_of_packets  .eq(ack_packet.number_of_packets),
+						# ... fill the fields out in our interface...
+						interface.endpoint_number    .eq(ack_packet.endpoint_number),
+						interface.retry_required     .eq(ack_packet.retry),
+						interface.next_sequence      .eq(ack_packet.data_sequence),
+						interface.packets_pending    .eq(ack_packet.packets_pending),
+						interface.direction          .eq(ack_packet.direction),
+						interface.host_error         .eq(ack_packet.host_error),
+						interface.number_of_packets  .eq(ack_packet.number_of_packets),
 
-					    # ... and report the event.
-					    interface.ack_received       .eq(1)
+						# ... and report the event.
+						interface.ack_received       .eq(1)
 					]
 
 		return m

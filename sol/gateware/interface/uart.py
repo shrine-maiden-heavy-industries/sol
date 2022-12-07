@@ -89,9 +89,9 @@ class UARTTransmitter(Elaboratable):
 				# Once we get a send request, fill in our shift register, and start shifting.
 				with m.If(self.stream.valid):
 					m.d.sync += [
-					    baud_counter      .eq(self.divisor   - 1),
-					    bits_to_send      .eq(len(data_shift) - 1),
-					    data_shift        .eq(framed_data_in),
+						baud_counter      .eq(self.divisor   - 1),
+						bits_to_send      .eq(len(data_shift) - 1),
+						data_shift        .eq(framed_data_in),
 					]
 
 					m.next = "TRANSMIT"
@@ -111,25 +111,25 @@ class UARTTransmitter(Elaboratable):
 
 					# ... if we have bits left to send, move to the next one.
 					with m.If(bits_to_send > 0):
-					    m.d.sync += [
-					        bits_to_send .eq(bits_to_send - 1),
-					        data_shift   .eq(data_shift[1:])
-					    ]
+						m.d.sync += [
+							bits_to_send .eq(bits_to_send - 1),
+							data_shift   .eq(data_shift[1:])
+						]
 
 					# Otherwise, complete the frame.
 					with m.Else():
-					    m.d.comb += self.stream.ready.eq(1)
+						m.d.comb += self.stream.ready.eq(1)
 
-					    # If we still have data to send, move to the next byte...
-					    with m.If(self.stream.valid):
-					        m.d.sync += [
-					            bits_to_send  .eq(bits_per_frame - 1),
-					            data_shift    .eq(framed_data_in),
-					        ]
+						# If we still have data to send, move to the next byte...
+						with m.If(self.stream.valid):
+							m.d.sync += [
+								bits_to_send  .eq(bits_per_frame - 1),
+								data_shift    .eq(framed_data_in),
+							]
 
-					    # ... otherwise, move to our idle state.
-					    with m.Else():
-					        m.next = "IDLE"
+						# ... otherwise, move to our idle state.
+						with m.Else():
+							m.next = "IDLE"
 
 
 		return m
@@ -329,8 +329,8 @@ class UARTMultibyteTransmitter(Elaboratable):
 				# Once we get a send request, fill in our shift register, and start shifting.
 				with m.If(self.stream.valid):
 					m.d.sync += [
-					    data_shift         .eq(self.stream.payload),
-					    bytes_to_send      .eq(self.byte_width - 1),
+						data_shift         .eq(self.stream.payload),
+						bytes_to_send      .eq(self.byte_width - 1),
 					]
 					m.next = "TRANSMIT"
 
@@ -344,25 +344,25 @@ class UARTMultibyteTransmitter(Elaboratable):
 
 					# ... if we have bytes left to send, move to the next one.
 					with m.If(bytes_to_send > 0):
-					    m.d.sync += [
-					        bytes_to_send .eq(bytes_to_send - 1),
-					        data_shift    .eq(data_shift[8:]),
-					    ]
+						m.d.sync += [
+							bytes_to_send .eq(bytes_to_send - 1),
+							data_shift    .eq(data_shift[8:]),
+						]
 
 					# Otherwise, complete the frame.
 					with m.Else():
-					    m.d.comb += self.stream.ready.eq(1)
+						m.d.comb += self.stream.ready.eq(1)
 
-					    # If we still have data to send, move to the next byte...
-					    with m.If(self.stream.valid):
-					        m.d.sync += [
-					            bytes_to_send      .eq(self.byte_width - 1),
-					            data_shift         .eq(self.stream.payload),
-					        ]
+						# If we still have data to send, move to the next byte...
+						with m.If(self.stream.valid):
+							m.d.sync += [
+								bytes_to_send      .eq(self.byte_width - 1),
+								data_shift         .eq(self.stream.payload),
+							]
 
-					    # ... otherwise, move to our idle state.
-					    with m.Else():
-					        m.next = "IDLE"
+						# ... otherwise, move to our idle state.
+						with m.Else():
+							m.next = "IDLE"
 
 
 		return m

@@ -32,7 +32,7 @@ class PHYResetController(Elaboratable):
 			reset_length   -- The length of a reset pulse, in seconds.
 			stop_length    -- The length of time STP should be asserted after reset.
 			power_on_reset -- If True or omitted, the reset will be applied once the firmware
-					          is configured.
+							  is configured.
 		"""
 
 		from math import ceil
@@ -141,7 +141,7 @@ class LunaDomainGenerator(Elaboratable, metaclass=ABCMeta):
 		O: clk_sync      -- The clock signal used for our sync clock domain.
 		O: clk_usb       -- The clock signal used for our USB domain.
 		O: usb_holdoff   -- Signal that indicates that the USB domain is immediately post-reset,
-					        and thus we should avoid transactions with the external PHY.
+							and thus we should avoid transactions with the external PHY.
 	"""
 
 	def __init__(self, *, clock_signal_name=None, clock_signal_frequency=60.0):
@@ -245,10 +245,10 @@ class LunaECP5DomainGenerator(LunaDomainGenerator):
 		"""
 		Parameters:
 			clock_frequencies -- A dictionary mapping 'fast', 'sync', and 'usb' to the clock
-					             frequencies for those domains, in MHz. Valid choices for each
-					             domain are 60, 120, and 240. If not provided, fast will be
-					             assumed to be 240, sync will assumed to be 120, and usb will
-					             be assumed to be a standard 60.
+								 frequencies for those domains, in MHz. Valid choices for each
+								 domain are 60, 120, and 240. If not provided, fast will be
+								 assumed to be 240, sync will assumed to be 120, and usb will
+								 be assumed to be a standard 60.
 		"""
 		super().__init__(clock_signal_name=clock_signal_name)
 		self.clock_frequencies = clock_frequencies

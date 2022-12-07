@@ -221,7 +221,7 @@ class USBResetSequencer(Elaboratable):
 
 					# If we're okay to run in high speed, we'll try to perform a high-speed detect.
 					with m.If(~self.low_speed_only & ~self.full_speed_only):
-					    m.next = 'START_HS_DETECTION'
+						m.next = 'START_HS_DETECTION'
 
 
 				# If we're seeing a state other than IDLE, clear our suspend timer.
@@ -260,11 +260,11 @@ class USBResetSequencer(Elaboratable):
 				# Afterwards, we'll take steps to differentiate a reset from a suspend.
 				with m.If(timer == self._CYCLES_3_MILLISECONDS):
 					m.d.usb += [
-					    timer                    .eq(0),
+						timer                    .eq(0),
 
-					    self.current_speed       .eq(USBSpeed.FULL),
-					    self.operating_mode      .eq(UTMIOperatingMode.NORMAL),
-					    self.termination_select  .eq(UTMITerminationSelect.LS_FS_NORMAL),
+						self.current_speed       .eq(USBSpeed.FULL),
+						self.operating_mode      .eq(UTMIOperatingMode.NORMAL),
+						self.termination_select  .eq(UTMITerminationSelect.LS_FS_NORMAL),
 					]
 					m.next = 'DETECT_HS_SUSPEND'
 
@@ -318,8 +318,8 @@ class USBResetSequencer(Elaboratable):
 				# we don't change our values in the middle of a bit.
 				with m.If((timer == self._CYCLES_2_MILLISECONDS)):
 					m.d.usb += [
-					    timer        .eq(0),
-					    valid_pairs  .eq(0)
+						timer        .eq(0),
+						valid_pairs  .eq(0)
 					]
 					m.next = 'AWAIT_HOST_K'
 
@@ -382,12 +382,12 @@ class USBResetSequencer(Elaboratable):
 					# If this would complete our third pair, this completes a handshake,
 					# and we've identified a high speed host!
 					with m.If(valid_pairs == 2):
-					    m.next = 'IS_HIGH_SPEED'
+						m.next = 'IS_HIGH_SPEED'
 
 					# Otherwise, count the pair as valid, and wait for the next K.
 					with m.Else():
-					    m.d.usb += valid_pairs.eq(valid_pairs + 1)
-					    m.next = 'AWAIT_HOST_K'
+						m.d.usb += valid_pairs.eq(valid_pairs + 1)
+						m.next = 'AWAIT_HOST_K'
 
 				# If our input has become something other than a K, then
 				# we haven't finished our sequence. We'll go back to expecting a K.
@@ -436,8 +436,8 @@ class USBResetSequencer(Elaboratable):
 				with m.If(self.line_state != self._LINE_STATE_SE0):
 					m.next = 'LS_FS_NON_RESET'
 					m.d.usb += [
-					    timer.eq(0),
-					    line_state_time.eq(0)
+						timer.eq(0),
+						line_state_time.eq(0)
 					]
 
 
@@ -453,14 +453,14 @@ class USBResetSequencer(Elaboratable):
 
 					# If we've resume IDLE, this is suspend. Move to HS suspend.
 					with m.If(self.line_state == self._LINE_STATE_FS_HS_J):
-					    m.d.usb += was_hs_pre_suspend.eq(1)
-					    m.next = 'SUSPENDED'
+						m.d.usb += was_hs_pre_suspend.eq(1)
+						m.next = 'SUSPENDED'
 
 					# Otherwise, this is a reset (or, if K/SE1, we're very confused, and
 					# should re-initialize anyway). Move to the HS reset detect sequence.
 					with m.Else():
-					    m.d.comb += self.bus_reset.eq(1)
-					    m.next = 'START_HS_DETECTION'
+						m.d.comb += self.bus_reset.eq(1)
+						m.next = 'START_HS_DETECTION'
 
 
 			# SUSPEND -- our device has entered USB suspend; we'll now wait for either a
@@ -476,15 +476,15 @@ class USBResetSequencer(Elaboratable):
 
 					# If we were in high-speed pre-suspend, then resume being in HS.
 					with m.If(was_hs_pre_suspend):
-					    m.next = 'IS_HIGH_SPEED'
+						m.next = 'IS_HIGH_SPEED'
 
 					# Otherwise, just resume.
 					with m.Else():
-					    m.next = 'LS_FS_NON_RESET'
-					    m.d.usb += [
-					        timer.eq(0),
-					        line_state_time.eq(0)
-					    ]
+						m.next = 'LS_FS_NON_RESET'
+						m.d.usb += [
+							timer.eq(0),
+							line_state_time.eq(0)
+						]
 
 
 				# If this isn't an SE0, we're not receiving a reset request.
@@ -501,15 +501,15 @@ class USBResetSequencer(Elaboratable):
 
 					# If we're limited to LS or FS, move to the appropriate state.
 					with m.If(self.low_speed_only | self.full_speed_only):
-					    m.next = 'LS_FS_NON_RESET'
-					    m.d.usb += [
-					        timer.eq(0),
-					        line_state_time.eq(0)
-					    ]
+						m.next = 'LS_FS_NON_RESET'
+						m.d.usb += [
+							timer.eq(0),
+							line_state_time.eq(0)
+						]
 
 					# Otherwise, this could be a high-speed device; enter its reset.
 					with m.Else():
-					    m.next = 'START_HS_DETECTION'
+						m.next = 'START_HS_DETECTION'
 
 		return m
 

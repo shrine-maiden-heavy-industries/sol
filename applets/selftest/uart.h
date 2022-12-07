@@ -32,7 +32,7 @@ void uart_puts(char *str);
 void uart_print_byte(uint8_t value);
 
 /**
- * 
+ *
  * Prints the hex value of a uint16_t to the UART console.
  */
 void uart_print_word(uint16_t value);

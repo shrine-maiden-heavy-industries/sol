@@ -89,15 +89,15 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 					# If we've received a new setup packet, handle it.
 					with m.If(setup.received):
 
-					    # Select which vendor we're going to handle.
-					    with m.Switch(setup.request):
+						# Select which vendor we're going to handle.
+						with m.Switch(setup.request):
 
-					        with m.Case(USBAnalyzerVendorRequests.GET_STATE):
-					            m.next = 'GET_STATE'
-					        with m.Case(USBAnalyzerVendorRequests.SET_STATE):
-					            m.next = 'SET_STATE'
-					        with m.Case():
-					            m.next = 'UNHANDLED'
+							with m.Case(USBAnalyzerVendorRequests.GET_STATE):
+								m.next = 'GET_STATE'
+							with m.Case(USBAnalyzerVendorRequests.SET_STATE):
+								m.next = 'SET_STATE'
+							with m.Case():
+								m.next = 'UNHANDLED'
 
 
 				# GET_STATE -- Fetch the device's state
@@ -114,8 +114,8 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 					# When we next have an opportunity to stall, do so,
 					# and then return to idle.
 					with m.If(interface.data_requested | interface.status_requested):
-					    m.d.comb += handshake_generator.stall.eq(1)
-					    m.next = 'IDLE'
+						m.d.comb += handshake_generator.stall.eq(1)
+						m.next = 'IDLE'
 
 		return m
 

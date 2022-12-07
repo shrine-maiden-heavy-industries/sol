@@ -215,11 +215,11 @@ class TxNRZIEncoder(Elaboratable):
 
 				with m.If(self.i_valid):
 					with m.If(~self.i_oe):
-					    m.next = "SE0A"
+						m.next = "SE0A"
 					with m.Elif(self.i_data):
-					    m.next = "DJ"
+						m.next = "DJ"
 					with m.Else():
-					    m.next = "DK"
+						m.next = "DK"
 
 
 			# the output line is in state K
@@ -232,11 +232,11 @@ class TxNRZIEncoder(Elaboratable):
 
 				with m.If(self.i_valid):
 					with m.If(~self.i_oe):
-					    m.next = "SE0A"
+						m.next = "SE0A"
 					with m.Elif(self.i_data):
-					    m.next = "DK"
+						m.next = "DK"
 					with m.Else():
-					    m.next = "DJ"
+						m.next = "DJ"
 
 
 			# first bit of the SE0 state
@@ -334,11 +334,11 @@ class TxBitstuffer(Elaboratable):
 				with m.State(f"D{i}"):
 					# Receiving '1' increments the bitstuff counter.
 					with m.If(self.i_data):
-					    m.next = f"D{i+1}"
+						m.next = f"D{i+1}"
 
 					# Receiving '0' resets the bitstuff counter.
 					with m.Else():
-					    m.next = "D0"
+						m.next = "D0"
 
 
 			with m.State("D5"):
@@ -480,8 +480,8 @@ class TxPipeline(Elaboratable):
 			with m.State('IDLE'):
 				with m.If(self.i_oe):
 					m.d.usb += [
-					    sync_pulse.eq(1 << 7),
-					    state_gray.eq(0b01)
+						sync_pulse.eq(1 << 7),
+						state_gray.eq(0b01)
 					]
 					m.next = "SEND_SYNC"
 				with m.Else():
@@ -501,13 +501,13 @@ class TxPipeline(Elaboratable):
 			with m.State('SEND_DATA'):
 				with m.If(~self.i_oe & shifter.o_empty & ~bitstuff.o_stall):
 					with m.If(bitstuff.o_will_stall):
-					    m.next = 'STUFF_LAST_BIT'
+						m.next = 'STUFF_LAST_BIT'
 					with m.Else():
-					    m.d.usb += state_gray.eq(0b10)
-					    m.next = 'IDLE'
+						m.d.usb += state_gray.eq(0b10)
+						m.next = 'IDLE'
 
 				with m.Else():
-					    m.d.usb += state_gray.eq(0b11)
+						m.d.usb += state_gray.eq(0b11)
 
 			with m.State('STUFF_LAST_BIT'):
 				m.d.usb += state_gray.eq(0b10)

@@ -190,8 +190,8 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 				# Once we've received our first byte, buffer it, and mark it as our first byte.
 				with m.If(in_stream.valid & in_stream.next):
 					m.d.usb += [
-					    buffered_byte.eq(in_stream.payload),
-					    is_first_byte.eq(1)
+						buffered_byte.eq(in_stream.payload),
+						is_first_byte.eq(1)
 					]
 					m.next = 'RECEIVE_AND_TRANSMIT'
 
@@ -214,16 +214,16 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 				# If we get a new byte, emit our buffered byte, and store the incoming byte.
 				with m.If(in_stream.valid & in_stream.next):
 					m.d.usb += [
-					    # Output our buffered byte...
-					    out_stream.payload  .eq(buffered_byte),
-					    out_stream.next     .eq(1),
+						# Output our buffered byte...
+						out_stream.payload  .eq(buffered_byte),
+						out_stream.next     .eq(1),
 
-					    # indicate whether our current byte was the first byte captured...
-					    self.first          .eq(is_first_byte),
+						# indicate whether our current byte was the first byte captured...
+						self.first          .eq(is_first_byte),
 
-					    # ... and store the new, incoming byte.
-					    buffered_byte       .eq(in_stream.payload),
-					    is_first_byte       .eq(0)
+						# ... and store the new, incoming byte.
+						buffered_byte       .eq(in_stream.payload),
+						is_first_byte       .eq(0)
 					]
 
 				# Once we no longer have an active packet, transmit our _last_ byte,
@@ -231,13 +231,13 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 				with m.If(~in_stream.valid):
 					m.d.usb += [
 
-					    # Output our buffered byte...
-					    out_stream.payload  .eq(buffered_byte),
-					    out_stream.next     .eq(1),
-					    self.first          .eq(is_first_byte),
+						# Output our buffered byte...
+						out_stream.payload  .eq(buffered_byte),
+						out_stream.next     .eq(1),
+						self.first          .eq(is_first_byte),
 
-					    # ... and indicate that it's the last byte in our stream.
-					    self.last           .eq(1)
+						# ... and indicate that it's the last byte in our stream.
+						self.last           .eq(1)
 					]
 					m.next = 'OUTPUT_STROBES'
 

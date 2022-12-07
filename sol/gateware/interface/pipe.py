@@ -208,7 +208,7 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 	def __init__(self, phy, *, width, domain="ss"):
 		if width < phy.width:
 			raise ValueError(f"Async PIPE interface cannot adapt PHY data bus width {phy.width} "
-					         f"to MAC data bus width {width}")
+							 f"to MAC data bus width {width}")
 		super().__init__(width=width)
 		self.phy            = phy
 		self._domain        = domain
@@ -358,7 +358,7 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		)
 		m.d.phy  += [
 			rx_fifo.w_data.word_select(gear_index, len(phy_rx_bus_signals))
-					            .eq(phy_rx_bus_signals),
+								.eq(phy_rx_bus_signals),
 			rx_fifo.w_en        .eq(gear_advance),
 		]
 		m.d.comb += [

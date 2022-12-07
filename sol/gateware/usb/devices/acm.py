@@ -49,11 +49,11 @@ class ACMRequestHandlers(USBRequestHandler):
 
 					# Always ACK the data out...
 					with m.If(interface.rx_ready_for_response):
-					    m.d.comb += interface.handshakes_out.ack.eq(1)
+						m.d.comb += interface.handshakes_out.ack.eq(1)
 
 					# ... and accept whatever the request was.
 					with m.If(interface.status_requested):
-					    m.d.comb += self.send_zlp()
+						m.d.comb += self.send_zlp()
 
 
 				with m.Case():
@@ -62,7 +62,7 @@ class ACMRequestHandlers(USBRequestHandler):
 					# Stall unhandled requests.
 					#
 					with m.If(interface.status_requested | interface.data_requested):
-					    m.d.comb += interface.handshakes_out.stall.eq(1)
+						m.d.comb += interface.handshakes_out.stall.eq(1)
 
 				return m
 

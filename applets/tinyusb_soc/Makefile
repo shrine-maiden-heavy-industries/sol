@@ -1,5 +1,5 @@
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 
 SOC = tinyusb_soc.py
@@ -36,4 +36,3 @@ flash-soc: $(SOC)
 
 clean:
 	rm -f $(TARGET).elf $(TARGET).bin soc.ld resources.h soc.bit
-

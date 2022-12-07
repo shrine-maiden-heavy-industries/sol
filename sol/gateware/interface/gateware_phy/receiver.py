@@ -140,13 +140,13 @@ class RxClockDataRecovery(Elaboratable):
 
 				with m.Switch(dpair):
 					with m.Case(0b10):
-					    m.next = "DJ"
+						m.next = "DJ"
 					with m.Case(0b01):
-					    m.next = "DK"
+						m.next = "DK"
 					with m.Case(0b00):
-					    m.next = "SE0"
+						m.next = "SE0"
 					with m.Case(0b11):
-					    m.next = "SE1"
+						m.next = "SE1"
 
 			# If we are in a valid line state and the value of the pair changes,
 			# then we need to move to the transition state.
@@ -356,29 +356,29 @@ class RxPacketDetect(Elaboratable):
 
 				with m.State(f"D{i}"):
 					with m.If(self.i_valid):
-					    with m.If(self.i_data | self.i_se0):
-					        # Receiving '1' or SE0 early resets the packet start counter.
-					        m.next = "D0"
+						with m.If(self.i_data | self.i_se0):
+							# Receiving '1' or SE0 early resets the packet start counter.
+							m.next = "D0"
 
-					    with m.Else():
-					        # Receiving '0' increments the packet start counter.
-					        m.next = f"D{i + 1}"
+						with m.Else():
+							# Receiving '0' increments the packet start counter.
+							m.next = f"D{i + 1}"
 
 			with m.State("D5"):
 				with m.If(self.i_valid):
 					with m.If(self.i_se0):
-					    m.next = "D0"
+						m.next = "D0"
 					# once we get a '1', the packet is active
 					with m.Elif(self.i_data):
-					    m.d.comb += pkt_start.eq(1)
-					    m.next = "PKT_ACTIVE"
+						m.d.comb += pkt_start.eq(1)
+						m.next = "PKT_ACTIVE"
 
 			with m.State("PKT_ACTIVE"):
 				m.d.comb += pkt_active.eq(1)
 				with m.If(self.i_valid & self.i_se0):
 					m.d.comb += [
-					    pkt_active.eq(0),
-					    pkt_end.eq(1)
+						pkt_active.eq(0),
+						pkt_end.eq(1)
 					]
 					m.next = "D0"
 
@@ -459,12 +459,12 @@ class RxBitstuffRemover(Elaboratable):
 			for i in range(6):
 				with m.State(f"D{i}"):
 					with m.If(self.i_valid):
-					    with m.If(self.i_data):
-					        # Receiving '1' increments the bitstuff counter.
-					        m.next = (f"D{i + 1}")
-					    with m.Else():
-					        # Receiving '0' resets the bitstuff counter.
-					        m.next = "D0"
+						with m.If(self.i_data):
+							# Receiving '1' increments the bitstuff counter.
+							m.next = (f"D{i + 1}")
+						with m.Else():
+							# Receiving '0' resets the bitstuff counter.
+							m.next = "D0"
 
 			with m.State("D6"):
 				with m.If(self.i_valid):

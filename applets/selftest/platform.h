@@ -10,7 +10,7 @@
 
 /**
  * Function pointer type for simple conditionals.
- */ 
+ */
 typedef uint32_t (*simple_conditional)(void);
 
 
