@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Header Packet data interfacing definitions."""
+''' Header Packet data interfacing definitions.'''
 
 import functools
 import operator
@@ -15,7 +15,7 @@ from ....stream.arbiter import StreamArbiter
 
 
 class HeaderPacket(Record):
-	""" Container that represents a Header Packet. """
+	''' Container that represents a Header Packet. '''
 
 	# Create overrideable constants that allow us to specialize
 	# the data words of our headers in subclasses.
@@ -34,13 +34,13 @@ class HeaderPacket(Record):
 	]
 
 	def get_type(self):
-		""" Returns the selection of bits in DW0 that encode the packet type. """
+		''' Returns the selection of bits in DW0 that encode the packet type. '''
 		return self.dw0[0:5]
 
 
 	@classmethod
 	def get_layout(cls):
-		""" Computes the layout for the HeaderPacket (sub)class. """
+		''' Computes the layout for the HeaderPacket (sub)class. '''
 		return [
 			*cls.DW0_LAYOUT,
 			*cls.DW1_LAYOUT,
@@ -55,7 +55,7 @@ class HeaderPacket(Record):
 
 
 class HeaderQueue(Record):
-	""" Record representing a header, and stream-link control signals.
+	''' Record representing a header, and stream-link control signals.
 
 	Attributes
 	----------
@@ -65,23 +65,23 @@ class HeaderQueue(Record):
 		Contains a full set of header packet data.
 	ready: Signal(), consumer to producer
 		Strobed by the consumer to indicate that it has accepted the given header.
-	"""
+	'''
 
 	def __init__(self, *, header_type=HeaderPacket):
 		super().__init__([
 			('valid', 1),
 			('header', header_type.get_layout()),
 			('ready', 1),
-		], name="HeaderQueue")
+		], name='HeaderQueue')
 
 
 	def get_type(self):
-		""" Returns the selection of bits in the current header's that encode the packet type. """
+		''' Returns the selection of bits in the current header's that encode the packet type. '''
 		return self.header.dw0[0:5]
 
 
 	def header_eq(self, other):
-		""" Connects a producer (self) up to a consumer. """
+		''' Connects a producer (self) up to a consumer. '''
 		return [
 			self.valid   .eq(other.valid),
 			self.header  .eq(other.header),
@@ -90,13 +90,13 @@ class HeaderQueue(Record):
 
 
 	def stream_eq(self, other):
-		""" Alias for ``header_eq`` that ensures we share a stream interface. """
+		''' Alias for ``header_eq`` that ensures we share a stream interface. '''
 		return self.header_eq(other)
 
 
 
 class HeaderQueueArbiter(StreamArbiter):
-	""" Gateware that accepts a collection of header queues, and merges them into a single queue.
+	''' Gateware that accepts a collection of header queues, and merges them into a single queue.
 
 	Add produces using ``add_producer``.
 
@@ -104,20 +104,20 @@ class HeaderQueueArbiter(StreamArbiter):
 	----------
 	source: HeaderQueue(), output queue
 		A single header queue that carries data from all producer queues.
-	"""
+	'''
 
 	def __init__(self):
-		super().__init__(stream_type=HeaderQueue, domain="ss")
+		super().__init__(stream_type=HeaderQueue, domain='ss')
 
 
 	def add_producer(self, interface: HeaderQueue):
-		""" Adds a HeaderQueue interface that will add packets into this mux. """
+		''' Adds a HeaderQueue interface that will add packets into this mux. '''
 		self.add_stream(interface)
 
 
 
 class HeaderQueueDemultiplexer(Elaboratable):
-	""" Gateware that accepts a single Header Queue, and routes it to multiple modules.
+	''' Gateware that accepts a single Header Queue, and routes it to multiple modules.
 
 	Assumes that each type of header is handled by a separate module, and thus no two inputs
 	will assert :attr:``ready`` at the same time.
@@ -128,7 +128,7 @@ class HeaderQueueDemultiplexer(Elaboratable):
 	----------
 	sink: HeaderQueue(), input queue
 		The single header queue to be distributed to all of our consumers.
-	"""
+	'''
 
 	def __init__(self):
 		self._consumers = []
@@ -140,7 +140,7 @@ class HeaderQueueDemultiplexer(Elaboratable):
 
 
 	def add_consumer(self, interface: HeaderQueue):
-		""" Adds a HeaderQueue interface that will consume packets from this mux. """
+		''' Adds a HeaderQueue interface that will consume packets from this mux. '''
 		self._consumers.append(interface)
 
 

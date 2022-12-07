@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Utilities for building USB descriptors into gateware. """
+''' Utilities for building USB descriptors into gateware. '''
 
 import functools
 import struct
@@ -23,24 +23,24 @@ from ..stream                                 import USBInStreamInterface
 
 
 class USBDescriptorStreamGenerator(ConstantStreamGenerator):
-	""" Specialized stream generator for generating USB descriptor constants. """
+	''' Specialized stream generator for generating USB descriptor constants. '''
 
 	def __init__(self, data):
-		"""
+		'''
 		Parameters:
 			descriptor_number -- The descriptor number represented.
 			data              -- The raw bytes (or equivalent) for the descriptor.
-		"""
+		'''
 
 		# Always create USB descriptors in the USB domain; always have a maximum length field that can
 		# be up to 16 bits wide, and always use USBInStream's. These allow us to tie easily to our request
 		# handlers.
-		super().__init__(data, domain="usb", stream_type=USBInStreamInterface, max_length_width=16)
+		super().__init__(data, domain='usb', stream_type=USBInStreamInterface, max_length_width=16)
 
 
 
 class GetDescriptorHandlerDistributed(Elaboratable):
-	""" Gateware that handles responding to GetDescriptor requests.
+	''' Gateware that handles responding to GetDescriptor requests.
 
 	Currently does not support descriptors in multiple languages.
 
@@ -54,14 +54,14 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 
 		*: tx         -- The USBInStreamInterface that streams our descriptor data.
 		O: stall      -- Pulsed if a STALL handshake should be generated, instead of a response.
-	"""
+	'''
 
 	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length=64):
-		"""
+		'''
 		Parameteres:
 			descriptor_collection -- The DeviceDescriptorCollection containing the descriptors
 									 to use for this device.
-		"""
+		'''
 
 		self._descriptors = descriptor_collection
 		self._max_packet_length = max_packet_length
@@ -145,7 +145,7 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 
 
 class GetDescriptorHandlerBlock(Elaboratable):
-	""" Gateware that handles responding to GetDescriptor requests.
+	''' Gateware that handles responding to GetDescriptor requests.
 
 	Currently does not support descriptors in multiple languages.
 
@@ -160,15 +160,15 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 		*: tx             -- The USBInStreamInterface that streams our descriptor data.
 		O: stall          -- Pulsed if a STALL handshake should be generated, instead of a response.
-	"""
+	'''
 
 	ELEMENT_SIZE = 4
 
 	COUNT_SIZE_BITS   = 16
 	ADDRESS_SIZE_BITS = 16
 
-	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length=64, domain="usb"):
-		"""
+	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length=64, domain='usb'):
+		'''
 		Parameters
 		----------
 		descriptor_collection: DeviceDescriptorCollection
@@ -177,7 +177,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 			Maximum packet length.
 		domain: string
 			The clock domain this generator should belong to. Defaults to 'usb'.
-		"""
+		'''
 
 		self._descriptors        = descriptor_collection
 		self._max_packet_length  = max_packet_length
@@ -198,11 +198,11 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 	@classmethod
 	def _align_to_element_size(cls, n):
-		""" Returns a given number rounded up to the next "aligned" element size. """
+		''' Returns a given number rounded up to the next 'aligned' element size. '''
 		return (n + (cls.ELEMENT_SIZE - 1)) // cls.ELEMENT_SIZE
 
 	def generate_rom_content(self):
-		""" Generates the contents of the ROM used to hold descriptors.
+		''' Generates the contents of the ROM used to hold descriptors.
 
 		Memory layout
 		-------------
@@ -244,7 +244,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 		...   Descriptor data
 
-		"""
+		'''
 
 		# Get all descriptors and cache them in a dictionary, so that we can access them at will.
 		descriptors = {}
@@ -257,7 +257,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		# For now, we only support layouts with consecutive indexes.
 		# Ensure this is the case.
 		for type_number, indexes in sorted(descriptors.items()):
-			assert max(indexes.keys()) == len(indexes) - 1, "descriptors have non-contiguous indices!"
+			assert max(indexes.keys()) == len(indexes) - 1, 'descriptors have non-contiguous indices!'
 
 
 		#
@@ -298,11 +298,11 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		next_free_address       = (max_type_number + 1) * self.ELEMENT_SIZE
 		type_index_base_address = [0] * (max_type_number + 1)
 
-		# First, generate a list of "table pointers", which point to the address of each type, in memory.
+		# First, generate a list of 'table pointers', which point to the address of each type, in memory.
 		for type_number, indexes in sorted(descriptors.items()):
 
 			# Create our table pointer entry, which should always point to the next free address...
-			pointer_bytes = struct.pack(">HH", len(indexes), next_free_address)
+			pointer_bytes = struct.pack('>HH', len(indexes), next_free_address)
 
 			# ...add the pointer to our ROM...
 			type_base_address = type_number * self.ELEMENT_SIZE
@@ -321,7 +321,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 			for index, raw_descriptor in sorted(descriptor_set.items()):
 
 				# Create our descriptor pointer entries...
-				pointer_bytes = struct.pack(">HH", len(raw_descriptor), next_free_address)
+				pointer_bytes = struct.pack('>HH', len(raw_descriptor), next_free_address)
 
 				# ... figure out where in the ROM we're going to store the pointer ...
 				index_base_address = type_index_base_address[type_number] + index * self.ELEMENT_SIZE
@@ -349,7 +349,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		rom_entries = (rom[(element_size * i):(element_size * i) + element_size] for i in range(total_elements))
 
 		# ... and then convert that into an initializer value in the format Torii ROMs like (integers).
-		initializer = [struct.unpack(">I", rom_entry)[0] for rom_entry in rom_entries]
+		initializer = [struct.unpack('>I', rom_entry)[0] for rom_entry in rom_entries]
 
 		return initializer, max_descriptor_size, max_type_number
 
@@ -458,14 +458,14 @@ class GetDescriptorHandlerBlock(Elaboratable):
 			# descriptor pointer.
 			with m.State('LOOKUP_TYPE'):
 
-				# Our previous state already selected the ROM word associated with our "table of tables";
+				# Our previous state already selected the ROM word associated with our 'table of tables';
 				# meaning the ROM's read port now contains (count, table-pointer) for the relevant ROM type.
 
 				# If the requested type is greater than the maximum type number the ROM encodes,
 				# stall the request and return to idle.
 				with m.If(index >= rom_element_count):
 					m.d.comb += self.stall.eq(1)
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 				# Otherwise, look up the type data in the ROM; and then move on to finding the descriptor itself.
 				with m.Else():
@@ -545,8 +545,8 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
-		if self._domain != "sync":
-			m = DomainRenamer({"sync": self._domain})(m)
+		if self._domain != 'sync':
+			m = DomainRenamer({'sync': self._domain})(m)
 
 		return m
 
@@ -558,9 +558,9 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 		d.bcdUSB             = 2.00
 		d.idVendor           = 0x1234
 		d.idProduct          = 0x4567
-		d.iManufacturer      = "Manufacturer"
-		d.iProduct           = "Product"
-		d.iSerialNumber      = "ThisSerialNumberIsResultsInADescriptorLongerThan64Bytes"
+		d.iManufacturer      = 'Manufacturer'
+		d.iProduct           = 'Product'
+		d.iSerialNumber      = 'ThisSerialNumberIsResultsInADescriptorLongerThan64Bytes'
 		d.bNumConfigurations = 1
 
 		with descriptors.ConfigurationDescriptor() as c:
@@ -583,7 +583,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 	descriptors.add_descriptor(b'\x09\x21\x01\x01\x00\x01\x22\x00\x32')
 
 	FRAGMENT_UNDER_TEST = GetDescriptorHandlerBlock
-	FRAGMENT_ARGUMENTS = {"descriptor_collection": descriptors}
+	FRAGMENT_ARGUMENTS = {'descriptor_collection': descriptors}
 
 	def traces_of_interest(self):
 		dut = self.dut
@@ -591,7 +591,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 				dut.tx.ready, dut.tx.first, dut.tx.last, dut.tx.payload, dut.tx.valid)
 
 	def _test_descriptor(self, type_number, index, raw_descriptor, start_position, max_length, delay_ready=0):
-		""" Triggers a read and checks if correct data is transmitted. """
+		''' Triggers a read and checks if correct data is transmitted. '''
 
 		# Set a defined start before starting
 		yield self.dut.tx.ready.eq(0)
@@ -639,7 +639,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 		self.assertEqual((yield self.dut.tx.valid), 0)
 
 	def _test_stall(self, type_number, index, start_position, max_length):
-		""" Triggers a read and checks if correctly stalled. """
+		''' Triggers a read and checks if correctly stalled. '''
 
 		yield self.dut.value.word_select(1, 8).eq(type_number)  # Type
 		yield self.dut.value.word_select(0, 8).eq(index)  # Index
@@ -660,7 +660,7 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 
 			cycles_passed += 1
 			if timeout and cycles_passed > timeout:
-				raise RuntimeError(f"Timeout waiting for stall!")
+				raise RuntimeError(f'Timeout waiting for stall!')
 
 	@usb_domain_test_case
 	def test_all_descriptors(self):
@@ -704,5 +704,5 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 		# Index after last used type
 		yield from self._test_stall(0x42, 0, 0, 64)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

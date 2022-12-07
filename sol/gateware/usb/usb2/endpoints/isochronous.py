@@ -4,12 +4,12 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 Endpoint interfaces for isochronous endpoints.
 
 These interfaces provide interfaces for connecting memories or memory-like
 interfaces to hosts via isochronous pipes.
-"""
+'''
 
 from torii      import Elaboratable, Module, Signal
 
@@ -17,7 +17,7 @@ from ..endpoint import EndpointInterface
 
 
 class USBIsochronousInEndpoint(Elaboratable):
-	""" Isochronous endpoint that presents a memory-like interface.
+	''' Isochronous endpoint that presents a memory-like interface.
 
 	Used for repeatedly streaming data to a host from a memory or memory-like interface.
 	Intended to be useful as a transport for e.g. video or audio data.
@@ -44,7 +44,7 @@ class USBIsochronousInEndpoint(Elaboratable):
 		Indicates the address / offset of the byte currently being transmitted.
 		Can be used to drive the ``address` lines of an asynchronous memory
 	next_address: Signal(range(0,3072)), output
-		Indicates the "address" / offset of the byte that should be presented
+		Indicates the 'address' / offset of the byte that should be presented
 		on :attr:``value`` at the next ``usb``-clock cycle. Can be used to drive
 		the ``address`` lines of a synchronous memory.
 	value: Signal(8), input
@@ -58,7 +58,7 @@ class USBIsochronousInEndpoint(Elaboratable):
 	max_packet_size: int
 		The maximum packet size for this endpoint. Should match the wMaxPacketSize provided in the
 		USB endpoint descriptor.
-	"""
+	'''
 
 	_MAX_FRAME_DATA = 1024 * 3
 
@@ -133,10 +133,10 @@ class USBIsochronousInEndpoint(Elaboratable):
 		#
 		# Core sequencing FSM.
 		#
-		with m.FSM(domain="usb"):
+		with m.FSM(domain='usb'):
 
 			# IDLE -- the host hasn't yet requested data from our endpoint.
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				m.d.usb  += [
 					# Remain targeting the first byte in our frame.
 					self.address      .eq(0),
@@ -151,15 +151,15 @@ class USBIsochronousInEndpoint(Elaboratable):
 					# If we have data to send, send it.
 					with m.If(bytes_left_in_frame):
 						m.d.usb += out_stream.first.eq(1)
-						m.next = "SEND_DATA"
+						m.next = 'SEND_DATA'
 
 					# Otherwise, we'll send a ZLP.
 					with m.Else():
-						m.next = "SEND_ZLP"
+						m.next = 'SEND_ZLP'
 
 
 			# SEND_DATA -- our primary data-transmission state; handles packet transmission
-			with m.State("SEND_DATA"):
+			with m.State('SEND_DATA'):
 				last_byte_in_packet    = (bytes_left_in_packet <= 1)
 				last_byte_in_frame     = (bytes_left_in_frame  <= 1)
 				byte_terminates_send   = last_byte_in_packet | last_byte_in_frame
@@ -204,16 +204,16 @@ class USBIsochronousInEndpoint(Elaboratable):
 							# Mark our next packet as being a full one.
 							bytes_left_in_packet .eq(self._max_packet_size)
 						]
-						m.next = "IDLE"
+						m.next = 'IDLE'
 
 
 			# SEND_ZLP -- sends a zero-length packet, and then return to idle.
-			with m.State("SEND_ZLP"):
+			with m.State('SEND_ZLP'):
 				# We'll request a ZLP by strobing LAST and VALID without strobing FIRST.
 				m.d.comb += [
 					out_stream.valid  .eq(1),
 					out_stream.last   .eq(1),
 				]
-				m.next = "IDLE"
+				m.next = 'IDLE'
 
 		return m

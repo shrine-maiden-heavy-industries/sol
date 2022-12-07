@@ -4,13 +4,13 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" U0 link-maintenance timers. """
+''' U0 link-maintenance timers. '''
 
 from torii import *
 
 
 class LinkMaintenanceTimers(Elaboratable):
-	""" Timers which ensure link integrity is maintained in U0.
+	''' Timers which ensure link integrity is maintained in U0.
 
 	These timers ensure that we provide enough traffic to maintain link state,
 	and move to link recovery if we ever fail to see constant traffic.
@@ -41,7 +41,7 @@ class LinkMaintenanceTimers(Elaboratable):
 	----------
 	ss_clock_frequency: float
 		The frequency of our ``ss`` domain clock, in Hz.
-	"""
+	'''
 
 	KEEPALIVE_TIMEOUT = 10e-6
 	RECOVERY_TIMEOUT  = 1e-3

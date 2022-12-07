@@ -4,10 +4,10 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 This module contains gateware designed to assist with endpoint/transfer state management.
 Its components facilitate data transfer longer than a single packet.
-"""
+'''
 
 import unittest
 
@@ -21,7 +21,7 @@ from .packet       import HandshakeExchangeInterface, TokenDetectorInterface
 
 
 class USBInTransferManager(Elaboratable):
-	""" Sequencer that converts a long data stream (a USB *transfer*) into a burst of USB packets.
+	''' Sequencer that converts a long data stream (a USB *transfer*) into a burst of USB packets.
 
 	This module is designed so it can serve as the core of a IN endpoint.
 
@@ -74,7 +74,7 @@ class USBInTransferManager(Elaboratable):
 	----------
 	max_packet_size: int
 		The maximum packet size for our associated endpoint, in bytes.
-	"""
+	'''
 
 	def __init__(self, max_packet_size):
 
@@ -134,9 +134,9 @@ class USBInTransferManager(Elaboratable):
 		#
 
 		# We'll create two buffers; so we can fill one as we empty the other.
-		buffer = Array(Memory(width=8, depth=self._max_packet_size, name=f"transmit_buffer_{i}") for i in range(2))
-		buffer_write_ports = Array(buffer[i].write_port(domain="usb") for i in range(2))
-		buffer_read_ports  = Array(buffer[i].read_port(domain="usb") for i in range(2))
+		buffer = Array(Memory(width=8, depth=self._max_packet_size, name=f'transmit_buffer_{i}') for i in range(2))
+		buffer_write_ports = Array(buffer[i].write_port(domain='usb') for i in range(2))
+		buffer_read_ports  = Array(buffer[i].read_port(domain='usb') for i in range(2))
 
 		m.submodules.read_port_0,  m.submodules.read_port_1  = buffer_read_ports
 		m.submodules.write_port_0, m.submodules.write_port_1 = buffer_write_ports
@@ -158,7 +158,7 @@ class USBInTransferManager(Elaboratable):
 		#   ``generate_zlps`` is enabled, is used to determine if the given buffer should end in
 		#   a short packet; which determines whether ZLPs are emitted.
 		buffer_fill_count   = Array(Signal(range(0, self._max_packet_size + 1)) for _ in range(2))
-		buffer_stream_ended = Array(Signal(name=f"stream_ended_in_buffer{i}") for i in range(2))
+		buffer_stream_ended = Array(Signal(name=f'stream_ended_in_buffer{i}') for i in range(2))
 
 		# Create shortcuts to active fill_count / stream_ended signals for the buffer being written.
 		write_fill_count   = buffer_fill_count[write_buffer_number]
@@ -227,14 +227,14 @@ class USBInTransferManager(Elaboratable):
 			# WAIT_FOR_DATA -- We don't yet have a full packet to transmit, so  we'll capture data
 			# to fill the our buffer. At full throughput, this state will never be reached after
 			# the initial post-reset fill.
-			with m.State("WAIT_FOR_DATA"):
+			with m.State('WAIT_FOR_DATA'):
 
 				# We can't yet send data; so NAK any packet requests.
 				m.d.comb += self.handshakes_out.nak.eq(in_token_received)
 
 				# If we've just finished a packet, we now have data we can send!
 				with m.If(packet_ready):
-					m.next = "WAIT_TO_SEND"
+					m.next = 'WAIT_TO_SEND'
 					m.d.usb += [
 
 						# We're now ready to take the data we've captured and _transmit_ it.
@@ -249,7 +249,7 @@ class USBInTransferManager(Elaboratable):
 
 			# WAIT_TO_SEND -- we now have at least a buffer full of data to send; we'll
 			# need to wait for an IN token to send it.
-			with m.State("WAIT_TO_SEND"):
+			with m.State('WAIT_TO_SEND'):
 				m.d.usb += send_position .eq(0),
 
 				# Once we get an IN token, move to sending a packet.
@@ -257,7 +257,7 @@ class USBInTransferManager(Elaboratable):
 
 					# If we have a packet to send, send it.
 					with m.If(read_fill_count):
-						m.next = "SEND_PACKET"
+						m.next = 'SEND_PACKET'
 						m.d.usb += out_stream.first  .eq(1)
 
 					# Otherwise, we entered a transmit path without any data in the buffer.
@@ -269,10 +269,10 @@ class USBInTransferManager(Elaboratable):
 						]
 						# ... and clear the need to follow up with one, since we've just sent a short packet.
 						m.d.usb += read_stream_ended.eq(0)
-						m.next = "WAIT_FOR_ACK"
+						m.next = 'WAIT_FOR_ACK'
 
 
-			with m.State("SEND_PACKET"):
+			with m.State('SEND_PACKET'):
 				last_packet = (send_position + 1 == read_fill_count)
 
 				m.d.comb += [
@@ -306,7 +306,7 @@ class USBInTransferManager(Elaboratable):
 
 			# WAIT_FOR_ACK -- We've just sent a packet; but don't know if the host has
 			# received it correctly. We'll wait to see if the host ACKs.
-			with m.State("WAIT_FOR_ACK"):
+			with m.State('WAIT_FOR_ACK'):
 
 				# If the host does ACK...
 				with m.If(self.handshakes_in.ack):
@@ -319,18 +319,18 @@ class USBInTransferManager(Elaboratable):
 					follow_up_with_zlp = \
 						self.generate_zlps & (read_fill_count == self._max_packet_size) & read_stream_ended
 
-					# If we're following up with a ZLP, move back to our "wait to send" state.
+					# If we're following up with a ZLP, move back to our 'wait to send' state.
 					# Since we've now cleared our fill count; this next go-around will emit a ZLP.
 					with m.If(follow_up_with_zlp):
 						m.d.usb += self.data_pid[0].eq(~self.data_pid[0]),
-						m.next = "WAIT_TO_SEND"
+						m.next = 'WAIT_TO_SEND'
 
 					# Otherwise, there's a possibility we already have a packet-worth of data waiting
-					# for us in our "write buffer", which we've been filling in the background.
+					# for us in our 'write buffer', which we've been filling in the background.
 					# If this is the case, we'll flip which buffer we're working with, toggle our data pid,
 					# and then ready ourselves for transmit.
 					with m.Elif(~in_stream.ready | packet_ready):
-						m.next = "WAIT_TO_SEND"
+						m.next = 'WAIT_TO_SEND'
 						m.d.usb += [
 							self.buffer_toggle .eq(~self.buffer_toggle),
 							self.data_pid[0]   .eq(~self.data_pid[0]),
@@ -340,11 +340,11 @@ class USBInTransferManager(Elaboratable):
 					# If neither of the above conditions are true; we now don't have enough data to send.
 					# We'll wait for enough data to transmit.
 					with m.Else():
-						m.next = "WAIT_FOR_DATA"
+						m.next = 'WAIT_FOR_DATA'
 
 
 				# If the host starts a new packet without ACK'ing, we'll need to retransmit.
-				# We'll move back to our "wait for token" state without clearing our buffer.
+				# We'll move back to our 'wait for token' state without clearing our buffer.
 				with m.If(self.tokenizer.new_token):
 					m.next = 'WAIT_TO_SEND'
 
@@ -353,7 +353,7 @@ class USBInTransferManager(Elaboratable):
 
 class USBInTransferManagerTest(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = USBInTransferManager
-	FRAGMENT_ARGUMENTS  = {"max_packet_size": 8}
+	FRAGMENT_ARGUMENTS  = {'max_packet_size': 8}
 
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
@@ -555,5 +555,5 @@ class USBInTransferManagerTest(SolGatewareTestCase):
 		self.assertEqual((yield transfer_stream.ready), 1)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

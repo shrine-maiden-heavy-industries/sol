@@ -24,9 +24,7 @@ REGISTER_RAM_VALUE      = 3
 
 
 class HyperRAMDiagnostic(Elaboratable):
-	"""
-	Temporary gateware that evaluates HyperRAM skews.
-	"""
+	''' Temporary gateware that evaluates HyperRAM skews. '''
 
 
 	def elaborate(self, platform):
@@ -67,14 +65,14 @@ class HyperRAMDiagnostic(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	test = cli(HyperRAMDiagnostic)
 
 	# Create a debug and ILA connection.
 	dut = ApolloDebugger()
-	log.info(f"Connected to onboard dut; hardware revision r{dut.major}.{dut.minor} (s/n: {dut.serial_number}).")
+	log.info(f'Connected to onboard dut; hardware revision r{dut.major}.{dut.minor} (s/n: {dut.serial_number}).')
 
-	log.info("Running basic HyperRAM diagnostics.")
+	log.info('Running basic HyperRAM diagnostics.')
 
 	iterations = 100
 
@@ -98,20 +96,20 @@ if __name__ == "__main__":
 		for i in range(iterations):
 
 			if test():
-				pprint(f".", end="")
+				pprint('.', end='')
 				passes += 1
 			else:
-				pprint(f"✗", end="")
+				pprint('✗', end='')
 
 				failures += 1
 				failed_tests.add(test)
 
-	fail_text = "<red>✗ FAILED</red>"
-	pass_text = "<green>✓ PASSED</green>"
-	pprint(HTML("\n\n<b><u>Results:</u></b>"))
+	fail_text = '<red>✗ FAILED</red>'
+	pass_text = '<green>✓ PASSED</green>'
+	pprint(HTML('\n\n<b><u>Results:</u></b>'))
 
-	pprint(HTML(f"    ID READ:     {fail_text if test_id_read in failed_tests else pass_text}"))
-	pprint(HTML(f"    CONFIG READ: {fail_text if test_config_read in failed_tests else pass_text}"))
+	pprint(HTML(f'    ID READ:     {fail_text if test_id_read in failed_tests else pass_text}'))
+	pprint(HTML(f'    CONFIG READ: {fail_text if test_config_read in failed_tests else pass_text}'))
 
 
-	print(f"\nDiagnostics completed with {passes} passes and {failures} failures.\n")
+	print(f'\nDiagnostics completed with {passes} passes and {failures} failures.\n')

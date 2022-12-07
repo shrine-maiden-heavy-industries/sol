@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 physical-layer abstraction."""
+''' USB3 physical-layer abstraction.'''
 
 
 from torii         import *
@@ -12,7 +12,7 @@ from torii.hdl.ast import Rose
 
 
 class PHYResetController(Elaboratable):
-	""" Gateware responsible for bringing up a PIPE PHY.
+	''' Gateware responsible for bringing up a PIPE PHY.
 
 	Note that this gateware resides in `sync`, rather than one of our
 	SuperSpeed domains, as the SuperSpeed PHY has yet to bring up its clocks.
@@ -33,7 +33,7 @@ class PHYResetController(Elaboratable):
 	sync_frequency: float
 		The frequency of the sync clock domain.
 
-	"""
+	'''
 
 	def __init__(self, *, sync_frequency):
 		self._sync_frequency = sync_frequency
@@ -63,7 +63,7 @@ class PHYResetController(Elaboratable):
 			# STARTUP_RESET -- post configuration, we'll reset the PIPE PHY.
 			# This is distinct from the PHY's built-in power-on-reset, as we run this
 			# on every FPGA configuration.
-			with m.State("STARTUP_RESET"):
+			with m.State('STARTUP_RESET'):
 				m.d.comb += [
 					self.reset        .eq(1),
 				]
@@ -71,29 +71,29 @@ class PHYResetController(Elaboratable):
 				# Once we've extended past a reset time, we can move on.
 				m.d.sync += cycles_spent_in_reset.eq(cycles_spent_in_reset + 1)
 				with m.If(cycles_spent_in_reset == cycles_in_reset):
-					m.next = "DETECT_PHY_STARTUP"
+					m.next = 'DETECT_PHY_STARTUP'
 
 
 			# DETECT_PHY_STARTUP -- post-reset, the PHY should drive its status line high.
 			# We'll wait for this to happen, so we can track the PHY's progress.
-			with m.State("DETECT_PHY_STARTUP"):
+			with m.State('DETECT_PHY_STARTUP'):
 
 				with m.If(self.phy_status):
-					m.next = "WAIT_FOR_STARTUP"
+					m.next = 'WAIT_FOR_STARTUP'
 
 
 			# WAIT_FOR_STARTUP -- we've now detected that the PHY is starting up.
 			# We'll wait for that startup signal to be de-asserted, indicating that the PHY is ready.
-			with m.State("WAIT_FOR_STARTUP"):
+			with m.State('WAIT_FOR_STARTUP'):
 
 				# For now, we'll start up in P0. This will change once we implement proper RxDetect.
 				with m.If(~self.phy_status):
-					m.next = "READY"
+					m.next = 'READY'
 
 
 			# READY -- our PHY is all started up and ready for use.
 			# For now, we'll remain here until we're reset.
-			with m.State("READY"):
+			with m.State('READY'):
 				m.d.comb += self.ready.eq(1)
 
 
@@ -102,7 +102,7 @@ class PHYResetController(Elaboratable):
 
 
 class LinkPartnerDetector(Elaboratable):
-	""" Light abstraction over our PIPE receiver detection mechanism.
+	''' Light abstraction over our PIPE receiver detection mechanism.
 
 	Primarily responsible for the power state sequencing necessary during receiver detection.
 
@@ -129,7 +129,7 @@ class LinkPartnerDetector(Elaboratable):
 	----------
 	rx_status: Array(Signal(3), Signal(3))
 		Read-only view of the PHY's rx_status signal.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -155,20 +155,20 @@ class LinkPartnerDetector(Elaboratable):
 		# after a detection completes.
 		PARTNER_PRESENT_STATUS = 0b011
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# IDLE_P2 -- our post-startup state; represents when we're IDLE but in P2.
 			# This is typically only seen at board startup.
-			with m.State("IDLE_P2"):
+			with m.State('IDLE_P2'):
 				m.d.comb += self.power_state.eq(2)
 
 				with m.If(self.request_detection):
-					m.next = "PERFORM_DETECT"
+					m.next = 'PERFORM_DETECT'
 
 
 			# PERFORM_DETECT -- we're asking our PHY to perform the core of our detection,
 			# and waiting for that detection to complete.
-			with m.State("PERFORM_DETECT"):
+			with m.State('PERFORM_DETECT'):
 
 				# Per [TUSB1310A, 5.3.5.2], we should hold our detection control high until
 				# PhyStatus pulses high; when we'll get the results of our detection.
@@ -186,12 +186,12 @@ class LinkPartnerDetector(Elaboratable):
 						# ... capture the results, but don't mark ourselves as complete, yet, as we're
 						# still in P2. We'll need to move to operational state.
 						m.d.ss += self.partner_present.eq(self.rx_status == PARTNER_PRESENT_STATUS)
-						m.next = "MOVE_TO_P0"
+						m.next = 'MOVE_TO_P0'
 
 
 			# MOVE_TO_P0 -- we've completed a detection, and now are ready to move (back) into our
 			# operational state.
-			with m.State("MOVE_TO_P0"):
+			with m.State('MOVE_TO_P0'):
 
 				# Ask the PHY to put us back down in P0.
 				m.d.comb += self.power_state.eq(0)
@@ -200,23 +200,23 @@ class LinkPartnerDetector(Elaboratable):
 				# We can now broadcast our result.
 				with m.If(self.phy_status):
 					m.d.comb += self.new_result.eq(1)
-					m.next = "IDLE_P0"
+					m.next = 'IDLE_P0'
 
 
 			# IDLE_P0 -- our normal operational state; usually reached after at least one detection
 			# has completed successfully. We'll wait until another detection is requested.
-			with m.State("IDLE_P0"):
+			with m.State('IDLE_P0'):
 				m.d.comb += self.power_state.eq(0)
 
 				# We can only perform detections from P2; so, when the user requests a detection, we'll
 				# need to move back to P2.
 				with m.If(Rose(self.request_detection)):
-					m.next = "MOVE_TO_P2"
+					m.next = 'MOVE_TO_P2'
 
 
 			# MOVE_TO_P2 -- our user has requested a detection, which we can only perform from P2.
 			# Accordingly, we'll move to P2, and -then- perform our detection.
-			with m.State("MOVE_TO_P2"):
+			with m.State('MOVE_TO_P2'):
 
 				# Ask the PHY to put us into P2.
 				m.d.comb += self.power_state.eq(2)
@@ -224,7 +224,7 @@ class LinkPartnerDetector(Elaboratable):
 				# Once the PHY indicates it's put us into the relevant power state, we can begin
 				# our link partner detection.
 				with m.If(self.phy_status):
-					m.next = "PERFORM_DETECT"
+					m.next = 'PERFORM_DETECT'
 
 
 		return m

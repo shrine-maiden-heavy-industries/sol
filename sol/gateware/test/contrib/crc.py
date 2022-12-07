@@ -4,7 +4,7 @@
 # Copyright (C) 2005,2007  Ray Burr
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
+# of this software and associated documentation files (the 'Software'), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
@@ -13,7 +13,7 @@
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -29,7 +29,7 @@
 # inaccurate.
 
 # Requires at least Python 2.4; tested with 2.4 and 2.5.
-"""
+'''
 This module can model common CRC algorithms given the set of defining
 parameters.  This is intended to be easy to use for experimentation
 rather than optimized for speed.  It is slow even for a native Python
@@ -115,18 +115,16 @@ bits are the CRC (0x1E, LSb-first order).
 
   >>> '%X' % CRC5_USB.calcWord(0xE6, 11)
   '1E'
-"""
+'''
 
 # <http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html>
-__docformat__ = "restructuredtext en"
+__docformat__ = 'restructuredtext en'
 
-__version__ = "20070611"
+__version__ = '20070611'
 
 
 class CrcAlgorithm:
-	"""
-	Represents the parameters of a CRC algorithm.
-	"""
+	''' Represents the parameters of a CRC algorithm. '''
 
 	# FIXME: Instances are supposed to be immutable, but attributes are
 	# writable.
@@ -139,7 +137,7 @@ class CrcAlgorithm:
 				 lsbFirst=False,
 				 lsbFirstData=None,
 				 xorMask=0):
-		"""
+		'''
 		:param width:
 
 		  The number of bits in the CRC register, or equivalently, the
@@ -204,7 +202,7 @@ class CrcAlgorithm:
 		:type xorMask:
 
 		  an integer
-		"""
+		'''
 
 		if width > 0:
 			try:
@@ -225,7 +223,7 @@ class CrcAlgorithm:
 						polynomial += (i, )
 
 			if polynomial[:1] != (width, ):
-				ValueError("mismatch between width and polynomial degree")
+				ValueError('mismatch between width and polynomial degree')
 
 		self.width = width
 		self.polynomial = polynomial
@@ -235,53 +233,53 @@ class CrcAlgorithm:
 		self.lsbFirstData = lsbFirstData
 		self.xorMask = xorMask
 
-		if not hasattr(width, "__rlshift__"):
+		if not hasattr(width, '__rlshift__'):
 			raise ValueError
 
 		# FIXME: Need more checking of parameters.
 
 	def __repr__(self):
-		info = ""
+		info = ''
 		if self.name is not None:
-			info = ' "%s"' % str(self.name)
-		result = "<%s.%s%s @ %#x>" % (self.__class__.__module__,
+			info = ' \'%s\'' % str(self.name)
+		result = '<%s.%s%s @ %#x>' % (self.__class__.__module__,
 									  self.__class__.__name__, info, id(self))
 		return result
 
 	def calcString(self, s, value=None):
-		"""
+		'''
 		Calculate the CRC of the 8-bit string *s*.
-		"""
+		'''
 		r = CrcRegister(self, value)
 		r.takeString(s)
 		return r.getFinalValue()
 
 	def calcWord(self, word, width, value=None):
-		"""
+		'''
 		Calculate the CRC of the integer *word* as a sequence of
 		*width* bits.
-		"""
+		'''
 		r = CrcRegister(self, value)
 		r.takeWord(word, width)
 		return r.getFinalValue()
 
 	def reflect(self):
-		"""
+		'''
 		Return the algorithm with the bit-order reversed.
-		"""
+		'''
 		ca = CrcAlgorithm(0, 0)
 		ca._initFromOther(self)
 		ca.lsbFirst = not self.lsbFirst
 		if self.lsbFirstData is not None:
 			ca.lsbFirstData = not self.lsbFirstData
 		if ca.name:
-			ca.name += " reflected"
+			ca.name += ' reflected'
 		return ca
 
 	def reverse(self):
-		"""
+		'''
 		Return the algorithm with the reverse polynomial.
-		"""
+		'''
 		ca = CrcAlgorithm(0, 0)
 		ca._initFromOther(self)
 		ca.polynomial = [(self.width - e) for e in self.polynomial]
@@ -289,7 +287,7 @@ class CrcAlgorithm:
 		ca.polynomial.reverse()
 		ca.polynomial = tuple(ca.polynomial)
 		if ca.name:
-			ca.name += " reversed"
+			ca.name += ' reversed'
 		return ca
 
 	def _initFromOther(self, other):
@@ -303,11 +301,11 @@ class CrcAlgorithm:
 
 
 class CrcRegister:
-	"""
+	'''
 	Holds the intermediate state of the CRC algorithm.
-	"""
+	'''
 	def __init__(self, crcAlgorithm, value=None):
-		"""
+		'''
 		:param crcAlgorithm:
 
 		  The CRC algorithm to use.
@@ -327,7 +325,7 @@ class CrcRegister:
 		:type value:
 
 		  an integer
-		"""
+		'''
 
 		self.crcAlgorithm = crcAlgorithm
 		p = crcAlgorithm
@@ -363,15 +361,15 @@ class CrcRegister:
 		return formatBinaryString(self.value, self.crcAlgorithm.width)
 
 	def reset(self):
-		"""
+		'''
 		Reset the state of the register with the default seed value.
-		"""
+		'''
 		self.value = int(self.crcAlgorithm.seed)
 
 	def takeBit(self, bit):
-		"""
+		'''
 		Process a single input bit.
-		"""
+		'''
 		outBit = ((self.value & self.outBitMask) != 0)
 		if self.crcAlgorithm.lsbFirst:
 			self.value >>= 1
@@ -382,7 +380,7 @@ class CrcRegister:
 			self.value ^= self.polyMask
 
 	def takeWord(self, word, width=8):
-		"""
+		'''
 		Process a binary input word.
 
 		:param word:
@@ -402,7 +400,7 @@ class CrcRegister:
 		:type width:
 
 		  an integer
-		"""
+		'''
 		if self.lsbFirstData:
 			bitList = list(range(0, width))
 		else:
@@ -411,25 +409,25 @@ class CrcRegister:
 			self.takeBit((word >> n) & 1)
 
 	def takeString(self, s):
-		"""
+		'''
 		Process a string as input.  It is handled as a sequence of
 		8-bit integers.
-		"""
+		'''
 		for c in s:
 			self.takeWord(ord(c))
 
 	def getValue(self):
-		"""
+		'''
 		Return the current value of the register as an integer.
-		"""
+		'''
 		return self.value
 
 	def getFinalValue(self):
-		"""
+		'''
 		Return the current value of the register as an integer with
 		*xorMask* applied.  This can be used after all input data is
 		processed to obtain the final result.
-		"""
+		'''
 		p = self.crcAlgorithm
 		return self.value ^ p.xorMask
 
@@ -439,7 +437,7 @@ def reflect(value, width):
 
 
 def formatBinaryString(value, width):
-	return "".join("01" [(value >> i) & 1] for i in range(width - 1, -1, -1))
+	return ''.join('01' [(value >> i) & 1] for i in range(width - 1, -1, -1))
 
 
 # Some standard algorithms are defined here.  I believe I was able to
@@ -447,7 +445,7 @@ def formatBinaryString(value, width):
 # existing implementation or sample data with a known result).
 
 #: Same CRC algorithm as Python's zlib.crc32
-CRC32 = CrcAlgorithm(name="CRC-32",
+CRC32 = CrcAlgorithm(name='CRC-32',
 					 width=32,
 					 polynomial=(32, 26, 23, 22, 16, 12, 11, 10, 8, 7, 5, 4, 2,
 								 1, 0),
@@ -455,7 +453,7 @@ CRC32 = CrcAlgorithm(name="CRC-32",
 					 lsbFirst=True,
 					 xorMask=0xFFFFFFFF)
 
-CRC16 = CrcAlgorithm(name="CRC-16",
+CRC16 = CrcAlgorithm(name='CRC-16',
 					 width=16,
 					 polynomial=(16, 15, 2, 0),
 					 seed=0x0000,
@@ -463,14 +461,14 @@ CRC16 = CrcAlgorithm(name="CRC-16",
 					 xorMask=0x0000)
 
 #: Used in USB data packets.
-CRC16_USB = CrcAlgorithm(name="CRC-16-USB",
+CRC16_USB = CrcAlgorithm(name='CRC-16-USB',
 						 width=16,
 						 polynomial=(16, 15, 2, 0),
 						 seed=0xFFFF,
 						 lsbFirst=True,
 						 xorMask=0xFFFF)
 
-CRC_CCITT = CrcAlgorithm(name="CRC-CCITT",
+CRC_CCITT = CrcAlgorithm(name='CRC-CCITT',
 						 width=16,
 						 polynomial=(16, 12, 5, 0),
 						 seed=0xFFFF,
@@ -478,7 +476,7 @@ CRC_CCITT = CrcAlgorithm(name="CRC-CCITT",
 						 xorMask=0x0000)
 
 #: This is the algorithm used in X.25 and for the HDLC 2-byte FCS.
-CRC_HDLC = CrcAlgorithm(name="CRC-HDLC",
+CRC_HDLC = CrcAlgorithm(name='CRC-HDLC',
 						width=16,
 						polynomial=(16, 12, 5, 0),
 						seed=0xFFFF,
@@ -486,7 +484,7 @@ CRC_HDLC = CrcAlgorithm(name="CRC-HDLC",
 						xorMask=0xFFFF)
 
 #: Used in ATM HEC and SMBus.
-CRC8_SMBUS = CrcAlgorithm(name="CRC-8-SMBUS",
+CRC8_SMBUS = CrcAlgorithm(name='CRC-8-SMBUS',
 						  width=8,
 						  polynomial=(8, 2, 1, 0),
 						  seed=0,
@@ -494,7 +492,7 @@ CRC8_SMBUS = CrcAlgorithm(name="CRC-8-SMBUS",
 						  xorMask=0)
 
 #: Used in RFC-2440 and MIL STD 188-184.
-CRC24 = CrcAlgorithm(name="CRC-24",
+CRC24 = CrcAlgorithm(name='CRC-24',
 					 width=24,
 					 polynomial=(24, 23, 18, 17, 14, 11, 10, 7, 6, 5, 4, 3, 1,
 								 0),
@@ -503,7 +501,7 @@ CRC24 = CrcAlgorithm(name="CRC-24",
 					 xorMask=0)
 
 #: Used in Controller Area Network frames.
-CRC15 = CrcAlgorithm(name="CRC-15",
+CRC15 = CrcAlgorithm(name='CRC-15',
 					 width=15,
 					 polynomial=(15, 14, 10, 8, 7, 4, 3, 0),
 					 seed=0,
@@ -511,7 +509,7 @@ CRC15 = CrcAlgorithm(name="CRC-15",
 					 xorMask=0)
 
 #: Used in iSCSI (RFC-3385); usually credited to Guy Castagnoli.
-CRC32C = CrcAlgorithm(name="CRC-32C",
+CRC32C = CrcAlgorithm(name='CRC-32C',
 					  width=32,
 					  polynomial=(32, 28, 27, 26, 25, 23, 22, 20, 19, 18, 14,
 								  13, 11, 10, 9, 8, 6, 0),
@@ -520,7 +518,7 @@ CRC32C = CrcAlgorithm(name="CRC-32C",
 					  xorMask=0xFFFFFFFF)
 
 #: CRC used in USB Token and Start-Of-Frame packets
-CRC5_USB = CrcAlgorithm(name="CRC-5-USB",
+CRC5_USB = CrcAlgorithm(name='CRC-5-USB',
 						width=5,
 						polynomial=(5, 2, 0),
 						seed=0x1F,
@@ -528,7 +526,7 @@ CRC5_USB = CrcAlgorithm(name="CRC-5-USB",
 						xorMask=0x1F)
 
 #: ISO 3309
-CRC64 = CrcAlgorithm(name="CRC-64",
+CRC64 = CrcAlgorithm(name='CRC-64',
 					 width=64,
 					 polynomial=(64, 4, 3, 1, 0),
 					 seed=0,
@@ -537,11 +535,11 @@ CRC64 = CrcAlgorithm(name="CRC-64",
 
 #: This is just to show off the ability to handle a very wide CRC.
 # If this is a standard, I don't know where it is from.  I found the
-# polynomial on a web page of an apparent Czech "Lady Killer"
+# polynomial on a web page of an apparent Czech 'Lady Killer'
 # <http://www.volny.cz/lk77/crc256mmx/>.
 POLYNOM256 = 0x82E2443E6320383A20B8A2A0A1EA91A3CCA99A30C5205038349C82AAA3A8FD27
 CRC256 = CrcAlgorithm(
-	name="CRC-256",
+	name='CRC-256',
 	width=256,
 	polynomial=POLYNOM256,
 	seed=0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
@@ -553,7 +551,7 @@ CRC256 = CrcAlgorithm(
 # <http://en.wikipedia.org/wiki/Cyclic_redundancy_check>.
 #
 # CRC4_ITU = CrcAlgorithm(
-#    name         = "CRC-4-ITU",
+#    name         = 'CRC-4-ITU',
 #    width        = 4,
 #    polynomial   = (4, 1, 0),
 #    seed         = ?,
@@ -561,7 +559,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC5_ITU = CrcAlgorithm(
-#    name         = "CRC-5-ITU",
+#    name         = 'CRC-5-ITU',
 #    width        = 5,
 #    polynomial   = (5, 4, 2, 0),
 #    seed         = ?,
@@ -569,7 +567,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC6_ITU = CrcAlgorithm(
-#    name         = "CRC-6-ITU",
+#    name         = 'CRC-6-ITU',
 #    width        = 6,
 #    polynomial   = (6, 1, 0),
 #    seed         = ?,
@@ -577,7 +575,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC7 = CrcAlgorithm(
-#    name         = "CRC-7",
+#    name         = 'CRC-7',
 #    width        = 7,
 #    polynomial   = (7, 3, 0),
 #    seed         = ?,
@@ -585,7 +583,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC8_CCITT = CrcAlgorithm(
-#    name         = "CRC-8-CCITT",
+#    name         = 'CRC-8-CCITT',
 #    width        = 8,
 #    polynomial   = (8, 7, 3, 2, 0),
 #    seed         = ?,
@@ -593,7 +591,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC8_DALLAS = CrcAlgorithm(
-#    name         = "CRC-8-Dallas",
+#    name         = 'CRC-8-Dallas',
 #    width        = 8,
 #    polynomial   = (8, 5, 4, 0),
 #    seed         = ?,
@@ -601,7 +599,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC8 = CrcAlgorithm(
-#    name         = "CRC-8",
+#    name         = 'CRC-8',
 #    width        = 8,
 #    polynomial   = (8, 7, 6, 4, 2, 0),
 #    seed         = ?,
@@ -609,7 +607,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC8_J1850 = CrcAlgorithm(
-#    name         = "CRC-8-J1850",
+#    name         = 'CRC-8-J1850',
 #    width        = 8,
 #    polynomial   = (8, 4, 3, 2, 0),
 #    seed         = ?,
@@ -617,7 +615,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC10 = CrcAlgorithm(
-#    name         = "CRC-10",
+#    name         = 'CRC-10',
 #    width        = 10,
 #    polynomial   = (10, 9, 5, 4, 1, 0),
 #    seed         = ?,
@@ -625,7 +623,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC12 = CrcAlgorithm(
-#    name         = "CRC-12",
+#    name         = 'CRC-12',
 #    width        = 12,
 #    polynomial   = (12, 11, 3, 2, 1, 0),
 #    seed         = ?,
@@ -633,7 +631,7 @@ CRC256 = CrcAlgorithm(
 #    xorMask      = ?)
 #
 # CRC64_ECMA182 = CrcAlgorithm(
-#    name         = "CRC-64-ECMA-182",
+#    name         = 'CRC-64-ECMA-182',
 #    width        = 64,
 #    polynomial   = (64, 62, 57, 55, 54, 53, 52, 47, 46, 45, 40, 39, 38, 37,
 #                    35, 33, 32, 31, 29, 27, 24, 23, 22, 21, 19, 17, 13, 12,
@@ -654,8 +652,8 @@ def _printResults(fn=_callCalcString123456789):
 		(v for (k, v) in d.items() if isinstance(v, CrcAlgorithm)),
 		key=lambda v: (v.width, v.name))
 	for a in algorithms:
-		format = ("%%0%dX" % ((a.width + 3) // 4))
-		print("%s:" % a.name, end=' ')
+		format = ('%%0%dX' % ((a.width + 3) // 4))
+		print('%s:' % a.name, end=' ')
 		print(format % fn(a))
 
 
@@ -665,5 +663,5 @@ def _test():
 	return doctest.testmod(sys.modules[__name__])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	_test()

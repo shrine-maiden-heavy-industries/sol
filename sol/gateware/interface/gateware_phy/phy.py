@@ -3,7 +3,7 @@
 # This file is part of SOL.
 #
 
-""" Pure-gateware, UTMI-compatible Full Speed PHY."""
+''' Pure-gateware, UTMI-compatible Full Speed PHY.'''
 
 from torii         import Cat, Elaboratable, Module, Signal
 
@@ -12,7 +12,7 @@ from .transmitter  import TxPipeline
 
 
 class GatewarePHY(Elaboratable):
-	""" Gateware that implements a UTMI-compatible transciever using raw FPGA I/O.
+	''' Gateware that implements a UTMI-compatible transciever using raw FPGA I/O.
 
 	Clock Domains
 	-------------
@@ -85,7 +85,7 @@ class GatewarePHY(Elaboratable):
 		A record containing the raw I/O signals to be used to drive our I/O-based USB connnection.
 		The ``d_p`` and ``d_n`` signals are mandatory; the ``pullup``, ``pulldown``,
 		and ``vbus_valid`` signals are optional.
-	"""
+	'''
 
 	OP_MODE_NORMAL      = 0b00
 	OP_MODE_NONDRIVING  = 0b10

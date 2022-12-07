@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Gateware for working with abstract endpoints. """
+''' Gateware for working with abstract endpoints. '''
 
 import functools
 import operator
@@ -21,7 +21,7 @@ from .packet       import (
 
 
 class EndpointInterface:
-	""" Interface that connects a USB endpoint module to a USB device.
+	''' Interface that connects a USB endpoint module to a USB device.
 
 	Many non-control endpoints won't need to use the latter half of this structure;
 	it will be automatically removed by the relevant synthesis tool.
@@ -76,7 +76,7 @@ class EndpointInterface:
 		Interface to our interpacket timer.
 	data_crc: DataCRCInterface
 		Control connection for our data-CRC unit.
-	"""
+	'''
 
 	def __init__(self):
 		self.data_crc              = DataCRCInterface()
@@ -108,7 +108,7 @@ class EndpointInterface:
 
 
 class USBEndpointMultiplexer(Elaboratable):
-	""" Multiplexes access to the resources shared between multiple endpoint interfaces.
+	''' Multiplexes access to the resources shared between multiple endpoint interfaces.
 
 	Interfaces are added using :attr:`add_interface`.
 
@@ -117,7 +117,7 @@ class USBEndpointMultiplexer(Elaboratable):
 
 	shared: EndpointInterface
 		The post-multiplexer endpoint interface.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -133,16 +133,16 @@ class USBEndpointMultiplexer(Elaboratable):
 
 
 	def add_interface(self, interface: EndpointInterface):
-		""" Adds a EndpointInterface to the multiplexer.
+		''' Adds a EndpointInterface to the multiplexer.
 
 		Arbitration is not performed; it's expected only one endpoint will be
 		driving the transmit lines at a time.
-		"""
+		'''
 		self._interfaces.append(interface)
 
 
 	def _multiplex_signals(self, m, *, when, multiplex, sub_bus=None):
-		""" Helper that creates a simple priority-encoder multiplexer.
+		''' Helper that creates a simple priority-encoder multiplexer.
 
 		Parmeters
 		---------
@@ -151,10 +151,10 @@ class USBEndpointMultiplexer(Elaboratable):
 			selected for output. If this signals should be multiplexed, it should be included in `multiplex`.
 		multiplex: iterable(str)
 			The names of the interface signals to be multiplexed.
-		"""
+		'''
 
 		def get_signal(interface, name):
-			""" Fetches an interface signal by name / sub_bus. """
+			''' Fetches an interface signal by name / sub_bus. '''
 
 			if sub_bus:
 				bus = getattr(interface, sub_bus)
@@ -186,7 +186,7 @@ class USBEndpointMultiplexer(Elaboratable):
 
 
 	def or_join_interface_signals(self, m, signal_for_interface):
-		""" Joins together a set of signals on each interface by OR'ing the signals together. """
+		''' Joins together a set of signals on each interface by OR'ing the signals together. '''
 
 		# Find the value of all of our pre-mux signals OR'd together...
 		all_signals = (signal_for_interface(i) for i in self._interfaces)
@@ -267,7 +267,7 @@ class USBEndpointMultiplexer(Elaboratable):
 
 		# We'll connect our PID toggle to whichever interface has a valid transmission going.
 		for interface in self._interfaces:
-			with conditional(interface.tx.valid | Past(interface.tx.valid, domain="usb")):
+			with conditional(interface.tx.valid | Past(interface.tx.valid, domain='usb')):
 				m.d.comb += shared.tx_pid_toggle.eq(interface.tx_pid_toggle)
 
 			conditional = m.Elif

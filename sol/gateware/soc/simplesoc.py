@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Simple SoC abstraction for SOL examples."""
+''' Simple SoC abstraction for SOL examples.'''
 
 import datetime
 import logging               as log
@@ -25,7 +25,7 @@ from .memory                 import WishboneRAM, WishboneROM
 
 
 class SimpleSoC(CPUSoC, Elaboratable):
-	""" Class used for building simple, example system-on-a-chip architectures.
+	''' Class used for building simple, example system-on-a-chip architectures.
 
 	Intended to facilitate demonstrations (and very simple USB devices) by providing
 	a wrapper that can be updated as the Torii-based-SoC landscape changes. Hopefully,
@@ -40,15 +40,15 @@ class SimpleSoC(CPUSoC, Elaboratable):
 	The current implementation uses a single, 32-bit wide Wishbone bus
 	as the system's backend; and uses lambdasoc as its backing technology.
 	This is subject to change.
-	"""
+	'''
 
 	BUS_ADDRESS_WIDTH = 30
 
 	def __init__(self, clock_frequency=int(60e6)):
-		"""
+		'''
 		Parameters:
 			clock_frequency -- The frequency of our `sync` domain, in MHz.
-		"""
+		'''
 
 		self.clk_freq = clock_frequency
 
@@ -78,19 +78,19 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		self.intc = GenericInterruptController(width=32)
 
 		# Create our bus decoder and set up our memory map.
-		self.bus_decoder = wishbone.Decoder(addr_width=30, data_width=32, granularity=8, features={"cti", "bte"})
+		self.bus_decoder = wishbone.Decoder(addr_width=30, data_width=32, granularity=8, features={'cti', 'bte'})
 		self.memory_map  = self.bus_decoder.bus.memory_map
 
 
 
 	def add_rom(self, data, size, addr=0, is_main_rom=True):
-		""" Creates a simple ROM and adds it to the design.
+		''' Creates a simple ROM and adds it to the design.
 
 		Parameters:
 			data -- The data to fill the relevant ROM.
 			size -- The size for the rom that should be created.
 			addr -- The address at which the ROM should reside.
-			"""
+			'''
 
 		# Figure out how many address bits we'll need to address the given memory size.
 		addr_width = (size - 1).bit_length()
@@ -103,12 +103,12 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def add_ram(self, size: int, addr: int = None, is_main_mem: bool = True):
-		""" Creates a simple RAM and adds it to our design.
+		''' Creates a simple RAM and adds it to our design.
 
 		Parameters:
 			size -- The size of the RAM, in bytes. Will be rounded up to the nearest power of two.
 			addr -- The address at which to place the RAM.
-		"""
+		'''
 
 		# Figure out how many address bits we'll need to address the given memory size.
 		addr_width = (size - 1).bit_length()
@@ -122,11 +122,11 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def add_peripheral(self, p, *, as_submodule=True, **kwargs):
-		""" Adds a peripheral to the SoC.
+		''' Adds a peripheral to the SoC.
 
 		For now, this is identical to adding a peripheral to the SoC's wishbone bus.
 		For convenience, returns the peripheral provided.
-		"""
+		'''
 
 		# Add the peripheral to our bus...
 		interface = getattr(p, 'bus')
@@ -153,12 +153,12 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def add_debug_port(self):
-		""" Adds an automatically-connected Debug port to our SoC. """
+		''' Adds an automatically-connected Debug port to our SoC. '''
 		self._auto_debug = True
 
 
 	def add_bios_and_peripherals(self, uart_pins, uart_baud_rate=115200, fixed_addresses=False):
-		""" Adds a simple BIOS that allows loading firmware, and the requisite peripherals.
+		''' Adds a simple BIOS that allows loading firmware, and the requisite peripherals.
 
 		Automatically adds the following peripherals:
 			self.uart      -- An AsyncSerialPeripheral used for serial I/O.
@@ -169,7 +169,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		Parameters:
 			uart_pins      -- The UARTResource to be used for UART communications; or an equivalent record.
 			uart_baud_rate -- The baud rate to be used by the BIOS' uart.
-		"""
+		'''
 
 		self._build_bios = True
 		self._uart_baud  = uart_baud_rate
@@ -221,7 +221,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		# to an arbiter, so they both share use of the single bus.
 
 		# Create the arbiter around our main bus...
-		m.submodules.bus_arbiter = arbiter = wishbone.Arbiter(addr_width=30, data_width=32, granularity=8, features={"cti", "bte"})
+		m.submodules.bus_arbiter = arbiter = wishbone.Arbiter(addr_width=30, data_width=32, granularity=8, features={'cti', 'bte'})
 		m.d.comb += arbiter.bus.connect(self.bus_decoder.bus)
 
 		# ... and connect it to the CPU instruction and data busses.
@@ -234,10 +234,10 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		# If we're automatically creating a debug connection, do so.
 		if self._auto_debug:
 			m.d.comb += [
-				self.cpu._cpu.jtag.tck  .eq(synchronize(m, platform.request("user_io", 0, dir="i").i)),
-				self.cpu._cpu.jtag.tms  .eq(synchronize(m, platform.request("user_io", 1, dir="i").i)),
-				self.cpu._cpu.jtag.tdi  .eq(synchronize(m, platform.request("user_io", 2, dir="i").i)),
-				platform.request("user_io", 3, dir="o").o  .eq(self.cpu._cpu.jtag.tdo)
+				self.cpu._cpu.jtag.tck  .eq(synchronize(m, platform.request('user_io', 0, dir='i').i)),
+				self.cpu._cpu.jtag.tms  .eq(synchronize(m, platform.request('user_io', 1, dir='i').i)),
+				self.cpu._cpu.jtag.tdi  .eq(synchronize(m, platform.request('user_io', 2, dir='i').i)),
+				platform.request('user_io', 3, dir='o').o  .eq(self.cpu._cpu.jtag.tdo)
 			]
 
 		return m
@@ -245,14 +245,14 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def resources(self, omit_bios_mem=True):
-		""" Creates an iterator over each of the device's addressable resources.
+		''' Creates an iterator over each of the device's addressable resources.
 
 		Yields (resource, address, size) for each resource.
 
 		Parameters:
 			omit_bios_mem -- If True, BIOS-related memories are skipped when generating our
 							 resource listings. This hides BIOS resources from the application.
-		"""
+		'''
 
 		# Grab the memory map for this SoC...
 		memory_map = self.bus_decoder.bus.memory_map
@@ -274,8 +274,8 @@ class SimpleSoC(CPUSoC, Elaboratable):
 				yield resource, peripheral_start + register_offset, size
 
 
-	def build(self, name=None, build_dir="build"):
-		""" Builds any internal artifacts necessary to create our CPU.
+	def build(self, name=None, build_dir='build'):
+		''' Builds any internal artifacts necessary to create our CPU.
 
 		This is usually used for e.g. building our BIOS.
 
@@ -283,24 +283,24 @@ class SimpleSoC(CPUSoC, Elaboratable):
 			name      -- The name for the SoC design.
 			build_dir -- The directory where our main Torii build is being performed.
 						 We'll build in a subdirectory of it.
-		"""
+		'''
 
 		# If we're building a BIOS, let our superclass build a BIOS for us.
 		if self._build_bios:
-			logging.info("Building SoC BIOS...")
+			log.info('Building SoC BIOS...')
 			super().build(name=name, build_dir=os.path.join(build_dir, 'soc'), do_build=True, do_init=True)
-			logging.info("BIOS build complete. Continuing with SoC build.")
+			log.info('BIOS build complete. Continuing with SoC build.')
 
 		self.log_resources()
 
 
 	def _range_for_peripheral(self, target_peripheral):
-		""" Returns size information for the given peripheral.
+		''' Returns size information for the given peripheral.
 
 		Returns:
 			addr, size -- if the given size is known; or
 			None, None    if not
-		"""
+		'''
 
 
 		# Grab the memory map for this SoC...
@@ -315,91 +315,91 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def _emit_minerva_basics(self, emit):
-		""" Emits the standard Minerva RISC-V CSR functionality.
+		''' Emits the standard Minerva RISC-V CSR functionality.
 
 		Parameters
 		----------
 		emit: callable(str)
 			The function used to print the code lines to the output stream.
-		"""
+		'''
 
 
-		emit("#ifndef read_csr")
-		emit("#define read_csr(reg) ({ unsigned long __tmp; \\")
-		emit("  asm volatile (\"csrr %0, \" #reg : \"=r\"(__tmp)); \\")
-		emit("  __tmp; })")
-		emit("#endif")
-		emit("")
-		emit("#ifndef write_csr")
-		emit("#define write_csr(reg, val) ({ \\")
-		emit("  asm volatile (\"csrw \" #reg \", %0\" :: \"rK\"(val)); })")
-		emit("#endif")
-		emit("")
-		emit("#ifndef set_csr")
-		emit("#define set_csr(reg, bit) ({ unsigned long __tmp; \\")
-		emit("  asm volatile (\"csrrs %0, \" #reg \", %1\" : \"=r\"(__tmp) : \"rK\"(bit)); \\")
-		emit("  __tmp; })")
-		emit("#endif")
-		emit("")
-		emit("#ifndef clear_csr")
-		emit("#define clear_csr(reg, bit) ({ unsigned long __tmp; \\")
-		emit("  asm volatile (\"csrrc %0, \" #reg \", %1\" : \"=r\"(__tmp) : \"rK\"(bit)); \\")
-		emit("  __tmp; })")
-		emit("#endif")
-		emit("")
+		emit('#ifndef read_csr')
+		emit('#define read_csr(reg) ({ unsigned long __tmp; \\')
+		emit('  asm volatile ("csrr %0, " #reg : "=r"(__tmp)); \\')
+		emit('  __tmp; })')
+		emit('#endif')
+		emit('')
+		emit('#ifndef write_csr')
+		emit('#define write_csr(reg, val) ({ \\')
+		emit('  asm volatile ("csrw " #reg ", %0" :: "rK"(val)); })')
+		emit('#endif')
+		emit('')
+		emit('#ifndef set_csr')
+		emit('#define set_csr(reg, bit) ({ unsigned long __tmp; \\')
+		emit('  asm volatile ("csrrs %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); \\')
+		emit('  __tmp; })')
+		emit('#endif')
+		emit('')
+		emit('#ifndef clear_csr')
+		emit('#define clear_csr(reg, bit) ({ unsigned long __tmp; \\')
+		emit('  asm volatile ("csrrc %0, " #reg ", %1" : "=r"(__tmp) : "rK"(bit)); \\')
+		emit('  __tmp; })')
+		emit('#endif')
+		emit('')
 
-		emit("#ifndef MSTATUS_MIE")
-		emit("#define MSTATUS_MIE         0x00000008")
-		emit("#endif")
-		emit("")
+		emit('#ifndef MSTATUS_MIE')
+		emit('#define MSTATUS_MIE         0x00000008')
+		emit('#endif')
+		emit('')
 
-		emit("//")
-		emit("// Minerva headers")
-		emit("//")
-		emit("")
-		emit("static inline uint32_t irq_getie(void)")
-		emit("{")
-		emit("        return (read_csr(mstatus) & MSTATUS_MIE) != 0;")
-		emit("}")
-		emit("")
-		emit("static inline void irq_setie(uint32_t ie)")
-		emit("{")
-		emit("        if (ie) {")
-		emit("                set_csr(mstatus, MSTATUS_MIE);")
-		emit("        } else {")
-		emit("                clear_csr(mstatus, MSTATUS_MIE);")
-		emit("        }")
-		emit("}")
-		emit("")
-		emit("static inline uint32_t irq_getmask(void)")
-		emit("{")
-		emit("        return read_csr(0x330);")
-		emit("}")
-		emit("")
-		emit("static inline void irq_setmask(uint32_t value)")
-		emit("{")
-		emit("        write_csr(0x330, value);")
-		emit("}")
-		emit("")
-		emit("static inline uint32_t pending_irqs(void)")
-		emit("{")
-		emit("        return read_csr(0x360);")
-		emit("}")
-		emit("")
+		emit('//')
+		emit('// Minerva headers')
+		emit('//')
+		emit('')
+		emit('static inline uint32_t irq_getie(void)')
+		emit('{')
+		emit('        return (read_csr(mstatus) & MSTATUS_MIE) != 0;')
+		emit('}')
+		emit('')
+		emit('static inline void irq_setie(uint32_t ie)')
+		emit('{')
+		emit('        if (ie) {')
+		emit('                set_csr(mstatus, MSTATUS_MIE);')
+		emit('        } else {')
+		emit('                clear_csr(mstatus, MSTATUS_MIE);')
+		emit('        }')
+		emit('}')
+		emit('')
+		emit('static inline uint32_t irq_getmask(void)')
+		emit('{')
+		emit('        return read_csr(0x330);')
+		emit('}')
+		emit('')
+		emit('static inline void irq_setmask(uint32_t value)')
+		emit('{')
+		emit('        write_csr(0x330, value);')
+		emit('}')
+		emit('')
+		emit('static inline uint32_t pending_irqs(void)')
+		emit('{')
+		emit('        return read_csr(0x360);')
+		emit('}')
+		emit('')
 
 
 
-	def generate_c_header(self, macro_name="SOC_RESOURCES", file=None, platform_name="Generic Platform"):
-		""" Generates a C header file that simplifies access to the platform's resources.
+	def generate_c_header(self, macro_name='SOC_RESOURCES', file=None, platform_name='Generic Platform'):
+		''' Generates a C header file that simplifies access to the platform's resources.
 
 		Parameters:
 			macro_name -- Optional. The name of the guard macro for the C header, as a string without spaces.
 			file       -- Optional. If provided, this will be treated as the file= argument to the print()
 						  function. This can be used to generate file content instead of printing to the terminal.
-		"""
+		'''
 
 		def emit(content):
-			""" Utility function that emits a string to the targeted file. """
+			''' Utility function that emits a string to the targeted file. '''
 			print(content, file=file)
 
 		# Create a mapping that maps our register sizes to C types.
@@ -410,42 +410,42 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		}
 
 		# Emit a warning header.
-		emit("/*")
-		emit(" * Automatically generated by SOL; edits will be discarded on rebuild.")
-		emit(" * (Most header files phrase this 'Do not edit.'; be warned accordingly.)")
-		emit(" *")
-		emit(f" * Generated: {datetime.datetime.now()}.")
-		emit(" */")
-		emit("\n")
+		emit('/*')
+		emit(' * Automatically generated by SOL; edits will be discarded on rebuild.')
+		emit(' * (Most header files phrase this \'Do not edit.\'; be warned accordingly.)')
+		emit(' *')
+		emit(f' * Generated: {datetime.datetime.now()}.')
+		emit(' */')
+		emit('\n')
 
-		emit(f"#ifndef __{macro_name}_H__")
-		emit(f"#define __{macro_name}_H__")
-		emit("")
-		emit("#include <stdint.h>\n")
-		emit("#include <stdbool.h>")
-		emit("")
+		emit(f'#ifndef __{macro_name}_H__')
+		emit(f'#define __{macro_name}_H__')
+		emit('')
+		emit('#include <stdint.h>\n')
+		emit('#include <stdbool.h>')
+		emit('')
 
-		emit("//")
-		emit("// Environment Information")
-		emit("//")
+		emit('//')
+		emit('// Environment Information')
+		emit('//')
 
-		emit("")
-		emit(f"#define PLATFORM_NAME \"{platform_name}\"")
-		emit("")
+		emit('')
+		emit(f'#define PLATFORM_NAME \'{platform_name}\'')
+		emit('')
 
 
 		# Emit our constant data for all Minerva CPUs.
 		self._emit_minerva_basics(emit)
 
-		emit("//")
-		emit("// Peripherals")
-		emit("//")
+		emit('//')
+		emit('// Peripherals')
+		emit('//')
 		for resource, address, size in self.resources():
 
 			# Always generate a macro for the resource's ADDRESS and size.
 			name = resource.name
-			emit(f"#define {name.upper()}_ADDRESS (0x{address:08x}U)")
-			emit(f"#define {name.upper()}_SIZE ({size})")
+			emit(f'#define {name.upper()}_ADDRESS (0x{address:08x}U)')
+			emit(f'#define {name.upper()}_SIZE ({size})')
 
 			# If we have information on how to access this resource, generate convenience
 			# macros for reading and writing it.
@@ -454,112 +454,112 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 				# Generate a read stub, if useful...
 				if resource.access.readable():
-					emit(f"static inline {c_type} {name}_read(void) {{")
-					emit(f"    volatile {c_type} *reg = ({c_type} *){name.upper()}_ADDRESS;")
-					emit(f"    return *reg;")
-					emit(f"}}")
+					emit(f'static inline {c_type} {name}_read(void) {{')
+					emit(f'    volatile {c_type} *reg = ({c_type} *){name.upper()}_ADDRESS;')
+					emit(f'    return *reg;')
+					emit('}')
 
 				# ... and a write stub.
 				if resource.access.writable():
-					emit(f"static inline void {name}_write({c_type} value) {{")
-					emit(f"    volatile {c_type} *reg = ({c_type} *){name.upper()}_ADDRESS;")
-					emit(f"    *reg = value;")
-					emit(f"}}")
+					emit(f'static inline void {name}_write({c_type} value) {{')
+					emit(f'    volatile {c_type} *reg = ({c_type} *){name.upper()}_ADDRESS;')
+					emit(f'    *reg = value;')
+					emit('}')
 
-			emit("")
+			emit('')
 
 
-		emit("//")
-		emit("// Interrupts")
-		emit("//")
+		emit('//')
+		emit('// Interrupts')
+		emit('//')
 		for irq, peripheral in self._irqs.items():
 
 			# Function that determines if a given unit has an IRQ pending.
-			emit(f"static inline bool {peripheral.name}_interrupt_pending(void) {{")
-			emit(f"    return pending_irqs() & (1 << {irq});")
-			emit(f"}}")
+			emit(f'static inline bool {peripheral.name}_interrupt_pending(void) {{')
+			emit(f'    return pending_irqs() & (1 << {irq});')
+			emit('}')
 
 			# IRQ masking
-			emit(f"static inline void {peripheral.name}_interrupt_enable(void) {{")
-			emit(f"    irq_setmask(irq_getmask() | (1 << {irq}));")
-			emit(f"}}")
-			emit(f"static inline void {peripheral.name}_interrupt_disable(void) {{")
-			emit(f"    irq_setmask(irq_getmask() & ~(1 << {irq}));")
-			emit(f"}}")
+			emit(f'static inline void {peripheral.name}_interrupt_enable(void) {{')
+			emit(f'    irq_setmask(irq_getmask() | (1 << {irq}));')
+			emit('}')
+			emit(f'static inline void {peripheral.name}_interrupt_disable(void) {{')
+			emit(f'    irq_setmask(irq_getmask() & ~(1 << {irq}));')
+			emit('}')
 
-		emit("#endif")
-		emit("")
+		emit('#endif')
+		emit('')
 
 
 	def generate_ld_script(self, file=None):
-		""" Generates an ldscript that holds our primary RAM and ROM regions.
+		''' Generates an ldscript that holds our primary RAM and ROM regions.
 
 		Parameters:
 			file       -- Optional. If provided, this will be treated as the file= argument to the print()
 						  function. This can be used to generate file content instead of printing to the terminal.
-		"""
+		'''
 
 		def emit(content):
-			""" Utility function that emits a string to the targeted file. """
+			''' Utility function that emits a string to the targeted file. '''
 			print(content, file=file)
 
 
 		# Insert our automatically generated header.
-		emit("/**")
-		emit(" * Linker memory regions.")
-		emit(" *")
-		emit(" * Automatically generated by SOL; edits will be discarded on rebuild.")
-		emit(" * (Most header files phrase this 'Do not edit.'; be warned accordingly.)")
-		emit(" *")
-		emit(f" * Generated: {datetime.datetime.now()}.")
-		emit(" */")
-		emit("")
+		emit('/**')
+		emit(' * Linker memory regions.')
+		emit(' *')
+		emit(' * Automatically generated by SOL; edits will be discarded on rebuild.')
+		emit(' * (Most header files phrase this \'Do not edit.\'; be warned accordingly.)')
+		emit(' *')
+		emit(f' * Generated: {datetime.datetime.now()}.')
+		emit(' */')
+		emit('')
 
-		emit("MEMORY")
-		emit("{")
+		emit('MEMORY')
+		emit('{')
 
 		# Add regions for our main ROM and our main RAM.
 		for memory in [self._main_rom, self._main_ram]:
 
 			# Figure out our fields: a region name, our start, and our size.
-			name = "ram" if (memory is self._main_ram) else "rom"
+			name = 'ram' if (memory is self._main_ram) else 'rom'
 			start, size = self._range_for_peripheral(memory)
 
 			if size:
-				emit(f"    {name} : ORIGIN = 0x{start:08x}, LENGTH = 0x{size:08x}")
+				emit(f'    {name} : ORIGIN = 0x{start:08x}, LENGTH = 0x{size:08x}')
 
-		emit("}")
-		emit("")
+		emit('}')
+		emit('')
 
 
 	def log_resources(self):
-		""" Logs a summary of our resource utilization to our running logs. """
+		''' Logs a summary of our resource utilization to our running logs. '''
 
 		# Resource addresses:
-		log.info("Physical address allocations:")
+		log.info('Physical address allocations:')
 		for peripheral, (start, end, _granularity) in self.memory_map.all_resources():
-			log.info(f"    {start:08x}-{end:08x}: {peripheral}")
-		log.info("")
+			log.info(f'    {start:08x}-{end:08x}: {peripheral}')
+		log.info('')
 
 		# IRQ numbers
-		log.info("IRQ allocations:")
+		log.info('IRQ allocations:')
 		for irq, peripheral in self._irqs.items():
-			log.info(f"    {irq}: {peripheral.name}")
-		log.info("")
+			log.info(f'    {irq}: {peripheral.name}')
+		log.info('')
 
 		# Main memory.
 		if self._build_bios:
 			memory_location = self.main_ram_address()
 
-			log.info(f"Main memory at 0x{memory_location:08x}; upload using:")
-			log.info(f"    flterm --kernel <your_firmware> --kernel-addr 0x{memory_location:08x} --speed {self._uart_baud}")
-			log.info("or")
-			log.info(f"    lxterm --kernel <your_firmware> --kernel-adr 0x{memory_location:08x} --speed {self._uart_baud}")
+			log.info(f'Main memory at 0x{memory_location:08x}; upload using:')
+			log.info(f'    flterm --kernel <your_firmware> --kernel-addr 0x{memory_location:08x} --speed {self._uart_baud}')
+			log.info('or')
+			log.info(f'    lxterm --kernel <your_firmware> --kernel-adr 0x{memory_location:08x} --speed {self._uart_baud}')
 
-		log.info("")
+		log.info('')
 
 
 	def main_ram_address(self):
-		""" Returns the address of the main system RAM. """
+		''' Returns the address of the main system RAM. '''
 		start, _  = self._range_for_peripheral(self._main_ram)
 		return start

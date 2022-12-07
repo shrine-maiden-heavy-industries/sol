@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Pure-gateware, UTMI-compatible Full Speed PHY."""
+''' Pure-gateware, UTMI-compatible Full Speed PHY.'''
 
 from .phy import GatewarePHY
 

@@ -6,7 +6,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Generic USB analyzer backend generator for SOL. """
+''' Generic USB analyzer backend generator for SOL. '''
 
 
 import errno
@@ -77,11 +77,11 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 
 		# Transmitter for small-constant-response requests
 		m.submodules.transmitter = transmitter = \
-			StreamSerializer(data_length=1, domain="usb", stream_type=USBInStreamInterface, max_length_width=1)
+			StreamSerializer(data_length=1, domain='usb', stream_type=USBInStreamInterface, max_length_width=1)
 
 		# Handle vendor requests
 		with m.If(setup.type == USBRequestType.VENDOR):
-			with m.FSM(domain="usb"):
+			with m.FSM(domain='usb'):
 
 				# IDLE -- not handling any active request
 				with m.State('IDLE'):
@@ -121,11 +121,11 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 
 
 class USBAnalyzerApplet(Elaboratable):
-	""" Gateware that serves as a generic USB analyzer backend.
+	''' Gateware that serves as a generic USB analyzer backend.
 
 	WARNING: This is _incomplete_! It's missing:
 		- DRAM backing for analysis
-	"""
+	'''
 
 
 	def __init__(self, usb_speed=USB_SPEED_FULL):
@@ -133,7 +133,7 @@ class USBAnalyzerApplet(Elaboratable):
 
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -147,9 +147,9 @@ class USBAnalyzerApplet(Elaboratable):
 			d.idVendor           = USB_VENDOR_ID
 			d.idProduct          = USB_PRODUCT_ID
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "USB Analyzer"
-			d.iSerialNumber      = "[autodetect serial here]"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'USB Analyzer'
+			d.iSerialNumber      = '[autodetect serial here]'
 
 			d.bNumConfigurations = 1
 
@@ -179,14 +179,14 @@ class USBAnalyzerApplet(Elaboratable):
 		m.submodules.clocking = clocking
 
 		# Create our UTMI translator.
-		ulpi = platform.request("target_phy")
+		ulpi = platform.request('target_phy')
 		m.submodules.utmi = utmi = UTMITranslator(ulpi=ulpi)
 
 		# Strap our power controls to be in VBUS passthrough by default,
 		# on the target port.
 		m.d.comb += [
-			platform.request("power_a_port").o      .eq(0),
-			platform.request("pass_through_vbus").o .eq(1),
+			platform.request('power_a_port').o      .eq(0),
+			platform.request('pass_through_vbus').o .eq(1),
 		]
 
 		# Set up our parameters.
@@ -204,7 +204,7 @@ class USBAnalyzerApplet(Elaboratable):
 		]
 
 		# Create our USB uplink interface...
-		uplink_ulpi = platform.request("host_phy")
+		uplink_ulpi = platform.request('host_phy')
 		m.submodules.usb = usb = USBDevice(bus=uplink_ulpi)
 
 		# Add our standard control endpoint to the device.
@@ -238,13 +238,13 @@ class USBAnalyzerApplet(Elaboratable):
 			usb.connect                 .eq(1),
 
 			# LED indicators.
-			platform.request("led", 0).o  .eq(analyzer.capturing),
-			platform.request("led", 1).o  .eq(analyzer.stream.valid),
-			platform.request("led", 2).o  .eq(analyzer.overrun),
+			platform.request('led', 0).o  .eq(analyzer.capturing),
+			platform.request('led', 1).o  .eq(analyzer.stream.valid),
+			platform.request('led', 2).o  .eq(analyzer.overrun),
 
-			platform.request("led", 3).o  .eq(utmi.session_valid),
-			platform.request("led", 4).o  .eq(utmi.rx_active),
-			platform.request("led", 5).o  .eq(utmi.rx_error),
+			platform.request('led', 3).o  .eq(utmi.session_valid),
+			platform.request('led', 4).o  .eq(utmi.rx_active),
+			platform.request('led', 5).o  .eq(utmi.rx_error),
 		]
 
 		# Return our elaborated module.
@@ -253,14 +253,14 @@ class USBAnalyzerApplet(Elaboratable):
 
 
 class USBAnalyzerConnection:
-	""" Class representing a connection to a SOL USB analyzer.
+	''' Class representing a connection to a SOL USB analyzer.
 
 	This abstracts away connection details, so we can rapidly change the way things
 	work without requiring changes in e.g. our ViewSB frontend.
-	"""
+	'''
 
 	def __init__(self):
-		""" Creates our connection to the USBAnalyzer. """
+		''' Creates our connection to the USBAnalyzer. '''
 
 		self._buffer = bytearray()
 		self._device = None
@@ -268,7 +268,7 @@ class USBAnalyzerConnection:
 
 
 	def build_and_configure(self, capture_speed):
-		""" Builds the SOL analyzer applet and configures the FPGA with it. """
+		''' Builds the SOL analyzer applet and configures the FPGA with it. '''
 
 		# Create the USBAnalyzer we want to work with.
 		analyzer = USBAnalyzerApplet(usb_speed=capture_speed)
@@ -295,12 +295,12 @@ class USBAnalyzerConnection:
 			1,
 			1,
 			0,
-			b"",
+			b'',
 			timeout=5,
 		)
 
 	def _fetch_data_into_buffer(self):
-		""" Attempts a single data read from the analyzer into our buffer. """
+		''' Attempts a single data read from the analyzer into our buffer. '''
 
 		try:
 			data = self._device.read(BULK_ENDPOINT_ADDRESS, MAX_BULK_PACKET_SIZE)
@@ -314,13 +314,13 @@ class USBAnalyzerConnection:
 
 
 	def read_raw_packet(self):
-		""" Reads a raw packet from our USB Analyzer. Blocks until a packet is complete.
+		''' Reads a raw packet from our USB Analyzer. Blocks until a packet is complete.
 
 		Returns: packet, timestamp, flags:
 			packet    -- The raw packet data, as bytes.
 			timestamp -- The timestamp at which the packet was taken, in microseconds.
 			flags     -- Flags indicating connection status. Format TBD.
-		"""
+		'''
 
 		size = 0
 		packet = None

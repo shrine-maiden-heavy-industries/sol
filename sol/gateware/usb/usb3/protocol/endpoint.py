@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Endpoint abstractions for USB3. """
+''' Endpoint abstractions for USB3. '''
 
 
 from torii        import *
@@ -15,7 +15,7 @@ from .transaction import HandshakeGeneratorInterface, HandshakeReceiverInterface
 
 
 class SuperSpeedEndpointInterface:
-	""" Interface that connects a USB3 endpoint module to a USB device.
+	''' Interface that connects a USB3 endpoint module to a USB device.
 
 	Many non-control endpoints won't need to use the latter half of this structure;
 	it will be automatically removed by the relevant synthesis tool.
@@ -60,7 +60,7 @@ class SuperSpeedEndpointInterface:
 		Strobe; pulses high when the device's configuration should be changed.
 	new_config: Signal(8)
 		When `config_changed` is high, this field contains the configuration that should be applied.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -97,7 +97,7 @@ class SuperSpeedEndpointInterface:
 
 
 class SuperSpeedEndpointMultiplexer(Elaboratable):
-	""" Multiplexes access to the resources shared between multiple endpoint interfaces.
+	''' Multiplexes access to the resources shared between multiple endpoint interfaces.
 
 	Interfaces are added using :attr:`add_interface`.
 
@@ -106,7 +106,7 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 
 	shared: SuperSpeedEndpointInterface
 		The post-multiplexer endpoint interface.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -122,16 +122,16 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 
 
 	def add_interface(self, interface: SuperSpeedEndpointInterface):
-		""" Adds a EndpointInterface to the multiplexer.
+		''' Adds a EndpointInterface to the multiplexer.
 
 		Arbitration is not performed; it's expected only one endpoint will be
 		driving the transmit lines at a time.
-		"""
+		'''
 		self._interfaces.append(interface)
 
 
 	def _multiplex_signals(self, m, *, when, multiplex):
-		""" Helper that creates a simple priority-encoder multiplexer.
+		''' Helper that creates a simple priority-encoder multiplexer.
 
 		Parmeters
 		---------
@@ -140,7 +140,7 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 			selected for output. If this signals should be multiplexed, it should be included in `multiplex`.
 		multiplex: iterable(str)
 			The names of the interface signals to be multiplexed.
-		"""
+		'''
 
 		# We're building an if-elif tree; so we should start with an If entry.
 		conditional = m.If

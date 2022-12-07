@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Link Training and Status State Machine (LTSSM) gateware. """
+''' Link Training and Status State Machine (LTSSM) gateware. '''
 
 #
 # WARNING: This implementation is currently the minimum set of things that make
@@ -18,7 +18,7 @@ from torii import *
 
 
 class LTSSMController(Elaboratable):
-	""" Link Training and Status State Machine
+	''' Link Training and Status State Machine
 
 	This state machine orchestrates USB bringup, link training, and power saving.
 	It is implemented according to chaper 7.5 of the USB 3.2 specification [USB3.2r1; 7.5].
@@ -52,7 +52,7 @@ class LTSSMController(Elaboratable):
 	loosen_requirements: bool
 		If True, the requirements will be relaxed from the USB3 specification, in order
 		to make things work a little more easily on a variety of PHYs and setups.
-	"""
+	'''
 
 	def __init__(self, ss_clock_frequency=125e6, *, loosen_requirements=True):
 		self._clock_frequency = ss_clock_frequency
@@ -182,12 +182,12 @@ class LTSSMController(Elaboratable):
 
 
 		def transition_to_state(state):
-			""" FSM helper that handles transitions to the given state.
+			''' FSM helper that handles transitions to the given state.
 
-			Automatically handles any "on entry" conditions for the given state.
-			"""
+			Automatically handles any 'on entry' conditions for the given state.
+			'''
 
-			# Clear our "time-in-state" counter, and some of our mode flags.
+			# Clear our 'time-in-state' counter, and some of our mode flags.
 			m.d.ss += [
 				cycles_in_state         .eq(0),
 				self.request_hot_reset  .eq(0)
@@ -201,7 +201,7 @@ class LTSSMController(Elaboratable):
 
 
 		def transition_on_timeout(timeout, *, to):
-			""" FSM helper that adds a state transition that is automatically invoked after a timeout. """
+			''' FSM helper that adds a state transition that is automatically invoked after a timeout. '''
 
 			# Figure out how many cycles need to pass before we consider ourselves timed out.
 			timeout_in_cycles = int(math.ceil(timeout * self._clock_frequency))
@@ -212,12 +212,12 @@ class LTSSMController(Elaboratable):
 
 
 		def handle_warm_resets():
-			""" FSM helper that automatically moves back to the Rx.Detect.Reset state when appropriate."""
+			''' FSM helper that automatically moves back to the Rx.Detect.Reset state when appropriate.'''
 
 			# If we're in USB reset, we're actively receiving warm reset signaling; and we should reset
 			# to the Rx.Detect.Reset state.
 			with m.If(self.in_usb_reset):
-				transition_to_state("Rx.Detect.Reset")
+				transition_to_state('Rx.Detect.Reset')
 
 
 		#
@@ -281,11 +281,11 @@ class LTSSMController(Elaboratable):
 		#
 		# Main Link Training and Status State Machine
 		#
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# Rx.Detect.Reset -- we've just started link bringup post-reset; and are ready to
 			# perform any necessary link configuration.
-			with m.State("Rx.Detect.Reset"):
+			with m.State('Rx.Detect.Reset'):
 				m.d.comb += [
 
 					# Keep ourselves from transmitting until we're ready to send...
@@ -300,42 +300,42 @@ class LTSSMController(Elaboratable):
 				# We'll wait in this state until our PHY is brought up, and we're not detecting
 				# any Warm Reset LFPS signaling.
 				with m.If(~self.in_usb_reset & self.phy_ready):
-					transition_to_state("Rx.Detect.Active")
+					transition_to_state('Rx.Detect.Active')
 
 
 			# Rx.Detect.Active -- we're now post-reset; and we're going to attempt to detect a
 			# link partner, by checking for far-end receiver terminations. Basically, we try to
 			# detect whether we're connected to another SuperSpeed transciever via a cable, so
 			# we don't waste time performing link training if our link isn't there.
-			with m.State("Rx.Detect.Active"):
+			with m.State('Rx.Detect.Active'):
 				m.d.comb += [
 					self.tx_electrical_idle    .eq(1),
 					self.perform_rx_detection  .eq(1)
 				]
 
 				with m.If(self.link_partner_detected):
-					transition_to_state("Polling.LFPS")
+					transition_to_state('Polling.LFPS')
 				with m.If(self.no_link_partner_detected):
-					transition_to_state("Rx.Detect.Quiet")
+					transition_to_state('Rx.Detect.Quiet')
 
 
 			# Rx.Detect.Quiet -- we've performed a link detection, but didn't detect anyone.
 			# We'll wait here until our next detection cycle, saving the power of performing
 			# continuous detections.
-			with m.State("Rx.Detect.Quiet"):
+			with m.State('Rx.Detect.Quiet'):
 				m.d.comb += self.tx_electrical_idle.eq(1)
 
 				# TODO: count our number of failed attempts; and disable
 				# SuperSpeed after we see eight of them.
 
 				# After 12ms, try again.
-				transition_on_timeout(12e-3, to="Rx.Detect.Active")
+				transition_on_timeout(12e-3, to='Rx.Detect.Active')
 
 
 			# Polling.LFPS -- now that we know there's someone listening on the other side, we'll
 			# begin exchanging LFPS messages; giving the two sides the opportunity to sync up and
 			# establish initial DC characteristics. [USB 3.2r1: 7.5.4.3]
-			with m.State("Polling.LFPS"):
+			with m.State('Polling.LFPS'):
 				m.d.comb += self.tx_electrical_idle.eq(1)
 
 
@@ -350,7 +350,7 @@ class LTSSMController(Elaboratable):
 					# If we see a TS1, and we're not in strict mode, move forward without
 					# necessarily seeing a LFPS burst ourselves.
 					with m.If(self._loosen_requirements & self.ts1_detected):
-							transition_to_state("Polling.RxEQ")
+							transition_to_state('Polling.RxEQ')
 
 					# If this is the first burst we've seen, move our target forward;
 					# so we can meet our second condition.
@@ -362,7 +362,7 @@ class LTSSMController(Elaboratable):
 
 					# If we've sent enough, -and- we meet our condition, move forward.
 					with m.If(lfps_burst_seen):
-							transition_to_state("Polling.RxEQ")
+							transition_to_state('Polling.RxEQ')
 
 
 				# If we haven't yet sent 16 bursts, track how many bursts we have sent.
@@ -376,9 +376,9 @@ class LTSSMController(Elaboratable):
 
 				# If we've never seen polling, we'll exit to Compliance once this passes. [USB 3.2r1: 7.5.4.3]
 				with m.If(~polling_seen):
-					transition_on_timeout(360e-3, to="Compliance")
+					transition_on_timeout(360e-3, to='Compliance')
 				with m.Else():
-					transition_on_timeout(360e-3, to="SS.Disabled.Default")
+					transition_on_timeout(360e-3, to='SS.Disabled.Default')
 
 
 
@@ -386,7 +386,7 @@ class LTSSMController(Elaboratable):
 			# communications. We'll bring our link online, start sending our first Training Set (TSEQ),
 			# and give the PHY time to achieve DC equalization.
 			# [USB 3.2.r1: 7.5.4.7]
-			with m.State("Polling.RxEQ"):
+			with m.State('Polling.RxEQ'):
 				handle_warm_resets()
 
 				# Continuously send TSEQs; these are used to perform receiver equalization training.
@@ -397,13 +397,13 @@ class LTSSMController(Elaboratable):
 
 				# Once we've sent a full burst of 65536 TSEQs, we can begin our link training handshake.
 				with m.If(self.ts_burst_complete):
-					transition_to_state("Polling.Active")
+					transition_to_state('Polling.Active')
 
 
 			# Polling.Active -- we've now exchanged our initial training sequences, and we're ready to
 			# begin exchaning our core training sequences. We'll start sending TS1, and let the PHY handle
 			# link training until it reliably the same thing from the host. [USB 3.2r1: 7.5.4.8]
-			with m.State("Polling.Active"):
+			with m.State('Polling.Active'):
 				handle_warm_resets()
 
 				# Constantly send TS1s; which indicate that we're in link training, but haven't yet
@@ -412,7 +412,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll start our process again from the beginning.
-				transition_on_timeout(12e-3, to="Rx.Detect.Active")
+				transition_on_timeout(12e-3, to='Rx.Detect.Active')
 
 				#
 				# The specification allows us to move on to Polling.Configuration as soon as we
@@ -431,7 +431,7 @@ class LTSSMController(Elaboratable):
 					# move to Polling.Configuration to await completion of the other side.
 					with m.If(self.ts1_detected | self.ts2_detected):
 						m.d.ss += self.invert_rx_polarity.eq(0),
-						transition_to_state("Polling.Configuration")
+						transition_to_state('Polling.Configuration')
 
 
 					# If we see a long enough burst of -inverted- training sets, we're also satisfied
@@ -439,12 +439,12 @@ class LTSSMController(Elaboratable):
 					# We'll continue, but ask our physical layer to invert our received data.
 					with m.If(self.inverted_ts1_detected):
 						m.d.ss += self.invert_rx_polarity.eq(1),
-						transition_to_state("Polling.Configuration")
+						transition_to_state('Polling.Configuration')
 
 
 			# Polling.Configuration -- we're now satisfied with our link training; we'll need to communicate
 			# this to the other side, and wait for the other side to advertise the same. [USB3.2r1; 7.5.4.9]
-			with m.State("Polling.Configuration"):
+			with m.State('Polling.Configuration'):
 				handle_warm_resets()
 
 				# Constantly send TS2s, which both allow the other side to continue link training and
@@ -453,20 +453,20 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll start our process again from the beginning.
-				transition_on_timeout(12e-3, to="Rx.Detect.Active")
+				transition_on_timeout(12e-3, to='Rx.Detect.Active')
 
 				# If we've finished sending the requisite amount of TS2s and we've seen TS2s from the
 				# other side, we know that both sides are finished with the core link training.
 				# Move on to our final
 				with m.If(self.ts_burst_complete & ts2_seen):
-					transition_to_state("Polling.Configuration.Exit")
+					transition_to_state('Polling.Configuration.Exit')
 
 
 			# Polling.Configuration.Exit [synthetic state; not from the specification] -- once we're
 			# satisfied with our TS1/TS2 exchange, we're required to send at least 16 more TS2s, to ensure
 			# that the other side sees enough TS2s to know that we're both done. In this state, we'll send
 			# a burst of TS2s.
-			with m.State("Polling.Configuration.Exit"):
+			with m.State('Polling.Configuration.Exit'):
 				handle_warm_resets()
 
 				# Continue to send TS2s...
@@ -474,13 +474,13 @@ class LTSSMController(Elaboratable):
 
 				# ... until we've sent a full burst of 16; at which point we can advance.
 				with m.If(self.ts_burst_complete):
-					transition_to_state("Polling.Idle")
+					transition_to_state('Polling.Idle')
 
 
 			# Polling.Idle -- we've now finished link training, and we're ready to move on to real
 			# communications. We'll perform one final sanity check, and then move to our next state.
 			# [USB3.2r1: 7.5.4.10]
-			with m.State("Polling.Idle"):
+			with m.State('Polling.Idle'):
 				handle_warm_resets()
 
 				m.d.comb += [
@@ -493,11 +493,11 @@ class LTSSMController(Elaboratable):
 
 				# If a hot-reset is being requested, we'll enter Hot Reset.Active.
 				with m.If(hot_reset_seen):
-					transition_to_state("Hot Reset.Active")
+					transition_to_state('Hot Reset.Active')
 
 				# If Loopback is being requested, we'll enter Loopback mode.
 				with m.Elif(loopback_seen):
-					transition_to_state("Loopback")
+					transition_to_state('Loopback')
 
 				# Otherwise, As one final synchronization step and sanity check, we'll require a proper
 				# period of # Logical Idle to be detected before we move to our next state. Since Logical
@@ -505,16 +505,16 @@ class LTSSMController(Elaboratable):
 				# synchronized scrambler state and that the other side has stopped sending TS2s.
 				with m.Elif(self.idle_handshake_complete):
 					m.d.comb += self.entering_u0.eq(1)
-					transition_to_state("U0")
+					transition_to_state('U0')
 
 				# If we don't see that logical idle within 2ms, something's gone wrong. We'll need to
 				# start our connection process from the beginning.
-				transition_on_timeout(2e-3, to="Rx.Detect.Reset")
+				transition_on_timeout(2e-3, to='Rx.Detect.Reset')
 
 
 			# U0 -- our primary active USB state, in which we've completed link bringup and now are
 			# performing normal USB3 operations.
-			with m.State("U0"):
+			with m.State('U0'):
 				handle_warm_resets()
 
 				m.d.comb += [
@@ -526,12 +526,12 @@ class LTSSMController(Elaboratable):
 
 				# If we've seen an event that requires link recovery, move into link recovery.
 				with m.If(self.trigger_link_recovery):
-					transition_to_state("Recovery.Active")
+					transition_to_state('Recovery.Active')
 
 				# If we've seen a TS1 ordered set, we know the other side has gone into recovery.
 				# We should, as well.
 				with m.If(self.ts1_detected):
-					transition_to_state("Recovery.Active")
+					transition_to_state('Recovery.Active')
 
 
 				# TODO: handle the various other cases for leaving U0
@@ -539,7 +539,7 @@ class LTSSMController(Elaboratable):
 			# Hot Reset.Active -- during link training, we've seen a training set indicating
 			# we should perform a hot reset. We're now performing a TS2 handshake, modified so
 			# we are also sending Hot Reset.
-			with m.State("Hot Reset.Active"):
+			with m.State('Hot Reset.Active'):
 				handle_warm_resets()
 
 				# As in Polling.Configuration, we'll send TS2s; but we'll send them with our
@@ -550,7 +550,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll assume our link is no longer recoverable, and move to inactive.
-				transition_on_timeout(12e-3, to="SS.Inactive.Quiet")
+				transition_on_timeout(12e-3, to='SS.Inactive.Quiet')
 
 				# We need to at least one burst with the Reset bit set; and then drop out of hot reset.
 				with m.If(self.ts_burst_complete):
@@ -559,12 +559,12 @@ class LTSSMController(Elaboratable):
 				# Once we've seen TS2s in response that don't have Hot Reset asserted, we can drop out
 				# of hot reset; and pursue normal operation again.
 				with m.If(self.ts_burst_complete & ts2_seen & ~self.hot_reset_requested):
-					transition_to_state("Hot Reset.Exit")
+					transition_to_state('Hot Reset.Exit')
 
 
 			# Hot Reset.Exit -- we've now finished link training, and we're ready to move on to having
 			# an active link. We'll now perform a reduced-complexity Idle handshake.
-			with m.State("Hot Reset.Exit"):
+			with m.State('Hot Reset.Exit'):
 				handle_warm_resets()
 
 				m.d.comb += [
@@ -578,18 +578,18 @@ class LTSSMController(Elaboratable):
 				# Once we've finished our Idle handshake, we can move on to U0.
 				with m.If(self.idle_handshake_complete):
 					m.d.comb += self.entering_u0.eq(1)
-					transition_to_state("U0")
+					transition_to_state('U0')
 
 				# If we don't complete our Idle handshake within 2ms, something's gone wrong.
 				# We'll consider our link irrecoverable.
-				transition_on_timeout(2e-3, to="SS.Inactive.Quiet")
+				transition_on_timeout(2e-3, to='SS.Inactive.Quiet')
 
 
 			# Recovery.Active -- our link is no longer in a reliably usable state; we'll need
 			# to perform a re-training before we can use it fully. However, since we've already
 			# performed our initial receiver equalization, we can maintain its settings and perform
 			# only the last steps of training.
-			with m.State("Recovery.Active"):
+			with m.State('Recovery.Active'):
 				handle_warm_resets()
 
 				# As in Polling.Active, we'll send TS1s to establish training.
@@ -597,7 +597,7 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll assume our link is no longer recoverable, and move to inactive.
-				transition_on_timeout(12e-3, to="SS.Inactive.Quiet")
+				transition_on_timeout(12e-3, to='SS.Inactive.Quiet')
 
 				#
 				# The specification allows us to move on to Polling.Configuration as soon as we
@@ -612,12 +612,12 @@ class LTSSMController(Elaboratable):
 
 					# Once we see enough TS1s from the other side; or see TS2s, we'll move into our next step.
 					with m.If(self.ts1_detected | self.ts2_detected):
-						transition_to_state("Recovery.Configuration")
+						transition_to_state('Recovery.Configuration')
 
 
 			# Recovery.Configuration -- we're now satisfied with our link training; we'll need to communicate
 			# this to the other side, and wait for the other side to advertise the same. [USB3.2r1; 7.5.4.9]
-			with m.State("Recovery.Configuration"):
+			with m.State('Recovery.Configuration'):
 				handle_warm_resets()
 
 				# Constantly send TS2s.
@@ -625,20 +625,20 @@ class LTSSMController(Elaboratable):
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
 				# link partner. We'll assume our link is no longer up, and move to inactive.
-				transition_on_timeout(12e-3, to="SS.Inactive.Quiet")
+				transition_on_timeout(12e-3, to='SS.Inactive.Quiet')
 
 				# If we've finished sending the requisite amount of TS2s and we've seen TS2s from the
 				# other side, we know that both sides are finished with the core link training.
 				# Move on to our final
 				with m.If(self.ts_burst_complete & ts2_seen):
-					transition_to_state("Recovery.Configuration.Exit")
+					transition_to_state('Recovery.Configuration.Exit')
 
 
 			# Recovery.Configuration.Exit [synthetic state; not from the specification] -- once we're
 			# satisfied with our TS1/TS2 exchange, we're required to send at least 16 more TS2s, to ensure
 			# that the other side sees enough TS2s to know that we're both done. In this state, we'll send
 			# a burst of TS2s.
-			with m.State("Recovery.Configuration.Exit"):
+			with m.State('Recovery.Configuration.Exit'):
 				handle_warm_resets()
 
 				# Continue to send TS2s...
@@ -646,12 +646,12 @@ class LTSSMController(Elaboratable):
 
 				# ... until we've sent a full burst of 16; at which point we can advance.
 				with m.If(self.ts_burst_complete):
-					transition_to_state("Recovery.Idle")
+					transition_to_state('Recovery.Idle')
 
 
 			# Recovery.Idle -- we've now finished link re-training; and are waiting to see that the other
 			# side has also finished sending TS2s [USB3.2r1: 7.5.4.10].
-			with m.State("Recovery.Idle"):
+			with m.State('Recovery.Idle'):
 				handle_warm_resets()
 
 				m.d.comb += [
@@ -662,11 +662,11 @@ class LTSSMController(Elaboratable):
 
 				# If a hot-reset is being requested, we'll enter Hot Reset.Active.
 				with m.If(hot_reset_seen):
-					transition_to_state("Hot Reset.Active")
+					transition_to_state('Hot Reset.Active')
 
 				# If Loopback is being requested, we'll enter Loopback mode.
 				with m.Elif(loopback_seen):
-					transition_to_state("Loopback")
+					transition_to_state('Loopback')
 
 				# Otherwise, As one final synchronization step and sanity check, we'll require a proper
 				# period of Logical Idle to be detected before we move to our next state. Since Logical
@@ -674,16 +674,16 @@ class LTSSMController(Elaboratable):
 				# synchronized scrambler state and that the other side has stopped sending TS2s.
 				with m.Elif(self.idle_handshake_complete):
 					m.d.comb += self.entering_u0.eq(1)
-					transition_to_state("U0")
+					transition_to_state('U0')
 
 				# If we don't see that logical idle within 2ms, something's gone wrong. We'll
 				# assume we've lost our link partner, and move to SS.Inactive.
-				transition_on_timeout(2e-3, to="SS.Inactive.Quiet")
+				transition_on_timeout(2e-3, to='SS.Inactive.Quiet')
 
 
 			# Compliance -- we've failed link training in such a way as to believe we're in the
 			# middle of a compliance test / validation (lucky us!).
-			with m.State("Compliance"):
+			with m.State('Compliance'):
 				handle_warm_resets()
 
 				# We don't currently handle Compliance properly. In this case, this message refers
@@ -692,12 +692,12 @@ class LTSSMController(Elaboratable):
 				#
 				# We'll throw our hands up in despair and re-try link training.
 				# Maybe this time it'll work.
-				transition_to_state("Rx.Detect.Reset")
+				transition_to_state('Rx.Detect.Reset')
 
 
 			# Loopback -- during the link bringup, our link partner requested that we go into
 			# Loopback mode; so we'll begin acting as a loopback device.
-			with m.State("Loopback"):
+			with m.State('Loopback'):
 				handle_warm_resets()
 				m.d.comb += self.act_as_loopback.eq(1)
 
@@ -706,16 +706,16 @@ class LTSSMController(Elaboratable):
 
 			# SS.Inactive.Quiet -- an non-recoverable error has occurred somewhere with the link.
 			# We'll wait for a bit here and do nothing, so we don't completely drain power.
-			with m.State("SS.Inactive.Quiet"):
+			with m.State('SS.Inactive.Quiet'):
 				handle_warm_resets()
 
 				m.d.comb += self.tx_electrical_idle.eq(1),
-				transition_on_timeout(12e-3, to="SS.Inactive.Disconnect.Detect")
+				transition_on_timeout(12e-3, to='SS.Inactive.Disconnect.Detect')
 
 
 			# SS.Inactive.Disconnect.Detect  -- our best case scenario is that we become disconnected,
 			# and then are reconnected to establish a working link. We'll check for disconnection.
-			with m.State("SS.Inactive.Disconnect.Detect"):
+			with m.State('SS.Inactive.Disconnect.Detect'):
 				handle_warm_resets()
 
 				m.d.comb += [
@@ -726,17 +726,17 @@ class LTSSMController(Elaboratable):
 				# If we detect a link partner, we're still in our non-recoverable state.
 				# We'll go back to .Quiet and wait another 12ms to check again.
 				with m.If(self.link_partner_detected):
-					transition_to_state("SS.Inactive.Quiet")
+					transition_to_state('SS.Inactive.Quiet')
 
 				# If we detect the absence of a link partner, we're no longer in our bad state.
 				# We'll move to Rx.Detect, and start over again.
 				with m.If(self.no_link_partner_detected):
-					transition_to_state("Rx.Detect.Quiet")
+					transition_to_state('Rx.Detect.Quiet')
 
 
 			# SS.Disabled.Default -- the SuperSpeed portion of our link is disabled; we'll remove
 			# our terminations and attempt to act as a valid USB2 device.
-			with m.State("SS.Disabled.Default"):
+			with m.State('SS.Disabled.Default'):
 				handle_warm_resets()
 
 				m.d.comb += [
@@ -749,7 +749,7 @@ class LTSSMController(Elaboratable):
 
 			# SS.Disabled.Error -- the SuperSpeed portion of our link is disabled; we'll remove
 			# our terminations and sit idly until VBUS is cycled.
-			with m.State("SS.Disabled.Error"):
+			with m.State('SS.Disabled.Error'):
 				handle_warm_resets()
 
 				m.d.comb += [

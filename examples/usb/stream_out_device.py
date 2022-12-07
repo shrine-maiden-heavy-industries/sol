@@ -18,16 +18,16 @@ from sol.usb2               import USBDevice, USBStreamOutEndpoint
 
 
 class USBStreamOutDeviceExample(Elaboratable):
-	""" Simple device that demonstrates use of a bulk-OUT endpoint.
+	''' Simple device that demonstrates use of a bulk-OUT endpoint.
 
 	Captures streaming data, and outputs it over the User I/O.
-	"""
+	'''
 
 	BULK_ENDPOINT_NUMBER = 1
 	MAX_BULK_PACKET_SIZE = 512
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -41,9 +41,9 @@ class USBStreamOutDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "User IO streamer"
-			d.iSerialNumber      = "no serial"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'User IO streamer'
+			d.iSerialNumber      = 'no serial'
 
 			d.bNumConfigurations = 1
 
@@ -83,8 +83,8 @@ class USBStreamOutDeviceExample(Elaboratable):
 		)
 		usb.add_endpoint(stream_ep)
 
-		leds    = Cat(platform.request_optional("led", i, default=NullPin()) for i in range(6))
-		user_io = Cat(platform.request_optional("user_io", i, default=NullPin()) for i in range(4))
+		leds    = Cat(platform.request_optional('led', i, default=NullPin()) for i in range(6))
+		user_io = Cat(platform.request_optional('user_io', i, default=NullPin()) for i in range(4))
 
 		# Always stream our USB data directly onto our User I/O and LEDS.
 		with m.If(stream_ep.stream.valid):
@@ -107,5 +107,5 @@ class USBStreamOutDeviceExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBStreamOutDeviceExample)

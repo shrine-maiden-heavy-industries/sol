@@ -29,7 +29,7 @@ CLOCK_FREQUENCIES_MHZ = {
 
 
 class EptriDeviceExample(Elaboratable):
-	""" Example of an Eptri-equivalent USB device built with SOL. """
+	''' Example of an Eptri-equivalent USB device built with SOL. '''
 
 	def __init__(self):
 
@@ -41,7 +41,7 @@ class EptriDeviceExample(Elaboratable):
 
 		# Create our SoC...
 		self.soc = soc = SimpleSoC()
-		soc.add_rom("eptri_example.bin", 0x4000)
+		soc.add_rom('eptri_example.bin', 0x4000)
 
 		# ... add some bulk RAM ...
 		soc.add_ram(0x4000)
@@ -76,15 +76,15 @@ class EptriDeviceExample(Elaboratable):
 		m.submodules.soc = self.soc
 
 		# Check for our prerequisites before building.
-		if not os.path.exists("eptri_example.bin"):
-			log.error("Firmware binary not found -- you may want to build this with `make program`.")
+		if not os.path.exists('eptri_example.bin'):
+			log.error('Firmware binary not found -- you may want to build this with `make program`.')
 			sys.exit(-1)
 
 		# Generate our domain clocks/resets.
 		m.submodules.car = platform.clock_domain_generator(clock_frequencies=CLOCK_FREQUENCIES_MHZ)
 
 		# Connect up our UART.
-		uart_io = platform.request("uart", 0)
+		uart_io = platform.request('uart', 0)
 		m.d.comb += [
 			uart_io.tx         .eq(self.uart_pins.tx),
 			self.uart_pins.rx  .eq(uart_io.rx)
@@ -104,7 +104,7 @@ class EptriDeviceExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
 	design = EptriDeviceExample()
 	cli(design, cli_soc=design.soc)

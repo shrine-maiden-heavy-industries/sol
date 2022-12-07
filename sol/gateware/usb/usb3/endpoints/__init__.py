@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 endpoint-type implementations. """
+''' USB3 endpoint-type implementations. '''
 
 
 from .control import USB3ControlEndpoint

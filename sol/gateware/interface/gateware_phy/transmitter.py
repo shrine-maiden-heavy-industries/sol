@@ -20,7 +20,7 @@
 #   contributors may be used to endorse or promote products derived from
 #   this software without specific prior written permission.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 # DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
@@ -39,7 +39,7 @@ from torii.lib.cdc  import FFSynchronizer
 
 
 class TxShifter(Elaboratable):
-	"""Transmit Shifter
+	'''Transmit Shifter
 
 	TxShifter accepts parallel data and shifts it out serially.
 
@@ -73,7 +73,7 @@ class TxShifter(Elaboratable):
 	o_get : Signal()
 		Asserted the cycle after the shifter loads in i_data.
 
-	"""
+	'''
 	def __init__(self, width):
 		self._width = width
 
@@ -130,7 +130,7 @@ class TxShifter(Elaboratable):
 
 
 class TxNRZIEncoder(Elaboratable):
-	"""
+	'''
 	NRZI Encode
 
 	In order to ensure there are enough bit transitions for a receiver to recover
@@ -170,7 +170,7 @@ class TxNRZIEncoder(Elaboratable):
 
 	o_oe : Signal()
 		When asserted it indicates that the tx pipeline should be driving USB.
-	"""
+	'''
 
 	def __init__(self):
 		self.i_valid = Signal()
@@ -191,8 +191,8 @@ class TxNRZIEncoder(Elaboratable):
 		oe = Signal()
 
 		# wait for new packet to start
-		with m.FSM(domain="usb_io"):
-			with m.State("IDLE"):
+		with m.FSM(domain='usb_io'):
+			with m.State('IDLE'):
 				m.d.comb += [
 					usbp.eq(1),
 					usbn.eq(0),
@@ -202,11 +202,11 @@ class TxNRZIEncoder(Elaboratable):
 				with m.If(self.i_valid & self.i_oe):
 					# first bit of sync always forces a transition, we idle
 					# in J so the first output bit is K.
-					m.next = "DK"
+					m.next = 'DK'
 
 
 			# the output line is in state J
-			with m.State("DJ"):
+			with m.State('DJ'):
 				m.d.comb += [
 					usbp.eq(1),
 					usbn.eq(0),
@@ -215,15 +215,15 @@ class TxNRZIEncoder(Elaboratable):
 
 				with m.If(self.i_valid):
 					with m.If(~self.i_oe):
-						m.next = "SE0A"
+						m.next = 'SE0A'
 					with m.Elif(self.i_data):
-						m.next = "DJ"
+						m.next = 'DJ'
 					with m.Else():
-						m.next = "DK"
+						m.next = 'DK'
 
 
 			# the output line is in state K
-			with m.State("DK"):
+			with m.State('DK'):
 				m.d.comb += [
 					usbp.eq(0),
 					usbn.eq(1),
@@ -232,15 +232,15 @@ class TxNRZIEncoder(Elaboratable):
 
 				with m.If(self.i_valid):
 					with m.If(~self.i_oe):
-						m.next = "SE0A"
+						m.next = 'SE0A'
 					with m.Elif(self.i_data):
-						m.next = "DK"
+						m.next = 'DK'
 					with m.Else():
-						m.next = "DJ"
+						m.next = 'DJ'
 
 
 			# first bit of the SE0 state
-			with m.State("SE0A"):
+			with m.State('SE0A'):
 				m.d.comb += [
 					usbp.eq(0),
 					usbn.eq(0),
@@ -248,10 +248,10 @@ class TxNRZIEncoder(Elaboratable):
 				]
 
 				with m.If(self.i_valid):
-					m.next = "SE0B"
+					m.next = 'SE0B'
 
 			# second bit of the SE0 state
-			with m.State("SE0B"):
+			with m.State('SE0B'):
 				m.d.comb += [
 					usbp.eq(0),
 					usbn.eq(0),
@@ -259,11 +259,11 @@ class TxNRZIEncoder(Elaboratable):
 				]
 
 				with m.If(self.i_valid):
-					m.next = "EOPJ"
+					m.next = 'EOPJ'
 
 
 			# drive the bus back to J before relinquishing control
-			with m.State("EOPJ"):
+			with m.State('EOPJ'):
 				m.d.comb += [
 					usbp.eq(1),
 					usbn.eq(0),
@@ -271,7 +271,7 @@ class TxNRZIEncoder(Elaboratable):
 				]
 
 				with m.If(self.i_valid):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 
 		m.d.usb_io += [
@@ -284,7 +284,7 @@ class TxNRZIEncoder(Elaboratable):
 
 
 class TxBitstuffer(Elaboratable):
-	"""
+	'''
 	Bitstuff Insertion
 
 	Long sequences of 1's would cause the receiver to lose it's lock on the
@@ -314,7 +314,7 @@ class TxBitstuffer(Elaboratable):
 
 	o_stall : Signal()
 		Used to apply backpressure on the tx pipeline.
-	"""
+	'''
 	def __init__(self):
 		self.i_data = Signal()
 
@@ -327,34 +327,34 @@ class TxBitstuffer(Elaboratable):
 		m = Module()
 		stuff_bit = Signal()
 
-		with m.FSM(domain="usb"):
+		with m.FSM(domain='usb'):
 
 			for i in range(5):
 
-				with m.State(f"D{i}"):
+				with m.State(f'D{i}'):
 					# Receiving '1' increments the bitstuff counter.
 					with m.If(self.i_data):
-						m.next = f"D{i+1}"
+						m.next = f'D{i+1}'
 
 					# Receiving '0' resets the bitstuff counter.
 					with m.Else():
-						m.next = "D0"
+						m.next = 'D0'
 
 
-			with m.State("D5"):
+			with m.State('D5'):
 				with m.If(self.i_data):
 
 					# There's a '1', so indicate we might stall on the next loop.
 					m.d.comb += self.o_will_stall.eq(1),
-					m.next = "D6"
+					m.next = 'D6'
 
 				with m.Else():
-					m.next = "D0"
+					m.next = 'D0'
 
 
-			with m.State("D6"):
+			with m.State('D6'):
 				m.d.comb += stuff_bit.eq(1)
-				m.next = "D0"
+				m.next = 'D0'
 
 
 		m.d.comb += [
@@ -466,7 +466,7 @@ class TxPipeline(Elaboratable):
 		#
 
 		m.d.usb += [
-			# If the shifter runs out of data, percolate the "reset" signal to the
+			# If the shifter runs out of data, percolate the 'reset' signal to the
 			# shifter, and then down to the bitstuffer.
 			# da_reset_shifter.eq(~stall & shifter.o_empty & ~da_stalled_reset),
 			# da_stalled_reset.eq(da_reset_shifter),
@@ -475,7 +475,7 @@ class TxPipeline(Elaboratable):
 		]
 
 
-		with m.FSM(domain="usb"):
+		with m.FSM(domain='usb'):
 
 			with m.State('IDLE'):
 				with m.If(self.i_oe):
@@ -483,7 +483,7 @@ class TxPipeline(Elaboratable):
 						sync_pulse.eq(1 << 7),
 						state_gray.eq(0b01)
 					]
-					m.next = "SEND_SYNC"
+					m.next = 'SEND_SYNC'
 				with m.Else():
 					m.d.usb += state_gray.eq(0b00)
 
@@ -493,7 +493,7 @@ class TxPipeline(Elaboratable):
 
 				with m.If(sync_pulse[0]):
 					m.d.usb += state_gray.eq(0b11)
-					m.next = "SEND_DATA"
+					m.next = 'SEND_DATA'
 				with m.Else():
 					m.d.usb += state_gray.eq(0b01)
 
@@ -520,8 +520,8 @@ class TxPipeline(Elaboratable):
 		nrzi_oe = Signal()
 
 		# Cross the data from the 12MHz domain to the 48MHz domain
-		cdc_dat = FFSynchronizer(self.fit_dat, nrzi_dat, o_domain="usb_io", stages=3)
-		cdc_oe  = FFSynchronizer(self.fit_oe, nrzi_oe, o_domain="usb_io", stages=3)
+		cdc_dat = FFSynchronizer(self.fit_dat, nrzi_dat, o_domain='usb_io', stages=3)
+		cdc_oe  = FFSynchronizer(self.fit_oe, nrzi_oe, o_domain='usb_io', stages=3)
 		m.submodules += [cdc_dat, cdc_oe]
 
 		m.d.comb += [

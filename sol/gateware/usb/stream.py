@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Core stream definitions. """
+''' Core stream definitions. '''
 
 import unittest
 
@@ -18,7 +18,7 @@ from ..test           import SolUSBGatewareTestCase, usb_domain_test_case
 
 
 class USBInStreamInterface(StreamInterface):
-	""" Variant of SOL's StreamInterface optimized for USB IN transmission.
+	''' Variant of SOL's StreamInterface optimized for USB IN transmission.
 
 	This stream interface is nearly identical to StreamInterface, with the following
 	restriction: the `valid` signal _must_ be held high for every packet between `first`
@@ -32,10 +32,10 @@ class USBInStreamInterface(StreamInterface):
 		valid   | tx_valid
 		payload | tx_data
 		ready   | tx_ready
-	"""
+	'''
 
 	def bridge_to(self, utmi_tx):
-		""" Generates a list of connections that connect this stream to the provided UTMITransmitInterface. """
+		''' Generates a list of connections that connect this stream to the provided UTMITransmitInterface. '''
 
 		return [
 			utmi_tx.valid  .eq(self.valid),
@@ -47,7 +47,7 @@ class USBInStreamInterface(StreamInterface):
 
 
 class USBOutStreamInterface(Record):
-	""" Variant of SOL's StreamInterface optimized for USB OUT receipt.
+	''' Variant of SOL's StreamInterface optimized for USB OUT receipt.
 
 	This is a heavily simplified version of our StreamInterface, which omits the 'first',
 	'last', and 'ready' signals. Instead, the streamer indicates when data is valid using
@@ -62,13 +62,13 @@ class USBOutStreamInterface(Record):
 		rx_data   | payload
 		rx_valid  | next
 
-	"""
+	'''
 
 	def __init__(self, payload_width=8):
-		"""
+		'''
 		Parameter:
 			payload_width -- The width of the payload packets.
-		"""
+		'''
 		super().__init__([
 			('valid',    1,             DIR_FANOUT),
 			('next',     1,             DIR_FANOUT),
@@ -78,7 +78,7 @@ class USBOutStreamInterface(Record):
 
 
 	def bridge_to(self, utmi_rx):
-		""" Generates a list of connections that connect this stream to the provided UTMIReceiveInterface. """
+		''' Generates a list of connections that connect this stream to the provided UTMIReceiveInterface. '''
 
 		return [
 			self.valid     .eq(utmi_rx.rx_active),
@@ -88,14 +88,14 @@ class USBOutStreamInterface(Record):
 
 
 	def stream_eq(self, other):
-		""" Generates a list of connections that connect this stream to the provided UTMIReceiveInterface. """
+		''' Generates a list of connections that connect this stream to the provided UTMIReceiveInterface. '''
 		return self.connect(other)
 
 
 
 
 class USBOutStreamBoundaryDetector(Elaboratable):
-	""" Gateware that detects USBOutStream packet boundaries, and generates First and Last signals.
+	''' Gateware that detects USBOutStream packet boundaries, and generates First and Last signals.
 
 	As UTMI/ULPI do not denote the last byte of a packet; this module injects two bytes of delay in
 	order to correctly identify the last bytes.
@@ -131,10 +131,10 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 	Parameters
 	----------
 	domain: str
-		The name of the domain the stream belongs to; defaults to "usb".
-	"""
+		The name of the domain the stream belongs to; defaults to 'usb'.
+	'''
 
-	def __init__(self, domain="usb"):
+	def __init__(self, domain='usb'):
 
 		self._domain = domain
 
@@ -255,8 +255,8 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 				m.next = 'WAIT_FOR_FIRST_BYTE'
 
 
-		if self._domain != "usb":
-			m = DomainRenamer({"usb": self._domain})(m)
+		if self._domain != 'usb':
+			m = DomainRenamer({'usb': self._domain})(m)
 
 		return m
 
@@ -321,9 +321,9 @@ class USBOutStreamBoundaryDetectorTest(SolUSBGatewareTestCase):
 
 
 class USBRawSuperSpeedStream(StreamInterface):
-	""" Variant of SOL's StreamInterface optimized for carrying raw USB3 data.
+	''' Variant of SOL's StreamInterface optimized for carrying raw USB3 data.
 
-	Low-level USB3 data-streams consist of both data bytes ("data") and control flags,
+	Low-level USB3 data-streams consist of both data bytes ('data') and control flags,
 	which differentiate standard data bytes from data bytes used for control.
 
 	This variant comes implicitly with the relevant control flags; and is sized to allow
@@ -333,14 +333,14 @@ class USBRawSuperSpeedStream(StreamInterface):
 	----------
 	payload_words: int
 		The number of payload words (1 byte data, 1 bit control) to include in the current stream.
-	"""
+	'''
 
 	def __init__(self, payload_words=4):
 		super().__init__(payload_width=8 * payload_words, extra_fields=[('ctrl', payload_words)])
 
 
 	def stream_eq(self, interface, *, endian_swap=False, omit=None, **kwargs):
-		""" Extend the global ``stream_eq`` operator to swap endianness. """
+		''' Extend the global ``stream_eq`` operator to swap endianness. '''
 
 		# If we're not performing an endian swap, delegate directly to our parent.
 		if endian_swap == False:
@@ -382,14 +382,14 @@ class USBRawSuperSpeedStream(StreamInterface):
 
 
 class SuperSpeedStreamArbiter(StreamArbiter):
-	""" Convenience variant of our StreamArbiter that operates SuperSpeed streams in the ``ss`` domain. """
+	''' Convenience variant of our StreamArbiter that operates SuperSpeed streams in the ``ss`` domain. '''
 
 	def __init__(self):
-		super().__init__(stream_type=USBRawSuperSpeedStream, domain="ss")
+		super().__init__(stream_type=USBRawSuperSpeedStream, domain='ss')
 
 
 class SuperSpeedStreamInterface(StreamInterface):
-	""" Convenience variant of our StreamInterface sized to work with SuperSpeed streams. """
+	''' Convenience variant of our StreamInterface sized to work with SuperSpeed streams. '''
 
 	def __init__(self):
 		super().__init__(payload_width=32, valid_width=4)
@@ -397,5 +397,5 @@ class SuperSpeedStreamInterface(StreamInterface):
 
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

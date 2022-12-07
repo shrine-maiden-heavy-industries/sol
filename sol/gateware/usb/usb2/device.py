@@ -4,10 +4,10 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 Contains the organizing hardware used to add USB Device functionality
 to your own designs; including the core :class:`USBDevice` class.
-"""
+'''
 
 import unittest
 
@@ -32,7 +32,7 @@ from .reset                    import USBResetSequencer
 
 
 class USBDevice(Elaboratable):
-	""" Core gateware common to all SOL USB2 devices.
+	''' Core gateware common to all SOL USB2 devices.
 
 	The ``USBDevice`` module contains the low-level communications hardware necessary to implement a USB device;
 	including hardware for maintaining device state, detecting events, reading data from the host, and generating
@@ -90,12 +90,12 @@ class USBDevice(Elaboratable):
 	rx_activity_led: Signal(), output
 		Signal that can be used to drive an activity LED for RX.
 
-	"""
+	'''
 
 	def __init__(self, *, bus, handle_clocking=True):
-		"""
+		'''
 		Parameters:
-		"""
+		'''
 
 		# If this looks more like a ULPI bus than a UTMI bus, translate it.
 		if hasattr(bus, 'dir'):
@@ -150,19 +150,19 @@ class USBDevice(Elaboratable):
 
 
 	def add_endpoint(self, endpoint):
-		""" Adds an endpoint interface to the device.
+		''' Adds an endpoint interface to the device.
 
 		Parameters
 		----------
 		endpoint: Elaborateable
 			The endpoint interface to be added. Can be any piece of gateware with a
 			:class:`EndpointInterface` attribute called ``interface``.
-		"""
+		'''
 		self._endpoints.append(endpoint)
 
 
 	def add_control_endpoint(self):
-		""" Adds a basic control endpoint to the device.
+		''' Adds a basic control endpoint to the device.
 
 		Does not add any request handlers. If you want standard request handlers;
 		:attr:`add_standard_control_endpoint` automatically adds standard request handlers.
@@ -170,7 +170,7 @@ class USBDevice(Elaboratable):
 		Returns
 		-------
 		Returns the endpoint object for the control endpoint.
-		"""
+		'''
 		control_endpoint = USBControlEndpoint(utmi=self.utmi)
 		self.add_endpoint(control_endpoint)
 
@@ -178,14 +178,14 @@ class USBDevice(Elaboratable):
 
 
 	def add_standard_control_endpoint(self, descriptors: DeviceDescriptorCollection, **kwargs):
-		""" Adds a control endpoint with standard request handlers to the device.
+		''' Adds a control endpoint with standard request handlers to the device.
 
 		Parameters will be passed on to StandardRequestHandler.
 
 		Return value
 		------------
 		The endpoint object created.
-		"""
+		'''
 
 		# Create our endpoint, and add standard descriptors to it.
 		control_endpoint = USBControlEndpoint(utmi=self.utmi)
@@ -319,7 +319,7 @@ class USBDevice(Elaboratable):
 			# Create a display name for the endpoint...
 			name = endpoint.__class__.__name__
 			if hasattr(m.submodules, name):
-				name = f"{name}_{id(endpoint)}"
+				name = f'{name}_{id(endpoint)}'
 
 			# ... and add it, both as a submodule and to our multiplexer.
 			endpoint_mux.add_interface(endpoint.interface)
@@ -416,7 +416,7 @@ class USBDevice(Elaboratable):
 
 
 class FullDeviceTest(USBDeviceTest):
-	""" :meta private: """
+	''' :meta private: '''
 
 	FRAGMENT_UNDER_TEST = USBDevice
 	FRAGMENT_ARGUMENTS = {'handle_clocking': False}
@@ -449,9 +449,9 @@ class FullDeviceTest(USBDeviceTest):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Test Device"
-			d.iSerialNumber      = "1234"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Test Device'
+			d.iSerialNumber      = '1234'
 
 			d.bNumConfigurations = 1
 
@@ -540,11 +540,11 @@ class FullDeviceTest(USBDeviceTest):
 		# ... and ensure it's applied.
 		handshake, configuration = yield from self.get_configuration()
 		self.assertEqual(handshake, USBPacketID.ACK)
-		self.assertEqual(configuration, [1], "device did not accept configuration!")
+		self.assertEqual(configuration, [1], 'device did not accept configuration!')
 
 
 class LongDescriptorTest(USBDeviceTest):
-	""" :meta private: """
+	''' :meta private: '''
 
 	FRAGMENT_UNDER_TEST = USBDevice
 	FRAGMENT_ARGUMENTS = {'handle_clocking': False}
@@ -569,9 +569,9 @@ class LongDescriptorTest(USBDeviceTest):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Test Device"
-			d.iSerialNumber      = "1234"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Test Device'
+			d.iSerialNumber      = '1234'
 
 			d.bNumConfigurations = 1
 
@@ -631,7 +631,7 @@ try:
 	from ...soc.peripheral import Peripheral
 
 	class USBDeviceController(Peripheral, Elaboratable):
-		""" SoC controller for a USBDevice.
+		''' SoC controller for a USBDevice.
 
 		Breaks our USBDevice control and status signals out into registers so a CPU / Wishbone master
 		can control our USB device.
@@ -646,7 +646,7 @@ try:
 		connect: Signal(), output
 			High when the USBDevice should be allowed to connect to a host.
 
-		"""
+		'''
 
 		def __init__(self):
 			super().__init__()
@@ -663,18 +663,18 @@ try:
 			#
 
 			regs = self.csr_bank()
-			self._connect = regs.csr(1, "rw", desc="""
+			self._connect = regs.csr(1, 'rw', desc='''
 				Set this bit to '1' to allow the associated USB device to connect to a host.
-			""")
+			''')
 
-			self._speed = regs.csr(2, "r", desc="""
+			self._speed = regs.csr(2, 'r', desc='''
 				Indicates the current speed of the USB device. 0 indicates High; 1 => Full,
 				2 => Low, and 3 => SuperSpeed (incl SuperSpeed+).
-			""")
+			''')
 
-			self._reset_irq = self.event(name="reset", desc="""
+			self._reset_irq = self.event(name='reset', desc='''
 				Interrupt that occurs when a USB bus reset is received.
-			""")
+			''')
 
 			# Wishbone connection.
 			self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
@@ -683,7 +683,7 @@ try:
 
 
 		def attach(self, device: USBDevice):
-			""" Returns a list of statements necessary to connect this to a USB controller.
+			''' Returns a list of statements necessary to connect this to a USB controller.
 
 			The returned values makes all of the connections necessary to provide control and fetch status
 			from the relevant USB device. These can be made either combinationally or synchronously, but
@@ -693,7 +693,7 @@ try:
 			----------
 			device: USBDevice
 				The :class:`USBDevice` object to be controlled.
-			"""
+			'''
 			return [
 				device.connect      .eq(self.connect),
 				self.bus_reset      .eq(device.reset_detected),
@@ -720,5 +720,5 @@ except ImportError as e:
 	pass
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

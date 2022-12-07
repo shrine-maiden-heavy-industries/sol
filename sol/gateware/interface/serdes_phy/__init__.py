@@ -7,7 +7,7 @@
 #
 # Code adapted from ``litex`` and ``usb3_pipe``.
 
-""" SerDes-based USB3 PIPE PHY. """
+''' SerDes-based USB3 PIPE PHY. '''
 
 
 from .ecp5    import ECP5SerDesPIPE

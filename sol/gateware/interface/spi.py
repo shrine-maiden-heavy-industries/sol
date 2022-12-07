@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" SPI and derived interfaces. """
+''' SPI and derived interfaces. '''
 
 import unittest
 
@@ -16,7 +16,7 @@ from ..test.utils  import SolGatewareTestCase, sync_test_case
 
 
 class SPIBus(Record):
-	""" Record representing an SPI bus. """
+	''' Record representing an SPI bus. '''
 
 	def __init__(self):
 		super().__init__([
@@ -28,7 +28,7 @@ class SPIBus(Record):
 
 
 class SPIDeviceInterface(Elaboratable):
-	""" Simple word-oriented SPI interface.
+	''' Simple word-oriented SPI interface.
 
 	I/O signals:
 		B: spi           -- the SPI bus to work with
@@ -36,17 +36,17 @@ class SPIDeviceInterface(Elaboratable):
 		O: word_in       -- the most recent word received
 		O: word_complete -- strobe indicating a new word is present on word_in
 		I: word_out      -- the word to be loaded; latched in on next word_complete and while cs is low
-	"""
+	'''
 
 	def __init__(self, *, word_size=8, clock_polarity=0, clock_phase=0, msb_first=True, cs_idles_high=False):
-		"""
+		'''
 		Parameters:
 			word_size      -- The size of each transmitted word, in bits.
 			clock_polarity -- The SPI-standard clock polarity. 0 for idle low, 1 for idle high.
 			clock_phase    -- The SPI-standard clock phase. 1 to capture on the leading edge, or 0 for on the trailing
 			msb_first      -- If true, or not provided, data will be transmitted MSB first (standard).
 			cs_idles_high  -- If provided, data will be captured when CS goes _low_, rather than high.
-		"""
+		'''
 
 		self.word_size      = word_size
 		self.clock_polarity = clock_polarity
@@ -69,12 +69,12 @@ class SPIDeviceInterface(Elaboratable):
 
 
 	def spi_edge_detectors(self, m):
-		""" Generates edge detectors for the sample and output clocks, based on the current SPI mode.
+		''' Generates edge detectors for the sample and output clocks, based on the current SPI mode.
 
 		Returns:
 			sample_edge, output_edge -- signals that pulse high for a single cycle when we should
 										sample and change our outputs, respectively
-		"""
+		'''
 
 		# Select whether we're working with an inverted or un-inverted serial clock.
 		serial_clock = Signal()
@@ -86,8 +86,8 @@ class SPIDeviceInterface(Elaboratable):
 		# Generate the leading and trailing edge detectors.
 		# Note that we use rising and falling edge detectors, but call these leading and
 		# trailing edges, as our clock here may have been inverted.
-		leading_edge  = Rose(serial_clock, domain="sync")
-		trailing_edge = Fell(serial_clock, domain="sync")
+		leading_edge  = Rose(serial_clock, domain='sync')
+		trailing_edge = Fell(serial_clock, domain='sync')
 
 		# Determine the sample and output edges based on the SPI clock phase.
 		sample_edge = trailing_edge if self.clock_phase else leading_edge
@@ -170,16 +170,16 @@ class SPIDeviceInterface(Elaboratable):
 
 
 class SPIGatewareTestCase(SolGatewareTestCase):
-	""" Extended version of the SolGatewareTestCase.
+	''' Extended version of the SolGatewareTestCase.
 
 	Adds three SPI-simulation methods:
 		-spi_send_bit
 		-spi_exchange_byte
 		-spi_exchange_data
-	"""
+	'''
 
 	def spi_send_bit(self, bit):
-		""" Sends a single bit over the SPI bus. """
+		''' Sends a single bit over the SPI bus. '''
 		cycles_per_bit = 4
 		spi = self.dut.spi
 
@@ -203,10 +203,10 @@ class SPIGatewareTestCase(SolGatewareTestCase):
 
 
 	def spi_exchange_byte(self, datum, *, msb_first=True):
-		""" Sends a by over the virtual SPI bus. """
+		''' Sends a by over the virtual SPI bus. '''
 
-		bits = "{:08b}".format(datum)
-		data_received = ""
+		bits = '{:08b}'.format(datum)
+		data_received = ''
 
 		if not msb_first:
 			bits = bits[::-1]
@@ -223,7 +223,7 @@ class SPIGatewareTestCase(SolGatewareTestCase):
 
 
 	def spi_exchange_data(self, data, msb_first=True):
-		""" Sends a string of bytes over our virtual SPI bus. """
+		''' Sends a string of bytes over our virtual SPI bus. '''
 
 		yield self.dut.spi.cs.eq(1)
 		yield
@@ -265,8 +265,8 @@ class SPIDeviceInterfaceTest(SPIGatewareTestCase):
 		yield
 
 		# Verify that the SPI in/out behavior is what we expect.
-		response = yield from self.spi_exchange_data(b"\xCA\xFE")
-		self.assertEqual(response, b"\xAB\xCD")
+		response = yield from self.spi_exchange_data(b'\xCA\xFE')
+		self.assertEqual(response, b'\xAB\xCD')
 		self.assertEqual((yield self.dut.word_in), 0xCAFE)
 
 
@@ -281,13 +281,13 @@ class SPIDeviceInterfaceTest(SPIGatewareTestCase):
 		yield
 
 		# Verify that the SPI in/out behavior is what we expect.
-		response = yield from self.spi_exchange_data(b"\x00\x00")
-		self.assertEqual(response, b"\x0F\x00")
+		response = yield from self.spi_exchange_data(b'\x00\x00')
+		self.assertEqual(response, b'\x0F\x00')
 
 
 
 class SPICommandInterface(Elaboratable):
-	""" Variant of an SPIDeviceInterface that accepts command-prefixed data.
+	''' Variant of an SPIDeviceInterface that accepts command-prefixed data.
 
 	I/O signals:
 		I: sck           -- SPI clock, from the SPI master
@@ -304,7 +304,7 @@ class SPICommandInterface(Elaboratable):
 
 		O: idle          -- true iff the register interface is currently doing nothing
 		O: stalled       -- true iff the register interface cannot accept data until this transaction ends
-	"""
+	'''
 
 	def __init__(self, command_size=8, word_size=32):
 
@@ -337,7 +337,7 @@ class SPICommandInterface(Elaboratable):
 		m = Module()
 		spi = self.spi
 
-		sample_edge = Fell(spi.sck, domain="sync")
+		sample_edge = Fell(spi.sck, domain='sync')
 
 		# Bit counter: counts the number of bits received.
 		max_bit_count = max(self.word_size, self.command_size)
@@ -362,7 +362,7 @@ class SPICommandInterface(Elaboratable):
 
 			# STALL: entered when we can't accept new bits -- either when
 			# CS starts asserted, or when we've received more data than expected.
-			with m.State("STALL"):
+			with m.State('STALL'):
 
 				# Wait for CS to clear.
 				with m.If(~spi.cs):
@@ -446,7 +446,7 @@ class SPICommandInterface(Elaboratable):
 
 
 class SPIRegisterInterface(Elaboratable):
-	""" SPI device interface that allows for register reads and writes via SPI.
+	''' SPI device interface that allows for register reads and writes via SPI.
 	The SPI transaction format matches:
 
 		in:  WAAAAAAA[...] VVVVVVVV[...]
@@ -468,10 +468,10 @@ class SPIRegisterInterface(Elaboratable):
 		O: stalled       -- true iff the register interface cannot accept data until this transaction ends
 
 	Other I/O ports are added dynamically with add_register().
-	"""
+	'''
 
 	def __init__(self, address_size=15, register_size=32, default_read_value=0, support_size_autonegotiation=True):
-		"""
+		'''
 		Parameters:
 			address_size       -- the size of an address, in bits; recommended to be one bit
 								  less than a binary number, as the write command is formed by adding a one-bit
@@ -482,7 +482,7 @@ class SPIRegisterInterface(Elaboratable):
 			support_size_autonegotiation --
 				If set, register 0 is used as a size auto-negotiation register. Functionally equivalent to
 				calling .support_size_autonegotiation(); see its documentation for details on autonegotiation.
-		"""
+		'''
 
 		self.address_size  = address_size
 		self.register_size = register_size
@@ -516,14 +516,14 @@ class SPIRegisterInterface(Elaboratable):
 
 
 	def _ensure_register_is_unused(self, address):
-		""" Checks to make sure a register address isn't in use before issuing it. """
+		''' Checks to make sure a register address isn't in use before issuing it. '''
 
 		if address in self.registers:
-			raise ValueError("can't add more than one register with address 0x{:x}!".format(address))
+			raise ValueError('can\'t add more than one register with address 0x{:x}!'.format(address))
 
 
 	def support_size_autonegotiation(self):
-		""" Support autonegotiation of register and address size. Consumes address 0.
+		''' Support autonegotiation of register and address size. Consumes address 0.
 
 		Auto-negotiation of size is relatively simple: the host sends a string of zeroes over
 		the SPI bus, and we respond with:
@@ -533,12 +533,12 @@ class SPIRegisterInterface(Elaboratable):
 			-- zeroes for any bits after
 
 		In practice, this is functionally identical to setting register zero to a constant of all 1's.
-		"""
+		'''
 		self.add_read_only_register(0, read=-1)
 
 
 	def add_sfr(self, address, *, read=None, write_signal=None, write_strobe=None, read_strobe=None):
-		""" Adds a special function register to the given command interface.
+		''' Adds a special function register to the given command interface.
 
 		Parameters:
 			address       -- the register's address, as a big-endian integer
@@ -550,7 +550,7 @@ class SPIRegisterInterface(Elaboratable):
 			write_signal  -- a Signal set to the value to be written when a write is requested;
 							 if not provided, writes will be ignored
 			wrote_strobe  -- a Signal that goes high when a value is available for a write request
-		 """
+		 '''
 
 		assert address < (2 ** self.address_size)
 		self._ensure_register_is_unused(address)
@@ -566,7 +566,7 @@ class SPIRegisterInterface(Elaboratable):
 
 
 	def add_read_only_register(self, address, *, read, read_strobe=None):
-		""" Adds a read-only register.
+		''' Adds a read-only register.
 
 		Parameters:
 			address       -- the register's address, as a big-endian integer
@@ -575,14 +575,14 @@ class SPIRegisterInterface(Elaboratable):
 							 value will be read
 			read_strobe   -- a Signal that is asserted when a read is completed; if not provided,
 							 the relevant strobe will be left unconnected
-		"""
+		'''
 		self.add_sfr(address, read=read, read_strobe=read_strobe)
 
 
 
 	def add_register(self, address, *, value_signal=None, size=None, name=None, read_strobe=None,
 		write_strobe=None, reset=0):
-		""" Adds a standard, memory-backed register.
+		''' Adds a standard, memory-backed register.
 
 			Parameters:
 				address       -- the register's address, as a big-endian integer
@@ -596,11 +596,11 @@ class SPIRegisterInterface(Elaboratable):
 			Returns:
 				value_signal  -- a signal that stores the register's value; which may be the value_signal arg,
 								 or may be a signal created during execution
-		"""
+		'''
 		self._ensure_register_is_unused(address)
 
 		# Generate a name for the register, if we don't already have one.
-		name = name if name else "register_{:x}".format(address)
+		name = name if name else 'register_{:x}'.format(address)
 
 		# Generate a backing store for the register, if we don't already have one.
 		if value_signal is None:
@@ -609,10 +609,10 @@ class SPIRegisterInterface(Elaboratable):
 
 		# If we don't have a write strobe signal, create an internal one.
 		if write_strobe is None:
-			write_strobe = Signal(name=name + "_write_strobe")
+			write_strobe = Signal(name=name + '_write_strobe')
 
 		# Create our register-value-input and our write strobe.
-		write_value  = Signal.like(value_signal, name=name + "_write_value")
+		write_value  = Signal.like(value_signal, name=name + '_write_value')
 
 		# Create a generator for a the fragments that will manage the register's memory.
 		def _elaborate_memory_register(m):
@@ -632,14 +632,14 @@ class SPIRegisterInterface(Elaboratable):
 
 
 	def _elaborate_register(self, m, register_address, connections):
-		""" Generates the hardware connections that handle a given register. """
+		''' Generates the hardware connections that handle a given register. '''
 
 		#
 		# Elaborate our register hardware.
 		#
 
 		# Create a signal that goes high iff the given register is selected.
-		register_selected = Signal(name="register_address_matches_{:x}".format(register_address))
+		register_selected = Signal(name='register_address_matches_{:x}'.format(register_address))
 		m.d.comb += register_selected.eq(self._address == register_address)
 
 		# Our write signal is always connected to word_received; but it's only meaningful
@@ -668,10 +668,10 @@ class SPIRegisterInterface(Elaboratable):
 
 
 	def _connect_interface(self, m):
-		""" Connects up our SPI transciever interface.
+		''' Connects up our SPI transciever interface.
 
 		Intended to be overridden, if need be.
-		"""
+		'''
 
 		# Connect up our SPI transceiver submodule.
 		m.d.comb += [
@@ -688,7 +688,7 @@ class SPIRegisterInterface(Elaboratable):
 		m.submodules.interface = self.interface
 		self._connect_interface(m)
 
-		# Split the command into our "write" and "address" signals.
+		# Split the command into our 'write' and 'address' signals.
 		m.d.comb += [
 			self._is_write.eq(self.interface.command[-1]),
 			self._address .eq(self.interface.command[0:-1])
@@ -726,7 +726,7 @@ class SPIRegisterInterface(Elaboratable):
 
 
 class SPIRegisterInterfaceTest(SPIGatewareTestCase):
-	""" Tests for the SPI command interface. """
+	''' Tests for the SPI command interface. '''
 
 	def instantiate_dut(self):
 
@@ -748,48 +748,48 @@ class SPIRegisterInterfaceTest(SPIGatewareTestCase):
 	@sync_test_case
 	def test_undefined_read_behavior(self):
 		data = yield from self.spi_exchange_data([0, 1, 0, 0, 0, 0])
-		self.assertEqual(bytes(data), b"\x00\x00\xde\xad\xbe\xef")
+		self.assertEqual(bytes(data), b'\x00\x00\xde\xad\xbe\xef')
 
 
 	@sync_test_case
 	def test_write_behavior(self):
 
 		# Send a write command...
-		data = yield from self.spi_exchange_data(b"\x80\x02\x12\x34\x56\x78")
-		self.assertEqual(bytes(data), b"\x00\x00\x00\x00\x00\x00")
+		data = yield from self.spi_exchange_data(b'\x80\x02\x12\x34\x56\x78')
+		self.assertEqual(bytes(data), b'\x00\x00\x00\x00\x00\x00')
 
 		# ... and then read the relevant data back.
-		data = yield from self.spi_exchange_data(b"\x00\x02\x12\x34\x56\x78")
-		self.assertEqual(bytes(data), b"\x00\x00\x12\x34\x56\x78")
+		data = yield from self.spi_exchange_data(b'\x00\x02\x12\x34\x56\x78')
+		self.assertEqual(bytes(data), b'\x00\x00\x12\x34\x56\x78')
 
 
 	@sync_test_case
 	def test_aborted_write_behavior(self):
 
 		# Set an initial value...
-		data = yield from self.spi_exchange_data(b"\x80\x02\x12\x34\x56\x78")
+		data = yield from self.spi_exchange_data(b'\x80\x02\x12\x34\x56\x78')
 
 		# ... and then perform an incomplete write.
-		data = yield from self.spi_exchange_data(b"\x80\x02\xAA\xBB")
+		data = yield from self.spi_exchange_data(b'\x80\x02\xAA\xBB')
 
 		# We should return to being idle after CS is de-asserted...
 		yield
 		self.assertEqual((yield self.dut.idle), 1)
 
 		# ... and our register data should not have changed.
-		data = yield from self.spi_exchange_data(b"\x00\x02\x12\x34\x56\x78")
-		self.assertEqual(bytes(data), b"\x00\x00\x12\x34\x56\x78")
+		data = yield from self.spi_exchange_data(b'\x00\x02\x12\x34\x56\x78')
+		self.assertEqual(bytes(data), b'\x00\x00\x12\x34\x56\x78')
 
 
 class SPIMultiplexer(Elaboratable):
-	""" Gateware that assists in connecting multiple SPI busses to the same shared lines. """
+	''' Gateware that assists in connecting multiple SPI busses to the same shared lines. '''
 
 	def __init__(self, multiplexed_busses):
-		"""
+		'''
 		Parameters:
 			multiplexed_busses -- A list of SPI busses to be multiplexed. The active bus will
 								  be selected based on each bus's chip-select signals.
-		"""
+		'''
 		self.multiplexed_busses = multiplexed_busses
 
 		#
@@ -826,5 +826,5 @@ class SPIMultiplexer(Elaboratable):
 
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 link-layer abstraction."""
+''' USB3 link-layer abstraction.'''
 
 from torii             import *
 
@@ -23,12 +23,12 @@ from .transmitter      import PacketTransmitter
 
 
 class USB3LinkLayer(Elaboratable):
-	""" Abstraction encapsulating the USB3 link layer hardware.
+	''' Abstraction encapsulating the USB3 link layer hardware.
 
 	Performs the lower-level data manipulations associated with transporting USB3 packets
 	from place to place.
 
-	"""
+	'''
 
 	def __init__(self, *, physical_layer, ss_clock_frequency=125e6):
 		self._physical_layer  = physical_layer

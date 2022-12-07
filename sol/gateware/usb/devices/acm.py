@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Pre-made gateware that implements CDC-ACM serial. """
+''' Pre-made gateware that implements CDC-ACM serial. '''
 
 
 from torii                              import Elaboratable, Module, Signal
@@ -20,13 +20,13 @@ from ..usb2.request                     import StallOnlyRequestHandler, USBReque
 
 
 class ACMRequestHandlers(USBRequestHandler):
-	""" Minimal set of request handlers to implement ACM functionality.
+	''' Minimal set of request handlers to implement ACM functionality.
 
 	Implements just enough of the requests to be usable on major operating system.
 	In testing, macOS and Linux are fine will all requests being stalled; while Windows
 	seems to be happy as long as SET_LINE_CODING is implemented. We'll implement only
 	that, and stall every other handler.
-	"""
+	'''
 
 	SET_LINE_CODING = 0x20
 
@@ -68,7 +68,7 @@ class ACMRequestHandlers(USBRequestHandler):
 
 
 class USBSerialDevice(Elaboratable):
-	""" Device that acts as a CDC-ACM 'serial converter'.
+	''' Device that acts as a CDC-ACM 'serial converter'.
 
 	Exposes a stream interface.
 
@@ -101,14 +101,14 @@ class USBSerialDevice(Elaboratable):
 
 	max_packet_size: int in {64, 246, 512}, optional
 		The maximum packet size for communications.
-	"""
+	'''
 
 	_STATUS_ENDPOINT_NUMBER = 3
 	_DATA_ENDPOINT_NUMBER   = 4
 
 	def __init__(self, *, bus, idVendor, idProduct,
-			manufacturer_string="SOL",
-			product_string="USB-to-serial",
+			manufacturer_string='SOL',
+			product_string='USB-to-serial',
 			serial_number=None, max_packet_size=64):
 
 		self._bus                 = bus
@@ -128,7 +128,7 @@ class USBSerialDevice(Elaboratable):
 
 
 	def create_descriptors(self):
-		""" Creates the descriptors that describe our serial topology. """
+		''' Creates the descriptors that describe our serial topology. '''
 
 		descriptors = DeviceDescriptorCollection()
 

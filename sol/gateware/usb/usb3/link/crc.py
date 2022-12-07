@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" CRC computation gateware for USB3. """
+''' CRC computation gateware for USB3. '''
 
 
 import functools
@@ -17,7 +17,7 @@ from ....test import SolSSGatewareTestCase, ss_domain_test_case
 
 
 def compute_usb_crc5(protected_bits):
-	""" Generates a 5-bit signal equivalent to the CRC5 check of a given 11-bits.
+	''' Generates a 5-bit signal equivalent to the CRC5 check of a given 11-bits.
 
 	Intended for link command words / link control words.
 
@@ -30,7 +30,7 @@ def compute_usb_crc5(protected_bits):
 	-------
 	Signal(5)
 		A five-bit signal equivalent to the CRC5 of the protected bits.
-	"""
+	'''
 
 	def xor_bits(*indices):
 		bits = (protected_bits[len(protected_bits) - 1 - i] for i in indices)
@@ -48,7 +48,7 @@ def compute_usb_crc5(protected_bits):
 
 
 class HeaderPacketCRC(Elaboratable):
-	""" Gateware that computes a running CRC-16 for the first three words of a header packet.
+	''' Gateware that computes a running CRC-16 for the first three words of a header packet.
 
 	Attributes
 	----------
@@ -68,7 +68,7 @@ class HeaderPacketCRC(Elaboratable):
 	----------
 	initial_value: int, Const
 			The initial value of the CRC shift register; the USB default is used if not provided.
-	"""
+	'''
 
 	def __init__(self, initial_value=0xFFFF):
 		self._initial_value = initial_value
@@ -85,7 +85,7 @@ class HeaderPacketCRC(Elaboratable):
 
 
 	def _generate_next_crc(self, current_crc, data_in):
-		""" Generates the next round of a wordwise USB CRC16. """
+		''' Generates the next round of a wordwise USB CRC16. '''
 
 		def xor_data_bits(*indices):
 			bits = (data_in[len(data_in) - 1 - i] for i in indices)
@@ -97,7 +97,7 @@ class HeaderPacketCRC(Elaboratable):
 
 		# Extracted from the USB3 spec's definition of the CRC16 polynomial.
 		# This is hideous, but it's lifted directly from the specification, so it's probably safer
-		# not to try and "clean it up" by expanding the polynomial ourselves.
+		# not to try and 'clean it up' by expanding the polynomial ourselves.
 		return Cat(
 			xor_past_bits(4, 5, 7, 10, 12, 13, 15)
 				^ xor_data_bits(0, 4, 8, 12, 13, 15, 20, 21, 23, 26, 28, 29, 31),
@@ -149,7 +149,7 @@ class HeaderPacketCRC(Elaboratable):
 		with m.Elif(self.advance_crc):
 			m.d.ss += crc.eq(self._generate_next_crc(crc, self.data_input))
 
-		# Convert from our intermediary "running CRC" format into the current CRC-16...
+		# Convert from our intermediary 'running CRC' format into the current CRC-16...
 		m.d.comb += self.crc.eq(~crc[::-1])
 
 		return m
@@ -157,7 +157,7 @@ class HeaderPacketCRC(Elaboratable):
 
 
 class DataPacketPayloadCRC(Elaboratable):
-	""" Gateware that computes a running CRC-32 for a data packet payload.
+	''' Gateware that computes a running CRC-32 for a data packet payload.
 
 	This CRC is more complicated than others, as Data Packet Payloads are not
 	required to end on a word boundary. Accordingly, we'll need to handle cases
@@ -195,7 +195,7 @@ class DataPacketPayloadCRC(Elaboratable):
 	----------
 	initial_value: int, Const
 			The initial value of the CRC shift register; the USB default is used if not provided.
-	"""
+	'''
 
 	def __init__(self, initial_value=0xFFFFFFFF):
 		self._initial_value = initial_value
@@ -218,7 +218,7 @@ class DataPacketPayloadCRC(Elaboratable):
 
 
 	def _generate_next_full_crc(self, current_crc, data_in):
-		""" Generates the next round of our CRC; given a full input word . """
+		''' Generates the next round of our CRC; given a full input word . '''
 
 		# Helper functions that help us more clearly match the expanded polynomial form.
 		d = lambda i : data_in[len(data_in) - i - 1]
@@ -262,7 +262,7 @@ class DataPacketPayloadCRC(Elaboratable):
 
 
 	def _generate_next_3B_crc(self, current_crc, data_in):
-		""" Generates the next round of our CRC; given a 3B trailing input word . """
+		''' Generates the next round of our CRC; given a 3B trailing input word . '''
 
 		# Helper functions that help us more clearly match the expanded polynomial form.
 		d = lambda i : data_in[len(data_in) - i - 1]
@@ -306,7 +306,7 @@ class DataPacketPayloadCRC(Elaboratable):
 
 
 	def _generate_next_2B_crc(self, current_crc, data_in):
-		""" Generates the next round of our CRC; given a 2B trailing input word . """
+		''' Generates the next round of our CRC; given a 2B trailing input word . '''
 
 		# Helper functions that help us more clearly match the expanded polynomial form.
 		d = lambda i : data_in[len(data_in) - i - 1]
@@ -350,7 +350,7 @@ class DataPacketPayloadCRC(Elaboratable):
 
 
 	def _generate_next_1B_crc(self, current_crc, data_in):
-		""" Generates the next round of our CRC; given a 2B trailing input word . """
+		''' Generates the next round of our CRC; given a 2B trailing input word . '''
 
 		# Helper functions that help us more clearly match the expanded polynomial form.
 		d = lambda i : data_in[len(data_in) - i - 1]
@@ -403,7 +403,7 @@ class DataPacketPayloadCRC(Elaboratable):
 		next_crc_2B = Signal.like(crc)
 		next_crc_1B = Signal.like(crc)
 
-		# Compute each of our theoretical partial "next-CRC" values.
+		# Compute each of our theoretical partial 'next-CRC' values.
 		m.d.comb += [
 			next_crc_3B.eq(self._generate_next_3B_crc(crc, self.data_input[0:24])),
 			next_crc_2B.eq(self._generate_next_2B_crc(crc, self.data_input[0:16])),
@@ -426,7 +426,7 @@ class DataPacketPayloadCRC(Elaboratable):
 			m.d.ss   += crc.eq(next_crc_1B)
 
 
-		# Convert from our intermediary "running CRC" format into the correct CRC32 outputs.
+		# Convert from our intermediary 'running CRC' format into the correct CRC32 outputs.
 		m.d.comb += [
 			self.crc          .eq(~crc[::-1]),
 			self.next_crc_3B  .eq(~next_crc_3B[::-1]),
@@ -483,5 +483,5 @@ class DataPacketPayloadCRCTest(SolSSGatewareTestCase):
 		self.assertEqual((yield dut.crc), 0x540aa487)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

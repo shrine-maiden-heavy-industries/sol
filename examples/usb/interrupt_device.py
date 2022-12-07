@@ -18,16 +18,16 @@ from sol.usb2               import USBDevice, USBSignalInEndpoint
 
 
 class USBInterruptExample(Elaboratable):
-	""" Simple example of a USB device that presents an interrupt endpoint.
+	''' Simple example of a USB device that presents an interrupt endpoint.
 
 	This demonstrates use of the ``USBSignalInEndpoint``, which reports the value
 	of a status signal when polled. Here, we'll create a 32-bit counter, and report
 	its value each time our interrupt endpoint is polled.
 
-	"""
+	'''
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -41,9 +41,9 @@ class USBInterruptExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Status interrupt mechanism"
-			d.iSerialNumber      = "1234"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Status interrupt mechanism'
+			d.iSerialNumber      = '1234'
 
 			d.bNumConfigurations = 1
 
@@ -87,7 +87,7 @@ class USBInterruptExample(Elaboratable):
 
 		# Create an interrupt endpoint which will carry the value of our counter to the host
 		# each time our interrupt EP is polled.
-		status_ep = USBSignalInEndpoint(width=32, endpoint_number=1, endianness="big")
+		status_ep = USBSignalInEndpoint(width=32, endpoint_number=1, endianness='big')
 		usb.add_endpoint(status_ep)
 		m.d.comb += status_ep.signal.eq(counter)
 
@@ -101,5 +101,5 @@ class USBInterruptExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBInterruptExample)

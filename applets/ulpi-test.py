@@ -25,7 +25,7 @@ ANALYZER_RESULT = 2
 
 
 class ULPIDiagnostic(Elaboratable):
-	""" Gateware that evalutes ULPI PHY functionality. """
+	''' Gateware that evalutes ULPI PHY functionality. '''
 
 
 	def elaborate(self, platform):
@@ -36,7 +36,7 @@ class ULPIDiagnostic(Elaboratable):
 		m.submodules.clocking = clocking
 
 		# Grab a reference to our debug-SPI bus.
-		board_spi = synchronize(m, platform.request("debug_spi").i)
+		board_spi = synchronize(m, platform.request('debug_spi').i)
 
 		# Create our SPI-connected registers.
 		m.submodules.spi_registers = spi_registers = SPIRegisterInterface(7, 8)
@@ -50,16 +50,16 @@ class ULPIDiagnostic(Elaboratable):
 		# Strap our power controls to be in VBUS passthrough by default,
 		# on the target port.
 		m.d.comb += [
-			platform.request("power_a_port").o      .eq(0),
-			platform.request("pass_through_vbus").o .eq(1),
+			platform.request('power_a_port').o      .eq(0),
+			platform.request('pass_through_vbus').o .eq(1),
 		]
 
 
 		# Hook up our LEDs to status signals.
 		m.d.comb += [
-			platform.request("led", 2).o  .eq(utmi.session_valid),
-			platform.request("led", 3).o  .eq(utmi.rx_active),
-			platform.request("led", 4).o  .eq(utmi.rx_error)
+			platform.request('led', 2).o  .eq(utmi.session_valid),
+			platform.request('led', 3).o  .eq(utmi.rx_active),
+			platform.request('led', 4).o  .eq(utmi.rx_error)
 		]
 
 		# Set up our parameters.
@@ -85,9 +85,9 @@ class ULPIDiagnostic(Elaboratable):
 		spi_registers.add_read_only_register(ANALYZER_RESULT, read=analyzer.data_out, read_strobe=read_strobe)
 
 		m.d.comb += [
-			platform.request("led", 0).o  .eq(analyzer.capturing),
-			platform.request("led", 1).o  .eq(analyzer.data_available),
-			platform.request("led", 5).o  .eq(analyzer.overrun),
+			platform.request('led', 0).o  .eq(analyzer.capturing),
+			platform.request('led', 1).o  .eq(analyzer.data_available),
+			platform.request('led', 5).o  .eq(analyzer.overrun),
 
 			analyzer.next               .eq(read_strobe)
 		]
@@ -95,10 +95,10 @@ class ULPIDiagnostic(Elaboratable):
 
 		# Debug output.
 		m.d.comb += [
-			platform.request("user_io", 0, dir="o") .eq(ClockSignal("usb")),
-			platform.request("user_io", 1, dir="o") .eq(ulpi.dir),
-			platform.request("user_io", 2, dir="o") .eq(ulpi.nxt),
-			platform.request("user_io", 3, dir="o") .eq(analyzer.sampling),
+			platform.request('user_io', 0, dir='o') .eq(ClockSignal('usb')),
+			platform.request('user_io', 1, dir='o') .eq(ulpi.dir),
+			platform.request('user_io', 2, dir='o') .eq(ulpi.nxt),
+			platform.request('user_io', 3, dir='o') .eq(analyzer.sampling),
 		]
 
 
@@ -106,7 +106,7 @@ class ULPIDiagnostic(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	analyzer = cli(ULPIDiagnostic)
 	debugger = ApolloDebugger()
 
@@ -132,10 +132,10 @@ if __name__ == "__main__":
 
 		# Then read and print out our body
 		packet = [get_next_byte() for _ in range(size)]
-		packet_hex = [f"{byte:02x}" for byte in packet]
+		packet_hex = [f'{byte:02x}' for byte in packet]
 		packet_as_string = bytes(packet)
-		print(f"{packet_as_string}: {packet_hex}")
+		print(f'{packet_as_string}: {packet_hex}')
 
 		#byte = get_next_byte()
-		#print(f"{byte:02x} ", end="")
+		#print(f'{byte:02x} ', end=')
 		#sys.stdout.flush()

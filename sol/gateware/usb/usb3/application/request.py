@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Control-request interfacing and gateware for USB3. """
+''' Control-request interfacing and gateware for USB3. '''
 
 
 import unittest
@@ -17,12 +17,12 @@ from ....test               import SolSSGatewareTestCase, ss_domain_test_case
 from ....utils              import falling_edge_detected
 from ...request             import SetupPacket
 from ...stream              import SuperSpeedStreamInterface
-from ..protocol.data        import DataHeaderPacket
+from ..link.data            import DataHeaderPacket
 from ..protocol.transaction import HandshakeGeneratorInterface, HandshakeReceiverInterface
 
 
 class SuperSpeedRequestHandlerInterface:
-	""" Interface representing a connection between a control endpoint and a request handler.
+	''' Interface representing a connection between a control endpoint and a request handler.
 
 	Attributes
 	----------
@@ -74,7 +74,7 @@ class SuperSpeedRequestHandlerInterface:
 
 	current_configuration: Signal(8), input to handler
 		The index of the device's current configuration.
-	"""
+	'''
 
 	MAX_PACKET_LENGTH = 1024
 
@@ -111,7 +111,7 @@ class SuperSpeedRequestHandlerInterface:
 
 
 class SuperSpeedSetupDecoder(Elaboratable):
-	""" Gateware that decodes any received Setup packets.
+	''' Gateware that decodes any received Setup packets.
 
 	Attributes
 	-----------
@@ -129,7 +129,7 @@ class SuperSpeedSetupDecoder(Elaboratable):
 
 	packet: SetupPacket(), output
 		The parsed contents of our setup packet.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -152,47 +152,47 @@ class SuperSpeedSetupDecoder(Elaboratable):
 		# Capture our packet locally, until we have an entire valid packet.
 		packet = SetupPacket()
 
-		# Keep our "received" flag low unless explicitly driven.
+		# Keep our 'received' flag low unless explicitly driven.
 		m.d.ss += self.packet.received.eq(0)
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# WAIT_FOR_FIRST -- we're waiting for the first word of a setup packet;
 			# which we'll handle on receipt.
-			with m.State("WAIT_FOR_FIRST"):
+			with m.State('WAIT_FOR_FIRST'):
 				packet_starting = self.sink.valid.all() & self.sink.first
 				packet_is_setup = (self.header_in.setup)
 
 				# Once we see the start of a new setup packet, parse it, and move to the second word.
 				with m.If(packet_starting & packet_is_setup):
 					m.d.ss += packet.word_select(0, 32).eq(self.sink.data)
-					m.next = "PARSE_SECOND"
+					m.next = 'PARSE_SECOND'
 
 			# PARSE_SECOND -- handle the second and last packet, which contains the remainder of
 			# our setup data.
-			with m.State("PARSE_SECOND"):
+			with m.State('PARSE_SECOND'):
 
 				with m.If(self.sink.valid.all()):
 
 					# This should be our last word; parse it.
 					with m.If(self.sink.last):
 						m.d.ss += packet.word_select(1, 32).eq(self.sink.data)
-						m.next = "WAIT_FOR_VALID"
+						m.next = 'WAIT_FOR_VALID'
 
 					# If this wasn't our last word, something's gone very wrong.
 					# We'll ignore this packet.
 					with m.Else():
-						m.next = "WAIT_FOR_FIRST"
+						m.next = 'WAIT_FOR_FIRST'
 
 				# If we see :attr:``rx_bad``, this means our packet aborted early,
 				# and thus isn't a valid setup packet. Ignore it, and go back to waiting
 				# for our first packet.
 				with m.If(self.rx_bad):
-						m.next = "WAIT_FOR_FIRST"
+						m.next = 'WAIT_FOR_FIRST'
 
 			# WAIT_FOR_VALID -- we've now received all of our data; and we're just waiting
 			# for an indication of  whether the data is good or bad.
-			with m.State("WAIT_FOR_VALID"):
+			with m.State('WAIT_FOR_VALID'):
 
 				# If we see :attr:``packet_good``, this means we have a valid setup packet!
 				# We'll output it, and indicate that we've received a new packet.
@@ -204,12 +204,12 @@ class SuperSpeedSetupDecoder(Elaboratable):
 						# ... but strobe its received flag for a cycle.
 						self.packet.received  .eq(1)
 					]
-					m.next = "WAIT_FOR_FIRST"
+					m.next = 'WAIT_FOR_FIRST'
 
 				# If we see :attr:``packet_bad``, this means our packet failed CRC checks.
 				# We can't do anything with it; so we'll just ignore it.
 				with m.If(self.rx_bad):
-					m.next = "WAIT_FOR_FIRST"
+					m.next = 'WAIT_FOR_FIRST'
 
 		return m
 
@@ -256,7 +256,7 @@ class SuperSpeedSetupDecoderTest(SolSSGatewareTestCase):
 
 
 class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
-	""" Multiplexes multiple RequestHandlers down to a single interface.
+	''' Multiplexes multiple RequestHandlers down to a single interface.
 
 	Interfaces are added using .add_interface().
 
@@ -264,7 +264,7 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 	----------
 	shared: SuperSpeedRequestHandlerInterface()
 		The post-multiplexer RequestHandler interface.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -280,26 +280,26 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 
 
 	def add_interface(self, interface: SuperSpeedRequestHandlerInterface):
-		""" Adds a RequestHandlerInterface to the multiplexer.
+		''' Adds a RequestHandlerInterface to the multiplexer.
 
 		Arbitration is not performed; it's expected only one handler will be
 		driving requests at a time.
-		"""
+		'''
 		self._interfaces.append(interface)
 
 
 	def _multiplex_signals(self, m, *, when, multiplex, sub_bus=None):
-		""" Helper that creates a simple priority-encoder multiplexer.
+		''' Helper that creates a simple priority-encoder multiplexer.
 
 		Parmeters:
 			when      -- The name of the interface signal that indicates that the `multiplex` signals
 						 should be selected for output. If this signals should be multiplex, it
 						 should be included in `multiplex`.
 			multiplex -- The names of the interface signals to be multiplexed.
-		"""
+		'''
 
 		def get_signal(interface, name):
-			""" Fetches an interface signal by name / sub_bus. """
+			''' Fetches an interface signal by name / sub_bus. '''
 
 			if sub_bus:
 				bus = getattr(interface, sub_bus)
@@ -405,19 +405,19 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 
 
 class StallOnlyRequestHandler(Elaboratable):
-	""" Simple gateware request handler that only conditionally stalls requests.
+	''' Simple gateware request handler that only conditionally stalls requests.
 
 	I/O port:
 		*: interface -- The RequestHandlerInterface used to handle requests.
 						See its record definition for signal definitions.
-	"""
+	'''
 
 	def __init__(self, stall_condition):
-		"""
+		'''
 		Parameters:
 			stall_condition -- A function that accepts a SetupRequest packet, and returns
 							   an Torii conditional indicating whether we should stall.
-		"""
+		'''
 
 		self.condition = stall_condition
 
@@ -432,7 +432,7 @@ class StallOnlyRequestHandler(Elaboratable):
 		interface = self.interface
 
 		# If we have the opportunity to stall ...
-		data_received = falling_edge_detected(m, interface.rx.valid, domain="ss")
+		data_received = falling_edge_detected(m, interface.rx.valid, domain='ss')
 		with m.If(interface.data_requested | interface.status_requested | data_received):
 
 			# ... and our stall condition is met ...
@@ -446,7 +446,7 @@ class StallOnlyRequestHandler(Elaboratable):
 
 
 class SuperSpeedRequestHandler(Elaboratable):
-	""" Simple base class for request handlers. """
+	''' Simple base class for request handlers. '''
 
 	def __init__(self):
 		#
@@ -455,5 +455,5 @@ class SuperSpeedRequestHandler(Elaboratable):
 		self.interface = SuperSpeedRequestHandlerInterface()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

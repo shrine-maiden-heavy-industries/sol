@@ -20,7 +20,7 @@
 #   contributors may be used to endorse or promote products derived from
 #   this software without specific prior written permission.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 # DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
@@ -41,7 +41,7 @@ from ...utils.cdc   import synchronize
 
 
 class RxClockDataRecovery(Elaboratable):
-	"""RX Clock Data Recovery module.
+	'''RX Clock Data Recovery module.
 
 	RxClockDataRecovery synchronizes the USB differential pair with the FPGAs
 	clocks, de-glitches the differential pair, and recovers the incoming clock
@@ -84,7 +84,7 @@ class RxClockDataRecovery(Elaboratable):
 	line_state_se1 : Signal(1)
 		Represents SE1 on the incoming USB data pair.
 		Qualify with line_state_valid.
-	"""
+	'''
 	def __init__(self, usbp_raw, usbn_raw):
 		self._usbp = usbp_raw
 		self._usbn = usbn_raw
@@ -104,8 +104,8 @@ class RxClockDataRecovery(Elaboratable):
 		# Synchronize the USB signals at our I/O boundary.
 		# Despite the assumptions made in ValentyUSB, this line rate recovery FSM
 		# isn't enough to properly synchronize these inputs. We'll explicitly synchronize.
-		sync_dp = synchronize(m, self._usbp, o_domain="usb_io")
-		sync_dn = synchronize(m, self._usbn, o_domain="usb_io")
+		sync_dp = synchronize(m, self._usbp, o_domain='usb_io')
+		sync_dn = synchronize(m, self._usbn, o_domain='usb_io')
 
 		#######################################################################
 		# Line State Recovery State Machine
@@ -125,46 +125,46 @@ class RxClockDataRecovery(Elaboratable):
 		# output signals for use by the clock recovery stage
 		line_state_in_transition = Signal()
 
-		with m.FSM(domain="usb_io") as fsm:
+		with m.FSM(domain='usb_io') as fsm:
 			m.d.usb_io += [
-				self.line_state_se0  .eq(fsm.ongoing("SE0")),
-				self.line_state_se1  .eq(fsm.ongoing("SE1")),
-				self.line_state_dj   .eq(fsm.ongoing("DJ" )),
-				self.line_state_dk   .eq(fsm.ongoing("DK" )),
+				self.line_state_se0  .eq(fsm.ongoing('SE0')),
+				self.line_state_se1  .eq(fsm.ongoing('SE1')),
+				self.line_state_dj   .eq(fsm.ongoing('DJ' )),
+				self.line_state_dk   .eq(fsm.ongoing('DK' )),
 			]
 
 			# If we are in a transition state, then we can sample the pair and
 			# move to the next corresponding line state.
-			with m.State("DT"):
+			with m.State('DT'):
 				m.d.comb += line_state_in_transition.eq(1)
 
 				with m.Switch(dpair):
 					with m.Case(0b10):
-						m.next = "DJ"
+						m.next = 'DJ'
 					with m.Case(0b01):
-						m.next = "DK"
+						m.next = 'DK'
 					with m.Case(0b00):
-						m.next = "SE0"
+						m.next = 'SE0'
 					with m.Case(0b11):
-						m.next = "SE1"
+						m.next = 'SE1'
 
 			# If we are in a valid line state and the value of the pair changes,
 			# then we need to move to the transition state.
-			with m.State("DJ"):
+			with m.State('DJ'):
 				with m.If(dpair != 0b10):
-					m.next = "DT"
+					m.next = 'DT'
 
-			with m.State("DK"):
+			with m.State('DK'):
 				with m.If(dpair != 0b01):
-					m.next = "DT"
+					m.next = 'DT'
 
-			with m.State("SE0"):
+			with m.State('SE0'):
 				with m.If(dpair != 0b00):
-					m.next = "DT"
+					m.next = 'DT'
 
-			with m.State("SE1"):
+			with m.State('SE1'):
 				with m.If(dpair != 0b11):
-					m.next = "DT"
+					m.next = 'DT'
 
 
 		#######################################################################
@@ -202,7 +202,7 @@ class RxClockDataRecovery(Elaboratable):
 
 
 class RxNRZIDecoder(Elaboratable):
-	"""RX NRZI decoder.
+	'''RX NRZI decoder.
 
 	In order to ensure there are enough bit transitions for a receiver to recover
 	the clock usb uses NRZI encoding.  This module processes the incoming
@@ -251,7 +251,7 @@ class RxNRZIDecoder(Elaboratable):
 	o_se0 : Signal(1)
 		Indicates the bus is currently in a SE0 state.
 		Qualified by valid.
-	"""
+	'''
 
 	def __init__(self):
 		self.i_valid = Signal()
@@ -281,7 +281,7 @@ class RxNRZIDecoder(Elaboratable):
 
 
 class RxPacketDetect(Elaboratable):
-	"""Packet Detection
+	'''Packet Detection
 
 	Full Speed packets begin with the following sequence:
 
@@ -331,7 +331,7 @@ class RxPacketDetect(Elaboratable):
 
 	o_pkt_end : Signal(1)
 		Asserted for one clock after the last data bit of a packet was received.
-	"""
+	'''
 
 	def __init__(self):
 		self.i_valid = Signal()
@@ -350,37 +350,37 @@ class RxPacketDetect(Elaboratable):
 		pkt_active = Signal()
 		pkt_end = Signal()
 
-		with m.FSM(domain="usb_io"):
+		with m.FSM(domain='usb_io'):
 
 			for i in range(5):
 
-				with m.State(f"D{i}"):
+				with m.State(f'D{i}'):
 					with m.If(self.i_valid):
 						with m.If(self.i_data | self.i_se0):
 							# Receiving '1' or SE0 early resets the packet start counter.
-							m.next = "D0"
+							m.next = 'D0'
 
 						with m.Else():
 							# Receiving '0' increments the packet start counter.
-							m.next = f"D{i + 1}"
+							m.next = f'D{i + 1}'
 
-			with m.State("D5"):
+			with m.State('D5'):
 				with m.If(self.i_valid):
 					with m.If(self.i_se0):
-						m.next = "D0"
+						m.next = 'D0'
 					# once we get a '1', the packet is active
 					with m.Elif(self.i_data):
 						m.d.comb += pkt_start.eq(1)
-						m.next = "PKT_ACTIVE"
+						m.next = 'PKT_ACTIVE'
 
-			with m.State("PKT_ACTIVE"):
+			with m.State('PKT_ACTIVE'):
 				m.d.comb += pkt_active.eq(1)
 				with m.If(self.i_valid & self.i_se0):
 					m.d.comb += [
 						pkt_active.eq(0),
 						pkt_end.eq(1)
 					]
-					m.next = "D0"
+					m.next = 'D0'
 
 		# pass all of the outputs through a pipe stage
 		m.d.comb += [
@@ -394,7 +394,7 @@ class RxPacketDetect(Elaboratable):
 
 
 class RxBitstuffRemover(Elaboratable):
-	"""RX Bitstuff Removal
+	'''RX Bitstuff Removal
 
 	Long sequences of 1's would cause the receiver to lose it's lock on the
 	transmitter's clock.  USB solves this with bitstuffing.  A '0' is stuffed
@@ -432,7 +432,7 @@ class RxBitstuffRemover(Elaboratable):
 		of a '0', there is an additional '1'.  This is normal during IDLE, but
 		should never happen within a packet.
 		Qualified by valid.
-	"""
+	'''
 
 	def __init__(self):
 		self.i_valid = Signal()
@@ -454,23 +454,23 @@ class RxBitstuffRemover(Elaboratable):
 		drop_bit = Signal(1)
 
 
-		with m.FSM(domain="usb_io"):
+		with m.FSM(domain='usb_io'):
 
 			for i in range(6):
-				with m.State(f"D{i}"):
+				with m.State(f'D{i}'):
 					with m.If(self.i_valid):
 						with m.If(self.i_data):
 							# Receiving '1' increments the bitstuff counter.
-							m.next = (f"D{i + 1}")
+							m.next = (f'D{i + 1}')
 						with m.Else():
 							# Receiving '0' resets the bitstuff counter.
-							m.next = "D0"
+							m.next = 'D0'
 
-			with m.State("D6"):
+			with m.State('D6'):
 				with m.If(self.i_valid):
 					m.d.comb += drop_bit.eq(1)
 					# Reset the bitstuff counter, drop the data.
-					m.next = "D0"
+					m.next = 'D0'
 
 		m.d.usb_io += [
 			self.o_data.eq(self.i_data),
@@ -482,7 +482,7 @@ class RxBitstuffRemover(Elaboratable):
 
 
 class RxShifter(Elaboratable):
-	"""RX Shifter
+	'''RX Shifter
 
 	A shifter is responsible for shifting in serial bits and presenting them
 	as parallel data.  The shifter knows how many bits to shift and has
@@ -516,7 +516,7 @@ class RxShifter(Elaboratable):
 
 	o_put : Signal(1)
 		Asserted for one clock once the register is full.
-	"""
+	'''
 	def __init__(self, width):
 		self._width = width
 
@@ -626,7 +626,7 @@ class RxPipeline(Elaboratable):
 		m.d.comb += [
 			shifter.reset.eq(detect.o_pkt_end),
 			shifter.i_data.eq(bitstuff.o_data),
-			shifter.i_valid.eq(~bitstuff.o_stall & Past(detect.o_pkt_active, domain="usb_io")),
+			shifter.i_valid.eq(~bitstuff.o_stall & Past(detect.o_pkt_active, domain='usb_io')),
 		]
 
 		#
@@ -635,7 +635,7 @@ class RxPipeline(Elaboratable):
 		flag_start  = Signal()
 		flag_end    = Signal()
 		flag_valid  = Signal()
-		m.submodules.payload_fifo = payload_fifo = AsyncFIFOBuffered(width=8, depth=4, r_domain="usb", w_domain="usb_io")
+		m.submodules.payload_fifo = payload_fifo = AsyncFIFOBuffered(width=8, depth=4, r_domain='usb', w_domain='usb_io')
 		m.d.comb += [
 			payload_fifo.w_data  .eq(shifter.o_data[::-1]),
 			payload_fifo.w_en    .eq(shifter.o_put),
@@ -644,7 +644,7 @@ class RxPipeline(Elaboratable):
 			payload_fifo.r_en    .eq(1)
 		]
 
-		m.submodules.flags_fifo = flags_fifo = AsyncFIFOBuffered(width=2, depth=4, r_domain="usb", w_domain="usb_io")
+		m.submodules.flags_fifo = flags_fifo = AsyncFIFOBuffered(width=2, depth=4, r_domain='usb', w_domain='usb_io')
 		m.d.comb += [
 			flags_fifo.w_data[1]  .eq(detect.o_pkt_start),
 			flags_fifo.w_data[0]  .eq(detect.o_pkt_end),

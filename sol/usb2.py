@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Import shortcuts for our most commonly used functionality. """
+''' Import shortcuts for our most commonly used functionality. '''
 
 # Create shorthands for the most common parts of the library's usb2 gateware.
 from .gateware.usb.usb2.device                import USBDevice

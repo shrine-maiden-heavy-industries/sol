@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 Physical-Layer modules """
+''' USB3 Physical-Layer modules '''
 
 from .layer import USB3PhysicalLayer
 

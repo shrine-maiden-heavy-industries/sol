@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2022 Aki "lethalbit" Van Ness.
+# Copyright 2022 Aki 'lethalbit' Van Ness.
 # SPDX-License-Identifier: BSD-3-Clause
 
 #
@@ -22,7 +22,7 @@
 #   contributors may be used to endorse or promote products derived from
 #   this software without specific prior written permission.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 'AS IS'
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 # DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
@@ -38,26 +38,26 @@ from ...usb.usb2 import USBPacketID as PID
 
 
 def b(s):
-	"""Byte string with LSB first into an integer.
+	'''Byte string with LSB first into an integer.
 
-	>>> b("1")
+	>>> b('1')
 	1
-	>>> b("01")
+	>>> b('01')
 	2
-	>>> b("101")
+	>>> b('101')
 	5
-	"""
+	'''
 	return int(s[::-1], 2)
 
 
 def encode_data(data):
-	"""
+	'''
 	Converts array of 8-bit ints into string of 0s and 1s.
-	"""
-	output = ""
+	'''
+	output = ''
 
 	for b in data:
-		output += (f"{int(b):08b}")[::-1]
+		output += (f'{int(b):08b}')[::-1]
 
 	return output
 
@@ -70,14 +70,14 @@ def encode_pid(value):
 
 
 # width=5 poly=0x05 init=0x1f refin=true refout=true xorout=0x1f check=0x19
-# residue=0x06 name="CRC-5/USB"
+# residue=0x06 name='CRC-5/USB'
 def crc5(nibbles):
-	"""
+	'''
 	>>> hex(crc5([0, 0]))
 	'0x1'
 	>>> hex(crc5([3, 0]))
 	'0x13'
-	"""
+	'''
 	reg = crc.CrcRegister(crc.CRC5_USB)
 	for n in nibbles:
 		reg.takeWord(n, 4)
@@ -85,7 +85,7 @@ def crc5(nibbles):
 
 
 def crc5_token(addr, ep):
-	"""
+	'''
 	>>> hex(crc5_token(0, 0))
 	'0x2'
 	>>> hex(crc5_token(92, 0))
@@ -94,7 +94,7 @@ def crc5_token(addr, ep):
 	'0xa'
 	>>> hex(crc5_token(56, 4))
 	'0xb'
-	"""
+	'''
 	reg = crc.CrcRegister(crc.CRC5_USB)
 	reg.takeWord(addr, 7)
 	reg.takeWord(ep, 4)
@@ -102,12 +102,12 @@ def crc5_token(addr, ep):
 
 
 def crc5_sof(v):
-	"""
+	'''
 	>>> hex(crc5_sof(1429))
 	'0x10'
 	>>> hex(crc5_sof(1013))
 	'0x14'
-	"""
+	'''
 	reg = crc.CrcRegister(crc.CRC5_USB)
 	reg.takeWord(v, 11)
 	return eval('0b' + bin(reg.getFinalValue() | 0x10000000)[::-1][:5])
@@ -115,7 +115,7 @@ def crc5_sof(v):
 
 def crc16(input_data):
 	# width=16 poly=0x8005 init=0xffff refin=true refout=true xorout=0xffff
-	# check=0xb4c8 residue=0xb001 name="CRC-16/USB"
+	# check=0xb4c8 residue=0xb001 name='CRC-16/USB'
 	# CRC appended low byte first.
 	reg = crc.CrcRegister(crc.CRC16_USB)
 	for d in input_data:
@@ -125,28 +125,28 @@ def crc16(input_data):
 	return [crc16 & 0xff, (crc16 >> 8) & 0xff]
 
 
-def nrzi(data, cycles=4, init="J"):
-	"""Converts string of 0s and 1s into NRZI encoded string.
+def nrzi(data, cycles=4, init='J'):
+	'''Converts string of 0s and 1s into NRZI encoded string.
 
-	>>> nrzi("11 00000001", 1)
+	>>> nrzi('11 00000001', 1)
 	'JJ KJKJKJKK'
 
 	It will do bit stuffing.
-	>>> nrzi("1111111111", 1)
+	>>> nrzi('1111111111', 1)
 	'JJJJJJKKKKK'
 
 	Support single ended zero
-	>>> nrzi("1111111__", 1)
+	>>> nrzi('1111111__', 1)
 	'JJJJJJKK__'
 
 	Support pre-encoded mixing.
-	>>> nrzi("11kkj11__", 1)
+	>>> nrzi('11kkj11__', 1)
 	'JJKKJJJ__'
 
 	Supports wider clock widths
-	>>> nrzi("101", 4)
+	>>> nrzi('101', 4)
 	'JJJJKKKKKKKK'
-	"""
+	'''
 	def toggle_state(state):
 		if state == 'J':
 			return 'K'
@@ -155,7 +155,7 @@ def nrzi(data, cycles=4, init="J"):
 		return state
 
 	state = init
-	output = ""
+	output = ''
 
 	stuffed = []
 	i = 0
@@ -179,10 +179,10 @@ def nrzi(data, cycles=4, init="J"):
 			state = toggle_state(state)
 		elif bit == '1':
 			pass
-		elif bit in "jk_":
+		elif bit in 'jk_':
 			state = bit.upper()
 		else:
-			assert False, "Unknown bit %s in %r" % (bit, data)
+			assert False, 'Unknown bit %s in %r' % (bit, data)
 
 		output += (state * cycles)
 
@@ -190,15 +190,15 @@ def nrzi(data, cycles=4, init="J"):
 
 
 def sync():
-	return "kjkjkjkk"
+	return 'kjkjkjkk'
 
 
 def eop():
-	return "__j"
+	return '__j'
 
 
 def wrap_packet(data, cycles=4):
-	"""Add the sync + eop sections and do nrzi encoding.
+	'''Add the sync + eop sections and do nrzi encoding.
 
 	>>> wrap_packet(handshake_packet(PID.ACK), cycles=1)
 	'KJKJKJKKJJKJJKKK__J'
@@ -209,12 +209,12 @@ def wrap_packet(data, cycles=4):
 	>>> wrap_packet(data_packet(PID.DATA0, [0x1]), cycles=1)
 	'KJKJKJKKKKJKJKKKKJKJKJKJJKJKJKJJJJJJJKKKJ__J'
 
-	"""
+	'''
 	return nrzi(sync() + data + eop(), cycles)
 
 
 def token_packet(pid, addr, endp):
-	"""Create a token packet for testing.
+	'''Create a token packet for testing.
 
 	sync, pid, addr (7bit), endp(4bit), crc5(5bit), eop
 
@@ -245,20 +245,20 @@ def token_packet(pid, addr, endp):
 			 AAAAAAA          - 7 bits - ADDR
 					EEEE      - 4 bits - EP
 						CCCCC - 5 bits - CRC
-	"""
+	'''
 	assert addr < 128, addr
 	assert endp < 2**4, endp
 	assert pid in (PID.OUT, PID.IN, PID.SETUP), pid
 	token = encode_pid(pid)
-	token += "{0:07b}".format(addr)[::-1]  # 7 bits address
-	token += "{0:04b}".format(endp)[::-1]  # 4 bits endpoint
-	token += "{0:05b}".format(crc5_token(addr, endp))[::-1]  # 5 bits CRC5
+	token += '{0:07b}'.format(addr)[::-1]  # 7 bits address
+	token += '{0:04b}'.format(endp)[::-1]  # 4 bits endpoint
+	token += '{0:05b}'.format(crc5_token(addr, endp))[::-1]  # 5 bits CRC5
 	assert len(token) == 24, token
 	return token
 
 
 def data_packet(pid, payload):
-	"""Create a data packet for testing.
+	'''Create a data packet for testing.
 
 	sync, pid, data, crc16, eop
 	FIXME: data should be multiples of 8?
@@ -270,14 +270,14 @@ def data_packet(pid, payload):
 	>>> data_packet(PID.DATA1, [])
 	'110100100000000000000000'
 
-	"""
+	'''
 	assert pid in (PID.DATA0, PID.DATA1), pid
 	payload = list(payload)
 	return encode_pid(pid) + encode_data(payload + crc16(payload))
 
 
 def handshake_packet(pid):
-	""" Create a handshake packet for testing.
+	''' Create a handshake packet for testing.
 
 	sync, pid, eop
 	ack / nak / stall / nyet (high speed only)
@@ -286,13 +286,13 @@ def handshake_packet(pid):
 	'01001011'
 	>>> handshake_packet(PID.NAK)
 	'01011010'
-	"""
+	'''
 	assert pid in (PID.ACK, PID.NAK, PID.STALL), pid
 	return encode_pid(pid)
 
 
 def sof_packet(frame):
-	"""Create a SOF packet for testing.
+	'''Create a SOF packet for testing.
 
 	sync, pid, frame no (11bits), crc5(5bits), eop
 
@@ -310,12 +310,12 @@ def sof_packet(frame):
 
 	>>> sof_packet(2**11 - 2)
 	'101001010111111111111101'
-	"""
+	'''
 	def rev_byte(x):
-		return int("{0:08b}".format(x)[:8][::-1], 2)
+		return int('{0:08b}'.format(x)[:8][::-1], 2)
 
 	assert frame < 2**11, (frame, '<', 2**11)
-	frame_rev = int("{0:011b}".format(frame)[:11][::-1], 2)
+	frame_rev = int('{0:011b}'.format(frame)[:11][::-1], 2)
 	data = [frame_rev >> 3, (frame_rev & 0b111) << 5]
 	data[-1] = data[-1] | crc5_sof(frame)
 	data[0] = rev_byte(data[0])
@@ -324,7 +324,7 @@ def sof_packet(frame):
 
 
 def diff(value):
-	"""Convert J/K encoding into bits for P/N diff pair.
+	'''Convert J/K encoding into bits for P/N diff pair.
 
 	>>> diff('KJ_')
 	('010', '100')
@@ -335,30 +335,30 @@ def diff(value):
 	'0101010011011000001'
 	>>> n
 	'1010101100100111000'
-	"""
-	usbp = ""
-	usbn = ""
+	'''
+	usbp = ''
+	usbn = ''
 	for i in range(len(value)):
 		v = value[i]
 		if v == ' ':
 			continue
 		elif v == '_':
 			# SE0 - both lines pulled low
-			usbp += "0"
-			usbn += "0"
+			usbp += '0'
+			usbn += '0'
 		elif v == 'J':
-			usbp += "1"
-			usbn += "0"
+			usbp += '1'
+			usbn += '0'
 		elif v == 'K':
-			usbp += "0"
-			usbn += "1"
+			usbp += '0'
+			usbn += '1'
 		else:
-			assert False, "Unknown value: %s" % v
+			assert False, 'Unknown value: %s' % v
 	return usbp, usbn
 
 
 def undiff(usbp, usbn):
-	"""Convert P/N diff pair bits into J/K encoding.
+	'''Convert P/N diff pair bits into J/K encoding.
 
 	>>> from cocotb_usb.usb.pp_packet import pp_packet
 	>>> undiff(
@@ -435,9 +435,9 @@ def undiff(usbp, usbn):
 	____ SE0
 	____ SE0
 	JJJJ END
-	"""
+	'''
 	assert len(usbp) == len(
-		usbn), "Sequence different lengths!\n%s\n%s\n" % (usbp, usbn)
+		usbn), 'Sequence different lengths!\n%s\n%s\n' % (usbp, usbn)
 	value = []
 	for i in range(0, len(usbp)):
 		p = usbp[i]
@@ -449,9 +449,9 @@ def undiff(usbp, usbn):
 			'10': 'J',
 			'01': 'K',
 		}[p + n])
-	return "".join(value)
+	return ''.join(value)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	import doctest
 	doctest.testmod()

@@ -5,16 +5,16 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 Example of using the debug controller's UART bridge.
 
 Connect to the ttyACM connection at 115200 baud, 8N1,
-and you should see "Hello World" 'typed' repeatedly.
-"""
+and you should see 'Hello World' 'typed' repeatedly.
+'''
 
 from torii                       import Signal, Elaboratable, Module, Array, Cat
 
-from sol.cli                     import  cli
+from sol.cli                     import cli
 from sol.gateware.interface.uart import UARTTransmitter
 
 
@@ -22,7 +22,7 @@ class UARTBridgeExample(Elaboratable):
 
 	def elaborate(self, platform):
 		m = Module()
-		uart = platform.request("uart")
+		uart = platform.request('uart')
 
 		clock_freq = int(60e6)
 		char_freq  = int(6e6)
@@ -40,7 +40,7 @@ class UARTBridgeExample(Elaboratable):
 			m.d.sync += counter.eq(counter + 1)
 
 		# Create a simple ROM with a message for ourselves...
-		letters = Array(ord(i) for i in "Hello, world! \r\n")
+		letters = Array(ord(i) for i in 'Hello, world! \r\n')
 
 		# ... and count through it whenever we send a letter.
 		current_letter = Signal(range(0, len(letters)))
@@ -68,5 +68,5 @@ class UARTBridgeExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(UARTBridgeExample)

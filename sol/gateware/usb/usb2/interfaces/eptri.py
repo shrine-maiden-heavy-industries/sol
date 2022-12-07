@@ -4,13 +4,13 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 Implementation of a Triple-FIFO endpoint manager.
 
 Equivalent (but not binary-compatbile) implementation of ValentyUSB's ``eptri``.
 
 For an example, see ``examples/usb/eptri`` or TinyUSB's ``sol/dcd_eptri.c``.
-"""
+'''
 
 
 from torii              import *
@@ -22,7 +22,7 @@ from ..endpoint         import EndpointInterface
 
 
 class SetupFIFOInterface(Peripheral, Elaboratable):
-	""" Setup component of our `eptri`-equivalent interface.
+	''' Setup component of our `eptri`-equivalent interface.
 
 	Implements the USB Setup FIFO, which handles SETUP packets on any endpoint.
 
@@ -35,7 +35,7 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 
 	interface: EndpointInterface
 		Our primary interface to the core USB device hardware.
-	"""
+	'''
 
 	def __init__(self):
 		super().__init__()
@@ -46,33 +46,33 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 
 		regs = self.csr_bank()
 
-		self.data = regs.csr(8, "r", desc="""
+		self.data = regs.csr(8, 'r', desc='''
 			A FIFO that returns the bytes from the most recently captured SETUP packet.
 			Reading a byte from this register advances the FIFO. The first eight bytes read
 			from this conain the core SETUP packet.
-		""")
+		''')
 
-		self.reset = regs.csr(1, "w", desc="""
+		self.reset = regs.csr(1, 'w', desc='''
 			Local reset control for the SETUP handler; writing a '1' to this register clears the handler state.
-		""")
+		''')
 
-		self.epno = regs.csr(4, "r", desc="The number of the endpoint associated with the current SETUP packet.")
-		self.have = regs.csr(1, "r", desc="`1` iff data is available in the FIFO.")
-		self.pend = regs.csr(1, "r", desc="`1` iff an interrupt is pending")
+		self.epno = regs.csr(4, 'r', desc='The number of the endpoint associated with the current SETUP packet.')
+		self.have = regs.csr(1, 'r', desc='`1` iff data is available in the FIFO.')
+		self.pend = regs.csr(1, 'r', desc='`1` iff an interrupt is pending')
 
 
 		# TODO: figure out where this should actually go to match ValentyUSB as much as possible
-		self._address = regs.csr(8, "rw", desc="""
+		self._address = regs.csr(8, 'rw', desc='''
 			Controls the current device's USB address. Should be written after a SET_ADDRESS request is
 			received. Automatically resets back to zero on a USB reset.
-		""")
+		''')
 
 		#
 		# IRQ / Events
 		#
-		self.setup_received = self.event(desc="""
+		self.setup_received = self.event(desc='''
 			Interrupt that triggers when a new SETUP packet is ready to be read.
-		""")
+		''')
 
 		#
 		# I/O port
@@ -155,12 +155,12 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 
 		# TODO: generate interrupts
 
-		return DomainRenamer({"sync": "usb"})(m)
+		return DomainRenamer({'sync': 'usb'})(m)
 
 
 
 class InFIFOInterface(Peripheral, Elaboratable):
-	""" IN component of our `eptri`-equivalent interface.
+	''' IN component of our `eptri`-equivalent interface.
 
 	Implements the FIFO that handles `eptri` IN requests. This FIFO collects USB data, and
 	transmits it in response to an IN token. Like all `eptri` interfaces; it can handle only one
@@ -173,17 +173,17 @@ class InFIFOInterface(Peripheral, Elaboratable):
 	interface: EndpointInterface
 		Our primary interface to the core USB device hardware.
 
-	"""
+	'''
 
 
 	def __init__(self, max_packet_size=512):
-		"""
+		'''
 		Parameters
 		----------
 			max_packet_size: int, optional
 				Sets the maximum packet size that can be transmitted on this endpoint.
 				This should match the value provided in the relevant endpoint descriptor.
-		"""
+		'''
 
 		super().__init__()
 
@@ -195,43 +195,43 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 		regs = self.csr_bank()
 
-		self.data = regs.csr(8, "w", desc="""
+		self.data = regs.csr(8, 'w', desc='''
 			Write-only register. Each write enqueues a byte to be transmitted; gradually building
 			a single packet to be transmitted. This queue should only ever contain a single packet;
 			it is the software's responsibility to handle breaking requests down into packets.
-		""")
+		''')
 
-		self.epno = regs.csr(4, "rw", desc="""
+		self.epno = regs.csr(4, 'rw', desc='''
 			Contains the endpoint the enqueued packet is to be transmitted on. Writing this register
 			marks the relevant packet as ready to transmit; and thus should only be written after a
 			full packet has been written into the FIFO. If no data has been placed into the DATA FIFO,
 			a zero-length packet is generated.
 
 			Note that any IN requests that do not match the endpoint number are automatically NAK'd.
-		""")
+		''')
 
-		self.reset = regs.csr(1, "w", desc="A write to this register clears the FIFO without transmitting.")
+		self.reset = regs.csr(1, 'w', desc='A write to this register clears the FIFO without transmitting.')
 
-		self.stall = regs.csr(1, "rw", desc="""
+		self.stall = regs.csr(1, 'rw', desc='''
 			When this register contains '1', any IN tokens targeting `epno` will be responded to with a
 			STALL token, rather than DATA or a NAK.
 
 			For EP0, this register will automatically be cleared when a new SETUP token is received.
-		""")
+		''')
 
-		self.idle = regs.csr(1, "r", desc="This value is `1` if no packet is actively being transmitted.")
-		self.have = regs.csr(1, "r", desc="This value is `1` if data is present in the transmit FIFO.")
-		self.pend = regs.csr(1, "r", desc="`1` iff an interrupt is pending")
-		self.pid  = regs.csr(1, "rw", desc="Contains the current PID toggle bit for the given endpoint.")
+		self.idle = regs.csr(1, 'r', desc='This value is `1` if no packet is actively being transmitted.')
+		self.have = regs.csr(1, 'r', desc='This value is `1` if data is present in the transmit FIFO.')
+		self.pend = regs.csr(1, 'r', desc='`1` iff an interrupt is pending')
+		self.pid  = regs.csr(1, 'rw', desc='Contains the current PID toggle bit for the given endpoint.')
 
 		#
 		# Interrupts
 		#
 
-		self._done_irq = self.event(name="done", desc="""
+		self._done_irq = self.event(name='done', desc='''
 			Indicates that the host has successfully transferred an ``IN`` packet,
 			and that the FIFO is now empty.
-		""")
+		''')
 
 		#
 		# I/O port
@@ -369,7 +369,7 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 			# IDLE -- our CPU hasn't yet requested that we send data.
 			# We'll wait for it to do so, and NAK any packets that arrive.
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 
 				# If we get an IN token...
 				with m.If(new_in_token):
@@ -383,18 +383,18 @@ class InFIFOInterface(Peripheral, Elaboratable):
 						m.d.comb += handshakes_out.nak.eq(1)
 
 
-				# If the user request that we send data, "prime" the endpoint.
+				# If the user request that we send data, 'prime' the endpoint.
 				# This means we have data to send, but are just waiting for an IN token.
 				with m.If(self.epno.w_stb & ~stalled):
-					m.next = "PRIMED"
+					m.next = 'PRIMED'
 
 				# Always return to IDLE on reset.
 				with m.If(self.reset.w_stb):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 			# PRIMED -- our CPU has provided data, but we haven't been sent an IN token, yet.
 			# Await that IN token.
-			with m.State("PRIMED"):
+			with m.State('PRIMED'):
 
 				with m.If(new_in_token):
 
@@ -407,12 +407,12 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 						# If there's no data in our endpoint, send a ZLP.
 						with m.If(~fifo.r_rdy):
-							m.next = "SEND_ZLP"
+							m.next = 'SEND_ZLP'
 
 						# Otherwise, send our data, starting with our first byte.
 						with m.Else():
 							m.d.usb += tx.first.eq(1)
-							m.next = "SEND_DATA"
+							m.next = 'SEND_DATA'
 
 					# Otherwise, we don't have a response; NAK the packet.
 					with m.Else():
@@ -420,11 +420,11 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 				# Always return to IDLE on reset.
 				with m.If(self.reset.w_stb):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 			# SEND_ZLP -- we're now now ready to respond to an IN token with a ZLP.
 			# Send our response.
-			with m.State("SEND_ZLP"):
+			with m.State('SEND_ZLP'):
 				m.d.comb += [
 					tx.valid  .eq(1),
 					tx.last   .eq(1)
@@ -434,7 +434,7 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 			# SEND_DATA -- we're now ready to respond to an IN token to our endpoint.
 			# Send our response.
-			with m.State("SEND_DATA"):
+			with m.State('SEND_DATA'):
 				last_byte = (bytes_in_fifo == 1)
 
 				m.d.comb += [
@@ -460,14 +460,14 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 				# Always return to IDLE on reset.
 				with m.If(self.reset.w_stb):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
-		return DomainRenamer({"sync": "usb"})(m)
+		return DomainRenamer({'sync': 'usb'})(m)
 
 
 
 class OutFIFOInterface(Peripheral, Elaboratable):
-	""" OUT component of our `eptri`
+	''' OUT component of our `eptri`
 
 	Implements the OUT FIFO, which handles receiving packets from our host.
 
@@ -476,7 +476,7 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 
 	interface: EndpointInterface
 		Our primary interface to the core USB device hardware.
-	"""
+	'''
 
 	def __init__(self, max_packet_size=512):
 		super().__init__()
@@ -488,32 +488,32 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		#
 
 		regs = self.csr_bank()
-		self.data = regs.csr(8, "r", desc="""
+		self.data = regs.csr(8, 'r', desc='''
 			A FIFO that returns the bytes from the most recently captured OUT transaction.
 			Reading a byte from this register advances the FIFO.
-		""")
-		self.data_ep = regs.csr(4, "r", desc="""
+		''')
+		self.data_ep = regs.csr(4, 'r', desc='''
 			Register that contains the endpoint number associated with the data in the FIFO -- that is,
 			the endpoint number on which the relevant data was received.
-		""")
+		''')
 
-		self.reset = regs.csr(1, "w", desc="""
+		self.reset = regs.csr(1, 'w', desc='''
 			Local reset for the OUT handler; clears the out FIFO.
-		""")
+		''')
 
-		self.epno = regs.csr(4, "rw", desc="""
+		self.epno = regs.csr(4, 'rw', desc='''
 			Selects the endpoint number to prime. This interface only allows priming a single endpoint at once--
 			that is, only one endpoint can be ready to receive data at a time. See the `enable` bit for usage.
-		""")
+		''')
 
-		self.enable = regs.csr(1, "rw", desc="""
+		self.enable = regs.csr(1, 'rw', desc='''
 			Controls whether any data can be received on any primed OUT endpoint. This bit is automatically cleared
 			on receive in order to give the controller time to read data from the FIFO. It must be re-enabled once
 			the FIFO has been emptied.
-		""")
+		''')
 
-		self.prime = regs.csr(1, "w", desc="""
-			Controls "priming" an out endpoint. To receive data on any endpoint, the CPU must first select
+		self.prime = regs.csr(1, 'w', desc='''
+			Controls 'priming' an out endpoint. To receive data on any endpoint, the CPU must first select
 			the endpoint with the `epno` register; and then write a '1' into the prime and enable register.
 			This prepares our FIFO to receive data; and the next OUT transaction will be captured into the FIFO.
 
@@ -523,36 +523,36 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 
 			Only one transaction / data packet is captured per `enable` write; repeated enabling is necessary
 			to capture multiple packets.
-		""")
+		''')
 
-		self.stall = regs.csr(1, "rw", desc="""
+		self.stall = regs.csr(1, 'rw', desc='''
 			Controls STALL'ing the active endpoint. Setting or clearing this bit will set or clear STALL on
 			the provided endpoint. Endpoint STALLs persist even after `epno` is changed; so multiple endpoints
 			can be stalled at once by writing their respective endpoint numbers into `epno` register and then
 			setting their `stall` bits.
-		""")
+		''')
 
 
-		self.have = regs.csr(1, "r", desc="`1` iff data is available in the FIFO.")
-		self.pend = regs.csr(1, "r", desc="`1` iff an interrupt is pending")
+		self.have = regs.csr(1, 'r', desc='`1` iff data is available in the FIFO.')
+		self.pend = regs.csr(1, 'r', desc='`1` iff an interrupt is pending')
 
 		# TODO: figure out where this should actually go to match ValentyUSB as much as possible
-		self._address = regs.csr(8, "rw", desc="""
+		self._address = regs.csr(8, 'rw', desc='''
 			Controls the current device's USB address. Should be written after a SET_ADDRESS request is
 			received. Automatically resets back to zero on a USB reset.
-		""")
+		''')
 
-		self.pid  = regs.csr(1, "rw", desc="Contains the current PID toggle bit for the given endpoint.")
+		self.pid  = regs.csr(1, 'rw', desc='Contains the current PID toggle bit for the given endpoint.')
 
 		#
 		# Interrupts.
 		#
 
-		self._done_irq = self.event(name="done", desc="""
+		self._done_irq = self.event(name='done', desc='''
 			Indicates that an ``OUT`` packet has successfully been transferred
 			from the host.  This bit must be cleared in order to receive
 			additional packets.
-		""")
+		''')
 
 
 		#
@@ -647,7 +647,7 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		allow_receive    = token.is_out & ready_to_receive
 		nak_receives     = token.is_out & ~ready_to_receive & ~stalled
 
-		# Shortcut for when we have a "redundant"/incorrect PID. In these cases, we'll assume
+		# Shortcut for when we have a 'redundant'/incorrect PID. In these cases, we'll assume
 		# the host missed our ACK, and per the USB spec, implicitly ACK the packet.
 		is_redundant_pid    = (interface.rx_pid_toggle != endpoint_data_pid[token.endpoint])
 		is_redundant_packet = endpoint_primed & token.is_out & is_redundant_pid
@@ -705,4 +705,4 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		# Interrupt/status
 		#
 
-		return DomainRenamer({"sync": "usb"})(m)
+		return DomainRenamer({'sync': 'usb'})(m)

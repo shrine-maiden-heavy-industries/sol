@@ -15,13 +15,13 @@ from sol.usb3               import SuperSpeedStreamInEndpoint, USBSuperSpeedDevi
 
 
 class USBSuperSpeedExample(Elaboratable):
-	""" Simple example of a USB SuperSpeed device using the SOL framework. """
+	''' Simple example of a USB SuperSpeed device using the SOL framework. '''
 
 	BULK_ENDPOINT_NUMBER = 1
 	MAX_BULK_PACKET_SIZE = 1024
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = SuperSpeedDeviceDescriptorCollection()
 
@@ -38,12 +38,12 @@ class USBSuperSpeedExample(Elaboratable):
 			# We're complying with the USB 3.2 standard.
 			d.bcdUSB             = 3.2
 
-			# USB3 requires this to be "9", to indicate 2 ** 9, or 512B.
+			# USB3 requires this to be '9', to indicate 2 ** 9, or 512B.
 			d.bMaxPacketSize0    = 9
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "SuperSpeed Bulk Test"
-			d.iSerialNumber      = "1234"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'SuperSpeed Bulk Test'
+			d.iSerialNumber      = '1234'
 
 			d.bNumConfigurations = 1
 
@@ -107,5 +107,5 @@ class USBSuperSpeedExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBSuperSpeedExample)

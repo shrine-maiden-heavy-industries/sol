@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Gateware for creating USB2 devices. """
+''' Gateware for creating USB2 devices. '''
 
 from enum                import IntEnum, IntFlag
 
@@ -15,7 +15,7 @@ from usb_construct.types import USBPIDCategory, USBDirection
 #
 
 class USBSpeed(IntEnum):
-	""" Enumeration representing USB speeds. Matches UTMI xcvr_select constants. """
+	''' Enumeration representing USB speeds. Matches UTMI xcvr_select constants. '''
 
 	HIGH = 0b00
 	FULL = 0b01
@@ -24,7 +24,7 @@ class USBSpeed(IntEnum):
 
 
 class USBPacketID(IntFlag):
-	""" Enumeration specifying all of the valid USB PIDs we can handle. """
+	''' Enumeration specifying all of the valid USB PIDs we can handle. '''
 
 	# Token group (lsbs = 0b01).
 	OUT   = 0b0001
@@ -57,7 +57,7 @@ class USBPacketID(IntFlag):
 
 	@classmethod
 	def from_byte(cls, byte, skip_checks=False):
-		""" Creates a PID object from a byte. """
+		''' Creates a PID object from a byte. '''
 
 		# Convert the raw PID to an integer.
 		pid_as_int = int.from_bytes(byte, byteorder='little')
@@ -66,7 +66,7 @@ class USBPacketID(IntFlag):
 
 	@classmethod
 	def from_int(cls, value, skip_checks=True):
-		""" Create a PID object from an integer. """
+		''' Create a PID object from an integer. '''
 
 		PID_MASK           = 0b1111
 		INVERTED_PID_SHIFT = 4
@@ -85,13 +85,13 @@ class USBPacketID(IntFlag):
 
 	@classmethod
 	def from_name(cls, name):
-		""" Create a PID object from a string representation of its name. """
+		''' Create a PID object from a string representation of its name. '''
 		return cls[name]
 
 
 	@classmethod
 	def parse(cls, value):
-		""" Attempt to create a PID object from a number, byte, or string. """
+		''' Attempt to create a PID object from a number, byte, or string. '''
 
 		if isinstance(value, bytes):
 			return cls.from_byte(value)
@@ -106,31 +106,31 @@ class USBPacketID(IntFlag):
 
 
 	def category(self):
-		""" Returns the USBPIDCategory that each given PID belongs to. """
+		''' Returns the USBPIDCategory that each given PID belongs to. '''
 		return USBPIDCategory(self & USBPIDCategory.MASK)
 
 
 	def is_data(self):
-		""" Returns true iff the given PID represents a DATA packet. """
+		''' Returns true iff the given PID represents a DATA packet. '''
 		return self.category() is USBPIDCategory.DATA
 
 
 	def is_token(self):
-		""" Returns true iff the given PID represents a token packet. """
+		''' Returns true iff the given PID represents a token packet. '''
 		return self.category() is USBPIDCategory.TOKEN
 
 
 	def is_handshake(self):
-		""" Returns true iff the given PID represents a handshake packet. """
+		''' Returns true iff the given PID represents a handshake packet. '''
 		return self.category() is USBPIDCategory.HANDSHAKE
 
 
 	def is_invalid(self):
-		""" Returns true if this object is an attempt to encapsulate an invalid PID. """
+		''' Returns true if this object is an attempt to encapsulate an invalid PID. '''
 		return (self & self.PID_INVALID)
 
 	def direction(self):
-		""" Get a USB direction from a PacketID. """
+		''' Get a USB direction from a PacketID. '''
 
 		if self is self.SOF:
 			return None
@@ -146,7 +146,7 @@ class USBPacketID(IntFlag):
 
 
 	def summarize(self):
-		""" Return a summary of the given packet. """
+		''' Return a summary of the given packet. '''
 
 		# By default, get the raw name.
 		core_pid  = self & self.PID_CORE_MASK
@@ -159,7 +159,7 @@ class USBPacketID(IntFlag):
 
 
 	def byte(self):
-		""" Return the value with its upper nibble. """
+		''' Return the value with its upper nibble. '''
 
 		inverted_pid = self ^ 0b1111
 		full_pid     = (inverted_pid << 4) | self

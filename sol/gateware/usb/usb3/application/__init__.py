@@ -4,4 +4,4 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 application-layer gateware. """
+''' USB3 application-layer gateware. '''

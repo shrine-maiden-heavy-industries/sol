@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Link Management Packet (LMP) -related gateware. """
+''' Link Management Packet (LMP) -related gateware. '''
 
 from torii                          import *
 
@@ -52,7 +52,7 @@ class PortConfigurationResponseHeaderPacket(HeaderPacket):
 
 
 class LinkManagementPacketHandler(Elaboratable):
-	""" Gateware that handles Link Management Packets.
+	''' Gateware that handles Link Management Packets.
 
 	Attributes
 	-----------
@@ -63,7 +63,7 @@ class LinkManagementPacketHandler(Elaboratable):
 
 	link_ready: Signal(), input
 		Should be asserted once our link is ready; used to trigger advertising.
-	"""
+	'''
 
 	# Link speed constants.
 	LINK_SPEED_5GBPS = 1
@@ -93,7 +93,7 @@ class LinkManagementPacketHandler(Elaboratable):
 
 
 		#
-		# Pending "tasks" for our transmitter.
+		# Pending 'tasks' for our transmitter.
 		#
 		pending_configuration_result = Signal(2)
 
@@ -103,7 +103,7 @@ class LinkManagementPacketHandler(Elaboratable):
 		#
 
 		def send_packet_response(response_type, **fields):
-			""" Helper that allows us to easily define a packet-send state."""
+			''' Helper that allows us to easily define a packet-send state.'''
 
 			# Create a response packet, and mark ourselves as sending it.
 			response = response_type()
@@ -120,27 +120,27 @@ class LinkManagementPacketHandler(Elaboratable):
 
 
 		def handle_resets():
-			""" Helper that brings down the link on USB reset. """
+			''' Helper that brings down the link on USB reset. '''
 			with m.If(self.usb_reset):
-				m.next = "LINK_DOWN"
+				m.next = 'LINK_DOWN'
 
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# LINK_DOWN -- our link is not yet ready to exchange packets; we'll wait until
 			# it's come up to the point where we can exchange header packets.
-			with m.State("LINK_DOWN"):
+			with m.State('LINK_DOWN'):
 
 				# Once our link is ready, we're ready to start link bringup.
 				with m.If(self.link_ready):
-					m.next = "SEND_CAPABILITIES"
+					m.next = 'SEND_CAPABILITIES'
 				with m.Else():
 					m.d.ss += pending_configuration_result.eq(0)
 
 
 			# SEND_CAPABILITIES -- our link has come up; and we're now ready to advertise our link
 			# capabilities to the other side of our link [USB3.2r1: 8.4.5].
-			with m.State("SEND_CAPABILITIES"):
+			with m.State('SEND_CAPABILITIES'):
 				handle_resets()
 
 				send_packet_response(PortCapabilityHeaderPacket,
@@ -156,21 +156,21 @@ class LinkManagementPacketHandler(Elaboratable):
 
 				# Continue to drive our packet until it's accepted by the link layer.
 				with m.If(header_source.ready):
-					m.next = "DISPATCH_COMMANDS"
+					m.next = 'DISPATCH_COMMANDS'
 
 
 			# DISPATCH_COMMANDS -- we'll wait for a command to be queued, and then send it.
-			with m.State("DISPATCH_COMMANDS"):
+			with m.State('DISPATCH_COMMANDS'):
 				handle_resets()
 
 				# If we have a pending configuration result, send it!
 				with m.If(pending_configuration_result):
-					m.next = "SEND_PORT_CONFIGURATION_RESPONSE"
+					m.next = 'SEND_PORT_CONFIGURATION_RESPONSE'
 
 
 			# SEND_CONFIGURATION_RESPONSE -- we're sending a Port Configuration Response,
 			# typically as a result of receiving a Port Configuration Request packet.
-			with m.State("SEND_PORT_CONFIGURATION_RESPONSE"):
+			with m.State('SEND_PORT_CONFIGURATION_RESPONSE'):
 				handle_resets()
 
 				send_packet_response(PortConfigurationResponseHeaderPacket,
@@ -181,7 +181,7 @@ class LinkManagementPacketHandler(Elaboratable):
 				# Continue to drive our packet until it's accepted by the link layer.
 				with m.If(header_source.ready):
 					m.d.ss += pending_configuration_result.eq(0)
-					m.next = "DISPATCH_COMMANDS"
+					m.next = 'DISPATCH_COMMANDS'
 
 
 		#

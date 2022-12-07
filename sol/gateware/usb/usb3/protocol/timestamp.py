@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Isochronous Timestamp Packet (ITP)-related gateware. """
+''' Isochronous Timestamp Packet (ITP)-related gateware. '''
 
 from torii                          import *
 
@@ -14,7 +14,7 @@ from ..link.header                  import HeaderQueue
 
 
 class TimestampPacketReceiver(Elaboratable):
-	""" Gateware that receives Isochronous Timestamp Packets, and keeps time.
+	''' Gateware that receives Isochronous Timestamp Packets, and keeps time.
 
 	Attributes
 	----------
@@ -25,7 +25,7 @@ class TimestampPacketReceiver(Elaboratable):
 		The currently timestamp, expressed in a number of 125uS bus intervals.
 	delta: Signal(13)
 		The delta from the aligned bus interval and ITP transmission.
-	"""
+	'''
 
 	def __init__(self):
 

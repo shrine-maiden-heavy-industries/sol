@@ -15,7 +15,7 @@ __all__ = (
 )
 
 class GetDescriptorSetHandler(Elaboratable):
-	""" Gateware that handles responding to Windows GET_DESCRIPTOR_SET requests.
+	''' Gateware that handles responding to Windows GET_DESCRIPTOR_SET requests.
 
 	Attributes
 	----------
@@ -35,11 +35,11 @@ class GetDescriptorSetHandler(Elaboratable):
 			The USBInStreamInterface that streams our descriptor data.
 		stall : Signal(), output
 			Pulsed if a STALL handshake should be generated, instead of a response.
-	"""
+	'''
 	elementSize = 4
 
 	def __init__(self, descriptorCollection : PlatformDescriptorCollection, maxPacketLength = 64, domain = 'usb'):
-		"""
+		'''
 		Parameters
 		----------
 		descriptorCollection : PlatformDescriptorCollection
@@ -48,7 +48,7 @@ class GetDescriptorSetHandler(Elaboratable):
 			Maximum EP0 packet length.
 		domain: string
 			The clock domain this generator should belong to. Defaults to 'usb'.
-		"""
+		'''
 		self._descriptors = descriptorCollection
 		self._maxPacketLength = maxPacketLength
 		self._domain = domain
@@ -67,11 +67,11 @@ class GetDescriptorSetHandler(Elaboratable):
 
 	@classmethod
 	def _alignToElementSize(cls, n):
-		""" Returns a given number rounded up to the next 'aligned' element size. """
+		''' Returns a given number rounded up to the next 'aligned' element size. '''
 		return (n + (cls.elementSize - 1)) // cls.elementSize
 
 	def generateROM(self) -> Tuple[Memory, int, int]:
-		""" Generates a ROM used to hold descriptor sets.
+		''' Generates a ROM used to hold descriptor sets.
 
 		Notes
 		-----
@@ -114,11 +114,11 @@ class GetDescriptorSetHandler(Elaboratable):
 				  The memory object uses 32-bit entries which the descriptor gateware accesses accordingly.
 				* The length of the largest held descriptor.
 				* The highest Vendor code number used by the descriptors for retrieval.
-		"""
+		'''
 
 		descriptors = self._descriptors.descriptors
-		assert max(descriptors.keys()) == len(descriptors), "descriptor sets have non-contiguous vendor codes!"
-		assert min(descriptors.keys()) == 1, "descriptor sets must start at vendor code 1"
+		assert max(descriptors.keys()) == len(descriptors), 'descriptor sets have non-contiguous vendor codes!'
+		assert min(descriptors.keys()) == 1, 'descriptor sets must start at vendor code 1'
 
 		maxVendorCode = max(descriptors.keys())
 		maxDescriptorSize = 0
@@ -153,7 +153,7 @@ class GetDescriptorSetHandler(Elaboratable):
 		return Memory(width = 32, depth = len(initialiser), init = initialiser), maxDescriptorSize, maxVendorCode
 
 	def elaborate(self, platform) -> Module:
-		""" Describes the specific gateware needed to implement Windows :code:`GET_DESCRIPTOR_SET` requests.
+		''' Describes the specific gateware needed to implement Windows :code:`GET_DESCRIPTOR_SET` requests.
 
 		Parameters
 		----------
@@ -164,7 +164,7 @@ class GetDescriptorSetHandler(Elaboratable):
 		-------
 		:py:class:`torii.hdl.dsl.Module`
 			A complete description of the gateware behaviour required.
-		"""
+		'''
 		m = Module()
 		rom, descriptorMaxLength, maxVendorCode = self.generateROM()
 		m.submodules.readPort = readPort = rom.read_port(transparent = False)

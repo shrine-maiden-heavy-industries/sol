@@ -4,9 +4,9 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 This module contains definitions of memory units that work well for USB applications.
-"""
+'''
 
 import unittest
 
@@ -17,10 +17,10 @@ from .test          import SolGatewareTestCase, sync_test_case
 
 
 class TransactionalizedFIFO(Elaboratable):
-	""" Transactionalized, buffer first-in-first-out queue.
+	''' Transactionalized, buffer first-in-first-out queue.
 
-	This FIFO is "transactionalized", which means that it allows sets of reads and writes to be "undone".
-	Effectively, this FIFO allows "rewinding" its read and write pointers to a previous point in time,
+	This FIFO is 'transactionalized', which means that it allows sets of reads and writes to be 'undone'.
+	Effectively, this FIFO allows 'rewinding' its read and write pointers to a previous point in time,
 	which makes it ideal for USB transmission or receipt; where the protocol can require blocks of data
 	to be retransmitted or ignored.
 
@@ -30,14 +30,14 @@ class TransactionalizedFIFO(Elaboratable):
 		Contains the next byte in the FIFO. Valid only when :attr:``empty`` is false.
 	read_en: Signal(), input
 		When asserted, the current :attr:``read_data`` will move to the next value. The data is not
-		internally consumed/dequeued until :attr:``read_commit`` is asserted. This read can be "undone"
+		internally consumed/dequeued until :attr:``read_commit`` is asserted. This read can be 'undone'
 		by asserting :attr:``read_discard``. Should only be asserted when :attr:``empty`` is false.
 	read_commit: Signal(), input
-		Strobe; when asserted, any reads performed since the last commit will be "finalized".
+		Strobe; when asserted, any reads performed since the last commit will be 'finalized'.
 		This effectively frees the memory associated with past reads. If this value is tied to '1',
 		the read port on this FIFO gracefully degrades to non-transactionalized port.
 	read_discard: Signal(), input
-		Strobe; when asserted; any reads since the last commit will be "undone", placing the read pointer
+		Strobe; when asserted; any reads since the last commit will be 'undone', placing the read pointer
 		back at the queue position it had after the last :attr:``read_commit`.
 	empty: Signal(), output
 		Asserted when no data is available in the FIFO. This signal refers to whether data is available to
@@ -48,13 +48,13 @@ class TransactionalizedFIFO(Elaboratable):
 		Holds the byte to be added to the FIFO when :attr:``write_en`` is asserted.
 	write_en: Signal(), input
 		When asserted, the current :attr:``write_data`` will be added to the FIFO; but will not be ready for read
-		until :attr:``write_commit`` is asserted. This write can be "undone" by asserting :attr:``write_discard``.
+		until :attr:``write_commit`` is asserted. This write can be 'undone' by asserting :attr:``write_discard``.
 		Should only be asserted when :attr:``full`` is false.
 	write_commit: Signal(), input
-		Strobe; when asserted, any writes reads performed since the last commit will be "finalized".
+		Strobe; when asserted, any writes reads performed since the last commit will be 'finalized'.
 		This makes the relevant data available for read.
 	write_discard: Signal(), input
-		Strobe; when asserted; any writes since the last commit will be "undone", placing the write pointer
+		Strobe; when asserted; any writes since the last commit will be 'undone', placing the write pointer
 		back at the queue position it had after the last :attr:``write_commit`. This frees the relevant memory
 		for new writes.
 	full: Signal(), output
@@ -77,9 +77,9 @@ class TransactionalizedFIFO(Elaboratable):
 		If not provided, Torii will attempt auto-detection.
 	domain: str
 		The name of the domain this module should exist in.
-	"""
+	'''
 
-	def __init__(self, *, width, depth, name=None, domain="sync"):
+	def __init__(self, *, width, depth, name=None, domain='sync'):
 		self.width  = width
 		self.depth  = depth
 		self.name   = name
@@ -110,7 +110,7 @@ class TransactionalizedFIFO(Elaboratable):
 		address_range = range(0, self.depth + 1)
 
 		#
-		# Core internal "backing store".
+		# Core internal 'backing store'.
 		#
 		memory = Memory(width=self.width, depth=self.depth + 1, name=self.name)
 		m.submodules.read_port  = read_port  = memory.read_port()
@@ -177,7 +177,7 @@ class TransactionalizedFIFO(Elaboratable):
 
 
 		# Our memory always takes a single cycle to provide its read output; so we'll update its address
-		# "one cycle in advance". Accordingly, if we're about to advance the FIFO, we'll use the next read
+		# 'one cycle in advance'. Accordingly, if we're about to advance the FIFO, we'll use the next read
 		# address as our input. If we're not, we'll use the current one.
 		with m.If(self.read_en & ~self.empty):
 			m.d.comb += read_port.addr.eq(next_read_pointer)
@@ -221,8 +221,8 @@ class TransactionalizedFIFO(Elaboratable):
 
 
 		# If we're not supposed to be in the sync domain, rename our sync domain to the target.
-		if self.domain != "sync":
-			m = DomainRenamer({"sync": self.domain})(m)
+		if self.domain != 'sync':
+			m = DomainRenamer({'sync': self.domain})(m)
 
 		return m
 
@@ -251,7 +251,7 @@ class TransactionalizedFIFOTest(SolGatewareTestCase):
 		# ... we should have less space available ...
 		self.assertEqual((yield dut.space_available), 15)
 
-		# ... but we still should be "empty", as we won't have data to read until we commit.
+		# ... but we still should be 'empty', as we won't have data to read until we commit.
 		self.assertEqual((yield dut.empty), 1)
 
 		# Once we _commit_ our write, we should suddenly have data to read.
@@ -348,5 +348,5 @@ class TransactionalizedFIFOTest(SolGatewareTestCase):
 		self.assertEqual((yield dut.space_available),  16)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

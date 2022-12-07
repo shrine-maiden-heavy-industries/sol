@@ -7,7 +7,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Peripheral interrupt helpers for SOL devices. """
+''' Peripheral interrupt helpers for SOL devices. '''
 
 
 from lambdasoc.periph.event import IRQLine
@@ -24,13 +24,13 @@ __all__ = (
 
 
 class EventSource:
-	"""Event source.
+	'''Event source.
 
 	Parameters
 	----------
-	mode : ``"level"``, ``"rise"``, ``"fall"``
-		Trigger mode. If ``"level"``, a notification is raised when the ``stb`` signal is high.
-		If ``"rise"`` (or ``"fall"``) a notification is raised on a rising (or falling) edge
+	mode : ``'level'``, ``'rise'``, ``'fall'``
+		Trigger mode. If ``'level'``, a notification is raised when the ``stb`` signal is high.
+		If ``'rise'`` (or ``'fall'``) a notification is raised on a rising (or falling) edge
 		of ``stb``.
 	name : str
 		Name of the event. If ``None`` (default) the name is inferred from the variable
@@ -40,28 +40,28 @@ class EventSource:
 	----------
 	name : str
 		Name of the event
-	mode : ``"level"``, ``"rise"``, ``"fall"``
+	mode : ``'level'``, ``'rise'``, ``'fall'``
 		Trigger mode.
 	stb : Signal, in
 		Event strobe.
-	"""
-	def __init__(self, *, mode="level", name=None, src_loc_at=0):
+	'''
+	def __init__(self, *, mode='level', name=None, src_loc_at=0):
 		if name is not None and not isinstance(name, str):
-			raise TypeError("Name must be a string, not {!r}".format(name))
+			raise TypeError('Name must be a string, not {!r}'.format(name))
 
-		choices = ("level", "rise", "fall")
+		choices = ('level', 'rise', 'fall')
 		if mode not in choices:
-			raise ValueError("Invalid trigger mode {!r}; must be one of {}"
-							 .format(mode, ", ".join(choices)))
+			raise ValueError('Invalid trigger mode {!r}; must be one of {}'
+							 .format(mode, ', '.join(choices)))
 
 		self.name = name or tracer.get_var_name(depth=2 + src_loc_at)
 		self.mode = mode
-		self.stb  = Signal(name="{}_stb".format(self.name))
+		self.stb  = Signal(name='{}_stb'.format(self.name))
 
 
 
 class InterruptSource(Elaboratable):
-	"""Interrupt source.
+	'''Interrupt source.
 
 	A mean of gathering multiple event sources into a single interrupt request line.
 
@@ -91,24 +91,24 @@ class InterruptSource(Elaboratable):
 	irq : :class:`IRQLine`, out
 		Interrupt request. It is raised if any event source is enabled and has a pending
 		notification.
-	"""
+	'''
 	def __init__(self, events, *, name=None, src_loc_at=0):
 		if name is not None and not isinstance(name, str):
-			raise TypeError("Name must be a string, not {!r}".format(name))
+			raise TypeError('Name must be a string, not {!r}'.format(name))
 		self.name = name or tracer.get_var_name(depth=2 + src_loc_at)
 
 		for event in events:
 			if not isinstance(event, EventSource):
-				raise TypeError("Event source must be an instance of EventSource, not {!r}"
+				raise TypeError('Event source must be an instance of EventSource, not {!r}'
 								.format(event))
 		self._events = list(events)
 
 		width = len(events)
-		self.status  = csr.Element(width, "r",  name="{}_status".format(self.name))
-		self.pending = csr.Element(width, "rw", name="{}_pending".format(self.name))
-		self.enable  = csr.Element(width, "rw", name="{}_enable".format(self.name))
+		self.status  = csr.Element(width, 'r',  name='{}_status'.format(self.name))
+		self.pending = csr.Element(width, 'rw', name='{}_pending'.format(self.name))
+		self.enable  = csr.Element(width, 'rw', name='{}_enable'.format(self.name))
 
-		self.irq = IRQLine(name="{}_irq".format(self.name))
+		self.irq = IRQLine(name='{}_irq'.format(self.name))
 
 	def elaborate(self, platform):
 		m = Module()
@@ -122,16 +122,16 @@ class InterruptSource(Elaboratable):
 		for i, event in enumerate(self._events):
 			m.d.sync += self.status.r_data[i].eq(event.stb)
 
-			if event.mode in ("rise", "fall"):
-				event_stb_r = Signal.like(event.stb, name_suffix="_r")
+			if event.mode in ('rise', 'fall'):
+				event_stb_r = Signal.like(event.stb, name_suffix='_r')
 				m.d.sync += event_stb_r.eq(event.stb)
 
-			event_trigger = Signal(name="{}_trigger".format(event.name))
-			if event.mode == "level":
+			event_trigger = Signal(name='{}_trigger'.format(event.name))
+			if event.mode == 'level':
 				m.d.comb += event_trigger.eq(event.stb)
-			elif event.mode == "rise":
+			elif event.mode == 'rise':
 				m.d.comb += event_trigger.eq(~event_stb_r & event.stb)
-			elif event.mode == "fall":
+			elif event.mode == 'fall':
 				m.d.comb += event_trigger.eq(event_stb_r & ~event.stb)
 			else:
 				assert False # :nocov:

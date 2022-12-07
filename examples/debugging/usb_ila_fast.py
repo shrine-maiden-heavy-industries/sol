@@ -15,7 +15,7 @@ from sol.gateware.usb.devices.ila import (
 
 
 class ILAExample(Elaboratable):
-	""" Gateware module that demonstrates use of the internal ILA. """
+	''' Gateware module that demonstrates use of the internal ILA. '''
 
 	def __init__(self):
 		self.counter = Signal(16)
@@ -45,8 +45,8 @@ class ILAExample(Elaboratable):
 		# Clock divider / counter.
 		m.d.sync += self.counter.eq(self.counter + 1)
 
-		# Say "hello world" constantly over our ILA...
-		letters = Array(ord(i) for i in "Hello, world! \r\n")
+		# Say 'hello world' constantly over our ILA...
+		letters = Array(ord(i) for i in 'Hello, world! \r\n')
 
 		current_letter = Signal(range(0, len(letters)))
 
@@ -62,6 +62,6 @@ class ILAExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	example = cli(ILAExample)
 	example.interactive_display()

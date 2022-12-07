@@ -4,12 +4,12 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 Endpoint interfaces for working with streams.
 
 The endpoint interfaces in this module provide endpoint interfaces suitable for
 connecting streams to USB endpoints.
-"""
+'''
 
 from torii               import *
 
@@ -20,7 +20,7 @@ from ..protocol.endpoint import SuperSpeedEndpointInterface
 
 
 class SuperSpeedStreamInEndpoint(Elaboratable):
-	""" Endpoint interface that transmits a simple data stream to a host.
+	''' Endpoint interface that transmits a simple data stream to a host.
 
 	This interface is suitable for a single bulk or interrupt endpoint.
 
@@ -47,7 +47,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 	max_packet_size: int
 		The maximum packet size for this endpoint. Should match the wMaxPacketSize provided in the
 		USB endpoint descriptor.
-	"""
+	'''
 
 	SEQUENCE_NUMBER_BITS = 5
 
@@ -112,10 +112,10 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 		# We'll create two buffers; so we can fill one as we empty the other.
 		# Since each buffer will be used for every other transaction, we'll use a simple flag to identify
-		# which of our "ping-pong" buffers is currently being targeted.
-		buffer = Array(Memory(width=data_width, depth=buffer_depth, name=f"transmit_buffer_{i}") for i in range(2))
-		buffer_write_ports = Array(buffer[i].write_port(domain="ss") for i in range(2))
-		buffer_read_ports  = Array(buffer[i].read_port(domain="ss", transparent=False) for i in range(2))
+		# which of our 'ping-pong' buffers is currently being targeted.
+		buffer = Array(Memory(width=data_width, depth=buffer_depth, name=f'transmit_buffer_{i}') for i in range(2))
+		buffer_write_ports = Array(buffer[i].write_port(domain='ss') for i in range(2))
+		buffer_read_ports  = Array(buffer[i].read_port(domain='ss', transparent=False) for i in range(2))
 
 		m.submodules.read_port_0,  m.submodules.read_port_1  = buffer_read_ports
 		m.submodules.write_port_0, m.submodules.write_port_1 = buffer_write_ports
@@ -137,7 +137,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		#   ``generate_zlps`` is enabled, is used to determine if the given buffer should end in
 		#   a short packet; which determines whether ZLPs are emitted.
 		buffer_fill_count   = Array(Signal(range(0, self._max_packet_size + 1)) for _ in range(2))
-		buffer_stream_ended = Array(Signal(name=f"stream_ended_in_buffer{i}") for i in range(2))
+		buffer_stream_ended = Array(Signal(name=f'stream_ended_in_buffer{i}') for i in range(2))
 
 		# Create shortcuts to active fill_count / stream_ended signals for the buffer being written.
 		write_fill_count   = buffer_fill_count[write_buffer_number]
@@ -219,7 +219,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 			# WAIT_FOR_DATA -- We don't yet have a full packet to transmit, so  we'll capture data
 			# to fill the our buffer. At full throughput, this state will never be reached after
 			# the initial post-reset fill.
-			with m.State("WAIT_FOR_DATA"):
+			with m.State('WAIT_FOR_DATA'):
 
 				# We can't yet send data; so we'll send an NRDY transaction packet.
 				with m.If(in_token_received):
@@ -248,36 +248,36 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 						# If we've already sent an NRDY token, we'll need to request an IN token
 						# before the host will be willing to send us one.
 						with m.If(erdy_required | in_token_received):
-							m.next = "REQUEST_IN_TOKEN"
+							m.next = 'REQUEST_IN_TOKEN'
 
 						# Otherwise, we can wait for an IN token directly.
 						with m.Else():
-							m.next = "WAIT_TO_SEND"
+							m.next = 'WAIT_TO_SEND'
 
 
 			# REQUEST_IN_TOKEN -- we now have at least a buffer full of data to send; but
 			# we've sent a NRDY token to the host; and thus the host is no longer polling for data.
 			# We'll send an ERDY token to the host, in order to request it poll us again.
-			with m.State("REQUEST_IN_TOKEN"):
+			with m.State('REQUEST_IN_TOKEN'):
 
 				# Send our ERDY token...
 				m.d.comb += handshakes_out.send_erdy.eq(1)
 
 				# ... and once that send is complete, move on to waiting for an IN token.
 				with m.If(handshakes_out.done):
-					m.next = "WAIT_TO_SEND"
+					m.next = 'WAIT_TO_SEND'
 
 
 			# WAIT_TO_SEND -- we now have at least a buffer full of data to send; we'll
 			# need to wait for an IN token to send it.
-			with m.State("WAIT_TO_SEND"):
+			with m.State('WAIT_TO_SEND'):
 
 				# Once we get an IN token, move to sending a packet.
 				with m.If(in_token_received):
 
 					# If we have a packet to send, send it.
 					with m.If(read_fill_count):
-						m.next = "SEND_PACKET"
+						m.next = 'SEND_PACKET'
 						m.d.ss += [
 							last_packet_was_zlp  .eq(0)
 						]
@@ -294,12 +294,12 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 						]
 
 						# We've now completed a packet send; so wait for it to be acknowledged.
-						m.next = "WAIT_FOR_ACK"
+						m.next = 'WAIT_FOR_ACK'
 
 
 			# SEND_PACKET -- we now have enough data to send _and_ have received an IN token.
 			# We can now send our data over to the host.
-			with m.State("SEND_PACKET"):
+			with m.State('SEND_PACKET'):
 
 				m.d.comb += [
 					# Apply our general transfer information.
@@ -362,7 +362,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 			# WAIT_FOR_ACK -- We've just sent a packet; but don't know if the host has
 			# received it correctly. We'll wait to see if the host ACKs.
-			with m.State("WAIT_FOR_ACK"):
+			with m.State('WAIT_FOR_ACK'):
 
 				# We're done transmitting data.
 				m.d.ss   += out_stream.valid.eq(0)
@@ -430,11 +430,11 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 							# Otherwise, we'll wait for an attempt to send data before we generate a ZLP.
 							with m.Else():
-								m.next = "WAIT_TO_SEND"
+								m.next = 'WAIT_TO_SEND'
 
 
 						# Otherwise, there's a possibility we already have a packet-worth of data waiting
-						# for us in our "write buffer", which we've been filling in the background.
+						# for us in our 'write buffer', which we've been filling in the background.
 						# If this is the case, we'll flip which buffer we're working with, and then
 						# ready ourselves for transmit.
 						packet_completing = in_stream.valid & (write_fill_count + 4 >= self._max_packet_size)
@@ -451,14 +451,14 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 								m.d.ss += [
 									last_packet_was_zlp  .eq(0)
 								]
-								m.next = "SEND_PACKET"
+								m.next = 'SEND_PACKET'
 
 							with m.Else():
-								m.next = "WAIT_TO_SEND"
+								m.next = 'WAIT_TO_SEND'
 
 						# If neither of the above conditions are true; we now don't have enough data to send.
 						# We'll wait for enough data to transmit.
 						with m.Else():
-							m.next = "WAIT_FOR_DATA"
+							m.next = 'WAIT_FOR_DATA'
 
 		return m

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Request components shared between USB2 and USB3. """
+''' Request components shared between USB2 and USB3. '''
 
 
 from torii         import *
@@ -12,7 +12,7 @@ from torii.hdl.rec import DIR_FANOUT
 
 
 class SetupPacket(Record):
-	""" Record capturing the content of a setup packet.
+	''' Record capturing the content of a setup packet.
 
 	Components (O = output from setup parser; read-only input to others):
 		O: received      -- Strobe; indicates that a new setup packet has been received,
@@ -26,7 +26,7 @@ class SetupPacket(Record):
 		O: value[16]     -- Value argument for the setup request.
 		O: index[16]     -- Index argument for the setup request.
 		O: length[16]    -- Length of the relevant setup request.
-	"""
+	'''
 
 	def __init__(self):
 		super().__init__([

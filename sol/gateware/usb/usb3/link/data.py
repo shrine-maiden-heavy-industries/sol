@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Data Packet Payload (DPP) management gateware. """
+''' Data Packet Payload (DPP) management gateware. '''
 
 import unittest
 
@@ -47,7 +47,7 @@ class DataHeaderPacket(HeaderPacket):
 
 
 class DataPacketReceiver(Elaboratable):
-	""" Class that monitors the USB bus for data packets, and receives them.
+	''' Class that monitors the USB bus for data packets, and receives them.
 
 	This class has logic redundant with our Header Packet Receiver, to simplify data packet
 	reception. Accordingly, the header section of the data packet will be parsed here as well
@@ -80,7 +80,7 @@ class DataPacketReceiver(Elaboratable):
 		Strobe; indicates that the packet received passed validations and can be considered good.
 	packet_bad: Signal(), output
 		Strobe; indicates that the packet failed CRC checks, or did not end properly.
-	"""
+	'''
 
 	MAX_PACKET_SIZE = 1024
 
@@ -138,11 +138,11 @@ class DataPacketReceiver(Elaboratable):
 		#
 		# Receiver Sequencing
 		#
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# WAIT_FOR_HPSTART -- we're currently waiting for HPSTART framing, which indicates
 			# that the following 16 symbols (4 words) will be a header packet.
-			with m.State("WAIT_FOR_HPSTART"):
+			with m.State('WAIT_FOR_HPSTART'):
 
 				# Don't start our CRCs until we're past our HPSTART header.
 				m.d.comb += [
@@ -152,28 +152,28 @@ class DataPacketReceiver(Elaboratable):
 
 				is_hpstart = stream_matches_symbols(sink, SHP, SHP, SHP, EPF)
 				with m.If(is_hpstart):
-					m.next = "RECEIVE_DW0"
+					m.next = 'RECEIVE_DW0'
 
 			# RECEIVE_DWn -- the first three words of our header packet are data words meant form
 			# the protocol layer; we'll receive them so we can pass them on to the protocol layer.
 			for n in range(3):
-				with m.State(f"RECEIVE_DW{n}"):
+				with m.State(f'RECEIVE_DW{n}'):
 
 					with m.If(sink.valid):
 						m.d.comb += crc16.advance_crc.eq(1)
 						m.d.ss += header[f'dw{n}'].eq(sink.data)
-						m.next = f"RECEIVE_DW{n+1}"
+						m.next = f'RECEIVE_DW{n+1}'
 
 						# Extra check for our first packet; we'll make sure this of -data- type;
 						# and bail out, otherwise.
 						if n == 0:
 							with m.If(sink.data[0:5] != HeaderPacketType.DATA):
-								m.next = "WAIT_FOR_HPSTART"
+								m.next = 'WAIT_FOR_HPSTART'
 
 
 			# RECEIVE_DW3 -- we'll receive and parse our final data word, which contains the fields
 			# relevant to the link layer.
-			with m.State("RECEIVE_DW3"):
+			with m.State('RECEIVE_DW3'):
 
 				with m.If(sink.valid):
 					m.d.ss += [
@@ -190,16 +190,16 @@ class DataPacketReceiver(Elaboratable):
 						expected_crc5           .eq(compute_usb_crc5(sink.data[16:27]))
 					]
 
-					m.next = "CHECK_HEADER"
+					m.next = 'CHECK_HEADER'
 
 			# CHECK_PACKET -- we've now received our full packet; we'll check it for validity.
-			with m.State("CHECK_HEADER"):
+			with m.State('CHECK_HEADER'):
 				crc5_failed  = (expected_crc5 != header.crc5)
 				crc16_failed = (crc16.crc     != header.crc16)
 
 				# If either of our CRCs fail, this isn't going to be followed by a DPP we care about.
 				with m.If(crc5_failed | crc16_failed):
-					m.next = "WAIT_FOR_HPSTART"
+					m.next = 'WAIT_FOR_HPSTART'
 
 				# Otherwise, if we have a data packet header, move to capturing our data.
 				with m.Elif(stream_matches_symbols(sink, SDP, SDP, SDP, EPF)):
@@ -216,15 +216,15 @@ class DataPacketReceiver(Elaboratable):
 					]
 
 					# Move to receiving data.
-					m.next = "RECEIVE_PAYLOAD"
+					m.next = 'RECEIVE_PAYLOAD'
 
 				# If our data is valid and we're -not- a start of DPP, this isn't for us.
 				# Go back to watching for data.
 				with m.Elif(sink.valid):
-					m.next = "WAIT_FOR_HPSTART"
+					m.next = 'WAIT_FOR_HPSTART'
 
 			# RECEIVE_PAYLOAD -- receive the core data payload
-			with m.State("RECEIVE_PAYLOAD"):
+			with m.State('RECEIVE_PAYLOAD'):
 				m.d.comb += [
 					# Pass through most our data directly.
 					source.data         .eq(sink.data),
@@ -252,10 +252,10 @@ class DataPacketReceiver(Elaboratable):
 					# If we see unexpected control codes in our data packet, bail out.
 					# Note that we'll only check for validity in positions we consider to have
 					# valid data; as we always expect our data packet payload to be followed by
-					# and "end of packet" set of control codes.
+					# and 'end of packet' set of control codes.
 					with m.If((sink.ctrl & source.valid) != 0):
 						m.d.comb += self.packet_bad.eq(1)
-						m.next = "WAIT_FOR_HPSTART"
+						m.next = 'WAIT_FOR_HPSTART'
 
 					# Capture the current word and valid value, so we can refer to them in
 					# future states. This is necessary for CRC validation when we have a data payload
@@ -271,12 +271,12 @@ class DataPacketReceiver(Elaboratable):
 						m.d.ss += data_bytes_remaining.eq(data_bytes_remaining - 4)
 
 					with m.Else():
-						m.next = "CHECK_CRC32"
+						m.next = 'CHECK_CRC32'
 
 
 			# CHECK_CRC32 -- we've received the end of our packet; and we're ready to decide if the
 			# packet is good or not. We'll check its CRC, and strobe either packet_good or packet_bad.
-			with m.State("CHECK_CRC32"):
+			with m.State('CHECK_CRC32'):
 				data_to_check = Signal.like(sink.data)
 
 				# Depending on how many bytes were present in our data packet, our CRC may be partially
@@ -310,7 +310,7 @@ class DataPacketReceiver(Elaboratable):
 					m.d.comb += self.packet_bad.eq(1)
 
 				# Finally, wait for our next packet.
-					m.next = "WAIT_FOR_HPSTART"
+					m.next = 'WAIT_FOR_HPSTART'
 
 
 		return m
@@ -324,7 +324,7 @@ class DataPacketReceiverTest(SolSSGatewareTestCase):
 		yield self.dut.sink.valid.eq(1)
 
 	def provide_data(self, *tuples):
-		""" Provides the receiver with a sequence of (data, ctrl) values. """
+		''' Provides the receiver with a sequence of (data, ctrl) values. '''
 
 		# Provide each word of our data to our receiver...
 		for data, ctrl in tuples:
@@ -406,7 +406,7 @@ class DataPacketReceiverTest(SolSSGatewareTestCase):
 
 
 class DataPacketTransmitter(Elaboratable):
-	""" Gateware that generates a Data Packet Header, and orchestrates sending it and a payload.
+	''' Gateware that generates a Data Packet Header, and orchestrates sending it and a payload.
 
 	The actual sending is handled by our transmitter gateware.
 
@@ -430,7 +430,7 @@ class DataPacketTransmitter(Elaboratable):
 
 	address: Signal(7), input
 		The current address of the USB device.
-	"""
+	'''
 
 	MAX_PACKET_SIZE = 1024
 
@@ -481,10 +481,10 @@ class DataPacketTransmitter(Elaboratable):
 			m.d.comb += data_sink.ready.eq(1)
 
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# WAIT_FOR_DATA -- we're idly waiting for our input data stream to become valid.
-			with m.State("WAIT_FOR_DATA"):
+			with m.State('WAIT_FOR_DATA'):
 
 				# Constantly latch in our data parameters until we get a new data packet.
 				m.d.ss += [
@@ -496,14 +496,14 @@ class DataPacketTransmitter(Elaboratable):
 
 				# Once our data goes valid, begin sending our data.
 				with m.If(data_sink.valid.any()):
-					m.next = "SEND_HEADER"
+					m.next = 'SEND_HEADER'
 
 				with m.Elif(self.send_zlp):
-					m.next = "SEND_ZLP"
+					m.next = 'SEND_ZLP'
 
 
 			# SEND_HEADER -- we're sending the header associated with our data packet.
-			with m.State("SEND_HEADER"):
+			with m.State('SEND_HEADER'):
 				header = DataHeaderPacket()
 				m.d.comb += [
 					header_source.header    .eq(header),
@@ -522,21 +522,21 @@ class DataPacketTransmitter(Elaboratable):
 
 				# Once our header is accepted, move on to passing through our payload.
 				with m.If(header_source.ready):
-					m.next = "SEND_PAYLOAD"
+					m.next = 'SEND_PAYLOAD'
 
 
 			# SEND_PAYLOAD -- we're now passing our payload data to our transmitter; which will
 			# drive ready when it's time to accept data.
-			with m.State("SEND_PAYLOAD"):
+			with m.State('SEND_PAYLOAD'):
 
 				# Once our packet is complete, we'll go back to idle.
 				with m.If(~data_sink.valid.any()):
-					m.next = "WAIT_FOR_DATA"
+					m.next = 'WAIT_FOR_DATA'
 
 
 			# SEND_ZLP -- we're sending a ZLP; which in our case means we'll be sending a header
 			# without driving our data stream.
-			with m.State("SEND_ZLP"):
+			with m.State('SEND_ZLP'):
 				header = DataHeaderPacket()
 				m.d.comb += [
 					header_source.header    .eq(header),
@@ -556,12 +556,12 @@ class DataPacketTransmitter(Elaboratable):
 				# Once our header is accepted, we can move directly back to idle.
 				# Our transmitter will handle generating the zero-length DPP.
 				with m.If(header_source.ready):
-					m.next = "WAIT_FOR_DATA"
+					m.next = 'WAIT_FOR_DATA'
 
 
 
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

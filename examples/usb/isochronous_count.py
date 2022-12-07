@@ -18,18 +18,18 @@ from sol.usb2               import USBDevice, USBIsochronousInEndpoint
 
 
 class USBIsochronousCounterDeviceExample(Elaboratable):
-	""" Simple device that demonstrates use of an isochronous-IN endpoint.
+	''' Simple device that demonstrates use of an isochronous-IN endpoint.
 
 	Always sends a monotonically-incrementing 8-bit counter up to the host; but does so
 	using an isochronous endpoint. In this case, the counter stands in for a simple memory.
-	"""
+	'''
 
 	ISO_ENDPOINT_NUMBER      = 1
 	MAX_ISO_PACKET_SIZE      = 1024
 	TRANSFERS_PER_MICROFRAME = (2 << 11)
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -43,9 +43,9 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Isochronous IN Test"
-			d.iSerialNumber      = "no serial"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Isochronous IN Test'
+			d.iSerialNumber      = 'no serial'
 
 			d.bNumConfigurations = 1
 
@@ -104,5 +104,5 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBIsochronousCounterDeviceExample)

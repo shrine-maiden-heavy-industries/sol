@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 PIPE interfacing gateware. """
+''' USB3 PIPE interfacing gateware. '''
 
 
 from torii          import *
@@ -14,14 +14,14 @@ from torii.lib.fifo import AsyncFIFOBuffered
 
 
 class PIPEInterface(Elaboratable):
-	""" Interface present on hardware that implements the PHY Interface for PCI Express and USB 3.0 (PIPE).
+	''' Interface present on hardware that implements the PHY Interface for PCI Express and USB 3.0 (PIPE).
 
 	This interface is compliant with the PHY Interface For the PCI Express and USB 3.0
 	Architectures, Version 3.0 specification. Unless otherwise noted, the descriptions of
 	the signals as stated in this specification take precedence over the ones provided here.
 
 	The directions of the signals are given from the PHY perspective, i.e. a signal described as
-	an "output" is driven by the PHY and received by the MAC.
+	an 'output' is driven by the PHY and received by the MAC.
 
 	Parameters
 	----------
@@ -121,7 +121,7 @@ class PIPEInterface(Elaboratable):
 	power_present : Signal(), output
 		If asserted, voltage is present on Vbus. Whether this signal is implemented is PHY
 		implementation dependent.
-	"""
+	'''
 
 	# Mappings of interface widths to DataBusWidth parameters.
 	_DATA_BUS_WIDTHS = {
@@ -133,7 +133,7 @@ class PIPEInterface(Elaboratable):
 	def __init__(self, *, width):
 		# Ensure we have a valid interface width.
 		if width not in (1, 2, 4):
-			raise ValueError(f"PIPE does not support a data bus width of {width}")
+			raise ValueError(f'PIPE does not support a data bus width of {width}')
 		self.width          = width
 
 		#
@@ -182,7 +182,7 @@ class PIPEInterface(Elaboratable):
 
 
 class AsyncPIPEInterface(PIPEInterface, Elaboratable):
-	""" Gateware that transfers PIPE interface signals between clock domains.
+	''' Gateware that transfers PIPE interface signals between clock domains.
 
 	The PIPE specification defines the PHY interface signals to be synchronous to a PHY-generated
 	clock ``pclk``, and asynchronous if ``pclk`` is not running. The MAC will typically not be
@@ -203,12 +203,12 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 	The ``pclk`` signal is driven by the clock of this domain.
 
 	This gateware does not currently support asynchronous signaling in the deepest PHY power state.
-	"""
+	'''
 
-	def __init__(self, phy, *, width, domain="ss"):
+	def __init__(self, phy, *, width, domain='ss'):
 		if width < phy.width:
-			raise ValueError(f"Async PIPE interface cannot adapt PHY data bus width {phy.width} "
-							 f"to MAC data bus width {width}")
+			raise ValueError(f'Async PIPE interface cannot adapt PHY data bus width {phy.width} '
+							 f'to MAC data bus width {width}')
 		super().__init__(width=width)
 		self.phy            = phy
 		self._domain        = domain
@@ -226,10 +226,10 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		m.domains.phy = ClockDomain(local=True, async_reset=True)
 		m.d.comb += [
 			phy.clk             .eq(self.clk),
-			ClockSignal("phy")  .eq(phy.pclk),
+			ClockSignal('phy')  .eq(phy.pclk),
 		]
 
-		m.submodules += ResetSynchronizer(phy.reset, domain="phy")
+		m.submodules += ResetSynchronizer(phy.reset, domain='phy')
 		m.d.comb += [
 			phy.reset           .eq(self.reset),
 		]
@@ -283,8 +283,8 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		m.submodules.tx_fifo = tx_fifo = AsyncFIFOBuffered(
 			width=len(mac_tx_bus_signals),
 			depth=4,
-			w_domain="sync",
-			r_domain="phy"
+			w_domain='sync',
+			r_domain='phy'
 		)
 		m.d.comb += [
 			tx_fifo.w_data      .eq(mac_tx_bus_signals),
@@ -297,11 +297,11 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		#
 		# Receive data bus and related control signals.
 		#
-		geared_rx_data          = [Signal.like(phy.rx_data,     name_suffix=f"_{i}") for i in range(ratio)]
-		geared_rx_datak         = [Signal.like(phy.rx_datak,    name_suffix=f"_{i}") for i in range(ratio)]
-		geared_rx_valid         = [Signal.like(phy.rx_valid,    name_suffix=f"_{i}") for i in range(ratio)]
-		geared_rx_status        = [Signal.like(phy.rx_status,   name_suffix=f"_{i}") for i in range(ratio)]
-		geared_phy_status       = [Signal.like(phy.phy_status,  name_suffix=f"_{i}") for i in range(ratio)]
+		geared_rx_data          = [Signal.like(phy.rx_data,     name_suffix=f'_{i}') for i in range(ratio)]
+		geared_rx_datak         = [Signal.like(phy.rx_datak,    name_suffix=f'_{i}') for i in range(ratio)]
+		geared_rx_valid         = [Signal.like(phy.rx_valid,    name_suffix=f'_{i}') for i in range(ratio)]
+		geared_rx_status        = [Signal.like(phy.rx_status,   name_suffix=f'_{i}') for i in range(ratio)]
+		geared_phy_status       = [Signal.like(phy.phy_status,  name_suffix=f'_{i}') for i in range(ratio)]
 		phy_rx_bus_signals = Cat(
 			phy.rx_data,
 			phy.rx_datak,
@@ -353,8 +353,8 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		m.submodules.rx_fifo = rx_fifo = AsyncFIFOBuffered(
 			width=len(mac_rx_bus_signals),
 			depth=4,
-			w_domain="phy",
-			r_domain="sync"
+			w_domain='phy',
+			r_domain='sync'
 		)
 		m.d.phy  += [
 			rx_fifo.w_data.word_select(gear_index, len(phy_rx_bus_signals))
@@ -374,30 +374,30 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 			# These control and status signals may change while the PHY is active; but they
 			# do not need to be precisely synchronized to the data bus, since no specific
 			# latency is defined for these signals.
-			FFSynchronizer(self.phy_mode,       phy.phy_mode,       o_domain="phy"),
-			FFSynchronizer(self.elas_buf_mode,  phy.elas_buf_mode,  o_domain="phy"),
-			FFSynchronizer(self.rate,           phy.rate,           o_domain="phy"),
-			FFSynchronizer(self.power_down,     phy.power_down,     o_domain="phy"),
-			FFSynchronizer(self.tx_deemph,      phy.tx_deemph,      o_domain="phy"),
-			FFSynchronizer(self.tx_margin,      phy.tx_margin,      o_domain="phy"),
-			FFSynchronizer(self.tx_swing,       phy.tx_swing,       o_domain="phy"),
-			FFSynchronizer(self.tx_detrx_lpbk,  phy.tx_detrx_lpbk,  o_domain="phy"),
-			FFSynchronizer(self.tx_elec_idle,   phy.tx_elec_idle,   o_domain="phy"),
-			FFSynchronizer(self.rx_polarity,    phy.rx_polarity,    o_domain="phy"),
-			FFSynchronizer(self.rx_eq_training, phy.rx_eq_training, o_domain="phy"),
-			FFSynchronizer(self.rx_termination, phy.rx_termination, o_domain="phy"),
-			FFSynchronizer(phy.rx_elec_idle,    self.rx_elec_idle,  o_domain="sync"),
-			FFSynchronizer(phy.power_present,   self.power_present, o_domain="sync"),
+			FFSynchronizer(self.phy_mode,       phy.phy_mode,       o_domain='phy'),
+			FFSynchronizer(self.elas_buf_mode,  phy.elas_buf_mode,  o_domain='phy'),
+			FFSynchronizer(self.rate,           phy.rate,           o_domain='phy'),
+			FFSynchronizer(self.power_down,     phy.power_down,     o_domain='phy'),
+			FFSynchronizer(self.tx_deemph,      phy.tx_deemph,      o_domain='phy'),
+			FFSynchronizer(self.tx_margin,      phy.tx_margin,      o_domain='phy'),
+			FFSynchronizer(self.tx_swing,       phy.tx_swing,       o_domain='phy'),
+			FFSynchronizer(self.tx_detrx_lpbk,  phy.tx_detrx_lpbk,  o_domain='phy'),
+			FFSynchronizer(self.tx_elec_idle,   phy.tx_elec_idle,   o_domain='phy'),
+			FFSynchronizer(self.rx_polarity,    phy.rx_polarity,    o_domain='phy'),
+			FFSynchronizer(self.rx_eq_training, phy.rx_eq_training, o_domain='phy'),
+			FFSynchronizer(self.rx_termination, phy.rx_termination, o_domain='phy'),
+			FFSynchronizer(phy.rx_elec_idle,    self.rx_elec_idle,  o_domain='sync'),
+			FFSynchronizer(phy.power_present,   self.power_present, o_domain='sync'),
 		]
 
 
 		# Rename the default domain to the MAC domain that was requested.
-		return DomainRenamer({"sync": self._domain})(m)
+		return DomainRenamer({'sync': self._domain})(m)
 
 
 
 class GearedPIPEInterface(Elaboratable):
-	""" Module that presents a post-gearing PIPE interface, performing gearing in I/O hardware.
+	''' Module that presents a post-gearing PIPE interface, performing gearing in I/O hardware.
 
 	This module presents a public interface that's identical to a standard PIPE PHY,
 	with the following exceptions:
@@ -423,9 +423,9 @@ class GearedPIPEInterface(Elaboratable):
 		The raw PIPE interface to be worked with.
 	handle_clocking: boolean, optional
 		If true or not provided, this module will attempt to handle some clock connections
-		for you. This means that ClockSignal("pipe_io") will be automatically driven by the
-		PHY's clock (``pclk``), and ``tx_clk`` will automatically be tied to ClockSignal("pipe").
-	"""
+		for you. This means that ClockSignal('pipe_io') will be automatically driven by the
+		PHY's clock (``pclk``), and ``tx_clk`` will automatically be tied to ClockSignal('pipe').
+	'''
 
 	# Provide standard XDR settings that can be used when requesting an interface.
 	GEARING_XDR = {
@@ -480,7 +480,7 @@ class GearedPIPEInterface(Elaboratable):
 				setattr(self, name, io.o)
 
 			else:
-				raise ValueError(f"Unexpected signal {name} with subordinates {io} in PIPE PHY!")
+				raise ValueError(f'Unexpected signal {name} with subordinates {io} in PIPE PHY!')
 
 
 	def elaborate(self, platform):
@@ -490,13 +490,13 @@ class GearedPIPEInterface(Elaboratable):
 		m.d.comb += [
 			# Drive our I/O boundary clock with our PHY clock directly,
 			# and replace our geared clock with the relevant divided clock.
-			ClockSignal("ss_io")     .eq(self._io.pclk.i),
-			self.pclk                .eq(ClockSignal("ss")),
+			ClockSignal('ss_io')     .eq(self._io.pclk.i),
+			self.pclk                .eq(ClockSignal('ss')),
 
 			# Drive our transmit clock with an DDR output driven from our full-rate clock.
 			# Re-creating the clock in this I/O cell ensures that our clock output is phase-aligned
-			# with the signals we create below. [UG471: pg128, "Clock Forwarding"]
-			self._io.tx_clk.o_clk    .eq(ClockSignal("ss_io_shifted")),
+			# with the signals we create below. [UG471: pg128, 'Clock Forwarding']
+			self._io.tx_clk.o_clk    .eq(ClockSignal('ss_io_shifted')),
 			self._io.tx_clk.o0       .eq(1),
 			self._io.tx_clk.o1       .eq(0),
 		]
@@ -504,15 +504,15 @@ class GearedPIPEInterface(Elaboratable):
 		# Set up our geared I/O clocks.
 		m.d.comb += [
 			# Drive our transmit signals from our transmit-domain clocks...
-			self._io.tx_data.o_clk     .eq(ClockSignal("ss")),
-			self._io.tx_datak.o_clk    .eq(ClockSignal("ss")),
+			self._io.tx_data.o_clk     .eq(ClockSignal('ss')),
+			self._io.tx_datak.o_clk    .eq(ClockSignal('ss')),
 
 			# ... and drive our receive signals from our primary/receive domain clock.
-			self._io.rx_data.i_clk     .eq(ClockSignal("ss_shifted")),
-			self._io.rx_datak.i_clk    .eq(ClockSignal("ss_shifted")),
-			self._io.rx_valid.i_clk    .eq(ClockSignal("ss_shifted")),
-			self._io.phy_status.i_clk  .eq(ClockSignal("ss_shifted")),
-			self._io.rx_status.i_clk   .eq(ClockSignal("ss_shifted")),
+			self._io.rx_data.i_clk     .eq(ClockSignal('ss_shifted')),
+			self._io.rx_datak.i_clk    .eq(ClockSignal('ss_shifted')),
+			self._io.rx_valid.i_clk    .eq(ClockSignal('ss_shifted')),
+			self._io.phy_status.i_clk  .eq(ClockSignal('ss_shifted')),
+			self._io.rx_status.i_clk   .eq(ClockSignal('ss_shifted')),
 		]
 
 		#

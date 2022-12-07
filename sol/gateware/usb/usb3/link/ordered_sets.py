@@ -7,7 +7,7 @@
 #
 # Code based on ``litex`` and ``usb3_pipe``.
 
-""" Link training support gateware. """
+''' Link training support gateware. '''
 
 
 from torii             import *
@@ -55,7 +55,7 @@ TS2_SET_DATA = [
 
 
 class TSBurstDetector(Elaboratable):
-	""" Simple Training Set detector; capable of detecting basic training sets.
+	''' Simple Training Set detector; capable of detecting basic training sets.
 
 	Parameters
 	----------
@@ -63,7 +63,7 @@ class TSBurstDetector(Elaboratable):
 		The sink to monitor for ordered sets; should be fed pre-descrambler data.
 	detected: Signal(), output
 		Strobe; pulses high when a burst of ordered sets has been received.
-	"""
+	'''
 
 	def __init__(self, *, set_data, first_word_ctrl=0b1111, sets_in_burst=1, include_config=False):
 		self._set_data            = set_data
@@ -98,36 +98,36 @@ class TSBurstDetector(Elaboratable):
 		ctrl  = self.sink.ctrl
 
 
-		def advance_on_match(count, target_ctrl=0b0000, fail_state="NONE_DETECTED"):
+		def advance_on_match(count, target_ctrl=0b0000, fail_state='NONE_DETECTED'):
 			data_matches = (data == self._set_data[count])
 			ctrl_matches = (ctrl == target_ctrl)
 
 			# Once we have a valid word in our stream...
 			with m.If(self.sink.valid):
 
-				# ... advance if that word matches; or move to our "fail state" otherwise.
+				# ... advance if that word matches; or move to our 'fail state' otherwise.
 				with m.If(data_matches & ctrl_matches):
-					m.next = f"{count + 1}_DETECTED"
+					m.next = f'{count + 1}_DETECTED'
 				with m.Else():
 					m.next = fail_state
 
 
 		last_state_number = len(self._set_data)
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# NONE_DETECTED -- we haven't seen any parts of our ordered set;
 			# we're waiting for the first one.
-			with m.State("NONE_DETECTED"):
+			with m.State('NONE_DETECTED'):
 				m.d.ss += consecutive_set_count.eq(0)
-				m.next = "WAIT_FOR_FIRST"
+				m.next = 'WAIT_FOR_FIRST'
 
 			# WAIT_FOR_FIRST -- we're waiting to see the first word of our sequence
-			with m.State("WAIT_FOR_FIRST"):
-				advance_on_match(0, target_ctrl=self._first_word_ctrl, fail_state="WAIT_FOR_FIRST")
+			with m.State('WAIT_FOR_FIRST'):
+				advance_on_match(0, target_ctrl=self._first_word_ctrl, fail_state='WAIT_FOR_FIRST')
 
 			# 1_DETECTED -- we're parsing the first data word; which we'll do slightly differently,
 			# as it can contain a variable configuration field.
-			with m.State("1_DETECTED"):
+			with m.State('1_DETECTED'):
 				# If this set includes a configuration field, then we'll want to compare
 				# our data with that set removed. Otherwise, we compare normally.
 				data_masked  = (data & 0xffff0000) if self._include_config else data
@@ -137,9 +137,9 @@ class TSBurstDetector(Elaboratable):
 				# Once we have a valid word in our stream...
 				with m.If(self.sink.valid):
 
-					# ... advance if that word matches; or move to our "fail state" otherwise.
+					# ... advance if that word matches; or move to our 'fail state' otherwise.
 					with m.If(data_matches & ctrl_matches):
-						m.next = f"2_DETECTED"
+						m.next = f'2_DETECTED'
 
 						# If we're including a configuration field, parse it before we continue.
 						if self._include_config:
@@ -155,15 +155,15 @@ class TSBurstDetector(Elaboratable):
 							]
 
 					with m.Else():
-						m.next = "NONE_DETECTED"
+						m.next = 'NONE_DETECTED'
 
 
 			for i in range(2, last_state_number):
-				with m.State(f"{i}_DETECTED"):
+				with m.State(f'{i}_DETECTED'):
 					advance_on_match(i)
 
 
-			with m.State(f"{last_state_number}_DETECTED"):
+			with m.State(f'{last_state_number}_DETECTED'):
 
 				# If we've seen as many sets as we're looking to detect, reset our count,
 				# and indicate that we've completed a detection.
@@ -180,7 +180,7 @@ class TSBurstDetector(Elaboratable):
 				with m.If(self.sink.valid):
 					advance_on_match(0, target_ctrl=self._first_word_ctrl)
 				with m.Else():
-					m.next = "WAIT_FOR_FIRST"
+					m.next = 'WAIT_FOR_FIRST'
 
 
 		return m
@@ -188,7 +188,7 @@ class TSBurstDetector(Elaboratable):
 
 
 class TSEmitter(Elaboratable):
-	""" Training Set Emitter
+	''' Training Set Emitter
 
 	Generic Training Sequence Ordered Set generator.
 
@@ -196,7 +196,7 @@ class TSEmitter(Elaboratable):
 	N consecutive Ordered Sets are generated (N configured by n_ordered_sets). Done signal is assert
 	on the last cycle of the generation. Training config can also be transmitted for TS1/TS2 Ordered
 	Sets.
-	"""
+	'''
 	def __init__(self, *, set_data, first_word_ctrl=0b1111, transmit_burst_length=1, include_config=False):
 		self._set_data          = set_data
 		self._first_word_ctrl   = first_word_ctrl
@@ -224,18 +224,18 @@ class TSEmitter(Elaboratable):
 		# Keep track of how many ordered sets we've sent.
 		sent_ordered_sets = Signal(range(self._total_to_transmit))
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# IDLE - we're currently waiting for a ``start`` request.=
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 
 				# Once we get our start request, start blasting out our words in order.
 				with m.If(self.start):
-					m.next = "WORD_0"
+					m.next = 'WORD_0'
 
 			# Sequentially output each word of our training set.
 			for i in range(len(self._set_data)):
-				with m.State(f"WORD_{i}"):
+				with m.State(f'WORD_{i}'):
 					is_last_word = (i + 1 == len(self._set_data))
 					m.d.comb += [
 						self.source.valid  .eq(1),
@@ -268,28 +268,28 @@ class TSEmitter(Elaboratable):
 
 								# If we're still requesting data be sent, restart from the first word.
 								with m.If(self.start):
-									m.next = "WORD_0"
+									m.next = 'WORD_0'
 								# Otherwise, return to idle until we receive ``start`` again`.
 								with m.Else():
-									m.next = "IDLE"
+									m.next = 'IDLE'
 
 							# If we're not yet done transmitting our full set, continue.
 							with m.Else():
 								m.d.ss += sent_ordered_sets.eq(sent_ordered_sets + 1)
-								m.next = "WORD_0"
+								m.next = 'WORD_0'
 
 						else:
-							m.next = f"WORD_{i+1}"
+							m.next = f'WORD_{i+1}'
 
 		return m
 
 
 class TSTransceiver(Elaboratable):
-	"""Training Sequence Unit
+	'''Training Sequence Unit
 
 	Detect/generate the Training Sequence Ordered Sets required for a USB3.0 link with simple
 	control/status signals.
-	"""
+	'''
 	def __init__(self):
 
 		#

@@ -17,20 +17,20 @@ from sol.usb2               import USBDevice, USBStreamInEndpoint
 
 
 class USBCounterDeviceExample(Elaboratable):
-	""" Simple device that demonstrates use of a bulk-IN endpoint.
+	''' Simple device that demonstrates use of a bulk-IN endpoint.
 
 	Always sends a monotonically-incrementing 8-bit counter up to the host.
 	This is useful for two things:
 
 	- We can get a sense that no bytes are dropped by observing the counter sequence.
 	- This generates data with a maximum possible rate; which is useful for gauging SOL throughput.
-	"""
+	'''
 
 	BULK_ENDPOINT_NUMBER = 1
 	MAX_BULK_PACKET_SIZE = 512
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -44,9 +44,9 @@ class USBCounterDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Counter/Throughput Test"
-			d.iSerialNumber      = "no serial"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Counter/Throughput Test'
+			d.iSerialNumber      = 'no serial'
 
 			d.bNumConfigurations = 1
 
@@ -108,5 +108,5 @@ class USBCounterDeviceExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBCounterDeviceExample)

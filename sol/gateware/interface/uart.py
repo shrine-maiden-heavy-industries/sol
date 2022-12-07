@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" UART interface gateware."""
+''' UART interface gateware.'''
 
 import unittest
 
@@ -16,7 +16,7 @@ from ..test        import SolGatewareTestCase, sync_test_case
 
 
 class UARTTransmitter(Elaboratable):
-	""" Simple UART transitter.
+	''' Simple UART transitter.
 
 	Intended for communicating with the debug controller; currently assumes 8n1.
 
@@ -42,7 +42,7 @@ class UARTTransmitter(Elaboratable):
 	------------
 	divisor: int
 		The number of `sync` clock cycles per bit period.
-	"""
+	'''
 
 	START_BIT = 0
 	STOP_BIT  = 1
@@ -79,7 +79,7 @@ class UARTTransmitter(Elaboratable):
 			m.d.comb += self.idle.eq(f.ongoing('IDLE'))
 
 			# IDLE: transmitter is waiting for input
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				m.d.comb += [
 					self.tx            .eq(1),
 					self.stream.ready  .eq(1)
@@ -94,11 +94,11 @@ class UARTTransmitter(Elaboratable):
 						data_shift        .eq(framed_data_in),
 					]
 
-					m.next = "TRANSMIT"
+					m.next = 'TRANSMIT'
 
 
 			# TRANSMIT: actively shift out start/data/stop
-			with m.State("TRANSMIT"):
+			with m.State('TRANSMIT'):
 				m.d.sync += baud_counter  .eq(baud_counter - 1)
 				m.d.comb += [
 					self.tx       .eq(data_shift[0]),
@@ -129,7 +129,7 @@ class UARTTransmitter(Elaboratable):
 
 						# ... otherwise, move to our idle state.
 						with m.Else():
-							m.next = "IDLE"
+							m.next = 'IDLE'
 
 
 		return m
@@ -157,7 +157,7 @@ class UARTTransmitterTest(SolGatewareTestCase):
 		self.assertEqual((yield dut.tx), 0)
 
 		# We should then see each bit of our data, LSB first.
-		bits = [int(i) for i in f"{byte_expected:08b}"]
+		bits = [int(i) for i in f'{byte_expected:08b}']
 		for bit in bits[::-1]:
 			yield from self.advance_bit()
 			self.assertEqual((yield dut.tx), bit)
@@ -209,7 +209,7 @@ class UARTTransmitterTest(SolGatewareTestCase):
 
 
 class UARTTransmitterPeripheral(Elaboratable):
-	""" Wishbone-attached variant of our UARTTransmitter.
+	''' Wishbone-attached variant of our UARTTransmitter.
 
 	Attributes
 	----------
@@ -222,7 +222,7 @@ class UARTTransmitterPeripheral(Elaboratable):
 	----------
 	divisor: int
 		number of `sync` clock cycles per bit period
-	"""
+	'''
 
 	# TODO: include a variant of misoc/LiteX's autoregister mechanism
 
@@ -254,7 +254,7 @@ class UARTTransmitterPeripheral(Elaboratable):
 
 
 class UARTMultibyteTransmitter(Elaboratable):
-	""" UART transmitter capable of sending wide words.
+	''' UART transmitter capable of sending wide words.
 
 	Intended for communicating with the debug controller; currently assumes 8n1.
 	Transmits our words little-endian.
@@ -281,7 +281,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 
 	divisor: int
 		The number of `sync` clock cycles per bit period.
-	"""
+	'''
 	def __init__(self, *, byte_width, divisor):
 		self.byte_width = byte_width
 		self.divisor = divisor
@@ -323,7 +323,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 			m.d.comb += self.idle.eq(f.ongoing('IDLE'))
 
 			# IDLE: transmitter is waiting for input
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				m.d.comb += self.stream.ready.eq(1)
 
 				# Once we get a send request, fill in our shift register, and start shifting.
@@ -332,11 +332,11 @@ class UARTMultibyteTransmitter(Elaboratable):
 						data_shift         .eq(self.stream.payload),
 						bytes_to_send      .eq(self.byte_width - 1),
 					]
-					m.next = "TRANSMIT"
+					m.next = 'TRANSMIT'
 
 
 			# TRANSMIT: actively send each of the bytes of our word
-			with m.State("TRANSMIT"):
+			with m.State('TRANSMIT'):
 				m.d.comb += uart.stream.valid.eq(1)
 
 				# Once the UART is accepting our input...
@@ -362,7 +362,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 
 						# ... otherwise, move to our idle state.
 						with m.Else():
-							m.next = "IDLE"
+							m.next = 'IDLE'
 
 
 		return m
@@ -390,7 +390,7 @@ class UARTMultibyteTransmitterTest(SolGatewareTestCase):
 		self.assertEqual((yield dut.tx), 0)
 
 		# We should then see each bit of our data, LSB first.
-		bits = [int(i) for i in f"{byte_expected:08b}"]
+		bits = [int(i) for i in f'{byte_expected:08b}']
 		for bit in bits[::-1]:
 			yield from self.advance_bit()
 			self.assertEqual((yield dut.tx), bit)
@@ -429,5 +429,5 @@ class UARTMultibyteTransmitterTest(SolGatewareTestCase):
 
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

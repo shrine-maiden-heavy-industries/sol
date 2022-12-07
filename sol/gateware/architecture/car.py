@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Clock and reset (CAR) controllers for SOL. """
+''' Clock and reset (CAR) controllers for SOL. '''
 
 import logging   as log
 from abc         import ABCMeta, abstractmethod
@@ -18,22 +18,22 @@ from ..utils.cdc import stretch_strobe_signal
 
 
 class PHYResetController(Elaboratable):
-	""" Gateware that implements a short power-on-reset pulse to reset an attached PHY.
+	''' Gateware that implements a short power-on-reset pulse to reset an attached PHY.
 
 	I/O ports:
 
 		I: trigger   -- A signal that triggers a reset when high.
 		O: phy_reset -- The signal to be delivered to the target PHY.
-	"""
+	'''
 
 	def __init__(self, *, clock_frequency=60e6, reset_length=2e-6, stop_length=2e-6, power_on_reset=True):
-		""" Params:
+		''' Params:
 
 			reset_length   -- The length of a reset pulse, in seconds.
 			stop_length    -- The length of time STP should be asserted after reset.
 			power_on_reset -- If True or omitted, the reset will be applied once the firmware
 							  is configured.
-		"""
+		'''
 
 		from math import ceil
 
@@ -131,7 +131,7 @@ class PHYResetControllerTest(SolGatewareTestCase):
 
 
 class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
-	""" Helper that generates the clock domains used in a SOL board.
+	''' Helper that generates the clock domains used in a SOL board.
 
 	Note that this module should create three in-phase clocks; so these domains
 	should not require explicit boundary crossings.
@@ -142,14 +142,14 @@ class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
 		O: clk_usb       -- The clock signal used for our USB domain.
 		O: usb_holdoff   -- Signal that indicates that the USB domain is immediately post-reset,
 							and thus we should avoid transactions with the external PHY.
-	"""
+	'''
 
 	def __init__(self, *, clock_signal_name=None, clock_signal_frequency=60.0):
-		"""
+		'''
 		Parameters:
 			clock_signal_name      = The clock signal name to use; or None to use the platform's default clock.
 			clock_signal_frequency = The frequency of clock_signal_name; default to 60MHz.
-		"""
+		'''
 
 		self.clock_name      = clock_signal_name
 		self.clock_frequency = clock_signal_frequency
@@ -166,33 +166,33 @@ class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
 
 	@abstractmethod
 	def generate_fast_clock(self, m, platform):
-		""" Method that returns our platform's fast clock; used for e.g. RAM interfacing. """
+		''' Method that returns our platform's fast clock; used for e.g. RAM interfacing. '''
 
 
 	@abstractmethod
 	def generate_sync_clock(self, m, platform):
-		""" Method that returns our platform's primary synchronous clock. """
+		''' Method that returns our platform's primary synchronous clock. '''
 
 
 	@abstractmethod
 	def generate_usb_clock(self, m, platform):
-		""" Method that generates a 60MHz clock used for ULPI interfacing. """
+		''' Method that generates a 60MHz clock used for ULPI interfacing. '''
 
 
 	def create_submodules(self, m, platform):
-		""" Method hook for creating any necessary submodules before generating clock. """
+		''' Method hook for creating any necessary submodules before generating clock. '''
 		pass
 
 
 	def create_usb_reset(self, m, platform):
-		"""
+		'''
 		Function that should create our USB reset, and connect it to:
 			m.domains.usb.rst / self.usb_rst
-		"""
+		'''
 
 		m.submodules.usb_reset = controller = PHYResetController()
 		m.d.comb += [
-			ResetSignal("usb")  .eq(controller.phy_reset),
+			ResetSignal('usb')  .eq(controller.phy_reset),
 			self.usb_holdoff    .eq(controller.phy_stop)
 		]
 
@@ -214,9 +214,9 @@ class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
 			self.clk_sync                  .eq(self.generate_sync_clock(m, platform)),
 			self.clk_fast                  .eq(self.generate_fast_clock(m, platform)),
 
-			ClockSignal(domain="fast")     .eq(self.clk_fast),
-			ClockSignal(domain="sync")     .eq(self.clk_sync),
-			ClockSignal(domain="usb")      .eq(self.clk_usb),
+			ClockSignal(domain='fast')     .eq(self.clk_fast),
+			ClockSignal(domain='sync')     .eq(self.clk_sync),
+			ClockSignal(domain='usb')      .eq(self.clk_usb),
 		]
 
 		# Call the hook that will connect up our reset signals.
@@ -226,7 +226,7 @@ class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
 
 
 class SolECP5DomainGenerator(SolDomainGenerator):
-	""" ECP5 clock domain generator for SOL. Assumes a 60MHz input clock. """
+	''' ECP5 clock domain generator for SOL. Assumes a 60MHz input clock. '''
 
 	# For debugging, we'll allow the ECP5's onboard clock to generate a 62MHz
 	# oscillator signal. This won't work for USB, but it'll at least allow
@@ -236,20 +236,20 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 
 	# Quick configuration selection
 	DEFAULT_CLOCK_FREQUENCIES_MHZ = {
-		"fast": 240,
-		"sync": 120,
-		"usb":  60
+		'fast': 240,
+		'sync': 120,
+		'usb':  60
 	}
 
 	def __init__(self, *, clock_frequencies=None, clock_signal_name=None):
-		"""
+		'''
 		Parameters:
 			clock_frequencies -- A dictionary mapping 'fast', 'sync', and 'usb' to the clock
 								 frequencies for those domains, in MHz. Valid choices for each
 								 domain are 60, 120, and 240. If not provided, fast will be
 								 assumed to be 240, sync will assumed to be 120, and usb will
 								 be assumed to be a standard 60.
-		"""
+		'''
 		super().__init__(clock_signal_name=clock_signal_name)
 		self.clock_frequencies = clock_frequencies
 
@@ -285,29 +285,29 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		}
 
 		# Grab our input clock
-		# For debugging: if our clock name is "OSCG", allow using the internal
+		# For debugging: if our clock name is 'OSCG', allow using the internal
 		# oscillator. This is mostly useful for debugging.
-		if clock_name == "OSCG":
-			log.warning("Using FPGA-internal oscillator for an approximately 62MHz.")
-			log.warning("USB communication won't work for f_OSC != 60MHz.")
+		if clock_name == 'OSCG':
+			log.warning('Using FPGA-internal oscillator for an approximately 62MHz.')
+			log.warning('USB communication won\'t work for f_OSC != 60MHz.')
 
 			input_clock = Signal()
-			m.submodules += Instance("OSCG", p_DIV=self.OSCG_DIV, o_OSC=input_clock)
+			m.submodules += Instance('OSCG', p_DIV=self.OSCG_DIV, o_OSC=input_clock)
 			clock_frequency = 62.0
 		else:
 			input_clock = platform.request(clock_name)
 
 		pll_params_per_freq = {
-			"62000000.0" : { "CLKFB_DIV" : 4,
+			'62000000.0' : { 'CLKFB_DIV' : 4,
 			},
-			"60000000.0" : { "CLKFB_DIV" : 4,
+			'60000000.0' : { 'CLKFB_DIV' : 4,
 			},
-			"30000000.0" : { "CLKFB_DIV" : 8,
+			'30000000.0' : { 'CLKFB_DIV' : 8,
 			},
 		}
 
 		if not str(clock_frequency) in pll_params_per_freq:
-			raise ValueError("Unsupported clock frequency {}MHz".format(clock_frequency/1e6))
+			raise ValueError('Unsupported clock frequency {}MHz'.format(clock_frequency/1e6))
 
 		pll_params = pll_params_per_freq[str(clock_frequency)]
 
@@ -315,7 +315,7 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		# These constants generated by Clarity Designer; which will
 		# ideally be replaced by an open-source component.
 		# (see https://github.com/SymbiFlow/prjtrellis/issues/34.)
-		m.submodules.pll = Instance("EHXPLLL",
+		m.submodules.pll = Instance('EHXPLLL',
 
 				# Clock in.
 				i_CLKI=input_clock,
@@ -329,10 +329,10 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 				o_LOCK=self._pll_lock,
 
 				# PLL parameters...
-				p_PLLRST_ENA="DISABLED",
-				p_INTFB_WAKE="DISABLED",
-				p_STDBY_ENABLE="DISABLED",
-				p_DPHASE_SOURCE="DISABLED",
+				p_PLLRST_ENA='DISABLED',
+				p_INTFB_WAKE='DISABLED',
+				p_STDBY_ENABLE='DISABLED',
+				p_DPHASE_SOURCE='DISABLED',
 				p_CLKOS3_FPHASE=0,
 				p_CLKOS3_CPHASE=0,
 				p_CLKOS2_FPHASE=0,
@@ -342,25 +342,25 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 				p_CLKOP_FPHASE=0,
 				p_CLKOP_CPHASE=1,
 				p_PLL_LOCK_MODE=0,
-				p_CLKOS_TRIM_DELAY="0",
-				p_CLKOS_TRIM_POL="FALLING",
-				p_CLKOP_TRIM_DELAY="0",
-				p_CLKOP_TRIM_POL="FALLING",
-				p_OUTDIVIDER_MUXD="DIVD",
-				p_CLKOS3_ENABLE="DISABLED",
-				p_OUTDIVIDER_MUXC="DIVC",
-				p_CLKOS2_ENABLE="ENABLED",
-				p_OUTDIVIDER_MUXB="DIVB",
-				p_CLKOS_ENABLE="ENABLED",
-				p_OUTDIVIDER_MUXA="DIVA",
-				p_CLKOP_ENABLE="ENABLED",
+				p_CLKOS_TRIM_DELAY='0',
+				p_CLKOS_TRIM_POL='FALLING',
+				p_CLKOP_TRIM_DELAY='0',
+				p_CLKOP_TRIM_POL='FALLING',
+				p_OUTDIVIDER_MUXD='DIVD',
+				p_CLKOS3_ENABLE='DISABLED',
+				p_OUTDIVIDER_MUXC='DIVC',
+				p_CLKOS2_ENABLE='ENABLED',
+				p_OUTDIVIDER_MUXB='DIVB',
+				p_CLKOS_ENABLE='ENABLED',
+				p_OUTDIVIDER_MUXA='DIVA',
+				p_CLKOP_ENABLE='ENABLED',
 				p_CLKOS3_DIV=1,
 				p_CLKOS2_DIV=8,
 				p_CLKOS_DIV=4,
 				p_CLKOP_DIV=2,
-				p_CLKFB_DIV=pll_params["CLKFB_DIV"],
+				p_CLKFB_DIV=pll_params['CLKFB_DIV'],
 				p_CLKI_DIV=1,
-				p_FEEDBK_PATH="CLKOP",
+				p_FEEDBK_PATH='CLKOP',
 
 				# Internal feedback.
 				i_CLKFB=self._clk_240MHz,
@@ -382,12 +382,12 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 				i_ENCLKOS3=0,
 
 				# Synthesis attributes.
-				a_FREQUENCY_PIN_CLKI="60.000000",
-				a_FREQUENCY_PIN_CLKOS2="60.000000",
-				a_FREQUENCY_PIN_CLKOS="120.000000",
-				a_FREQUENCY_PIN_CLKOP="240.000000",
-				a_ICP_CURRENT="9",
-				a_LPF_RESISTOR="8"
+				a_FREQUENCY_PIN_CLKI='60.000000',
+				a_FREQUENCY_PIN_CLKOS2='60.000000',
+				a_FREQUENCY_PIN_CLKOS='120.000000',
+				a_FREQUENCY_PIN_CLKOP='240.000000',
+				a_ICP_CURRENT='9',
+				a_LPF_RESISTOR='8'
 		)
 
 
@@ -395,8 +395,8 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		# our core PLL is fully stable. This prevents us from internally clock
 		# glitching ourselves before our PLL is locked. :)
 		m.d.comb += [
-			ResetSignal("sync").eq(~self._pll_lock),
-			ResetSignal("fast").eq(~self._pll_lock),
+			ResetSignal('sync').eq(~self._pll_lock),
+			ResetSignal('fast').eq(~self._pll_lock),
 		]
 
 
@@ -411,10 +411,10 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 
 
 	def stretch_sync_strobe_to_usb(self, m, strobe, output=None, allow_delay=False):
-		"""
+		'''
 		Helper that stretches a strobe from the `sync` domain to communicate with the `usn` domain.
 		Works for any chosen frequency in which f(usb) < f(sync).
-		"""
+		'''
 
 		# TODO: replace with Torii's pulsesynchronizer?
 		to_cycles = self.clock_frequencies['sync'] // self.clock_frequencies['usb']

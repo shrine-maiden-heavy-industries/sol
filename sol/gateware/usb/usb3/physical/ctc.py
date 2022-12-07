@@ -7,7 +7,7 @@
 #
 # Code adapted from ``usb3_pipe``.
 
-"""
+'''
 Code for handling SKP ordered sets on the transmit and receive path.
 
 SKP ordered sets are provided in order to give some "padding data" that can be removed
@@ -17,7 +17,7 @@ for CTC is handled by the PHY -- but it only adds and removes sets where it need
 compensate for clock differences.
 
 It's up to us to insert and remove additional ordered sets.
-"""
+'''
 
 import unittest
 
@@ -29,7 +29,7 @@ from .coding        import SKP, stream_word_matches_symbol
 
 
 class CTCSkipRemover(Elaboratable):
-	""" Clock Tolerance Compensation (CTC) receive buffer gateware.
+	''' Clock Tolerance Compensation (CTC) receive buffer gateware.
 
 	It's functionally impossible to precisely synchronize the clocks for two independent
 	systems -- every specification has to allow for some difference in frequency between
@@ -55,7 +55,7 @@ class CTCSkipRemover(Elaboratable):
 
 	skip_removed: Signal(), output
 		Strobe that indicates that a SKP ordered set was removed.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -359,7 +359,7 @@ class CTCSkipRemoverTest(SolSSGatewareTestCase):
 
 
 class CTCSkipInserter(Elaboratable):
-	""" Clock Tolerance Compensation (CTC) Skip insertion gateware.
+	''' Clock Tolerance Compensation (CTC) Skip insertion gateware.
 
 	See the ``CTCSkipRemover`` for a description of CTC and its general operation.
 
@@ -384,7 +384,7 @@ class CTCSkipInserter(Elaboratable):
 	sending_skip: Signal(), output
 		Indicates that we're currently sending only SKP characters; and thus our scrambler
 		should not advance.
-	"""
+	'''
 
 	SKIP_BYTE_LIMIT = 354
 
@@ -468,5 +468,5 @@ class CTCSkipInserter(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

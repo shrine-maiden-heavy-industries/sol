@@ -11,7 +11,7 @@
 #
 # Code based in part on ``litex`` and ``liteiclink``.
 
-""" Soft PIPE backend for the Lattice ECP5 SerDes. """
+''' Soft PIPE backend for the Lattice ECP5 SerDes. '''
 
 
 from torii         import *
@@ -32,17 +32,17 @@ class ECP5SerDesPLLConfiguration:
 			current_linerate = refclk_freq*mult
 			if current_linerate == linerate:
 				return {
-					"mult":       mult,
-					"refck_freq": refclk_freq,
-					"linerate":   linerate,
+					'mult':       mult,
+					'refck_freq': refclk_freq,
+					'linerate':   linerate,
 				}
-		msg = "No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate."
+		msg = 'No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate.'
 		raise ValueError(msg.format(refclk_freq/1e6, linerate/1e9))
 
 
 
 class ECP5SerDesConfigInterface(Elaboratable):
-	""" Module that interfaces with the ECP5's SerDes Client Interface (SCI). """
+	''' Module that interfaces with the ECP5's SerDes Client Interface (SCI). '''
 
 	def __init__(self, serdes):
 		self._serdes = serdes
@@ -80,32 +80,32 @@ class ECP5SerDesConfigInterface(Elaboratable):
 			self.sci_wdata.eq(self.dat_w)
 		]
 
-		with m.FSM(domain="pipe"):
+		with m.FSM(domain='pipe'):
 
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				m.d.comb += self.done.eq(1)
 
 				with m.If(self.we):
-					m.next = "WRITE"
+					m.next = 'WRITE'
 				with m.Elif(self.re):
 					m.d.comb += self.sci_rd.eq(1),
-					m.next = "READ"
+					m.next = 'READ'
 
-			with m.State("WRITE"):
+			with m.State('WRITE'):
 				m.d.comb += self.sci_wrn.eq(0)
-				m.next = "IDLE"
+				m.next = 'IDLE'
 
 
-			with m.State("READ"):
+			with m.State('READ'):
 				m.d.comb += self.sci_rd.eq(1)
 				m.d.pipe += self.dat_r.eq(self.sci_rdata)
-				m.next = "IDLE"
+				m.next = 'IDLE'
 
 		return m
 
 
 class ECP5SerDesRegisterTranslator(Elaboratable):
-	""" Interface that converts control signals into SerDes register reads and writes. """
+	''' Interface that converts control signals into SerDes register reads and writes. '''
 
 	def __init__(self, serdes, sci):
 		self._serdes = serdes
@@ -129,13 +129,13 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 		data  = Signal(8)
 
 
-		with m.FSM(domain="pipe"):
+		with m.FSM(domain='pipe'):
 
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				m.d.pipe += first.eq(1)
-				m.next = "READ-CH_01"
+				m.next = 'READ-CH_01'
 
-			with m.State("READ-CH_01"):
+			with m.State('READ-CH_01'):
 				m.d.pipe += first.eq(0)
 				m.d.comb += [
 					sci.chan_sel.eq(1),
@@ -149,10 +149,10 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 						data.eq(sci.dat_r),
 						first.eq(1)
 					]
-					m.next = "WRITE-CH_01"
+					m.next = 'WRITE-CH_01'
 
 
-			with m.State("WRITE-CH_01"):
+			with m.State('WRITE-CH_01'):
 				m.d.pipe += first.eq(0)
 				m.d.comb += [
 					sci.chan_sel.eq(1),
@@ -165,9 +165,9 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 				with m.If(~first & sci.done):
 					m.d.comb += sci.we.eq(0)
 					m.d.pipe += first.eq(1)
-					m.next = "READ-CH_02"
+					m.next = 'READ-CH_02'
 
-			with m.State("READ-CH_02"):
+			with m.State('READ-CH_02'):
 				m.d.pipe += first.eq(0)
 				m.d.comb += [
 					sci.chan_sel.eq(1),
@@ -178,9 +178,9 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 				with m.If(~first & sci.done):
 					m.d.comb += sci.re.eq(0)
 					m.d.pipe += data.eq(sci.dat_r)
-					m.next = "WRITE-CH_02"
+					m.next = 'WRITE-CH_02'
 
-			with m.State("WRITE-CH_02"):
+			with m.State('WRITE-CH_02'):
 				m.d.pipe += first.eq(0)
 				m.d.comb += [
 					sci.chan_sel.eq(1),
@@ -193,9 +193,9 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 				with m.If(~first & sci.done):
 					m.d.pipe += first.eq(1)
 					m.d.comb += sci.we.eq(0)
-					m.next = "READ-CH_15"
+					m.next = 'READ-CH_15'
 
-			with m.State("READ-CH_15"):
+			with m.State('READ-CH_15'):
 				m.d.pipe += first.eq(0)
 				m.d.comb += [
 					sci.chan_sel.eq(1),
@@ -207,9 +207,9 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 					m.d.pipe += first.eq(1)
 					m.d.comb += sci.re.eq(0)
 					m.d.pipe += data.eq(sci.dat_r)
-					m.next = "WRITE-CH_15"
+					m.next = 'WRITE-CH_15'
 
-			with m.State("WRITE-CH_15"):
+			with m.State('WRITE-CH_15'):
 				m.d.pipe += first.eq(0)
 				m.d.comb += [
 					sci.chan_sel.eq(1),
@@ -222,9 +222,9 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 
 				with m.If(~first & sci.done):
 					m.d.comb += sci.we.eq(0)
-					m.next = "READ-CH_17"
+					m.next = 'READ-CH_17'
 
-			with m.State("READ-CH_17"):
+			with m.State('READ-CH_17'):
 				m.d.pipe += first.eq(0)
 				m.d.comb += [
 					sci.chan_sel.eq(1),
@@ -236,9 +236,9 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 					m.d.pipe += first.eq(1)
 					m.d.comb += sci.re.eq(0)
 					m.d.pipe += data.eq(sci.dat_r)
-					m.next = "WRITE-CH_17"
+					m.next = 'WRITE-CH_17'
 
-			with m.State("WRITE-CH_17"):
+			with m.State('WRITE-CH_17'):
 				m.d.pipe += first.eq(0)
 				m.d.comb += [
 					sci.chan_sel.eq(1),
@@ -250,14 +250,14 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 
 				with m.If(~first & sci.done):
 					m.d.comb += sci.we.eq(0)
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 		return m
 
 
 
 class ECP5SerDesEqualizerInterface(Elaboratable):
-	""" Interface that controls the ECP5 SerDes' equalization settings via SCI.
+	''' Interface that controls the ECP5 SerDes' equalization settings via SCI.
 
 	Currently takes full ownership of the SerDes Client Interface.
 
@@ -272,9 +272,9 @@ class ECP5SerDesEqualizerInterface(Elaboratable):
 		linear equalizer. The meaning of these values are not documented by Lattice.
 	equalizer_level: Signal(2), input
 		Selects the equalizer's gain. 0 = 6dB, 1 = 9dB, 2 = 12dB, 3 = undocumented.
-		Note that the value `3` is marked as "not used" in the SerDes manual; but then used anyway
+		Note that the value `3` is marked as 'not used' in the SerDes manual; but then used anyway
 		by Lattice's reference designs.
-	"""
+	'''
 
 	SERDES_EQUALIZATION_REGISTER = 0x19
 
@@ -312,13 +312,13 @@ class ECP5SerDesEqualizerInterface(Elaboratable):
 
 
 class ECP5SerDesEqualizer(Elaboratable):
-	""" Interface that controls the ECP5 SerDes' equalization settings via SCI.
+	''' Interface that controls the ECP5 SerDes' equalization settings via SCI.
 
 	Currently takes full ownership of the SerDes Client Interface.
 
 	Ideally, an analog-informed receiver equalization would occur during USB3 link training. However,
 	we're at best a simulacrum of a USB3 PHY built on an undocumented SerDes; so we'll do the best we
-	can by measuring 8b10b encoding errors and trying various equalization settings until we've "minimized"
+	can by measuring 8b10b encoding errors and trying various equalization settings until we've 'minimized'
 	bit error rate.
 
 	Attributes
@@ -329,7 +329,7 @@ class ECP5SerDesEqualizer(Elaboratable):
 
 	encoding_error_detected: Signal(), input
 		Strobe; should be high each time the SerDes encounters an 8b10b encoding error.
-	"""
+	'''
 
 	# We'll try each equalizer setting for ~1024 cycles.
 	# This value could easily be higher; but the higher this goes, the slower our counters
@@ -423,7 +423,7 @@ class ECP5SerDesEqualizer(Elaboratable):
 
 
 class ECP5SerDesResetSequencer(Elaboratable):
-	""" Reset sequencer; ensures that the PLL, CDR, and PCS all start correctly. """
+	''' Reset sequencer; ensures that the PLL, CDR, and PCS all start correctly. '''
 
 	RESET_CYCLES  = 8
 	RX_LOS_CYCLES = 4000
@@ -459,7 +459,7 @@ class ECP5SerDesResetSequencer(Elaboratable):
 	def elaborate(self, platform):
 		m = Module()
 
-		# Per [TN1261: "Reset Sequence"], the SerDes requires certain conditions to be met on start-up:
+		# Per [TN1261: 'Reset Sequence'], the SerDes requires certain conditions to be met on start-up:
 		# 1. The TxPLL must be locked before the CDR PLL reset is released.
 		# 2. The PCS reset must be released only when the PLLs are locked.
 		#
@@ -478,10 +478,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 		rx_cdr_locked = Signal()
 		rx_coding_err = Signal()
 		m.submodules += [
-			FFSynchronizer(self.tx_pll_locked, tx_pll_locked, o_domain="ss"),
-			FFSynchronizer(self.rx_has_signal, rx_has_signal, o_domain="ss"),
-			FFSynchronizer(self.rx_cdr_locked, rx_cdr_locked, o_domain="ss"),
-			FFSynchronizer(self.rx_coding_err, rx_coding_err, o_domain="ss"),
+			FFSynchronizer(self.tx_pll_locked, tx_pll_locked, o_domain='ss'),
+			FFSynchronizer(self.rx_has_signal, rx_has_signal, o_domain='ss'),
+			FFSynchronizer(self.rx_cdr_locked, rx_cdr_locked, o_domain='ss'),
+			FFSynchronizer(self.rx_coding_err, rx_coding_err, o_domain='ss'),
 		]
 
 
@@ -503,26 +503,26 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 		timer = Signal(range(max(self.RESET_CYCLES, self.RX_LOS_CYCLES, self.RX_LOL_CYCLES)))
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# Hold everything in reset, initially.
-			with m.State("INITIAL_RESET"):
+			with m.State('INITIAL_RESET'):
 				apply_resets(m, tx_pll=1, tx_pcs=1, rx_cdr=1, rx_pcs=1)
 				apply_readys(m, tx_pcs=0, rx_pcs=0)
 
-				m.next = "WAIT_FOR_TXPLL_LOCK"
+				m.next = 'WAIT_FOR_TXPLL_LOCK'
 
 			# Deassert Tx PLL reset, and wait for it to start up.
-			with m.State("WAIT_FOR_TXPLL_LOCK"):
+			with m.State('WAIT_FOR_TXPLL_LOCK'):
 				apply_resets(m, tx_pll=0, tx_pcs=1, rx_cdr=1, rx_pcs=1)
 				apply_readys(m, tx_pcs=0, rx_pcs=0)
 
 				with m.If(tx_pll_locked):
 					m.d.ss += timer.eq(0)
-					m.next = "APPLY_TXPCS_RESET"
+					m.next = 'APPLY_TXPCS_RESET'
 
 			# Reset Tx PCS.
-			with m.State("APPLY_TXPCS_RESET"):
+			with m.State('APPLY_TXPCS_RESET'):
 				apply_resets(m, tx_pll=0, tx_pcs=1, rx_cdr=1, rx_pcs=1)
 				apply_readys(m, tx_pcs=0, rx_pcs=0)
 
@@ -530,10 +530,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 					m.d.ss += timer.eq(timer + 1)
 				with m.Else():
 					m.d.ss += timer.eq(0)
-					m.next = "WAIT_FOR_RX_SIGNAL"
+					m.next = 'WAIT_FOR_RX_SIGNAL'
 
 			# Deassert Tx PCS reset, and wait until Rx signal is present.
-			with m.State("WAIT_FOR_RX_SIGNAL"):
+			with m.State('WAIT_FOR_RX_SIGNAL'):
 				# CDR reset implies LOS reset; and must be deasserted for LOS to go low.
 				# This is not documented in [TN1261], and contradicts [FPGA-PB-02001].
 				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=1)
@@ -546,13 +546,13 @@ class ECP5SerDesResetSequencer(Elaboratable):
 						m.d.ss += timer.eq(timer + 1)
 					with m.Else():
 						m.d.ss += timer.eq(0)
-						m.next = "APPLY_CDR_RESET"
+						m.next = 'APPLY_CDR_RESET'
 
 				with m.If(~tx_pll_locked):
-					m.next = "WAIT_FOR_TXPLL_LOCK"
+					m.next = 'WAIT_FOR_TXPLL_LOCK'
 
 			# Reset CDR.
-			with m.State("APPLY_CDR_RESET"):
+			with m.State('APPLY_CDR_RESET'):
 				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=1, rx_pcs=1)
 				apply_readys(m, tx_pcs=1, rx_pcs=0)
 
@@ -560,10 +560,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 					m.d.ss += timer.eq(timer + 1)
 				with m.Else():
 					m.d.ss += timer.eq(0)
-					m.next = "DELAY_FOR_CDR_LOCK"
+					m.next = 'DELAY_FOR_CDR_LOCK'
 
 			# Deassert CDR reset, and wait until CDR had some time to lock (to embedded Rx clock).
-			with m.State("DELAY_FOR_CDR_LOCK"):
+			with m.State('DELAY_FOR_CDR_LOCK'):
 				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=1)
 				apply_readys(m, tx_pcs=1, rx_pcs=0)
 
@@ -571,35 +571,35 @@ class ECP5SerDesResetSequencer(Elaboratable):
 					m.d.ss += timer.eq(timer + 1)
 				with m.Else():
 					m.d.ss += timer.eq(0)
-					m.next = "CHECK_FOR_CDR_LOCK"
+					m.next = 'CHECK_FOR_CDR_LOCK'
 
 				with m.If(~rx_has_signal):
-					m.next = "WAIT_FOR_RX_SIGNAL"
+					m.next = 'WAIT_FOR_RX_SIGNAL'
 				with m.If(~tx_pll_locked):
-					m.next = "WAIT_FOR_TXPLL_LOCK"
+					m.next = 'WAIT_FOR_TXPLL_LOCK'
 
 			# Wait until CDR has been locked for a while; and if it lost lock, reset it.
-			with m.State("CHECK_FOR_CDR_LOCK"):
+			with m.State('CHECK_FOR_CDR_LOCK'):
 				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=1)
 				apply_readys(m, tx_pcs=1, rx_pcs=0)
 
 				with m.If(~rx_cdr_locked):
 					m.d.ss += timer.eq(0)
-					m.next = "APPLY_CDR_RESET"
+					m.next = 'APPLY_CDR_RESET'
 				with m.Else():
 					with m.If(timer + 1 != self.RX_LOL_CYCLES):
 						m.d.ss += timer.eq(timer + 1)
 					with m.Else():
 						m.d.ss += timer.eq(0)
-						m.next = "APPLY_RXPCS_RESET"
+						m.next = 'APPLY_RXPCS_RESET'
 
 				with m.If(~rx_has_signal):
-					m.next = "WAIT_FOR_RX_SIGNAL"
+					m.next = 'WAIT_FOR_RX_SIGNAL'
 				with m.If(~tx_pll_locked):
-					m.next = "WAIT_FOR_TXPLL_LOCK"
+					m.next = 'WAIT_FOR_TXPLL_LOCK'
 
 			# Reset Rx PCS.
-			with m.State("APPLY_RXPCS_RESET"):
+			with m.State('APPLY_RXPCS_RESET'):
 				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=1)
 				apply_readys(m, tx_pcs=1, rx_pcs=0)
 
@@ -607,10 +607,10 @@ class ECP5SerDesResetSequencer(Elaboratable):
 					m.d.ss += timer.eq(timer + 1)
 				with m.Else():
 					m.d.ss += timer.eq(0)
-					m.next = "DELAY_FOR_RXPCS_LOCK"
+					m.next = 'DELAY_FOR_RXPCS_LOCK'
 
 			# Deassert Rx PCS reset, and wait until PCS had some time to lock (to a K28.5 comma).
-			with m.State("DELAY_FOR_RXPCS_LOCK"):
+			with m.State('DELAY_FOR_RXPCS_LOCK'):
 				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=0)
 				apply_readys(m, tx_pcs=1, rx_pcs=0)
 
@@ -618,50 +618,50 @@ class ECP5SerDesResetSequencer(Elaboratable):
 					m.d.ss += timer.eq(timer + 1)
 				with m.Else():
 					m.d.ss += timer.eq(0)
-					m.next = "CHECK_FOR_RXPCS_LOCK"
+					m.next = 'CHECK_FOR_RXPCS_LOCK'
 
 				with m.If(~rx_has_signal):
-					m.next = "WAIT_FOR_RX_SIGNAL"
+					m.next = 'WAIT_FOR_RX_SIGNAL'
 				with m.If(~tx_pll_locked):
-					m.next = "WAIT_FOR_TXPLL_LOCK"
+					m.next = 'WAIT_FOR_TXPLL_LOCK'
 
 			# Wait until Rx PCS has been locked for a while; and if it lost lock, reset it.
-			with m.State("CHECK_FOR_RXPCS_LOCK"):
+			with m.State('CHECK_FOR_RXPCS_LOCK'):
 				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=0)
 				apply_readys(m, tx_pcs=1, rx_pcs=0)
 
 				with m.If(rx_coding_err):
 					m.d.ss += timer.eq(0)
-					m.next = "APPLY_RXPCS_RESET"
+					m.next = 'APPLY_RXPCS_RESET'
 				with m.Else():
 					with m.If(timer + 1 != self.RX_ERR_CYCLES):
 						m.d.ss += timer.eq(timer + 1)
 					with m.Else():
 						m.d.ss += timer.eq(0)
-						m.next = "IDLE"
+						m.next = 'IDLE'
 
 				with m.If(~rx_has_signal):
-					m.next = "WAIT_FOR_RX_SIGNAL"
+					m.next = 'WAIT_FOR_RX_SIGNAL'
 				with m.If(~tx_pll_locked):
-					m.next = "WAIT_FOR_TXPLL_LOCK"
+					m.next = 'WAIT_FOR_TXPLL_LOCK'
 
 			# Everything is okay; monitor for errors, and restart the reset sequence if necessary.
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				apply_resets(m, tx_pll=0, tx_pcs=0, rx_cdr=0, rx_pcs=0)
 				apply_readys(m, tx_pcs=1, rx_pcs=1)
 
 				with m.If(rx_coding_err):
-					m.next = "APPLY_RXPCS_RESET"
+					m.next = 'APPLY_RXPCS_RESET'
 				with m.If(~rx_has_signal):
-					m.next = "WAIT_FOR_RX_SIGNAL"
+					m.next = 'WAIT_FOR_RX_SIGNAL'
 				with m.If(~tx_pll_locked):
-					m.next = "WAIT_FOR_TXPLL_LOCK"
+					m.next = 'WAIT_FOR_TXPLL_LOCK'
 
-		return ResetInserter({"ss": self.reset})(m)
+		return ResetInserter({'ss': self.reset})(m)
 
 
 class ECP5SerDes(Elaboratable):
-	""" Abstraction layer for working with the ECP5 SerDes. """
+	''' Abstraction layer for working with the ECP5 SerDes. '''
 
 	def __init__(self, pll_config, tx_pads, rx_pads, dual=0, channel=0):
 		assert dual    in [0, 1]
@@ -778,9 +778,9 @@ class ECP5SerDes(Elaboratable):
 			# Changing their bases will work with the open toolchain, but will make Diamond mad.
 
 			# DCU — power management
-			p_D_MACROPDB            = "0b1",
-			p_D_IB_PWDNB            = "0b1",
-			p_D_TXPLL_PWDNB         = "0b1",
+			p_D_MACROPDB            = '0b1',
+			p_D_IB_PWDNB            = '0b1',
+			p_D_TXPLL_PWDNB         = '0b1',
 			i_D_FFC_MACROPDB        = 1,
 
 			# DCU — reset
@@ -791,59 +791,59 @@ class ECP5SerDes(Elaboratable):
 			i_D_REFCLKI             = self._pll.refclk,
 			o_D_FFS_PLOL            = tx_lol,
 			p_D_REFCK_MODE          = {
-				25: "0b100",
-				20: "0b000",
-				16: "0b010",
-				10: "0b001",
-				 8: "0b011"}[self._pll.config["mult"]],
-			p_D_TX_MAX_RATE         = "5.0",    # 5.0 Gbps
+				25: '0b100',
+				20: '0b000',
+				16: '0b010',
+				10: '0b001',
+				 8: '0b011'}[self._pll.config['mult']],
+			p_D_TX_MAX_RATE         = '5.0',    # 5.0 Gbps
 			p_D_TX_VCO_CK_DIV       = {
-				32: "0b111",
-				16: "0b110",
-				 8: "0b101",
-				 4: "0b100",
-				 2: "0b010",
-				 1: "0b000"}[1],                # DIV/1
-			p_D_BITCLK_LOCAL_EN     = "0b1",    # Use clock from local PLL
+				32: '0b111',
+				16: '0b110',
+				 8: '0b101',
+				 4: '0b100',
+				 2: '0b010',
+				 1: '0b000'}[1],                # DIV/1
+			p_D_BITCLK_LOCAL_EN     = '0b1',    # Use clock from local PLL
 
 			# DCU — clock multiplier unit
 			# begin undocumented (Clarity Designer values for 5 Gbps PCIe used)
-			p_D_CMUSETBIASI         = "0b00",
-			p_D_CMUSETI4CPP         = "0d4",
-			p_D_CMUSETI4CPZ         = "0d3",
-			p_D_CMUSETI4VCO         = "0b00",
-			p_D_CMUSETICP4P         = "0b01",
-			p_D_CMUSETICP4Z         = "0b101",
-			p_D_CMUSETINITVCT       = "0b00",
-			p_D_CMUSETISCL4VCO      = "0b000",
-			p_D_CMUSETP1GM          = "0b000",
-			p_D_CMUSETP2AGM         = "0b000",
-			p_D_CMUSETZGM           = "0b100",
+			p_D_CMUSETBIASI         = '0b00',
+			p_D_CMUSETI4CPP         = '0d4',
+			p_D_CMUSETI4CPZ         = '0d3',
+			p_D_CMUSETI4VCO         = '0b00',
+			p_D_CMUSETICP4P         = '0b01',
+			p_D_CMUSETICP4Z         = '0b101',
+			p_D_CMUSETINITVCT       = '0b00',
+			p_D_CMUSETISCL4VCO      = '0b000',
+			p_D_CMUSETP1GM          = '0b000',
+			p_D_CMUSETP2AGM         = '0b000',
+			p_D_CMUSETZGM           = '0b100',
 			# end undocumented
 
 			# DCU — unknown
 			# begin undocumented (Clarity Designer values for 5 Gbps PCIe used)
-			p_D_PD_ISET             = "0b11",
-			p_D_RG_EN               = "0b0",
-			p_D_RG_SET              = "0b00",
-			p_D_SETICONST_AUX       = "0b01",
-			p_D_SETICONST_CH        = "0b10",
-			p_D_SETIRPOLY_AUX       = "0b10",
-			p_D_SETIRPOLY_CH        = "0b10",
-			p_D_SETPLLRC            = "0d1",
+			p_D_PD_ISET             = '0b11',
+			p_D_RG_EN               = '0b0',
+			p_D_RG_SET              = '0b00',
+			p_D_SETICONST_AUX       = '0b01',
+			p_D_SETICONST_CH        = '0b10',
+			p_D_SETIRPOLY_AUX       = '0b10',
+			p_D_SETIRPOLY_CH        = '0b10',
+			p_D_SETPLLRC            = '0d1',
 			# end undocumented
 
 			# CHX common ---------------------------------------------------------------------------
 			# CHX — protocol
-			p_CHX_PROTOCOL          = "G8B10B",
-			p_CHX_PCIE_MODE         = "0b1",
+			p_CHX_PROTOCOL          = 'G8B10B',
+			p_CHX_PCIE_MODE         = '0b1',
 
-			p_CHX_ENC_BYPASS        = "0b0",    # Use the 8b10b encoder
-			p_CHX_DEC_BYPASS        = "0b0",    # Use the 8b10b decoder
+			p_CHX_ENC_BYPASS        = '0b0',    # Use the 8b10b encoder
+			p_CHX_DEC_BYPASS        = '0b0',    # Use the 8b10b decoder
 
 			# CHX receive --------------------------------------------------------------------------
 			# CHX RX — power management
-			p_CHX_RPWDNB            = "0b1",
+			p_CHX_RPWDNB            = '0b1',
 			i_CHX_FFC_RXPWDNB       = 1,
 
 			# CHX RX — reset
@@ -854,120 +854,120 @@ class ECP5SerDes(Elaboratable):
 			i_CHX_HDINP             = self._rx_pads.p,
 			i_CHX_HDINN             = self._rx_pads.n,
 
-			p_CHX_LDR_RX2CORE_SEL   = "0b1",            # Enables low-speed out-of-band input.
+			p_CHX_LDR_RX2CORE_SEL   = '0b1',            # Enables low-speed out-of-band input.
 			o_CHX_LDR_RX2CORE       = self.rx_gpio,
 
 			p_CHX_RTERM_RX          = {
-				"5k-ohms":        "0d0",
-				"80-ohms":        "0d1",
-				"75-ohms":        "0d4",
-				"70-ohms":        "0d6",
-				"60-ohms":        "0d11",
-				"50-ohms":        "0d19",
-				"46-ohms":        "0d25",
-				"wizard-50-ohms": "0d22"}["5k-ohms"], # Set via SCI
-			p_CHX_RXTERM_CM         = "0b10",   # Terminate RX to GND
-			p_CHX_RXIN_CM           = "0b11",   # Common mode feedback
+				'5k-ohms':        '0d0',
+				'80-ohms':        '0d1',
+				'75-ohms':        '0d4',
+				'70-ohms':        '0d6',
+				'60-ohms':        '0d11',
+				'50-ohms':        '0d19',
+				'46-ohms':        '0d25',
+				'wizard-50-ohms': '0d22'}['5k-ohms'], # Set via SCI
+			p_CHX_RXTERM_CM         = '0b10',   # Terminate RX to GND
+			p_CHX_RXIN_CM           = '0b11',   # Common mode feedback
 
 			# CHX RX — equalizer
-			p_D_REQ_ISET            = "0b011",  # Undocumented, needs to be 010 or 011
-			p_CHX_REQ_EN            = "0b1",    # Enable equalizer
-			p_CHX_REQ_LVL_SET       = "0b01",   # Equalizer attenuation, 9 dB
-			p_CHX_RX_RATE_SEL       = "0d09",   # Equalizer pole position, values documented as "TBD"
+			p_D_REQ_ISET            = '0b011',  # Undocumented, needs to be 010 or 011
+			p_CHX_REQ_EN            = '0b1',    # Enable equalizer
+			p_CHX_REQ_LVL_SET       = '0b01',   # Equalizer attenuation, 9 dB
+			p_CHX_RX_RATE_SEL       = '0d09',   # Equalizer pole position, values documented as 'TBD'
 
 			# CHX RX — clocking
-			p_CHX_FF_RX_H_CLK_EN    = "0b0",    # disable DIV/2 output clock
-			p_CHX_FF_RX_F_CLK_DIS   = "0b1",    # disable DIV/1 output clock
-			p_CHX_SEL_SD_RX_CLK     = "0b0",    # FIFO write driven by CTC buffer read clock
+			p_CHX_FF_RX_H_CLK_EN    = '0b0',    # disable DIV/2 output clock
+			p_CHX_FF_RX_F_CLK_DIS   = '0b1',    # disable DIV/1 output clock
+			p_CHX_SEL_SD_RX_CLK     = '0b0',    # FIFO write driven by CTC buffer read clock
 			i_CHX_FF_EBRD_CLK       = tx_clk_full,
-			p_CHX_RX_GEAR_MODE      = "0b1",    # 1:2 gearbox
+			p_CHX_RX_GEAR_MODE      = '0b1',    # 1:2 gearbox
 			i_CHX_FF_RXI_CLK        = tx_clk_half,
 
 			# CHX RX — clock and data recovery
-			p_CHX_CDR_MAX_RATE      = "5.0",    # 5.0 Gbps
+			p_CHX_CDR_MAX_RATE      = '5.0',    # 5.0 Gbps
 			i_CHX_RX_REFCLK         = self._pll.refclk,
 			p_CHX_RX_DCO_CK_DIV     = {
-				32: "0b111",
-				16: "0b110",
-				 8: "0b101",
-				 4: "0b100",
-				 2: "0b010",
-				 1: "0b000"}[1],                # DIV/1
+				32: '0b111',
+				16: '0b110',
+				 8: '0b101',
+				 4: '0b100',
+				 2: '0b010',
+				 1: '0b000'}[1],                # DIV/1
 
 			# begin undocumented (Clarity Designer values for 5 Gbps PCIe used)
-			p_CHX_DCOATDCFG         = "0b00",
-			p_CHX_DCOATDDLY         = "0b00",
-			p_CHX_DCOBYPSATD        = "0b1",
-			p_CHX_DCOCALDIV         = "0b010",
-			p_CHX_DCOCTLGI          = "0b011",
-			p_CHX_DCODISBDAVOID     = "0b1",
-			p_CHX_DCOFLTDAC         = "0b00",
-			p_CHX_DCOFTNRG          = "0b001",
-			p_CHX_DCOIOSTUNE        = "0b010",
-			p_CHX_DCOITUNE          = "0b00",
-			p_CHX_DCOITUNE4LSB      = "0b010",
-			p_CHX_DCOIUPDNX2        = "0b1",
-			p_CHX_DCONUOFLSB        = "0b101",
-			p_CHX_DCOSCALEI         = "0b01",
-			p_CHX_DCOSTARTVAL       = "0b010",
-			p_CHX_DCOSTEP           = "0b11",
-			p_CHX_BAND_THRESHOLD    = "0d0",
-			p_CHX_AUTO_FACQ_EN      = "0b1",
-			p_CHX_AUTO_CALIB_EN     = "0b1",
-			p_CHX_CALIB_CK_MODE     = "0b1",
-			p_D_DCO_CALIB_TIME_SEL  = "0b00",
-			p_CHX_REG_BAND_OFFSET   = "0d0",
-			p_CHX_REG_BAND_SEL      = "0d0",
-			p_CHX_REG_IDAC_SEL      = "0d0",
-			p_CHX_REG_IDAC_EN       = "0b0",
+			p_CHX_DCOATDCFG         = '0b00',
+			p_CHX_DCOATDDLY         = '0b00',
+			p_CHX_DCOBYPSATD        = '0b1',
+			p_CHX_DCOCALDIV         = '0b010',
+			p_CHX_DCOCTLGI          = '0b011',
+			p_CHX_DCODISBDAVOID     = '0b1',
+			p_CHX_DCOFLTDAC         = '0b00',
+			p_CHX_DCOFTNRG          = '0b001',
+			p_CHX_DCOIOSTUNE        = '0b010',
+			p_CHX_DCOITUNE          = '0b00',
+			p_CHX_DCOITUNE4LSB      = '0b010',
+			p_CHX_DCOIUPDNX2        = '0b1',
+			p_CHX_DCONUOFLSB        = '0b101',
+			p_CHX_DCOSCALEI         = '0b01',
+			p_CHX_DCOSTARTVAL       = '0b010',
+			p_CHX_DCOSTEP           = '0b11',
+			p_CHX_BAND_THRESHOLD    = '0d0',
+			p_CHX_AUTO_FACQ_EN      = '0b1',
+			p_CHX_AUTO_CALIB_EN     = '0b1',
+			p_CHX_CALIB_CK_MODE     = '0b1',
+			p_D_DCO_CALIB_TIME_SEL  = '0b00',
+			p_CHX_REG_BAND_OFFSET   = '0d0',
+			p_CHX_REG_BAND_SEL      = '0d0',
+			p_CHX_REG_IDAC_SEL      = '0d0',
+			p_CHX_REG_IDAC_EN       = '0b0',
 			# end undocumented
 
 			# CHX RX — loss of signal
 			# Undocumented values were taken from Clarity Designer output for 5 Gbps PCIe
 			o_CHX_FFS_RLOS          = rx_los,
-			p_CHX_RLOS_SEL          = "0b1",
-			p_CHX_RX_LOS_EN         = "0b1",
-			p_CHX_RX_LOS_LVL        = "0b100",  # Values documented as "TBD"
-			p_CHX_RX_LOS_CEQ        = "0b11",   # Values documented as "TBD"
-			p_CHX_RX_LOS_HYST_EN    = "0b0",
-			p_CHX_PDEN_SEL          = "0b1",    # phase detector disabled on LOS
+			p_CHX_RLOS_SEL          = '0b1',
+			p_CHX_RX_LOS_EN         = '0b1',
+			p_CHX_RX_LOS_LVL        = '0b100',  # Values documented as 'TBD'
+			p_CHX_RX_LOS_CEQ        = '0b11',   # Values documented as 'TBD'
+			p_CHX_RX_LOS_HYST_EN    = '0b0',
+			p_CHX_PDEN_SEL          = '0b1',    # phase detector disabled on LOS
 
 			# CHX RX — loss of lock
 			o_CHX_FFS_RLOL          = rx_lol,
 			# USB requires the use of spread spectrum clocking, modulating the frequency from
 			# +0 to -5000 ppm of the base 5 GHz clock.
-			p_D_CDR_LOL_SET         = "0b10",   # ±4000 ppm lock, ±7000 ppm unlock
+			p_D_CDR_LOL_SET         = '0b10',   # ±4000 ppm lock, ±7000 ppm unlock
 
 			# CHX RX — comma alignment
 			# In the User Configured mode (generic 8b10b), the link state machine must be disabled
 			# using CHx_LSM_DISABLE, or the CHx_FFC_ENABLE_CGALIGN and CHx_FFC_CR_EN_BITSLIP inputs
 			# will not affect the WA and CDR.
-			p_CHX_LSM_DISABLE       = "0b1",
+			p_CHX_LSM_DISABLE       = '0b1',
 			# The CHx_FFC_ENABLE_CGALIGN input is edge-sensitive; a posedge enables the word aligner,
 			# which, once it discovers a comma, configures the barrel shifter and disables itself.
 			# A constant level on this input does not affect WA; neither does the CHx_ENABLE_CG_ALIGN
 			# parameter.
 			i_CHX_FFC_ENABLE_CGALIGN= rx_err,
 
-			p_CHX_UDF_COMMA_MASK    = "0x3ff",  # compare all bits
-			p_CHX_UDF_COMMA_A       = "0x17c",   # 0b0101_111100, K28.5 RD- 10b code
-			p_CHX_UDF_COMMA_B       = "0x283",   # 0b1010_000011, K28.5 RD+ 10b code
+			p_CHX_UDF_COMMA_MASK    = '0x3ff',  # compare all bits
+			p_CHX_UDF_COMMA_A       = '0x17c',   # 0b0101_111100, K28.5 RD- 10b code
+			p_CHX_UDF_COMMA_B       = '0x283',   # 0b1010_000011, K28.5 RD+ 10b code
 
 			# CHX RX — clock tolerance compensation
 			# Due to spread spectrum modulation, the USB 3 word clock is, on average, 2.5% slower
 			# than the base 5 GHz line rate. Since the USB soft logic always runs at a fraction of
 			# the base line rate, SKP ordered sets only need to be removed, and RX FIFO underrun
 			# can be handled using clock enables alone.
-			p_CHX_CTC_BYPASS        = "0b0",    # enable CTC FIFO
-			p_CHX_MIN_IPG_CNT       = "0b00",   # minimum interpacket gap of 1X (multiplied by match length)
-			p_CHX_MATCH_2_ENABLE    = "0b1",    # enable  2 character skip matching (using characters 3..4)
-			p_CHX_MATCH_4_ENABLE    = "0b0",    # disable 4 character skip matching (using characters 1..4)
-			p_CHX_CC_MATCH_1        = "0x13c",   # K28.1 1+8b code
-			p_CHX_CC_MATCH_2        = "0x13c",   # K28.1 1+8b code
-			p_CHX_CC_MATCH_3        = "0x13c",   # K28.1 1+8b code
-			p_CHX_CC_MATCH_4        = "0x13c",   # K28.1 1+8b code
-			p_D_LOW_MARK            = "0d4",    # CTC FIFO low  water mark (mean=8)
-			p_D_HIGH_MARK           = "0d12",   # CTC FIFO high water mark (mean=8)
+			p_CHX_CTC_BYPASS        = '0b0',    # enable CTC FIFO
+			p_CHX_MIN_IPG_CNT       = '0b00',   # minimum interpacket gap of 1X (multiplied by match length)
+			p_CHX_MATCH_2_ENABLE    = '0b1',    # enable  2 character skip matching (using characters 3..4)
+			p_CHX_MATCH_4_ENABLE    = '0b0',    # disable 4 character skip matching (using characters 1..4)
+			p_CHX_CC_MATCH_1        = '0x13c',   # K28.1 1+8b code
+			p_CHX_CC_MATCH_2        = '0x13c',   # K28.1 1+8b code
+			p_CHX_CC_MATCH_3        = '0x13c',   # K28.1 1+8b code
+			p_CHX_CC_MATCH_4        = '0x13c',   # K28.1 1+8b code
+			p_D_LOW_MARK            = '0d4',    # CTC FIFO low  water mark (mean=8)
+			p_D_HIGH_MARK           = '0d12',   # CTC FIFO high water mark (mean=8)
 
 			# The CTC FIFO underrun and overrun flags are 'sticky'; once the condition occurs, the flag
 			# remains set until the RX PCS is reset. This affects the PIPE RxStatus output as well; to
@@ -976,11 +976,11 @@ class ECP5SerDes(Elaboratable):
 			o_CHX_FFS_CC_OVERRUN    = rx_ctc_orun,
 
 			# CHX RX — data
-			**{"o_CHX_FF_RX_D_%d" % n: rx_bus[n] for n in range(len(rx_bus))},
+			**{'o_CHX_FF_RX_D_%d' % n: rx_bus[n] for n in range(len(rx_bus))},
 
 			# CHX transmit -------------------------------------------------------------------------
 			# CHX TX — power management
-			p_CHX_TPWDNB            = "0b1",
+			p_CHX_TPWDNB            = '0b1',
 			i_CHX_FFC_TXPWDNB       = 1,
 
 			# CHX TX — reset
@@ -991,52 +991,52 @@ class ECP5SerDes(Elaboratable):
 			o_CHX_HDOUTP            = self._tx_pads.p,
 			o_CHX_HDOUTN            = self._tx_pads.n,
 
-			p_CHX_LDR_CORE2TX_SEL   = "0b0",            # Uses CORE2TX_EN to enable out-of-band output.
+			p_CHX_LDR_CORE2TX_SEL   = '0b0',            # Uses CORE2TX_EN to enable out-of-band output.
 			i_CHX_LDR_CORE2TX       = self.tx_gpio,
 			i_CHX_FFC_LDR_CORE2TX_EN= self.tx_gpio_en,
 
 			p_CHX_RTERM_TX          = {
-				"5k-ohms":        "0d0",
-				"80-ohms":        "0d1",
-				"75-ohms":        "0d4",
-				"70-ohms":        "0d6",
-				"60-ohms":        "0d11",
-				"50-ohms":        "0d19",
-				"46-ohms":        "0d25",
-				"wizard-50-ohms": "0d19"}["50-ohms"],
-			p_CHX_TXAMPLITUDE       = "0d1000", # 1000 mV
+				'5k-ohms':        '0d0',
+				'80-ohms':        '0d1',
+				'75-ohms':        '0d4',
+				'70-ohms':        '0d6',
+				'60-ohms':        '0d11',
+				'50-ohms':        '0d19',
+				'46-ohms':        '0d25',
+				'wizard-50-ohms': '0d19'}['50-ohms'],
+			p_CHX_TXAMPLITUDE       = '0d1000', # 1000 mV
 
 			# CHX TX — equalization
-			p_CHX_TDRV_SLICE0_CUR   = "0b011",  # 400 uA
-			p_CHX_TDRV_SLICE0_SEL   = "0b01",   # main data
-			p_CHX_TDRV_SLICE1_CUR   = "0b000",  # 100 uA
-			p_CHX_TDRV_SLICE1_SEL   = "0b00",   # power down
-			p_CHX_TDRV_SLICE2_CUR   = "0b11",   # 3200 uA
-			p_CHX_TDRV_SLICE2_SEL   = "0b01",   # main data
-			p_CHX_TDRV_SLICE3_CUR   = "0b10",   # 2400 uA
-			p_CHX_TDRV_SLICE3_SEL   = "0b01",   # main data
-			p_CHX_TDRV_SLICE4_CUR   = "0b00",   # 800 uA
-			p_CHX_TDRV_SLICE4_SEL   = "0b00",   # power down
-			p_CHX_TDRV_SLICE5_CUR   = "0b00",   # 800 uA
-			p_CHX_TDRV_SLICE5_SEL   = "0b00",   # power down
+			p_CHX_TDRV_SLICE0_CUR   = '0b011',  # 400 uA
+			p_CHX_TDRV_SLICE0_SEL   = '0b01',   # main data
+			p_CHX_TDRV_SLICE1_CUR   = '0b000',  # 100 uA
+			p_CHX_TDRV_SLICE1_SEL   = '0b00',   # power down
+			p_CHX_TDRV_SLICE2_CUR   = '0b11',   # 3200 uA
+			p_CHX_TDRV_SLICE2_SEL   = '0b01',   # main data
+			p_CHX_TDRV_SLICE3_CUR   = '0b10',   # 2400 uA
+			p_CHX_TDRV_SLICE3_SEL   = '0b01',   # main data
+			p_CHX_TDRV_SLICE4_CUR   = '0b00',   # 800 uA
+			p_CHX_TDRV_SLICE4_SEL   = '0b00',   # power down
+			p_CHX_TDRV_SLICE5_CUR   = '0b00',   # 800 uA
+			p_CHX_TDRV_SLICE5_SEL   = '0b00',   # power down
 
 			# CHX TX — clocking
-			p_CHX_FF_TX_F_CLK_DIS   = "0b0",    # enable  DIV/1 output clock
+			p_CHX_FF_TX_F_CLK_DIS   = '0b0',    # enable  DIV/1 output clock
 			o_CHX_FF_TX_F_CLK       = tx_clk_full,
-			p_CHX_FF_TX_H_CLK_EN    = "0b1",    # enable  DIV/2 output clock
+			p_CHX_FF_TX_H_CLK_EN    = '0b1',    # enable  DIV/2 output clock
 			o_CHX_FF_TX_PCLK        = tx_clk_half, # ff_tx_pclk feeds a pclk net, ff_tx_h_clk does not
-			p_CHX_TX_GEAR_MODE      = "0b1",    # 1:2 gearbox
+			p_CHX_TX_GEAR_MODE      = '0b1',    # 1:2 gearbox
 			i_CHX_FF_TXI_CLK        = tx_clk_half,
 
 			# CHX TX — data
-			**{"i_CHX_FF_TX_D_%d" % n: tx_bus[n] for n in range(len(tx_bus))},
+			**{'i_CHX_FF_TX_D_%d' % n: tx_bus[n] for n in range(len(tx_bus))},
 
 			i_CHX_FFC_EI_EN         = self.tx_elec_idle & ~self.tx_gpio_en,
 
 			# SCI interface ------------------------------------------------------------------------
-			**{"i_D_SCIWDATA%d" % n: sci.sci_wdata[n] for n in range(8)},
-			**{"i_D_SCIADDR%d"  % n: sci.sci_addr [n] for n in range(6)},
-			**{"o_D_SCIRDATA%d" % n: sci.sci_rdata[n] for n in range(8)},
+			**{'i_D_SCIWDATA%d' % n: sci.sci_wdata[n] for n in range(8)},
+			**{'i_D_SCIADDR%d'  % n: sci.sci_addr [n] for n in range(6)},
+			**{'o_D_SCIRDATA%d' % n: sci.sci_rdata[n] for n in range(8)},
 			i_D_SCIENAUX  = sci.dual_sel,
 			i_D_SCISELAUX = sci.dual_sel,
 			i_CHX_SCIEN   = sci.chan_sel,
@@ -1047,12 +1047,12 @@ class ECP5SerDes(Elaboratable):
 
 		# Translate the 'CHX' string to the correct channel name in each of our SerDes parameters,
 		# and create our SerDes instance.
-		serdes_params = {k.replace("CHX", f"CH{self._channel}"):v for (k,v) in serdes_params.items()}
-		m.submodules.serdes = serdes = Instance("DCUA", **serdes_params)
+		serdes_params = {k.replace('CHX', f'CH{self._channel}'):v for (k,v) in serdes_params.items()}
+		m.submodules.serdes = serdes = Instance('DCUA', **serdes_params)
 
 		# Bind our SerDes to the correct location inside the FPGA.
-		serdes.attrs["LOC"] = "DCU{}".format(self._dual)
-		serdes.attrs["CHAN"] = "CH{}".format(self._channel)
+		serdes.attrs['LOC'] = 'DCU{}'.format(self._dual)
+		serdes.attrs['CHAN'] = 'CH{}'.format(self._channel)
 
 		# SerDes decodes invalid 10b symbols to 0xEE with control bit set, which is not a part
 		# of the 8b10b encoding space. We use it to drive the comma aligner and reset sequencer.
@@ -1096,7 +1096,7 @@ class ECP5SerDes(Elaboratable):
 
 
 class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
-	""" Wrapper around the core ECP5 SerDes that adapts it to the PIPE interface.
+	''' Wrapper around the core ECP5 SerDes that adapts it to the PIPE interface.
 
 	The implementation-dependent behavior of the standard PIPE signals is described below:
 
@@ -1131,7 +1131,7 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 		These inputs are not implemented.
 	power_present :
 		This output is not implemented. External logic may drive it if necessary.
-	"""
+	'''
 
 	def __init__(self, *, tx_pads, rx_pads, channel=0, dual=0, refclk_frequency):
 		super().__init__(width=2)
@@ -1165,7 +1165,7 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 		# a local clock domain to drive it.
 		m.domains.pipe = ClockDomain(local=True, async_reset=True)
 		m.d.comb += [
-			ClockSignal("pipe")     .eq(serdes.pclk),
+			ClockSignal('pipe')     .eq(serdes.pclk),
 		]
 
 

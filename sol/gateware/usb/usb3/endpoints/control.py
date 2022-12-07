@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Low-level USB3 transciever gateware -- control transfer components. """
+''' Low-level USB3 transciever gateware -- control transfer components. '''
 
 
 from torii                  import *
@@ -20,7 +20,7 @@ from ..request.standard     import StandardRequestHandler
 
 
 class USB3ControlEndpoint(Elaboratable):
-	""" Gateware that manages control request data progression.
+	''' Gateware that manages control request data progression.
 
 	This class is used by creating one or more *request handler* modules; which define how requests
 	are handled. These handlers can be bound using :attr:`add_request_handler`.
@@ -38,7 +38,7 @@ class USB3ControlEndpoint(Elaboratable):
 		endpoint_number: int, optional
 			The endpoint number for this control interface; defaults to (and almost always should
 			be) zero.
-	"""
+	'''
 
 	def __init__(self, *, endpoint_number=0):
 		self._endpoint_number = endpoint_number
@@ -54,23 +54,23 @@ class USB3ControlEndpoint(Elaboratable):
 
 
 	def add_request_handler(self, request_handler):
-		""" Adds a ControlRequestHandler module to this control endpoint.
+		''' Adds a ControlRequestHandler module to this control endpoint.
 
 		No arbitration is performed between request handlers; so it's important
 		that request handlers not overlap in the requests they handle.
-		"""
+		'''
 		self._request_handlers.append(request_handler)
 
 
 	def add_standard_request_handlers(self, descriptors: DeviceDescriptorCollection):
-		""" Adds a handlers for the standard USB requests.
+		''' Adds a handlers for the standard USB requests.
 
 		This will handle all Standard-type requests; so any additional request handlers
 		must not handle Standard requests.
 
 		Parameters:
 
-		"""
+		'''
 		handler = StandardRequestHandler(descriptors)
 		self._request_handlers.append(handler)
 
@@ -127,7 +127,7 @@ class USB3ControlEndpoint(Elaboratable):
 			# Create a display name for the handler...
 			name = handler.__class__.__name__
 			if hasattr(m.submodules, name):
-				name = f"{name}_{id(handler)}"
+				name = f'{name}_{id(handler)}'
 
 			# ... and add it.
 			m.submodules[name] = handler

@@ -24,10 +24,10 @@ REGISTER_ID  = 1
 REGISTER_ILA = 2
 
 class ILASharedBusExample(Elaboratable):
-	"""
+	'''
 	Gateware that demonstrates sharing the Debug SPI bus between
 	a register interface and an ILA.
-	"""
+	'''
 
 	def __init__(self):
 		self.counter = Signal(28)
@@ -40,7 +40,7 @@ class ILASharedBusExample(Elaboratable):
 		m.submodules += self.ila
 
 		# Grab a reference to our debug-SPI bus.
-		board_spi = synchronize(m, platform.request("debug_spi"))
+		board_spi = synchronize(m, platform.request('debug_spi'))
 
 		# Clock divider / counter.
 		m.d.sync += self.counter.eq(self.counter + 1)
@@ -86,14 +86,14 @@ class ILASharedBusExample(Elaboratable):
 		)
 
 		# Attach the LEDs and User I/O to the MSBs of our counter.
-		leds    = [platform.request("led", i, dir="o") for i in range(0, 6)]
+		leds    = [platform.request('led', i, dir='o') for i in range(0, 6)]
 		m.d.comb += Cat(leds).eq(self.counter[-7:-1])
 
 		# Return our elaborated module.
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	example = cli(ILASharedBusExample)
 
 	# Create a debug and ILA connection.

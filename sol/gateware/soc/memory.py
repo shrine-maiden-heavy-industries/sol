@@ -12,19 +12,19 @@ from torii.lib.soc import memory, wishbone
 
 
 class WishboneRAM(Elaboratable):
-	""" Simple Wishbone-connected RAM. """
+	''' Simple Wishbone-connected RAM. '''
 
 
 	@staticmethod
 	def _initialization_value(value, data_width, granularity, byteorder):
-		""" Converts a provided value into a valid Memory-initializer array.
+		''' Converts a provided value into a valid Memory-initializer array.
 
 		Parameters should match those provied to __init__
-		"""
+		'''
 
 		# If this is a filename, read the file's contents before processing.
 		if isinstance(value, str):
-			with open(value, "rb") as f:
+			with open(value, 'rb') as f:
 				value = f.read()
 
 		# If we don't have bytes, read this direction.
@@ -39,8 +39,8 @@ class WishboneRAM(Elaboratable):
 
 
 	def __init__(self, *, addr_width, data_width=32, granularity=8, init=None,
-			read_only=False, byteorder="little", name="ram"):
-		"""
+			read_only=False, byteorder='little', name='ram'):
+		'''
 		Parameters:
 			addr_width  -- The -bus- address width for the relevant memory. Determines the size
 						   of the memory.
@@ -55,7 +55,7 @@ class WishboneRAM(Elaboratable):
 						   acts as a ROM fixed to its initialization value.
 			byteorder   -- Sets the byte order of the initializer value. Ignored unless a bytes-type initializer is provided.
 			name        -- A descriptive name for the given memory.
-		"""
+		'''
 
 		self.name          = name
 		self.read_only     = read_only
@@ -136,10 +136,10 @@ class WishboneRAM(Elaboratable):
 
 
 class WishboneROM(WishboneRAM):
-	""" Wishbone-attached ROM. """
+	''' Wishbone-attached ROM. '''
 
-	def __init__(self, data, *, addr_width, data_width=32, granularity=8, name="rom"):
-		"""
+	def __init__(self, data, *, addr_width, data_width=32, granularity=8, name='rom'):
+		'''
 		Parameters:
 			data -- The data to fill the ROM with.
 
@@ -148,7 +148,7 @@ class WishboneROM(WishboneRAM):
 			data_width  -- The width of each memory word.
 			granularity -- The number of bits of data per each address.
 			name        -- A descriptive name for the ROM.
-		"""
+		'''
 
 		super().__init__(
 			addr_width=addr_width,

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2021 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Hardware for communicating over various FPGAs' debug interfaces. """
+''' Hardware for communicating over various FPGAs' debug interfaces. '''
 
 from torii         import *
 from torii.hdl.ast import ValueCastable
@@ -16,7 +16,7 @@ from .spi          import SPIRegisterInterface
 
 
 class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
-	""" Hardware that creates a virtual 'debug SPI' port, exposed over JTAG.
+	''' Hardware that creates a virtual 'debug SPI' port, exposed over JTAG.
 
 	WARNING: all signals are asynchronous to any internal clock domain -- they're
 	synchronized to the JTAG scan chain clock. They should be synchronized before
@@ -37,7 +37,7 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		Alternate serial data to be transmitted. Used with the ER2 instruction.
 	cs_alt: Signal(), output
 		Alternate, active-high chip-select. Used with the ER2 instruction.
-	"""
+	'''
 
 	fields = ['sck', 'sdi', 'sdo', 'cs']
 	layout = [
@@ -73,7 +73,7 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		# Instantiate our core JTAG interface, and hook it up to our signals.
 		# This essentially grabs a connection to the ECP5's JTAG data chain when the ER1 or ER2
 		# instructions are loaded into its instruction register.
-		m.submodules.jtag = jtag = Instance("JTAGG",
+		m.submodules.jtag = jtag = Instance('JTAGG',
 			o_JTCK   = jtck,
 			o_JTDI   = self.sdi,
 			i_JTDO1  = self.sdo,
@@ -96,8 +96,8 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		#
 
 		# Create a clock domain clocked from our JTAG clock.
-		m.domains.jtag = ClockDomain(local=True, clk_edge="neg")
-		m.d.comb += ClockSignal("jtag").eq(jtck)
+		m.domains.jtag = ClockDomain(local=True, clk_edge='neg')
+		m.d.comb += ClockSignal('jtag').eq(jtck)
 
 		# Create our chip selects. Note that these are based on two conditions:
 		# - the JCE flags only go high when the right instruction is loaded; and
@@ -129,8 +129,8 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		}[key]
 
 
-	def _synchronize_(self, m, output, o_domain="sync", stages=2):
-		""" Creates a synchronized copy of this interface's I/O. """
+	def _synchronize_(self, m, output, o_domain='sync', stages=2):
+		''' Creates a synchronized copy of this interface's I/O. '''
 
 		# Synchronize our inputs...
 		m.submodules += [
@@ -145,7 +145,7 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 
 
 class JTAGCommandInterface(Elaboratable):
-	""" Interface that allow us to receive simple register-style commands over ECP5 JTAGG.
+	''' Interface that allow us to receive simple register-style commands over ECP5 JTAGG.
 
 	This module works in an emulation of JTAG, except both instruction and data are shifted
 	in the SHIFT-DR state. To shift an instruction, place the Lattice ER1 instruction into the
@@ -166,9 +166,9 @@ class JTAGCommandInterface(Elaboratable):
 		Strobe indicating a new word is present on word_in.
 	word_to_send: Signal(word_size), input
 		The word to be transmitted; latched in on next word_complete and while cs is low
-	"""
+	'''
 
-	def __init__(self, command_size=8, word_size=32, output_domain="sync"):
+	def __init__(self, command_size=8, word_size=32, output_domain='sync'):
 		self.command_size   = command_size
 		self.word_size      = word_size
 		self._output_domain = output_domain
@@ -222,7 +222,7 @@ class JTAGCommandInterface(Elaboratable):
 		# Instantiate our core JTAG interface, and hook it up to our signals.
 		# This essentially grabs a connection to the ECP5's JTAG data chain when the ER1 or ER2
 		# instructions are loaded into its instruction register.
-		m.submodules.jtag =  Instance("JTAGG",
+		m.submodules.jtag =  Instance('JTAGG',
 			o_JTCK    = jtag_clk,
 			o_JTDI    = jtag_tdi,
 			i_JTDO1   = jtag_tdo_instruction,
@@ -275,7 +275,7 @@ class JTAGCommandInterface(Elaboratable):
 		command_ready = Signal()
 		data_ready    = Signal()
 
-		# Connect up our "data/command ready" signals.
+		# Connect up our 'data/command ready' signals.
 		m.d.comb += [
 		   command_ready  .eq(falling_edge_detected(m, shifting_instruction)),
 		   data_ready     .eq(falling_edge_detected(m, shifting_data)),
@@ -299,11 +299,11 @@ class JTAGCommandInterface(Elaboratable):
 
 
 class JTAGRegisterInterface(SPIRegisterInterface):
-	""" JTAG-carried version of our SPI register interface. """
+	''' JTAG-carried version of our SPI register interface. '''
 
 
 	def __init__(self, address_size=15, register_size=32, default_read_value=0, support_size_autonegotiation=True):
-		"""
+		'''
 		Parameters:
 			address_size       -- the size of an address, in bits; recommended to be one bit
 								  less than a binary number, as the write command is formed by adding a one-bit
@@ -314,7 +314,7 @@ class JTAGRegisterInterface(SPIRegisterInterface):
 			support_size_autonegotiation --
 				If set, register 0 is used as a size auto-negotiation register. Functionally equivalent to
 				calling .support_size_autonegotiation(); see its documentation for details on autonegotiation.
-		"""
+		'''
 
 		self.address_size  = address_size
 		self.register_size = register_size

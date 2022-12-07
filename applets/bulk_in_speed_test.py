@@ -31,7 +31,7 @@ BULK_ENDPOINT_NUMBER = 1
 TEST_DATA_SIZE = 1 * 1024 * 1024
 TEST_TRANSFER_SIZE = 16 * 1024
 
-# Size of the host-size "transfer queue" -- this is effectively the number of async transfers we'll
+# Size of the host-size 'transfer queue' -- this is effectively the number of async transfers we'll
 # have scheduled at a given time.
 TRANSFER_QUEUE_DEPTH = 16
 
@@ -43,13 +43,13 @@ if os.getenv('SOL_SUPERSPEED'):
 	MAX_BULK_PACKET_SIZE = 1024
 
 	class USBInSpeedTestDevice(Elaboratable):
-		""" Simple example of a USB SuperSpeed device using the SOL framework. """
+		''' Simple example of a USB SuperSpeed device using the SOL framework. '''
 
 		BULK_ENDPOINT_NUMBER = 1
 		MAX_BULK_PACKET_SIZE = 1024
 
 		def create_descriptors(self):
-			""" Create the descriptors we want to use for our device. """
+			''' Create the descriptors we want to use for our device. '''
 
 			descriptors = SuperSpeedDeviceDescriptorCollection()
 
@@ -66,12 +66,12 @@ if os.getenv('SOL_SUPERSPEED'):
 				# We're complying with the USB 3.2 standard.
 				d.bcdUSB             = 3.2
 
-				# USB3 requires this to be "9", to indicate 2 ** 9, or 512B.
+				# USB3 requires this to be '9', to indicate 2 ** 9, or 512B.
 				d.bMaxPacketSize0    = 9
 
-				d.iManufacturer      = "SOL"
-				d.iProduct           = "SuperSpeed Bulk Test"
-				d.iSerialNumber      = "1234"
+				d.iManufacturer      = 'SOL'
+				d.iProduct           = 'SuperSpeed Bulk Test'
+				d.iSerialNumber      = '1234'
 
 				d.bNumConfigurations = 1
 
@@ -138,13 +138,13 @@ else:
 	MAX_BULK_PACKET_SIZE = 64 if os.getenv('SOL_FULL_ONLY') else 512
 
 	class USBInSpeedTestDevice(Elaboratable):
-		""" Simple device that sends data to the host as fast as hardware can.
+		''' Simple device that sends data to the host as fast as hardware can.
 
 		This is paired with the python code below to evaluate SOL throughput.
-		"""
+		'''
 
 		def create_descriptors(self):
-			""" Create the descriptors we want to use for our device. """
+			''' Create the descriptors we want to use for our device. '''
 
 			descriptors = DeviceDescriptorCollection()
 
@@ -158,9 +158,9 @@ else:
 				d.idVendor           = VENDOR_ID
 				d.idProduct          = PRODUCT_ID
 
-				d.iManufacturer      = "SOL"
-				d.iProduct           = "IN speed test"
-				d.iSerialNumber      = "no serial"
+				d.iManufacturer      = 'SOL'
+				d.iProduct           = 'IN speed test'
+				d.iSerialNumber      = 'no serial'
 
 				d.bNumConfigurations = 1
 
@@ -190,7 +190,7 @@ else:
 			m.submodules.usb = usb = USBDevice(bus=ulpi)
 
 			assert not usb.always_fs or os.getenv('SOL_FULL_ONLY'), \
-				   "SOL_FULL_ONLY must be set for devices with a full speed only PHY"
+				   'SOL_FULL_ONLY must be set for devices with a full speed only PHY'
 
 			# Add our standard control endpoint to the device.
 			descriptors = self.create_descriptors()
@@ -219,27 +219,27 @@ else:
 
 
 def run_speed_test():
-	""" Runs a simple speed test, and reports throughput. """
+	''' Runs a simple speed test, and reports throughput. '''
 
 	total_data_exchanged = 0
 	failed_out = False
 
 	_messages = {
-		1: "error'd out",
-		2: "timed out",
-		3: "was prematurely cancelled",
-		4: "was stalled",
-		5: "lost the device it was connected to",
-		6: "sent more data than expected."
+		1: 'error\'d out',
+		2: 'timed out',
+		3: 'was prematurely cancelled',
+		4: 'was stalled',
+		5: 'lost the device it was connected to',
+		6: 'sent more data than expected.'
 	}
 
 	def _should_terminate():
-		""" Returns true iff our test should terminate. """
+		''' Returns true iff our test should terminate. '''
 		return (total_data_exchanged > TEST_DATA_SIZE) or failed_out
 
 
 	def _transfer_completed(transfer: usb1.USBTransfer):
-		""" Callback executed when an async transfer completes. """
+		''' Callback executed when an async transfer completes. '''
 		nonlocal total_data_exchanged, failed_out
 
 		status = transfer.getStatus()
@@ -304,29 +304,29 @@ def run_speed_test():
 
 		# If we failed out; indicate it.
 		if (failed_out):
-			logging.error(f"Test failed because a transfer {_messages[failed_out]}.")
+			logging.error(f'Test failed because a transfer {_messages[failed_out]}.')
 			sys.exit(failed_out)
 
 
 		bytes_per_second = total_data_exchanged / elapsed
-		logging.info(f"Exchanged {total_data_exchanged / 1000000}MB total at {bytes_per_second / 1000000}MB/s.")
+		logging.info(f'Exchanged {total_data_exchanged / 1000000}MB total at {bytes_per_second / 1000000}MB/s.')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
 	# If our environment is suggesting we rerun tests, do so.
 	if os.getenv('SOL_RERUN_TEST'):
 		setup_logger()
-		logging.info("Running speed test without rebuilding...")
+		logging.info('Running speed test without rebuilding...')
 		run_speed_test()
 
 	# Otherwise, build and run our tests.
 	else:
 		device = cli(USBInSpeedTestDevice)
 
-		logging.info("Giving the device time to connect...")
+		logging.info('Giving the device time to connect...')
 		time.sleep(5)
 
 		if device is not None:
-			logging.info(f"Starting bulk in speed test.")
+			logging.info('Starting bulk in speed test.')
 			run_speed_test()

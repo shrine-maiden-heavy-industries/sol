@@ -3,4 +3,4 @@
 # This file is part of SOL.
 #
 
-""" USB device gateware. """
+''' USB device gateware. '''

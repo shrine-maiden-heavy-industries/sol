@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Incomplete example for working the SerDes-based a PIPE PHY. """
+''' Incomplete example for working the SerDes-based a PIPE PHY. '''
 
 from torii                        import *
 
@@ -17,7 +17,7 @@ from sol.gateware.usb.devices.ila import (
 WITH_ILA = False
 
 class PIPEPhyExample(Elaboratable):
-	""" Hardware module that demonstrates grabbing a PHY resource with gearing. """
+	''' Hardware module that demonstrates grabbing a PHY resource with gearing. '''
 
 	def __init__(self):
 		if WITH_ILA:
@@ -27,8 +27,8 @@ class PIPEPhyExample(Elaboratable):
 			self.rx_gpio   = Signal()
 
 			self.ila = USBIntegratedLogicAnalyzer(
-				bus="usb",
-				domain="ss",
+				bus='usb',
+				domain='ss',
 				signals=[
 					self.serdes_rx,
 					self.ctrl,
@@ -41,7 +41,7 @@ class PIPEPhyExample(Elaboratable):
 
 	def emit(self):
 		frontend = USBIntegratedLogicAnalyzerFrontend(ila=self.ila)
-		frontend.emit_vcd("/tmp/output.vcd")
+		frontend.emit_vcd('/tmp/output.vcd')
 
 	def elaborate(self, platform):
 		m = Module()
@@ -74,7 +74,7 @@ class PIPEPhyExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	ex = cli(PIPEPhyExample)
 	if WITH_ILA:
 		ex.emit()

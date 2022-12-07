@@ -20,13 +20,13 @@ from sol.gateware.utils.cdc        import synchronize
 # Can be modified to test at faster or slower frequencies.
 #
 CLOCK_FREQUENCIES = {
-	"fast": 240,
-	"sync": 120,
-	"usb":  60
+	'fast': 240,
+	'sync': 120,
+	'usb':  60
 }
 
 class ILAExample(Elaboratable):
-	""" Gateware module that demonstrates use of the internal ILA. """
+	''' Gateware module that demonstrates use of the internal ILA. '''
 
 	def __init__(self):
 		self.counter = Signal(28)
@@ -54,7 +54,7 @@ class ILAExample(Elaboratable):
 		m.d.comb += self.ila.trigger.eq(self.counter == 7)
 
 		# Grab our I/O connectors.
-		leds    = [platform.request("led", i, dir="o") for i in range(0, 6)]
+		leds    = [platform.request('led', i, dir='o') for i in range(0, 6)]
 		spi_bus = synchronize(m, platform.request('debug_spi'), o_domain='fast')
 
 		# Attach the LEDs and User I/O to the MSBs of our counter.
@@ -67,6 +67,6 @@ class ILAExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	example = cli(ILAExample)
 	example.interactive_display()

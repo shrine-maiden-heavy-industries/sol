@@ -4,12 +4,12 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 Endpoint interfaces for working with streams.
 
 The endpoint interfaces in this module provide endpoint interfaces suitable for
 connecting streams to USB endpoints.
-"""
+'''
 
 
 from torii      import Elaboratable, Module, Signal
@@ -21,7 +21,7 @@ from ..transfer import USBInTransferManager
 
 
 class USBStreamInEndpoint(Elaboratable):
-	""" Endpoint interface that transmits a simple data stream to a host.
+	''' Endpoint interface that transmits a simple data stream to a host.
 
 	This interface is suitable for a single bulk or interrupt endpoint.
 
@@ -56,7 +56,7 @@ class USBStreamInEndpoint(Elaboratable):
 	max_packet_size: int
 		The maximum packet size for this endpoint. Should match the wMaxPacketSize provided in the
 		USB endpoint descriptor.
-	"""
+	'''
 
 
 	def __init__(self, *, endpoint_number, max_packet_size):
@@ -106,7 +106,7 @@ class USBStreamInEndpoint(Elaboratable):
 
 
 class USBMultibyteStreamInEndpoint(Elaboratable):
-	""" Endpoint interface that transmits a simple data stream to a host.
+	''' Endpoint interface that transmits a simple data stream to a host.
 
 	This interface is suitable for a single bulk or interrupt endpoint.
 
@@ -138,7 +138,7 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 	max_packet_size: int
 		The maximum packet size for this endpoint. Should match the wMaxPacketSize provided in the
 		USB endpoint descriptor.
-	"""
+	'''
 	def __init__(self, *, byte_width, endpoint_number, max_packet_size):
 		self._byte_width      = byte_width
 		self._endpoint_number = endpoint_number
@@ -181,10 +181,10 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 		m.d.comb += byte_stream.payload.eq(data_shift[0:8])
 
 
-		with m.FSM(domain="usb"):
+		with m.FSM(domain='usb'):
 
 			# IDLE: transmitter is waiting for input
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				m.d.comb += word_stream.ready.eq(1)
 
 				# Once we get a send request, fill in our shift register, and start shifting.
@@ -196,11 +196,11 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 
 						bytes_to_send      .eq(self._byte_width - 1),
 					]
-					m.next = "TRANSMIT"
+					m.next = 'TRANSMIT'
 
 
 			# TRANSMIT: actively send each of the bytes of our word
-			with m.State("TRANSMIT"):
+			with m.State('TRANSMIT'):
 				m.d.comb += byte_stream.valid.eq(1)
 
 				# Once the byte-stream is accepting our input...
@@ -238,7 +238,7 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 
 						# ... otherwise, move to our idle state.
 						with m.Else():
-							m.next = "IDLE"
+							m.next = 'IDLE'
 
 
 		return m
@@ -246,7 +246,7 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 
 
 class USBStreamOutEndpoint(Elaboratable):
-	""" Endpoint interface that receives data from the host, and produces a simple data stream.
+	''' Endpoint interface that receives data from the host, and produces a simple data stream.
 
 	This interface is suitable for a single bulk or interrupt endpoint.
 
@@ -268,7 +268,7 @@ class USBStreamOutEndpoint(Elaboratable):
 	buffer_size: int, optional
 		The total amount of data we'll keep in the buffer; typically two max-packet-sizes or more.
 		Defaults to twice the maximum packet size.
-	"""
+	'''
 
 
 	def __init__(self, *, endpoint_number, max_packet_size, buffer_size=None):
@@ -324,7 +324,7 @@ class USBStreamOutEndpoint(Elaboratable):
 		rx_last  = boundary_detector.last
 
 		# Create a Rx FIFO.
-		m.submodules.fifo = fifo = TransactionalizedFIFO(width=10, depth=self._buffer_size, name="rx_fifo", domain="usb")
+		m.submodules.fifo = fifo = TransactionalizedFIFO(width=10, depth=self._buffer_size, name='rx_fifo', domain='usb')
 
 
 		#
@@ -350,7 +350,7 @@ class USBStreamOutEndpoint(Elaboratable):
 		m.d.comb += [
 
 			# We'll always populate our FIFO directly from the receive stream; but we'll also include our
-			# "short packet detected" signal, as this indicates that we're detecting the last byte of a transfer.
+			# 'short packet detected' signal, as this indicates that we're detecting the last byte of a transfer.
 			fifo.write_data[0:8] .eq(rx.payload),
 			fifo.write_data[8]   .eq(rx_last & ~full_packet),
 			fifo.write_data[9]   .eq(rx_first & ~transfer_active),

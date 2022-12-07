@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Helpers for clock domain crossings. """
+''' Helpers for clock domain crossings. '''
 
 import unittest
 import warnings
@@ -20,7 +20,7 @@ from ..test import SolGatewareTestCase, sync_test_case
 
 
 def synchronize(m, signal, *, output=None, o_domain='sync', stages=2):
-	""" Convenience function. Synchronizes a signal, or equivalent collection.
+	''' Convenience function. Synchronizes a signal, or equivalent collection.
 
 	Parameters:
 		input   -- The signal to be synchronized.
@@ -33,7 +33,7 @@ def synchronize(m, signal, *, output=None, o_domain='sync', stages=2):
 	Returns:
 		record  -- The post-synchronization signal. Will be equivalent to the
 				   `output` record if provided, or a new, created signal otherwise.
-	"""
+	'''
 
 	# Quick function to create a synchronizer with our domain and stages.
 	def create_synchronizer(signal, output):
@@ -107,7 +107,7 @@ class SynchronizedTest(TestCase):
 
 
 def stretch_strobe_signal(m, strobe, *, to_cycles, output=None, domain=None, allow_delay=False):
-	""" Stretches a given strobe to the given number of cycles.
+	''' Stretches a given strobe to the given number of cycles.
 
 	Parameters:
 		strobe    -- The strobe signal to stretch.
@@ -118,7 +118,7 @@ def stretch_strobe_signal(m, strobe, *, to_cycles, output=None, domain=None, all
 
 	 Returns the output signal. If output is provided, this is the same signal; otherwise, it is the
 	 signal that was created internally.
-	 """
+	 '''
 
 	# Assume the sync domain if no domain is provided.
 	if domain is None:
@@ -149,7 +149,7 @@ def stretch_strobe_signal(m, strobe, *, to_cycles, output=None, domain=None, all
 
 
 class StrobeStretcherTest(SolGatewareTestCase):
-	""" Test case for our strobe stretcher function. """
+	''' Test case for our strobe stretcher function. '''
 
 
 	def instantiate_dut(self):
@@ -194,6 +194,6 @@ class StrobeStretcherTest(SolGatewareTestCase):
 
 
 
-if __name__ == "__main__":
-	warnings.filterwarnings("error")
+if __name__ == '__main__':
+	warnings.filterwarnings('error')
 	unittest.main()

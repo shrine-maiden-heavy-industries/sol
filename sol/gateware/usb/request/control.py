@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Full-gateware control request handlers. """
+''' Full-gateware control request handlers. '''
 
 import unittest
 
@@ -14,18 +14,18 @@ from ..usb2.request import USBRequestHandler
 
 
 class ControlRequestHandler(USBRequestHandler):
-	""" Pure-gateware USB control request handler. """
+	''' Pure-gateware USB control request handler. '''
 
 
 	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition=0):
-		""" Fills in the current state with a request handler meant to set a register.
+		''' Fills in the current state with a request handler meant to set a register.
 
 		Parameters:
 			new_value_signal -- The signal to receive the new value to be applied to the relevant register.
 			write_strobe     -- The signal which will be pulsed when new_value_signal contains a update.
 			stall_condition  -- If provided, if this condition is true, the request will be STALL'd instead
 								of acknowledged.
-			"""
+			'''
 
 		# Provide an response to the STATUS stage.
 		with m.If(self.interface.status_requested):
@@ -48,14 +48,14 @@ class ControlRequestHandler(USBRequestHandler):
 
 
 	def handle_simple_data_request(self, m, transmitter, data, length=1):
-		""" Fills in a given current state with a request that returns a given piece of data.
+		''' Fills in a given current state with a request that returns a given piece of data.
 
 		For e.g. GET_CONFIGURATION and GET_STATUS requests.
 
 		Parameters:
 			transmitter -- The transmitter module we're working with.
 			data        -- The data to be returned.
-		"""
+		'''
 
 		# Connect our transmitter up to the output stream...
 		m.d.comb += [
@@ -74,5 +74,5 @@ class ControlRequestHandler(USBRequestHandler):
 			m.next = 'IDLE'
 
 
-if __name__ == "__main__":
-	unittest.main(warnings="ignore")
+if __name__ == '__main__':
+	unittest.main(warnings='ignore')

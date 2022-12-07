@@ -14,13 +14,13 @@ from sol.gateware.utils.cdc       import synchronize
 REGISTER_ID             = 1
 
 class DebugControllerFlashBridge(Elaboratable):
-	""" Hardware that makes the configuration flash accessible from the Debug Controller. """
+	''' Hardware that makes the configuration flash accessible from the Debug Controller. '''
 
 	def elaborate(self, platform):
 		m = Module()
 
 		# Create a set of registers, and expose them over SPI.
-		board_spi = platform.request("debug_spi")
+		board_spi = platform.request('debug_spi')
 		spi_registers = SPIRegisterInterface(default_read_value=-1)
 		m.submodules.spi_registers = spi_registers
 

@@ -5,4 +5,4 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 gateware. """
+''' USB3 gateware. '''

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Integrated logic analysis helpers. """
+''' Integrated logic analysis helpers. '''
 
 
 import math
@@ -30,7 +30,7 @@ from ..test.utils     import SolGatewareTestCase, sync_test_case
 
 
 class IntegratedLogicAnalyzer(Elaboratable):
-	""" Super-simple integrated-logic-analyzer generator class for SOL.
+	''' Super-simple integrated-logic-analyzer generator class for SOL.
 
 	Attributes
 	----------
@@ -65,9 +65,9 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		This also can act like an implicit synchronizer; so asynchronous inputs
 		are allowed if this number is >= 2. Note that the trigger strobe is read
 		on the rising edge of the clock.
-	"""
+	'''
 
-	def __init__(self, *, signals, sample_depth, domain="sync", sample_rate=60e6, samples_pretrigger=1):
+	def __init__(self, *, signals, sample_depth, domain='sync', sample_rate=60e6, samples_pretrigger=1):
 		self.domain             = domain
 		self.signals            = signals
 		self.inputs             = Cat(*signals)
@@ -80,7 +80,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		#
 		# Create a backing store for our samples.
 		#
-		self.mem = Memory(width=self.sample_width, depth=sample_depth, name="ila_buffer")
+		self.mem = Memory(width=self.sample_width, depth=sample_depth, name='ila_buffer')
 
 
 		#
@@ -99,7 +99,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 		# Memory ports.
 		write_port = self.mem.write_port()
-		read_port  = self.mem.read_port(domain="sync")
+		read_port  = self.mem.read_port(domain='sync')
 		m.submodules += [write_port, read_port]
 
 		# If necessary, create synchronized versions of the relevant signals.
@@ -129,9 +129,9 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		# Don't sample unless our FSM asserts our sample signal explicitly.
 		m.d.sync += write_port.en.eq(0)
 
-		with m.FSM(name="ila_state") as fsm:
+		with m.FSM(name='ila_state') as fsm:
 
-			m.d.comb += self.sampling.eq(~fsm.ongoing("IDLE"))
+			m.d.comb += self.sampling.eq(~fsm.ongoing('IDLE'))
 
 			# IDLE: wait for the trigger strobe
 			with m.State('IDLE'):
@@ -158,7 +158,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 				# If this is the last sample, we're done. Finish up.
 				with m.If(write_position + 1 == self.sample_depth):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 					m.d.sync += [
 						self.complete .eq(1),
@@ -167,7 +167,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
-		if self.domain != "sync":
+		if self.domain != 'sync':
 			m = DomainRenamer(self.domain)(m)
 
 		return m
@@ -198,7 +198,7 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 
 
 	def assert_sample_value(self, address, value):
-		""" Helper that asserts a ILA sample has a given value. """
+		''' Helper that asserts a ILA sample has a given value. '''
 
 		yield self.dut.captured_sample_number.eq(address)
 		yield
@@ -212,7 +212,7 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 
 		# Generate an appropriate exception.
 		actual_value = (yield self.dut.captured_sample)
-		message = "assertion failed: at address 0x{:08x}: {:08x} != {:08x} (expected)".format(address, actual_value, value)
+		message = 'assertion failed: at address 0x{:08x}: {:08x} != {:08x} (expected)'.format(address, actual_value, value)
 		raise AssertionError(message)
 
 
@@ -273,7 +273,7 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 
 
 class SyncSerialILA(Elaboratable):
-	""" Super-simple ILA that reads samples out over a simple unidirectional SPI.
+	''' Super-simple ILA that reads samples out over a simple unidirectional SPI.
 	Create a receiver for this object by calling apollo_fpga.ila_receiver_for(<this>).
 
 	This protocol is simple: every time CS goes low, we begin sending out a bit of
@@ -319,7 +319,7 @@ class SyncSerialILA(Elaboratable):
 		If False or not provided, the CS line will be assumed to be asserted when cs=1.
 		This can be used to share a simple two-device SPI bus, so two internal endpoints
 		can use the same CS line, with two opposite polarities.
-	"""
+	'''
 
 	def __init__(self, *, signals, sample_depth, clock_polarity=0, clock_phase=1, cs_idles_high=False, **kwargs):
 
@@ -422,7 +422,7 @@ class SyncSerialILA(Elaboratable):
 		]
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
-		if self.domain != "sync":
+		if self.domain != 'sync':
 			m = DomainRenamer(self.domain)(m)
 
 		return m
@@ -468,7 +468,7 @@ class SyncSerialReadoutILATest(SPIGatewareTestCase):
 		yield
 
 		# Read our our result over SPI...
-		data = yield from self.spi_exchange_data(b"\0" * 32)
+		data = yield from self.spi_exchange_data(b'\0' * 32)
 
 		# ... and ensure it matches what was sampled.
 		i = 0
@@ -476,7 +476,7 @@ class SyncSerialReadoutILATest(SPIGatewareTestCase):
 			datum = data[0:4]
 			del data[0:4]
 
-			expected = b"\x00\x00\x0f" + bytes([i])
+			expected = b'\x00\x00\x0f' + bytes([i])
 			self.assertEqual(datum, expected)
 			i += 1
 
@@ -484,7 +484,7 @@ class SyncSerialReadoutILATest(SPIGatewareTestCase):
 
 
 class StreamILA(Elaboratable):
-	""" Super-simple ILA that outputs its samples over a Stream.
+	''' Super-simple ILA that outputs its samples over a Stream.
 	Create a receiver for this object by calling apollo.ila_receiver_for(<this>).
 
 	This protocol is simple: we wait for a trigger; and then broadcast our samples.
@@ -518,7 +518,7 @@ class StreamILA(Elaboratable):
 		The number of our samples which should be captured _before_ the trigger.
 		This also can act like an implicit synchronizer; so asynchronous inputs
 		are allowed if this number is >= 2.
-	"""
+	'''
 
 	def __init__(self, *, signals, sample_depth, o_domain=None, **kwargs):
 		# Extract the domain from our keyword arguments, and then translate it to sync
@@ -542,7 +542,7 @@ class StreamILA(Elaboratable):
 		self.sample_rate   = self.ila.sample_rate
 		self.sample_period = self.ila.sample_period
 
-		# Bolster our bits per sample "word" up to a power of two.
+		# Bolster our bits per sample 'word' up to a power of two.
 		self.bits_per_sample = 2 ** ((self.ila.sample_width - 1).bit_length())
 		self.bytes_per_sample = (self.bits_per_sample + 7) // 8
 
@@ -580,20 +580,20 @@ class StreamILA(Elaboratable):
 		with m.FSM():
 
 			# IDLE -- we're currently waiting for a trigger before capturing samples.
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 
 				# Always allow triggering, as we're ready for the data.
 				m.d.comb += self.ila.trigger.eq(self.trigger)
 
 				# Once we're triggered, move onto the SAMPLING state.
 				with m.If(self.trigger):
-					m.next = "SAMPLING"
+					m.next = 'SAMPLING'
 
 
 			# SAMPLING -- the internal ILA is sampling; we're now waiting for it to
 			# complete. This state is similar to IDLE; except we block triggers in order
 			# to cleanly avoid a race condition.
-			with m.State("SAMPLING"):
+			with m.State('SAMPLING'):
 
 				# Once our ILA has finished sampling, prepare to read out our samples.
 				with m.If(self.ila.complete):
@@ -601,12 +601,12 @@ class StreamILA(Elaboratable):
 						current_sample_number  .eq(0),
 						in_domain_stream.first      .eq(1)
 					]
-					m.next = "SENDING"
+					m.next = 'SENDING'
 
 
 			# SENDING -- we now have a valid buffer of samples to send up to the host;
 			# we'll transmit them over our stream interface.
-			with m.State("SENDING"):
+			with m.State('SENDING'):
 				data_valid = Signal(reset=1)
 				m.d.comb += [
 					# While we're sending, we're always providing valid data to the UART.
@@ -627,7 +627,7 @@ class StreamILA(Elaboratable):
 
 						# If this was the last sample, we're done! Move back to idle.
 						with m.If(in_domain_stream.last):
-							m.next = "IDLE"
+							m.next = 'IDLE'
 					with m.Else():
 						m.d.sync += data_valid.eq(1)
 
@@ -650,7 +650,7 @@ class StreamILA(Elaboratable):
 			m.submodules.cdc = fifo = AsyncFIFOBuffered(
 				width=len(in_domain_signals),
 				depth=16,
-				w_domain="sync",
+				w_domain='sync',
 				r_domain=self._o_domain
 			)
 
@@ -667,7 +667,7 @@ class StreamILA(Elaboratable):
 			]
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
-		if self.domain != "sync":
+		if self.domain != 'sync':
 			m = DomainRenamer(self.domain)(m)
 
 		return m
@@ -721,7 +721,7 @@ class StreamILATest(SolGatewareTestCase):
 
 
 class AsyncSerialILA(Elaboratable):
-	""" Super-simple ILA that reads samples out over a UART connection.
+	''' Super-simple ILA that reads samples out over a UART connection.
 	Create a receiver for this object by calling apollo_fpga.ila_receiver_for(<this>).
 
 	This protocol is simple: we wait for a trigger; and then broadcast our samples.
@@ -755,7 +755,7 @@ class AsyncSerialILA(Elaboratable):
 		The number of our samples which should be captured _before_ the trigger.
 		This also can act like an implicit synchronizer; so asynchronous inputs
 		are allowed if this number is >= 2.
-	"""
+	'''
 
 	def __init__(self, *, signals, sample_depth, divisor, **kwargs):
 		self.divisor = divisor
@@ -808,32 +808,32 @@ class AsyncSerialILA(Elaboratable):
 
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
-		if self.domain != "sync":
-			m = DomainRenamer({"sync": self.domain})(m)
+		if self.domain != 'sync':
+			m = DomainRenamer({'sync': self.domain})(m)
 
 		return m
 
 
 
 class ILAFrontend(metaclass=ABCMeta):
-	""" Class that communicates with an ILA module and emits useful output. """
+	''' Class that communicates with an ILA module and emits useful output. '''
 
 	def __init__(self, ila):
-		"""
+		'''
 		Parameters:
 			ila -- The ILA object to work with.
-		"""
+		'''
 		self.ila = ila
 		self.samples = None
 
 
 	@abstractmethod
 	def _read_samples(self):
-		""" Read samples from the target ILA. Should return an iterable of samples. """
+		''' Read samples from the target ILA. Should return an iterable of samples. '''
 
 
 	def _parse_sample(self, raw_sample):
-		""" Converts a single binary sample to a dictionary of names -> sample values. """
+		''' Converts a single binary sample to a dictionary of names -> sample values. '''
 
 		position = 0
 		sample   = {}
@@ -850,17 +850,17 @@ class ILAFrontend(metaclass=ABCMeta):
 
 
 	def _parse_samples(self, raw_samples):
-		""" Converts raw, binary samples to dictionaries of name -> sample. """
+		''' Converts raw, binary samples to dictionaries of name -> sample. '''
 		return [self._parse_sample(sample) for sample in raw_samples]
 
 
 	def refresh(self):
-		""" Fetches the latest set of samples from the target ILA. """
+		''' Fetches the latest set of samples from the target ILA. '''
 		self.samples = self._parse_samples(self._read_samples())
 
 
 	def enumerate_samples(self):
-		""" Returns an iterator that returns pairs of (timestamp, sample). """
+		''' Returns an iterator that returns pairs of (timestamp, sample). '''
 
 		# If we don't have any samples, fetch samples from the ILA.
 		if self.samples is None:
@@ -877,16 +877,16 @@ class ILAFrontend(metaclass=ABCMeta):
 
 
 	def print_samples(self):
-		""" Simple method that prints each of our samples; for simple CLI debugging."""
+		''' Simple method that prints each of our samples; for simple CLI debugging.'''
 
 		for timestamp, sample in self.enumerate_samples():
 			timestamp_scaled = 1000000 * timestamp
-			print(f"{timestamp_scaled:08f}us: {sample}")
+			print(f'{timestamp_scaled:08f}us: {sample}')
 
 
 
 	def emit_vcd(self, filename, *, gtkw_filename=None, add_clock=True):
-		""" Emits a VCD file containing the ILA samples.
+		''' Emits a VCD file containing the ILA samples.
 
 		Parameters:
 			filename      -- The filename to write to, or '-' to write to stdout.
@@ -895,10 +895,10 @@ class ILAFrontend(metaclass=ABCMeta):
 							 order provided to the ILA.
 			add_clock     -- If true or not provided, adds a replica of the ILA's sample
 							 clock to make change points easier to see.
-		"""
+		'''
 
 		# Select the file-like object we're working with.
-		if filename == "-":
+		if filename == '-':
 			stream = sys.stdout
 			close_after = False
 		else:
@@ -906,7 +906,7 @@ class ILAFrontend(metaclass=ABCMeta):
 			close_after = True
 
 		# Create our basic VCD.
-		with VCDWriter(stream, timescale=f"1 ns", date='today') as writer:
+		with VCDWriter(stream, timescale=f'1 ns', date='today') as writer:
 			first_timestamp = math.inf
 			last_timestamp  = 0
 
@@ -946,19 +946,19 @@ class ILAFrontend(metaclass=ABCMeta):
 
 
 	def _emit_gtkw(self, filename, dump_filename, *, add_clock=True):
-		""" Emits a GTKWave save file to accompany a generated VCD.
+		''' Emits a GTKWave save file to accompany a generated VCD.
 
 		Parameters:
 			filename      -- The filename to write the GTKW save to.
 			dump_filename -- The filename of the VCD that should be opened with this save.
 			add_clock     -- True iff a clock signal should be added to the GTKW save.
-		"""
+		'''
 
 		with open(filename, 'w') as f:
 			gtkw = GTKWSave(f)
 
 			# Comments / context.
-			gtkw.comment("Generated by the SOL ILA.")
+			gtkw.comment('Generated by the SOL ILA.')
 
 			# Add a reference to the dumpfile we're working with.
 			gtkw.dumpfile(dump_filename)
@@ -968,11 +968,11 @@ class ILAFrontend(metaclass=ABCMeta):
 
 			# Add each of our signals to the file.
 			for signal in self.ila.signals:
-				gtkw.trace(f"ila.{signal.name}")
+				gtkw.trace(f'ila.{signal.name}')
 
 
 	def interactive_display(self, *, add_clock=True):
-		""" Attempts to spawn a GTKWave instance to display the ILA results interactively. """
+		''' Attempts to spawn a GTKWave instance to display the ILA results interactively. '''
 
 		# Hack: generate files in a way that doesn't trip macOS's fancy guards.
 		try:
@@ -980,14 +980,14 @@ class ILAFrontend(metaclass=ABCMeta):
 			gtkw_filename = os.path.join(tempfile.gettempdir(), os.urandom(24).hex() + '.gtkw')
 
 			self.emit_vcd(vcd_filename, gtkw_filename=gtkw_filename)
-			subprocess.run(["gtkwave", "-f", vcd_filename, "-a", gtkw_filename])
+			subprocess.run(['gtkwave', '-f', vcd_filename, '-a', gtkw_filename])
 		finally:
 			os.remove(vcd_filename)
 			os.remove(gtkw_filename)
 
 
 class AsyncSerialILAFrontend(ILAFrontend):
-	""" UART-based ILA transport.
+	''' UART-based ILA transport.
 
 	Parameters
 	------------
@@ -995,7 +995,7 @@ class AsyncSerialILAFrontend(ILAFrontend):
 		The serial port to use to connect. This is typically a path on *nix systems.
 	ila: IntegratedLogicAnalyzer
 		The ILA object to work with.
-	"""
+	'''
 
 	def __init__(self, *args, ila, **kwargs):
 		import serial
@@ -1007,7 +1007,7 @@ class AsyncSerialILAFrontend(ILAFrontend):
 
 
 	def _split_samples(self, all_samples):
-		""" Returns an iterator that iterates over each sample in the raw binary of samples. """
+		''' Returns an iterator that iterates over each sample in the raw binary of samples. '''
 		from apollo_fpga.support.bits import bits
 
 		sample_width_bytes = self.ila.bytes_per_sample
@@ -1021,7 +1021,7 @@ class AsyncSerialILAFrontend(ILAFrontend):
 
 
 	def _read_samples(self):
-		""" Reads a set of ILA samples, and returns them. """
+		''' Reads a set of ILA samples, and returns them. '''
 
 		sample_width_bytes = self.ila.bytes_per_sample
 		total_to_read      = self.ila.sample_depth * sample_width_bytes
@@ -1031,5 +1031,5 @@ class AsyncSerialILAFrontend(ILAFrontend):
 		return list(self._split_samples(all_samples))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

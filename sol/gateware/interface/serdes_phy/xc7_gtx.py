@@ -7,7 +7,7 @@
 #
 # Code based in part on ``litex`` and ``liteiclink``.
 
-""" Soft PIPE backend for the Xilinx 7 Series GTX transceivers. """
+''' Soft PIPE backend for the Xilinx 7 Series GTX transceivers. '''
 
 from torii         import *
 from torii.lib.cdc import FFSynchronizer
@@ -62,27 +62,27 @@ class GTXQuadPLL(Elaboratable):
 			100: 1,
 		}
 
-		return Instance("GTXE2_COMMON",
+		return Instance('GTXE2_COMMON',
 			# Common Block Attributes
 			p_BIAS_CFG                 = 0x0000040000001000,
 			p_COMMON_CFG               = 0x00000000,
-			p_QPLL_CFG                 = 0x0680181 if self.config["vco_band"] == "upper" else 0x06801C1,
+			p_QPLL_CFG                 = 0x0680181 if self.config['vco_band'] == 'upper' else 0x06801C1,
 			p_QPLL_CLKOUT_CFG          = 0b0000,
 			p_QPLL_COARSE_FREQ_OVRD    = 0b010000,
 			p_QPLL_COARSE_FREQ_OVRD_EN = 0b0,
 			p_QPLL_CP                  = 0b0000011111,
 			p_QPLL_CP_MONITOR_EN       = 0b0,
 			p_QPLL_DMONITOR_SEL        = 0b0,
-			p_QPLL_FBDIV               = qpll_fbdivs[self.config["n"]],
+			p_QPLL_FBDIV               = qpll_fbdivs[self.config['n']],
 			p_QPLL_FBDIV_MONITOR_EN    = 0b0,
-			p_QPLL_FBDIV_RATIO         = qpll_fbdiv_ratios[self.config["n"]],
+			p_QPLL_FBDIV_RATIO         = qpll_fbdiv_ratios[self.config['n']],
 			p_QPLL_INIT_CFG            = 0x000006,
 			p_QPLL_LOCK_CFG            = 0x21E8,
 			p_QPLL_LPF                 = 0b1111,
-			p_QPLL_REFCLK_DIV          = self.config["m"],
+			p_QPLL_REFCLK_DIV          = self.config['m'],
 
 			# Common Block - Dynamic Reconfiguration Port
-			i_DRPCLK            = ClockSignal("ss"),
+			i_DRPCLK            = ClockSignal('ss'),
 			i_DRPADDR           = self.drp.addr,
 			i_DRPDI             = self.drp.di,
 			o_DRPDO             = self.drp.do,
@@ -134,26 +134,26 @@ class GTXQuadPLL(Elaboratable):
 			for n in 16, 20, 32, 40, 64, 66, 80, 100:
 				vco_freq = refclk_freq*n/m
 				if 5.93e9 <= vco_freq <= 8e9:
-					vco_band = "lower"
+					vco_band = 'lower'
 				elif 9.8e9 <= vco_freq <= 12.5e9:
-					vco_band = "upper"
+					vco_band = 'upper'
 				else:
 					vco_band = None
 				if vco_band is not None:
 					for d in 1, 2, 4, 8, 16:
 						current_linerate = (vco_freq/2)*2/d
 						if current_linerate == linerate:
-							return {"n": n, "nr": 0 if n == 66 else 1, "m": m, "d": d,
-									"vco_freq": vco_freq,
-									"vco_band": vco_band,
-									"clkin": refclk_freq,
-									"linerate": linerate}
-		msg = "No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate."
+							return {'n': n, 'nr': 0 if n == 66 else 1, 'm': m, 'd': d,
+									'vco_freq': vco_freq,
+									'vco_band': vco_band,
+									'clkin': refclk_freq,
+									'linerate': linerate}
+		msg = 'No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate.'
 		raise ValueError(msg.format(refclk_freq/1e6, linerate/1e9))
 
 	def __repr__(self):
 		config = self.config
-		r = """
+		r = '''
 GTXQuadPLL
 ==========
   overview:
@@ -180,12 +180,12 @@ CLKIN +---> /M  +-->       Charge Pump         +->    VCO     +-> /2 +--> CLKOUT
 			 = {vco_freq}GHz
 	LINERATE = CLKOUT x 2 / D = {vco_freq}GHz x 2 / {d}
 			 = {linerate}GHz
-""".format(clkin    = config["clkin"]/1e6,
-		   n        = config["n"],
-		   m        = config["m"],
-		   vco_freq = config["vco_freq"]/1e9,
-		   d        = config["d"],
-		   linerate = config["linerate"]/1e9)
+'''.format(clkin    = config['clkin']/1e6,
+		   n        = config['n'],
+		   m        = config['m'],
+		   vco_freq = config['vco_freq']/1e9,
+		   d        = config['d'],
+		   linerate = config['linerate']/1e9)
 		return r
 
 
@@ -218,16 +218,16 @@ class GTXChannelPLL(Elaboratable):
 						for d in 1, 2, 4, 8, 16:
 							current_linerate = vco_freq*2/d
 							if current_linerate == linerate:
-								return {"n1": n1, "n2": n2, "m": m, "d": d,
-										"vco_freq": vco_freq,
-										"clkin": refclk_freq,
-										"linerate": linerate}
-		msg = "No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate."
+								return {'n1': n1, 'n2': n2, 'm': m, 'd': d,
+										'vco_freq': vco_freq,
+										'clkin': refclk_freq,
+										'linerate': linerate}
+		msg = 'No config found for {:3.2f} MHz refclk / {:3.2f} Gbps linerate.'
 		raise ValueError(msg.format(refclk_freq/1e6, linerate/1e9))
 
 	def __repr__(self):
 		config = self.config
-		r = """
+		r = '''
 GTXChannelPLL
 =============
   overview:
@@ -254,13 +254,13 @@ CLKIN +----> /M  +-->       Charge Pump         +-> VCO +---> CLKOUT
 			 = {vco_freq}GHz
 	LINERATE = CLKOUT x 2 / D = {vco_freq}GHz x 2 / {d}
 			 = {linerate}GHz
-""".format(clkin    = config["clkin"]/1e6,
-		   n1       = config["n1"],
-		   n2       = config["n2"],
-		   m        = config["m"],
-		   vco_freq = config["vco_freq"]/1e9,
-		   d        = config["d"],
-		   linerate = config["linerate"]/1e9)
+'''.format(clkin    = config['clkin']/1e6,
+		   n1       = config['n1'],
+		   n2       = config['n2'],
+		   m        = config['m'],
+		   vco_freq = config['vco_freq']/1e9,
+		   d        = config['d'],
+		   linerate = config['linerate']/1e9)
 		return r
 
 
@@ -327,7 +327,7 @@ class GTXChannel(Elaboratable):
 		#
 
 		# Ensure we have a valid PLL/CDR configuration.
-		assert pll.config["linerate"] < 6.6e9
+		assert pll.config['linerate'] < 6.6e9
 
 		# We support both QPLL and CPLL clock sources.
 		use_cpll = isinstance(pll, GTXChannelPLL)
@@ -345,7 +345,7 @@ class GTXChannel(Elaboratable):
 		# The recovered Rx clock will not match the generated Tx clock; use the recovered word
 		# clock to drive the CTC FIFO in the transceiver, which will compensate for the difference.
 		txoutclk = Signal()
-		m.submodules += Instance("BUFG",
+		m.submodules += Instance('BUFG',
 			i_I=txoutclk,
 			o_O=self.pclk
 		)
@@ -385,7 +385,7 @@ class GTXChannel(Elaboratable):
 		# Dynamic reconfiguration.
 		#
 		rx_termination = Signal()
-		m.submodules += FFSynchronizer(self.rx_termination, rx_termination, o_domain="ss")
+		m.submodules += FFSynchronizer(self.rx_termination, rx_termination, o_domain='ss')
 
 		m.submodules.rx_term = rx_term = DRPFieldController(
 			addr=0x0011, bits=slice(4, 6), reset=0b10) # RX_CM_SEL
@@ -403,41 +403,41 @@ class GTXChannel(Elaboratable):
 		#
 		# Core SerDes instantiation.
 		#
-		m.submodules.gtx = Instance("GTXE2_CHANNEL",
+		m.submodules.gtx = Instance('GTXE2_CHANNEL',
 			# Simulation-Only Attributes
-			p_SIM_RECEIVER_DETECT_PASS   = "TRUE",
-			p_SIM_TX_EIDLE_DRIVE_LEVEL   = "X",
-			p_SIM_RESET_SPEEDUP          = "FALSE",
+			p_SIM_RECEIVER_DETECT_PASS   = 'TRUE',
+			p_SIM_TX_EIDLE_DRIVE_LEVEL   = 'X',
+			p_SIM_RESET_SPEEDUP          = 'FALSE',
 			p_SIM_CPLLREFCLK_SEL         = 0b001,
-			p_SIM_VERSION                = "4.0",
+			p_SIM_VERSION                = '4.0',
 
 			# RX 8B/10B Decoder Attributes
-			p_RX_DISPERR_SEQ_MATCH       = "FALSE",
-			p_DEC_MCOMMA_DETECT          = "TRUE",
-			p_DEC_PCOMMA_DETECT          = "TRUE",
-			p_DEC_VALID_COMMA_ONLY       = "TRUE",
+			p_RX_DISPERR_SEQ_MATCH       = 'FALSE',
+			p_DEC_MCOMMA_DETECT          = 'TRUE',
+			p_DEC_PCOMMA_DETECT          = 'TRUE',
+			p_DEC_VALID_COMMA_ONLY       = 'TRUE',
 			p_UCODEER_CLR                = 0b0,
 
 			# RX Byte and Word Alignment Attributes
-			p_ALIGN_COMMA_DOUBLE         = "FALSE",
+			p_ALIGN_COMMA_DOUBLE         = 'FALSE',
 			p_ALIGN_COMMA_ENABLE         = 0b1111_111111,
 			p_ALIGN_COMMA_WORD           = 1,
-			p_ALIGN_MCOMMA_DET           = "TRUE",
+			p_ALIGN_MCOMMA_DET           = 'TRUE',
 			p_ALIGN_MCOMMA_VALUE         = 0b0101_111100, # K28.5 RD- 10b code
-			p_ALIGN_PCOMMA_DET           = "TRUE",
+			p_ALIGN_PCOMMA_DET           = 'TRUE',
 			p_ALIGN_PCOMMA_VALUE         = 0b1010_000011, # K28.5 RD+ 10b code
-			p_SHOW_REALIGN_COMMA         = "TRUE",
+			p_SHOW_REALIGN_COMMA         = 'TRUE',
 			p_RXSLIDE_AUTO_WAIT          = 7,
-			p_RXSLIDE_MODE               = "OFF",
+			p_RXSLIDE_MODE               = 'OFF',
 			p_RX_SIG_VALID_DLY           = 10,
 
 			# RX Clock Correction Attributes
-			p_CBCC_DATA_SOURCE_SEL       = "DECODED",
-			p_CLK_CORRECT_USE            = "TRUE",
-			p_CLK_COR_KEEP_IDLE          = "FALSE",
+			p_CBCC_DATA_SOURCE_SEL       = 'DECODED',
+			p_CLK_CORRECT_USE            = 'TRUE',
+			p_CLK_COR_KEEP_IDLE          = 'FALSE',
 			p_CLK_COR_MAX_LAT            = 14,
 			p_CLK_COR_MIN_LAT            = 11,
-			p_CLK_COR_PRECEDENCE         = "TRUE",
+			p_CLK_COR_PRECEDENCE         = 'TRUE',
 			p_CLK_COR_REPEAT_WAIT        = 0,
 			p_CLK_COR_SEQ_LEN            = 2,
 			p_CLK_COR_SEQ_1_ENABLE       = 0b1111,
@@ -446,14 +446,14 @@ class GTXChannel(Elaboratable):
 			p_CLK_COR_SEQ_1_3            = 0b0000000000,
 			p_CLK_COR_SEQ_1_4            = 0b0000000000,
 			p_CLK_COR_SEQ_2_ENABLE       = 0b1111,
-			p_CLK_COR_SEQ_2_USE          = "FALSE",
+			p_CLK_COR_SEQ_2_USE          = 'FALSE',
 			p_CLK_COR_SEQ_2_1            = 0b0000000000,
 			p_CLK_COR_SEQ_2_2            = 0b0000000000,
 			p_CLK_COR_SEQ_2_3            = 0b0000000000,
 			p_CLK_COR_SEQ_2_4            = 0b0000000000,
 
 			# RX Channel Bonding Attributes
-			p_CHAN_BOND_KEEP_ALIGN       = "FALSE",
+			p_CHAN_BOND_KEEP_ALIGN       = 'FALSE',
 			p_CHAN_BOND_MAX_SKEW         = 1,
 			p_CHAN_BOND_SEQ_LEN          = 1,
 			p_CHAN_BOND_SEQ_1_1          = 0b0000000000,
@@ -466,15 +466,15 @@ class GTXChannel(Elaboratable):
 			p_CHAN_BOND_SEQ_2_3          = 0b0000000000,
 			p_CHAN_BOND_SEQ_2_4          = 0b0000000000,
 			p_CHAN_BOND_SEQ_2_ENABLE     = 0b1111,
-			p_CHAN_BOND_SEQ_2_USE        = "FALSE",
+			p_CHAN_BOND_SEQ_2_USE        = 'FALSE',
 			p_FTS_DESKEW_SEQ_ENABLE      = 0b1111,
 			p_FTS_LANE_DESKEW_CFG        = 0b1111,
-			p_FTS_LANE_DESKEW_EN         = "FALSE",
+			p_FTS_LANE_DESKEW_EN         = 'FALSE',
 
 			# RX Margin Analysis Attributes
 			p_ES_CONTROL                 = 0b000000,
-			p_ES_ERRDET_EN               = "FALSE",
-			p_ES_EYE_SCAN_EN             = "TRUE",
+			p_ES_ERRDET_EN               = 'FALSE',
+			p_ES_EYE_SCAN_EN             = 'TRUE',
 			p_ES_HORZ_OFFSET             = 0x000,
 			p_ES_PMA_CFG                 = 0b0000000000,
 			p_ES_PRESCALE                = 0b00000,
@@ -505,24 +505,24 @@ class GTXChannel(Elaboratable):
 			p_TX_CLK25_DIV               = clk25_div,
 
 			# PCI Express Attributes
-			p_PCS_PCIE_EN                = "FALSE",
+			p_PCS_PCIE_EN                = 'FALSE',
 
 			# PCS Attributes
 			p_PCS_RSVD_ATTR              = 0x0000_0000_0108, # OOB power up, OOB clock from CLKRSVD[0]
 
 			# RX Buffer Attributes
-			p_RXBUF_ADDR_MODE            = "FULL",
+			p_RXBUF_ADDR_MODE            = 'FULL',
 			p_RXBUF_EIDLE_HI_CNT         = 0b1000,
 			p_RXBUF_EIDLE_LO_CNT         = 0b0000,
-			p_RXBUF_EN                   = "TRUE",
+			p_RXBUF_EN                   = 'TRUE',
 			p_RX_BUFFER_CFG              = 0b000000,
-			p_RXBUF_RESET_ON_CB_CHANGE   = "TRUE",
-			p_RXBUF_RESET_ON_COMMAALIGN  = "FALSE",
-			p_RXBUF_RESET_ON_EIDLE       = "FALSE",
-			p_RXBUF_RESET_ON_RATE_CHANGE = "TRUE",
+			p_RXBUF_RESET_ON_CB_CHANGE   = 'TRUE',
+			p_RXBUF_RESET_ON_COMMAALIGN  = 'FALSE',
+			p_RXBUF_RESET_ON_EIDLE       = 'FALSE',
+			p_RXBUF_RESET_ON_RATE_CHANGE = 'TRUE',
 			p_RXBUFRESET_TIME            = 0b00001,
 			p_RXBUF_THRESH_OVFLW         = 61,
-			p_RXBUF_THRESH_OVRD          = "FALSE",
+			p_RXBUF_THRESH_OVRD          = 'FALSE',
 			p_RXBUF_THRESH_UNDFLW        = 4,
 			p_RXDLY_CFG                  = 0x001F,
 			p_RXDLY_LCFG                 = 0x030,
@@ -530,12 +530,12 @@ class GTXChannel(Elaboratable):
 			p_RXPH_CFG                   = 0x000000,
 			p_RXPHDLY_CFG                = 0x084020,
 			p_RXPH_MONITOR_SEL           = 0b00000,
-			p_RX_XCLK_SEL                = "RXREC",
+			p_RX_XCLK_SEL                = 'RXREC',
 			p_RX_DDI_SEL                 = 0b000000,
-			p_RX_DEFER_RESET_BUF_EN      = "TRUE",
+			p_RX_DEFER_RESET_BUF_EN      = 'TRUE',
 
 			# CDR Attributes
-			p_RXCDR_CFG                  = rxcdr_cfgs[pll.config["d"]],
+			p_RXCDR_CFG                  = rxcdr_cfgs[pll.config['d']],
 			p_RXCDR_FR_RESET_ON_EIDLE    = 0b0,
 			p_RXCDR_HOLD_DURING_EIDLE    = 0b0,
 			p_RXCDR_PH_RESET_ON_EIDLE    = 0b0,
@@ -553,7 +553,7 @@ class GTXChannel(Elaboratable):
 			p_RXOOB_CFG                  = 0b0000110,
 
 			# RX Gearbox Attributes
-			p_RXGEARBOX_EN               = "FALSE",
+			p_RXGEARBOX_EN               = 'FALSE',
 			p_GEARBOX_MODE               = 0b000,
 
 			# PRBS Detection Attribute
@@ -581,15 +581,15 @@ class GTXChannel(Elaboratable):
 			p_TRANS_TIME_RATE            = 0x0E,
 
 			# TX Buffer Attributes
-			p_TXBUF_EN                   = "TRUE",
-			p_TXBUF_RESET_ON_RATE_CHANGE = "TRUE",
+			p_TXBUF_EN                   = 'TRUE',
+			p_TXBUF_RESET_ON_RATE_CHANGE = 'TRUE',
 			p_TXDLY_CFG                  = 0x001F,
 			p_TXDLY_LCFG                 = 0x030,
 			p_TXDLY_TAP_CFG              = 0x0000,
 			p_TXPH_CFG                   = 0x0780,
 			p_TXPHDLY_CFG                = 0x084020,
 			p_TXPH_MONITOR_SEL           = 0b00000,
-			p_TX_XCLK_SEL                = "TXOUT",
+			p_TX_XCLK_SEL                = 'TXOUT',
 
 			# FPGA TX Interface Attributes
 			p_TX_DATA_WIDTH              = data_width,
@@ -597,10 +597,10 @@ class GTXChannel(Elaboratable):
 			# TX Configurable Driver Attributes
 			p_TX_DEEMPH0                 = 0b000000,
 			p_TX_DEEMPH1                 = 0b000000,
-			p_TX_DRIVE_MODE              = "DIRECT",
+			p_TX_DRIVE_MODE              = 'DIRECT',
 			p_TX_EIDLE_ASSERT_DELAY      = 0b110,
 			p_TX_EIDLE_DEASSERT_DELAY    = 0b100,
-			p_TX_LOOPBACK_DRIVE_HIZ      = "FALSE",
+			p_TX_LOOPBACK_DRIVE_HIZ      = 'FALSE',
 			p_TX_MAINCURSOR_SEL          = 0b0,
 			p_TX_PREDRIVER_MODE          = 0b0,
 			p_TX_MARGIN_FULL_0           = 0b1001110,
@@ -616,7 +616,7 @@ class GTXChannel(Elaboratable):
 			p_TX_QPI_STATUS_EN           = 0b0,
 
 			# TX Gearbox Attributes
-			p_TXGEARBOX_EN               = "FALSE",
+			p_TXGEARBOX_EN               = 'FALSE',
 
 			# TX Initialization and Reset Attributes
 			p_TXPCSRESET_TIME            = 0b00001,
@@ -628,14 +628,14 @@ class GTXChannel(Elaboratable):
 
 			# CPLL Attributes
 			p_CPLL_CFG                   = 0xBC07DC,
-			p_CPLL_FBDIV                 = pll.config["n2"] if use_cpll else 1,
-			p_CPLL_FBDIV_45              = pll.config["n1"] if use_cpll else 4,
+			p_CPLL_FBDIV                 = pll.config['n2'] if use_cpll else 1,
+			p_CPLL_FBDIV_45              = pll.config['n1'] if use_cpll else 4,
 			p_CPLL_INIT_CFG              = 0x00001E,
 			p_CPLL_LOCK_CFG              = 0x01E8,
-			p_CPLL_REFCLK_DIV            = pll.config["m"]  if use_cpll else 1,
-			p_RXOUT_DIV                  = pll.config["d"],
-			p_TXOUT_DIV                  = pll.config["d"],
-			p_SATA_CPLL_CFG              = "VCO_3000MHZ",
+			p_CPLL_REFCLK_DIV            = pll.config['m']  if use_cpll else 1,
+			p_RXOUT_DIV                  = pll.config['d'],
+			p_TXOUT_DIV                  = pll.config['d'],
+			p_SATA_CPLL_CFG              = 'VCO_3000MHZ',
 
 			# RX Equalizer Attributes
 			p_RXLPM_HF_CFG               = 0b00000011110000,
@@ -693,7 +693,7 @@ class GTXChannel(Elaboratable):
 			i_GTSOUTHREFCLK1        = 0,
 
 			# Channel - DRP Ports
-			i_DRPCLK                = ClockSignal("ss"),
+			i_DRPCLK                = ClockSignal('ss'),
 			i_DRPADDR               = drp_arbiter.shared.addr,
 			i_DRPDI                 = drp_arbiter.shared.di,
 			o_DRPDO                 = drp_arbiter.shared.do,
@@ -988,7 +988,7 @@ class GTXChannel(Elaboratable):
 
 
 class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
-	""" Wrapper around the core GTX SerDes that adapts it to the PIPE interface.
+	''' Wrapper around the core GTX SerDes that adapts it to the PIPE interface.
 
 	The implementation-dependent behavior of the standard PIPE signals is described below:
 
@@ -1021,7 +1021,7 @@ class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
 		These inputs are not implemented.
 	power_present :
 		This output is not implemented. External logic may drive it if necessary.
-	"""
+	'''
 
 	def __init__(self, *, tx_pads, rx_pads, refclk_frequency, ss_clock_frequency):
 		super().__init__(width=2)
@@ -1054,7 +1054,7 @@ class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
 		# a local clock domain to drive it.
 		m.domains.pipe = ClockDomain(local=True, async_reset=True)
 		m.d.comb += [
-			ClockSignal("pipe")     .eq(serdes.pclk),
+			ClockSignal('pipe')     .eq(serdes.pclk),
 		]
 
 

@@ -4,18 +4,18 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Simple gateware debug console for SOL. """
+''' Simple gateware debug console for SOL. '''
 
 
 from torii  import Signal, Module,  Elaboratable, Array
 
 class DebugConsole(Elaboratable):
-	""" Simple debug console gateware for SOL.
+	''' Simple debug console gateware for SOL.
 
 		I: line_in[8][max_line_legth] -- The line to be rendered to the output stream.
 		I: line_length -- The data length to be rendered t
 
-	"""
+	'''
 
 	def __init__(self, *, max_line_length=128):
 

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Protocol-level Transaction Packet (flow control header) generation. """
+''' Protocol-level Transaction Packet (flow control header) generation. '''
 
 from torii                          import *
 from torii.hdl.rec                  import DIR_FANIN, DIR_FANOUT
@@ -19,7 +19,7 @@ from ..link.header                  import HeaderPacket, HeaderQueue
 #
 
 class HandshakeGeneratorInterface(Record):
-	""" Interface used by an endpoint to generate transaction packets.
+	''' Interface used by an endpoint to generate transaction packets.
 
 	Attributes
 	-----------
@@ -37,7 +37,7 @@ class HandshakeGeneratorInterface(Record):
 		Asserted when the handshake generator is ready to accept new signals.
 	done: Signal(), output from handshake geneartor.
 		Strobe; pulsed when a requested send is complete.
-	"""
+	'''
 
 	def __init__(self):
 		super().__init__([
@@ -61,7 +61,7 @@ class HandshakeGeneratorInterface(Record):
 
 
 class HandshakeReceiverInterface(Record):
-	""" Interface used by an endpoint to generate transaction packets.
+	''' Interface used by an endpoint to generate transaction packets.
 
 	Attributes
 	-----------
@@ -79,7 +79,7 @@ class HandshakeReceiverInterface(Record):
 		Asserted when the handshake generator is ready to accept new signals.
 	done: Signal(), output from handshake geneartor.
 		Strobe; pulsed when a requested send is complete.
-	"""
+	'''
 
 	def __init__(self):
 		super().__init__([
@@ -184,7 +184,7 @@ class StatusHeaderPacket(TransactionHeaderPacket):
 
 
 class TransactionPacketGenerator(Elaboratable):
-	""" Module responsible for generating Token Packets, for flow control.
+	''' Module responsible for generating Token Packets, for flow control.
 
 	Attributes
 	----------
@@ -195,7 +195,7 @@ class TransactionPacketGenerator(Elaboratable):
 
 	address: Signal(7), input
 		The address associated with the device; used to fill in header packet fields.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -223,7 +223,7 @@ class TransactionPacketGenerator(Elaboratable):
 
 
 		def send_packet(response_type, **fields):
-			""" Helper that allows us to easily define a packet-send state."""
+			''' Helper that allows us to easily define a packet-send state.'''
 
 			# Create a response packet, and mark ourselves as sending it.
 			response = response_type()
@@ -242,15 +242,15 @@ class TransactionPacketGenerator(Elaboratable):
 
 			with m.If(header_source.ready):
 				m.d.comb += interface.done.eq(1)
-				m.next = "DISPATCH_REQUESTS"
+				m.next = 'DISPATCH_REQUESTS'
 
 
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# DISPATCH_REQUESTS -- we're actively waiting for any generation requests that come in;
 			# and preparing to handle them.
-			with m.State("DISPATCH_REQUESTS"):
+			with m.State('DISPATCH_REQUESTS'):
 				m.d.comb += interface.ready.eq(1)
 
 				# In this state, we'll constantly latch in our parameters.
@@ -262,17 +262,17 @@ class TransactionPacketGenerator(Elaboratable):
 				]
 
 				with m.If(interface.send_ack):
-					m.next = "SEND_ACK"
+					m.next = 'SEND_ACK'
 				with m.If(interface.send_stall):
-					m.next = "SEND_STALL"
+					m.next = 'SEND_STALL'
 				with m.If(interface.send_nrdy):
-					m.next = "SEND_NRDY"
+					m.next = 'SEND_NRDY'
 				with m.If(interface.send_erdy):
-					m.next = "SEND_NRDY"
+					m.next = 'SEND_NRDY'
 
 
 			# SEND_ACK -- actively send an ACK packet to our link partner; and wait for that to complete.
-			with m.State("SEND_ACK"):
+			with m.State('SEND_ACK'):
 				send_packet(ACKHeaderPacket,
 					subtype           = TransactionPacketSubtype.ACK,
 					direction         = USBDirection.OUT,
@@ -285,7 +285,7 @@ class TransactionPacketGenerator(Elaboratable):
 
 
 			# SEND_NRDY -- actively send an NRDY packet to our link partner; and wait for that to complete.
-			with m.State("SEND_NRDY"):
+			with m.State('SEND_NRDY'):
 				send_packet(NRDYHeaderPacket,
 					subtype           = TransactionPacketSubtype.NRDY,
 					direction         = USBDirection.IN,
@@ -293,7 +293,7 @@ class TransactionPacketGenerator(Elaboratable):
 
 
 			# SEND_NRDY -- actively send an NRDY packet to our link partner; and wait for that to complete.
-			with m.State("SEND_ERDY"):
+			with m.State('SEND_ERDY'):
 				send_packet(ERDYHeaderPacket,
 					subtype           = TransactionPacketSubtype.ERDY,
 					direction         = USBDirection.IN,
@@ -304,7 +304,7 @@ class TransactionPacketGenerator(Elaboratable):
 
 
 			# SEND_STALL -- actively send a STALL packet to our link partner; and wait for that to complete.
-			with m.State("SEND_STALL"):
+			with m.State('SEND_STALL'):
 				send_packet(ACKHeaderPacket,
 					subtype           = TransactionPacketSubtype.STALL,
 					direction         = USBDirection.OUT,
@@ -317,7 +317,7 @@ class TransactionPacketGenerator(Elaboratable):
 
 
 class TransactionPacketReceiver(Elaboratable):
-	""" Module responsible for receiving Transaction Packets from the host.
+	''' Module responsible for receiving Transaction Packets from the host.
 
 	Attributes
 	----------
@@ -325,7 +325,7 @@ class TransactionPacketReceiver(Elaboratable):
 		The stream that carries received header packets up from the host.
 	interface: HandshakeReceiverInterface(), output to endpoint
 		Interface that detects transaction packets and reports them to the endpoint.
-	"""
+	'''
 
 	def __init__(self):
 

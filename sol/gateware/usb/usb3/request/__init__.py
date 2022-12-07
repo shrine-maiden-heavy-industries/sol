@@ -4,4 +4,4 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 control request handler gateware. """
+''' USB3 control request handler gateware. '''

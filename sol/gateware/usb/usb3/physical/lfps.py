@@ -7,13 +7,13 @@
 #
 # Code based in part on ``usb3_pipe``.
 
-"""
+'''
 Low-frequency periodic signaling gateware.
 
 LFPS is the first signaling to happen during the initialization of the USB3.0 link.
 
 LFPS allows partners to exchange Out Of Band (OOB) controls/commands and consists of bursts where
-a "slow" clock is generated (between 10M-50MHz) for a specific duration and with a specific repeat
+a 'slow' clock is generated (between 10M-50MHz) for a specific duration and with a specific repeat
 period. After the burst, the transceiver is put in electrical idle mode (same electrical level on
 P/N pairs while in nominal mode P/N pairs always have an opposite level):
 
@@ -26,7 +26,7 @@ A LFPS pattern is identified by a burst duration and repeat period.
 
 To be able generate and receive LFPS, a transceiver needs to be able put its TX in electrical idle
 and to detect RX electrical idle.
-"""
+'''
 
 import unittest
 from math           import ceil
@@ -42,11 +42,11 @@ __all__ = (
 
 
 #
-# LPFS timing "constants", and collection classes that represent them.
+# LPFS timing 'constants', and collection classes that represent them.
 #
 
 class LFPSTiming:
-	"""LPFS timings with typical, minimum and maximum timing values."""
+	'''LPFS timings with typical, minimum and maximum timing values.'''
 
 	def __init__(self, t_typ=None, t_min=None, t_max=None):
 		self.t_typ = t_typ
@@ -59,7 +59,7 @@ class LFPSTiming:
 
 
 class LFPS:
-	"""LPFS patterns with burst and repeat timings."""
+	'''LPFS patterns with burst and repeat timings.'''
 
 	def __init__(self, burst, repeat=None, cycles=None):
 		self.burst  = burst
@@ -84,7 +84,7 @@ _ResetLFPS         = LFPS(burst=_ResetLFPSBurst)
 #
 
 class LFPSDetector(Elaboratable):
-	""" LFPS Signaling Detector
+	''' LFPS Signaling Detector
 
 	Compares received (and demodulated) LFPS signaling with a specified pattern.
 
@@ -95,7 +95,7 @@ class LFPSDetector(Elaboratable):
 		Held high when our PHY is detecting LFPS square waves.
 	detect: Signal(), output
 		Strobes high when a valid LFPS burst is detected.
-	"""
+	'''
 	def __init__(self, lfps_pattern, ss_clk_frequency=125e6):
 		self._pattern              = lfps_pattern
 		self._clock_frequency      = ss_clk_frequency
@@ -111,7 +111,7 @@ class LFPSDetector(Elaboratable):
 		m = Module()
 
 		# Create an in-domain version of our square-wave-detector signal.
-		present = synchronize(m, self.signaling_received, o_domain="ss")
+		present = synchronize(m, self.signaling_received, o_domain='ss')
 
 		# Figure out how large of a counter we're going to need...
 		burst_cycles_min    = ceil(self._clock_frequency * self._pattern.burst.t_min)
@@ -136,20 +136,20 @@ class LFPSDetector(Elaboratable):
 		#
 		# Detector state machine.
 		#
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# WAIT_FOR_NEXT_BURST -- we're not currently in a measurement; but are waiting for a
 			# burst to begin, so we can perform a full measurement.
-			with m.State("WAIT_FOR_NEXT_BURST"):
+			with m.State('WAIT_FOR_NEXT_BURST'):
 				m.d.ss += last_iteration_matched.eq(0)
 
 				# If we've just seen the start of a burst, start measuring it.
-				with m.If(rising_edge_detected(m, present, domain="ss")):
+				with m.If(rising_edge_detected(m, present, domain='ss')):
 					m.d.ss += count.eq(1),
-					m.next = "MEASURE_BURST"
+					m.next = 'MEASURE_BURST'
 
 			# MEASURE_BURST -- we're seeing something we believe to be a burst; and measuring its length.
-			with m.State("MEASURE_BURST"):
+			with m.State('MEASURE_BURST'):
 
 				# Failing case: if our counter has gone longer than our maximum burst time, this isn't
 				# a relevant burst. We'll wait for the next one.
@@ -170,17 +170,17 @@ class LFPSDetector(Elaboratable):
 						# If we don't have a repeat interval, we're done!
 						if self._pattern.repeat is None:
 							m.d.comb += self.detect.eq(1)
-							m.next = "WAIT_FOR_NEXT_BURST"
+							m.next = 'WAIT_FOR_NEXT_BURST'
 
 						# Otherwise, we'll need to check the repeat interval, as well.
 						else:
-							m.next = "MEASURE_REPEAT"
+							m.next = 'MEASURE_REPEAT'
 
 			if self._pattern.repeat is not None:
 
 				# MEASURE_REPEAT -- we've just finished seeing a burst; and now we're measuring the gap between
-				# successive bursts, which the USB specification calls the "repeat interval". [USB3.2r1: Fig 6-32]
-				with m.State("MEASURE_REPEAT"):
+				# successive bursts, which the USB specification calls the 'repeat interval'. [USB3.2r1: Fig 6-32]
+				with m.State('MEASURE_REPEAT'):
 
 					# Failing case: if our counter has gone longer than our maximum burst time, this isn't
 					# a relevant burst. We'll wait for the next one.
@@ -208,7 +208,7 @@ class LFPSDetector(Elaboratable):
 
 
 class LFPSGenerator(Elaboratable):
-	""" LFPS Signaling Generator
+	''' LFPS Signaling Generator
 
 	Transmits (to be modulated) LFPS signaling that follows a specified pattern.
 
@@ -224,7 +224,7 @@ class LFPSGenerator(Elaboratable):
 		Held high while cycles are being generated; during both burst and repeat intervals.
 	send_signaling: Signal(), output
 		Held high during a burst.
-	"""
+	'''
 	def __init__(self, lfps_pattern, sys_clk_freq):
 		self._pattern         = lfps_pattern
 		self._clock_frequency = sys_clk_freq
@@ -250,32 +250,32 @@ class LFPSGenerator(Elaboratable):
 		count = Signal(range(0, repeat_cycles))
 		m.d.ss += count.eq(count + 1)
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# IDLE -- wait for an LFPS burst request.
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				m.d.ss += count.eq(0)
 
 				# Once we get one, start a burst.
 				with m.If(self.generate):
 					m.d.comb += self.drive_electrical_idle.eq(1)
-					m.next = "BURST"
+					m.next = 'BURST'
 
 			# BURST -- transmit an LFPS burst for the duration of the burst interval.
-			with m.State("BURST"):
+			with m.State('BURST'):
 				m.d.comb += self.drive_electrical_idle.eq(1)
 				m.d.comb += self.send_signaling.eq(1)
 
 				with m.If(count + 1 == burst_cycles):
-					m.next = "WAIT"
+					m.next = 'WAIT'
 
 			# WAIT -- do nothing for the remaining part of the repeat interval.
-			with m.State("WAIT"):
+			with m.State('WAIT'):
 				m.d.comb += self.drive_electrical_idle.eq(1)
 
 				with m.If(count + 1 == repeat_cycles):
 					m.d.comb += self.completed.eq(1)
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 		return m
 
@@ -322,7 +322,7 @@ class LFPSGeneratorTest(SolSSGatewareTestCase):
 
 
 class LFPSTransceiver(Elaboratable):
-	""" Low-Frequency Periodic Signaling (LFPS) Transciever
+	''' Low-Frequency Periodic Signaling (LFPS) Transciever
 
 	Transmits and receives the LPFS sequences required for a USB 3.0 link.
 
@@ -345,7 +345,7 @@ class LFPSTransceiver(Elaboratable):
 		Strobes high when Polling LFPS is detected.
 	reset_detected: Signal(), output
 		Strobes high when Reset LFPS is detected.
-	"""
+	'''
 
 	def __init__(self, ss_clk_freq=125e6):
 		self._clock_frequency      = ss_clk_freq
@@ -403,5 +403,5 @@ class LFPSTransceiver(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

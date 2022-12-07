@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Helpers for I/O interfacing. """
+''' Helpers for I/O interfacing. '''
 
 
 from torii import Cat, Instance, Signal
@@ -13,7 +13,7 @@ from torii import Cat, Instance, Signal
 
 # FIXME: move this out of here and into an ECP5-specific set of functionality
 def delay(m, signal, interval, *, out=None):
-	""" Creates a delayed copy of a given I/O signal.
+	''' Creates a delayed copy of a given I/O signal.
 
 	Currently only works at the FPGA's I/O boundary, and only on ECP5s.
 
@@ -29,7 +29,7 @@ def delay(m, signal, interval, *, out=None):
 	Returns:
 		delayed -- The delayed signal. Will be equivalent to 'out'
 				   if provided; or a new signal otherwise.
-	"""
+	'''
 
 	# If we're not being passed our output signal, create one.
 	if out is None:
@@ -49,7 +49,7 @@ def delay(m, signal, interval, *, out=None):
 	#
 	# Base case: create a delayed version of the relevant signal.
 	#
-	m.submodules += Instance("DELAYG",
+	m.submodules += Instance('DELAYG',
 		i_A=signal,
 		o_Z=out,
 		p_DEL_VALUE=interval

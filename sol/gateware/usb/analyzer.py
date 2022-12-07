@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Low-level USB analyzer gateware. """
+''' Low-level USB analyzer gateware. '''
 
 import unittest
 
@@ -15,7 +15,7 @@ from ..test   import SolGatewareTestCase, usb_domain_test_case
 
 
 class USBAnalyzer(Elaboratable):
-	""" Core USB analyzer; backed by a small ringbuffer in FPGA block RAM.
+	''' Core USB analyzer; backed by a small ringbuffer in FPGA block RAM.
 
 	If you're looking to instantiate a full analyzer, you'll probably want to grab
 	one of the DRAM-based ringbuffer variants (which are currently forthcoming).
@@ -44,7 +44,7 @@ class USBAnalyzer(Elaboratable):
 	mem_depth: int, default=8192
 		The depth of the analyzer's local ringbuffer, in bytes.
 		Must be a power of 2.
-	"""
+	'''
 
 	# Current, we'll provide a packet header of 16 bits.
 	HEADER_SIZE_BITS = 16
@@ -54,17 +54,17 @@ class USBAnalyzer(Elaboratable):
 	MAX_PACKET_SIZE_BYTES = 1024 + 1 + 2
 
 	def __init__(self, *, utmi_interface, mem_depth=65536):
-		"""
+		'''
 		Parameters:
 			utmi_interface -- A record or elaboratable that presents a UTMI interface.
-		"""
+		'''
 
 		self.utmi = utmi_interface
 
-		assert (mem_depth % 2) == 0, "mem_depth must be a power of 2"
+		assert (mem_depth % 2) == 0, 'mem_depth must be a power of 2'
 
 		# Internal storage memory.
-		self.mem = Memory(width=8, depth=mem_depth, name="analysis_ringbuffer")
+		self.mem = Memory(width=8, depth=mem_depth, name='analysis_ringbuffer')
 		self.mem_size = mem_depth
 
 		#
@@ -85,8 +85,8 @@ class USBAnalyzer(Elaboratable):
 		m = Module()
 
 		# Memory read and write ports.
-		m.submodules.read  = mem_read_port  = self.mem.read_port(domain="usb")
-		m.submodules.write = mem_write_port = self.mem.write_port(domain="usb")
+		m.submodules.read  = mem_read_port  = self.mem.read_port(domain='usb')
+		m.submodules.write = mem_write_port = self.mem.write_port(domain='usb')
 
 		# Store the memory address of our active packet header, which will store
 		# packet metadata like the packet size.
@@ -153,25 +153,25 @@ class USBAnalyzer(Elaboratable):
 		#
 		# Core analysis FSM.
 		#
-		with m.FSM(domain="usb") as f:
+		with m.FSM(domain='usb') as f:
 			m.d.comb += [
-				self.idle      .eq(f.ongoing("START") | f.ongoing("IDLE")),
-				self.overrun   .eq(f.ongoing("OVERRUN")),
-				self.capturing .eq(f.ongoing("CAPTURE")),
+				self.idle      .eq(f.ongoing('START') | f.ongoing('IDLE')),
+				self.overrun   .eq(f.ongoing('OVERRUN')),
+				self.capturing .eq(f.ongoing('CAPTURE')),
 			]
 
 			# START: wait for capture to be enabled, but don't start mid-packet.
-			with m.State("START"):
+			with m.State('START'):
 				with m.If(self.capture_enable & ~self.utmi.rx_active):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 
 			# IDLE: capture is enabled, wait for a packet to start.
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				with m.If(~self.capture_enable):
-					m.next = "START"
+					m.next = 'START'
 				with m.Elif(self.utmi.rx_active):
-					m.next = "CAPTURE"
+					m.next = 'CAPTURE'
 					m.d.usb += [
 						header_location  .eq(write_location),
 						write_location   .eq(write_location + self.HEADER_SIZE_BYTES),
@@ -180,7 +180,7 @@ class USBAnalyzer(Elaboratable):
 
 
 			# Capture data until the packet is complete.
-			with m.State("CAPTURE"):
+			with m.State('CAPTURE'):
 
 				byte_received = self.utmi.rx_valid & self.utmi.rx_active
 
@@ -202,24 +202,24 @@ class USBAnalyzer(Elaboratable):
 					# If this would be filling up our data memory,
 					# move to the OVERRUN state.
 					with m.If(fifo_count == self.mem_size - 1 - self.HEADER_SIZE_BYTES):
-						m.next = "OVERRUN"
+						m.next = 'OVERRUN'
 
-				# If we've stopped receiving, move to the "finalize" state.
+				# If we've stopped receiving, move to the 'finalize' state.
 				with m.If(~self.utmi.rx_active):
-					m.next = "EOP_1"
+					m.next = 'EOP_1'
 
 					# Optimization: if we didn't receive any data, there's no need
 					# to create a packet. Clear our header from the FIFO and disarm.
 					with m.If(packet_size == 0):
-						m.next = "START"
+						m.next = 'START'
 						m.d.usb += [
 							write_location.eq(header_location)
 						]
 					with m.Else():
-						m.next = "EOP_1"
+						m.next = 'EOP_1'
 
 			# EOP: handle the end of the relevant packet.
-			with m.State("EOP_1"):
+			with m.State('EOP_1'):
 
 				# Now that we're done, add the header to the start of our packet.
 				# This will take two cycles, currently, as we're using a 2-byte header,
@@ -230,10 +230,10 @@ class USBAnalyzer(Elaboratable):
 					mem_write_port.en    .eq(1),
 					fifo_new_data        .eq(1)
 				]
-				m.next = "EOP_2"
+				m.next = 'EOP_2'
 
 
-			with m.State("EOP_2"):
+			with m.State('EOP_2'):
 
 				# Add the second byte of our header.
 				# Note that, if this is an adjacent read, we should have
@@ -244,23 +244,23 @@ class USBAnalyzer(Elaboratable):
 					mem_write_port.en    .eq(1),
 					fifo_new_data        .eq(1)
 				]
-				m.next = "START"
+				m.next = 'START'
 
 
 			# BABBLE -- handles the case in which we've received a packet beyond
 			# the allowable size in the USB spec
-			with m.State("BABBLE"):
+			with m.State('BABBLE'):
 
 				# Trap here, for now.
 				pass
 
 
-			with m.State("OVERRUN"):
+			with m.State('OVERRUN'):
 				# TODO: we should probably set an overrun flag and then emit an EOP, here?
 
 				# If capture is stopped by the host, reset back to the ready state.
 				with m.If(~self.capture_enable):
-					m.next = "START"
+					m.next = 'START'
 
 
 		return m
@@ -388,7 +388,7 @@ class USBAnalyzerTest(SolGatewareTestCase):
 
 
 class USBAnalyzerStackTest(SolGatewareTestCase):
-	""" Test that evaluates a full-stack USB analyzer setup. """
+	''' Test that evaluates a full-stack USB analyzer setup. '''
 
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
@@ -467,5 +467,5 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

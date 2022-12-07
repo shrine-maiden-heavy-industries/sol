@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Standard, full-gateware control request handlers. """
+''' Standard, full-gateware control request handlers. '''
 
 import unittest
 
@@ -20,7 +20,7 @@ from ..application.request    import SuperSpeedRequestHandlerInterface
 
 
 class StandardRequestHandler(Elaboratable):
-	""" Pure-gateware USB3 setup request handler. Implements the standard requests required for enumeration. """
+	''' Pure-gateware USB3 setup request handler. Implements the standard requests required for enumeration. '''
 
 	def __init__(self, descriptors: DeviceDescriptorCollection):
 		self.descriptors = descriptors
@@ -33,7 +33,7 @@ class StandardRequestHandler(Elaboratable):
 
 
 	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition=0):
-		""" Fills in the current state with a request handler meant to set a register.
+		''' Fills in the current state with a request handler meant to set a register.
 
 		Parameters
 		----------
@@ -43,7 +43,7 @@ class StandardRequestHandler(Elaboratable):
 			The signal which will be pulsed when new_value_signal contains a update.
 		stall_condition:
 			If provided, if this condition is true, the request will be STALL'd instead of acknowledged.
-			"""
+			'''
 
 		# Provide an response to the STATUS stage.
 		with m.If(self.interface.status_requested):
@@ -64,7 +64,7 @@ class StandardRequestHandler(Elaboratable):
 
 
 	def handle_simple_data_request(self, m, data, *, length=1):
-		""" Fills in a given current state with a request that returns a given short piece of data.
+		''' Fills in a given current state with a request that returns a given short piece of data.
 
 		For e.g. GET_CONFIGURATION and GET_STATUS requests. The relevant data must fit within a word.
 
@@ -76,7 +76,7 @@ class StandardRequestHandler(Elaboratable):
 			The data to be transmitted.
 		valid_mask: Torii value, or equivalent, up to 4b
 			The valid mask for the data to be transmitted. Should be 0b0001, 0b0011, 0b0111, or 0b1111.
-		"""
+		'''
 
 		# Create a simple mapping of our valid bits to lengths.
 		# Slightly clearer than the arithmetic version. :)
@@ -128,7 +128,7 @@ class StandardRequestHandler(Elaboratable):
 
 		# Handler for Get Descriptor requests; responds with our various fixed descriptors.
 		m.submodules.get_descriptor = get_descriptor_handler = GetDescriptorHandler(self.descriptors,
-			usb_domain  = "ss",
+			usb_domain  = 'ss',
 			stream_type = SuperSpeedStreamInterface
 		)
 		m.d.comb += [
@@ -141,7 +141,7 @@ class StandardRequestHandler(Elaboratable):
 		## Handlers.
 		##
 		with m.If(setup.type == USBRequestType.STANDARD):
-			with m.FSM(domain="ss"):
+			with m.FSM(domain='ss'):
 
 				# IDLE -- not handling any active request
 				with m.State('IDLE'):
@@ -189,7 +189,7 @@ class StandardRequestHandler(Elaboratable):
 					self.handle_register_write_request(m, interface.new_config, interface.config_changed)
 
 
-				# GET_DESCRIPTOR -- The host is asking for a USB descriptor -- for us to "self describe".
+				# GET_DESCRIPTOR -- The host is asking for a USB descriptor -- for us to 'self describe'.
 				with m.State('GET_DESCRIPTOR'):
 					m.d.comb += [
 						interface.tx                    .stream_eq(get_descriptor_handler.tx),
@@ -229,7 +229,7 @@ class StandardRequestHandler(Elaboratable):
 					# TODO: use the actual latencies once we support USB3 power states
 
 					# ACK the data that's coming in, once we get it; but ignore it for now
-					data_received = falling_edge_detected(m, interface.rx.valid, domain="ss")
+					data_received = falling_edge_detected(m, interface.rx.valid, domain='ss')
 					with m.If(data_received):
 						m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
 
@@ -244,7 +244,7 @@ class StandardRequestHandler(Elaboratable):
 				with m.State('UNHANDLED'):
 
 					# When we next have an opportunity to stall, do so, and then return to idle.
-					data_received = falling_edge_detected(m, interface.rx.valid, domain="ss")
+					data_received = falling_edge_detected(m, interface.rx.valid, domain='ss')
 					with m.If(interface.data_requested | interface.status_requested | data_received):
 						m.d.comb += handshake_generator.send_stall.eq(1)
 						m.next = 'IDLE'
@@ -252,5 +252,5 @@ class StandardRequestHandler(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
-	unittest.main(warnings="ignore")
+if __name__ == '__main__':
+	unittest.main(warnings='ignore')

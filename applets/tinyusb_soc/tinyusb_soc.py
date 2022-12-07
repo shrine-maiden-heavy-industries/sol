@@ -23,7 +23,7 @@ CLOCK_FREQUENCIES_MHZ = {
 
 
 class LEDPeripheral(Peripheral, Elaboratable):
-	""" Example peripheral that controls the board's LEDs. """
+	''' Example peripheral that controls the board's LEDs. '''
 
 	def __init__(self):
 		super().__init__()
@@ -34,7 +34,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		# space it's attached to; and the SoC utilities will automatically generate header
 		# entires and stub functions for it.
 		bank            = self.csr_bank()
-		self._output    = bank.csr(6, "w")
+		self._output    = bank.csr(6, 'w')
 
 		# ... and convert our register into a Wishbone peripheral.
 		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
@@ -46,7 +46,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		m.submodules.bridge = self._bridge
 
 		# Grab our LEDS...
-		leds = Cat(platform.request("led", i) for i in range(6))
+		leds = Cat(platform.request('led', i) for i in range(6))
 
 		# ... and update them on each register write.
 		with m.If(self._output.w_stb):
@@ -57,7 +57,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 
 
 class TinyUSBSoC(Elaboratable):
-	""" Simple SoC for hosting TinyUSB. """
+	''' Simple SoC for hosting TinyUSB. '''
 
 	RAM_SIZE          = 0x0001_0000
 
@@ -110,7 +110,7 @@ class TinyUSBSoC(Elaboratable):
 		m.submodules.car = platform.clock_domain_generator(clock_frequencies=CLOCK_FREQUENCIES_MHZ)
 
 		# Connect up our UART.
-		uart_io = platform.request("uart", 0)
+		uart_io = platform.request('uart', 0)
 		m.d.comb += [
 			uart_io.tx         .eq(self.uart_pins.tx),
 			self.uart_pins.rx  .eq(uart_io.rx)
@@ -133,6 +133,6 @@ class TinyUSBSoC(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	design = TinyUSBSoC()
 	cli(design, cli_soc=design.soc)

@@ -5,7 +5,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-""" Stream generators. """
+''' Stream generators. '''
 
 import unittest
 
@@ -20,7 +20,7 @@ from .            import StreamInterface
 
 
 class ConstantStreamGenerator(Elaboratable):
-	""" Gateware that generates stream of constant data.
+	''' Gateware that generates stream of constant data.
 
 	Attributes
 	----------
@@ -58,11 +58,11 @@ class ConstantStreamGenerator(Elaboratable):
 		If provided, a `max_length` signal will be present that can limit the total length transmitted.
 	data_endianness: little
 		If bytes are provided, and our data width is greater
-	"""
+	'''
 
 
-	def __init__(self, constant_data, domain="sync", stream_type=StreamInterface,
-			max_length_width=None, data_width=None, data_endianness="little"):
+	def __init__(self, constant_data, domain='sync', stream_type=StreamInterface,
+			max_length_width=None, data_width=None, data_endianness='little'):
 
 		self._domain           = domain
 		self._data             = constant_data
@@ -97,7 +97,7 @@ class ConstantStreamGenerator(Elaboratable):
 
 
 	def _get_initializer_value(self):
-		""" Returns this geneartor's data in a form usable as a ROM initializer.
+		''' Returns this geneartor's data in a form usable as a ROM initializer.
 
 		Returns
 		-------
@@ -108,7 +108,7 @@ class ConstantStreamGenerator(Elaboratable):
 
 			For example, if we have 32-bit words; and 3 bytes of data, we'd have
 			three valid bits on the last word; since the upper 8-bits are meaningless.
-		"""
+		'''
 
 		# If we have byte-sized data, Python will implicitly handle things correctly.
 		# Return our data unmodified.
@@ -121,7 +121,7 @@ class ConstantStreamGenerator(Elaboratable):
 
 		# If our width isn't evenly divisible by 8, we can't accept bytes.
 		if (self._data_width % 8):
-			raise ValueError("Can't initialize with bytes unless data_width is divisible by 8!")
+			raise ValueError('Can't initialize with bytes unless data_width is divisible by 8!')
 
 		# Figure out how wide each datum will be in bytes.
 		datum_width_bytes = self._data_width // 8
@@ -349,15 +349,15 @@ class ConstantStreamGenerator(Elaboratable):
 
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
-		if self._domain != "sync":
-			m = DomainRenamer({"sync": self._domain})(m)
+		if self._domain != 'sync':
+			m = DomainRenamer({'sync': self._domain})(m)
 
 		return m
 
 
 class ConstantStreamGeneratorTest(SolUSBGatewareTestCase):
 	FRAGMENT_UNDER_TEST = ConstantStreamGenerator
-	FRAGMENT_ARGUMENTS  = {'constant_data': b"HELLO, WORLD", 'domain': "usb", 'max_length_width': 16}
+	FRAGMENT_ARGUMENTS  = {'constant_data': b'HELLO, WORLD', 'domain': 'usb', 'max_length_width': 16}
 
 	@usb_domain_test_case
 	def test_basic_transmission(self):
@@ -514,8 +514,8 @@ class ConstantStreamGeneratorTest(SolUSBGatewareTestCase):
 class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = ConstantStreamGenerator
 	FRAGMENT_ARGUMENTS  = dict(
-		domain           = "ss",
-		constant_data    = b"HELLO WORLD",
+		domain           = 'ss',
+		constant_data    = b'HELLO WORLD',
 		stream_type      = SuperSpeedStreamInterface,
 		max_length_width = 16
 	)
@@ -538,13 +538,13 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# and we should see our first byte of data.
 		yield from self.pulse(dut.start)
 		self.assertEqual((yield dut.stream.valid),   0b1111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b"HELL", byteorder="little"))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
 		self.assertEqual((yield dut.stream.first),   1)
 
 		# That data should remain there until we accept it.
 		yield from self.advance_cycles(10)
 		self.assertEqual((yield dut.stream.valid),   0b1111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b"HELL", byteorder="little"))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
 
 		# Once we indicate that we're accepting data...
 		yield dut.stream.ready.eq(1)
@@ -553,13 +553,13 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# ... we should start seeing the remainder of our transmission.
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b1111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b"O WO", byteorder="little"))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'O WO', byteorder='little'))
 		self.assertEqual((yield dut.stream.first),   0)
 
 
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b"RLD", byteorder="little"))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'RLD', byteorder='little'))
 		self.assertEqual((yield dut.stream.first),   0)
 
 
@@ -583,13 +583,13 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# and we should see our first byte of data.
 		yield from self.pulse(dut.start)
 		self.assertEqual((yield dut.stream.valid),   0b1111)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b"HELL", byteorder="little"))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
 		self.assertEqual((yield dut.stream.first),   1)
 
 		# We should then see only two bytes of our remainder.
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b0011)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b"O WO", byteorder="little"))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'O WO', byteorder='little'))
 		self.assertEqual((yield dut.stream.first),   0)
 		self.assertEqual((yield dut.stream.last),    1)
 
@@ -605,7 +605,7 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# and we should see our first word of data.
 		yield from self.pulse(dut.start)
 		self.assertEqual((yield dut.stream.valid),   0b0011)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b"HELL", byteorder="little"))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
 		self.assertEqual((yield dut.stream.first),   1)
 		self.assertEqual((yield dut.stream.last),    1)
 
@@ -613,7 +613,7 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		yield dut.stream.ready.eq(1)
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b0011)
-		self.assertEqual((yield dut.stream.payload), int.from_bytes(b"HELL", byteorder="little"))
+		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'HELL', byteorder='little'))
 		self.assertEqual((yield dut.stream.first),   1)
 		self.assertEqual((yield dut.stream.last),    1)
 
@@ -624,7 +624,7 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 
 
 class StreamSerializer(Elaboratable):
-	""" Gateware that serializes a short Array input onto a stream.
+	''' Gateware that serializes a short Array input onto a stream.
 
 	I/O port:
 		I: start        -- Strobe that indicates when the stream should be started.
@@ -636,10 +636,10 @@ class StreamSerializer(Elaboratable):
 
 		*: stream       -- The generated stream interface.
 
-	"""
+	'''
 
-	def __init__(self, data_length, domain="sync", data_width=8, stream_type=StreamInterface, max_length_width=None):
-		"""
+	def __init__(self, data_length, domain='sync', data_width=8, stream_type=StreamInterface, max_length_width=None):
+		'''
 		Parameters:
 			data_length        -- The length of the data to be transmitted.
 			domain             -- The clock domain this generator should belong to. Defaults to 'sync'.
@@ -647,7 +647,7 @@ class StreamSerializer(Elaboratable):
 			stream_type        -- The type of stream we'll be multiplexing. Must be a subclass of StreamInterface.
 			max_length_width   -- If provided, a `max_length` signal will be present that can limit the total length
 								  transmitted.
-		"""
+		'''
 
 		self.domain      = domain
 		self.data_width  = data_width
@@ -659,7 +659,7 @@ class StreamSerializer(Elaboratable):
 		self.start       = Signal()
 		self.done        = Signal()
 
-		self.data        = Array(Signal(data_width, name=f"datum_{i}") for i in range(data_length))
+		self.data        = Array(Signal(data_width, name=f'datum_{i}') for i in range(data_length))
 		self.stream      = stream_type(payload_width=data_width)
 
 
@@ -734,11 +734,11 @@ class StreamSerializer(Elaboratable):
 
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
-		if self.domain != "sync":
-			m = DomainRenamer({"sync": self.domain})(m)
+		if self.domain != 'sync':
+			m = DomainRenamer({'sync': self.domain})(m)
 
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

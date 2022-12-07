@@ -14,7 +14,7 @@ __all__ = (
 )
 
 class WindowsRequestHandler(USBRequestHandler):
-	""" The platform-specific handler for Windows requests.
+	''' The platform-specific handler for Windows requests.
 
 	Parameters
 	----------
@@ -49,7 +49,7 @@ class WindowsRequestHandler(USBRequestHandler):
 	* Once the data phase concludes and the status phase begins, we then respond to the host with an all-clear ACK
 	* If either the :py:class:`dragonBoot.windows.descriptorSet.GetDescriptorSetHandler` or the status phase
 	  concludes, we return to :code:`IDLE`.
-	"""
+	'''
 	def __init__(self, descriptors : PlatformDescriptorCollection, maxPacketSize = 64):
 		self.descriptors = descriptors
 		self._maxPacketSize = maxPacketSize
@@ -57,7 +57,7 @@ class WindowsRequestHandler(USBRequestHandler):
 		super().__init__()
 
 	def elaborate(self, platform) -> Module:
-		""" Describes the specific gateware needed to implement the platform-specific windows descriptor handling on USB EP0.
+		''' Describes the specific gateware needed to implement the platform-specific windows descriptor handling on USB EP0.
 
 		Parameters
 		----------
@@ -68,7 +68,7 @@ class WindowsRequestHandler(USBRequestHandler):
 		-------
 		:py:class:`torii.hdl.dsl.Module`
 			A complete description of the gateware behaviour required.
-		"""
+		'''
 		m = Module()
 		interface = self.interface
 		setup = interface.setup
@@ -142,7 +142,7 @@ class WindowsRequestHandler(USBRequestHandler):
 		return m
 
 	def handlerCondition(self, setup : SetupPacket):
-		""" Defines the setup packet conditions under which the request handler will operate.
+		''' Defines the setup packet conditions under which the request handler will operate.
 
 		This is used to gate the handler's operation and forms part of the condition under which
 		the stall-only handler in :py:class:`dragonBoot.bootloader.DragonBoot` will be triggered.
@@ -169,7 +169,7 @@ class WindowsRequestHandler(USBRequestHandler):
 
 		The latter has not been given support as we don't currently allow swapping out the device
 		descriptors in this manner.
-		"""
+		'''
 		return (
 			(setup.type == USBRequestType.VENDOR) &
 			(setup.recipient == USBRequestRecipient.DEVICE) &

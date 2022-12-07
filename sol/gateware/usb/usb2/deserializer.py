@@ -4,14 +4,14 @@
 #
 # Copyright (c) 2022 Rachel Mant <git@dragonmux.network>
 
-""" Stream deserializers. """
+''' Stream deserializers. '''
 
 from torii    import *
 from .request import USBOutStreamInterface
 
 
 class StreamDeserializer(Elaboratable):
-	""" Gateware that deserializes a short Array output from a stream.
+	''' Gateware that deserializes a short Array output from a stream.
 
 	I/O port:
 		I: start        -- Strobe that indicates when reading the stream should be started.
@@ -23,10 +23,10 @@ class StreamDeserializer(Elaboratable):
 
 		*: stream       -- The stream being consumed.
 
-	"""
+	'''
 
 	def __init__(self, dataLength, streamType = USBOutStreamInterface, domain = 'sync', dataWidth = 8, maxLengthWidth = None):
-		"""
+		'''
 		Parameters:
 			dataLength      -- The length of the data to be received.
 			domain          -- The clock domain this deserializer should belong to. Defaults to 'sync'.
@@ -34,7 +34,7 @@ class StreamDeserializer(Elaboratable):
 			streamType      -- The stream we'll be consuming. Must be a subclass of USBOutStreamInterface
 			maxLengthWidth  -- If provided, a `maxLength` signal will be present that can limit the total length
 							   consumed from the stream.
-		"""
+		'''
 
 		self.domain = domain
 		self.dataWidth = dataWidth

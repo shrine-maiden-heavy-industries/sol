@@ -3,4 +3,4 @@
 # This file is part of SOL.
 #
 
-""" Interface code helpers. """
+''' Interface code helpers. '''

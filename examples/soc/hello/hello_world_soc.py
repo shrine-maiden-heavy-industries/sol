@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-from torii                     import Elaboratable, Module, Cat
-from torii.hdl.rec             import Record
+from lambdasoc.periph        import Peripheral
+from lambdasoc.periph.serial import AsyncSerialPeripheral
+from lambdasoc.periph.timer  import TimerPeripheral
 
-from lambdasoc.periph             import Peripheral
-from lambdasoc.periph.serial      import AsyncSerialPeripheral
-from lambdasoc.periph.timer       import TimerPeripheral
+from torii                   import Cat, Elaboratable, Module
+from torii.hdl.rec           import Record
 
-from sol                         import top_level_cli
-from sol.gateware.soc            import SimpleSoC
-from sol.gateware.interface.uart import UARTTransmitterPeripheral
+from sol.cli                 import cli
+from sol.gateware.soc        import SimpleSoC
 
 
 class LEDPeripheral(Peripheral, Elaboratable):
-	""" Example peripheral that controls the board's LEDs. """
+	''' Example peripheral that controls the board's LEDs. '''
 
 	def __init__(self):
 		super().__init__()
@@ -29,7 +28,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		# space it's attached to; and the SoC utilities will automatically generate header
 		# entires and stub functions for it.
 		bank            = self.csr_bank()
-		self._output    = bank.csr(6, "rw")
+		self._output    = bank.csr(6, 'rw')
 
 		# ... and convert our register into a Wishbone peripheral.
 		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
@@ -41,7 +40,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		m.submodules.bridge = self._bridge
 
 		# Grab our LEDS...
-		leds = Cat(platform.request("led", i) for i in range(6))
+		leds = Cat(platform.request('led', i) for i in range(6))
 
 		# ... and update them on each register write.
 		with m.If(self._output.w_stb):
@@ -55,7 +54,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 
 
 class SolCPUExample(Elaboratable):
-	""" Simple example of building a simple SoC around SOL. """
+	''' Simple example of building a simple SoC around SOL. '''
 
 	def __init__(self):
 		clock_freq = 60e6
@@ -89,7 +88,7 @@ class SolCPUExample(Elaboratable):
 		m.submodules.soc = self.soc
 
 		# Connect up our UART.
-		uart_io = platform.request("uart", 0)
+		uart_io = platform.request('uart', 0)
 		m.d.comb += [
 			uart_io.tx         .eq(self.uart_pins.tx),
 			self.uart_pins.rx  .eq(uart_io.rx)
@@ -98,6 +97,6 @@ class SolCPUExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	design = SolCPUExample()
-	top_level_cli(design, cli_soc=design.soc)
+	cli(design, cli_soc=design.soc)

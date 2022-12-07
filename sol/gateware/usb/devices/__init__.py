@@ -4,4 +4,4 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Convenience gateware with pre-made device logic. """
+''' Convenience gateware with pre-made device logic. '''

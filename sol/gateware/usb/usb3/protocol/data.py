@@ -4,13 +4,13 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 Data header handling gateware.
 
 This file currently contains very little logic; the actual transmission framing is handled at
 the link layer; and the generation of our packets is handled by our endpoint.
 
-"""
+'''
 
 from torii                          import *
 
@@ -20,13 +20,13 @@ from ..link.header                  import HeaderQueue
 
 
 class DataHeaderReceiver(Elaboratable):
-	""" Gateware that handles received Data Header packets.
+	''' Gateware that handles received Data Header packets.
 
 	Attributes
 	-----------
 	header_sink: HeaderQueue(), input stream
 		Stream that brings up header packets for handling.
-	"""
+	'''
 
 	def __init__(self):
 

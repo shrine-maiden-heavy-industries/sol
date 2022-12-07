@@ -4,14 +4,14 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Core stream definitions. """
+''' Core stream definitions. '''
 
 
 from torii import Record
 
 
 class StreamInterface(Record):
-	""" Simple record implementing a unidirectional data stream.
+	''' Simple record implementing a unidirectional data stream.
 
 	This class is similar to LiteX's streams; but instances may be optimized for
 	interaction with USB PHYs. Accordingly, some uses may add restrictions; this
@@ -39,13 +39,13 @@ class StreamInterface(Record):
 	extra_fields: list of tuples, optional
 		A flat (non-nested) list of tuples indicating any extra fields present.
 		Similar to a record's layout field; but cannot be nested.
-	"""
+	'''
 
 	def __init__(self, payload_width=8, valid_width=1, extra_fields=None):
-		"""
+		'''
 		Parameter:
 			payload_width -- The width of the payload packets.
-		"""
+		'''
 
 		# If we don't have any extra fields, use an empty list in its place.
 		if extra_fields is None:
@@ -94,19 +94,19 @@ class StreamInterface(Record):
 
 
 	def stream_eq(self, interface, *, omit=None):
-		""" A hopefully more clear version of .connect() that more clearly indicates data_flow direction.
+		''' A hopefully more clear version of .connect() that more clearly indicates data_flow direction.
 
 		This will either solve a common footgun or introduce a new one. We'll see and adapt accordingly.
-		"""
+		'''
 		return interface.attach(self, omit=omit)
 
 
 	def tap(self, interface, *, tap_ready=False, **kwargs):
-		""" Simple extension to stream_eq() that captures a read-only view of the stream.
+		''' Simple extension to stream_eq() that captures a read-only view of the stream.
 
 		This connects all signals from ``interface`` to their equivalents in this stream.
-		"""
-		core = self.stream_eq(interface, omit={"ready"}, **kwargs)
+		'''
+		core = self.stream_eq(interface, omit={'ready'}, **kwargs)
 
 		if tap_ready:
 			core.append(self.ready.eq(interface.ready))
@@ -118,10 +118,10 @@ class StreamInterface(Record):
 
 	def __getattr__(self, name):
 
-		# Allow "data" to be a semantic alias for payload.
+		# Allow 'data' to be a semantic alias for payload.
 		# In some cases, this makes more sense to write; so we'll allow either.
 		# Individual sections of the code base should stick to one or the other (please).
 		if name == 'data':
-			name = "payload"
+			name = 'payload'
 
 		return super().__getattr__(name)

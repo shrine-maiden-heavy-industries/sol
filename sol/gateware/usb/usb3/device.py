@@ -4,10 +4,10 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-"""
+'''
 Contains the organizing hardware used to add USB3 Device functionality
 to your own designs; including the core :class:`USBSuperSpeedDevice` class.
-"""
+'''
 
 
 from torii                  import *
@@ -25,7 +25,7 @@ from .protocol.endpoint     import SuperSpeedEndpointMultiplexer
 
 
 class USBSuperSpeedDevice(Elaboratable):
-	""" Core gateware common to all SOL USB3 devices. """
+	''' Core gateware common to all SOL USB3 devices. '''
 
 	def __init__(self, *, phy, sync_frequency=None):
 		self._phy = phy
@@ -51,19 +51,19 @@ class USBSuperSpeedDevice(Elaboratable):
 
 
 	def add_endpoint(self, endpoint):
-		""" Adds an endpoint interface to the device.
+		''' Adds an endpoint interface to the device.
 
 		Parameters
 		----------
 		endpoint: Elaborateable
 			The endpoint interface to be added. Can be any piece of gateware with a
 			:class:`EndpointInterface` attribute called ``interface``.
-		"""
+		'''
 		self._endpoints.append(endpoint)
 
 
 	def add_standard_control_endpoint(self, descriptors: DeviceDescriptorCollection):
-		""" Adds a control endpoint with standard request handlers to the device.
+		''' Adds a control endpoint with standard request handlers to the device.
 
 		Parameters
 		----------
@@ -73,7 +73,7 @@ class USBSuperSpeedDevice(Elaboratable):
 		Return value
 		------------
 		The endpoint object created.
-		"""
+		'''
 
 		# TODO: split out our standard request handlers
 
@@ -176,7 +176,7 @@ class USBSuperSpeedDevice(Elaboratable):
 			# Create a display name for the endpoint...
 			name = endpoint.__class__.__name__
 			if hasattr(m.submodules, name):
-				name = f"{name}_{id(endpoint)}"
+				name = f'{name}_{id(endpoint)}'
 
 			# ... and add it, both as a submodule and to our multiplexer.
 			endpoint_mux.add_interface(endpoint.interface)

@@ -31,12 +31,12 @@ PLATFORM_FOR_REVISION = {
 }
 
 def _get_platform_from_string(platform):
-	""" Attempts to get the most appropriate platform given a <module>:<class> specification."""
+	''' Attempts to get the most appropriate platform given a <module>:<class> specification.'''
 
 	# Attempt to split the platform into a module / name.
 	module, _, name = platform.partition(':')
 	if (not module) or (not name):
-		raise TypeError("LUNA_PLATFORM must be in <module path>:<class name> format.")
+		raise TypeError('LUNA_PLATFORM must be in <module path>:<class name> format.')
 
 
 	# If we have a filename, load the module from our file.
@@ -44,7 +44,7 @@ def _get_platform_from_string(platform):
 	if os.path.isfile(module_path):
 
 		# Get a reference to the platform module to be loaded...
-		import_path     = "sol.gateware.platform.dynamic"
+		import_path     = 'sol.gateware.platform.dynamic'
 		spec            = importlib.util.spec_from_file_location(import_path, module_path)
 		platform_module = importlib.util.module_from_spec(spec)
 
@@ -62,11 +62,11 @@ def _get_platform_from_string(platform):
 
 
 def get_appropriate_platform() -> LatticeECP5Platform:
-	""" Attempts to return the most appropriate platform for the local configuration. """
+	''' Attempts to return the most appropriate platform for the local configuration. '''
 
 	# If we have a LUNA_PLATFORM variable, use it instead of autonegotiating.
-	if os.getenv("LUNA_PLATFORM"):
-		return _get_platform_from_string(os.getenv("LUNA_PLATFORM"))
+	if os.getenv('LUNA_PLATFORM'):
+		return _get_platform_from_string(os.getenv('LUNA_PLATFORM'))
 
 	import apollo_fpga
 
@@ -95,12 +95,12 @@ def get_appropriate_platform() -> LatticeECP5Platform:
 	except apollo_fpga.DebuggerNotFound:
 		platform = LATEST_PLATFORM()
 
-		log.warning(f"Couldn't auto-detect connected platform. Assuming {platform.name}.")
+		log.warning(f'Couldn't auto-detect connected platform. Assuming {platform.name}.')
 		return platform
 
 
 class NullPin(Record):
-	""" Stand-in for a I/O record. """
+	''' Stand-in for a I/O record. '''
 
 	def __init__(self, size=1):
 		super().__init__([

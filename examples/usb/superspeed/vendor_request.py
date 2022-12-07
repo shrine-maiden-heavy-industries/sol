@@ -17,7 +17,7 @@ from sol.usb3               import SuperSpeedRequestHandler, USBSuperSpeedDevice
 
 
 class LEDRequestHandler(SuperSpeedRequestHandler):
-	""" Simple, example request handler that can control the board's LEDs. """
+	''' Simple, example request handler that can control the board's LEDs. '''
 
 	REQUEST_SET_LEDS = 0
 
@@ -28,7 +28,7 @@ class LEDRequestHandler(SuperSpeedRequestHandler):
 		setup             = self.interface.setup
 
 		# Grab a reference to the board's LEDs.
-		leds  = Cat(platform.request_optional("led", i, default=NullPin()).o for i in range(32))
+		leds  = Cat(platform.request_optional('led', i, default=NullPin()).o for i in range(32))
 
 		#
 		# Vendor request handlers.
@@ -90,11 +90,11 @@ class LEDRequestHandler(SuperSpeedRequestHandler):
 
 
 class SuperSpeedVendorDeviceExample(Elaboratable):
-	""" Simple example of a USB SuperSpeed device using the SOL framework. """
+	''' Simple example of a USB SuperSpeed device using the SOL framework. '''
 
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = SuperSpeedDeviceDescriptorCollection()
 
@@ -111,12 +111,12 @@ class SuperSpeedVendorDeviceExample(Elaboratable):
 			# We're complying with the USB 3.2 standard.
 			d.bcdUSB             = 3.2
 
-			# USB3 requires this to be "9", to indicate 2 ** 9, or 512B.
+			# USB3 requires this to be '9', to indicate 2 ** 9, or 512B.
 			d.bMaxPacketSize0    = 9
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Vendor Test Device"
-			d.iSerialNumber      = "1234"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Vendor Test Device'
+			d.iSerialNumber      = '1234'
 
 			d.bNumConfigurations = 1
 
@@ -155,5 +155,5 @@ class SuperSpeedVendorDeviceExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(SuperSpeedVendorDeviceExample)

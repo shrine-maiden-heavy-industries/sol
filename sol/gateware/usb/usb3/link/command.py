@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB Link Commands Transmitter/Receivers """
+''' USB Link Commands Transmitter/Receivers '''
 
 
 from torii             import *
@@ -15,7 +15,7 @@ from .crc              import compute_usb_crc5
 
 
 class LinkCommandDetector(Elaboratable):
-	""" USB3 Link Command Detector.
+	''' USB3 Link Command Detector.
 
 	This module detects USB3 link commands as they're received on the bus.
 
@@ -38,7 +38,7 @@ class LinkCommandDetector(Elaboratable):
 	new_command: signal(), output
 		Strobe; indicates that a new link command has been received, and the details of this command
 		are ready to be read.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -70,20 +70,20 @@ class LinkCommandDetector(Elaboratable):
 		# Assume we don't have a new command, unless asserted below.
 		m.d.ss += self.new_command.eq(0)
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# WAIT_FOR_LCSTART -- we're currently waiting for LCSTART framing, which indicates
 			# that the following word is a link command.
-			with m.State("WAIT_FOR_LCSTART"):
+			with m.State('WAIT_FOR_LCSTART'):
 
 				is_lcstart = stream_matches_symbols(self.sink, SLC, SLC, SLC, EPF)
 				with m.If(is_lcstart):
-					m.next = "PARSE_COMMAND"
+					m.next = 'PARSE_COMMAND'
 
 
 			# PARSE_COMMAND -- our previous data word contained LCSTART; so this word contains our
 			# link command. We'll parse / validate it.
-			with m.State("PARSE_COMMAND"):
+			with m.State('PARSE_COMMAND'):
 
 				with m.If(self.sink.valid):
 
@@ -116,7 +116,7 @@ class LinkCommandDetector(Elaboratable):
 
 					# No matter the word's validity, we'll move back to waiting for a new command header;
 					# as we can't do anything about invalid commands.
-					m.next = "WAIT_FOR_LCSTART"
+					m.next = 'WAIT_FOR_LCSTART'
 
 
 		return m
@@ -124,7 +124,7 @@ class LinkCommandDetector(Elaboratable):
 
 
 class LinkCommandGenerator(Elaboratable):
-	""" USB3 Link Command Generator.
+	''' USB3 Link Command Generator.
 
 	This module generates link commands on the USB3 bus.
 
@@ -143,7 +143,7 @@ class LinkCommandGenerator(Elaboratable):
 	done: Signal(), output
 		Indicates that the link command will be complete this cycle; and thus this unit will
 		be ready to send another link command next cycle.
-	"""
+	'''
 
 
 	def __init__(self):
@@ -170,10 +170,10 @@ class LinkCommandGenerator(Elaboratable):
 		latched_subtype = Signal.like(self.subtype)
 
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# IDLE -- we're currently waiting to generate a link command
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 
 				# Once we have a generate command...
 				with m.If(self.generate):
@@ -183,10 +183,10 @@ class LinkCommandGenerator(Elaboratable):
 						latched_command  .eq(self.command),
 						latched_subtype  .eq(self.subtype)
 					]
-					m.next = "TRANSMIT_HEADER"
+					m.next = 'TRANSMIT_HEADER'
 
 			# TRANSMIT_HEADER -- we're starting our link command by transmitting a header.
-			with m.State("TRANSMIT_HEADER"):
+			with m.State('TRANSMIT_HEADER'):
 
 				# Drive the bus with our header...
 				header_data, header_ctrl = get_word_for_symbols(SLC, SLC, SLC, EPF)
@@ -198,11 +198,11 @@ class LinkCommandGenerator(Elaboratable):
 
 				# ... and keep driving it until it's accepted.
 				with m.If(self.source.ready):
-					m.next = "TRANSMIT_COMMAND"
+					m.next = 'TRANSMIT_COMMAND'
 
 
 			# TRANSMIT_COMMAND -- we're now ready to send the core of our command.
-			with m.State("TRANSMIT_COMMAND"):
+			with m.State('TRANSMIT_COMMAND'):
 				link_command = Signal(16)
 
 				# Drive our command onto the bus...
@@ -223,7 +223,7 @@ class LinkCommandGenerator(Elaboratable):
 				# ... and keep driving it until it's accepted.
 				with m.If(self.source.ready):
 					m.d.comb += self.done.eq(1)
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 
 		return m

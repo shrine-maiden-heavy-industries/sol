@@ -4,14 +4,14 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Interfaces for working with an ECP5 MSPI configuration flash. """
+''' Interfaces for working with an ECP5 MSPI configuration flash. '''
 
 
 from torii import Signal, Module, Elaboratable, Instance
 
 
 class ECP5ConfigurationFlashInterface(Elaboratable):
-	""" Gateware that creates a connection to an MSPI configuration flash.
+	''' Gateware that creates a connection to an MSPI configuration flash.
 
 	Automatically uses appropriate platform resources; this abstracts away details
 	necessary to e.g. drive the MCLK lines on an ECP5, which has special handling.
@@ -23,13 +23,13 @@ class ECP5ConfigurationFlashInterface(Elaboratable):
 		I: sdi -- The SDI line to be passed through to the target flash.
 		O: sdo -- The SDO line read from the target flash.
 		I: cs  -- Active-high chip select line.
-	"""
+	'''
 
 	def __init__(self, *, bus, use_cs=False):
-		""" Params:
+		''' Params:
 			bus    -- The SPI bus object to connect to.
 			use_cs -- Whether or not the CS line should be passed through to the target device.
-		"""
+		'''
 
 		self.bus = bus
 		self.use_cs = use_cs

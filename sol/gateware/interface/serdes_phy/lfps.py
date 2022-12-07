@@ -5,14 +5,14 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 #
 
-"""
+'''
 Generating and recognizing LFPS square wave patterns.
 
 SerDes blocks differ in their out-of-band signaling capabilities. Some are capable of detecting
 and generating LFPS signaling on their own; others only make it possible to access the high-speed
 I/O buffers directly through fabric. This gateware can detect patterns that fit LFPS requriements
 given only a bare input buffer, or vice versa.
-"""
+'''
 
 from math import ceil
 
@@ -32,7 +32,7 @@ _LFPS_PERIOD_MAX = 100e-9
 
 
 class LFPSSquareWaveDetector(Elaboratable):
-	""" Detector that identifies LFPS square-wave patterns.
+	''' Detector that identifies LFPS square-wave patterns.
 
 	Operates in the ``pipe`` domain.
 
@@ -42,7 +42,7 @@ class LFPSSquareWaveDetector(Elaboratable):
 		The current state of the Rx lines, as retrieved by our SerDes.
 	present: Signal(), output
 		High whenever we detect an LFPS toggling.
-	"""
+	'''
 
 	def __init__(self, pipe_clock_frequency=250e6):
 
@@ -65,7 +65,7 @@ class LFPSSquareWaveDetector(Elaboratable):
 
 		# Synchronize the GPIO to our clock domain.
 		rx_gpio = Signal()
-		m.submodules += FFSynchronizer(self.rx_gpio, rx_gpio, o_domain="pipe")
+		m.submodules += FFSynchronizer(self.rx_gpio, rx_gpio, o_domain='pipe')
 
 		# Our mechanism is simple: we measure the length of any periods of consecutive highs and lows
 		# we see, and then check to see when they're both in acceptable ranges. Theoretically, we should
@@ -158,8 +158,8 @@ class LFPSSquareWaveDetector(Elaboratable):
 
 
 class LFPSSquareWaveGenerator(Elaboratable):
-	"""Generator that outputs LFPS square-wave patterns.
-	"""
+	'''Generator that outputs LFPS square-wave patterns.
+	'''
 	def __init__(self, lfps_frequency, pipe_clock_frequency):
 
 		# Compute the cycles in one half-period, and make sure the final period is within the spec.

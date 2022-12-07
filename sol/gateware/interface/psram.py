@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Interfaces to SOL's PSRAM chips."""
+''' Interfaces to SOL's PSRAM chips.'''
 
 import unittest
 
@@ -16,7 +16,7 @@ from ..utils.io    import delay
 
 
 class HyperBus(Record):
-	""" Record representing an HyperBus (DDR-ish connection for HyperRAM). """
+	''' Record representing an HyperBus (DDR-ish connection for HyperRAM). '''
 
 	def __init__(self):
 		super().__init__([
@@ -38,7 +38,7 @@ class HyperBus(Record):
 
 
 class HyperRAMInterface(Elaboratable):
-	""" Gateware interface to HyperRAM series self-refreshing DRAM chips.
+	''' Gateware interface to HyperRAM series self-refreshing DRAM chips.
 
 	I/O port:
 		B: bus              -- The primary physical connection to the DRAM chip.
@@ -57,19 +57,19 @@ class HyperRAMInterface(Elaboratable):
 
 		O: idle             -- High whenever the transmitter is idle (and thus we can start a new piece of data.)
 		O: new_data_ready   -- Strobe that indicates when new data is ready for reading
-	"""
+	'''
 
 	LOW_LATENCY_EDGES  = 6
 	HIGH_LATENCY_EDGES = 14
 
 	def __init__(self, *, bus, in_skew=None, out_skew=None, clock_skew=None):
-		"""
+		'''
 		Parmeters:
 			bus           -- The RAM record that should be connected to this RAM chip.
 			data_skews    -- If provided, adds an input delay to each line of the data input.
 							 Can be provided as a single delay number, or an interable of eight
 							 delays to separately delay each of the input lines.
-		"""
+		'''
 
 		self.in_skew    = in_skew
 		self.out_skew   = out_skew
@@ -207,9 +207,9 @@ class HyperRAMInterface(Elaboratable):
 			# our read/write latency. Note that we advance the clock in this state,
 			# as our out-of-phase clock signal will output the relevant data before
 			# the next edge can occur.
-			with m.State("LATCH_RWDS"):
+			with m.State('LATCH_RWDS'):
 				m.d.sync += extra_latency.eq(self.bus.rwds.i),
-				m.next="SHIFT_COMMAND0"
+				m.next='SHIFT_COMMAND0'
 
 
 			# Commands, in order of bytes sent:
@@ -291,7 +291,7 @@ class HyperRAMInterface(Elaboratable):
 				# or a longer one, depending on what the RAM requested via
 				# RWDS.
 				with m.Else():
-					m.next = "HANDLE_LATENCY"
+					m.next = 'HANDLE_LATENCY'
 
 					with m.If(extra_latency):
 						m.d.sync += latency_edges_remaining.eq(self.HIGH_LATENCY_EDGES)
@@ -341,21 +341,21 @@ class HyperRAMInterface(Elaboratable):
 
 
 			# WRITE_DATA_MSB -- write the first of our two bytes of data to the to the PSRAM
-			with m.State("WRITE_DATA_MSB"):
+			with m.State('WRITE_DATA_MSB'):
 				m.d.sync += [
 					data_out  .eq(self.write_data[8:16]),
 					data_oe   .eq(1),
 				]
-				m.next = "WRITE_DATA_LSB"
+				m.next = 'WRITE_DATA_LSB'
 
 
 			# WRITE_DATA_LSB -- write the first of our two bytes of data to the to the PSRAM
-			with m.State("WRITE_DATA_LSB"):
+			with m.State('WRITE_DATA_LSB'):
 				m.d.sync += [
 					data_out  .eq(self.write_data[0:8]),
 					data_oe   .eq(1),
 				]
-				m.next = "WRITE_DATA_LSB"
+				m.next = 'WRITE_DATA_LSB'
 
 				# If we just finished a register write, we're done -- there's no need for recovery.
 				with m.If(is_register):
@@ -391,12 +391,12 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 	def instantiate_dut(self):
 		# Create a record that recreates the layout of our RAM signals.
 		self.ram_signals = Record([
-			("clk",   1),
-			("clkN",  1),
-			("dq",   [("i",  8), ("o",  8), ("oe", 1)]),
-			("rwds", [("i",  1), ("o",  1), ("oe", 1)]),
-			("cs",    1),
-			("reset", 1)
+			('clk',   1),
+			('clkN',  1),
+			('dq',   [('i',  8), ('o',  8), ('oe', 1)]),
+			('rwds', [('i',  1), ('o',  1), ('oe', 1)]),
+			('cs',    1),
+			('reset', 1)
 		])
 
 		# Create our HyperRAM interface...
@@ -404,7 +404,7 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 
 
 	def assert_clock_pulses(self, times=1):
-		""" Function that asserts we get a specified number of clock pulses. """
+		''' Function that asserts we get a specified number of clock pulses. '''
 
 		for _ in range(times):
 			yield
@@ -442,7 +442,7 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 		self.assertEqual((yield self.ram_signals.cs),  1)
 		self.assertEqual((yield self.ram_signals.clk), 0)
 
-		# Drop our "start request" line somewhere during the transaction;
+		# Drop our 'start request' line somewhere during the transaction;
 		# so we don't immediately go into the next transfer.
 		yield self.dut.start_transfer.eq(0)
 
@@ -521,7 +521,7 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 		self.assertEqual((yield self.ram_signals.cs),  1)
 		self.assertEqual((yield self.ram_signals.clk), 0)
 
-		# Drop our "start request" line somewhere during the transaction;
+		# Drop our 'start request' line somewhere during the transaction;
 		# so we don't immediately go into the next transfer.
 		yield self.dut.start_transfer.eq(0)
 
@@ -600,5 +600,5 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 
 		# TODO: test recovery time
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

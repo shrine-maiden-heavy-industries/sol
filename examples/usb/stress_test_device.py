@@ -22,7 +22,7 @@ CONSTANT_TO_SEND     = 0x00
 
 
 class StressTestEndpoint(Elaboratable):
-	""" Endpoint interface that transmits a constant to the host, without buffering.
+	''' Endpoint interface that transmits a constant to the host, without buffering.
 
 	Attributes
 	----------
@@ -39,7 +39,7 @@ class StressTestEndpoint(Elaboratable):
 		USB endpoint descriptor.
 	constant: int, between 0 and 255
 		The constant byte to send.
-	"""
+	'''
 
 
 	def __init__(self, *, endpoint_number: int, max_packet_size: int, constant: int):
@@ -108,16 +108,16 @@ class StressTestEndpoint(Elaboratable):
 
 
 class USBStressTest(Elaboratable):
-	""" Simple device with a custom endpoint that stress tests USB hardware.
+	''' Simple device with a custom endpoint that stress tests USB hardware.
 
 	This:
 		- Uses no buffering whatsoever; every time the host requests data, we directly
 		  provide a constant value. This ensures that we go as fast as possible.
 		- Sends a stream with maximum transition rate (all NRZI toggles).
-	"""
+	'''
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -131,9 +131,9 @@ class USBStressTest(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Stress Test"
-			d.iSerialNumber      = "no serial"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Stress Test'
+			d.iSerialNumber      = 'no serial'
 
 			d.bNumConfigurations = 1
 
@@ -185,5 +185,5 @@ class USBStressTest(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBStressTest)

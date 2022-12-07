@@ -4,14 +4,14 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" UTMI interfacing. """
+''' UTMI interfacing. '''
 
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT, Record
 
 from ..utils.bus   import OneHotMultiplexer
 
 class UTMIOperatingMode:
-	""" Enumeration that specifies the modes a UTMI transceiver can use. """
+	''' Enumeration that specifies the modes a UTMI transceiver can use. '''
 
 	NORMAL                    = 0
 	NON_DRIVING               = 1
@@ -24,7 +24,7 @@ class UTMIOperatingMode:
 
 
 class UTMITerminationSelect:
-	""" Enumeration that specifies meanings of the UTMI TermSelect bit. """
+	''' Enumeration that specifies meanings of the UTMI TermSelect bit. '''
 
 	HS_NORMAL    = 0
 	HS_CHIRP     = 1
@@ -32,7 +32,7 @@ class UTMITerminationSelect:
 
 
 class UTMITransmitInterface(Record):
-	""" Interface present on hardware that transmits onto a UTMI bus. """
+	''' Interface present on hardware that transmits onto a UTMI bus. '''
 
 	LAYOUT = [
 
@@ -52,11 +52,11 @@ class UTMITransmitInterface(Record):
 
 
 	def attach(self, utmi_bus):
-		""" Returns a list of connection fragments connecting this interface to the provided bus.
+		''' Returns a list of connection fragments connecting this interface to the provided bus.
 
 		A typical usage might look like:
 			m.d.comb += interface_object.attach(utmi_bus)
-		"""
+		'''
 
 		return [
 			utmi_bus.tx_data   .eq(self.data),
@@ -67,13 +67,13 @@ class UTMITransmitInterface(Record):
 
 
 class UTMIInterfaceMultiplexer(OneHotMultiplexer):
-	""" Gateware that merges a collection of UTMITransmitInterfaces into a single interface.
+	''' Gateware that merges a collection of UTMITransmitInterfaces into a single interface.
 
 	Assumes that only one transmitter will be communicating at once.
 
 	I/O port:
 		O*: output -- Our output interface; has all of the active busses merged together.
-	"""
+	'''
 
 	def __init__(self):
 		super().__init__(
@@ -87,18 +87,18 @@ class UTMIInterfaceMultiplexer(OneHotMultiplexer):
 
 
 class UTMIInterface(Record):
-	""" UTMI+-standardized interface. Intended mostly as a simulation aid."""
+	''' UTMI+-standardized interface. Intended mostly as a simulation aid.'''
 
 	def __init__(self):
 		super().__init__([
 			# Core signals.
-			("rx_data",                     8),
-			("rx_active",                   1),
-			("rx_valid",                    1),
+			('rx_data',                     8),
+			('rx_active',                   1),
+			('rx_valid',                    1),
 
-			("tx_data",                     8),
-			("tx_valid",                    1),
-			("tx_ready",                    1),
+			('tx_data',                     8),
+			('tx_valid',                    1),
+			('tx_ready',                    1),
 
 			# Control signals.
 			('xcvr_select',                 2),

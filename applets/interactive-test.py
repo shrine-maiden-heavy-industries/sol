@@ -20,9 +20,9 @@ from sol.gateware.interface.ulpi   import ULPIRegisterWindow
 
 
 CLOCK_FREQUENCIES = {
-	"fast": 60,
-	"sync": 60,
-	"usb":  60
+	'fast': 60,
+	'sync': 60,
+	'usb':  60
 }
 
 
@@ -55,7 +55,7 @@ REGISTER_RAM_REG_ADDR   = 20
 REGISTER_RAM_VALUE      = 21
 
 class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
-	""" Hardware meant to demonstrate use of the Debug Controller's register interface.
+	''' Hardware meant to demonstrate use of the Debug Controller's register interface.
 
 	Registers:
 		0 -- register/address size auto-negotiation for Apollo
@@ -81,7 +81,7 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		20 -- HyperRAM register address
 		21 -- HyperRAM register value
-	"""
+	'''
 
 	def elaborate(self, platform):
 		m = Module()
@@ -97,8 +97,8 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		registers.add_read_only_register(REGISTER_ID, read=0x54455354)
 
 		# LED test register.
-		led_reg = registers.add_register(REGISTER_LEDS, size=6, name="leds", reset=0b111111)
-		led_out   = Cat([platform.request("led", i, dir="o") for i in range(0, 6)])
+		led_reg = registers.add_register(REGISTER_LEDS, size=6, name='leds', reset=0b111111)
+		led_out   = Cat([platform.request('led', i, dir='o') for i in range(0, 6)])
 		m.d.comb += led_out.eq(led_reg)
 
 		#
@@ -123,8 +123,8 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 			m.d.sync += power_test_reg[0:2].eq(power_test_write_value)
 
 		# Decode the enable bits and control the two power supplies.
-		power_a_port      = platform.request("power_a_port")
-		power_passthrough = platform.request("pass_through_vbus")
+		power_a_port      = platform.request('power_a_port')
+		power_passthrough = platform.request('pass_through_vbus')
 		with m.If(power_test_reg[0:2] == 1):
 			m.d.comb += [
 				power_a_port       .eq(1),
@@ -157,7 +157,7 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		# Grab and connect each of our user-I/O ports our GPIO registers.
 		for i in range(2):
-			pin = platform.request("user_io", i)
+			pin = platform.request('user_io', i)
 			m.d.comb += [
 				pin.oe         .eq(user_io_dir[i]),
 				user_io_in[i]  .eq(pin.i),
@@ -169,15 +169,15 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		# ULPI PHY windows
 		#
 		self.add_ulpi_registers(m, platform,
-			ulpi_bus="target_phy",
+			ulpi_bus='target_phy',
 			register_base=REGISTER_TARGET_ADDR
 		)
 		self.add_ulpi_registers(m, platform,
-			ulpi_bus="host_phy",
+			ulpi_bus='host_phy',
 			register_base=REGISTER_HOST_ADDR
 		)
 		self.add_ulpi_registers(m, platform,
-			ulpi_bus="sideband_phy",
+			ulpi_bus='sideband_phy',
 			register_base=REGISTER_SIDEBAND_ADDR
 		)
 
@@ -209,7 +209,7 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 
 	def add_ulpi_registers(self, m, platform, *, ulpi_bus, register_base):
-		""" Adds a set of ULPI registers to the active design. """
+		''' Adds a set of ULPI registers to the active design. '''
 
 		target_ulpi      = platform.request(ulpi_bus)
 
@@ -221,8 +221,8 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 			ulpi_reg_window.ulpi_dir      .eq(target_ulpi.dir.i),
 			ulpi_reg_window.ulpi_next     .eq(target_ulpi.nxt.i),
 
-			target_ulpi.clk      .eq(ClockSignal("usb")),
-			target_ulpi.rst      .eq(ResetSignal("usb")),
+			target_ulpi.clk      .eq(ClockSignal('usb')),
+			target_ulpi.rst      .eq(ResetSignal('usb')),
 			target_ulpi.stp      .eq(ulpi_reg_window.ulpi_stop),
 			target_ulpi.data.o   .eq(ulpi_reg_window.ulpi_data_out),
 			target_ulpi.data.oe  .eq(~target_ulpi.dir.i)
@@ -256,14 +256,14 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 
 	def assertPhyRegister(self, phy_register_base: int, register: int, expected_value: int):
-		""" Asserts that a PHY register contains a given value.
+		''' Asserts that a PHY register contains a given value.
 
 		Parameters:
 			phy_register_base -- The base address of the PHY window in the debug SPI
 								 address range.
 			register          -- The PHY register to check.
 			value             -- The expected value of the relevant PHY register.
-		"""
+		'''
 
 		# Set the address of the ULPI register we're going to read from.
 		self.dut.registers.register_write(phy_register_base, register)
@@ -274,17 +274,17 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		# Finally, validate it.
 		if actual_value != expected_value:
-			raise AssertionError(f"PHY register {register} was {actual_value}, not expected {expected_value}")
+			raise AssertionError(f'PHY register {register} was {actual_value}, not expected {expected_value}')
 
 
 	def assertPhyReadBack(self, phy_register_base: int, value: int):
-		""" Writes a value to the PHY scratch register and asserts that the read-back matches.
+		''' Writes a value to the PHY scratch register and asserts that the read-back matches.
 
 		Parameters:
 			phy_register_base -- The base address of the PHY window in the debug SPI
 								 address range.
 			value             -- The value written to the scratch register.
-		"""
+		'''
 
 		# Set the address of the ULPI register we're going to read from.
 		self.dut.registers.register_write(phy_register_base, 0x16)
@@ -300,11 +300,11 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		# Finally, validate it.
 		if actual_value != value:
-			raise AssertionError(f"PHY scratch register read-back was {actual_value}, not expected {value}")
+			raise AssertionError(f'PHY scratch register read-back was {actual_value}, not expected {value}')
 
 
 	def assertPhyPresence(self, register_base: int):
-		""" Assertion that fails iff the given PHY isn't detected. """
+		''' Assertion that fails iff the given PHY isn't detected. '''
 
 		# Check the value of our four ID registers, which should
 		# read 2404:0900 (vendor: microchip; product: USB3343).
@@ -322,43 +322,43 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 
 	def assertHyperRAMRegister(self, address: int, expected_values: int):
-		""" Assertion that fails iff a RAM register doesn't hold the expected value. """
+		''' Assertion that fails iff a RAM register doesn't hold the expected value. '''
 
 		self.dut.registers.register_write(REGISTER_RAM_REG_ADDR, address)
 		self.dut.registers.register_write(REGISTER_RAM_REG_ADDR, address)
 		actual_value =  self.dut.registers.register_read(REGISTER_RAM_VALUE)
 
 		if actual_value not in expected_values:
-			raise AssertionError(f"RAM register {address} was {actual_value}, not one of expected {expected_values}")
+			raise AssertionError(f'RAM register {address} was {actual_value}, not one of expected {expected_values}')
 
 
-	@named_test("Debug module")
+	@named_test('Debug module')
 	def test_debug_connection(self, dut):
 		self.assertRegisterValue(1, 0x54455354)
 
 
-	@named_test("Host PHY")
+	@named_test('Host PHY')
 	def test_host_phy(self, dut):
 		self.assertPhyPresence(REGISTER_HOST_ADDR)
 
 
-	@named_test("Target PHY")
+	@named_test('Target PHY')
 	def test_target_phy(self, dut):
 		self.assertPhyPresence(REGISTER_TARGET_ADDR)
 
 
-	@named_test("Sideband PHY")
+	@named_test('Sideband PHY')
 	def test_sideband_phy(self, dut):
 		self.assertPhyPresence(REGISTER_SIDEBAND_ADDR)
 
 
-	@named_test("HyperRAM")
+	@named_test('HyperRAM')
 	def test_hyperram(self, dut):
 		self.assertHyperRAMRegister(0, ALLOWED_HYPERRAM_IDS)
 
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	tester = cli(InteractiveSelftest)
 
 	if tester:

@@ -5,7 +5,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-""" Low-level USB transciever gateware -- control transfer components. """
+''' Low-level USB transciever gateware -- control transfer components. '''
 
 import unittest
 
@@ -23,7 +23,7 @@ from .request               import (
 
 
 class USBControlEndpoint(Elaboratable):
-	""" Gateware that manages control request data progression.
+	''' Gateware that manages control request data progression.
 
 	This class is used by creating one or more *request handler* modules; which define how requests
 	are handled. These handlers can be bound using :attr:`add_request_handler`.
@@ -47,7 +47,7 @@ class USBControlEndpoint(Elaboratable):
 			Debug parameter. If true, this module will operate without external components;
 			i.e. without an internal data-CRC generator, or tokenizer. In this case, tokenizer
 			and timer should be set to None; and will be ignored.
-	"""
+	'''
 
 	def __init__(self, *, utmi, endpoint_number=0, standalone=False, max_packet_size=64):
 		self.utmi             = utmi
@@ -69,31 +69,31 @@ class USBControlEndpoint(Elaboratable):
 
 
 	def add_request_handler(self, request_handler):
-		""" Adds a ControlRequestHandler module to this control endpoint.
+		''' Adds a ControlRequestHandler module to this control endpoint.
 
 		No arbitration is performed between request handlers; so it's important
 		that request handlers not overlap in the requests they handle.
-		"""
+		'''
 		self._request_handlers.append(request_handler)
 
 
 	def add_standard_request_handlers(self, descriptors: DeviceDescriptorCollection, **kwargs):
-		""" Adds a handlers for the standard USB requests.
+		''' Adds a handlers for the standard USB requests.
 
 		This will handle all Standard-type requests; so any additional request handlers
 		must not handle Standard requests.
 
 		Parameters will be passed on to StandardRequestHandler.
-		"""
+		'''
 		handler = StandardRequestHandler(descriptors, max_packet_size=self._max_packet_size, **kwargs)
 		self._request_handlers.append(handler)
 
 
 	def _handle_setup_reset(self, m):
-		""" Adds a FSM condition that moves back to the SETUP phase if we ever receive a setup token.
+		''' Adds a FSM condition that moves back to the SETUP phase if we ever receive a setup token.
 
 		Should only be used within our core FSM.
-		"""
+		'''
 		tokenizer = self.interface.tokenizer
 
 		# If we receive a SETUP token, always move back to the SETUP stage.
@@ -175,7 +175,7 @@ class USBControlEndpoint(Elaboratable):
 			# Create a display name for the handler...
 			name = handler.__class__.__name__
 			if hasattr(m.submodules, name):
-				name = f"{name}_{id(handler)}"
+				name = f'{name}_{id(handler)}'
 
 			# ... and add it.
 			m.submodules[name] = handler
@@ -211,9 +211,9 @@ class USBControlEndpoint(Elaboratable):
 		# Behavior dictated by [USB2, 8.5.3].
 		#
 		endpoint_targeted = (self.interface.tokenizer.endpoint == self._endpoint_number)
-		with m.FSM(domain="usb"):
+		with m.FSM(domain='usb'):
 
-			# SETUP -- The "SETUP" phase of a control request. We'll wait here
+			# SETUP -- The 'SETUP' phase of a control request. We'll wait here
 			# until the SetupDetector detects a valid setup packet for us.
 			with m.State('SETUP'):
 
@@ -305,5 +305,5 @@ class USBControlEndpoint(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

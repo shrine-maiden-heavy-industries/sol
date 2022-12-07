@@ -3,7 +3,7 @@
 # This file is part of SOL.
 #
 
-""" Simple utility constructs for SOL. """
+''' Simple utility constructs for SOL. '''
 
 from torii import Signal
 
@@ -16,7 +16,7 @@ __all__ = [
 
 
 def _single_edge_detector(m, signal, *, domain, edge='rising'):
-	""" Generates and returns a signal that goes high for a cycle upon a given edge of a given signal. """
+	''' Generates and returns a signal that goes high for a cycle upon a given edge of a given signal. '''
 
 	# Create a one-cycle delayed version of our input signal.
 	delayed = Signal()
@@ -31,13 +31,13 @@ def _single_edge_detector(m, signal, *, domain, edge='rising'):
 	elif edge == 'any':
 		m.d.comb += edge_detected.eq(delayed != signal)
 	else:
-		raise ValueError("edge must be one of {rising,falling,any}")
+		raise ValueError('edge must be one of {rising,falling,any}')
 
 	return edge_detected
 
 
 def past_value_of(m, signal, *, domain):
-	""" Generates and returns a signal that represents the value of another signal a cycle ago. """
+	''' Generates and returns a signal that represents the value of another signal a cycle ago. '''
 
 	# Create a one-cycle delayed version of our input signal.
 	delayed = Signal()
@@ -46,16 +46,16 @@ def past_value_of(m, signal, *, domain):
 	return delayed
 
 
-def rising_edge_detected(m, signal, *, domain="sync"):
-	""" Generates and returns a signal that goes high for a cycle each rising edge of a given signal. """
+def rising_edge_detected(m, signal, *, domain='sync'):
+	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
 	return _single_edge_detector(m, signal, edge='rising', domain=domain)
 
 
-def falling_edge_detected(m, signal, *, domain="sync"):
-	""" Generates and returns a signal that goes high for a cycle each rising edge of a given signal. """
+def falling_edge_detected(m, signal, *, domain='sync'):
+	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
 	return _single_edge_detector(m, signal, edge='falling', domain=domain)
 
 
-def any_edge_detected(m, signal, *, domain="sync"):
-	""" Generates and returns a signal that goes high for a cycle each rising edge of a given signal. """
+def any_edge_detected(m, signal, *, domain='sync'):
+	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
 	return _single_edge_detector(m, signal, edge='any', domain=domain)

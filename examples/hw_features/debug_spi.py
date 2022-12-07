@@ -14,7 +14,7 @@ from sol.gateware.utils.cdc     import synchronize
 
 
 class DebugSPIExample(Elaboratable):
-	""" Hardware meant to demonstrate use of the Debug Controller's SPI interface. """
+	''' Hardware meant to demonstrate use of the Debug Controller's SPI interface. '''
 
 
 	def __init__(self):
@@ -25,7 +25,7 @@ class DebugSPIExample(Elaboratable):
 
 	def elaborate(self, platform):
 		m = Module()
-		board_spi = platform.request("debug_spi")
+		board_spi = platform.request('debug_spi')
 
 		# Use our command interface.
 		m.submodules.interface = self.interface
@@ -46,5 +46,5 @@ class DebugSPIExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(DebugSPIExample)

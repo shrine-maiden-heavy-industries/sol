@@ -12,7 +12,7 @@ from sol.cli          import cli
 from sol.full_devices import USBSerialDevice
 
 class USBSerialDeviceExample(Elaboratable):
-	""" Device that acts as a 'USB-to-serial' loopback using our premade gateware. """
+	''' Device that acts as a 'USB-to-serial' loopback using our premade gateware. '''
 
 	def elaborate(self, platform):
 		m = Module()
@@ -39,5 +39,5 @@ class USBSerialDeviceExample(Elaboratable):
 
 		return m
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBSerialDeviceExample)

@@ -18,7 +18,7 @@ from sol.gateware.usb.usb2.request import USBRequestHandler
 
 
 class LEDRequestHandler(USBRequestHandler):
-	""" Simple, example request handler that can control the board's LEDs. """
+	''' Simple, example request handler that can control the board's LEDs. '''
 
 	REQUEST_SET_LEDS = 0
 
@@ -29,7 +29,7 @@ class LEDRequestHandler(USBRequestHandler):
 		setup             = self.interface.setup
 
 		# Grab a reference to the board's LEDs.
-		leds  = Cat(platform.request_optional("led", i, default=NullPin()).o for i in range(8))
+		leds  = Cat(platform.request_optional('led', i, default=NullPin()).o for i in range(8))
 
 		#
 		# Vendor request handlers.
@@ -48,15 +48,15 @@ class LEDRequestHandler(USBRequestHandler):
 					# cause an update. This is fun; we can PWM the LEDs with
 					# USB packets. :)
 					with m.If(interface.rx.valid & interface.rx.next):
-					    m.d.usb += leds.eq(interface.rx.payload)
+						m.d.usb += leds.eq(interface.rx.payload)
 
 					# Once the receive is complete, respond with an ACK.
 					with m.If(interface.rx_ready_for_response):
-					    m.d.comb += interface.handshakes_out.ack.eq(1)
+						m.d.comb += interface.handshakes_out.ack.eq(1)
 
 					# If we reach the status stage, send a ZLP.
 					with m.If(interface.status_requested):
-					    m.d.comb += self.send_zlp()
+						m.d.comb += self.send_zlp()
 
 
 				with m.Case():
@@ -65,20 +65,20 @@ class LEDRequestHandler(USBRequestHandler):
 					# Stall unhandled requests.
 					#
 					with m.If(interface.status_requested | interface.data_requested):
-					    m.d.comb += interface.handshakes_out.stall.eq(1)
+						m.d.comb += interface.handshakes_out.stall.eq(1)
 
 				return m
 
 
 
 class USBVendorDeviceExample(Elaboratable):
-	""" Simple example of a device that operates via vendor requests.
+	''' Simple example of a device that operates via vendor requests.
 
 	Sets LEDs to the value set in vendor request 0.
-	"""
+	'''
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -92,9 +92,9 @@ class USBVendorDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Fancy USB-Controlled LEDs"
-			d.iSerialNumber      = "1234"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Fancy USB-Controlled LEDs'
+			d.iSerialNumber      = '1234'
 
 			d.bNumConfigurations = 1
 
@@ -136,5 +136,5 @@ class USBVendorDeviceExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBVendorDeviceExample)

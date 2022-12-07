@@ -12,17 +12,17 @@ from sol.cli               import cli
 from sol.gateware.platform import NullPin
 
 class Blinky(Elaboratable):
-	""" Hardware module that validates basic SOL functionality. """
+	''' Hardware module that validates basic SOL functionality. '''
 
 
 	def elaborate(self, platform):
-		""" Generate the Blinky tester. """
+		''' Generate the Blinky tester. '''
 
 		m = Module()
 
 		# Grab our I/O connectors.
-		leds    = [platform.request_optional("led", i, default=NullPin()).o for i in range(0, 8)]
-		user_io = [platform.request_optional("user_io", i, default=NullPin()).o for i in range(0, 8)]
+		leds    = [platform.request_optional('led', i, default=NullPin()).o for i in range(0, 8)]
+		user_io = [platform.request_optional('user_io', i, default=NullPin()).o for i in range(0, 8)]
 
 		# Clock divider / counter.
 		counter = Signal(28)
@@ -36,5 +36,5 @@ class Blinky(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(Blinky)

@@ -17,7 +17,7 @@ from sol.gateware.utils.cdc import synchronize
 
 
 class ILAExample(Elaboratable):
-	""" Gateware module that demonstrates use of the internal ILA. """
+	''' Gateware module that demonstrates use of the internal ILA. '''
 
 	def __init__(self):
 		self.counter = Signal(28)
@@ -40,7 +40,7 @@ class ILAExample(Elaboratable):
 		m.d.comb += self.ila.trigger.eq(self.counter == 7)
 
 		# Grab our I/O connectors.
-		leds    = [platform.request_optional("led", i, default=NullPin(), dir="o") for i in range(0, 6)]
+		leds    = [platform.request_optional('led', i, default=NullPin(), dir='o') for i in range(0, 6)]
 		spi_bus = synchronize(m, platform.request('debug_spi'))
 
 		# Attach the LEDs and User I/O to the MSBs of our counter.
@@ -53,6 +53,6 @@ class ILAExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	example = cli(ILAExample)
 	example.emit_analysis_vcd()

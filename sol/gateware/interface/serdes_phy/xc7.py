@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-""" Common building blocks for Xilinx 7-series targets. """
+''' Common building blocks for Xilinx 7-series targets. '''
 
 from math  import ceil
 
@@ -10,20 +10,20 @@ from .lfps import _LFPS_PERIOD_MAX
 
 
 class DRPInterface:
-	""" Dynamic Reconfiguration Port interface for Xilinx FPGAs. """
+	''' Dynamic Reconfiguration Port interface for Xilinx FPGAs. '''
 
 	def __init__(self):
-		self.lock = Signal(1,   name="drp_lock")
-		self.addr = Signal(9,   name="drp_addr")
-		self.di   = Signal(16,  name="drp_di")
-		self.do   = Signal(16,  name="drp_do")
-		self.we   = Signal(1,   name="drp_we")
-		self.en   = Signal(1,   name="drp_en")
-		self.rdy  = Signal(1,   name="drp_rdy")
+		self.lock = Signal(1,   name='drp_lock')
+		self.addr = Signal(9,   name='drp_addr')
+		self.di   = Signal(16,  name='drp_di')
+		self.do   = Signal(16,  name='drp_do')
+		self.we   = Signal(1,   name='drp_we')
+		self.en   = Signal(1,   name='drp_en')
+		self.rdy  = Signal(1,   name='drp_rdy')
 
 
 class _DRPInterfaceBuffer(Elaboratable):
-	""" Gateware that latches DRP transaction inputs, for an arbiter to complete it later. """
+	''' Gateware that latches DRP transaction inputs, for an arbiter to complete it later. '''
 	def __init__(self, interface):
 		self.intf = interface
 
@@ -53,12 +53,12 @@ class _DRPInterfaceBuffer(Elaboratable):
 
 
 class DRPArbiter(Elaboratable):
-	""" Gateware that merges a collection of DRPInterfaces into a single interface.
+	''' Gateware that merges a collection of DRPInterfaces into a single interface.
 
 	To support safe read-modify-write operations, the ``lock`` signal can be used to gain
 	exclusive access to the reconfiguration port. After starting a DRP operation with ``lock``
 	asserted, and until it is deasserted, no other client will be able to access the port.
-	"""
+	'''
 
 	def __init__(self):
 		self.shared = DRPInterface()
@@ -77,15 +77,15 @@ class DRPArbiter(Elaboratable):
 		current_idx = Signal(range(len(buffers)))
 		current_buf = buffers[current_idx]
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				for idx in range(len(buffers)):
 					with m.If(buffers[idx].en_latch):
 						m.d.ss += current_idx.eq(idx)
-						m.next = "REQUEST"
+						m.next = 'REQUEST'
 
-			with m.State("REQUEST"):
+			with m.State('REQUEST'):
 				m.d.comb += [
 					self.shared.lock.eq(current_buf.intf.lock),
 					self.shared.addr.eq(current_buf.addr_latch),
@@ -94,26 +94,26 @@ class DRPArbiter(Elaboratable):
 					self.shared.en.eq(current_buf.en_latch),
 				]
 				with m.If(self.shared.en):
-					m.next = "REPLY"
+					m.next = 'REPLY'
 				with m.Elif(~current_buf.intf.lock):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
-			with m.State("REPLY"):
+			with m.State('REPLY'):
 				m.d.comb += [
 					current_buf.intf.do.eq(self.shared.do),
 					current_buf.intf.rdy.eq(self.shared.rdy),
 				]
 				with m.If(self.shared.rdy):
 					with m.If(current_buf.intf.lock):
-						m.next = "REQUEST"
+						m.next = 'REQUEST'
 					with m.Else():
-						m.next = "IDLE"
+						m.next = 'IDLE'
 
 		return m
 
 
 class DRPFieldController(Elaboratable):
-	""" Gateware that atomically updates part of a word via DRP. """
+	''' Gateware that atomically updates part of a word via DRP. '''
 
 	def __init__(self, *, addr: int, bits: slice, reset=0):
 		self._addr = addr
@@ -134,43 +134,43 @@ class DRPFieldController(Elaboratable):
 
 		current_val = Signal.like(self.drp.do)
 
-		with m.FSM(domain="ss"):
-			with m.State("READ"):
+		with m.FSM(domain='ss'):
+			with m.State('READ'):
 				m.d.comb += [
 					self.drp.en.eq(1)
 				]
-				m.next = "READ-WAIT"
+				m.next = 'READ-WAIT'
 
-			with m.State("READ-WAIT"):
+			with m.State('READ-WAIT'):
 				with m.If(self.drp.rdy):
 					m.d.ss += [
 						current_val.eq(self.drp.do),
 						current_val[self._bits].eq(self.value)
 					]
-					m.next = "WRITE"
+					m.next = 'WRITE'
 
-			with m.State("WRITE"):
+			with m.State('WRITE'):
 				m.d.comb += [
 					self.drp.di.eq(current_val),
 					self.drp.we.eq(1),
 					self.drp.en.eq(1),
 				]
-				m.next = "WRITE-WAIT"
+				m.next = 'WRITE-WAIT'
 
-			with m.State("WRITE-WAIT"):
+			with m.State('WRITE-WAIT'):
 				with m.If(self.drp.rdy):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				m.d.comb += self.drp.lock.eq(0)
 				with m.If(current_val[self._bits] != self.value):
-					m.next = "READ"
+					m.next = 'READ'
 
 		return m
 
 
 class GTResetDeferrer(Elaboratable):
-	""" Gateware that ensures the mandatory post-configuration period before reset, per Xilinx AR43482. """
+	''' Gateware that ensures the mandatory post-configuration period before reset, per Xilinx AR43482. '''
 
 	def __init__(self, ss_clock_frequency):
 		self._ss_clock_frequency = ss_clock_frequency
@@ -214,7 +214,7 @@ class GTResetDeferrer(Elaboratable):
 
 
 class GTPRXPMAResetWorkaround(Elaboratable):
-	""" Gateware that ensures the required conditions for GTP receiver are met, per UG482. """
+	''' Gateware that ensures the required conditions for GTP receiver are met, per UG482. '''
 
 	def __init__(self, ss_clock_frequency):
 		self._ss_clock_frequency = ss_clock_frequency
@@ -236,22 +236,22 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 
 		saved_val = Signal.like(self.drp.do)
 
-		with m.FSM(domain="ss"):
-			with m.State("IDLE"):
+		with m.FSM(domain='ss'):
+			with m.State('IDLE'):
 				m.d.comb += [
 					self.drp.lock.eq(0),
 				]
 				with m.If(self.i):
-					m.next = "READ"
+					m.next = 'READ'
 
-			with m.State("READ"):
+			with m.State('READ'):
 				m.d.comb += [
 					self.o.eq(1),
 					self.drp.en.eq(1)
 				]
-				m.next = "READ-WAIT"
+				m.next = 'READ-WAIT'
 
-			with m.State("READ-WAIT"):
+			with m.State('READ-WAIT'):
 				m.d.comb += [
 					self.o.eq(1),
 				]
@@ -259,9 +259,9 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 					m.d.ss += [
 						saved_val.eq(self.drp.do)
 					]
-					m.next = "WRITE"
+					m.next = 'WRITE'
 
-			with m.State("WRITE"):
+			with m.State('WRITE'):
 				m.d.comb += [
 					self.o.eq(1),
 				]
@@ -271,44 +271,44 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 					self.drp.we.eq(1),
 					self.drp.en.eq(1),
 				]
-				m.next = "WRITE-WAIT"
+				m.next = 'WRITE-WAIT'
 
-			with m.State("WRITE-WAIT"):
+			with m.State('WRITE-WAIT'):
 				m.d.comb += [
 					self.o.eq(1),
 				]
 				with m.If(self.drp.rdy):
-					m.next = "RESET-WAIT"
+					m.next = 'RESET-WAIT'
 
-			with m.State("RESET-WAIT"):
+			with m.State('RESET-WAIT'):
 				m.d.comb += [
 					self.o.eq(1),
 				]
 				with m.If(~self.i):
-					m.next = "RXPMARESETDONE-WAIT"
+					m.next = 'RXPMARESETDONE-WAIT'
 
-			with m.State("RXPMARESETDONE-WAIT"):
+			with m.State('RXPMARESETDONE-WAIT'):
 				with m.If(self.rxpmaresetdone):
-					m.next = "RESTORE"
+					m.next = 'RESTORE'
 				with m.If(self.i):
-					m.next = "READ"
+					m.next = 'READ'
 
-			with m.State("RESTORE"):
+			with m.State('RESTORE'):
 				with m.If(~self.rxpmaresetdone):
 					m.d.comb += [
 						self.drp.di.eq(saved_val),
 						self.drp.we.eq(1),
 						self.drp.en.eq(1),
 					]
-					m.next = "RESTORE-WAIT"
+					m.next = 'RESTORE-WAIT'
 				with m.If(self.i):
-					m.next = "READ"
+					m.next = 'READ'
 
-			with m.State("RESTORE-WAIT"):
+			with m.State('RESTORE-WAIT'):
 				with m.If(self.drp.rdy):
-					m.next = "IDLE"
+					m.next = 'IDLE'
 				with m.If(self.i):
-					m.next = "READ"
+					m.next = 'READ'
 
 		return m
 
@@ -322,7 +322,7 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 # under different names: PMARSVDOUT0/PMARSVDOUT1 and PMARSVDIN2, respectively.
 
 class GTOOBClockDivider(Elaboratable):
-	""" Gateware that derives a clock for the out-of-band detector suitable for demodulating LFPS signaling. """
+	''' Gateware that derives a clock for the out-of-band detector suitable for demodulating LFPS signaling. '''
 
 	# Out-of-band decoding requires an auxiliary clock with a specific frequency.
 	# [UG482] does not describe how the Series 7 GTX OOB detector functions; however,

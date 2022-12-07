@@ -9,7 +9,7 @@ from torii.lib.soc import wishbone
 
 
 class Processor(Minerva):
-	""" Compatibility subclass around the Minerva RISC-V (riscv32i) processor. """
+	''' Compatibility subclass around the Minerva RISC-V (riscv32i) processor. '''
 
 	# List of features supported by the Minerva processor's wishbone busses.
 	MINERVA_BUS_FEATURES = {'cti', 'bte', 'err'}

@@ -7,7 +7,7 @@
 #
 # Code based on ``usb3_pipe``.
 
-""" Scrambling and descrambling for USB3. """
+''' Scrambling and descrambling for USB3. '''
 
 import functools
 import operator
@@ -25,7 +25,7 @@ from .coding        import COM, stream_word_matches_symbol
 #
 
 class ScramblerLFSR(Elaboratable):
-	""" Scrambler LFSR.
+	''' Scrambler LFSR.
 
 	Linear feedback shift register used for USB3 scrambling.
 	Polynomial: X^16 + X^5 + X^4 + X^3 + 1
@@ -45,7 +45,7 @@ class ScramblerLFSR(Elaboratable):
 	----------
 	initial_value: 32-bit int, optional
 		The initial value for the LFSR. Optional; defaults to all 1's, per the USB3 spec.
-	"""
+	'''
 	def __init__(self, initial_value=0xffff):
 		self._initial_value = initial_value
 
@@ -154,13 +154,13 @@ class ScramblerLFSRTest(SolSSGatewareTestCase):
 
 		# Check that our LFSR produces each of our values in order.
 		for index, value in enumerate(scrambled_sequence):
-			self.assertEqual((yield self.dut.value), value, f"incorrect value at cycle {index}")
+			self.assertEqual((yield self.dut.value), value, f'incorrect value at cycle {index}')
 			yield
 
 
 
 class Scrambler(Elaboratable):
-	""" USB3-compliant data scrambler.
+	''' USB3-compliant data scrambler.
 
 	Scrambles the transmitted data stream to reduce EMI.
 
@@ -179,7 +179,7 @@ class Scrambler(Elaboratable):
 	----------
 	initial_value: 32-bit int, optional
 		The initial value for the LFSR. Optional.
-	"""
+	'''
 	def __init__(self, initial_value=0x7dbd):
 		self._initial_value = initial_value
 
@@ -245,7 +245,7 @@ class Scrambler(Elaboratable):
 
 
 class Descrambler(Scrambler):
-	""" USB3-compliant data descrambler.
+	''' USB3-compliant data descrambler.
 
 	This module descrambles the received data stream. K-codes are not affected.
 	This module automatically resets itself whenever a COM alignment character is seen.
@@ -264,11 +264,11 @@ class Descrambler(Scrambler):
 	initial_value: 32-bit int, optional
 		The initial value for the LFSR. Optional.
 
-	"""
+	'''
 	def __init__(self, initial_value=0xffff):
 		self._initial_value = initial_value
 		super().__init__(initial_value=initial_value)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

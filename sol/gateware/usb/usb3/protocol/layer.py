@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 link-layer abstraction."""
+''' USB3 link-layer abstraction.'''
 
 from torii            import *
 
@@ -17,7 +17,7 @@ from .transaction     import TransactionPacketGenerator, TransactionPacketReceiv
 
 
 class USB3ProtocolLayer(Elaboratable):
-	""" Abstraction encapsulating the USB3 protocol layer hardware. """
+	''' Abstraction encapsulating the USB3 protocol layer hardware. '''
 
 	def __init__(self, *, link_layer):
 		self._link = link_layer

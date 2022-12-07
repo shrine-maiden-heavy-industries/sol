@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 Protocol-Layer modules """
+''' USB3 Protocol-Layer modules '''
 
 from .layer import USB3ProtocolLayer
 

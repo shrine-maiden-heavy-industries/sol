@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Standard, full-gateware control request handlers. """
+''' Standard, full-gateware control request handlers. '''
 
 
 import functools
@@ -28,7 +28,7 @@ from .control               import ControlRequestHandler
 
 
 class StandardRequestHandler(ControlRequestHandler):
-	""" Pure-gateware USB setup request handler. Implements the standard requests required for enumeration.
+	''' Pure-gateware USB setup request handler. Implements the standard requests required for enumeration.
 
 	Parameters
 	----------
@@ -41,7 +41,7 @@ class StandardRequestHandler(ControlRequestHandler):
 	avoid_blockram: int, optional
 		If True, placing data into block RAM will be avoided.
 
-	"""
+	'''
 
 	def __init__(self, descriptors: DeviceDescriptorCollection, max_packet_size=64, avoid_blockram=None, blacklist: Iterable[Callable[[SetupPacket], Value]] = ()):
 		self.descriptors      = descriptors
@@ -51,7 +51,7 @@ class StandardRequestHandler(ControlRequestHandler):
 
 		# If we don't have a value for avoiding blockrams; defer to the environment.
 		if self._avoid_blockram is None:
-			self._avoid_blockram = os.getenv("SOL_AVOID_BLOCKRAM", False)
+			self._avoid_blockram = os.getenv('SOL_AVOID_BLOCKRAM', False)
 
 		super().__init__()
 
@@ -83,14 +83,14 @@ class StandardRequestHandler(ControlRequestHandler):
 
 		# Handler for various small-constant-response requests (GET_CONFIGURATION, GET_STATUS).
 		m.submodules.transmitter = transmitter = \
-			StreamSerializer(data_length=2, domain="usb", stream_type=USBInStreamInterface, max_length_width=2)
+			StreamSerializer(data_length=2, domain='usb', stream_type=USBInStreamInterface, max_length_width=2)
 
 
 		#
 		# Handlers.
 		#
 		with m.If(setup.type == USBRequestType.STANDARD):
-			with m.FSM(domain="usb"):
+			with m.FSM(domain='usb'):
 
 				# IDLE -- not handling any active request
 				with m.State('IDLE'):
@@ -146,7 +146,7 @@ class StandardRequestHandler(ControlRequestHandler):
 					self.handle_register_write_request(m, interface.new_config, interface.config_changed)
 
 
-				# GET_DESCRIPTOR -- The host is asking for a USB descriptor -- for us to "self describe".
+				# GET_DESCRIPTOR -- The host is asking for a USB descriptor -- for us to 'self describe'.
 				with m.State('GET_DESCRIPTOR'):
 					# Keep track of whether we've sent a packet we're expecting an ACK to.
 					expecting_ack = Signal()
@@ -209,5 +209,5 @@ class StandardRequestHandler(ControlRequestHandler):
 		return m
 
 
-if __name__ == "__main__":
-	unittest.main(warnings="ignore")
+if __name__ == '__main__':
+	unittest.main(warnings='ignore')

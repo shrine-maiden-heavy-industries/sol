@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Full-device test harnesses for USB2. """
+''' Full-device test harnesses for USB2. '''
 
 from usb_construct.types import USBPacketID, USBStandardRequests
 
@@ -14,7 +14,7 @@ from .contrib            import usb_packet
 
 
 class USBDeviceTest(SolGatewareTestCase):
-	""" Test case strap for UTMI-connected devices. """
+	''' Test case strap for UTMI-connected devices. '''
 
 	# Use only the USB clock domain; ignore the sync one unless overridden.
 	SYNC_CLOCK_FREQUENCY = None
@@ -45,22 +45,22 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def provision_dut(self, dut):
-		""" Hook that allows us to add any desired properties to the DUT before simulation.
+		''' Hook that allows us to add any desired properties to the DUT before simulation.
 
 		This method is called before initial elaboration; so functions that modify devices
 		before elaboration can be used.
-		"""
+		'''
 		pass
 
 
 	def provide_byte(self, byte):
-		""" Provides a given byte on the UTMI receive data for one cycle. """
+		''' Provides a given byte on the UTMI receive data for one cycle. '''
 		yield self.utmi.rx_data.eq(byte)
 		yield
 
 
 	def start_packet(self, *, set_rx_valid=True):
-		""" Starts a UTMI packet receive. """
+		''' Starts a UTMI packet receive. '''
 		yield self.utmi.rx_active.eq(1)
 
 		if set_rx_valid:
@@ -70,14 +70,14 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def end_packet(self):
-		""" Starts a UTMI packet receive. """
+		''' Starts a UTMI packet receive. '''
 		yield self.utmi.rx_active.eq(0)
 		yield self.utmi.rx_valid.eq(0)
 		yield
 
 
 	def provide_packet(self, *octets, cycle_after=True):
-		""" Provides an entire packet transaction at once. """
+		''' Provides an entire packet transaction at once. '''
 
 		yield from self.start_packet()
 
@@ -92,10 +92,10 @@ class USBDeviceTest(SolGatewareTestCase):
 
 	@staticmethod
 	def bits_to_octets(bits):
-		""" Converts a string of bits to octets.
+		''' Converts a string of bits to octets.
 
 		For compatibility with antmicro's USB-testbench functions.
-		"""
+		'''
 
 		bits   = bits[:]
 		octets = []
@@ -115,7 +115,7 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def provide_bits(self, bits, cycle_after=True):
-		""" Provides an entire packet transaction at once; accepts bits. """
+		''' Provides an entire packet transaction at once; accepts bits. '''
 
 		octets = self.bits_to_octets(bits)
 		yield from self.provide_packet(*octets, cycle_after=cycle_after)
@@ -123,14 +123,14 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def send_token(self, pid, *, endpoint=0, address=None):
-		""" Issues a token packet to the simulated USB device.
+		''' Issues a token packet to the simulated USB device.
 
 		Parameters:
 			pid      -- The PID of the packet to be sent.
 			endpoint -- The endpoint on which the token should be sent.
 			address  -- The address of the device to be targeted.
 						If omitted, the most recently set-address'd address is used.
-		"""
+		'''
 
 		# Grab the raw bits that make up our token from the Antmicro library...
 		address = address if address else self.address
@@ -142,12 +142,12 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def send_data(self, pid, *octets):
-		""" Sends a data packet to the simulated USB device.
+		''' Sends a data packet to the simulated USB device.
 
 		Parameters:
 			pid  -- The PID to send the provided packet with.
 			*data -- The data to be sent.
-		"""
+		'''
 
 		bits = usb_packet.data_packet(pid, octets)
 		yield from self.provide_bits(bits)
@@ -156,11 +156,11 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def send_handshake(self, pid):
-		""" Issues a handshake packet to the simulated USB device.
+		''' Issues a handshake packet to the simulated USB device.
 
 		Parameters:
 			pid      -- The PID of the packet to be sent.
-		"""
+		'''
 
 		# Ensure we have an USBPacketID-wrapped PID.
 		pid = USBPacketID(pid)
@@ -170,7 +170,7 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def receive_packet(self, as_bytes=True, timeout=1000):
-		""" Receives a collection of data from the USB bus. """
+		''' Receives a collection of data from the USB bus. '''
 
 		data = []
 
@@ -197,7 +197,7 @@ class USBDeviceTest(SolGatewareTestCase):
 	#
 
 	def interpacket_delay(self):
-		""" Waits for a period appropriate between each packet. """
+		''' Waits for a period appropriate between each packet. '''
 
 		# We'll use a shorter value than real interpacket delays here,
 		# to speed up simulation. This can be tuned longer if necessary.
@@ -207,7 +207,7 @@ class USBDeviceTest(SolGatewareTestCase):
 
 	def out_transaction(self, *octets, endpoint=0, token_pid=USBPacketID.OUT,
 		data_pid=USBPacketID.DATA0, expect_handshake=None):
-		""" Performs an OUT transaction.
+		''' Performs an OUT transaction.
 
 		Parameters:
 			*octets          -- The data to send.
@@ -217,7 +217,7 @@ class USBDeviceTest(SolGatewareTestCase):
 			expect_handshake -- If provided, we'll assert that a given handshake is provided.
 
 		Returns the handshake received.
-		"""
+		'''
 
 		# Issue the token...
 		yield from self.send_token(token_pid, endpoint=endpoint)
@@ -239,7 +239,7 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def out_transfer(self, *octets, endpoint=0, data_pid=USBPacketID.DATA0, max_packet_size=64):
-		""" Performs an OUT transaction.
+		''' Performs an OUT transaction.
 
 		Parameters:
 			*octets          -- The data to send.
@@ -248,7 +248,7 @@ class USBDeviceTest(SolGatewareTestCase):
 			max_packet_size  -- The maximum packet size for the current endpoint.
 
 		Returns the final handshake received.
-		"""
+		'''
 
 		to_send  = octets[:]
 
@@ -290,7 +290,7 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def in_transaction(self, endpoint=0, data_pid=None, handshake=USBPacketID.ACK):
-		""" Performs an IN transaction.
+		''' Performs an IN transaction.
 
 		Parameters:
 			endpoint    -- The endpoint on which to fetch the relevant data.
@@ -300,7 +300,7 @@ class USBDeviceTest(SolGatewareTestCase):
 		Returns:
 			handshake   -- The handshake retrieved in response.
 			data        -- A list of octets received.
-		"""
+		'''
 
 		# Issue the IN token...
 		yield from self.send_token(USBPacketID.IN, endpoint=endpoint)
@@ -331,7 +331,7 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def in_transfer(self, endpoint=0, data_pid=None, handshake=USBPacketID.ACK):
-		""" Performs an IN transaction.
+		''' Performs an IN transaction.
 
 		Parameters:
 			endpoint    -- The endpoint on which to fetch the relevant data.
@@ -341,7 +341,7 @@ class USBDeviceTest(SolGatewareTestCase):
 		Returns:
 			handshake   -- The last data handshake received.
 			data        -- A list of octets received.
-		"""
+		'''
 
 		naks = 0
 		data = []
@@ -375,13 +375,13 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def setup_transaction(self, request_type, request, value=0, index=0, length=0):
-		""" Sends a SETUP transaction. All arguments match their SETUP packet definitions.
+		''' Sends a SETUP transaction. All arguments match their SETUP packet definitions.
 
 		Returns the handshake received.
-		"""
+		'''
 
 		def split(arg):
-			""" Convenience function that splits a setup parameter. """
+			''' Convenience function that splits a setup parameter. '''
 			high = arg >> 8
 			low  = arg & 0xFF
 
@@ -397,7 +397,7 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def control_interphase_delay(self):
-		""" Waits for a period appropriate between each delays. """
+		''' Waits for a period appropriate between each delays. '''
 
 		# This is shorter than would be normal, in order to speed up simulation.
 		# If necessary, this can be extended arbitrarily.
@@ -405,14 +405,14 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def control_request_in(self, request_type, request, value=0, index=0, length=0):
-		""" Performs an IN control request, and returns the results.
+		''' Performs an IN control request, and returns the results.
 
 		Arguments match the SETUP packets.
 
 		Returns:
 			handshake -- The handshake value returned.
 			data      -- A list of octets returned.
-		"""
+		'''
 
 		naks = 0
 
@@ -454,10 +454,10 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def control_request_out(self, request_type, request, value=0, index=0, data=()):
-		""" Performs an OUT control request, and returns the results.
+		''' Performs an OUT control request, and returns the results.
 
 		Arguments match the SETUP packets.
-		"""
+		'''
 
 		naks = 0
 
@@ -499,13 +499,13 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def get_descriptor(self, descriptor_type, index=0, length=64):
-		""" Performs a GET_DESCRIPTOR request; fetching a USB descriptor.
+		''' Performs a GET_DESCRIPTOR request; fetching a USB descriptor.
 
 		Parameters:
 			descriptor_type -- The descriptor type number to fetch.
 			index           -- The descriptor index to fetch.
 			length          -- The requested length to read.
-		"""
+		'''
 
 		# The type is stored in the MSB of the value; and the index in the LSB.
 		value = descriptor_type << 8 | index
@@ -516,11 +516,11 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def set_address(self, new_address, update_address=True):
-		""" Performs a SET_ADDRESS request; setting the device address.
+		''' Performs a SET_ADDRESS request; setting the device address.
 
 		Parameters:
 			new_address -- The address to apply.
-		"""
+		'''
 
 		response_pid = yield from self.control_request_out(0,
 			USBStandardRequests.SET_ADDRESS, value=new_address)
@@ -532,18 +532,18 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def set_configuration(self, number):
-		""" Performs a SET_CONFIGURATION request; configuring the device.
+		''' Performs a SET_CONFIGURATION request; configuring the device.
 
 		Parameters:
 			number -- The configuration to select.
-		"""
+		'''
 		response_pid = yield from self.control_request_out(0,
 			USBStandardRequests.SET_CONFIGURATION, value=number)
 		return response_pid
 
 
 	def get_configuration(self):
-		""" Performs a GET_CONFIGURATION request; reading the device's configuration. """
+		''' Performs a GET_CONFIGURATION request; reading the device's configuration. '''
 		response = yield from self.control_request_in(0x80,
 			USBStandardRequests.GET_CONFIGURATION, length=1)
 		return response

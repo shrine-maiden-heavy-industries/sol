@@ -7,7 +7,7 @@
 #
 # Code adapted from ``litex`` and ``usb3_pipe``.
 
-""" Code for USB3 physical-layer encoding. """
+''' Code for USB3 physical-layer encoding. '''
 
 from torii     import *
 
@@ -16,11 +16,11 @@ from .coding   import COM, EPF, SHP, SLC, get_word_for_symbols
 
 
 class RxWordAligner(Elaboratable):
-	""" Receiver word alignment.
+	''' Receiver word alignment.
 
 	Uses the location of COM signals in the data stream to re-position data so that the
 	relevant commas always fall in the data's LSB (little endian).
-	"""
+	'''
 
 	def __init__(self):
 
@@ -38,7 +38,7 @@ class RxWordAligner(Elaboratable):
 
 	@staticmethod
 	def word_meets_alignment_criteria(data, ctrl):
-		""" Returns true iff the given data and control appear to be correctly aligned. """
+		''' Returns true iff the given data and control appear to be correctly aligned. '''
 
 		# Our aligner is simple: we'll search for the start of a TS1/TS2 training set; which we know
 		# starts with a burst of four consecutive commas.
@@ -130,19 +130,19 @@ class RxWordAligner(Elaboratable):
 
 
 class RxPacketAligner(RxWordAligner):
-	""" Receiver word re-alignment.
+	''' Receiver word re-alignment.
 
 	Intended to perform a post-descramble (re)-alignment to ensure that we remain aligned to words
 	even if the other side does not maintain word alignment. Many links will work without this; but
 	the USB3 specification does not guarantee that word-alignment will always be maintained.
 
 	This unit corrects alignment if the link does not maintain this property.
-	"""
+	'''
 
 
 	@staticmethod
 	def word_meets_alignment_criteria(data, ctrl):
-		""" Returns true iff the given data and control appear to be correctly aligned. """
+		''' Returns true iff the given data and control appear to be correctly aligned. '''
 
 		# This alignment variant looks for a start of a packet, and attempts to align itself to that.
 		# We'll look specifically for the start of Link Commands and Header Packets, as they can start

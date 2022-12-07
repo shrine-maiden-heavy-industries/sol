@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Logical idle detection / polling gateware. """
+''' Logical idle detection / polling gateware. '''
 
 from torii         import *
 from torii.hdl.ast import Past
@@ -13,7 +13,7 @@ from ...stream     import USBRawSuperSpeedStream
 
 
 class IdleHandshakeHandler(Elaboratable):
-	""" Unit that performs the USB3 idle handshake.
+	''' Unit that performs the USB3 idle handshake.
 
 	The Idle Handshake occurs after link training; and is the first step of
 	post-training link initialization.
@@ -34,7 +34,7 @@ class IdleHandshakeHandler(Elaboratable):
 	idle_handshake_complete: Signal(), output
 		Asserted when we've seen IDLE at least once, and we've been enabled for at least
 		16 cycles, as required by the USB3 Idle Handshake [USB3.2r1: 7.5.4.10].
-	"""
+	'''
 
 	# We need to send 16B of idle during our handshake. Since we're sending 4B per cycle,
 	# that's a total of four cycles.

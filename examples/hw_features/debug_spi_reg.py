@@ -15,12 +15,12 @@ from sol.gateware.utils.cdc     import synchronize
 
 
 class DebugSPIRegisterExample(Elaboratable):
-	""" Gateware meant to demonstrate use of the Debug Controller's register interface. """
+	''' Gateware meant to demonstrate use of the Debug Controller's register interface. '''
 
 
 	def elaborate(self, platform):
 		m = Module()
-		board_spi = platform.request("debug_spi")
+		board_spi = platform.request('debug_spi')
 
 		# Create a set of registers, and expose them over SPI.
 		spi_registers = SPIRegisterInterface(default_read_value=0x4C554E41) #default read = u'LUNA'
@@ -29,11 +29,11 @@ class DebugSPIRegisterExample(Elaboratable):
 		# Fill in some example registers.
 		# (Register 0 is reserved for size autonegotiation).
 		spi_registers.add_read_only_register(1, read=0xc001cafe)
-		led_reg = spi_registers.add_register(2, size=6, name="leds")
+		led_reg = spi_registers.add_register(2, size=6, name='leds')
 		spi_registers.add_read_only_register(3, read=0xdeadbeef)
 
 		# ... and tie our LED register to our LEDs.
-		led_out   = Cat([platform.request_optional("led", i, default=NullPin()).o for i in range(0, 8)])
+		led_out   = Cat([platform.request_optional('led', i, default=NullPin()).o for i in range(0, 8)])
 		m.d.comb += led_out.eq(led_reg)
 
 		# Connect up our synchronized copies of the SPI registers.
@@ -44,5 +44,5 @@ class DebugSPIRegisterExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(DebugSPIRegisterExample)

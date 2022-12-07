@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Utilities for working with busses. """
+''' Utilities for working with busses. '''
 
 import operator
 import functools
@@ -14,7 +14,7 @@ from torii.lib.coding import Encoder
 
 
 class OneHotMultiplexer(Elaboratable):
-	""" Gateware that merges a collection of busses into a single bus.
+	''' Gateware that merges a collection of busses into a single bus.
 
 	The busses joined must meet the following conditions:
 		- The relevant type must have a signal that indicates when its data should be
@@ -25,10 +25,10 @@ class OneHotMultiplexer(Elaboratable):
 
 	I/O port:
 		O*: output -- Our output interface; carries the signal merged from all input busses.
-	"""
+	'''
 
 	def __init__(self, *, interface_type, valid_field='valid', mux_signals=(), or_signals=(), pass_signals=()):
-		"""
+		'''
 		Parameters:
 			interface_type  -- The type of interface we'll be multiplexing.
 			valid_field     -- The name of the field that indicates the relevant object's validity.
@@ -41,7 +41,7 @@ class OneHotMultiplexer(Elaboratable):
 							   only be high when their corresponding `valid` signal is high.
 			pass_signals    -- A list of signals that should be passed back from the output interface to each
 							   of our input interfaces.
-		"""
+		'''
 
 		self._valid_field  = valid_field
 		self._mux_signals  = mux_signals
@@ -58,30 +58,30 @@ class OneHotMultiplexer(Elaboratable):
 
 
 	def add_interface(self, input_interface):
-		""" Adds an interface to the multiplexer. """
+		''' Adds an interface to the multiplexer. '''
 		self._inputs.append(input_interface)
 
 
 	def add_interfaces(self, interfaces):
-		""" Adds a collection/iterable of interfaces to the multiplexer. """
+		''' Adds a collection/iterable of interfaces to the multiplexer. '''
 		for interface in interfaces:
 			self.add_interface(interface)
 
 
 	def add_input(self, input_interface):
-		""" Alias for add_interface. Adds an interface to the multiplexer. """
+		''' Alias for add_interface. Adds an interface to the multiplexer. '''
 		self.add_interface(input_interface)
 
 
 	@staticmethod
 	def _get_signal(interface, name_or_function):
-		""" Fetches a signal from the given interface.
+		''' Fetches a signal from the given interface.
 
 		Parameter:
 			interface        -- The interface to fetch the relevant signal from.
 			name_or_function -- The name of the signal to retrieve; or a function that
 								returns the relevant signal given the interface.
-		 """
+		 '''
 
 		if callable(name_or_function):
 			return name_or_function(interface)

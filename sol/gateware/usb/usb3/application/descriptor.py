@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Utilities for building USB3 descriptors into gateware. """
+''' Utilities for building USB3 descriptors into gateware. '''
 
 from torii                              import *
 
@@ -15,7 +15,7 @@ from ...stream                          import SuperSpeedStreamInterface
 
 
 class GetDescriptorHandler(Elaboratable):
-	""" Gateware that handles responding to GetDescriptor requests.
+	''' Gateware that handles responding to GetDescriptor requests.
 
 	Currently does not support descriptors in multiple languages.
 
@@ -44,11 +44,11 @@ class GetDescriptorHandler(Elaboratable):
 		The clock domain this generator should belong to. Defaults to ''.
 	stream_type: StreamInterface, or subclass
 		The type of stream we'll be multiplexing.
-	"""
+	'''
 
 	def __init__(self, descriptor_collection: DeviceDescriptorCollection, *,
-		usb_domain="ss", stream_type=SuperSpeedStreamInterface):
-		"""
+		usb_domain='ss', stream_type=SuperSpeedStreamInterface):
+		'''
 		Parameters
 		----------
 		descriptor_collection: DeviceDescriptorCollection
@@ -57,7 +57,7 @@ class GetDescriptorHandler(Elaboratable):
 			The name of the domain to use for USB data exchange.
 		stream_type: StreamInterface subclass
 			The type of the stream to be used to carry descriptor data.
-		"""
+		'''
 		self._domain      = usb_domain
 		self._descriptors = descriptor_collection
 		self._stream_type = stream_type
@@ -128,7 +128,7 @@ class GetDescriptorHandler(Elaboratable):
 				m.d.comb += self.stall.eq(self.start)
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
-		if self._domain != "sync":
-			m = DomainRenamer({"sync": self._domain})(m)
+		if self._domain != 'sync':
+			m = DomainRenamer({'sync': self._domain})(m)
 
 		return m

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Header Packet Rx-handling gateware. """
+''' Header Packet Rx-handling gateware. '''
 
 import unittest
 
@@ -22,7 +22,7 @@ from .header                        import HeaderPacket, HeaderQueue
 
 
 class RawHeaderPacketReceiver(Elaboratable):
-	""" Class that monitors the USB bus for Header Packet, and receives them.
+	''' Class that monitors the USB bus for Header Packet, and receives them.
 
 	This class performs the validations required at the link layer of the USB specification;
 	which include checking the CRC-5 and CRC-16 embedded within the header packet.
@@ -45,7 +45,7 @@ class RawHeaderPacketReceiver(Elaboratable):
 	expected_sequence: Signal(3), input
 		Indicates the next expected sequence number; used to validate the received packet.
 
-	"""
+	'''
 
 	def __init__(self):
 
@@ -77,7 +77,7 @@ class RawHeaderPacketReceiver(Elaboratable):
 		# Cache our expected CRC5, so we can pipeline generation and comparison.
 		expected_crc5 = Signal(5)
 
-		# Keep our "new packet" signal de-asserted unless asserted explicitly.
+		# Keep our 'new packet' signal de-asserted unless asserted explicitly.
 		m.d.ss += self.new_packet.eq(0)
 
 		#
@@ -90,32 +90,32 @@ class RawHeaderPacketReceiver(Elaboratable):
 		#
 		# Receiver Sequencing
 		#
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# WAIT_FOR_HPSTART -- we're currently waiting for HPSTART framing, which indicates
 			# that the following 16 symbols (4 words) will be a header packet.
-			with m.State("WAIT_FOR_HPSTART"):
+			with m.State('WAIT_FOR_HPSTART'):
 
 				# Don't start our CRC until we're past our HPSTART header.
 				m.d.comb += crc16.clear.eq(1)
 
 				is_hpstart = stream_matches_symbols(sink, SHP, SHP, SHP, EPF)
 				with m.If(is_hpstart):
-					m.next = "RECEIVE_DW0"
+					m.next = 'RECEIVE_DW0'
 
 			# RECEIVE_DWn -- the first three words of our header packet are data words meant form
 			# the protocol layer; we'll receive them so we can pass them on to the protocol layer.
 			for n in range(3):
-				with m.State(f"RECEIVE_DW{n}"):
+				with m.State(f'RECEIVE_DW{n}'):
 
 					with m.If(sink.valid):
 						m.d.comb += crc16.advance_crc.eq(1)
 						m.d.ss += packet[f'dw{n}'].eq(sink.data)
-						m.next = f"RECEIVE_DW{n+1}"
+						m.next = f'RECEIVE_DW{n+1}'
 
 			# RECEIVE_DW3 -- we'll receive and parse our final data word, which contains the fields
 			# relevant to the link layer.
-			with m.State("RECEIVE_DW3"):
+			with m.State('RECEIVE_DW3'):
 
 				with m.If(sink.valid):
 					m.d.ss += [
@@ -132,14 +132,14 @@ class RawHeaderPacketReceiver(Elaboratable):
 						expected_crc5           .eq(compute_usb_crc5(sink.data[16:27]))
 					]
 
-					m.next = "CHECK_PACKET"
+					m.next = 'CHECK_PACKET'
 
 			# CHECK_PACKET -- we've now received our full packet; we'll check it for validity.
-			with m.State("CHECK_PACKET"):
+			with m.State('CHECK_PACKET'):
 
 				# A minor error occurs if if one of our CRCs mismatches; in which case the link can
 				# continue after sending an LBAD link command. [USB3.2r1: 7.2.4.1.5].
-				# We'll strobe our less-severe "bad packet" indicator, but still reject the header.
+				# We'll strobe our less-severe 'bad packet' indicator, but still reject the header.
 				crc5_failed  = (expected_crc5 != packet.crc5)
 				crc16_failed = (crc16.crc     != packet.crc16)
 				with m.If(crc5_failed | crc16_failed):
@@ -159,7 +159,7 @@ class RawHeaderPacketReceiver(Elaboratable):
 						self.packet      .eq(packet)
 					]
 
-				m.next = "WAIT_FOR_HPSTART"
+				m.next = 'WAIT_FOR_HPSTART'
 
 
 		return m
@@ -172,7 +172,7 @@ class RawHeaderPacketReceiverTest(SolSSGatewareTestCase):
 		yield self.dut.sink.valid.eq(1)
 
 	def provide_data(self, *tuples):
-		""" Provides the receiver with a sequence of (data, ctrl) values. """
+		''' Provides the receiver with a sequence of (data, ctrl) values. '''
 
 		# Provide each word of our data to our receiver...
 		for data, ctrl in tuples:
@@ -272,7 +272,7 @@ class RawHeaderPacketReceiverTest(SolSSGatewareTestCase):
 
 
 class HeaderPacketReceiver(Elaboratable):
-	""" Receiver-side Header Packet logic.
+	''' Receiver-side Header Packet logic.
 
 	This module handles all header-packet-reception related logic for the link layer; including
 	header packet reception, buffering, flow control (credit management), and link command transmission.
@@ -305,7 +305,7 @@ class HeaderPacketReceiver(Elaboratable):
 	keepalive_required: Signal(), input
 		Strobe; when asserted; a keepalive packet will be generated.
 	packet_received: Signal(), output
-		Strobe; pulsed when an event occurs that should reset the USB3 "packet received" timers.
+		Strobe; pulsed when an event occurs that should reset the USB3 'packet received' timers.
 		This does *not* indicate valid data is present on the output :attr:``queue``; this has its
 		own valid signal.
 	bad_packet_received: Signal(), output
@@ -317,7 +317,7 @@ class HeaderPacketReceiver(Elaboratable):
 		Strobe; when pulsed, a LXU (Link-state rejection) will be generated.
 	acknowledge_power_state: Signal(), input
 		Strobe; when pulsed, a LPMA (Link-state acknowledgement) will be generated.
-	"""
+	'''
 
 	SEQUENCE_NUMBER_WIDTH = 3
 
@@ -373,7 +373,7 @@ class HeaderPacketReceiver(Elaboratable):
 
 
 		#
-		# Task "queues".
+		# Task 'queues'.
 		#
 
 		# Keep track of how many header received acknowledgements (LGOODs) we need to send.
@@ -388,7 +388,7 @@ class HeaderPacketReceiver(Elaboratable):
 
 
 		# Keep track of how many link credits we've yet to free.
-		# We'll start with every one of our buffers marked as "pending free"; this ensures
+		# We'll start with every one of our buffers marked as 'pending free'; this ensures
 		# we perform our credit restoration properly.
 		credits_to_issue  = Signal.like(acks_to_send, reset=self._buffer_count)
 		enqueue_credit_issue = Signal()
@@ -453,7 +453,7 @@ class HeaderPacketReceiver(Elaboratable):
 
 		# Flag that determines when we should ignore packets.
 		#
-		# After a receive error, we'll want to ignore all packets until we see a "retry"
+		# After a receive error, we'll want to ignore all packets until we see a 'retry'
 		# link command; so we don't receive packets out of order.
 		ignore_packets = Signal()
 
@@ -560,11 +560,11 @@ class HeaderPacketReceiver(Elaboratable):
 		]
 
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# DISPATCH_COMMAND -- the state in which we identify any pending link commands necessary,
 			# and then move to the state in which we'll send them.
-			with m.State("DISPATCH_COMMAND"):
+			with m.State('DISPATCH_COMMAND'):
 
 				with m.If(self.enable):
 					# NOTE: the order below is important; changing it can easily break things:
@@ -573,27 +573,27 @@ class HeaderPacketReceiver(Elaboratable):
 					#   sent to the other side for the LBAD to have the correct semantic meaning.
 
 					with m.If(lrty_pending):
-						m.next = "SEND_LRTY"
+						m.next = 'SEND_LRTY'
 
 					# If we have acknowledgements to send, send them.
 					with m.Elif(acks_to_send):
-						m.next = "SEND_ACKS"
+						m.next = 'SEND_ACKS'
 
 					# If we have link credits to issue, move to issuing them to the other side.
 					with m.Elif(credits_to_issue):
-						m.next = "ISSUE_CREDITS"
+						m.next = 'ISSUE_CREDITS'
 
 					# If we need to send an LBAD, do so.
 					with m.Elif(lbad_pending):
-						m.next = "SEND_LBAD"
+						m.next = 'SEND_LBAD'
 
 					# If we need to send a link power-state command, do so.
 					with m.Elif(lxu_pending):
-						m.next = "SEND_LXU"
+						m.next = 'SEND_LXU'
 
 					# If we need to send a keepalive, do so.
 					with m.Elif(keepalive_pending):
-						m.next = "SEND_KEEPALIVE"
+						m.next = 'SEND_KEEPALIVE'
 
 
 
@@ -636,7 +636,7 @@ class HeaderPacketReceiver(Elaboratable):
 
 			# SEND_ACKS -- a valid header packet has been received, or we're advertising
 			# our initial sequence number; send an LGOOD packet.
-			with m.State("SEND_ACKS"):
+			with m.State('SEND_ACKS'):
 
 				# Send an LGOOD command, acknowledging the last received packet header.
 				m.d.comb += [
@@ -654,12 +654,12 @@ class HeaderPacketReceiver(Elaboratable):
 
 					# If this was the last ACK we had to send, move back to our dispatch state.
 					with m.If(acks_to_send == 1):
-						m.next = "DISPATCH_COMMAND"
+						m.next = 'DISPATCH_COMMAND'
 
 
 			# ISSUE_CREDITS -- header packet buffers have been freed; and we now need to notify the
 			# other side, so it knows we have buffers available.
-			with m.State("ISSUE_CREDITS"):
+			with m.State('ISSUE_CREDITS'):
 
 				# Send an LCRD command, indicating that we have a free buffer.
 				m.d.comb += [
@@ -676,11 +676,11 @@ class HeaderPacketReceiver(Elaboratable):
 
 					# If this was the last credit we had to issue, move back to our dispatch state.
 					with m.If(credits_to_issue == 1):
-						m.next = "DISPATCH_COMMAND"
+						m.next = 'DISPATCH_COMMAND'
 
 
 			# SEND_LBAD -- we've received a bad header packet; we'll need to let the other side know.
-			with m.State("SEND_LBAD"):
+			with m.State('SEND_LBAD'):
 				m.d.comb += [
 					lc_generator.generate      .eq(1),
 					lc_generator.command       .eq(LinkCommand.LBAD),
@@ -690,12 +690,12 @@ class HeaderPacketReceiver(Elaboratable):
 				# (We can't ever have multiple LBADs queued up; as we ignore future packets after sending one.)
 				with m.If(lc_generator.done):
 					m.d.ss += lbad_pending.eq(0)
-					m.next = "DISPATCH_COMMAND"
+					m.next = 'DISPATCH_COMMAND'
 
 
 			# SEND_LRTY -- our transmitter has requested that we send an retry indication to the other side.
 			# We'll do our transmitter a favor and do so.
-			with m.State("SEND_LRTY"):
+			with m.State('SEND_LRTY'):
 				m.d.comb += [
 					lc_generator.generate      .eq(1),
 					lc_generator.command       .eq(LinkCommand.LRTY)
@@ -703,13 +703,13 @@ class HeaderPacketReceiver(Elaboratable):
 
 				with m.If(lc_generator.done):
 					m.d.ss += lrty_pending.eq(0)
-					m.next = "DISPATCH_COMMAND"
+					m.next = 'DISPATCH_COMMAND'
 
 
 
 			# SEND_KEEPALIVE -- our link layer timer has requested that we send a keep-alive,
 			# indicating that we're still in U0 and the link is still good. Do so.
-			with m.State("SEND_KEEPALIVE"):
+			with m.State('SEND_KEEPALIVE'):
 
 				# Send the correct packet type for the direction our port is facing.
 				command = LinkCommand.LDN if self._is_downstream_facing else LinkCommand.LUP
@@ -723,12 +723,12 @@ class HeaderPacketReceiver(Elaboratable):
 				# (There's no sense in sending repeated keepalives; one gets the message across.)
 				with m.If(lc_generator.done):
 					m.d.ss += keepalive_pending.eq(0)
-					m.next = "DISPATCH_COMMAND"
+					m.next = 'DISPATCH_COMMAND'
 
 
 			# SEND_LXU -- we're being instructed to reject a requested power-state transfer.
 			# We'll send an LXU packet to inform the other side of the rejection.
-			with m.State("SEND_LXU"):
+			with m.State('SEND_LXU'):
 				m.d.comb += [
 					lc_generator.generate      .eq(1),
 					lc_generator.command       .eq(LinkCommand.LXU)
@@ -736,10 +736,10 @@ class HeaderPacketReceiver(Elaboratable):
 
 				with m.If(lc_generator.done):
 					m.d.ss += lxu_pending.eq(0)
-					m.next = "DISPATCH_COMMAND"
+					m.next = 'DISPATCH_COMMAND'
 
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

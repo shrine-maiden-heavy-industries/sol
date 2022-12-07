@@ -18,21 +18,21 @@ from sol.gateware.soc             import SimpleSoC, UARTPeripheral
 # Run our tests at a slower clock rate, for now.
 # TODO: bump up the fast clock rate, to test the HyperRAM at speed?
 CLOCK_FREQUENCIES_MHZ = {
-	"fast": 120,
-	"sync":  60,
-	"usb":   60
+	'fast': 120,
+	'sync':  60,
+	'usb':   60
 }
 
 
 class LEDPeripheral(Peripheral, Elaboratable):
-	""" Simple peripheral that controls the board's LEDs. """
+	''' Simple peripheral that controls the board's LEDs. '''
 
-	def __init__(self, name="leds"):
+	def __init__(self, name='leds'):
 		super().__init__(name=name)
 
 		# Create our LED register.
 		bank            = self.csr_bank()
-		self._output    = bank.csr(6, "rw")
+		self._output    = bank.csr(6, 'rw')
 
 		# ... and convert our register into a Wishbone peripheral.
 		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
@@ -44,7 +44,7 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		m.submodules.bridge = self._bridge
 
 		# Grab our LEDS...
-		leds = Cat(platform.request("led", i) for i in range(6))
+		leds = Cat(platform.request('led', i) for i in range(6))
 
 		# ... and update them on each register write.
 		with m.If(self._output.w_stb):
@@ -58,17 +58,17 @@ class LEDPeripheral(Peripheral, Elaboratable):
 
 
 class ULPIRegisterPeripheral(Peripheral, Elaboratable):
-	""" Peripheral that provides access to a ULPI PHY, and its registers. """
+	''' Peripheral that provides access to a ULPI PHY, and its registers. '''
 
-	def __init__(self, name="ulpi", io_resource_name="usb"):
+	def __init__(self, name='ulpi', io_resource_name='usb'):
 		super().__init__(name=name)
 		self._io_resource = io_resource_name
 
 		# Create our registers...
 		bank            = self.csr_bank()
-		self._address   = bank.csr(8, "w")
-		self._value     = bank.csr(8, "rw")
-		self._busy      = bank.csr(1, "r")
+		self._address   = bank.csr(8, 'w')
+		self._value     = bank.csr(8, 'rw')
+		self._busy      = bank.csr(1, 'r')
 
 		# ... and convert our register into a Wishbone peripheral.
 		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
@@ -94,8 +94,8 @@ class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 			ulpi_reg_window.ulpi_dir      .eq(target_ulpi.dir.i),
 			ulpi_reg_window.ulpi_next     .eq(target_ulpi.nxt.i),
 
-			target_ulpi.clk               .eq(ClockSignal("usb")),
-			target_ulpi.rst               .eq(ResetSignal("usb")),
+			target_ulpi.clk               .eq(ClockSignal('usb')),
+			target_ulpi.rst               .eq(ResetSignal('usb')),
 			target_ulpi.stp               .eq(ulpi_reg_window.ulpi_stop),
 			target_ulpi.data.o            .eq(ulpi_reg_window.ulpi_data_out),
 			target_ulpi.data.oe           .eq(~target_ulpi.dir.i)
@@ -135,16 +135,16 @@ class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 
 
 class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
-	""" Peripheral that provides access to a ULPI PHY, and its registers. """
+	''' Peripheral that provides access to a ULPI PHY, and its registers. '''
 
-	def __init__(self, name="ram"):
+	def __init__(self, name='ram'):
 		super().__init__(name=name)
 
 		# Create our registers...
 		bank            = self.csr_bank()
-		self._address   = bank.csr(32, "w")
-		self._value     = bank.csr(32, "r")
-		self._busy      = bank.csr(1,  "r")
+		self._address   = bank.csr(32, 'w')
+		self._value     = bank.csr(32, 'r')
+		self._busy      = bank.csr(1,  'r')
 
 		# ... and convert our register into a Wishbone peripheral.
 		self._bridge    = self.bridge(data_width=32, granularity=8, alignment=2)
@@ -201,7 +201,7 @@ class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 
 
 class SelftestCore(Elaboratable):
-	""" Simple soft-core that executes the SOL factory tests. """
+	''' Simple soft-core that executes the SOL factory tests. '''
 
 	def __init__(self):
 		clock_freq = 60e6
@@ -225,11 +225,11 @@ class SelftestCore(Elaboratable):
 
 		# ... and add our peripherals under test.
 		peripherals = (
-			LEDPeripheral(name="leds"),
-			ULPIRegisterPeripheral(name="target_ulpi",   io_resource_name="target_phy"),
-			ULPIRegisterPeripheral(name="host_ulpi",     io_resource_name="host_phy"),
-			ULPIRegisterPeripheral(name="sideband_ulpi", io_resource_name="sideband_phy"),
-			PSRAMRegisterPeripheral(name="psram"),
+			LEDPeripheral(name='leds'),
+			ULPIRegisterPeripheral(name='target_ulpi',   io_resource_name='target_phy'),
+			ULPIRegisterPeripheral(name='host_ulpi',     io_resource_name='host_phy'),
+			ULPIRegisterPeripheral(name='sideband_ulpi', io_resource_name='sideband_phy'),
+			PSRAMRegisterPeripheral(name='psram'),
 		)
 
 		for peripheral in peripherals:
@@ -246,7 +246,7 @@ class SelftestCore(Elaboratable):
 		m.submodules.soc = self.soc
 
 		# ... and connect up its UART.
-		uart_io  = platform.request("uart", 0)
+		uart_io  = platform.request('uart', 0)
 		m.d.comb += [
 			uart_io.tx         .eq(self.uart.tx),
 			self.uart.rx       .eq(uart_io.rx),
@@ -258,6 +258,6 @@ class SelftestCore(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	design = SelftestCore()
 	cli(design, cli_soc=design.soc)

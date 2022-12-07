@@ -3,7 +3,7 @@
 # This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-""" Import shortcuts for our most commonly used functionality. """
+''' Import shortcuts for our most commonly used functionality. '''
 
 # Create shorthands for the most common parts of the library's usb3 gateware.
 from .gateware.usb.usb3.application.request import (

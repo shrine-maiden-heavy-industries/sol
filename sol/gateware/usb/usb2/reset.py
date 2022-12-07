@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Gateware that handles USB bus resets & speed detection. """
+''' Gateware that handles USB bus resets & speed detection. '''
 
 import unittest
 
@@ -16,7 +16,7 @@ from .                 import USBSpeed
 
 
 def _generate_wide_incrementer(m, platform, adder_input):
-	""" Attempts to create an optimal wide-incrementer for counters.
+	''' Attempts to create an optimal wide-incrementer for counters.
 
 	Yosys on certain platforms (ice40 UltraPlus) doesn't currently use hardware resources
 	effectively for wide adders. We'll manually instantiate the relevant resources
@@ -25,7 +25,7 @@ def _generate_wide_incrementer(m, platform, adder_input):
 	Parameters:
 		platform    -- The platform we're working with.
 		adder_input -- The input to our incrementer.
-	"""
+	'''
 
 	# If this isn't an iCE40 UltraPlus, let Yosys do its thing.
 	if (not platform) or not platform.device.startswith('iCE40UP'):
@@ -52,7 +52,7 @@ def _generate_wide_incrementer(m, platform, adder_input):
 
 
 class USBResetSequencer(Elaboratable):
-	""" Gateware that detects reset signaling on the USB bus.
+	''' Gateware that detects reset signaling on the USB bus.
 
 	Attributes
 	----------
@@ -90,7 +90,7 @@ class USBResetSequencer(Elaboratable):
 
 	tx: UTMITransmitInterface, output stream
 					 -- Our UTMI transmit interface; used to drive chirp signaling onto the bus.
-	"""
+	'''
 
 	# Constants for our line states at various speeds.
 	_LINE_STATE_SE0       = 0b00
@@ -584,5 +584,5 @@ class USBResetSequencerTest(SolGatewareTestCase):
 	#
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	unittest.main()

@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Pre-made gateware that implements an ILA connection serial. """
+''' Pre-made gateware that implements an ILA connection serial. '''
 
 
 from torii                   import Cat, Elaboratable, Module, Signal
@@ -19,10 +19,10 @@ from ..usb2.endpoints.stream import USBMultibyteStreamInEndpoint
 
 
 class USBIntegratedLogicAnalyzer(Elaboratable):
-	""" Pre-made gateware that presents a USB-connected ILA.
+	''' Pre-made gateware that presents a USB-connected ILA.
 
 	Samples are presented over a USB endpoint.
-	"""
+	'''
 
 	BULK_ENDPOINT_NUMBER = 1
 
@@ -60,7 +60,7 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -74,9 +74,9 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0x05a5
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Integrated Logic Analyzer"
-			d.iSerialNumber      = "no serial"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Integrated Logic Analyzer'
+			d.iSerialNumber      = 'no serial'
 
 			d.bNumConfigurations = 1
 
@@ -142,7 +142,7 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 
 
 class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
-	""" Frontend for USB-attached integrated logic analyzers.
+	''' Frontend for USB-attached integrated logic analyzers.
 
 	Parameters
 	------------
@@ -150,7 +150,7 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 		The number of seconds to wait before trying to connect.
 	ila: IntegratedLogicAnalyzer
 		The ILA object to work with.
-	"""
+	'''
 
 	def __init__(self, *args, ila, delay=3, **kwargs):
 		import time
@@ -169,7 +169,7 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 
 
 	def _split_samples(self, all_samples):
-		""" Returns an iterator that iterates over each sample in the raw binary of samples. """
+		''' Returns an iterator that iterates over each sample in the raw binary of samples. '''
 		from apollo_fpga.support.bits import bits
 
 		sample_width_bytes = self.ila.bytes_per_sample
@@ -183,7 +183,7 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 
 
 	def _read_samples(self):
-		""" Reads a set of ILA samples, and returns them. """
+		''' Reads a set of ILA samples, and returns them. '''
 
 		sample_width_bytes = self.ila.bytes_per_sample
 		total_to_read      = self.ila.sample_depth * sample_width_bytes

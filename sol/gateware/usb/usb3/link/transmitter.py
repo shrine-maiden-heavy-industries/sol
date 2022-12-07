@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Packet transmission handling gateware. """
+''' Packet transmission handling gateware. '''
 
 from torii                          import *
 
@@ -20,7 +20,7 @@ from .header                        import HeaderPacket, HeaderQueue
 
 
 class RawPacketTransmitter(Elaboratable):
-	""" Class that generates and sends header packets; with an optional payload attached.
+	''' Class that generates and sends header packets; with an optional payload attached.
 
 	This class generates the checks required at the link layer of the USB specification;
 	which include checking the CRC-5 and CRC-16 embedded within the header packet, and
@@ -46,7 +46,7 @@ class RawPacketTransmitter(Elaboratable):
 	done: Signal(), output
 		Indicates that the packet will be complete this cycle; and thus this unit will
 		be ready to send another packet next cycle.
-	"""
+	'''
 
 	def __init__(self):
 
@@ -109,10 +109,10 @@ class RawPacketTransmitter(Elaboratable):
 		# Store whether our packet is a ZLP.
 		packet_is_zlp = Signal()
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# IDLE -- wait for a generate command
-			with m.State("IDLE"):
+			with m.State('IDLE'):
 				# Don't start our CRCs until we're sending the data section relevant to them.
 				m.d.comb += [
 					crc16.clear  .eq(1),
@@ -122,11 +122,11 @@ class RawPacketTransmitter(Elaboratable):
 				# Once we have a request, latch in our data, and start sending.
 				with m.If(self.generate):
 					m.d.ss += header.eq(self.header)
-					m.next = "SEND_HPSTART"
+					m.next = 'SEND_HPSTART'
 
 
-			# SEND_HPSTART -- send our "start-of-header-packet" marker.
-			with m.State("SEND_HPSTART"):
+			# SEND_HPSTART -- send our 'start-of-header-packet' marker.
+			with m.State('SEND_HPSTART'):
 
 				# Drive the bus with our header...
 				header_data, header_ctrl = get_word_for_symbols(SHP, SHP, SHP, EPF)
@@ -138,14 +138,14 @@ class RawPacketTransmitter(Elaboratable):
 
 				# ... and keep driving it until it's accepted.
 				with m.If(source.ready):
-					m.next = "SEND_DW0"
+					m.next = 'SEND_DW0'
 
 
 			# SEND_DWn -- send along the three first data words unalatered, as we don't
 			# need to fill in any CRC details, here.
 			data_words = [header.dw0, header.dw1, header.dw2]
 			for n in range(3):
-				with m.State(f"SEND_DW{n}"):
+				with m.State(f'SEND_DW{n}'):
 
 					# Drive the bus with the relevant data word...
 					m.d.comb += [
@@ -157,11 +157,11 @@ class RawPacketTransmitter(Elaboratable):
 					# ... and keep driving it until it's accepted.
 					with m.If(source.ready):
 						m.d.comb += crc16.advance_crc.eq(1)
-						m.next = f"SEND_DW{n + 1}"
+						m.next = f'SEND_DW{n + 1}'
 
 
 			# Compose our final data word from our individual fields, filling
-			with m.State("SEND_DW3"):
+			with m.State('SEND_DW3'):
 
 				# Compose our data word
 				m.d.comb += [
@@ -184,17 +184,17 @@ class RawPacketTransmitter(Elaboratable):
 					was_data_header = (header.dw0[ 0: 4] == HeaderPacketType.DATA)
 					with m.If(was_data_header):
 						m.d.ss += packet_is_zlp.eq(self.data_sink.valid == 0)
-						m.next = "START_DPP"
+						m.next = 'START_DPP'
 
 					# Otherwise, we're done!
 					with m.Else():
 						m.d.comb += self.done.eq(1)
-						m.next = f"IDLE"
+						m.next = f'IDLE'
 
 
 			# START_DPP -- we'll start our data packet payload with our framing;
 			# and prepare to send our actual payload.
-			with m.State("START_DPP"):
+			with m.State('START_DPP'):
 
 				# Send our start framing...
 				header_data, header_ctrl = get_word_for_symbols(SDP, SDP, SDP, EPF)
@@ -210,7 +210,7 @@ class RawPacketTransmitter(Elaboratable):
 					# since we don't have the data buffered anywhere. Retransmission of the data payload
 					# will be handled at the protocol layer.
 					with m.If(header.delayed):
-						m.next = "ABORT_DPP"
+						m.next = 'ABORT_DPP'
 
 					# Special case: if we're sending a ZLP, we'll jump directly to sending our CRC.
 					with m.Elif(packet_is_zlp):
@@ -218,7 +218,7 @@ class RawPacketTransmitter(Elaboratable):
 						# We'll treat this as though we'd just sent a full data word; as this indicates
 						# to our later states that our data was word-aligned. (0B is a multiple of 4, after all.)
 						m.d.ss += pipelined_data_valid.eq(0b1111)
-						m.next = "SEND_CRC"
+						m.next = 'SEND_CRC'
 
 					# Otherwise, we have some data to handle.
 					with m.Else():
@@ -235,17 +235,17 @@ class RawPacketTransmitter(Elaboratable):
 						# ... and as long as we didn't just capture the last word, start the actual
 						# payload transmission.
 						with m.If(~self.data_sink.last):
-							m.next = "SEND_PAYLOAD"
+							m.next = 'SEND_PAYLOAD'
 
 						# If we -did- just capture the last word, we can skip to our last-word handler.
 						with m.Else():
-							m.next = "SEND_LAST_WORD"
+							m.next = 'SEND_LAST_WORD'
 
 
 			# SEND_PAYLOAD -- send the core part of our data stream.
-			with m.State("SEND_PAYLOAD"):
+			with m.State('SEND_PAYLOAD'):
 
-				# We'll always send our last pipelined value; so we can always have a valid "last word"
+				# We'll always send our last pipelined value; so we can always have a valid 'last word'
 				# for our last word handler, which handles special cases like inserting our CRC.
 				m.d.comb += [
 					source.data         .eq(pipelined_data_word),
@@ -265,13 +265,13 @@ class RawPacketTransmitter(Elaboratable):
 					# This means we can move on safely to sending our pipelined word; knowing we're ready to
 					# send part of our CRC if the last word isn't fully aligned.
 					with m.If(data_sink.last):
-						m.next = "SEND_LAST_WORD"
+						m.next = 'SEND_LAST_WORD'
 
 
 			# SEND_LAST_WORD -- flush our pipeline; and send our final word.
 			# Our final word is a special case; as it may not be a full word; in which
 			# case we'll have to stick part of our CRC into it.
-			with m.State("SEND_LAST_WORD"):
+			with m.State('SEND_LAST_WORD'):
 
 				# Send the final value captured from our pipeline; which we may modify slightly below.
 				m.d.comb += [
@@ -299,11 +299,11 @@ class RawPacketTransmitter(Elaboratable):
 
 				# Once our last data word is accepted, move to sending the (remainder) of the CRC.
 				with m.If(source.ready):
-					m.next = "SEND_CRC"
+					m.next = 'SEND_CRC'
 
 
 			# SEND_CRC -- send the CRC (or what remains of it)
-			with m.State("SEND_CRC"):
+			with m.State('SEND_CRC'):
 				m.d.comb += source.valid.eq(1)
 
 				# We'll need to send however much of the CRC is left; which will depend on the validity
@@ -343,11 +343,11 @@ class RawPacketTransmitter(Elaboratable):
 
 				# Once our CRC is accepted, finish our payload.
 				with m.If(source.ready):
-					m.next = "FINISH_DPP"
+					m.next = 'FINISH_DPP'
 
 
 			# FINISH_DPP -- send our end-of-payload framing.
-			with m.State("FINISH_DPP"):
+			with m.State('FINISH_DPP'):
 				m.d.comb += source.valid.eq(1)
 
 				# Get our data and ctrl constants for our framing.
@@ -391,11 +391,11 @@ class RawPacketTransmitter(Elaboratable):
 				# Once our CRC is accepted, finish our payload.
 				with m.If(source.ready):
 					m.d.comb += self.done.eq(1)
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 
 			# ABORT_DPP -- send our abort-of-payload framing.
-			with m.State("ABORT_DPP"):
+			with m.State('ABORT_DPP'):
 
 				# Send our abort framing...
 				framing_data, framing_ctrl = get_word_for_symbols(EDB, EDB, EDB, EPF)
@@ -408,14 +408,14 @@ class RawPacketTransmitter(Elaboratable):
 				# Once our framing is accepted, finish our payload.
 				with m.If(source.ready):
 					m.d.comb += self.done.eq(1)
-					m.next = "IDLE"
+					m.next = 'IDLE'
 
 		return m
 
 
 
 class PacketTransmitter(Elaboratable):
-	""" Transmitter-side Header Packet logic.
+	''' Transmitter-side Header Packet logic.
 
 	This module handles all header-packet-transmission related logic for the link layer; including
 	header packet generation, partner buffer tracking / flow control, and link command reception.
@@ -446,7 +446,7 @@ class PacketTransmitter(Elaboratable):
 
 	recovery_required: Signal(), output
 		Strobe; pulsed when a condition that requires link recovery occurs.
-	"""
+	'''
 
 	SEQUENCE_NUMBER_WIDTH = 3
 
@@ -505,7 +505,7 @@ class PacketTransmitter(Elaboratable):
 
 
 		#
-		# Task "queues".
+		# Task 'queues'.
 		#
 
 		# Control signals.
@@ -520,7 +520,7 @@ class PacketTransmitter(Elaboratable):
 		packets_awaiting_ack = Signal(range(self._buffer_count + 1))
 
 		# If we need to retry sending our packets, we'll need to reset our pending packet count.
-		# Otherwise, we increment and decrement our "to send" counts normally.
+		# Otherwise, we increment and decrement our 'to send' counts normally.
 		with m.If(self.retry_required):
 			m.d.ss += packets_to_send.eq(packets_awaiting_ack)
 		with m.Elif(enqueue_send & ~dequeue_send):
@@ -582,8 +582,8 @@ class PacketTransmitter(Elaboratable):
 			]
 
 			# Assign the packet a sequence number, and capture it into the buffer for transmission.
-			# [USB3.0r1: 7.2.4.1.1]: "A header packet that is re-transmitted shall maintain its
-			# originally assigned Header Sequence Number."
+			# [USB3.0r1: 7.2.4.1.1]: 'A header packet that is re-transmitted shall maintain its
+			# originally assigned Header Sequence Number.'
 			m.d.ss += [
 				buffers[write_pointer]                  .eq(self.queue.header),
 				buffers[write_pointer].sequence_number  .eq(transmit_sequence_number),
@@ -609,26 +609,26 @@ class PacketTransmitter(Elaboratable):
 			m.d.ss += retry_pending.eq(1)
 
 
-		with m.FSM(domain="ss"):
+		with m.FSM(domain='ss'):
 
 			# DISPATCH_PACKET -- wait packet transmissions to be scheduled, and prepare
 			# our local transmitter with the proper data to send them.
-			with m.State("DISPATCH_PACKET"):
+			with m.State('DISPATCH_PACKET'):
 
 				# If we have packets to send, pass them to our transmitter.
 				with m.If(self.bringup_complete & (packets_to_send != 0)):
 
 					with m.If(~retry_pending):
 						# Wait until the packet is sent.
-						m.next = "WAIT_FOR_SEND"
+						m.next = 'WAIT_FOR_SEND'
 
 					with m.Else():
 						# Wait until all of the non-acknowledged packets are retransmitted.
-						m.next = "WAIT_FOR_RETRY"
+						m.next = 'WAIT_FOR_RETRY'
 
 
 			# WAIT_FOR_SEND -- we've now dispatched our packet; and we're ready to wait for it to be sent.
-			with m.State("WAIT_FOR_SEND"):
+			with m.State('WAIT_FOR_SEND'):
 				m.d.comb += packet_tx.generate.eq(1)
 
 				# We're done with this packet.
@@ -640,12 +640,12 @@ class PacketTransmitter(Elaboratable):
 						m.d.comb += dequeue_send.eq(1)
 
 					# Handle the next packet, or wait for one.
-					m.next = "DISPATCH_PACKET"
+					m.next = 'DISPATCH_PACKET'
 
 
 			# WAIT_FOR_RETRY -- we're retransmitting all of the non-acknowledged packets, with the DL bit set;
 			# but only after the receiver transmits LRTY.
-			with m.State("WAIT_FOR_RETRY"):
+			with m.State('WAIT_FOR_RETRY'):
 				m.d.comb += packet_tx.header.delayed.eq(1)
 				m.d.comb += packet_tx.generate.eq(~self.lrty_pending)
 
@@ -656,7 +656,7 @@ class PacketTransmitter(Elaboratable):
 					# If this was the last packet to retransmit, we're done handling this LBAD.
 					with m.If(packets_to_send == 1):
 						m.d.ss += retry_pending.eq(0)
-						m.next = "DISPATCH_PACKET"
+						m.next = 'DISPATCH_PACKET'
 
 
 		#

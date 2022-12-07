@@ -18,11 +18,11 @@ from sol.gateware.usb.usb2.device import USBDevice
 
 
 class USBDeviceExample(Elaboratable):
-	""" Simple example of a USB device using the SOL framework. """
+	''' Simple example of a USB device using the SOL framework. '''
 
 
 	def create_descriptors(self):
-		""" Create the descriptors we want to use for our device. """
+		''' Create the descriptors we want to use for our device. '''
 
 		descriptors = DeviceDescriptorCollection()
 
@@ -36,9 +36,9 @@ class USBDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "SOL"
-			d.iProduct           = "Test Device"
-			d.iSerialNumber      = "1234"
+			d.iManufacturer      = 'SOL'
+			d.iProduct           = 'Test Device'
+			d.iSerialNumber      = '1234'
 
 			d.bNumConfigurations = 1
 
@@ -90,5 +90,5 @@ class USBDeviceExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(USBDeviceExample)

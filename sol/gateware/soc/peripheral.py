@@ -9,7 +9,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Peripheral helpers for SOL devices. """
+''' Peripheral helpers for SOL devices. '''
 
 
 from torii                      import Elaboratable, Module
@@ -29,7 +29,7 @@ __all__ = (
 
 
 class Peripheral:
-	"""Wishbone peripheral.
+	'''Wishbone peripheral.
 
 	A helper class to reduce the boilerplate needed to control a peripheral with a Wishbone interface.
 	It provides facilities for instantiating CSR registers, requesting windows to subordinate busses
@@ -46,10 +46,10 @@ class Peripheral:
 		def __init__(self):
 			super().__init__()
 			bank         = self.csr_bank()
-			self._foo    = bank.csr(8, "r")
-			self._bar    = bank.csr(8, "w")
+			self._foo    = bank.csr(8, 'r')
+			self._bar    = bank.csr(8, 'w')
 
-			self._rdy    = self.event(mode="rise")
+			self._rdy    = self.event(mode='rise')
 
 			self._bridge = self.bridge(data_width=32, granularity=8, alignment=2)
 			self.bus     = self._bridge.bus
@@ -72,11 +72,11 @@ class Peripheral:
 	----------
 	name : str
 		Name of the peripheral.
-	"""
+	'''
 	def __init__(self, name=None, src_loc_at=1):
 		if name is not None and not isinstance(name, str):
-			raise TypeError("Name must be a string, not {!r}".format(name))
-		self.name      = name or tracer.get_var_name(depth=2 + src_loc_at).lstrip("_")
+			raise TypeError('Name must be a string, not {!r}'.format(name))
+		self.name      = name or tracer.get_var_name(depth=2 + src_loc_at).lstrip('_')
 
 		self._csr_banks = []
 		self._windows   = []
@@ -87,7 +87,7 @@ class Peripheral:
 
 	@property
 	def bus(self):
-		"""Wishbone bus interface.
+		'''Wishbone bus interface.
 
 		Return value
 		------------
@@ -96,22 +96,22 @@ class Peripheral:
 		Exceptions
 		----------
 		Raises :exn:`NotImplementedError` if the peripheral does not have a Wishbone bus.
-		"""
+		'''
 		if self._bus is None:
-			raise NotImplementedError("Peripheral {!r} does not have a bus interface"
+			raise NotImplementedError('Peripheral {!r} does not have a bus interface'
 									  .format(self))
 		return self._bus
 
 	@bus.setter
 	def bus(self, bus):
 		if not isinstance(bus, wishbone.Interface):
-			raise TypeError("Bus interface must be an instance of wishbone.Interface, not {!r}"
+			raise TypeError('Bus interface must be an instance of wishbone.Interface, not {!r}'
 							.format(bus))
 		self._bus = bus
 
 	@property
 	def irq(self):
-		"""Interrupt request line.
+		'''Interrupt request line.
 
 		Return value
 		------------
@@ -120,21 +120,21 @@ class Peripheral:
 		Exceptions
 		----------
 		Raises :exn:`NotImplementedError` if the peripheral does not have an IRQ line.
-		"""
+		'''
 		if self._irq is None:
-			raise NotImplementedError("Peripheral {!r} does not have an IRQ line"
+			raise NotImplementedError('Peripheral {!r} does not have an IRQ line'
 									  .format(self))
 		return self._irq
 
 	@irq.setter
 	def irq(self, irq):
 		if not isinstance(irq, IRQLine):
-			raise TypeError("IRQ line must be an instance of IRQLine, not {!r}"
+			raise TypeError('IRQ line must be an instance of IRQLine, not {!r}'
 							.format(irq))
 		self._irq = irq
 
 	def csr_bank(self, *, addr=None, alignment=None, desc=None):
-		"""Request a CSR bank.
+		'''Request a CSR bank.
 
 		Arguments
 		---------
@@ -151,21 +151,21 @@ class Peripheral:
 		Return value
 		------------
 		An instance of :class:`CSRBank`.
-		"""
+		'''
 		bank = CSRBank(name_prefix=self.name)
 		self._csr_banks.append((bank, addr, alignment))
 		return bank
 
 	def window(self, *, addr_width, data_width, granularity=None, features=frozenset(),
 			   alignment=0, addr=None, sparse=None):
-		"""Request a window to a subordinate bus.
+		'''Request a window to a subordinate bus.
 
 		See :meth:`torii.lib.soc.wishbone.Decoder.add` for details.
 
 		Return value
 		------------
 		An instance of :class:`torii.lib.soc.wishbone.Interface`.
-		"""
+		'''
 		window = wishbone.Interface(addr_width=addr_width, data_width=data_width,
 									granularity=granularity, features=features)
 		granularity_bits = log2_int(data_width // window.granularity)
@@ -174,78 +174,78 @@ class Peripheral:
 		self._windows.append((window, addr, sparse))
 		return window
 
-	def event(self, *, mode="level", name=None, src_loc_at=0, desc=None):
-		"""Request an event source.
+	def event(self, *, mode='level', name=None, src_loc_at=0, desc=None):
+		'''Request an event source.
 
 		See :class:`EventSource` for details.
 
 		Return value
 		------------
 		An instance of :class:`EventSource`.
-		"""
+		'''
 		event = EventSource(mode=mode, name=name, src_loc_at=1 + src_loc_at)
 		self._events.append(event)
 		return event
 
 	def bridge(self, *, data_width=8, granularity=None, features=frozenset(), alignment=0):
-		"""Request a bridge to the resources of the peripheral.
+		'''Request a bridge to the resources of the peripheral.
 
 		See :class:`PeripheralBridge` for details.
 
 		Return value
 		------------
 		A :class:`PeripheralBridge` providing access to local resources.
-		"""
+		'''
 		return PeripheralBridge(self, data_width=data_width, granularity=granularity,
 								features=features, alignment=alignment)
 
 	def iter_csr_banks(self):
-		"""Iterate requested CSR banks and their parameters.
+		'''Iterate requested CSR banks and their parameters.
 
 		Yield values
 		------------
 		A tuple ``bank, addr, alignment`` describing the bank and its parameters.
-		"""
+		'''
 		for bank, addr, alignment in self._csr_banks:
 			yield bank, addr, alignment
 
 	def iter_windows(self):
-		"""Iterate requested windows and their parameters.
+		'''Iterate requested windows and their parameters.
 
 		Yield values
 		------------
 		A tuple ``window, addr, sparse`` descr
 		given to :meth:`Peripheral.window`.
-		"""
+		'''
 		for window, addr, sparse in self._windows:
 			yield window, addr, sparse
 
 	def iter_events(self):
-		"""Iterate requested event sources.
+		'''Iterate requested event sources.
 
 		Yield values
 		------------
 		An instance of :class:`EventSource`.
-		"""
+		'''
 		for event in self._events:
 			yield event
 
 
 class CSRBank:
-	"""CSR register bank.
+	'''CSR register bank.
 
 	Parameters
 	----------
 	name_prefix : str
 		Name prefix of the bank registers.
-	"""
-	def __init__(self, *, name_prefix=""):
+	'''
+	def __init__(self, *, name_prefix='):
 		self._name_prefix = name_prefix
 		self._csr_regs    = []
 
 	def csr(self, width, access, *, addr=None, alignment=None, name=None, desc=None,
 			src_loc_at=0):
-		"""Request a CSR register.
+		'''Request a CSR register.
 
 		Parameters
 		----------
@@ -268,29 +268,29 @@ class CSRBank:
 		Return value
 		------------
 		An instance of :class:`torii.lib.soc.csr.Element`.
-		"""
+		'''
 		if name is not None and not isinstance(name, str):
-			raise TypeError("Name must be a string, not {!r}".format(name))
-		name = name or tracer.get_var_name(depth=2 + src_loc_at).lstrip("_")
+			raise TypeError('Name must be a string, not {!r}'.format(name))
+		name = name or tracer.get_var_name(depth=2 + src_loc_at).lstrip('_')
 
-		elem_name = "{}_{}".format(self._name_prefix, name)
+		elem_name = '{}_{}'.format(self._name_prefix, name)
 		elem = csr.Element(width, access, name=elem_name)
 		self._csr_regs.append((elem, addr, alignment))
 		return elem
 
 	def iter_csr_regs(self):
-		"""Iterate requested CSR registers and their parameters.
+		'''Iterate requested CSR registers and their parameters.
 
 		Yield values
 		------------
 		A tuple ``elem, addr, alignment`` describing the register and its parameters.
-		"""
+		'''
 		for elem, addr, alignment in self._csr_regs:
 			yield elem, addr, alignment
 
 
 class PeripheralBridge(Elaboratable):
-	"""Peripheral bridge.
+	'''Peripheral bridge.
 
 	A bridge providing access to the registers and windows of a peripheral, and support for
 	interrupt requests from its event sources.
@@ -317,10 +317,10 @@ class PeripheralBridge(Elaboratable):
 	irq : :class:`IRQLine`, out
 		Interrupt request. It is raised if any event source is enabled and has a pending
 		notification.
-	"""
+	'''
 	def __init__(self, periph, *, data_width, granularity, features, alignment):
 		if not isinstance(periph, Peripheral):
-			raise TypeError("Peripheral must be an instance of Peripheral, not {!r}"
+			raise TypeError('Peripheral must be an instance of Peripheral, not {!r}'
 							.format(periph))
 
 		self._wb_decoder = wishbone.Decoder(addr_width=1, data_width=data_width,
@@ -347,7 +347,7 @@ class PeripheralBridge(Elaboratable):
 
 		events = list(periph.iter_events())
 		if len(events) > 0:
-			self._int_src = InterruptSource(events, name="{}_ev".format(periph.name))
+			self._int_src = InterruptSource(events, name='{}_ev'.format(periph.name))
 			self.irq      = self._int_src.irq
 
 			csr_mux = csr.Multiplexer(addr_width=1, data_width=8, alignment=alignment)
@@ -368,8 +368,8 @@ class PeripheralBridge(Elaboratable):
 		m = Module()
 
 		for i, (csr_mux, csr_bridge) in enumerate(self._csr_subs):
-			m.submodules[   "csr_mux_{}".format(i)] = csr_mux
-			m.submodules["csr_bridge_{}".format(i)] = csr_bridge
+			m.submodules[   'csr_mux_{}'.format(i)] = csr_mux
+			m.submodules['csr_bridge_{}'.format(i)] = csr_bridge
 
 		if self._int_src is not None:
 			m.submodules._int_src = self._int_src

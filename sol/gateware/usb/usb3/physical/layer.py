@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" USB3 physical-layer abstraction."""
+''' USB3 physical-layer abstraction.'''
 
 
 from torii       import *
@@ -18,7 +18,7 @@ from .scrambling import Descrambler, Scrambler
 
 
 class USB3PhysicalLayer(Elaboratable):
-	""" Abstraction encapsulating the USB3 physical layer hardware.
+	''' Abstraction encapsulating the USB3 physical layer hardware.
 
 	Performs the lowest-level PHY interfacing, including scrambling/descrambling.
 
@@ -31,7 +31,7 @@ class USB3PhysicalLayer(Elaboratable):
 
 	enable_scrambling: Signal(), input
 		When asserted, scrambling/descrambling will be enabled.
-	"""
+	'''
 
 	def __init__(self, *, phy, sync_frequency):
 		self._phy = phy

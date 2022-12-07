@@ -5,14 +5,14 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Incomplete example for working with a hardware PIPE PHY."""
+''' Incomplete example for working with a hardware PIPE PHY.'''
 
 from torii   import *
 
 from sol.cli import cli
 
 class PIPEPhyExample(Elaboratable):
-	""" Hardware module that demonstrates grabbing a PHY resource with gearing. """
+	''' Hardware module that demonstrates grabbing a PHY resource with gearing. '''
 
 	def elaborate(self, platform):
 		m = Module()
@@ -28,5 +28,5 @@ class PIPEPhyExample(Elaboratable):
 		return m
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 	cli(PIPEPhyExample)
