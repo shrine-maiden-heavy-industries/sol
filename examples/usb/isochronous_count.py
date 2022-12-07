@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 
 import os
@@ -43,7 +43,7 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "Isochronous IN Test"
 			d.iSerialNumber      = "no serial"
 
@@ -97,7 +97,7 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
 			usb.connect          .eq(1),
-			usb.full_speed_only  .eq(1 if os.getenv('LUNA_FULL_ONLY') else 0),
+			usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
 

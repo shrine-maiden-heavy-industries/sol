@@ -15,7 +15,7 @@ from prompt_toolkit                import print_formatted_text as pprint
 from torii                         import Elaboratable, Module, Signal
 
 from sol.cli                       import cli
-from sol.gateware.architecture.car import LunaECP5DomainGenerator
+from sol.gateware.architecture.car import SolECP5DomainGenerator
 from sol.gateware.interface.jtag   import JTAGRegisterInterface
 from sol.gateware.interface.psram  import HyperRAMInterface
 
@@ -33,7 +33,7 @@ class HyperRAMDiagnostic(Elaboratable):
 		m = Module()
 
 		# Generate our clock domains.
-		clocking = LunaECP5DomainGenerator()
+		clocking = SolECP5DomainGenerator()
 		m.submodules.clocking = clocking
 
 		# Create a set of registers...

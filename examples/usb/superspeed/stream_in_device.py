@@ -15,7 +15,7 @@ from sol.usb3               import SuperSpeedStreamInEndpoint, USBSuperSpeedDevi
 
 
 class USBSuperSpeedExample(Elaboratable):
-	""" Simple example of a USB SuperSpeed device using the LUNA framework. """
+	""" Simple example of a USB SuperSpeed device using the SOL framework. """
 
 	BULK_ENDPOINT_NUMBER = 1
 	MAX_BULK_PACKET_SIZE = 1024
@@ -41,7 +41,7 @@ class USBSuperSpeedExample(Elaboratable):
 			# USB3 requires this to be "9", to indicate 2 ** 9, or 512B.
 			d.bMaxPacketSize0    = 9
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "SuperSpeed Bulk Test"
 			d.iSerialNumber      = "1234"
 

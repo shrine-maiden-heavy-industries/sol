@@ -107,7 +107,7 @@ class USBSerialDevice(Elaboratable):
 	_DATA_ENDPOINT_NUMBER   = 4
 
 	def __init__(self, *, bus, idVendor, idProduct,
-			manufacturer_string="LUNA",
+			manufacturer_string="SOL",
 			product_string="USB-to-serial",
 			serial_number=None, max_packet_size=64):
 

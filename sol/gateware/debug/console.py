@@ -10,7 +10,7 @@
 from torii  import Signal, Module,  Elaboratable, Array
 
 class DebugConsole(Elaboratable):
-	""" Simple debug console gateware for LUNA.
+	""" Simple debug console gateware for SOL.
 
 		I: line_in[8][max_line_legth] -- The line to be rendered to the output stream.
 		I: line_length -- The data length to be rendered t

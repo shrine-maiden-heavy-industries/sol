@@ -32,7 +32,7 @@ from .reset                    import USBResetSequencer
 
 
 class USBDevice(Elaboratable):
-	""" Core gateware common to all LUNA USB2 devices.
+	""" Core gateware common to all SOL USB2 devices.
 
 	The ``USBDevice`` module contains the low-level communications hardware necessary to implement a USB device;
 	including hardware for maintaining device state, detecting events, reading data from the host, and generating
@@ -449,7 +449,7 @@ class FullDeviceTest(USBDeviceTest):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "Test Device"
 			d.iSerialNumber      = "1234"
 
@@ -569,7 +569,7 @@ class LongDescriptorTest(USBDeviceTest):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "Test Device"
 			d.iSerialNumber      = "1234"
 

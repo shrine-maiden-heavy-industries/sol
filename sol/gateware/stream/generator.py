@@ -13,7 +13,7 @@ from torii        import *
 
 # Brought in for tests.
 from ..test       import (
-	LunaSSGatewareTestCase, LunaUSBGatewareTestCase, ss_domain_test_case, usb_domain_test_case
+	SolSSGatewareTestCase, SolUSBGatewareTestCase, ss_domain_test_case, usb_domain_test_case
 )
 from ..usb.stream import SuperSpeedStreamInterface
 from .            import StreamInterface
@@ -355,7 +355,7 @@ class ConstantStreamGenerator(Elaboratable):
 		return m
 
 
-class ConstantStreamGeneratorTest(LunaUSBGatewareTestCase):
+class ConstantStreamGeneratorTest(SolUSBGatewareTestCase):
 	FRAGMENT_UNDER_TEST = ConstantStreamGenerator
 	FRAGMENT_ARGUMENTS  = {'constant_data': b"HELLO, WORLD", 'domain': "usb", 'max_length_width': 16}
 
@@ -511,7 +511,7 @@ class ConstantStreamGeneratorTest(LunaUSBGatewareTestCase):
 
 
 
-class ConstantStreamGeneratorWideTest(LunaSSGatewareTestCase):
+class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = ConstantStreamGenerator
 	FRAGMENT_ARGUMENTS  = dict(
 		domain           = "ss",

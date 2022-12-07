@@ -74,7 +74,7 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0x05a5
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "Integrated Logic Analyzer"
 			d.iSerialNumber      = "no serial"
 

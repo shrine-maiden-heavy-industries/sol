@@ -13,7 +13,7 @@ from torii                         import (
 )
 
 from sol.cli                       import cli
-from sol.gateware.architecture.car import LunaECP5DomainGenerator
+from sol.gateware.architecture.car import SolECP5DomainGenerator
 from sol.gateware.interface.jtag   import JTAGRegisterInterface
 from sol.gateware.interface.psram  import HyperRAMInterface
 from sol.gateware.interface.ulpi   import ULPIRegisterWindow
@@ -87,7 +87,7 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		m = Module()
 
 		# Generate our clock domains.
-		clocking = LunaECP5DomainGenerator(clock_frequencies=CLOCK_FREQUENCIES)
+		clocking = SolECP5DomainGenerator(clock_frequencies=CLOCK_FREQUENCIES)
 		m.submodules.clocking = clocking
 
 		registers = JTAGRegisterInterface(default_read_value=0xDEADBEEF)

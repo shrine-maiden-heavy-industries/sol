@@ -11,7 +11,7 @@ import unittest
 from torii    import Elaboratable, Memory, Module, Record, Signal
 
 from ..stream import StreamInterface
-from ..test   import LunaGatewareTestCase, usb_domain_test_case
+from ..test   import SolGatewareTestCase, usb_domain_test_case
 
 
 class USBAnalyzer(Elaboratable):
@@ -267,7 +267,7 @@ class USBAnalyzer(Elaboratable):
 
 
 
-class USBAnalyzerTest(LunaGatewareTestCase):
+class USBAnalyzerTest(SolGatewareTestCase):
 
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
@@ -387,7 +387,7 @@ class USBAnalyzerTest(LunaGatewareTestCase):
 
 
 
-class USBAnalyzerStackTest(LunaGatewareTestCase):
+class USBAnalyzerStackTest(SolGatewareTestCase):
 	""" Test that evaluates a full-stack USB analyzer setup. """
 
 	SYNC_CLOCK_FREQUENCY = None

@@ -20,13 +20,13 @@ Prerequisites
    `NextPNR <https://github.com/YosysHQ/nextpnr>`__ place-and-route
    tool. All of these tools must be built from ``master``.
 -  A working installation of
-   `Amaranth HDL <https://github.com/amaranth-lang/amaranth>`__.
+   `Torii HDL <https://github.com/shrine-maiden-heavy-industries/torii-hdl>`__.
 
 Installation
 ------------
 
-Currently, the LUNA library is considered a “work-in-progress”; and
-thus it's assumed you'll want to use a local copy of LUNA for
+Currently, the SOL library is considered a “work-in-progress”; and
+thus it's assumed you'll want to use a local copy of SOL for
 development.
 
 The easiest way to set this up is to install the distribution in a virtual environment.
@@ -41,13 +41,13 @@ From the root of the repository:
    poetry install
 
 
-If you want to install LUNA to your machine globally (not recommended), you can do so
+If you want to install SOL to your machine globally (not recommended), you can do so
 using the following single command:
 
 
 .. code:: sh
 
-   # Create a LUNA package, and install it.
+   # Create a SOL package, and install it.
    pip3 install . --user
 
 
@@ -56,15 +56,15 @@ Testing
 
 The easiest way to test your installation is to build one of the test
 applets. These applets are just Python scripts that construct and
-program gateware using Amaranth HDL; so they can be run like any other script:
+program gateware using Torii HDL; so they can be run like any other script:
 
 .. code:: sh
 
-   # With GSG or self-built LUNA hardware connected; we can run the full test,
+   # With GSG or self-built SOL hardware connected; we can run the full test,
    # and test both our installation and the attached hardware.
    poetry run applets/interactive-test.py
 
-   # Without LUNA hardware connected, we'll only build the applet, to exercise
+   # Without SOL hardware connected, we'll only build the applet, to exercise
    # our toolchain.
    poetry run applets/interactive-test.py --dry-run
 
@@ -82,10 +82,10 @@ and debug comms.
    $ apollo
    usage: apollo [-h] command: [[argument]] [[value]]
 
-   Utility for LUNA development via an onboard Debug Controller.
+   Utility for SOL development via an onboard Debug Controller.
 
    positional arguments:
-     command:    info       -- Prints information about any connected LUNA-compatible boards
+     command:    info       -- Prints information about any connected SOL-compatible boards
                  configure  -- Uploads a bitstream to the device's FPGA over JTAG.
                  erase      -- Clears the attached board's configuration flash.
                  program    -- Programs the target bitstream onto the attached FPGA.

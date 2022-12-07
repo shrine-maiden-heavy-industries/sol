@@ -177,7 +177,7 @@ def cli(fragment, *pos_args, cli_soc : Optional[Any] = None, **kwargs):
 		platform = get_appropriate_platform()
 
 		# If we have a toolchain override, apply it to our platform.
-		toolchain = getenv('LUNA_TOOLCHAIN')
+		toolchain = getenv('SOL_TOOLCHAIN')
 		if toolchain:
 			platform.toolchain = toolchain
 

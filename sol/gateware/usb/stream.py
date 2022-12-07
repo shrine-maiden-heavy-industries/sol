@@ -14,11 +14,11 @@ from torii.hdl.xfrm   import DomainRenamer
 
 from ..stream         import StreamInterface
 from ..stream.arbiter import StreamArbiter
-from ..test           import LunaUSBGatewareTestCase, usb_domain_test_case
+from ..test           import SolUSBGatewareTestCase, usb_domain_test_case
 
 
 class USBInStreamInterface(StreamInterface):
-	""" Variant of LUNA's StreamInterface optimized for USB IN transmission.
+	""" Variant of SOL's StreamInterface optimized for USB IN transmission.
 
 	This stream interface is nearly identical to StreamInterface, with the following
 	restriction: the `valid` signal _must_ be held high for every packet between `first`
@@ -47,7 +47,7 @@ class USBInStreamInterface(StreamInterface):
 
 
 class USBOutStreamInterface(Record):
-	""" Variant of LUNA's StreamInterface optimized for USB OUT receipt.
+	""" Variant of SOL's StreamInterface optimized for USB OUT receipt.
 
 	This is a heavily simplified version of our StreamInterface, which omits the 'first',
 	'last', and 'ready' signals. Instead, the streamer indicates when data is valid using
@@ -261,7 +261,7 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 		return m
 
 
-class USBOutStreamBoundaryDetectorTest(LunaUSBGatewareTestCase):
+class USBOutStreamBoundaryDetectorTest(SolUSBGatewareTestCase):
 	FRAGMENT_UNDER_TEST   = USBOutStreamBoundaryDetector
 
 	@usb_domain_test_case
@@ -321,7 +321,7 @@ class USBOutStreamBoundaryDetectorTest(LunaUSBGatewareTestCase):
 
 
 class USBRawSuperSpeedStream(StreamInterface):
-	""" Variant of LUNA's StreamInterface optimized for carrying raw USB3 data.
+	""" Variant of SOL's StreamInterface optimized for carrying raw USB3 data.
 
 	Low-level USB3 data-streams consist of both data bytes ("data") and control flags,
 	which differentiate standard data bytes from data bytes used for control.

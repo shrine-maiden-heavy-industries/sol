@@ -3,13 +3,13 @@
 Gateware Endpoint Interfaces
 ============================
 
-The LUNA architecture separates gateware into two distinct groups: the *core device*, responsible for the
+The SOL architecture separates gateware into two distinct groups: the *core device*, responsible for the
 low-level communications common to all devices, and *endpoint interfaces*, which perform high-level communications,
 and which are often responsible for tailoring each device for its intended application:
 
 .. figure:: USBDevice.svg
 
-Every useful LUNA device features at least one endpoint interface capable of at least handling enumeration. Many
+Every useful SOL device features at least one endpoint interface capable of at least handling enumeration. Many
 devices will provide multiple endpoint interfaces -- often one for each endpoint -- but this is not a requirement.
 Incoming token, data, and handshake packets are routed to all endpoint interfaces; it is up to each endpoint interface
 to decide which packets to respond to.
@@ -25,7 +25,7 @@ that talks on multiple endpoints, but which uses only one endpoint interface.
 Exclusivity
 -----------
 
-A LUNA ``USBDevice`` performs no arbitration -- if two endpoint interfaces attempt to transmit at the same time, the
+A SOL ``USBDevice`` performs no arbitration -- if two endpoint interfaces attempt to transmit at the same time, the
 result is undefined; and often will result in undesirable output. Accordingly, it's important to ensure a "clear
 delineation of responsibility" across endpoint interfaces. This is often accomplished by ensuring only one endpoint
 interface handles a given endpoint or request type.

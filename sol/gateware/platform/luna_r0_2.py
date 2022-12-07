@@ -11,7 +11,7 @@ from torii.build                        import *
 from torii.platform.resources           import *
 from torii.platform.vendor.lattice_ecp5 import LatticeECP5Platform
 
-from ..architecture.car                 import LunaECP5DomainGenerator
+from ..architecture.car                 import SolECP5DomainGenerator
 from .core                              import LUNAApolloPlatform
 
 __all__ = (
@@ -36,7 +36,7 @@ class LUNAPlatformRev0D2(LUNAApolloPlatform, LatticeECP5Platform):
 	default_clk = "clk_60MHz"
 
 	# Provide the type that'll be used to create our clock domains.
-	clock_domain_generator = LunaECP5DomainGenerator
+	clock_domain_generator = SolECP5DomainGenerator
 
 	# By default, assume we'll be connecting via our target PHY.
 	default_usb_connection = "target_phy"

@@ -9,11 +9,11 @@
 from usb_construct.types import USBPacketID, USBStandardRequests
 
 from ..interface.utmi    import UTMIInterface
-from .                   import LunaGatewareTestCase
+from .                   import SolGatewareTestCase
 from .contrib            import usb_packet
 
 
-class USBDeviceTest(LunaGatewareTestCase):
+class USBDeviceTest(SolGatewareTestCase):
 	""" Test case strap for UTMI-connected devices. """
 
 	# Use only the USB clock domain; ignore the sync one unless overridden.

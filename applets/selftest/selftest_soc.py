@@ -201,7 +201,7 @@ class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 
 
 class SelftestCore(Elaboratable):
-	""" Simple soft-core that executes the LUNA factory tests. """
+	""" Simple soft-core that executes the SOL factory tests. """
 
 	def __init__(self):
 		clock_freq = 60e6

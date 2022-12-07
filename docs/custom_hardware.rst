@@ -1,9 +1,9 @@
 
 =========================
-LUNA On Your Own Hardware
+SOL On Your Own Hardware
 =========================
 
-The LUNA stack is designed to be easy to use on your own FPGA hardware -- if you can already run Amaranth designs
+The SOL stack is designed to be easy to use on your own FPGA hardware -- if you can already run Torii designs
 on your board, all you'll need is to set up some I/O definitions and some clock domains.
 
 The exact platform requirements depend on how you'll perform USB interfacing, and are detailed below.
@@ -12,7 +12,7 @@ The exact platform requirements depend on how you'll perform USB interfacing, an
 High-Speed via a ULPI PHY
 -------------------------
 
-Using a ULPI PHY is relatively straightforward; and typically requires no hardware beyond the ULPI PHY. LUNA works with
+Using a ULPI PHY is relatively straightforward; and typically requires no hardware beyond the ULPI PHY. SOL works with
 both designs that receive their ``usb``-domain clocks from the PHY (typical) and designs that provide a 60MHz clock to
 their PHY.
 
@@ -89,7 +89,7 @@ An example resource might look like:
 Full-Speed using FPGA I/O
 -------------------------
 
-LUNA provides a *gateware PHY* that enables an FPGA to communicate at Full Speed using only FPGA 3V3 I/O
+SOL provides a *gateware PHY* that enables an FPGA to communicate at Full Speed using only FPGA 3V3 I/O
 and a pull-up resistor. The FPGA must be able to provide stable 48 MHz and 12 MHz clocks.
 
 The following clock domains are required:

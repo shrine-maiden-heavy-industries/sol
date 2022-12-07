@@ -92,7 +92,7 @@ class USBVendorDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "Fancy USB-Controlled LEDs"
 			d.iSerialNumber      = "1234"
 

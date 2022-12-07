@@ -15,7 +15,7 @@ from torii             import Array, Cat, Const, Elaboratable, Module, Signal
 from torii.hdl.rec     import DIR_FANIN, DIR_FANOUT, Record
 
 from ...interface.utmi import UTMITransmitInterface
-from ...test           import LunaGatewareTestCase, usb_domain_test_case
+from ...test           import SolGatewareTestCase, usb_domain_test_case
 from ..stream          import USBInStreamInterface, USBOutStreamInterface
 from .                 import USBPacketID, USBSpeed
 
@@ -201,7 +201,7 @@ class InterpacketTimerInterface(Record):
 #
 
 
-class USBPacketizerTest(LunaGatewareTestCase):
+class USBPacketizerTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY  = 60e6
 
@@ -1520,7 +1520,7 @@ class USBDataPacketGenerator(Elaboratable):
 		return m
 
 
-class USBDataPacketGeneratorTest(LunaGatewareTestCase):
+class USBDataPacketGeneratorTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
 
@@ -1736,7 +1736,7 @@ class USBHandshakeGenerator(Elaboratable):
 		return m
 
 
-class USBHandshakeGeneratorTest(LunaGatewareTestCase):
+class USBHandshakeGeneratorTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
 
@@ -1952,7 +1952,7 @@ class USBInterpacketTimer(Elaboratable):
 		return m
 
 
-class USBInterpacketTimerTest(LunaGatewareTestCase):
+class USBInterpacketTimerTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
 

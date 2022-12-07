@@ -38,7 +38,7 @@ class USBStreamOutDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "User IO streamer"
 			d.iSerialNumber      = "no serial"
 

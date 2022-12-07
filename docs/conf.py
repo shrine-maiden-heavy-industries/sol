@@ -1,7 +1,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'LUNA'
+project = 'SOL'
 copyright = '2020 Great Scott Gadgets'
 author = 'Katherine J. Temkin'
 

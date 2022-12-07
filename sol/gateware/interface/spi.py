@@ -12,7 +12,7 @@ from torii         import Cat, Elaboratable, Module, Record, Signal
 from torii.hdl.ast import Fell, Rose
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
-from ..test.utils  import LunaGatewareTestCase, sync_test_case
+from ..test.utils  import SolGatewareTestCase, sync_test_case
 
 
 class SPIBus(Record):
@@ -169,8 +169,8 @@ class SPIDeviceInterface(Elaboratable):
 
 
 
-class SPIGatewareTestCase(LunaGatewareTestCase):
-	""" Extended version of the LunaGatewareTestCase.
+class SPIGatewareTestCase(SolGatewareTestCase):
+	""" Extended version of the SolGatewareTestCase.
 
 	Adds three SPI-simulation methods:
 		-spi_send_bit

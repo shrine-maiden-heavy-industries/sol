@@ -11,7 +11,7 @@ import unittest
 from torii             import *
 
 from ...interface.utmi import UTMIOperatingMode, UTMITerminationSelect, UTMITransmitInterface
-from ...test           import LunaGatewareTestCase, usb_domain_test_case
+from ...test           import SolGatewareTestCase, usb_domain_test_case
 from .                 import USBSpeed
 
 
@@ -514,7 +514,7 @@ class USBResetSequencer(Elaboratable):
 		return m
 
 
-class USBResetSequencerTest(LunaGatewareTestCase):
+class USBResetSequencerTest(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = USBResetSequencer
 
 	SYNC_CLOCK_FREQUENCY = None

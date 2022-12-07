@@ -23,7 +23,7 @@ import unittest
 
 from torii          import *
 
-from ....test.utils import LunaSSGatewareTestCase, ss_domain_test_case
+from ....test.utils import SolSSGatewareTestCase, ss_domain_test_case
 from ...stream      import USBRawSuperSpeedStream
 from .coding        import SKP, stream_word_matches_symbol
 
@@ -222,7 +222,7 @@ class CTCSkipRemover(Elaboratable):
 
 
 
-class CTCSkipRemoverTest(LunaSSGatewareTestCase):
+class CTCSkipRemoverTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = CTCSkipRemover
 
 	def initialize_signals(self):

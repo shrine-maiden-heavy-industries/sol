@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # SPDX-License-Identifier: BSD-3-Clause
@@ -50,8 +50,8 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		return m
 
 
-class LunaCPUExample(Elaboratable):
-	""" Simple example of building a simple SoC around LUNA. """
+class SolCPUExample(Elaboratable):
+	""" Simple example of building a simple SoC around SOL. """
 
 	def __init__(self):
 
@@ -92,5 +92,5 @@ class LunaCPUExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	design = LunaCPUExample()
+	design = SolCPUExample()
 	top_level_cli(design, cli_soc=design.soc)

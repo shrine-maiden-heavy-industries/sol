@@ -51,7 +51,7 @@ class StandardRequestHandler(ControlRequestHandler):
 
 		# If we don't have a value for avoiding blockrams; defer to the environment.
 		if self._avoid_blockram is None:
-			self._avoid_blockram = os.getenv("LUNA_AVOID_BLOCKRAM", False)
+			self._avoid_blockram = os.getenv("SOL_AVOID_BLOCKRAM", False)
 
 		super().__init__()
 

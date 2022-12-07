@@ -16,7 +16,7 @@ from torii         import (
 from torii.hdl.ast import Rose
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
-from ..test        import LunaGatewareTestCase,  usb_domain_test_case
+from ..test        import SolGatewareTestCase,  usb_domain_test_case
 
 
 
@@ -261,7 +261,7 @@ class ULPIRegisterWindow(Elaboratable):
 
 
 
-class TestULPIRegisters(LunaGatewareTestCase):
+class TestULPIRegisters(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = ULPIRegisterWindow
 
 	USB_CLOCK_FREQUENCY = 60e6
@@ -516,7 +516,7 @@ class ULPIRxEventDecoder(Elaboratable):
 		return m
 
 
-class ULPIRxEventDecoderTest(LunaGatewareTestCase):
+class ULPIRxEventDecoderTest(SolGatewareTestCase):
 
 	USB_CLOCK_FREQUENCY = 60e6
 	SYNC_CLOCK_FREQUENCY = None
@@ -752,7 +752,7 @@ class ULPIControlTranslator(Elaboratable):
 		return m
 
 
-class ControlTranslatorTest(LunaGatewareTestCase):
+class ControlTranslatorTest(SolGatewareTestCase):
 
 	USB_CLOCK_FREQUENCY = 60e6
 	SYNC_CLOCK_FREQUENCY = None
@@ -940,7 +940,7 @@ class ULPITransmitTranslator(Elaboratable):
 		return m
 
 
-class ULPITransmitTranslatorTest(LunaGatewareTestCase):
+class ULPITransmitTranslatorTest(SolGatewareTestCase):
 	USB_CLOCK_FREQUENCY=60e6
 	SYNC_CLOCK_FREQUENCY=None
 

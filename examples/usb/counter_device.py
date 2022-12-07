@@ -23,7 +23,7 @@ class USBCounterDeviceExample(Elaboratable):
 	This is useful for two things:
 
 	- We can get a sense that no bytes are dropped by observing the counter sequence.
-	- This generates data with a maximum possible rate; which is useful for gauging LUNA throughput.
+	- This generates data with a maximum possible rate; which is useful for gauging SOL throughput.
 	"""
 
 	BULK_ENDPOINT_NUMBER = 1
@@ -44,7 +44,7 @@ class USBCounterDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "Counter/Throughput Test"
 			d.iSerialNumber      = "no serial"
 
@@ -101,7 +101,7 @@ class USBCounterDeviceExample(Elaboratable):
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
 			usb.connect          .eq(1),
-			usb.full_speed_only  .eq(1 if os.getenv('LUNA_FULL_ONLY') else 0),
+			usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
 

@@ -14,7 +14,7 @@ from apollo_fpga                   import ApolloDebugger
 from torii                         import ClockSignal, Elaboratable, Module, Signal
 
 from sol.cli                       import cli
-from sol.gateware.architecture.car import LunaECP5DomainGenerator
+from sol.gateware.architecture.car import SolECP5DomainGenerator
 from sol.gateware.interface.spi    import SPIRegisterInterface
 from sol.gateware.interface.ulpi   import UTMITranslator
 from sol.gateware.usb.analyzer     import USBAnalyzer
@@ -32,7 +32,7 @@ class ULPIDiagnostic(Elaboratable):
 		m = Module()
 
 		# Generate our clock domains.
-		clocking = LunaECP5DomainGenerator()
+		clocking = SolECP5DomainGenerator()
 		m.submodules.clocking = clocking
 
 		# Grab a reference to our debug-SPI bus.

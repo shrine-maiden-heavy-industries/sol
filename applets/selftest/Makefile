@@ -1,5 +1,5 @@
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 
 TARGET  = selftest
@@ -30,7 +30,7 @@ LLDFLAGS = \
 	 --oformat binary \
 	 -nostdlib \
 	 -static
-	
+
 SOC = $(TARGET)_soc.py
 #ASM_SOURCES = start.S
 SOURCES = \
@@ -84,6 +84,6 @@ program: $(TARGET).bin $(SOC)
 	./$(SOC)
 
 # Loads our "Hello world" program onto the FPGA.
-run: $(TARGET).bit 
+run: $(TARGET).bit
 	apollo configure $(TARGET).bit
 	pyserial-miniterm $(PORT) 115200

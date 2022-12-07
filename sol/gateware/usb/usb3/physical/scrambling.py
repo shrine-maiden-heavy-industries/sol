@@ -15,7 +15,7 @@ import unittest
 
 from torii          import *
 
-from ....test.utils import LunaSSGatewareTestCase, ss_domain_test_case
+from ....test.utils import SolSSGatewareTestCase, ss_domain_test_case
 from ...stream      import USBRawSuperSpeedStream
 from .coding        import COM, stream_word_matches_symbol
 
@@ -135,7 +135,7 @@ class ScramblerLFSR(Elaboratable):
 		return m
 
 
-class ScramblerLFSRTest(LunaSSGatewareTestCase):
+class ScramblerLFSRTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = ScramblerLFSR
 
 	@ss_domain_test_case

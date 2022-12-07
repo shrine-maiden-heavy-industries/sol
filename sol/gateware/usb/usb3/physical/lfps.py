@@ -33,7 +33,7 @@ from math           import ceil
 
 from torii          import *
 
-from ....test.utils import LunaSSGatewareTestCase, ss_domain_test_case
+from ....test.utils import SolSSGatewareTestCase, ss_domain_test_case
 from ....utils      import rising_edge_detected, synchronize
 
 __all__ = (
@@ -280,7 +280,7 @@ class LFPSGenerator(Elaboratable):
 		return m
 
 
-class LFPSGeneratorTest(LunaSSGatewareTestCase):
+class LFPSGeneratorTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = LFPSGenerator
 	FRAGMENT_ARGUMENTS  = dict(
 		lfps_pattern = _PollingLFPS,

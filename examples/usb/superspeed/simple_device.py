@@ -15,7 +15,7 @@ from sol.usb3               import USBSuperSpeedDevice
 
 
 class USBSuperSpeedExample(Elaboratable):
-	""" Simple example of a USB SuperSpeed device using the LUNA framework. """
+	""" Simple example of a USB SuperSpeed device using the SOL framework. """
 
 
 	def create_descriptors(self):
@@ -39,7 +39,7 @@ class USBSuperSpeedExample(Elaboratable):
 			# USB3 requires this to be "9", to indicate 2 ** 9, or 512B.
 			d.bMaxPacketSize0    = 9
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "SuperSpeed Test Device"
 			d.iSerialNumber      = "1234"
 

@@ -1,7 +1,7 @@
-#
-# This file is part of LUNA.
-#
 # SPDX-License-Identifier: BSD-3-Clause
+#
+# This file is part of SOL.
+#
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 """ UART interface gateware."""
@@ -12,7 +12,7 @@ from torii         import Cat, Elaboratable, Module, Signal
 from torii.lib.soc import memory, wishbone
 
 from ..stream      import StreamInterface
-from ..test        import LunaGatewareTestCase, sync_test_case
+from ..test        import SolGatewareTestCase, sync_test_case
 
 
 class UARTTransmitter(Elaboratable):
@@ -135,7 +135,7 @@ class UARTTransmitter(Elaboratable):
 		return m
 
 
-class UARTTransmitterTest(LunaGatewareTestCase):
+class UARTTransmitterTest(SolGatewareTestCase):
 	DIVISOR = 10
 
 	FRAGMENT_UNDER_TEST = UARTTransmitter
@@ -368,7 +368,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 		return m
 
 
-class UARTMultibyteTransmitterTest(LunaGatewareTestCase):
+class UARTMultibyteTransmitterTest(SolGatewareTestCase):
 	DIVISOR = 10
 
 	FRAGMENT_UNDER_TEST = UARTMultibyteTransmitter

@@ -39,11 +39,11 @@ TRANSFER_QUEUE_DEPTH = 16
 #
 # Selectively create our device to be either USB3 or USB2 based on the SuperSpeed variable.
 #
-if os.getenv('LUNA_SUPERSPEED'):
+if os.getenv('SOL_SUPERSPEED'):
 	MAX_BULK_PACKET_SIZE = 1024
 
 	class USBInSpeedTestDevice(Elaboratable):
-		""" Simple example of a USB SuperSpeed device using the LUNA framework. """
+		""" Simple example of a USB SuperSpeed device using the SOL framework. """
 
 		BULK_ENDPOINT_NUMBER = 1
 		MAX_BULK_PACKET_SIZE = 1024
@@ -69,7 +69,7 @@ if os.getenv('LUNA_SUPERSPEED'):
 				# USB3 requires this to be "9", to indicate 2 ** 9, or 512B.
 				d.bMaxPacketSize0    = 9
 
-				d.iManufacturer      = "LUNA"
+				d.iManufacturer      = "SOL"
 				d.iProduct           = "SuperSpeed Bulk Test"
 				d.iSerialNumber      = "1234"
 
@@ -135,12 +135,12 @@ if os.getenv('LUNA_SUPERSPEED'):
 
 
 else:
-	MAX_BULK_PACKET_SIZE = 64 if os.getenv('LUNA_FULL_ONLY') else 512
+	MAX_BULK_PACKET_SIZE = 64 if os.getenv('SOL_FULL_ONLY') else 512
 
 	class USBInSpeedTestDevice(Elaboratable):
 		""" Simple device that sends data to the host as fast as hardware can.
 
-		This is paired with the python code below to evaluate LUNA throughput.
+		This is paired with the python code below to evaluate SOL throughput.
 		"""
 
 		def create_descriptors(self):
@@ -158,7 +158,7 @@ else:
 				d.idVendor           = VENDOR_ID
 				d.idProduct          = PRODUCT_ID
 
-				d.iManufacturer      = "LUNA"
+				d.iManufacturer      = "SOL"
 				d.iProduct           = "IN speed test"
 				d.iSerialNumber      = "no serial"
 
@@ -189,8 +189,8 @@ else:
 			ulpi = platform.request(platform.default_usb_connection)
 			m.submodules.usb = usb = USBDevice(bus=ulpi)
 
-			assert not usb.always_fs or os.getenv('LUNA_FULL_ONLY'), \
-				   "LUNA_FULL_ONLY must be set for devices with a full speed only PHY"
+			assert not usb.always_fs or os.getenv('SOL_FULL_ONLY'), \
+				   "SOL_FULL_ONLY must be set for devices with a full speed only PHY"
 
 			# Add our standard control endpoint to the device.
 			descriptors = self.create_descriptors()
@@ -212,7 +212,7 @@ else:
 			# Connect our device as a high speed device by default.
 			m.d.comb += [
 				usb.connect          .eq(1),
-				usb.full_speed_only  .eq(1 if os.getenv('LUNA_FULL_ONLY') else 0),
+				usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 			]
 
 			return m
@@ -315,7 +315,7 @@ def run_speed_test():
 if __name__ == "__main__":
 
 	# If our environment is suggesting we rerun tests, do so.
-	if os.getenv('LUNA_RERUN_TEST'):
+	if os.getenv('SOL_RERUN_TEST'):
 		setup_logger()
 		logging.info("Running speed test without rebuilding...")
 		run_speed_test()

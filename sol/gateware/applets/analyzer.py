@@ -21,7 +21,7 @@ from torii                            import Elaboratable, Module, Signal
 from usb_construct.emitters           import DeviceDescriptorCollection
 from usb_construct.types              import USBRequestType
 
-from sol.gateware.architecture.car    import LunaECP5DomainGenerator
+from sol.gateware.architecture.car    import SolECP5DomainGenerator
 from sol.gateware.interface.ulpi      import UTMITranslator
 from sol.gateware.platform            import get_appropriate_platform
 from sol.gateware.stream.generator    import StreamSerializer
@@ -147,7 +147,7 @@ class USBAnalyzerApplet(Elaboratable):
 			d.idVendor           = USB_VENDOR_ID
 			d.idProduct          = USB_PRODUCT_ID
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "USB Analyzer"
 			d.iSerialNumber      = "[autodetect serial here]"
 
@@ -175,7 +175,7 @@ class USBAnalyzerApplet(Elaboratable):
 		m.submodules.state = state = USBAnalyzerState()
 
 		# Generate our clock domains.
-		clocking = LunaECP5DomainGenerator()
+		clocking = SolECP5DomainGenerator()
 		m.submodules.clocking = clocking
 
 		# Create our UTMI translator.
@@ -253,7 +253,7 @@ class USBAnalyzerApplet(Elaboratable):
 
 
 class USBAnalyzerConnection:
-	""" Class representing a connection to a LUNA USB analyzer.
+	""" Class representing a connection to a SOL USB analyzer.
 
 	This abstracts away connection details, so we can rapidly change the way things
 	work without requiring changes in e.g. our ViewSB frontend.
@@ -268,7 +268,7 @@ class USBAnalyzerConnection:
 
 
 	def build_and_configure(self, capture_speed):
-		""" Builds the LUNA analyzer applet and configures the FPGA with it. """
+		""" Builds the SOL analyzer applet and configures the FPGA with it. """
 
 		# Create the USBAnalyzer we want to work with.
 		analyzer = USBAnalyzerApplet(usb_speed=capture_speed)

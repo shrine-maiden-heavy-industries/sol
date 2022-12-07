@@ -1,5 +1,5 @@
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 
 TARGET  = hello_world
@@ -56,4 +56,3 @@ clean:
 # Loads our "Hello world" program onto the FPGA.
 program: $(TARGET).bin $(SOC)
 	./$(SOC)
-

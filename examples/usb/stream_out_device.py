@@ -41,7 +41,7 @@ class USBStreamOutDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "User IO streamer"
 			d.iSerialNumber      = "no serial"
 
@@ -100,7 +100,7 @@ class USBStreamOutDeviceExample(Elaboratable):
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
 			usb.connect          .eq(1),
-			usb.full_speed_only  .eq(1 if os.getenv('LUNA_FULL_ONLY') else 0),
+			usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
 

@@ -12,7 +12,7 @@ from sol.cli               import cli
 from sol.gateware.platform import NullPin
 
 class Blinky(Elaboratable):
-	""" Hardware module that validates basic LUNA functionality. """
+	""" Hardware module that validates basic SOL functionality. """
 
 
 	def elaborate(self, platform):

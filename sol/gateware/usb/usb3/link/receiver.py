@@ -13,7 +13,7 @@ from torii.hdl.ast                  import Fell
 
 from usb_construct.types.superspeed import LinkCommand
 
-from ....test.utils                 import LunaSSGatewareTestCase, ss_domain_test_case
+from ....test.utils                 import SolSSGatewareTestCase, ss_domain_test_case
 from ...stream                      import USBRawSuperSpeedStream
 from ..physical.coding              import EPF, SHP, stream_matches_symbols
 from .command                       import LinkCommandGenerator
@@ -165,7 +165,7 @@ class RawHeaderPacketReceiver(Elaboratable):
 		return m
 
 
-class RawHeaderPacketReceiverTest(LunaSSGatewareTestCase):
+class RawHeaderPacketReceiverTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = RawHeaderPacketReceiver
 
 	def initialize_signals(self):

@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
@@ -16,7 +16,7 @@ from torii                          import *
 
 from usb_construct.types.superspeed import HeaderPacketType
 
-from ..link.header                   import HeaderQueue
+from ..link.header                  import HeaderQueue
 
 
 class DataHeaderReceiver(Elaboratable):

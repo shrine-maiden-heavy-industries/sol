@@ -13,7 +13,7 @@ import unittest
 
 from torii    import *
 
-from ....test import LunaSSGatewareTestCase, ss_domain_test_case
+from ....test import SolSSGatewareTestCase, ss_domain_test_case
 
 
 def compute_usb_crc5(protected_bits):
@@ -437,7 +437,7 @@ class DataPacketPayloadCRC(Elaboratable):
 		return m
 
 
-class DataPacketPayloadCRCTest(LunaSSGatewareTestCase):
+class DataPacketPayloadCRCTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = DataPacketPayloadCRC
 
 	@ss_domain_test_case

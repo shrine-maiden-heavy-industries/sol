@@ -13,7 +13,7 @@ import unittest
 from torii          import Elaboratable, Memory, Module, Signal
 from torii.hdl.xfrm import DomainRenamer
 
-from .test          import LunaGatewareTestCase, sync_test_case
+from .test          import SolGatewareTestCase, sync_test_case
 
 
 class TransactionalizedFIFO(Elaboratable):
@@ -228,7 +228,7 @@ class TransactionalizedFIFO(Elaboratable):
 
 
 
-class TransactionalizedFIFOTest(LunaGatewareTestCase):
+class TransactionalizedFIFOTest(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = TransactionalizedFIFO
 	FRAGMENT_ARGUMENTS = {'width': 8, 'depth': 16}
 

@@ -15,7 +15,7 @@ from torii         import Array, Elaboratable, Module, Signal
 from torii.hdl.mem import Memory
 
 from ...stream     import StreamInterface
-from ...test       import LunaGatewareTestCase, usb_domain_test_case
+from ...test       import SolGatewareTestCase, usb_domain_test_case
 from ..stream      import USBInStreamInterface
 from .packet       import HandshakeExchangeInterface, TokenDetectorInterface
 
@@ -351,7 +351,7 @@ class USBInTransferManager(Elaboratable):
 		return m
 
 
-class USBInTransferManagerTest(LunaGatewareTestCase):
+class USBInTransferManagerTest(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = USBInTransferManager
 	FRAGMENT_ARGUMENTS  = {"max_packet_size": 8}
 

@@ -12,7 +12,7 @@ from torii                          import *
 
 from usb_construct.types.superspeed import HeaderPacketType
 
-from ....test.utils                 import LunaSSGatewareTestCase, ss_domain_test_case
+from ....test.utils                 import SolSSGatewareTestCase, ss_domain_test_case
 from ...stream                      import SuperSpeedStreamInterface, USBRawSuperSpeedStream
 from ..physical.coding              import EPF, SDP, SHP, stream_matches_symbols
 from .crc                           import (
@@ -317,7 +317,7 @@ class DataPacketReceiver(Elaboratable):
 
 
 
-class DataPacketReceiverTest(LunaSSGatewareTestCase):
+class DataPacketReceiverTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = DataPacketReceiver
 
 	def initialize_signals(self):

@@ -13,7 +13,7 @@ from torii       import (
 	ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
 )
 
-from ..test      import LunaGatewareTestCase, sync_test_case
+from ..test      import SolGatewareTestCase, sync_test_case
 from ..utils.cdc import stretch_strobe_signal
 
 
@@ -97,7 +97,7 @@ class PHYResetController(Elaboratable):
 
 
 
-class PHYResetControllerTest(LunaGatewareTestCase):
+class PHYResetControllerTest(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = PHYResetController
 
 	def initialize_signals(self):
@@ -130,8 +130,8 @@ class PHYResetControllerTest(LunaGatewareTestCase):
 
 
 
-class LunaDomainGenerator(Elaboratable, metaclass=ABCMeta):
-	""" Helper that generates the clock domains used in a LUNA board.
+class SolDomainGenerator(Elaboratable, metaclass=ABCMeta):
+	""" Helper that generates the clock domains used in a SOL board.
 
 	Note that this module should create three in-phase clocks; so these domains
 	should not require explicit boundary crossings.
@@ -225,8 +225,8 @@ class LunaDomainGenerator(Elaboratable, metaclass=ABCMeta):
 		return m
 
 
-class LunaECP5DomainGenerator(LunaDomainGenerator):
-	""" ECP5 clock domain generator for LUNA. Assumes a 60MHz input clock. """
+class SolECP5DomainGenerator(SolDomainGenerator):
+	""" ECP5 clock domain generator for SOL. Assumes a 60MHz input clock. """
 
 	# For debugging, we'll allow the ECP5's onboard clock to generate a 62MHz
 	# oscillator signal. This won't work for USB, but it'll at least allow

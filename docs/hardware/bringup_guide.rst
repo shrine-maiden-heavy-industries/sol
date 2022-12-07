@@ -159,7 +159,7 @@ Running Self-Tests
 ------------------
 
 The final step of bringup is to validate the functionality of your
-hardware. This is most easily accomplished by running LUNA's interactive
+hardware. This is most easily accomplished by running SOL's interactive
 self-test applet.
 
 Before you can run the applet, you'll need to have a working ``sol``
@@ -167,7 +167,7 @@ development environment. See [[Setting up the development environment]]
 to get your environment set up.
 
 Next, we can check to make sure your LUNA board is recognized by the
-LUNA toolchain. Running the ``apollo info`` command will list any
+SOL toolchain. Running the ``apollo info`` command will list any
 detected devices:
 
 .. code:: sh
@@ -190,7 +190,7 @@ Troubleshooting
 
 **Issue: some of the build files weren't found;** ``make`` **produces a message like "** ``no rule to make target`` **".**
 
-Chances are, your clone of LUNA is was pulled down without its
+Chances are, your clone of SOL is was pulled down without its
 submodules. You can pull down the relevant submodules using ``git``:
 
 .. code:: sh

@@ -8,7 +8,7 @@ Status & Support
 .. role:: needstest
 .. role:: complete
 
-The LUNA library is a work in progress; but many of its features are usable enough for inclusion in your own designs.
+The SOL library is a work in progress; but many of its features are usable enough for inclusion in your own designs.
 More testing of our work -- and more feedback -- is always appreciated!
 
 Support for Device Mode
@@ -113,7 +113,7 @@ Support for Device Mode
 Support for Host Mode
 -----------------------
 
-The LUNA library currently does not provide any support for operating as a USB host; though the low-level USB
+The SOL library currently does not provide any support for operating as a USB host; though the low-level USB
 communications interfaces have been designed to allow for eventual host support. Host support is not currently
 a priority, but contributions are welcome.
 
@@ -121,7 +121,7 @@ a priority, but contributions are welcome.
 "Reference" Boards
 ------------------
 
-The LUNA library is intended to work on any FPGA with sufficient fabric performance and resources; but testing is
+The SOL library is intended to work on any FPGA with sufficient fabric performance and resources; but testing is
 only performed on a collection of reference boards.
 
 .. list-table::
@@ -200,4 +200,3 @@ only performed on a collection of reference boards.
 	  - Kintex 7
 	  - ULPI (TUSB1210), FMC for PIPE (TUSB1310A) add-on boards
 	  - :complete:`High/Super-Speed Fully Supported`
-

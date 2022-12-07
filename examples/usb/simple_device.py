@@ -18,7 +18,7 @@ from sol.gateware.usb.usb2.device import USBDevice
 
 
 class USBDeviceExample(Elaboratable):
-	""" Simple example of a USB device using the LUNA framework. """
+	""" Simple example of a USB device using the SOL framework. """
 
 
 	def create_descriptors(self):
@@ -36,7 +36,7 @@ class USBDeviceExample(Elaboratable):
 			d.idVendor           = 0x16d0
 			d.idProduct          = 0xf3b
 
-			d.iManufacturer      = "LUNA"
+			d.iManufacturer      = "SOL"
 			d.iProduct           = "Test Device"
 			d.iSerialNumber      = "1234"
 
@@ -77,7 +77,7 @@ class USBDeviceExample(Elaboratable):
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
 			usb.connect          .eq(1),
-			usb.full_speed_only  .eq(1 if os.getenv('LUNA_FULL_ONLY') else 0),
+			usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
 		# ... and for now, attach our LEDs to our most recent control request.

@@ -16,7 +16,7 @@ from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 from torii.lib.cdc import FFSynchronizer
 from torii.lib.io  import Pin
 
-from ..test import LunaGatewareTestCase, sync_test_case
+from ..test import SolGatewareTestCase, sync_test_case
 
 
 def synchronize(m, signal, *, output=None, o_domain='sync', stages=2):
@@ -148,7 +148,7 @@ def stretch_strobe_signal(m, strobe, *, to_cycles, output=None, domain=None, all
 	return output
 
 
-class StrobeStretcherTest(LunaGatewareTestCase):
+class StrobeStretcherTest(SolGatewareTestCase):
 	""" Test case for our strobe stretcher function. """
 
 

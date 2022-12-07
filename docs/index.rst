@@ -1,9 +1,9 @@
 
 ========================================
-LUNA: USB Multitool and Gateware Library
+SOL: USB Multitool and Gateware Library
 ========================================
 
-This is the documentation for the LUNA gateware library; and the developer document for the LUNA
+This is the documentation for the SOL gateware library; and the developer document for the SOL
 USB multitool hardware and software.
 
 .. image:: images/board_readme_side.jpg

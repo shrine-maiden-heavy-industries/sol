@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-""" Utilities for creating LUNA platforms. """
+""" Utilities for creating SOL platforms. """
 
 import logging       as log
 
@@ -23,8 +23,8 @@ class NullPin(Record):
 		])
 
 
-class LUNAPlatform:
-	""" Mixin that extends Amaranth platforms with extra functionality."""
+class SOLPlatform:
+	""" Mixin that extends Torii platforms with extra functionality."""
 
 	name = "unnamed platform"
 
@@ -94,7 +94,7 @@ class LUNAPlatform:
 			return default
 
 
-class LUNAApolloPlatform(LUNAPlatform):
+class LUNAApolloPlatform(SOLPlatform):
 	""" Base class for Apollo-based LUNA platforms; includes configuration. """
 
 	def toolchain_program(self, products, name):

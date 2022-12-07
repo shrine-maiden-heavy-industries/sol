@@ -11,7 +11,7 @@ import unittest
 from torii         import Cat, Elaboratable, Module, Record, Signal
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
-from ..test.utils  import LunaGatewareTestCase, sync_test_case
+from ..test.utils  import SolGatewareTestCase, sync_test_case
 from ..utils.io    import delay
 
 
@@ -386,7 +386,7 @@ class HyperRAMInterface(Elaboratable):
 		return m
 
 
-class TestHyperRAMInterface(LunaGatewareTestCase):
+class TestHyperRAMInterface(SolGatewareTestCase):
 
 	def instantiate_dut(self):
 		# Create a record that recreates the layout of our RAM signals.

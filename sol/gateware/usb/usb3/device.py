@@ -25,7 +25,7 @@ from .protocol.endpoint     import SuperSpeedEndpointMultiplexer
 
 
 class USBSuperSpeedDevice(Elaboratable):
-	""" Core gateware common to all LUNA USB3 devices. """
+	""" Core gateware common to all SOL USB3 devices. """
 
 	def __init__(self, *, phy, sync_frequency=None):
 		self._phy = phy

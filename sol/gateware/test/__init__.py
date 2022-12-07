@@ -5,16 +5,16 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 from .utils import (
-	LunaGatewareTestCase, LunaUSBGatewareTestCase, LunaSSGatewareTestCase,
+	SolGatewareTestCase, SolUSBGatewareTestCase, SolSSGatewareTestCase,
 
 	sync_test_case, usb_domain_test_case, fast_domain_test_case,
 	ss_domain_test_case
 )
 
 __all__ = (
-	'LunaGatewareTestCase',
-	'LunaUSBGatewareTestCase',
-	'LunaSSGatewareTestCase',
+	'SolGatewareTestCase',
+	'SolUSBGatewareTestCase',
+	'SolSSGatewareTestCase',
 
 	'sync_test_case',
 	'usb_domain_test_case',

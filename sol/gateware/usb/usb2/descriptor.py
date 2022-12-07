@@ -17,7 +17,7 @@ from usb_construct.types.descriptors.standard import StandardDescriptorNumbers
 
 from ...stream.generator                      import ConstantStreamGenerator
 from ...test                                  import (
-	LunaUSBGatewareTestCase, usb_domain_test_case
+	SolUSBGatewareTestCase, usb_domain_test_case
 )
 from ..stream                                 import USBInStreamInterface
 
@@ -551,7 +551,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		return m
 
 
-class GetDescriptorHandlerBlockTest(LunaUSBGatewareTestCase):
+class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 	descriptors = DeviceDescriptorCollection()
 
 	with descriptors.DeviceDescriptor() as d:

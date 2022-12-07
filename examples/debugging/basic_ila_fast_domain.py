@@ -11,7 +11,7 @@ from apollo_fpga                   import create_ila_frontend
 from torii                         import Cat, Elaboratable, Module, Signal
 
 from sol.cli                       import cli
-from sol.gateware.architecture.car import LunaECP5DomainGenerator
+from sol.gateware.architecture.car import SolECP5DomainGenerator
 from sol.gateware.debug.ila        import SyncSerialILA
 from sol.gateware.utils.cdc        import synchronize
 
@@ -43,7 +43,7 @@ class ILAExample(Elaboratable):
 		m.submodules += self.ila
 
 		# Generate our clock domains.
-		clocking = LunaECP5DomainGenerator(clock_frequencies=CLOCK_FREQUENCIES)
+		clocking = SolECP5DomainGenerator(clock_frequencies=CLOCK_FREQUENCIES)
 		m.submodules.clocking = clocking
 
 		# Clock divider / counter.

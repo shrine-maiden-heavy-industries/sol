@@ -13,7 +13,7 @@ from torii                  import *
 
 from usb_construct.types    import USBRequestRecipient, USBRequestType
 
-from ....test               import LunaSSGatewareTestCase, ss_domain_test_case
+from ....test               import SolSSGatewareTestCase, ss_domain_test_case
 from ....utils              import falling_edge_detected
 from ...request             import SetupPacket
 from ...stream              import SuperSpeedStreamInterface
@@ -215,7 +215,7 @@ class SuperSpeedSetupDecoder(Elaboratable):
 
 
 
-class SuperSpeedSetupDecoderTest(LunaSSGatewareTestCase):
+class SuperSpeedSetupDecoderTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = SuperSpeedSetupDecoder
 
 	@ss_domain_test_case
