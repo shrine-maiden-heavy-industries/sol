@@ -1,10 +1,12 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 #
-# SPDX-License-Identifier: BSD-3-Clause
-""" Generating and recognizing LFPS square wave patterns.
+
+"""
+Generating and recognizing LFPS square wave patterns.
 
 SerDes blocks differ in their out-of-band signaling capabilities. Some are capable of detecting
 and generating LFPS signaling on their own; others only make it possible to access the high-speed
@@ -13,11 +15,14 @@ given only a bare input buffer, or vice versa.
 """
 
 from math import ceil
-from amaranth import *
-from amaranth.lib.cdc import FFSynchronizer
 
+from torii         import *
+from torii.lib.cdc import FFSynchronizer
 
-__all__ = ['LFPSSquareWaveDetector', 'LFPSSquareWaveGenerator']
+__all__ = (
+	'LFPSSquareWaveDetector',
+	'LFPSSquareWaveGenerator',
+)
 
 
 # From [USB3.2: Table 6-29]; the maximum and minimum

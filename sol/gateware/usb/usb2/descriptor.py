@@ -1,21 +1,25 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Utilities for building USB descriptors into gateware. """
 
+import functools
 import struct
 import unittest
-import functools
 
-from amaranth                                import *
+from torii                                    import *
+
 from usb_construct.emitters.descriptors       import DeviceDescriptorCollection
 from usb_construct.types.descriptors.standard import StandardDescriptorNumbers
 
-from ..stream                                import USBInStreamInterface
-from ...stream.generator                     import ConstantStreamGenerator
-from ...test                                 import LunaUSBGatewareTestCase, usb_domain_test_case
+from ...stream.generator                      import ConstantStreamGenerator
+from ...test                                  import (
+	LunaUSBGatewareTestCase, usb_domain_test_case
+)
+from ..stream                                 import USBInStreamInterface
 
 
 class USBDescriptorStreamGenerator(ConstantStreamGenerator):
@@ -344,7 +348,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		# Chunk our ROM into a collection of entries...
 		rom_entries = (rom[(element_size * i):(element_size * i) + element_size] for i in range(total_elements))
 
-		# ... and then convert that into an initializer value in the format Amaranth ROMs like (integers).
+		# ... and then convert that into an initializer value in the format Torii ROMs like (integers).
 		initializer = [struct.unpack(">I", rom_entry)[0] for rom_entry in rom_entries]
 
 		return initializer, max_descriptor_size, max_type_number

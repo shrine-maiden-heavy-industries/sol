@@ -1,19 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Packet transmission handling gateware. """
 
-from amaranth                      import *
-from usb_construct.types.superspeed import LinkCommand, HeaderPacketType
+from torii                          import *
 
-from .header                       import HeaderPacket, HeaderQueue
-from .crc                          import compute_usb_crc5, HeaderPacketCRC, DataPacketPayloadCRC
-from .command                      import LinkCommandDetector
-from ..physical.coding             import SHP, SDP, EPF, END, EDB, get_word_for_symbols
-from ...stream                     import USBRawSuperSpeedStream, SuperSpeedStreamInterface
+from usb_construct.types.superspeed import HeaderPacketType, LinkCommand
 
+from ...stream                      import SuperSpeedStreamInterface, USBRawSuperSpeedStream
+from ..physical.coding              import EDB, END, EPF, SDP, SHP, get_word_for_symbols
+from .command                       import LinkCommandDetector
+from .crc                           import (
+	DataPacketPayloadCRC, HeaderPacketCRC, compute_usb_crc5
+)
+from .header                        import HeaderPacket, HeaderQueue
 
 
 class RawPacketTransmitter(Elaboratable):

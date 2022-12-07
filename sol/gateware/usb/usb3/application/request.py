@@ -1,22 +1,25 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Control-request interfacing and gateware for USB3. """
+
 
 import unittest
 
-from amaranth               import *
-from usb_construct.types     import USBRequestType, USBRequestRecipient
+from torii                  import *
 
+from usb_construct.types    import USBRequestRecipient, USBRequestType
+
+from ....test               import LunaSSGatewareTestCase, ss_domain_test_case
+from ....utils              import falling_edge_detected
 from ...request             import SetupPacket
 from ...stream              import SuperSpeedStreamInterface
-from ..protocol.transaction import HandshakeGeneratorInterface, HandshakeReceiverInterface
 from ..protocol.data        import DataHeaderPacket
+from ..protocol.transaction import HandshakeGeneratorInterface, HandshakeReceiverInterface
 
-from ....utils              import falling_edge_detected
-from ....test               import LunaSSGatewareTestCase, ss_domain_test_case
 
 class SuperSpeedRequestHandlerInterface:
 	""" Interface representing a connection between a control endpoint and a request handler.
@@ -413,7 +416,7 @@ class StallOnlyRequestHandler(Elaboratable):
 		"""
 		Parameters:
 			stall_condition -- A function that accepts a SetupRequest packet, and returns
-					           an Amaranth conditional indicating whether we should stall.
+					           an Torii conditional indicating whether we should stall.
 		"""
 
 		self.condition = stall_condition

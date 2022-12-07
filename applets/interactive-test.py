@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import operator
-from functools import reduce
 
-from amaranth import Signal, Elaboratable, Module, Cat, ClockDomain, ClockSignal, ResetSignal
-from amaranth.lib.cdc import FFSynchronizer
+from apollo_fpga.support.selftest  import ApolloSelfTestCase, named_test
 
-from sol                             import top_level_cli
-from sol.gateware.utils.cdc          import synchronize
-from sol.gateware.architecture.car   import LunaECP5DomainGenerator
-from sol.gateware.interface.jtag     import JTAGRegisterInterface
-from sol.gateware.interface.ulpi     import ULPIRegisterWindow
-from sol.gateware.interface.psram    import HyperRAMInterface
+from torii                         import (
+	Cat, ClockSignal, Elaboratable, Module, ResetSignal, Signal
+)
 
-from apollo_fpga.support.selftest          import ApolloSelfTestCase, named_test
+from sol.cli                       import cli
+from sol.gateware.architecture.car import LunaECP5DomainGenerator
+from sol.gateware.interface.jtag   import JTAGRegisterInterface
+from sol.gateware.interface.psram  import HyperRAMInterface
+from sol.gateware.interface.ulpi   import ULPIRegisterWindow
 
 
 CLOCK_FREQUENCIES = {
@@ -361,7 +359,7 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 
 if __name__ == "__main__":
-	tester = top_level_cli(InteractiveSelftest)
+	tester = cli(InteractiveSelftest)
 
 	if tester:
 		tester.run_tests()

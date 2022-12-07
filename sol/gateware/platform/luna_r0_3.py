@@ -1,19 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020-2021 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 
 import os
 
-from amaranth.build import *
-from amaranth.vendor.lattice_ecp5 import LatticeECP5Platform
-from amaranth_boards.resources import *
+from torii.build                        import *
+from torii.platform.resources           import *
+from torii.platform.vendor.lattice_ecp5 import LatticeECP5Platform
 
-from .core import LUNAApolloPlatform
-from ..architecture.car import LunaECP5DomainGenerator
+from ..architecture.car                 import LunaECP5DomainGenerator
+from .core                              import LUNAApolloPlatform
 
-__all__ = ["LUNAPlatformRev0D3"]
+__all__ = (
+	'LUNAPlatformRev0D3',
+)
 
 #
 # Note that r0.3 have D+/D- swapped to avoid having to cross D+/D- in routing.

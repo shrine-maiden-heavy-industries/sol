@@ -1,21 +1,23 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Endpoint interfaces for working with streams.
+"""
+Endpoint interfaces for working with streams.
 
 The endpoint interfaces in this module provide endpoint interfaces suitable for
 connecting streams to USB endpoints.
 """
 
-from amaranth       import Elaboratable, Module, Signal
 
-from ..endpoint     import EndpointInterface
-from ...stream      import StreamInterface, USBOutStreamBoundaryDetector
-from ..transfer     import USBInTransferManager
-from ....memory     import TransactionalizedFIFO
+from torii      import Elaboratable, Module, Signal
+
+from ....memory import TransactionalizedFIFO
+from ...stream  import StreamInterface, USBOutStreamBoundaryDetector
+from ..endpoint import EndpointInterface
+from ..transfer import USBInTransferManager
 
 
 class USBStreamInEndpoint(Elaboratable):

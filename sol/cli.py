@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
+import logging         as log
 from argparse          import ArgumentParser, Namespace
 from os                import getenv
 from pathlib           import Path
-from sys               import exit, argv
-from typing            import Optional, Any
-from tempfile          import mkdtemp
 from shutil            import rmtree
-import logging         as log
+from sys               import argv, exit
+from tempfile          import mkdtemp
+from typing            import Any, Optional
 
 from rich              import traceback
 from rich.logging      import RichHandler

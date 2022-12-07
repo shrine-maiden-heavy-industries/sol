@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Copyright 2022 Aki "lethalbit" Van Ness.
+# SPDX-License-Identifier: BSD-3-Clause
+
 #
 # BSD 3-Clause License
 #

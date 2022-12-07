@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-from amaranth                      import *
-from amaranth.hdl.xfrm             import DomainRenamer
+from torii                        import *
 
-from lambdasoc.periph              import Peripheral
-from lambdasoc.periph.timer        import TimerPeripheral
+from lambdasoc.periph             import Peripheral
+from lambdasoc.periph.timer       import TimerPeripheral
 
-from sol                          import top_level_cli
-from sol.gateware.soc             import SimpleSoC, UARTPeripheral
-from sol.gateware.interface.ulpi  import ULPIRegisterWindow
+from sol.cli                      import cli
 from sol.gateware.interface.psram import HyperRAMInterface
-
+from sol.gateware.interface.ulpi  import ULPIRegisterWindow
+from sol.gateware.soc             import SimpleSoC, UARTPeripheral
 
 # Run our tests at a slower clock rate, for now.
 # TODO: bump up the fast clock rate, to test the HyperRAM at speed?
@@ -262,4 +260,4 @@ class SelftestCore(Elaboratable):
 
 if __name__ == "__main__":
 	design = SelftestCore()
-	top_level_cli(design, cli_soc=design.soc)
+	cli(design, cli_soc=design.soc)

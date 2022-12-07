@@ -1,8 +1,8 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """
 This module contains gateware designed to assist with endpoint/transfer state management.
@@ -11,14 +11,14 @@ Its components facilitate data transfer longer than a single packet.
 
 import unittest
 
-from amaranth         import Signal, Elaboratable, Module, Array
-from amaranth.hdl.mem import Memory
+from torii         import Array, Elaboratable, Module, Signal
+from torii.hdl.mem import Memory
 
-from .packet          import HandshakeExchangeInterface, TokenDetectorInterface
-from ..stream         import USBInStreamInterface
-from ...stream        import StreamInterface
+from ...stream     import StreamInterface
+from ...test       import LunaGatewareTestCase, usb_domain_test_case
+from ..stream      import USBInStreamInterface
+from .packet       import HandshakeExchangeInterface, TokenDetectorInterface
 
-from ...test          import LunaGatewareTestCase, usb_domain_test_case
 
 class USBInTransferManager(Elaboratable):
 	""" Sequencer that converts a long data stream (a USB *transfer*) into a burst of USB packets.

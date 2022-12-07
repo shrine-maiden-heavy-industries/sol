@@ -1,22 +1,21 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Pre-made gateware that implements an ILA connection serial. """
 
-from amaranth                          import Elaboratable, Module, Signal, Cat
 
-from ...debug.ila                      import StreamILA, ILAFrontend
-from ...stream                         import StreamInterface
-from ..usb2.device                     import USBDevice
-from ..usb2.request                    import USBRequestHandler, StallOnlyRequestHandler
-from ..usb2.endpoints.stream           import USBMultibyteStreamInEndpoint
+from torii                   import Cat, Elaboratable, Module, Signal
 
-from usb_construct.types                import USBRequestType
-from usb_construct.emitters             import DeviceDescriptorCollection
-from usb_construct.emitters.descriptors import cdc
+from usb_construct.emitters  import DeviceDescriptorCollection
+
+from ...debug.ila            import ILAFrontend, StreamILA
+
+from ..usb2.device           import USBDevice
+from ..usb2.endpoints.stream import USBMultibyteStreamInEndpoint
+
 
 
 class USBIntegratedLogicAnalyzer(Elaboratable):
@@ -154,8 +153,9 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 	"""
 
 	def __init__(self, *args, ila, delay=3, **kwargs):
-		import usb
 		import time
+
+		import usb
 
 		# If we have a connection delay, wait that long.
 		if delay:

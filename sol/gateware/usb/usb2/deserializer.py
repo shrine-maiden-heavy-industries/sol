@@ -1,12 +1,12 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2022 Rachel Mant <git@dragonmux.network>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Stream deserializers. """
 
-from amaranth import *
+from torii    import *
 from .request import USBOutStreamInterface
 
 

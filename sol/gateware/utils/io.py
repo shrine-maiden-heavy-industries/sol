@@ -1,17 +1,14 @@
-# amaranth: UnusedElaboratable=no
+# SPDX-License-Identifier: BSD-3-Clause
+# torii: UnusedElaboratable=no
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Helpers for I/O interfacing. """
 
-import unittest
-from unittest import TestCase
 
-from amaranth import Record, Instance, Module, Signal, Cat
-from amaranth.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii import Cat, Instance, Signal
 
 
 # FIXME: move this out of here and into an ECP5-specific set of functionality

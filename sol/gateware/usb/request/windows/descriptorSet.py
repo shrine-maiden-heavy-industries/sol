@@ -1,9 +1,14 @@
 # SPDX-License-Identifier: BSD-3-Clause
-from amaranth import Elaboratable, Module, Signal, Memory, DomainRenamer
-from struct import pack as structPack, unpack as structUnpack
+from struct                                       import pack as structPack
+from struct                                       import unpack as structUnpack
+from typing                                       import Tuple
+
+from torii                                        import (
+	DomainRenamer, Elaboratable, Memory, Module, Signal
+)
 from usb_construct.emitters.descriptors.microsoft import PlatformDescriptorCollection
-from ...stream import USBInStreamInterface
-from typing import Tuple
+
+from ...stream                                    import USBInStreamInterface
 
 __all__ = (
 	'GetDescriptorSetHandler',
@@ -102,7 +107,7 @@ class GetDescriptorSetHandler(Elaboratable):
 
 		Returns
 		-------
-		:py:class:`Tuple <tuple>` [ :py:class:`amaranth.hdl.mem.Memory`, :py:class:`int`, :py:class:`int` ]
+		:py:class:`Tuple <tuple>` [ :py:class:`torii.hdl.mem.Memory`, :py:class:`int`, :py:class:`int` ]
 			A List containing:
 
 				* A Memory object defining the descriptor data and access information as defined above.
@@ -153,11 +158,11 @@ class GetDescriptorSetHandler(Elaboratable):
 		Parameters
 		----------
 		platform
-			The Amaranth platform for which the gateware will be synthesised.
+			The Torii platform for which the gateware will be synthesised.
 
 		Returns
 		-------
-		:py:class:`amaranth.hdl.dsl.Module`
+		:py:class:`torii.hdl.dsl.Module`
 			A complete description of the gateware behaviour required.
 		"""
 		m = Module()

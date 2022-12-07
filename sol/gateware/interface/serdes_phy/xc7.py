@@ -1,8 +1,10 @@
 # SPDX-License-Identifier: BSD-3-Clause
+
 """ Common building blocks for Xilinx 7-series targets. """
 
-from math import ceil
-from amaranth import *
+from math  import ceil
+
+from torii import *
 
 from .lfps import _LFPS_PERIOD_MAX
 

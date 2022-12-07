@@ -1,24 +1,23 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # Copyright (c) 2020 Florent Kermarrec <florent@enjoy-digital.fr>
 #
 # Code based on ``usb3_pipe``.
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Scrambling and descrambling for USB3. """
 
-import unittest
-import operator
 import functools
+import operator
+import unittest
 
-from amaranth import *
-
-from .coding   import COM, stream_word_matches_symbol
-from ...stream import USBRawSuperSpeedStream
+from torii          import *
 
 from ....test.utils import LunaSSGatewareTestCase, ss_domain_test_case
-
+from ...stream      import USBRawSuperSpeedStream
+from .coding        import COM, stream_word_matches_symbol
 
 #
 # Scrambling modules.

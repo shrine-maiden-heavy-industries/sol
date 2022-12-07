@@ -1,21 +1,23 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Gateware for working with abstract endpoints. """
 
 import functools
 import operator
 
-from amaranth         import Signal, Elaboratable, Module
-from amaranth.hdl.ast import Past
+from torii         import Elaboratable, Module, Signal
+from torii.hdl.ast import Past
 
-from .packet          import DataCRCInterface, InterpacketTimerInterface, TokenDetectorInterface
-from .packet          import HandshakeExchangeInterface
-from ..stream         import USBInStreamInterface, USBOutStreamInterface
-from ...utils.bus     import OneHotMultiplexer
+from ...utils.bus  import OneHotMultiplexer
+from ..stream      import USBInStreamInterface, USBOutStreamInterface
+from .packet       import (
+	DataCRCInterface, HandshakeExchangeInterface, InterpacketTimerInterface,
+	TokenDetectorInterface
+)
 
 
 class EndpointInterface:

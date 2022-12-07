@@ -1,24 +1,26 @@
 
-# This file is part of LUNA.
+# SPDX-License-Identifier: BSD-3-Clause
+# This file is part of SOL.
 #
 # This file includes content Copyright (C) 2020 LambdaConcept.
 # Per our BSD license, derivative files must include this license disclaimer.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Peripheral interrupt helpers for LUNA devices. """
+""" Peripheral interrupt helpers for SOL devices. """
 
-
-from amaranth import Signal, Elaboratable, Module
-from amaranth import tracer
-
-from amaranth_soc import csr
 
 from lambdasoc.periph.event import IRQLine
 
+from torii                  import Elaboratable, Module, Signal
+from torii.lib.soc          import csr
+from torii.util             import tracer
 
-__all__ = ["EventSource", "IRQLine", "InterruptSource"]
+__all__ = (
+	'EventSource',
+	'IRQLine',
+	'InterruptSource',
+)
 
 
 class EventSource:

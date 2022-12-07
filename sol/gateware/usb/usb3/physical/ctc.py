@@ -1,12 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # Copyright (c) 2020 Florent Kermarrec <florent@enjoy-digital.fr>
 #
 # Code adapted from ``usb3_pipe``.
-# SPDX-License-Identifier: BSD-3-Clause
-""" Code for handling SKP ordered sets on the transmit and receive path.
+
+"""
+Code for handling SKP ordered sets on the transmit and receive path.
 
 SKP ordered sets are provided in order to give some "padding data" that can be removed
 in order to handle differences in transmitter/receiver clock rates -- a process called
@@ -19,12 +21,12 @@ It's up to us to insert and remove additional ordered sets.
 
 import unittest
 
-from amaranth import *
-
-from .coding import SKP, stream_word_matches_symbol
-from ...stream import USBRawSuperSpeedStream
+from torii          import *
 
 from ....test.utils import LunaSSGatewareTestCase, ss_domain_test_case
+from ...stream      import USBRawSuperSpeedStream
+from .coding        import SKP, stream_word_matches_symbol
+
 
 class CTCSkipRemover(Elaboratable):
 	""" Clock Tolerance Compensation (CTC) receive buffer gateware.
@@ -113,7 +115,7 @@ class CTCSkipRemover(Elaboratable):
 					ctrl_fragments = []
 
 					# We'll iterate over each of our possible positions, and gather
-					# the Amaranth signals associated with the non-skip values in the
+					# the Torii signals associated with the non-skip values in the
 					# relevant position.
 					for position in range(bytes_in_stream):
 

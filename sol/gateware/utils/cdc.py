@@ -1,22 +1,23 @@
-# amaranth: UnusedElaboratable=no
+# SPDX-License-Identifier: BSD-3-Clause
+# torii: UnusedElaboratable=no
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Helpers for clock domain crossings. """
 
 import unittest
 import warnings
+from unittest      import TestCase
 
-from unittest       import TestCase
-from amaranth       import Record, Module, Signal
-from amaranth.lib.cdc import FFSynchronizer
-from amaranth.lib.io  import Pin
-from amaranth.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii         import Module, Record, Signal
+from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii.lib.cdc import FFSynchronizer
+from torii.lib.io  import Pin
 
-from ..test         import LunaGatewareTestCase, sync_test_case
+from ..test import LunaGatewareTestCase, sync_test_case
+
 
 def synchronize(m, signal, *, output=None, o_domain='sync', stages=2):
 	""" Convenience function. Synchronizes a signal, or equivalent collection.

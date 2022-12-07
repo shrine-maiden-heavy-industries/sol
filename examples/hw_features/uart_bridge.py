@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """
 Example of using the debug controller's UART bridge.
 
@@ -11,9 +12,9 @@ Connect to the ttyACM connection at 115200 baud, 8N1,
 and you should see "Hello World" 'typed' repeatedly.
 """
 
-from amaranth import Signal, Elaboratable, Module, Array, Cat
+from torii                       import Signal, Elaboratable, Module, Array, Cat
 
-from sol import top_level_cli
+from sol.cli                     import  cli
 from sol.gateware.interface.uart import UARTTransmitter
 
 
@@ -68,4 +69,4 @@ class UARTBridgeExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(UARTBridgeExample)
+	cli(UARTBridgeExample)

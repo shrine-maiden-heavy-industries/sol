@@ -1,15 +1,13 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Simple gateware debug console for LUNA. """
+""" Simple gateware debug console for SOL. """
 
 
-from amaranth        import Signal, Module, Cat, Elaboratable, Array
-from ..test.utils    import LunaGatewareTestCase, sync_test_case
-
+from torii  import Signal, Module,  Elaboratable, Array
 
 class DebugConsole(Elaboratable):
 	""" Simple debug console gateware for LUNA.

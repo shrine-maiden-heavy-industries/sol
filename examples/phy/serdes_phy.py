@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # This file is part of LUNA.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Incomplete example for working the SerDes-based a PIPE PHY. """
 
-from amaranth import *
+from torii                        import *
 
-from sol                          import top_level_cli
-from sol.gateware.platform        import NullPin
-from sol.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
-
-from sol.gateware.interface.serdes_phy.backends.ecp5 import LunaECP5SerDes
-from sol.gateware.interface.serdes_phy.phy           import SerDesPHY
+from sol.cli                      import cli
+from sol.gateware.usb.devices.ila import (
+	USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
+)
 
 WITH_ILA = False
 
@@ -76,6 +75,6 @@ class PIPEPhyExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	ex = top_level_cli(PIPEPhyExample)
+	ex = cli(PIPEPhyExample)
 	if WITH_ILA:
 		ex.emit()

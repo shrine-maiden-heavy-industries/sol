@@ -1,18 +1,19 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ SPI and derived interfaces. """
 
 import unittest
 
-from amaranth import Signal, Module, Cat, Elaboratable, Record
-from amaranth.hdl.ast import Rose, Fell
-from amaranth.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii         import Cat, Elaboratable, Module, Record, Signal
+from torii.hdl.ast import Fell, Rose
+from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
-from ..test.utils import LunaGatewareTestCase, sync_test_case
+from ..test.utils  import LunaGatewareTestCase, sync_test_case
+
 
 class SPIBus(Record):
 	""" Record representing an SPI bus. """

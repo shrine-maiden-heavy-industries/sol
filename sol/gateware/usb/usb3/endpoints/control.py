@@ -1,19 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Low-level USB3 transciever gateware -- control transfer components. """
 
-from amaranth import *
 
-from usb_construct.emitters    import DeviceDescriptorCollection
-from usb_construct.types       import USBRequestType, USBDirection
+from torii                  import *
 
-from ..protocol.endpoint      import SuperSpeedEndpointInterface
-from ..application.request    import SuperSpeedRequestHandlerInterface, SuperSpeedSetupDecoder
-from ..application.request    import SuperSpeedRequestHandlerMultiplexer, StallOnlyRequestHandler
-from ..request.standard       import StandardRequestHandler
+from usb_construct.emitters import DeviceDescriptorCollection
+from usb_construct.types    import USBDirection, USBRequestType
+
+from ..application.request  import (
+	StallOnlyRequestHandler, SuperSpeedRequestHandlerMultiplexer, SuperSpeedSetupDecoder
+)
+from ..protocol.endpoint    import SuperSpeedEndpointInterface
+from ..request.standard     import StandardRequestHandler
 
 
 class USB3ControlEndpoint(Elaboratable):

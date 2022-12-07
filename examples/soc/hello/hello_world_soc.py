@@ -5,8 +5,8 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # SPDX-License-Identifier: BSD-3-Clause
 
-from amaranth                     import Elaboratable, Module, Cat
-from amaranth.hdl.rec             import Record
+from torii                     import Elaboratable, Module, Cat
+from torii.hdl.rec             import Record
 
 from lambdasoc.periph             import Peripheral
 from lambdasoc.periph.serial      import AsyncSerialPeripheral

@@ -1,20 +1,20 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Core stream definitions. """
 
 import unittest
 
-from amaranth          import Elaboratable, Signal, Module
-from amaranth.hdl.rec  import Record, DIR_FANIN, DIR_FANOUT
-from amaranth.hdl.xfrm import DomainRenamer
+from torii            import Elaboratable, Module, Signal
+from torii.hdl.rec    import DIR_FANOUT, Record
+from torii.hdl.xfrm   import DomainRenamer
 
-from ..stream          import StreamInterface
-from ..stream.arbiter  import StreamArbiter
-from ..test            import LunaUSBGatewareTestCase, usb_domain_test_case
+from ..stream         import StreamInterface
+from ..stream.arbiter import StreamArbiter
+from ..test           import LunaUSBGatewareTestCase, usb_domain_test_case
 
 
 class USBInStreamInterface(StreamInterface):

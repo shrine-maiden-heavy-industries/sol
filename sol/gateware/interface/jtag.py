@@ -1,18 +1,19 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2021 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Hardware for communicating over various FPGAs' debug interfaces. """
 
-from amaranth         import *
-from amaranth.lib.cdc import FFSynchronizer, PulseSynchronizer
-from amaranth.hdl.ast import ValueCastable
-from amaranth.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii         import *
+from torii.hdl.ast import ValueCastable
+from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii.lib.cdc import FFSynchronizer
 
-from ..utils        import falling_edge_detected, rising_edge_detected
-from .spi           import SPIRegisterInterface
+from ..utils       import falling_edge_detected, rising_edge_detected
+from .spi          import SPIRegisterInterface
+
 
 class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 	""" Hardware that creates a virtual 'debug SPI' port, exposed over JTAG.

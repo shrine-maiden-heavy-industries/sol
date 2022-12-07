@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import sys
 
-from amaranth import Signal, Module, Elaboratable, ClockDomain, ClockSignal, Cat
+from torii                 import Signal, Module, Elaboratable, Cat
 
-from sol import top_level_cli
+from sol.cli               import cli
 from sol.gateware.platform import NullPin
 
 class Blinky(Elaboratable):
@@ -38,4 +37,4 @@ class Blinky(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(Blinky)
+	cli(Blinky)

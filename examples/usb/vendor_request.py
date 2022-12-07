@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-from amaranth                       import Elaboratable, Module, Cat
-from usb_construct.types             import USBRequestType
-from usb_construct.emitters          import DeviceDescriptorCollection
 
-from sol                           import top_level_cli
+from torii                         import Cat, Elaboratable, Module
+
+from usb_construct.emitters        import DeviceDescriptorCollection
+from usb_construct.types           import USBRequestType
+
+from sol.cli                       import cli
 from sol.gateware.platform         import NullPin
 from sol.gateware.usb.usb2.device  import USBDevice
 from sol.gateware.usb.usb2.request import USBRequestHandler
@@ -135,4 +137,4 @@ class USBVendorDeviceExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(USBVendorDeviceExample)
+	cli(USBVendorDeviceExample)

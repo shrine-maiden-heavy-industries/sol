@@ -1,26 +1,27 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # This file is part of LUNA.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import sys
-import logging
+
+import logging as log
 import os.path
+import sys
 
-from amaranth                                import Elaboratable, Module, Cat
-from amaranth.hdl.rec                        import Record
+from lambdasoc.periph.serial                import AsyncSerialPeripheral
+from lambdasoc.periph.timer                 import TimerPeripheral
 
-from lambdasoc.periph.serial                 import AsyncSerialPeripheral
-from lambdasoc.periph.timer                  import TimerPeripheral
+from torii                                  import Elaboratable, Module
+from torii.hdl.rec                          import Record
 
-from sol                                    import top_level_cli
+from sol.cli                                import cli
 from sol.gateware.soc                       import SimpleSoC
-
 from sol.gateware.usb.usb2.device           import USBDevice, USBDeviceController
-from sol.gateware.usb.usb2.interfaces.eptri import SetupFIFOInterface, InFIFOInterface, OutFIFOInterface
-
+from sol.gateware.usb.usb2.interfaces.eptri import (
+	InFIFOInterface, OutFIFOInterface, SetupFIFOInterface
+)
 
 CLOCK_FREQUENCIES_MHZ = {
 	'sync': 60
@@ -76,7 +77,7 @@ class EptriDeviceExample(Elaboratable):
 
 		# Check for our prerequisites before building.
 		if not os.path.exists("eptri_example.bin"):
-			logging.error("Firmware binary not found -- you may want to build this with `make program`.")
+			log.error("Firmware binary not found -- you may want to build this with `make program`.")
 			sys.exit(-1)
 
 		# Generate our domain clocks/resets.
@@ -106,4 +107,4 @@ class EptriDeviceExample(Elaboratable):
 if __name__ == "__main__":
 
 	design = EptriDeviceExample()
-	top_level_cli(design, cli_soc=design.soc)
+	cli(design, cli_soc=design.soc)

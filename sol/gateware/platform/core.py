@@ -1,15 +1,15 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Utilities for creating LUNA platforms. """
 
-import logging
+import logging       as log
 
-from amaranth import Signal, Record
-from amaranth.build.res import ResourceError, Subsignal, Resource, Pins
+from torii           import Record
+from torii.build.res import ResourceError
 
 
 class NullPin(Record):
@@ -89,8 +89,8 @@ class LUNAPlatform:
 		try:
 			return self.request(name, number, *args, **kwargs)
 		except ResourceError:
-			log = logging.warnings if expected else logging.debug
-			log(f"Skipping resource {name}/{number}, as it is not present on this platform.")
+			logm = log.warnings if expected else log.debug
+			logm(f"Skipping resource {name}/{number}, as it is not present on this platform.")
 			return default
 
 

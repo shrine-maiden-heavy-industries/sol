@@ -1,32 +1,32 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Integrated logic analysis helpers. """
 
-import io
-import os
-import sys
+
 import math
-import unittest
-import tempfile
+import os
 import subprocess
+import sys
+import tempfile
+import unittest
+from abc              import ABCMeta, abstractmethod
 
-from abc               import ABCMeta, abstractmethod
+from torii            import Cat, DomainRenamer, Elaboratable, Memory, Module, Signal
+from torii.hdl.ast    import Rose
+from torii.lib.cdc    import FFSynchronizer
+from torii.lib.fifo   import AsyncFIFOBuffered
 
-from amaranth          import Signal, Module, Cat, Elaboratable, Memory, ClockDomain, DomainRenamer
-from amaranth.hdl.ast  import Rose
-from amaranth.lib.cdc  import FFSynchronizer
-from amaranth.lib.fifo import AsyncFIFOBuffered
-from vcd               import VCDWriter
-from vcd.gtkw          import GTKWSave
+from vcd              import VCDWriter
+from vcd.gtkw         import GTKWSave
 
-from ..stream          import StreamInterface
-from ..interface.uart  import UARTMultibyteTransmitter
-from ..interface.spi   import SPIDeviceInterface, SPIBus, SPIGatewareTestCase
-from ..test.utils      import LunaGatewareTestCase, sync_test_case
+from ..interface.spi  import SPIBus, SPIDeviceInterface, SPIGatewareTestCase
+from ..interface.uart import UARTMultibyteTransmitter
+from ..stream         import StreamInterface
+from ..test.utils     import LunaGatewareTestCase, sync_test_case
 
 
 class IntegratedLogicAnalyzer(Elaboratable):

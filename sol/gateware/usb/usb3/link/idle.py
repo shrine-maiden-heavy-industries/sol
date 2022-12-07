@@ -1,14 +1,16 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Logical idle detection / polling gateware. """
 
-from amaranth         import *
-from amaranth.hdl.ast import Past
+from torii         import *
+from torii.hdl.ast import Past
 
-from ...stream        import USBRawSuperSpeedStream
+from ...stream     import USBRawSuperSpeedStream
+
 
 class IdleHandshakeHandler(Elaboratable):
 	""" Unit that performs the USB3 idle handshake.

@@ -1,28 +1,28 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Standard, full-gateware control request handlers. """
 
-import os
-import operator
-import unittest
+
 import functools
-from typing import Iterable, Callable
+import operator
+import os
+import unittest
+from typing                 import Callable, Iterable
 
-from sol.gateware.test import utils
+from torii                  import *
+from torii.hdl.ast          import Const, Value
 
-from amaranth               import *
-from amaranth.hdl.ast       import Value, Const
-from usb_construct.types     import USBStandardRequests, USBRequestType
-from usb_construct.emitters  import DeviceDescriptorCollection
+from usb_construct.emitters import DeviceDescriptorCollection
+from usb_construct.types    import USBRequestType, USBStandardRequests
 
-from ..usb2.request         import RequestHandlerInterface, USBRequestHandler
-from ..usb2.descriptor      import GetDescriptorHandlerDistributed, GetDescriptorHandlerBlock
-from ..stream               import USBInStreamInterface
+
 from ...stream.generator    import StreamSerializer
-from sol.gateware.usb.usb2 import descriptor
+from ..stream               import USBInStreamInterface
+from ..usb2.descriptor      import GetDescriptorHandlerBlock, GetDescriptorHandlerDistributed
 from .                      import SetupPacket
 from .control               import ControlRequestHandler
 

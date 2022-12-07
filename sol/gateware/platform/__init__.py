@@ -1,29 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
-
-import os
-import sys
-import logging
 
 import importlib
 import importlib.util
+import logging                          as log
+import os
 
-from amaranth import Record
-from amaranth.vendor.lattice_ecp5 import LatticeECP5Platform
+from torii                              import Record
+from torii.platform.vendor.lattice_ecp5 import LatticeECP5Platform
 
-from .sol_r0_1 import LUNAPlatformRev0D1
-from .sol_r0_2 import LUNAPlatformRev0D2
-from .sol_r0_3 import LUNAPlatformRev0D3
-from .sol_r0_4 import LUNAPlatformRev0D4
-from .daisho    import DaishoPlatform
-from .amalthea  import AmaltheaPlatformRev0D1
-
-from .core      import NullPin
-
-
+from .core                              import NullPin
+from .luna_r0_1                         import LUNAPlatformRev0D1
+from .luna_r0_2                         import LUNAPlatformRev0D2
+from .luna_r0_3                         import LUNAPlatformRev0D3
+from .luna_r0_4                         import LUNAPlatformRev0D4
 
 # Stores the latest platform; for reference / automagic.
 LATEST_PLATFORM = LUNAPlatformRev0D4
@@ -35,8 +28,6 @@ PLATFORM_FOR_REVISION = {
 	(0,   2): LUNAPlatformRev0D2,
 	(0,   3): LUNAPlatformRev0D3,
 	(0,   4): LUNAPlatformRev0D4,
-	(254, 1): AmaltheaPlatformRev0D1,
-	(255, 0): DaishoPlatform
 }
 
 def _get_platform_from_string(platform):
@@ -104,7 +95,7 @@ def get_appropriate_platform() -> LatticeECP5Platform:
 	except apollo_fpga.DebuggerNotFound:
 		platform = LATEST_PLATFORM()
 
-		logging.warning(f"Couldn't auto-detect connected platform. Assuming {platform.name}.")
+		log.warning(f"Couldn't auto-detect connected platform. Assuming {platform.name}.")
 		return platform
 
 

@@ -1,20 +1,20 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ USB3 link-layer abstraction."""
 
-from amaranth import *
+from torii            import *
 
 from ..link.header    import HeaderQueueArbiter, HeaderQueueDemultiplexer
-from ...stream        import USBRawSuperSpeedStream
-
+from .data            import DataHeaderReceiver
+from .endpoint        import SuperSpeedEndpointInterface
 from .link_management import LinkManagementPacketHandler
 from .timestamp       import TimestampPacketReceiver
-from .endpoint        import SuperSpeedEndpointInterface
 from .transaction     import TransactionPacketGenerator, TransactionPacketReceiver
-from .data            import DataHeaderReceiver
+
 
 class USB3ProtocolLayer(Elaboratable):
 	""" Abstraction encapsulating the USB3 protocol layer hardware. """

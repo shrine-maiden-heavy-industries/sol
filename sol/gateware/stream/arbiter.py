@@ -1,13 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Stream multiplexers/arbiters. """
 
-from amaranth       import *
-from .              import StreamInterface
+from torii import *
+
+from . import StreamInterface
 
 
 class StreamMultiplexer(Elaboratable):

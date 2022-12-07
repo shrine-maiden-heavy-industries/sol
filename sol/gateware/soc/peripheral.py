@@ -1,5 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Adapted from lambdasoc.
 # This file includes content Copyright (C) 2020 LambdaConcept.
@@ -7,24 +8,24 @@
 # Per our BSD license, derivative files must include this license disclaimer.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Peripheral helpers for LUNA devices. """
-
-from contextlib import contextmanager
-
-from amaranth                import Module, Elaboratable
-from amaranth                import tracer
-from amaranth.utils          import log2_int
-
-from amaranth_soc              import csr, wishbone
-from amaranth_soc.memory       import MemoryMap
-from amaranth_soc.csr.wishbone import WishboneCSRBridge
-
-from .event                  import EventSource, IRQLine, InterruptSource
+""" Peripheral helpers for SOL devices. """
 
 
-__all__ = ["Peripheral", "CSRBank", "PeripheralBridge"]
+from torii                      import Elaboratable, Module
+from torii.lib.soc              import csr, wishbone
+from torii.lib.soc.csr.wishbone import WishboneCSRBridge
+from torii.lib.soc.memory       import MemoryMap
+from torii.util                 import tracer
+from torii.util.units           import log2_int
+
+from .event                     import EventSource, InterruptSource, IRQLine
+
+__all__ = (
+	'Peripheral',
+	'CSRBank',
+	'PeripheralBridge',
+)
 
 
 class Peripheral:
@@ -143,7 +144,7 @@ class Peripheral:
 			``2 ** max(alignment, bridge_alignment)``) will be used.
 		alignment : int or None
 			Alignment of the bank. If not specified, the bridge alignment is used.
-			See :class:`amaranth_soc.csr.Multiplexer` for details.
+			See :class:`torii.lib.soc.csr.Multiplexer` for details.
 		desc: (str, optional):
 			Documentation of the given CSR bank.
 
@@ -159,11 +160,11 @@ class Peripheral:
 			   alignment=0, addr=None, sparse=None):
 		"""Request a window to a subordinate bus.
 
-		See :meth:`amaranth_soc.wishbone.Decoder.add` for details.
+		See :meth:`torii.lib.soc.wishbone.Decoder.add` for details.
 
 		Return value
 		------------
-		An instance of :class:`amaranth_soc.wishbone.Interface`.
+		An instance of :class:`torii.lib.soc.wishbone.Interface`.
 		"""
 		window = wishbone.Interface(addr_width=addr_width, data_width=data_width,
 					                granularity=granularity, features=features)
@@ -249,13 +250,13 @@ class CSRBank:
 		Parameters
 		----------
 		width : int
-			Width of the register. See :class:`amaranth_soc.csr.Element`.
+			Width of the register. See :class:`torii.lib.soc.csr.Element`.
 		access : :class:`Access`
-			Register access mode. See :class:`amaranth_soc.csr.Element`.
+			Register access mode. See :class:`torii.lib.soc.csr.Element`.
 		addr : int
-			Address of the register. See :meth:`amaranth_soc.csr.Multiplexer.add`.
+			Address of the register. See :meth:`torii.lib.soc.csr.Multiplexer.add`.
 		alignment : int
-			Register alignment. See :class:`amaranth_soc.csr.Multiplexer`.
+			Register alignment. See :class:`torii.lib.soc.csr.Multiplexer`.
 		name : str
 			Name of the register. If ``None`` (default) the name is inferred from the variable
 			name this register is assigned to.
@@ -266,7 +267,7 @@ class CSRBank:
 
 		Return value
 		------------
-		An instance of :class:`amaranth_soc.csr.Element`.
+		An instance of :class:`torii.lib.soc.csr.Element`.
 		"""
 		if name is not None and not isinstance(name, str):
 			raise TypeError("Name must be a string, not {!r}".format(name))
@@ -301,17 +302,17 @@ class PeripheralBridge(Elaboratable):
 	periph : :class:`Peripheral`
 		The peripheral whose resources are exposed by this bridge.
 	data_width : int
-		Data width. See :class:`amaranth_soc.wishbone.Interface`.
+		Data width. See :class:`torii.lib.soc.wishbone.Interface`.
 	granularity : int or None
-		Granularity. See :class:`amaranth_soc.wishbone.Interface`.
+		Granularity. See :class:`torii.lib.soc.wishbone.Interface`.
 	features : iter(str)
-		Optional signal set. See :class:`amaranth_soc.wishbone.Interface`.
+		Optional signal set. See :class:`torii.lib.soc.wishbone.Interface`.
 	alignment : int
-		Resource alignment. See :class:`amaranth_soc.memory.MemoryMap`.
+		Resource alignment. See :class:`torii.lib.soc.memory.MemoryMap`.
 
 	Attributes
 	----------
-	bus : :class:`amaranth_soc.wishbone.Interface`
+	bus : :class:`torii.lib.soc.wishbone.Interface`
 		Wishbone bus providing access to the resources of the peripheral.
 	irq : :class:`IRQLine`, out
 		Interrupt request. It is raised if any event source is enabled and has a pending

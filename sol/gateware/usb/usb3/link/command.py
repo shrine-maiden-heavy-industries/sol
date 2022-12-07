@@ -1,21 +1,17 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ USB Link Commands Transmitter/Receivers """
 
-import functools
-import operator
 
-from enum import IntEnum
+from torii             import *
 
-from amaranth          import *
-from amaranth.hdl.ast  import Past
-
-from .crc              import compute_usb_crc5
-from ..physical.coding import SLC, EPF, stream_matches_symbols, get_word_for_symbols
 from ...stream         import USBRawSuperSpeedStream
+from ..physical.coding import EPF, SLC, get_word_for_symbols, stream_matches_symbols
+from .crc              import compute_usb_crc5
 
 
 class LinkCommandDetector(Elaboratable):

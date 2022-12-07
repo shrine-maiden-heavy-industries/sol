@@ -1,32 +1,24 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 # pylint: disable=maybe-no-member
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import sys
+
 import time
 
-from prompt_toolkit import HTML
-from prompt_toolkit import print_formatted_text as pprint
+from apollo_fpga                   import ApolloDebugger
 
-from amaranth import Signal, Elaboratable, Module, Cat, ClockDomain, ClockSignal, ResetInserter
-from amaranth.lib.cdc import FFSynchronizer
+from torii                         import ClockSignal, Elaboratable, Module, Signal
 
-from sol                             import top_level_cli
-
-from apollo_fpga                           import ApolloDebugger, ApolloILAFrontend
-from sol.gateware.debug.ila          import SyncSerialILA
-
-
-from sol.gateware.utils.cdc          import synchronize
-from sol.gateware.architecture.car   import LunaECP5DomainGenerator
-from sol.gateware.interface.spi      import SPIRegisterInterface, SPIMultiplexer, SPIBus
-from sol.gateware.interface.ulpi     import UTMITranslator
-from sol.gateware.usb.analyzer       import USBAnalyzer
-
+from sol.cli                       import cli
+from sol.gateware.architecture.car import LunaECP5DomainGenerator
+from sol.gateware.interface.spi    import SPIRegisterInterface
+from sol.gateware.interface.ulpi   import UTMITranslator
+from sol.gateware.usb.analyzer     import USBAnalyzer
+from sol.gateware.utils.cdc        import synchronize
 
 DATA_AVAILABLE  = 1
 ANALYZER_RESULT = 2
@@ -115,7 +107,7 @@ class ULPIDiagnostic(Elaboratable):
 
 
 if __name__ == "__main__":
-	analyzer = top_level_cli(ULPIDiagnostic)
+	analyzer = cli(ULPIDiagnostic)
 	debugger = ApolloDebugger()
 
 	time.sleep(1)

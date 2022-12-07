@@ -1,21 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Pre-made gateware that implements CDC-ACM serial. """
 
-from amaranth                          import Elaboratable, Module, Signal
 
-from ...stream                         import StreamInterface
-from ..usb2.device                     import USBDevice
-from ..usb2.request                    import USBRequestHandler, StallOnlyRequestHandler
-from ..usb2.endpoints.stream           import USBStreamInEndpoint, USBStreamOutEndpoint
+from torii                              import Elaboratable, Module, Signal
 
-from usb_construct.types                import USBRequestType
 from usb_construct.emitters             import DeviceDescriptorCollection
 from usb_construct.emitters.descriptors import cdc
+from usb_construct.types                import USBRequestType
+
+from ...stream                          import StreamInterface
+from ..usb2.device                      import USBDevice
+from ..usb2.endpoints.stream            import USBStreamInEndpoint, USBStreamOutEndpoint
+from ..usb2.request                     import StallOnlyRequestHandler, USBRequestHandler
 
 
 class ACMRequestHandlers(USBRequestHandler):

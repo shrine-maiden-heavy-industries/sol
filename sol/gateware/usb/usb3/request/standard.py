@@ -1,22 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Standard, full-gateware control request handlers. """
 
 import unittest
 
-from amaranth                 import *
+from torii                    import *
 
-from usb_construct.types       import USBStandardRequests, USBRequestType
-from usb_construct.emitters    import DeviceDescriptorCollection
+from usb_construct.emitters   import DeviceDescriptorCollection
+from usb_construct.types      import USBRequestType, USBStandardRequests
 
-from ..application.request    import SuperSpeedRequestHandlerInterface
-from ..application.descriptor import GetDescriptorHandler
-
-from ...stream                import SuperSpeedStreamInterface
 from ....utils                import falling_edge_detected
+from ...stream                import SuperSpeedStreamInterface
+from ..application.descriptor import GetDescriptorHandler
+from ..application.request    import SuperSpeedRequestHandlerInterface
 
 
 class StandardRequestHandler(Elaboratable):
@@ -72,9 +72,9 @@ class StandardRequestHandler(Elaboratable):
 		----------
 		tx_stream: StreamInterface
 			The transmit stream to drive.
-		data: Amaranth value, or equivalent, up to 32b
+		data: Torii value, or equivalent, up to 32b
 			The data to be transmitted.
-		valid_mask: Amaranth value, or equivalent, up to 4b
+		valid_mask: Torii value, or equivalent, up to 4b
 			The valid mask for the data to be transmitted. Should be 0b0001, 0b0011, 0b0111, or 0b1111.
 		"""
 

@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import time
-import logging
+import logging                     as log
 
-from prompt_toolkit import HTML
-from prompt_toolkit import print_formatted_text as pprint
+from apollo_fpga                   import ApolloDebugger
 
-from amaranth import Signal, Elaboratable, Module
+from prompt_toolkit                import HTML
+from prompt_toolkit                import print_formatted_text as pprint
 
-from sol                             import top_level_cli
-from apollo_fpga                      import ApolloDebugger
-from sol.gateware.interface.jtag     import JTAGRegisterInterface
-from sol.gateware.architecture.car   import LunaECP5DomainGenerator
-from sol.gateware.interface.psram    import HyperRAMInterface
+from torii                         import Elaboratable, Module, Signal
+
+from sol.cli                       import cli
+from sol.gateware.architecture.car import LunaECP5DomainGenerator
+from sol.gateware.interface.jtag   import JTAGRegisterInterface
+from sol.gateware.interface.psram  import HyperRAMInterface
 
 REGISTER_RAM_REG_ADDR   = 2
 REGISTER_RAM_VALUE      = 3
@@ -68,13 +68,13 @@ class HyperRAMDiagnostic(Elaboratable):
 
 
 if __name__ == "__main__":
-	test = top_level_cli(HyperRAMDiagnostic)
+	test = cli(HyperRAMDiagnostic)
 
 	# Create a debug and ILA connection.
 	dut = ApolloDebugger()
-	logging.info(f"Connected to onboard dut; hardware revision r{dut.major}.{dut.minor} (s/n: {dut.serial_number}).")
+	log.info(f"Connected to onboard dut; hardware revision r{dut.major}.{dut.minor} (s/n: {dut.serial_number}).")
 
-	logging.info("Running basic HyperRAM diagnostics.")
+	log.info("Running basic HyperRAM diagnostics.")
 
 	iterations = 100
 

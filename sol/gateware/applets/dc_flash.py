@@ -1,18 +1,15 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import operator
-from functools import reduce
 
-from amaranth import Signal, Elaboratable, Module, Cat, ClockDomain, ClockSignal, ResetInserter
-from amaranth.lib.cdc import FFSynchronizer
+from torii                        import Elaboratable, Module, Signal
 
-from sol.gateware.utils.cdc       import synchronize
-from sol.gateware.interface.spi   import SPIRegisterInterface
 from sol.gateware.interface.flash import ECP5ConfigurationFlashInterface
+from sol.gateware.interface.spi   import SPIRegisterInterface
+from sol.gateware.utils.cdc       import synchronize
 
 REGISTER_ID             = 1
 

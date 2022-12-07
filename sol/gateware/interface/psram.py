@@ -1,18 +1,18 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Interfaces to LUNA's PSRAM chips."""
+""" Interfaces to SOL's PSRAM chips."""
 
 import unittest
 
-from amaranth import Signal, Module, Cat, Elaboratable, Record, ClockDomain, ClockSignal
-from amaranth.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii         import Cat, Elaboratable, Module, Record, Signal
+from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
-from ..utils.io   import delay
-from ..test.utils import LunaGatewareTestCase, sync_test_case
+from ..test.utils  import LunaGatewareTestCase, sync_test_case
+from ..utils.io    import delay
 
 
 class HyperBus(Record):

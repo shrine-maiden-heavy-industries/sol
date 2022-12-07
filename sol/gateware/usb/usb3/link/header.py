@@ -1,17 +1,15 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Header Packet data interfacing definitions."""
 
-import operator
 import functools
+import operator
 
-from enum import IntEnum
-
-from amaranth           import *
-from amaranth.hdl.rec   import Layout
+from torii              import *
 
 from ....stream.arbiter import StreamArbiter
 

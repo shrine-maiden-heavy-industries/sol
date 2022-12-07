@@ -1,22 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # This file is part of LUNA.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
-""" Data header handling gateware.
+
+"""
+Data header handling gateware.
 
 This file currently contains very little logic; the actual transmission framing is handled at
 the link layer; and the generation of our packets is handled by our endpoint.
 
 """
 
-from amaranth import *
+from torii                          import *
+
 from usb_construct.types.superspeed import HeaderPacketType
 
-from ..link.header import HeaderQueue
-from ..link.data   import DataHeaderPacket
-from ...stream     import SuperSpeedStreamInterface
-from ...request    import SetupPacket
+from ..link.header                   import HeaderQueue
 
 
 class DataHeaderReceiver(Elaboratable):

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # This file is part of LUNA.
 #
@@ -5,18 +6,19 @@
 # Copyright (c) 2020 Florent Kermarrec <florent@enjoy-digital.fr>
 #
 # Code based in part on ``litex`` and ``liteiclink``.
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Soft PIPE backend for the Xilinx 7 Series GTP transceivers. """
 
-from amaranth import *
-from amaranth.lib.cdc import FFSynchronizer
 
+from torii         import *
+from torii.lib.cdc import FFSynchronizer
 
-from .xc7           import DRPInterface, DRPArbiter, DRPFieldController
-from .xc7           import GTResetDeferrer, GTPRXPMAResetWorkaround, GTOOBClockDivider
-from .lfps         import LFPSSquareWaveGenerator, LFPSSquareWaveDetector
 from ..pipe        import PIPEInterface
-
+from .lfps         import LFPSSquareWaveGenerator
+from .xc7          import (
+	DRPArbiter, DRPFieldController, DRPInterface, GTOOBClockDivider,
+	GTPRXPMAResetWorkaround, GTResetDeferrer
+)
 
 Open = Signal
 

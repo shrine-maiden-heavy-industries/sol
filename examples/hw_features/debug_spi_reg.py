@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-from amaranth import Signal, Elaboratable, Module, Cat
-from amaranth.lib.cdc import FFSynchronizer
 
-from sol import top_level_cli
+from torii                      import Cat, Elaboratable, Module
 
-from sol.gateware.utils.cdc     import synchronize
+from sol.cli                    import cli
 from sol.gateware.interface.spi import SPIRegisterInterface
 from sol.gateware.platform      import NullPin
+from sol.gateware.utils.cdc     import synchronize
+
 
 class DebugSPIRegisterExample(Elaboratable):
 	""" Gateware meant to demonstrate use of the Debug Controller's register interface. """
@@ -45,4 +45,4 @@ class DebugSPIRegisterExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(DebugSPIRegisterExample)
+	cli(DebugSPIRegisterExample)

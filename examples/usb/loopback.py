@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import os
 
-from amaranth                import Elaboratable, Module, Cat
+from torii                  import Elaboratable, Module
 
-from usb_construct.emitters   import DeviceDescriptorCollection
+from usb_construct.emitters import DeviceDescriptorCollection
 
-from sol                    import top_level_cli
-from sol.usb2               import USBDevice, USBStreamOutEndpoint, USBStreamInEndpoint
+from sol.cli                import cli
+from sol.usb2               import USBDevice, USBStreamInEndpoint, USBStreamOutEndpoint
 
 
 class USBStreamOutDeviceExample(Elaboratable):
@@ -110,4 +109,4 @@ class USBStreamOutDeviceExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(USBStreamOutDeviceExample)
+	cli(USBStreamOutDeviceExample)

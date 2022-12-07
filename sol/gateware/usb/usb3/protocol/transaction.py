@@ -1,17 +1,18 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Protocol-level Transaction Packet (flow control header) generation. """
 
-from amaranth import *
-from amaranth.hdl.rec import DIR_FANOUT, DIR_FANIN
+from torii                          import *
+from torii.hdl.rec                  import DIR_FANIN, DIR_FANOUT
 
-from usb_construct.types import USBDirection
+from usb_construct.types            import USBDirection
 from usb_construct.types.superspeed import HeaderPacketType, TransactionPacketSubtype
 
-from ..link.header import HeaderQueue, HeaderPacket
+from ..link.header                  import HeaderPacket, HeaderQueue
 
 #
 # Interfaces.

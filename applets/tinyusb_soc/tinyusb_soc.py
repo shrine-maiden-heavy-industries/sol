@@ -1,27 +1,21 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import sys
-import logging
-import os.path
+from torii                                  import Cat, Elaboratable, Module
+from torii.hdl.rec                          import Record
 
-from amaranth                                import Elaboratable, Module, Cat
-from amaranth.hdl.rec                        import Record
+from lambdasoc.periph                       import Peripheral
 
-from lambdasoc.periph                        import Peripheral
-from lambdasoc.periph.serial                 import AsyncSerialPeripheral
-from lambdasoc.periph.timer                  import TimerPeripheral
-
-from sol                                    import top_level_cli
+from sol.cli                                import cli
 from sol.gateware.soc                       import SimpleSoC
-
 from sol.gateware.usb.usb2.device           import USBDevice, USBDeviceController
-from sol.gateware.usb.usb2.interfaces.eptri import SetupFIFOInterface, InFIFOInterface, OutFIFOInterface
-
+from sol.gateware.usb.usb2.interfaces.eptri import (
+	InFIFOInterface, OutFIFOInterface, SetupFIFOInterface
+)
 
 CLOCK_FREQUENCIES_MHZ = {
 	'sync': 60
@@ -141,4 +135,4 @@ class TinyUSBSoC(Elaboratable):
 
 if __name__ == "__main__":
 	design = TinyUSBSoC()
-	top_level_cli(design, cli_soc=design.soc)
+	cli(design, cli_soc=design.soc)

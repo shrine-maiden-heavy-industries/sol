@@ -1,21 +1,23 @@
-# amaranth: UnusedElaboratable=no
+# SPDX-License-Identifier: BSD-3-Clause
+# torii: UnusedElaboratable=no
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ ULPI interfacing hardware. """
 
+
 import unittest
 
-from amaranth       import Signal, Module, Cat, Elaboratable, ClockSignal, \
-					       Record, ResetSignal, Const
-from amaranth.hdl.ast import Rose, Fell, Past
-from amaranth.hdl.rec import Record, DIR_FANIN, DIR_FANOUT, DIR_NONE
+from torii         import (
+	Cat, ClockSignal, Const, Elaboratable, Module, Record, ResetSignal, Signal
+)
+from torii.hdl.ast import Rose
+from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
-from ..utils.io     import delay
-from ..test         import LunaGatewareTestCase, usb_domain_test_case, sync_test_case
+from ..test        import LunaGatewareTestCase,  usb_domain_test_case
+
 
 
 class ULPIInterface(Record):

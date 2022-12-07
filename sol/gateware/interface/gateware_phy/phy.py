@@ -1,15 +1,15 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
+
 """ Pure-gateware, UTMI-compatible Full Speed PHY."""
 
-import logging
+from torii         import Cat, Elaboratable, Module, Signal
 
-from amaranth         import Signal, Module, Cat, Elaboratable, ClockSignal
-from amaranth.hdl.ast import Rose, Past
+from .receiver     import RxPipeline
+from .transmitter  import TxPipeline
 
-from .receiver      import RxPipeline
-from .transmitter   import TxPipeline
 
 class GatewarePHY(Elaboratable):
 	""" Gateware that implements a UTMI-compatible transciever using raw FPGA I/O.

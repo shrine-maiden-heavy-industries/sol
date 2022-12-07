@@ -1,24 +1,24 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Implementation of a Triple-FIFO endpoint manager.
+"""
+Implementation of a Triple-FIFO endpoint manager.
 
 Equivalent (but not binary-compatbile) implementation of ValentyUSB's ``eptri``.
 
 For an example, see ``examples/usb/eptri`` or TinyUSB's ``sol/dcd_eptri.c``.
 """
 
-from amaranth           import *
-from amaranth.lib.fifo  import SyncFIFOBuffered
-from amaranth.hdl.xfrm  import ResetInserter, DomainRenamer
 
+from torii              import *
+from torii.hdl.xfrm     import DomainRenamer, ResetInserter
+from torii.lib.fifo     import SyncFIFOBuffered
 
-from ..endpoint         import EndpointInterface
 from ....soc.peripheral import Peripheral
-from sol.gateware.usb.usb2 import endpoint
+from ..endpoint         import EndpointInterface
 
 
 class SetupFIFOInterface(Peripheral, Elaboratable):

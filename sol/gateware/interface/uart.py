@@ -1,19 +1,18 @@
 #
 # This file is part of LUNA.
 #
-# Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # SPDX-License-Identifier: BSD-3-Clause
+# Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 """ UART interface gateware."""
 
 import unittest
 
-from amaranth   import Elaboratable, Module, Signal, Cat
-from amaranth_soc import wishbone, memory
+from torii         import Cat, Elaboratable, Module, Signal
+from torii.lib.soc import memory, wishbone
 
-
-from ..stream       import StreamInterface
-from ..test         import LunaGatewareTestCase, sync_test_case
+from ..stream      import StreamInterface
+from ..test        import LunaGatewareTestCase, sync_test_case
 
 
 class UARTTransmitter(Elaboratable):

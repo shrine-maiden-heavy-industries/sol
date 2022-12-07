@@ -1,20 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Endpoint interfaces for working with streams.
+"""
+Endpoint interfaces for working with streams.
 
 The endpoint interfaces in this module provide endpoint interfaces suitable for
 connecting streams to USB endpoints.
 """
 
-from amaranth import *
+from torii               import *
+
 from usb_construct.types import USBDirection
 
-from ...stream                import SuperSpeedStreamInterface
-from ..protocol.endpoint      import SuperSpeedEndpointInterface
+from ...stream           import SuperSpeedStreamInterface
+from ..protocol.endpoint import SuperSpeedEndpointInterface
 
 
 class SuperSpeedStreamInEndpoint(Elaboratable):

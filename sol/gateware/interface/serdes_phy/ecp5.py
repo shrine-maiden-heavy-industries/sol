@@ -1,5 +1,6 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # Copyright (c) 2020 Florent Kermarrec <florent@enjoy-digital.fr>
@@ -9,15 +10,15 @@
 # as part of the Yumewatari project: https://github.com/whitequark/Yumewatari.
 #
 # Code based in part on ``litex`` and ``liteiclink``.
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Soft PIPE backend for the Lattice ECP5 SerDes. """
 
 
-from amaranth import *
-from amaranth.lib.cdc import FFSynchronizer
+from torii         import *
+from torii.lib.cdc import FFSynchronizer
 
-from .lfps         import LFPSSquareWaveGenerator, LFPSSquareWaveDetector
 from ..pipe        import PIPEInterface
+from .lfps         import LFPSSquareWaveDetector, LFPSSquareWaveGenerator
 
 
 class ECP5SerDesPLLConfiguration:

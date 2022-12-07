@@ -1,15 +1,16 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Full-gateware control request handlers. """
 
 import unittest
 
-from amaranth               import *
+from torii          import *
 
-from ..usb2.request         import USBRequestHandler
+from ..usb2.request import USBRequestHandler
 
 
 class ControlRequestHandler(USBRequestHandler):

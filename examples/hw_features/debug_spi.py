@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-from amaranth import Signal, Elaboratable, Module
-from amaranth.lib.cdc import FFSynchronizer
 
-from sol import top_level_cli
-from sol.gateware.utils.cdc import synchronize
-from sol.gateware.interface.spi import SPIDeviceInterface, SPIBus
+from torii                      import Elaboratable, Module
+
+from sol.cli                    import cli
+from sol.gateware.interface.spi import SPIDeviceInterface
+from sol.gateware.utils.cdc     import synchronize
 
 
 class DebugSPIExample(Elaboratable):
@@ -47,4 +47,4 @@ class DebugSPIExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(DebugSPIExample)
+	cli(DebugSPIExample)

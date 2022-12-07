@@ -1,23 +1,25 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
+
 """ Low-level USB transciever gateware -- control transfer components. """
 
 import unittest
 
-from amaranth              import Signal, Module, Elaboratable
+from torii                  import Elaboratable, Module
+
 from usb_construct.emitters import DeviceDescriptorCollection
 from usb_construct.types    import USBRequestType
 
-from .packet               import DataCRCInterface, USBDataPacketCRC, USBInterpacketTimer
-from .packet               import USBTokenDetector, TokenDetectorInterface
-from .packet               import InterpacketTimerInterface, HandshakeExchangeInterface
-from .endpoint             import EndpointInterface
-from .request              import USBSetupDecoder, USBRequestHandlerMultiplexer, StallOnlyRequestHandler
-from ..request.standard    import StandardRequestHandler
-from ..stream              import USBInStreamInterface, USBOutStreamInterface
+from ..request.standard     import StandardRequestHandler
+from .endpoint              import EndpointInterface
+from .packet                import USBDataPacketCRC, USBInterpacketTimer, USBTokenDetector
+from .request               import (
+	StallOnlyRequestHandler, USBRequestHandlerMultiplexer, USBSetupDecoder
+)
 
 
 class USBControlEndpoint(Elaboratable):

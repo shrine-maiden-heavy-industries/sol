@@ -1,8 +1,9 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Link Training and Status State Machine (LTSSM) gateware. """
 
 #
@@ -10,12 +11,10 @@
 # the SerDes PHY work in some cases. This is not a complete design.
 #
 
+
 import math
 
-from amaranth import *
-from amaranth.lib.coding import Encoder
-from amaranth.lib.cdc  import PulseSynchronizer
-
+from torii import *
 
 
 class LTSSMController(Elaboratable):

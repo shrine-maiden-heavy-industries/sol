@@ -1,8 +1,9 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """
 Contains the organizing hardware used to add USB Device functionality
 to your own designs; including the core :class:`USBDevice` class.
@@ -10,25 +11,24 @@ to your own designs; including the core :class:`USBDevice` class.
 
 import unittest
 
-from amaranth                  import Signal, Module, Elaboratable, Const
-from usb_construct.types        import DescriptorTypes
-from usb_construct.emitters     import DeviceDescriptorCollection
+from torii                     import Const, Elaboratable, Module, Signal
 
+from usb_construct.emitters    import DeviceDescriptorCollection
+from usb_construct.types       import DescriptorTypes
+
+from ...interface.gateware_phy import GatewarePHY
 from ...interface.ulpi         import UTMITranslator
 from ...interface.utmi         import UTMIInterfaceMultiplexer
-from ...interface.gateware_phy import GatewarePHY
-
-from .                         import USBSpeed, USBPacketID
-from .packet                   import USBTokenDetector, USBHandshakeGenerator, USBDataPacketCRC
-from .packet                   import USBInterpacketTimer, USBDataPacketGenerator, USBHandshakeDetector
-from .packet                   import USBDataPacketReceiver
-from .reset                    import USBResetSequencer
-
-from .endpoint                 import USBEndpointMultiplexer
-from .control                  import USBControlEndpoint
-
 from ...test                   import usb_domain_test_case
 from ...test.usb2              import USBDeviceTest
+from .                         import USBPacketID
+from .control                  import USBControlEndpoint
+from .endpoint                 import USBEndpointMultiplexer
+from .packet                   import (
+	USBDataPacketCRC, USBDataPacketGenerator, USBDataPacketReceiver, USBHandshakeDetector,
+	USBHandshakeGenerator, USBInterpacketTimer, USBTokenDetector
+)
+from .reset                    import USBResetSequencer
 
 
 class USBDevice(Elaboratable):

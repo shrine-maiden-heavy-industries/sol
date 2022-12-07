@@ -1,21 +1,21 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ USB3 physical-layer abstraction."""
 
-import logging
 
-from amaranth import *
-from amaranth.lib.fifo import AsyncFIFOBuffered
-from ...stream  import USBRawSuperSpeedStream
+from torii       import *
 
-from .lfps       import LFPSTransceiver
-from .scrambling import Scrambler, Descrambler
-from .power      import PHYResetController, LinkPartnerDetector
+from ...stream   import USBRawSuperSpeedStream
+from .alignment  import RxPacketAligner, RxWordAligner
 from .ctc        import CTCSkipInserter, CTCSkipRemover
-from .alignment  import RxWordAligner, RxPacketAligner
+from .lfps       import LFPSTransceiver
+from .power      import LinkPartnerDetector, PHYResetController
+from .scrambling import Descrambler, Scrambler
+
 
 class USB3PhysicalLayer(Elaboratable):
 	""" Abstraction encapsulating the USB3 physical layer hardware.

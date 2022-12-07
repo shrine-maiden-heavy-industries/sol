@@ -1,17 +1,17 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Low-level USB analyzer gateware. """
 
 import unittest
 
-from amaranth          import Signal, Module, Elaboratable, Memory, Record
+from torii    import Elaboratable, Memory, Module, Record, Signal
 
-from ..stream          import StreamInterface
-from ..test            import LunaGatewareTestCase, usb_domain_test_case
+from ..stream import StreamInterface
+from ..test   import LunaGatewareTestCase, usb_domain_test_case
 
 
 class USBAnalyzer(Elaboratable):

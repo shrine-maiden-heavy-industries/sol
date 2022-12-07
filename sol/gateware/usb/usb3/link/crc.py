@@ -1,16 +1,17 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ CRC computation gateware for USB3. """
 
 
-import unittest
-import operator
 import functools
+import operator
+import unittest
 
-from amaranth import *
+from torii    import *
 
 from ....test import LunaSSGatewareTestCase, ss_domain_test_case
 

@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-from amaranth            import Elaboratable, Module
 
-from sol                import top_level_cli
-from sol.full_devices   import USBSerialDevice
+from torii            import Elaboratable, Module
 
+from sol.cli          import cli
+from sol.full_devices import USBSerialDevice
 
 class USBSerialDeviceExample(Elaboratable):
 	""" Device that acts as a 'USB-to-serial' loopback using our premade gateware. """
@@ -40,4 +40,4 @@ class USBSerialDeviceExample(Elaboratable):
 		return m
 
 if __name__ == "__main__":
-	top_level_cli(USBSerialDeviceExample)
+	cli(USBSerialDeviceExample)

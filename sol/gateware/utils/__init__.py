@@ -1,10 +1,13 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
-""" Simple utility constructs for LUNA. """
 
-from amaranth import Module, Signal, Cat
-from .cdc import synchronize
+""" Simple utility constructs for SOL. """
+
+from torii import Signal
+
+from .cdc  import synchronize
 
 __all__ = [
 	'rising_edge_detected', 'falling_edge_detected', 'any_edge_detected',

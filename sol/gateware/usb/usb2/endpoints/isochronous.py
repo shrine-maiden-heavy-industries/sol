@@ -1,17 +1,19 @@
+# SPDX-License-Identifier: BSD--3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD--3-Clause
-""" Endpoint interfaces for isochronous endpoints.
+
+"""
+Endpoint interfaces for isochronous endpoints.
 
 These interfaces provide interfaces for connecting memories or memory-like
 interfaces to hosts via isochronous pipes.
 """
 
-from amaranth       import Elaboratable, Module, Signal
+from torii      import Elaboratable, Module, Signal
 
-from ..endpoint     import EndpointInterface
+from ..endpoint import EndpointInterface
 
 
 class USBIsochronousInEndpoint(Elaboratable):

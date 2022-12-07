@@ -1,18 +1,20 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Clock and reset (CAR) controllers for LUNA. """
+""" Clock and reset (CAR) controllers for SOL. """
 
-import logging
+import logging   as log
+from abc         import ABCMeta, abstractmethod
 
-from abc import ABCMeta, abstractmethod
-from amaranth import Signal, Module, ClockDomain, ClockSignal, Elaboratable, Instance, ResetSignal
+from torii       import (
+	ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
+)
 
+from ..test      import LunaGatewareTestCase, sync_test_case
 from ..utils.cdc import stretch_strobe_signal
-from ..test      import LunaGatewareTestCase, usb_domain_test_case, sync_test_case
 
 
 class PHYResetController(Elaboratable):
@@ -286,8 +288,8 @@ class LunaECP5DomainGenerator(LunaDomainGenerator):
 		# For debugging: if our clock name is "OSCG", allow using the internal
 		# oscillator. This is mostly useful for debugging.
 		if clock_name == "OSCG":
-			logging.warning("Using FPGA-internal oscillator for an approximately 62MHz.")
-			logging.warning("USB communication won't work for f_OSC != 60MHz.")
+			log.warning("Using FPGA-internal oscillator for an approximately 62MHz.")
+			log.warning("USB communication won't work for f_OSC != 60MHz.")
 
 			input_clock = Signal()
 			m.submodules += Instance("OSCG", p_DIV=self.OSCG_DIV, o_OSC=input_clock)
@@ -414,6 +416,6 @@ class LunaECP5DomainGenerator(LunaDomainGenerator):
 		Works for any chosen frequency in which f(usb) < f(sync).
 		"""
 
-		# TODO: replace with Amaranth's pulsesynchronizer?
+		# TODO: replace with Torii's pulsesynchronizer?
 		to_cycles = self.clock_frequencies['sync'] // self.clock_frequencies['usb']
 		return stretch_strobe_signal(m, strobe, output=output, to_cycles=to_cycles, allow_delay=allow_delay)

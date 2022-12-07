@@ -1,19 +1,22 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 
 """ Stream generators. """
 
 import unittest
 
-from amaranth     import *
-from .            import StreamInterface
-from ..test       import LunaUSBGatewareTestCase, LunaSSGatewareTestCase, ss_domain_test_case, usb_domain_test_case
+from torii        import *
 
 # Brought in for tests.
+from ..test       import (
+	LunaSSGatewareTestCase, LunaUSBGatewareTestCase, ss_domain_test_case, usb_domain_test_case
+)
 from ..usb.stream import SuperSpeedStreamInterface
+from .            import StreamInterface
 
 
 class ConstantStreamGenerator(Elaboratable):

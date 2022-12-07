@@ -1,23 +1,23 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Contains the gatware module necessary to interpret and generate low-level USB packets. """
 
 
+import functools
 import operator
 import unittest
-import functools
 
-from amaranth          import Signal, Module, Elaboratable, Cat, Array, Const
-from amaranth.hdl.rec  import Record, DIR_FANIN, DIR_FANOUT
+from torii             import Array, Cat, Const, Elaboratable, Module, Signal
+from torii.hdl.rec     import DIR_FANIN, DIR_FANOUT, Record
 
-from .                 import USBSpeed, USBPacketID
-from ..stream          import USBInStreamInterface, USBOutStreamInterface
 from ...interface.utmi import UTMITransmitInterface
 from ...test           import LunaGatewareTestCase, usb_domain_test_case
+from ..stream          import USBInStreamInterface, USBOutStreamInterface
+from .                 import USBPacketID, USBSpeed
 
 #
 # Interfaces.

@@ -1,20 +1,18 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Endpoint abstractions for USB3. """
 
-import operator
-import functools
 
-from amaranth import *
+from torii        import *
 
+from ...stream    import SuperSpeedStreamInterface
+from ..link.data  import DataHeaderPacket
 from .transaction import HandshakeGeneratorInterface, HandshakeReceiverInterface
 
-from ..link.data   import DataHeaderPacket
-from ....utils.bus import OneHotMultiplexer
-from ...stream     import SuperSpeedStreamInterface
 
 class SuperSpeedEndpointInterface:
 	""" Interface that connects a USB3 endpoint module to a USB device.

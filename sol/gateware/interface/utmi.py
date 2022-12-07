@@ -1,17 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # This file is part of LUNA.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ UTMI interfacing. """
 
-from enum import IntEnum
+from torii.hdl.rec import DIR_FANIN, DIR_FANOUT, Record
 
-from amaranth       import Elaboratable, Signal, Module
-from amaranth.hdl.rec import Record, DIR_FANIN, DIR_FANOUT
-
-from ..utils.bus    import OneHotMultiplexer
+from ..utils.bus   import OneHotMultiplexer
 
 class UTMIOperatingMode:
 	""" Enumeration that specifies the modes a UTMI transceiver can use. """

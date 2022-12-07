@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # This file is part of LUNA.
 #
@@ -5,14 +6,14 @@
 # Copyright (c) 2020 Florent Kermarrec <florent@enjoy-digital.fr>
 #
 # Code based on ``litex`` and ``usb3_pipe``.
-# SPDX-License-Identifier: BSD-3-Clause
-""" Link training support gateware.
-"""
 
-from amaranth import *
+""" Link training support gateware. """
 
-from ..physical.coding import D, COM
+
+from torii             import *
+
 from ...stream         import USBRawSuperSpeedStream
+from ..physical.coding import D
 
 TS1_SET_ID = D(10, 2)
 TS2_SET_ID = D(5,  2)

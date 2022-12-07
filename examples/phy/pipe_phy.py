@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
 # This file is part of LUNA.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Incomplete example for working with a hardware PIPE PHY."""
 
-from amaranth import *
+from torii   import *
 
-from sol                          import top_level_cli
-from sol.gateware.platform        import NullPin
-from sol.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
-
-from sol.gateware.interface.serdes_phy.backends.ecp5 import LunaECP5SerDes
-from sol.gateware.interface.serdes_phy.phy           import SerDesPHY
+from sol.cli import cli
 
 class PIPEPhyExample(Elaboratable):
 	""" Hardware module that demonstrates grabbing a PHY resource with gearing. """
@@ -33,4 +29,4 @@ class PIPEPhyExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(PIPEPhyExample)
+	cli(PIPEPhyExample)

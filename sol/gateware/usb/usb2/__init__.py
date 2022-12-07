@@ -1,12 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Gateware for creating USB2 devices. """
 
-from enum import IntEnum, IntFlag
+from enum                import IntEnum, IntFlag
+
+from usb_construct.types import USBPIDCategory, USBDirection
 
 #
 # TODO: these should be moved into a USBPacketID library

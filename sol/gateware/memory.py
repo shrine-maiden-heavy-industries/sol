@@ -1,8 +1,8 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """
 This module contains definitions of memory units that work well for USB applications.
@@ -10,11 +10,10 @@ This module contains definitions of memory units that work well for USB applicat
 
 import unittest
 
-from amaranth import Elaboratable, Module, Signal, Memory
-from amaranth.hdl.xfrm import DomainRenamer
+from torii          import Elaboratable, Memory, Module, Signal
+from torii.hdl.xfrm import DomainRenamer
 
-
-from .test import LunaGatewareTestCase, sync_test_case
+from .test          import LunaGatewareTestCase, sync_test_case
 
 
 class TransactionalizedFIFO(Elaboratable):
@@ -75,7 +74,7 @@ class TransactionalizedFIFO(Elaboratable):
 		The number of allowed entries in the FIFO.
 	name: str
 		The name of the relevant FIFO; to produce nicer debug output.
-		If not provided, Amaranth will attempt auto-detection.
+		If not provided, Torii will attempt auto-detection.
 	domain: str
 		The name of the domain this module should exist in.
 	"""

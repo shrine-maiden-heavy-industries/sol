@@ -1,12 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # Copyright (c) 2020 Florent Kermarrec <florent@enjoy-digital.fr>
 #
 # Code based in part on ``usb3_pipe``.
-# SPDX-License-Identifier: BSD-3-Clause
-""" Low-frequency periodic signaling gateware.
+
+"""
+Low-frequency periodic signaling gateware.
 
 LFPS is the first signaling to happen during the initialization of the USB3.0 link.
 
@@ -27,15 +29,16 @@ and to detect RX electrical idle.
 """
 
 import unittest
-from math import ceil
+from math           import ceil
 
-from amaranth       import *
+from torii          import *
 
-from ....test.utils  import LunaSSGatewareTestCase, ss_domain_test_case
-from ....utils       import synchronize, rising_edge_detected
+from ....test.utils import LunaSSGatewareTestCase, ss_domain_test_case
+from ....utils      import rising_edge_detected, synchronize
 
-
-__all__ = ['LFPSTransceiver']
+__all__ = (
+	'LFPSTransceiver',
+)
 
 
 #

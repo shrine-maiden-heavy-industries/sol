@@ -1,40 +1,40 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Simple SoC abstraction for LUNA examples."""
+""" Simple SoC abstraction for SOL examples."""
 
-import os
 import datetime
-import logging
+import logging               as log
+import os
 
-from amaranth                import Elaboratable, Module
-from amaranth_soc            import wishbone
-
-from lambdasoc.soc.cpu       import CPUSoC
 from lambdasoc.cpu.minerva   import MinervaCPU
 from lambdasoc.periph.intc   import GenericInterruptController
 from lambdasoc.periph.serial import AsyncSerialPeripheral
 from lambdasoc.periph.sram   import SRAMPeripheral
 from lambdasoc.periph.timer  import TimerPeripheral
+from lambdasoc.soc.cpu       import CPUSoC
 
-from .memory                 import WishboneRAM, WishboneROM
+from torii                   import Elaboratable, Module
+from torii.lib.soc           import wishbone
+
 from ..utils.cdc             import synchronize
+from .memory                 import WishboneRAM, WishboneROM
 
 
 class SimpleSoC(CPUSoC, Elaboratable):
 	""" Class used for building simple, example system-on-a-chip architectures.
 
 	Intended to facilitate demonstrations (and very simple USB devices) by providing
-	a wrapper that can be updated as the Amaranth-based-SoC landscape changes. Hopefully,
-	this will eventually be filled by e.g. Amaranth-compatible-LiteX. :)
+	a wrapper that can be updated as the Torii-based-SoC landscape changes. Hopefully,
+	this will eventually be filled by e.g. Torii-compatible-LiteX. :)
 
 	SimpleSoC devices intergrate:
 		- A simple riscv32i processor.
 		- One or more read-only or read-write memories.
-		- A number of amaranth-soc peripherals.
+		- A number of torii-soc peripherals.
 
 
 	The current implementation uses a single, 32-bit wide Wishbone bus
@@ -281,7 +281,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 		Parmeters:
 			name      -- The name for the SoC design.
-			build_dir -- The directory where our main Amaranth build is being performed.
+			build_dir -- The directory where our main Torii build is being performed.
 					     We'll build in a subdirectory of it.
 		"""
 
@@ -536,27 +536,27 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		""" Logs a summary of our resource utilization to our running logs. """
 
 		# Resource addresses:
-		logging.info("Physical address allocations:")
+		log.info("Physical address allocations:")
 		for peripheral, (start, end, _granularity) in self.memory_map.all_resources():
-			logging.info(f"    {start:08x}-{end:08x}: {peripheral}")
-		logging.info("")
+			log.info(f"    {start:08x}-{end:08x}: {peripheral}")
+		log.info("")
 
 		# IRQ numbers
-		logging.info("IRQ allocations:")
+		log.info("IRQ allocations:")
 		for irq, peripheral in self._irqs.items():
-			logging.info(f"    {irq}: {peripheral.name}")
-		logging.info("")
+			log.info(f"    {irq}: {peripheral.name}")
+		log.info("")
 
 		# Main memory.
 		if self._build_bios:
 			memory_location = self.main_ram_address()
 
-			logging.info(f"Main memory at 0x{memory_location:08x}; upload using:")
-			logging.info(f"    flterm --kernel <your_firmware> --kernel-addr 0x{memory_location:08x} --speed {self._uart_baud}")
-			logging.info("or")
-			logging.info(f"    lxterm --kernel <your_firmware> --kernel-adr 0x{memory_location:08x} --speed {self._uart_baud}")
+			log.info(f"Main memory at 0x{memory_location:08x}; upload using:")
+			log.info(f"    flterm --kernel <your_firmware> --kernel-addr 0x{memory_location:08x} --speed {self._uart_baud}")
+			log.info("or")
+			log.info(f"    lxterm --kernel <your_firmware> --kernel-adr 0x{memory_location:08x} --speed {self._uart_baud}")
 
-		logging.info("")
+		log.info("")
 
 
 	def main_ram_address(self):

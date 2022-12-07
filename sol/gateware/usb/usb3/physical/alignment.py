@@ -1,18 +1,18 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # Copyright (c) 2020 Florent Kermarrec <florent@enjoy-digital.fr>
 #
 # Code adapted from ``litex`` and ``usb3_pipe``.
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Code for USB3 physical-layer encoding. """
 
-from amaranth import *
-from amaranth.hdl.ast import Past
+from torii     import *
 
-from .coding   import COM, SHP, SLC, EPF, get_word_for_symbols
 from ...stream import USBRawSuperSpeedStream
+from .coding   import COM, EPF, SHP, SLC, get_word_for_symbols
 
 
 class RxWordAligner(Elaboratable):

@@ -1,18 +1,18 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Gateware that handles USB bus resets & speed detection. """
 
 import unittest
 
-from amaranth              import *
+from torii             import *
 
-from .                     import USBSpeed
-from ...interface.utmi     import UTMITransmitInterface, UTMIOperatingMode, UTMITerminationSelect
-from ...test               import LunaGatewareTestCase, usb_domain_test_case
+from ...interface.utmi import UTMIOperatingMode, UTMITerminationSelect, UTMITransmitInterface
+from ...test           import LunaGatewareTestCase, usb_domain_test_case
+from .                 import USBSpeed
 
 
 def _generate_wide_incrementer(m, platform, adder_input):

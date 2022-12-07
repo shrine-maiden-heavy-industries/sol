@@ -1,14 +1,16 @@
-# amaranth: UnusedElaboratable=no
+# SPDX-License-Identifier: BSD-3-Clause
+# torii: UnusedElaboratable=no
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ USB3 PIPE interfacing gateware. """
 
-from amaranth import *
-from amaranth.lib.cdc  import FFSynchronizer, ResetSynchronizer
-from amaranth.lib.fifo import AsyncFIFOBuffered
+
+from torii          import *
+from torii.lib.cdc  import FFSynchronizer, ResetSynchronizer
+from torii.lib.fifo import AsyncFIFOBuffered
 
 
 class PIPEInterface(Elaboratable):
@@ -197,7 +199,7 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 	This gateware transfers the PIPE interface signals between the PHY and MAC clock domains,
 	optionally performing gearing to adapt the PHY data bus width and interface clock rate to
 	the MAC capabilities. With the exception of ``reset``, ``clk`` and ``pclk``, all of the signals
-	in this gateware are synchronous to the specified Amaranth clock domain, ``ss`` by default.
+	in this gateware are synchronous to the specified Torii clock domain, ``ss`` by default.
 	The ``pclk`` signal is driven by the clock of this domain.
 
 	This gateware does not currently support asynchronous signaling in the deepest PHY power state.

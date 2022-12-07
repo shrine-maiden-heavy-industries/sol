@@ -1,15 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ USB3 physical-layer abstraction."""
 
-import logging
 
-from amaranth import *
-from amaranth.lib.cdc import PulseSynchronizer, FFSynchronizer
-from amaranth.hdl.ast import Rose
+from torii         import *
+from torii.hdl.ast import Rose
 
 
 class PHYResetController(Elaboratable):

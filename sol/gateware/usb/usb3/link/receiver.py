@@ -1,25 +1,24 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Header Packet Rx-handling gateware. """
 
 import unittest
 
-from amaranth                      import *
-from amaranth.hdl.ast              import Fell
+from torii                          import *
+from torii.hdl.ast                  import Fell
 
 from usb_construct.types.superspeed import LinkCommand
 
-from .header                       import HeaderPacket, HeaderQueue
-from .crc                          import compute_usb_crc5, HeaderPacketCRC
-from .command                      import LinkCommandGenerator
-from ..physical.coding             import SHP, EPF, stream_matches_symbols
-from ...stream                     import USBRawSuperSpeedStream
-
-from ....test.utils                import LunaSSGatewareTestCase, ss_domain_test_case
-
+from ....test.utils                 import LunaSSGatewareTestCase, ss_domain_test_case
+from ...stream                      import USBRawSuperSpeedStream
+from ..physical.coding              import EPF, SHP, stream_matches_symbols
+from .command                       import LinkCommandGenerator
+from .crc                           import HeaderPacketCRC, compute_usb_crc5
+from .header                        import HeaderPacket, HeaderQueue
 
 
 class RawHeaderPacketReceiver(Elaboratable):

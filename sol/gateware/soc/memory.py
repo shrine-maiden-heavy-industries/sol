@@ -1,17 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 
 import math
 
-from enum      import Enum
-from functools import reduce
-from operator  import or_
-
-from amaranth     import Elaboratable, Record, Module, Cat, Array, Repl, Signal, Memory
-from amaranth_soc import wishbone, memory
+from torii         import Elaboratable, Memory, Module
+from torii.lib.soc import memory, wishbone
 
 
 class WishboneRAM(Elaboratable):

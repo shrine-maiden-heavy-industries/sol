@@ -1,12 +1,13 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Interfaces for working with an ECP5 MSPI configuration flash. """
 
-from amaranth import Signal, Module, Cat, Elaboratable, Instance
+
+from torii import Signal, Module, Elaboratable, Instance
 
 
 class ECP5ConfigurationFlashInterface(Elaboratable):

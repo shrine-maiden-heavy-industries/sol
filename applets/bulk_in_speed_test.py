@@ -1,25 +1,26 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 # pylint: disable=no-member
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
+import logging
 import os
 import sys
-import logging
 import time
 
 import usb1
 
-from amaranth                import *
-from usb_construct.emitters   import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
+from torii                  import *
+from usb_construct.emitters import (
+	DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
+)
 
-from sol                    import top_level_cli, configure_default_logging
+from sol.cli                import cli, setup_logger
 from sol.usb2               import USBDevice, USBStreamInEndpoint
-from sol.usb3               import USBSuperSpeedDevice, SuperSpeedStreamInEndpoint
-
+from sol.usb3               import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
 
 VENDOR_ID  = 0x16d0
 PRODUCT_ID = 0x0f3b
@@ -315,13 +316,13 @@ if __name__ == "__main__":
 
 	# If our environment is suggesting we rerun tests, do so.
 	if os.getenv('LUNA_RERUN_TEST'):
-		configure_default_logging()
+		setup_logger()
 		logging.info("Running speed test without rebuilding...")
 		run_speed_test()
 
 	# Otherwise, build and run our tests.
 	else:
-		device = top_level_cli(USBInSpeedTestDevice)
+		device = cli(USBInSpeedTestDevice)
 
 		logging.info("Giving the device time to connect...")
 		time.sleep(5)

@@ -5,13 +5,15 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 # SPDX-License-Identifier: BSD-3-Clause
 
+
 import os
 
-from amaranth                import Elaboratable, Module, Signal
-from usb_construct.types      import USBTransferType
-from usb_construct.emitters   import DeviceDescriptorCollection
+from torii                  import Elaboratable, Module
 
-from sol                    import top_level_cli
+from usb_construct.emitters import DeviceDescriptorCollection
+from usb_construct.types    import USBTransferType
+
+from sol.cli                import cli
 from sol.usb2               import USBDevice, USBIsochronousInEndpoint
 
 
@@ -103,4 +105,4 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(USBIsochronousCounterDeviceExample)
+	cli(USBIsochronousCounterDeviceExample)

@@ -1,19 +1,18 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Boilerplate for LUNA unit tests. """
+""" Boilerplate for SOL unit tests. """
 
-import os
 import math
+import os
 import unittest
-
 from functools import wraps
 
-from amaranth import Signal
-from amaranth.sim import Simulator
+from torii     import Signal
+from torii.sim import Simulator
 
 
 def sync_test_case(process_function, *, domain="sync"):

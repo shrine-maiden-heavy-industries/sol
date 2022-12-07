@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-from amaranth import *
-from amaranth.hdl.ast import Fell
 
-from usb_construct.emitters         import SuperSpeedDeviceDescriptorCollection
+from torii                  import *
 
-from sol                          import top_level_cli
-from sol.gateware.platform        import NullPin
-from sol.gateware.usb.devices.ila import USBIntegratedLogicAnalyer, USBIntegratedLogicAnalyzerFrontend
+from usb_construct.emitters import SuperSpeedDeviceDescriptorCollection
 
-from sol.usb3                     import USBSuperSpeedDevice, SuperSpeedStreamInEndpoint
+from sol.cli                import cli
+from sol.usb3               import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
 
 
 class USBSuperSpeedExample(Elaboratable):
@@ -111,4 +108,4 @@ class USBSuperSpeedExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	top_level_cli(USBSuperSpeedExample)
+	cli(USBSuperSpeedExample)

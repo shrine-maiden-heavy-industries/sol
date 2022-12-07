@@ -32,12 +32,13 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-from amaranth          import Elaboratable, Module, Signal, Cat, Const, ClockSignal
-from amaranth.lib.fifo import AsyncFIFOBuffered
-from amaranth.hdl.ast  import Past
-from amaranth.hdl.xfrm import ResetInserter
+from torii          import Cat, Const, Elaboratable, Module, Signal
+from torii.hdl.ast  import Past
+from torii.hdl.xfrm import ResetInserter
+from torii.lib.fifo import AsyncFIFOBuffered
 
-from ...utils.cdc import synchronize
+from ...utils.cdc   import synchronize
+
 
 class RxClockDataRecovery(Elaboratable):
 	"""RX Clock Data Recovery module.

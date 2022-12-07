@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 # NOTE: This example requires a working `gtkwave` binary
 # to be present and on the system path; and will display the
@@ -11,14 +11,14 @@
 
 import time
 
-from amaranth import Signal, Elaboratable, Module, Cat, ClockDomain, ClockSignal, ResetInserter
-from amaranth.lib.cdc import FFSynchronizer
+from apollo_fpga                import ApolloDebugger, ApolloILAFrontend
 
-from sol                          import top_level_cli
-from apollo_fpga                        import ApolloDebugger, ApolloILAFrontend
-from sol.gateware.utils.cdc       import synchronize
-from sol.gateware.interface.spi   import SPIRegisterInterface, SPIMultiplexer, SPIBus
-from sol.gateware.debug.ila       import SyncSerialILA
+from torii                      import Cat, Elaboratable, Module, Signal
+
+from sol.cli                    import cli
+from sol.gateware.debug.ila     import SyncSerialILA
+from sol.gateware.interface.spi import SPIBus, SPIMultiplexer, SPIRegisterInterface
+from sol.gateware.utils.cdc     import synchronize
 
 REGISTER_ID  = 1
 REGISTER_ILA = 2
@@ -94,7 +94,7 @@ class ILASharedBusExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	example = top_level_cli(ILASharedBusExample)
+	example = cli(ILASharedBusExample)
 
 	# Create a debug and ILA connection.
 	debugger = ApolloDebugger()

@@ -1,16 +1,19 @@
-from amaranth import *
-from amaranth.lib.fifo import SyncFIFO
+# SPDX-License-Identifier: BSD-3-Clause
 
-from amaranth_stdio.serial import AsyncSerial
+from torii                  import *
+from torii.lib.fifo         import SyncFIFO
+from torii.lib.stdio.serial import AsyncSerial
 
-from .peripheral import Peripheral
+from .peripheral            import Peripheral
 
-__all__ = ["UARTPeripheral"]
+__all__ = (
+	'UARTPeripheral',
+)
 
 class UARTPeripheral(Peripheral, Elaboratable):
 	"""Asynchronous serial transceiver peripheral.
 
-	See :class:`amaranth_stdio.serial.AsyncSerial` for details.
+	See :class:`torii.lib.stdio.serial.AsyncSerial` for details.
 
 	CSR registers
 	-------------
@@ -21,7 +24,7 @@ class UARTPeripheral(Peripheral, Elaboratable):
 	rx_rdy : read-only
 		Receiver ready. The receiver FIFO is non-empty.
 	rx_err : read-only
-		Receiver error flags. See :class:`amaranth_stdio.serial.AsyncSerialRX` for layout.
+		Receiver error flags. See :class:`torii.lib.stdio.serial.AsyncSerialRX` for layout.
 	tx_data : write-only
 		Transmitter data.
 	tx_rdy : read-only
@@ -51,11 +54,11 @@ class UARTPeripheral(Peripheral, Elaboratable):
 	parity : ``"none"``, ``"mark"``, ``"space"``, ``"even"``, ``"odd"``
 		Parity mode.
 	pins : :class:`Record`
-		Optional. UART pins. See :class:`amaranth_boards.resources.UARTResource`.
+		Optional. UART pins. See :class:`torii.platform.resources.UARTResource`.
 
 	Attributes
 	----------
-	bus : :class:`amaranth_soc.wishbone.Interface`
+	bus : :class:`torii.lib.soc.wishbone.Interface`
 		Wishbone bus interface.
 	irq : :class:`IRQLine`
 		Interrupt request line.

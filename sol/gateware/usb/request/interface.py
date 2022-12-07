@@ -1,12 +1,14 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Request components shared between USB2 and USB3. """
 
-from amaranth       import *
-from amaranth.hdl.rec import DIR_FANOUT
+
+from torii         import *
+from torii.hdl.rec import DIR_FANOUT
 
 
 class SetupPacket(Record):

@@ -1,23 +1,24 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ Data Packet Payload (DPP) management gateware. """
 
 import unittest
 
-from amaranth import *
+from torii                          import *
 
-from usb_construct.types import USBDirection
 from usb_construct.types.superspeed import HeaderPacketType
 
-from .crc              import HeaderPacketCRC, DataPacketPayloadCRC, compute_usb_crc5
-from .header           import HeaderPacket, HeaderQueue
-
-from ..physical.coding import SHP, SDP, EPF, stream_matches_symbols
-from ...stream         import USBRawSuperSpeedStream, SuperSpeedStreamInterface
-from ....test.utils    import LunaSSGatewareTestCase, ss_domain_test_case
+from ....test.utils                 import LunaSSGatewareTestCase, ss_domain_test_case
+from ...stream                      import SuperSpeedStreamInterface, USBRawSuperSpeedStream
+from ..physical.coding              import EPF, SDP, SHP, stream_matches_symbols
+from .crc                           import (
+	DataPacketPayloadCRC, HeaderPacketCRC, compute_usb_crc5
+)
+from .header                        import HeaderPacket, HeaderQueue
 
 
 class DataHeaderPacket(HeaderPacket):

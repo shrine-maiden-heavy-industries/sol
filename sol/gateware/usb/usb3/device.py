@@ -1,28 +1,27 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """
 Contains the organizing hardware used to add USB3 Device functionality
 to your own designs; including the core :class:`USBSuperSpeedDevice` class.
 """
 
-import logging
 
-from amaranth import *
+from torii                  import *
 
 from usb_construct.emitters import DeviceDescriptorCollection
 
-# USB3 Protocol Stack
-from .physical             import USB3PhysicalLayer
-from .link                 import USB3LinkLayer
-from .protocol             import USB3ProtocolLayer
-from .endpoints            import USB3ControlEndpoint
-from .protocol.endpoint    import SuperSpeedEndpointMultiplexer
-
 # Temporary
-from ..stream              import USBRawSuperSpeedStream, SuperSpeedStreamInterface
+from ..stream               import SuperSpeedStreamInterface, USBRawSuperSpeedStream
+# USB3 Protocol Stack
+from .endpoints             import USB3ControlEndpoint
+from .link                  import USB3LinkLayer
+from .physical              import USB3PhysicalLayer
+from .protocol              import USB3ProtocolLayer
+from .protocol.endpoint     import SuperSpeedEndpointMultiplexer
 
 
 class USBSuperSpeedDevice(Elaboratable):

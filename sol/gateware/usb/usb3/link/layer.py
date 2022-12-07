@@ -1,23 +1,25 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
+
 """ USB3 link-layer abstraction."""
 
-from amaranth import *
+from torii             import *
 
-from ...stream          import USBRawSuperSpeedStream, SuperSpeedStreamArbiter, SuperSpeedStreamInterface
-from ..physical.coding  import IDL
-
-from .idle         import IdleHandshakeHandler
-from .ltssm        import LTSSMController
-from .header       import HeaderQueue, HeaderQueueArbiter
-from .receiver     import HeaderPacketReceiver
-from .transmitter  import PacketTransmitter
-from .timers       import LinkMaintenanceTimers
-from .ordered_sets import TSTransceiver
-from .data         import DataPacketReceiver, DataPacketTransmitter, DataHeaderPacket
+from ...stream         import (
+	SuperSpeedStreamArbiter, SuperSpeedStreamInterface, USBRawSuperSpeedStream
+)
+from ..physical.coding import IDL
+from .data             import DataHeaderPacket, DataPacketReceiver, DataPacketTransmitter
+from .header           import HeaderQueue, HeaderQueueArbiter
+from .idle             import IdleHandshakeHandler
+from .ltssm            import LTSSMController
+from .ordered_sets     import TSTransceiver
+from .receiver         import HeaderPacketReceiver
+from .timers           import LinkMaintenanceTimers
+from .transmitter      import PacketTransmitter
 
 
 class USB3LinkLayer(Elaboratable):

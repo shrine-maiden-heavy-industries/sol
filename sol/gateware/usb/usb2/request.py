@@ -1,28 +1,27 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Low-level USB transciever gateware -- control request components. """
 
-import unittest
 import functools
 import operator
+import unittest
 
-from amaranth            import Signal, Module, Elaboratable, Cat
-from amaranth.hdl.rec    import Record, DIR_FANOUT
+from torii        import Cat, Elaboratable, Module, Signal
 
-from .                   import USBSpeed
-from .packet             import USBTokenDetector, USBDataPacketDeserializer, USBPacketizerTest
-from .packet             import DataCRCInterface, USBInterpacketTimer, TokenDetectorInterface
-from .packet             import InterpacketTimerInterface, HandshakeExchangeInterface
-from ..stream            import USBInStreamInterface, USBOutStreamInterface
-from ..request           import SetupPacket
-from ...utils.bus        import OneHotMultiplexer
-
-from ...test             import usb_domain_test_case
-
+from ...test      import usb_domain_test_case
+from ...utils.bus import OneHotMultiplexer
+from ..request    import SetupPacket
+from ..stream     import USBInStreamInterface, USBOutStreamInterface
+from .            import USBSpeed
+from .packet      import (
+	DataCRCInterface, HandshakeExchangeInterface, InterpacketTimerInterface,
+	TokenDetectorInterface, USBDataPacketDeserializer, USBInterpacketTimer,
+	USBPacketizerTest, USBTokenDetector
+)
 
 
 class RequestHandlerInterface:
@@ -523,7 +522,7 @@ class StallOnlyRequestHandler(Elaboratable):
 		"""
 		Parameters:
 			stall_condition -- A function that accepts a SetupRequest packet, and returns
-					           an Amaranth conditional indicating whether we should stall.
+					           an Torii conditional indicating whether we should stall.
 		"""
 
 		self.condition = stall_condition

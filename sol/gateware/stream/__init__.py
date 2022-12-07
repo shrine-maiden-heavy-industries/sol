@@ -1,13 +1,13 @@
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
 """ Core stream definitions. """
 
-from amaranth         import Elaboratable, Signal, Module
-from amaranth.hdl.rec import Record, DIR_FANIN, DIR_FANOUT
+
+from torii import Record
 
 
 class StreamInterface(Record):

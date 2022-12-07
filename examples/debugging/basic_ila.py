@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-import sys
 
-from amaranth                import *
-from apollo_fpga                  import create_ila_frontend
+from apollo_fpga            import create_ila_frontend
 
-from sol                    import top_level_cli
+from torii                  import *
+
+from sol.cli                import cli
+from sol.gateware.debug.ila import SyncSerialILA
 from sol.gateware.platform  import NullPin
 from sol.gateware.utils.cdc import synchronize
-from sol.gateware.debug.ila import SyncSerialILA
 
 
 class ILAExample(Elaboratable):
@@ -54,5 +54,5 @@ class ILAExample(Elaboratable):
 
 
 if __name__ == "__main__":
-	example = top_level_cli(ILAExample)
+	example = cli(ILAExample)
 	example.emit_analysis_vcd()

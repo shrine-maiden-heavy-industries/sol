@@ -1,11 +1,13 @@
 # SPDX-License-Identifier: BSD-3-Clause
-from amaranth import Module, Signal
-from usb_construct.types import USBRequestType, USBRequestRecipient
-from usb_construct.types.descriptors.microsoft import MicrosoftRequests
-from usb_construct.emitters.descriptors.microsoft import PlatformDescriptorCollection
-from ...usb2.request import USBRequestHandler, SetupPacket
 
-from .descriptorSet import GetDescriptorSetHandler
+from torii                                        import Module, Signal
+
+from usb_construct.emitters.descriptors.microsoft import PlatformDescriptorCollection
+from usb_construct.types                          import USBRequestRecipient, USBRequestType
+from usb_construct.types.descriptors.microsoft    import MicrosoftRequests
+
+from ...usb2.request                              import SetupPacket, USBRequestHandler
+from .descriptorSet                               import GetDescriptorSetHandler
 
 __all__ = (
 	'WindowsRequestHandler',
@@ -60,11 +62,11 @@ class WindowsRequestHandler(USBRequestHandler):
 		Parameters
 		----------
 		platform
-			The Amaranth platform for which the gateware will be synthesised.
+			The Torii platform for which the gateware will be synthesised.
 
 		Returns
 		-------
-		:py:class:`amaranth.hdl.dsl.Module`
+		:py:class:`torii.hdl.dsl.Module`
 			A complete description of the gateware behaviour required.
 		"""
 		m = Module()

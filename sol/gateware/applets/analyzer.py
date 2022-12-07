@@ -1,37 +1,34 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
 # pylint: disable=maybe-no-member
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
-# SPDX-License-Identifier: BSD-3-Clause
 
-""" Generic USB analyzer backend generator for LUNA. """
+""" Generic USB analyzer backend generator for SOL. """
 
-import time
+
 import errno
-
+import time
+from datetime                         import datetime
+from enum                             import IntEnum
 
 import usb
-from datetime import datetime
-from enum import IntEnum
 
-from amaranth                          import Signal, Elaboratable, Module
-from usb_construct.emitters             import DeviceDescriptorCollection
-from usb_construct.types                import USBRequestType
+from torii                            import Elaboratable, Module, Signal
 
+from usb_construct.emitters           import DeviceDescriptorCollection
+from usb_construct.types              import USBRequestType
+
+from sol.gateware.architecture.car    import LunaECP5DomainGenerator
+from sol.gateware.interface.ulpi      import UTMITranslator
 from sol.gateware.platform            import get_appropriate_platform
-from sol.usb2                         import USBDevice, USBStreamInEndpoint
-
+from sol.gateware.stream.generator    import StreamSerializer
+from sol.gateware.usb.analyzer        import USBAnalyzer
 from sol.gateware.usb.request.control import ControlRequestHandler
 from sol.gateware.usb.stream          import USBInStreamInterface
-from sol.gateware.stream.generator    import StreamSerializer
-from sol.gateware.utils.cdc           import synchronize
-from sol.gateware.architecture.car    import LunaECP5DomainGenerator
-
-from sol.gateware.interface.ulpi      import UTMITranslator
-from sol.gateware.usb.analyzer        import USBAnalyzer
-
+from sol.usb2                         import USBDevice, USBStreamInEndpoint
 
 USB_SPEED_HIGH       = 0b00
 USB_SPEED_FULL       = 0b01
