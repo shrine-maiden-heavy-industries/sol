@@ -126,10 +126,10 @@ class USBSignalInEndpoint(Elaboratable):
 
 					m.d.usb += [
 						# ... clear our transmit counter ...
-						bytes_transmitted  .eq(0),
+						bytes_transmitted.eq(0),
 
 						# ... latch in our response...
-						latched_signal     .eq(self.signal),
+						latched_signal.eq(self.signal),
 					]
 
 					# ...  and start transmitting it.
@@ -142,9 +142,9 @@ class USBSignalInEndpoint(Elaboratable):
 
 				# While we're transmitting, our Tx data is valid.
 				m.d.comb += [
-					tx.valid  .eq(1),
-					tx.first  .eq(bytes_transmitted == 0),
-					tx.last   .eq(is_last_byte)
+					tx.valid.eq(1),
+					tx.first.eq(bytes_transmitted == 0),
+					tx.last.eq(is_last_byte)
 				]
 
 				# Each time we receive a byte, move on to the next one.

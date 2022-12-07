@@ -103,8 +103,8 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		# - the JCE flags only go high when the right instruction is loaded; and
 		# - the JSHIFT signal is only asserted when we're actually shifting data.
 		m.d.jtag += [
-			self.cs      .eq(jce1 & jshift),
-			self.cs_alt  .eq(jce2 & jshift),
+			self.cs.eq(jce1 & jshift),
+			self.cs_alt.eq(jce2 & jshift),
 		]
 
 		return m
@@ -246,8 +246,8 @@ class JTAGCommandInterface(Elaboratable):
 
 		# Always output the end of our scan chains.
 		m.d.comb += [
-			jtag_tdo_instruction  .eq(instruction_register[0]),
-			jtag_tdo_data         .eq(data_register[0]),
+			jtag_tdo_instruction.eq(instruction_register[0]),
+			jtag_tdo_data.eq(data_register[0]),
 		]
 
 		with m.If(jtag_strobe):
@@ -277,8 +277,8 @@ class JTAGCommandInterface(Elaboratable):
 
 		# Connect up our 'data/command ready' signals.
 		m.d.comb += [
-		   command_ready  .eq(falling_edge_detected(m, shifting_instruction)),
-		   data_ready     .eq(falling_edge_detected(m, shifting_data)),
+		   command_ready.eq(falling_edge_detected(m, shifting_instruction)),
+		   data_ready.eq(falling_edge_detected(m, shifting_data)),
 		]
 
 		# Latch our output data when new data is ready.
@@ -290,8 +290,8 @@ class JTAGCommandInterface(Elaboratable):
 		# Create sync-domain versions of our data/command ready signals, which are delayed
 		# one cycle from our internal ones, to coincide with the point at which our data is latched.
 		m.d.sync += [
-			self.command_ready  .eq(command_ready),
-			self.word_complete  .eq(data_ready)
+			self.command_ready.eq(command_ready),
+			self.word_complete.eq(data_ready)
 		]
 
 		return m

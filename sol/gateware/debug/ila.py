@@ -119,11 +119,11 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		# Set up our write port to capture the input signals,
 		# and our read port to provide the output.
 		m.d.comb += [
-			write_port.data        .eq(delayed_inputs),
-			write_port.addr        .eq(write_position),
+			write_port.data.eq(delayed_inputs),
+			write_port.addr.eq(write_position),
 
-			self.captured_sample   .eq(read_port.data),
-			read_port.addr         .eq(self.captured_sample_number)
+			self.captured_sample.eq(read_port.data),
+			read_port.addr.eq(self.captured_sample_number)
 		]
 
 		# Don't sample unless our FSM asserts our sample signal explicitly.
@@ -141,10 +141,10 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 					# Grab a sample as our trigger is asserted.
 					m.d.sync += [
-						write_port.en  .eq(1),
-						write_position .eq(0),
+						write_port.en.eq(1),
+						write_position.eq(0),
 
-						self.complete  .eq(0),
+						self.complete.eq(0),
 					]
 
 			# SAMPLE: do our sampling
@@ -152,8 +152,8 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 				# Sample until we run out of samples.
 				m.d.sync += [
-					write_port.en  .eq(1),
-					write_position .eq(write_position + 1),
+					write_port.en.eq(1),
+					write_position.eq(write_position + 1),
 				]
 
 				# If this is the last sample, we're done. Finish up.
@@ -161,8 +161,8 @@ class IntegratedLogicAnalyzer(Elaboratable):
 					m.next = 'IDLE'
 
 					m.d.sync += [
-						self.complete .eq(1),
-						write_port.en .eq(0)
+						self.complete.eq(1),
+						write_port.en.eq(0)
 					]
 
 
@@ -187,9 +187,9 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 
 
 	def initialize_signals(self):
-		yield self.input_a .eq(0)
-		yield self.input_b .eq(0)
-		yield self.input_c .eq(0)
+		yield self.input_a.eq(0)
+		yield self.input_b.eq(0)
+		yield self.input_c.eq(0)
 
 
 	def provide_all_signals(self, value):
@@ -385,10 +385,10 @@ class SyncSerialILA(Elaboratable):
 		)
 		m.submodules.spi = interface
 		m.d.comb += [
-			interface.spi      .connect(self.spi),
+			interface.spi.connect(self.spi),
 
 			# Always output the captured sample.
-			interface.word_out .eq(self.ila.captured_sample)
+			interface.word_out.eq(self.ila.captured_sample)
 		]
 
 		# Count where we are in the current transmission.
@@ -417,7 +417,7 @@ class SyncSerialILA(Elaboratable):
 
 		# Ensure our ILA module outputs the right sample.
 		m.d.sync += [
-			self.ila.captured_sample_number .eq(current_sample_number)
+			self.ila.captured_sample_number.eq(current_sample_number)
 		]
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
@@ -572,8 +572,8 @@ class StreamILA(Elaboratable):
 		# Always present the current sample number to our ILA, and the current
 		# sample value to the UART.
 		m.d.comb += [
-			ila.captured_sample_number  .eq(current_sample_number),
-			in_domain_stream.payload    .eq(ila.captured_sample)
+			ila.captured_sample_number.eq(current_sample_number),
+			in_domain_stream.payload.eq(ila.captured_sample)
 		]
 
 		with m.FSM():
@@ -597,8 +597,8 @@ class StreamILA(Elaboratable):
 				# Once our ILA has finished sampling, prepare to read out our samples.
 				with m.If(self.ila.complete):
 					m.d.sync += [
-						current_sample_number  .eq(0),
-						in_domain_stream.first      .eq(1)
+						current_sample_number.eq(0),
+						in_domain_stream.first.eq(1)
 					]
 					m.next = 'SENDING'
 
@@ -609,19 +609,19 @@ class StreamILA(Elaboratable):
 				data_valid = Signal(reset = 1)
 				m.d.comb += [
 					# While we're sending, we're always providing valid data to the UART.
-					in_domain_stream.valid  .eq(data_valid),
+					in_domain_stream.valid.eq(data_valid),
 
 					# Indicate when we're on the last sample.
-					in_domain_stream.last   .eq(current_sample_number == (self.sample_depth - 1))
+					in_domain_stream.last.eq(current_sample_number == (self.sample_depth - 1))
 				]
 
 				# Each time the UART accepts a valid word, move on to the next one.
 				with m.If(in_domain_stream.ready):
 					with m.If(data_valid):
 						m.d.sync += [
-							current_sample_number   .eq(current_sample_number + 1),
-							data_valid              .eq(0),
-							in_domain_stream.first  .eq(0)
+							current_sample_number.eq(current_sample_number + 1),
+							data_valid.eq(0),
+							in_domain_stream.first.eq(0)
 						]
 
 						# If this was the last sample, we're done! Move back to idle.
@@ -655,14 +655,14 @@ class StreamILA(Elaboratable):
 
 			m.d.comb += [
 				# ... fill it from our in-domain stream...
-				fifo.w_data             .eq(in_domain_signals),
-				fifo.w_en               .eq(in_domain_stream.valid),
-				in_domain_stream.ready  .eq(fifo.w_rdy),
+				fifo.w_data.eq(in_domain_signals),
+				fifo.w_en.eq(in_domain_stream.valid),
+				in_domain_stream.ready.eq(fifo.w_rdy),
 
 				# ... and output it into our outupt stream.
-				out_domain_signals      .eq(fifo.r_data),
-				self.stream.valid       .eq(fifo.r_rdy),
-				fifo.r_en               .eq(self.stream.ready)
+				out_domain_signals.eq(fifo.r_data),
+				self.stream.valid.eq(fifo.r_rdy),
+				fifo.r_en.eq(self.stream.ready)
 			]
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
@@ -801,8 +801,8 @@ class AsyncSerialILA(Elaboratable):
 			divisor = self.divisor
 		)
 		m.d.comb + = [
-			uart.stream  .stream_eq(ila.stream),
-			self.tx      .eq(uart.tx)
+			uart.stream.stream_eq(ila.stream),
+			self.tx.eq(uart.tx)
 		]
 
 

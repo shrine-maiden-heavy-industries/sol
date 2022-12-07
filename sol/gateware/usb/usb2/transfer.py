@@ -182,18 +182,18 @@ class USBInTransferManager(Elaboratable):
 		m.d.comb += [
 
 			# We'll only ever -write- data from our input stream...
-			buffer_write_ports[0].data   .eq(in_stream.payload),
-			buffer_write_ports[0].addr   .eq(write_fill_count),
-			buffer_write_ports[1].data   .eq(in_stream.payload),
-			buffer_write_ports[1].addr   .eq(write_fill_count),
+			buffer_write_ports[0].data.eq(in_stream.payload),
+			buffer_write_ports[0].addr.eq(write_fill_count),
+			buffer_write_ports[1].data.eq(in_stream.payload),
+			buffer_write_ports[1].addr.eq(write_fill_count),
 
 			# ... and we'll only ever -send- data from the Read buffer.
-			buffer_read.addr             .eq(send_position),
-			out_stream.payload           .eq(buffer_read.data),
+			buffer_read.addr.eq(send_position),
+			out_stream.payload.eq(buffer_read.data),
 
 			# We're ready to receive data iff we have space in the buffer we're currently filling.
-			in_stream.ready              .eq((write_fill_count != self._max_packet_size) & ~write_stream_ended),
-			buffer_write.en              .eq(in_stream.valid & in_stream.ready)
+			in_stream.ready.eq((write_fill_count != self._max_packet_size) & ~write_stream_ended),
+			buffer_write.en.eq(in_stream.valid & in_stream.ready)
 		]
 
 		# Increment our fill count whenever we accept new data.
@@ -239,18 +239,18 @@ class USBInTransferManager(Elaboratable):
 
 						# We're now ready to take the data we've captured and _transmit_ it.
 						# We'll swap our read and write buffers, and toggle our data PID.
-						self.buffer_toggle  .eq(~self.buffer_toggle),
-						self.data_pid[0]    .eq(~self.data_pid[0]),
+						self.buffer_toggle.eq(~self.buffer_toggle),
+						self.data_pid[0].eq(~self.data_pid[0]),
 
 						# Mark our current stream as no longer having ended.
-						read_stream_ended  .eq(0)
+						read_stream_ended.eq(0)
 					]
 
 
 			# WAIT_TO_SEND -- we now have at least a buffer full of data to send; we'll
 			# need to wait for an IN token to send it.
 			with m.State('WAIT_TO_SEND'):
-				m.d.usb += send_position .eq(0),
+				m.d.usb += send_position.eq(0),
 
 				# Once we get an IN token, move to sending a packet.
 				with m.If(in_token_received):
@@ -258,14 +258,14 @@ class USBInTransferManager(Elaboratable):
 					# If we have a packet to send, send it.
 					with m.If(read_fill_count):
 						m.next = 'SEND_PACKET'
-						m.d.usb += out_stream.first  .eq(1)
+						m.d.usb += out_stream.first.eq(1)
 
 					# Otherwise, we entered a transmit path without any data in the buffer.
 					with m.Else():
 						m.d.comb += [
 							# Send a ZLP...
-							out_stream.valid  .eq(1),
-							out_stream.last   .eq(1),
+							out_stream.valid.eq(1),
+							out_stream.last.eq(1),
 						]
 						# ... and clear the need to follow up with one, since we've just sent a short packet.
 						m.d.usb += read_stream_ended.eq(0)
@@ -278,10 +278,10 @@ class USBInTransferManager(Elaboratable):
 				m.d.comb += [
 					# We're always going to be sending valid data, since data is always
 					# available from our memory.
-					out_stream.valid  .eq(1),
+					out_stream.valid.eq(1),
 
 					# Let our transmitter know when we've reached our last packet.
-					out_stream.last   .eq(last_packet)
+					out_stream.last.eq(last_packet)
 				]
 
 				# Once our transmitter accepts our data...
@@ -289,14 +289,14 @@ class USBInTransferManager(Elaboratable):
 
 					m.d.usb += [
 						# ... move to the next byte in our packet ...
-						send_position     .eq(send_position + 1),
+						send_position.eq(send_position + 1),
 
 						# ... and mark our packet as no longer the first.
-						out_stream.first  .eq(0)
+						out_stream.first.eq(0)
 					]
 
 					# Move our memory pointer to its next position.
-					m.d.comb += buffer_read.addr  .eq(send_position + 1),
+					m.d.comb += buffer_read.addr.eq(send_position + 1),
 
 					# If we've just sent our last packet, we're now ready to wait for a
 					# response from our host.
@@ -332,9 +332,9 @@ class USBInTransferManager(Elaboratable):
 					with m.Elif(~in_stream.ready | packet_ready):
 						m.next = 'WAIT_TO_SEND'
 						m.d.usb += [
-							self.buffer_toggle .eq(~self.buffer_toggle),
-							self.data_pid[0]   .eq(~self.data_pid[0]),
-							read_stream_ended  .eq(0)
+							self.buffer_toggle.eq(~self.buffer_toggle),
+							self.data_pid[0].eq(~self.data_pid[0]),
+							read_stream_ended.eq(0)
 						]
 
 					# If neither of the above conditions are true; we now don't have enough data to send.

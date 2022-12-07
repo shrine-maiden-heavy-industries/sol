@@ -76,15 +76,15 @@ class USBDeviceExample(Elaboratable):
 
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
-			usb.connect          .eq(1),
-			usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
+			usb.connect.eq(1),
+			usb.full_speed_only.eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
 		# ... and for now, attach our LEDs to our most recent control request.
 		m.d.comb += [
-			platform.request_optional('led', 0, default = NullPin()).o  .eq(usb.tx_activity_led),
-			platform.request_optional('led', 1, default = NullPin()).o  .eq(usb.rx_activity_led),
-			platform.request_optional('led', 2, default = NullPin()).o  .eq(usb.suspended),
+			platform.request_optional('led', 0, default = NullPin()).o.eq(usb.tx_activity_led),
+			platform.request_optional('led', 1, default = NullPin()).o.eq(usb.rx_activity_led),
+			platform.request_optional('led', 2, default = NullPin()).o.eq(usb.suspended),
 		]
 
 		return m

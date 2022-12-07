@@ -199,10 +199,10 @@ class SuperSpeedSetupDecoder(Elaboratable):
 				with m.If(self.rx_good):
 					m.d.ss += [
 						# Output our stored packet...
-						self.packet           .eq(packet),
+						self.packet.eq(packet),
 
 						# ... but strobe its received flag for a cycle.
-						self.packet.received  .eq(1)
+						self.packet.received.eq(1)
 					]
 					m.next = 'WAIT_FOR_FIRST'
 
@@ -230,14 +230,14 @@ class SuperSpeedSetupDecoderTest(SolSSGatewareTestCase):
 
 		# Provide our first word...
 		yield sink.first.eq(1)
-		yield sink.last .eq(0)
-		yield sink.data .eq(0x2211AAC1)
+		yield sink.last.eq(0)
+		yield sink.data.eq(0x2211AAC1)
 		yield
 
 		# ... then our second ...
 		yield sink.first.eq(0)
-		yield sink.last .eq(1)
-		yield sink.data .eq(0x00043344)
+		yield sink.last.eq(1)
+		yield sink.data.eq(0x00043344)
 		yield
 
 		# ... then mark our packet as good.
@@ -324,7 +324,7 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 					target_signal  = get_signal(self.shared, signal_name)
 
 					# ... and connect them.
-					m.d.comb += target_signal   .eq(driving_signal)
+					m.d.comb += target_signal.eq(driving_signal)
 
 			# After the first element, all other entries should be created with Elif.
 			conditional = m.Elif
@@ -341,19 +341,19 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 		for interface in self._interfaces:
 			m.d.comb += [
 				# State inputs.
-				interface.setup                  .eq(shared.setup),
-				interface.active_config          .eq(shared.active_config),
+				interface.setup.eq(shared.setup),
+				interface.active_config.eq(shared.active_config),
 
 				# Event inputs.
-				interface.data_requested         .eq(shared.data_requested),
-				interface.status_requested       .eq(shared.status_requested),
+				interface.data_requested.eq(shared.data_requested),
+				interface.status_requested.eq(shared.status_requested),
 
 				# Receiver inputs.
-				interface.rx                     .tap(shared.rx),
-				interface.rx_complete            .eq(shared.rx_complete),
-				interface.rx_invalid             .eq(shared.rx_invalid),
-				interface.rx_header              .eq(shared.rx_header),
-				shared.handshakes_in             .connect(interface.handshakes_in),
+				interface.rx.tap(shared.rx),
+				interface.rx_complete.eq(shared.rx_complete),
+				interface.rx_invalid.eq(shared.rx_invalid),
+				interface.rx_header.eq(shared.rx_header),
+				shared.handshakes_in.connect(interface.handshakes_in),
 			]
 
 		#
@@ -379,9 +379,9 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 			# and still get an appropriate priority encoder.
 			with m.If(interface.tx.valid.any()):
 				m.d.comb += [
-					shared.tx                  .stream_eq(interface.tx),
-					shared.tx_sequence_number  .eq(interface.tx_sequence_number),
-					shared.tx_length           .eq(interface.tx_length)
+					shared.tx.stream_eq(interface.tx),
+					shared.tx_sequence_number.eq(interface.tx_sequence_number),
+					shared.tx_length.eq(interface.tx_length)
 				]
 
 

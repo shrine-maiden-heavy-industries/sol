@@ -418,10 +418,10 @@ class TxPipeline(Elaboratable):
 		#
 		m.submodules.shifter = shifter = TxShifter(width = 8)
 		m.d.comb += [
-			shifter.i_data    .eq(self.i_data_payload),
+			shifter.i_data.eq(self.i_data_payload),
 
-			shifter.i_enable  .eq(~stall),
-			shifter.i_clear   .eq(da_reset_shifter | sp_reset_shifter)
+			shifter.i_enable.eq(~stall),
+			shifter.i_clear.eq(da_reset_shifter | sp_reset_shifter)
 		]
 
 		#

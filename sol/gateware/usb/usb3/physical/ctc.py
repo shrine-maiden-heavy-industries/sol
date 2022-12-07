@@ -183,8 +183,8 @@ class CTCSkipRemover(Elaboratable):
 
 						# Grab our existing data, and stick it onto the end of the shift register.
 						m.d.ss += [
-							data_buffer  .eq(Cat(data_buffer[8*i:], valid_data[0:8*i])),
-							ctrl_buffer  .eq(Cat(ctrl_buffer[1*i:], valid_ctrl[0:1*i])),
+							data_buffer.eq(Cat(data_buffer[8*i:], valid_data[0:8*i])),
+							ctrl_buffer.eq(Cat(ctrl_buffer[1*i:], valid_ctrl[0:1*i])),
 						]
 
 		# If we're not receiving data, but we -are- removing it, we'll just update our total
@@ -455,14 +455,14 @@ class CTCSkipInserter(Elaboratable):
 		with m.If(self.can_send_skip & (skips_to_send >= 2)):
 			m.d.comb += self.sending_skip.eq(1)
 			m.d.ss += [
-				source.valid       .eq(1),
-				source.data        .eq(Repl(SKP.value_const(), len(source.ctrl))),
-				source.ctrl        .eq(Repl(SKP.ctrl_const(),  len(source.ctrl))),
+				source.valid.eq(1),
+				source.data.eq(Repl(SKP.value_const(), len(source.ctrl))),
+				source.ctrl.eq(Repl(SKP.ctrl_const(),  len(source.ctrl))),
 			]
 
 		with m.Else():
 			m.d.ss += [
-				self.source        .stream_eq(self.sink),
+				self.source.stream_eq(self.sink),
 			]
 
 		return m

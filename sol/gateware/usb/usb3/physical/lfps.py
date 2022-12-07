@@ -374,14 +374,14 @@ class LFPSTransceiver(Elaboratable):
 		#
 		m.submodules.polling_detector = polling_detector = LFPSDetector(_PollingLFPS, self._clock_frequency)
 		m.d.comb += [
-			polling_detector.signaling_received .eq(self.signaling_received),
-			self.polling_detected               .eq(polling_detector.detect)
+			polling_detector.signaling_received.eq(self.signaling_received),
+			self.polling_detected.eq(polling_detector.detect)
 		]
 
 		m.submodules.reset_detector = reset_detector = LFPSDetector(_ResetLFPS, self._clock_frequency)
 		m.d.comb += [
-			reset_detector.signaling_received   .eq(self.signaling_received),
-			self.reset_detected                 .eq(reset_detector.detect)
+			reset_detector.signaling_received.eq(self.signaling_received),
+			self.reset_detected.eq(reset_detector.detect)
 		]
 
 		#
@@ -389,9 +389,9 @@ class LFPSTransceiver(Elaboratable):
 		#
 		m.submodules.polling_generator = polling_generator = LFPSGenerator(_PollingLFPS, self._clock_frequency)
 		m.d.comb += [
-			polling_generator.generate  .eq(self.send_polling),
-			self.drive_electrical_idle  .eq(polling_generator.drive_electrical_idle),
-			self.send_signaling         .eq(polling_generator.send_signaling),
+			polling_generator.generate.eq(self.send_polling),
+			self.drive_electrical_idle.eq(polling_generator.drive_electrical_idle),
+			self.send_signaling.eq(polling_generator.send_signaling),
 		]
 
 		with m.If(polling_generator.generate):

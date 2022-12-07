@@ -109,15 +109,15 @@ class GetDescriptorHandler(Elaboratable):
 
 					# ... connect the relevant generator to our output.
 					m.d.comb += [
-						generator.start       .eq(self.start),
-						generator.max_length  .eq(self.length),
+						generator.start.eq(self.start),
+						generator.max_length.eq(self.length),
 					]
 
 					# Buffer the output stream to improve timings.
 					with m.If(~self.tx.valid.any() | self.tx.ready):
 						m.d.sync += [
-							self.tx               .stream_eq(generator.stream, omit = {'ready'}),
-							self.tx_length        .eq(generator.output_length)
+							self.tx.stream_eq(generator.stream, omit = {'ready'}),
+							self.tx_length.eq(generator.output_length)
 						]
 						m.d.comb += [
 							generator.stream.ready.eq(1),

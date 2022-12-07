@@ -118,10 +118,10 @@ class USBSuperSpeedDevice(Elaboratable):
 		#
 		m.submodules.link = link = USB3LinkLayer(physical_layer = physical)
 		m.d.comb += [
-			self.link_trained     .eq(link.trained),
-			self.link_in_reset    .eq(link.in_reset),
+			self.link_trained.eq(link.trained),
+			self.link_in_reset.eq(link.in_reset),
 
-			link.current_address  .eq(address)
+			link.current_address.eq(address)
 		]
 
 		#
@@ -129,8 +129,8 @@ class USBSuperSpeedDevice(Elaboratable):
 		#
 		m.submodules.protocol = protocol = USB3ProtocolLayer(link_layer = link)
 		m.d.comb += [
-			protocol.current_address        .eq(address),
-			protocol.current_configuration  .eq(configuration)
+			protocol.current_address.eq(address),
+			protocol.current_configuration.eq(configuration)
 		]
 
 
@@ -144,22 +144,22 @@ class USBSuperSpeedDevice(Elaboratable):
 
 		m.d.comb += [
 			# Receive interface.
-			endpoint_collection.rx                          .tap(protocol.endpoint_interface.rx),
-			endpoint_collection.rx_header                   .eq(protocol.endpoint_interface.rx_header),
-			endpoint_collection.rx_complete                 .eq(protocol.endpoint_interface.rx_complete),
-			endpoint_collection.rx_invalid                  .eq(protocol.endpoint_interface.rx_invalid),
+			endpoint_collection.rx.tap(protocol.endpoint_interface.rx),
+			endpoint_collection.rx_header.eq(protocol.endpoint_interface.rx_header),
+			endpoint_collection.rx_complete.eq(protocol.endpoint_interface.rx_complete),
+			endpoint_collection.rx_invalid.eq(protocol.endpoint_interface.rx_invalid),
 
 			# Transmit interface.
-			protocol.endpoint_interface.tx                  .stream_eq(endpoint_collection.tx),
-			protocol.endpoint_interface.tx_zlp              .eq(endpoint_collection.tx_zlp),
-			protocol.endpoint_interface.tx_length           .eq(endpoint_collection.tx_length),
-			protocol.endpoint_interface.tx_endpoint_number  .eq(endpoint_collection.tx_endpoint_number),
-			protocol.endpoint_interface.tx_sequence_number  .eq(endpoint_collection.tx_sequence_number),
-			protocol.endpoint_interface.tx_direction        .eq(endpoint_collection.tx_direction),
+			protocol.endpoint_interface.tx.stream_eq(endpoint_collection.tx),
+			protocol.endpoint_interface.tx_zlp.eq(endpoint_collection.tx_zlp),
+			protocol.endpoint_interface.tx_length.eq(endpoint_collection.tx_length),
+			protocol.endpoint_interface.tx_endpoint_number.eq(endpoint_collection.tx_endpoint_number),
+			protocol.endpoint_interface.tx_sequence_number.eq(endpoint_collection.tx_sequence_number),
+			protocol.endpoint_interface.tx_direction.eq(endpoint_collection.tx_direction),
 
 			# Handshake interface.
-			protocol.endpoint_interface.handshakes_out      .connect(endpoint_collection.handshakes_out),
-			protocol.endpoint_interface.handshakes_in       .connect(endpoint_collection.handshakes_in)
+			protocol.endpoint_interface.handshakes_out.connect(endpoint_collection.handshakes_out),
+			protocol.endpoint_interface.handshakes_in.connect(endpoint_collection.handshakes_in)
 		]
 
 
@@ -190,8 +190,8 @@ class USBSuperSpeedDevice(Elaboratable):
 		# Restore ourselves to our unconfigured state when a reset occurs.
 		with m.If(link.in_reset):
 			m.d.ss += [
-				address        .eq(0),
-				configuration  .eq(0)
+				address.eq(0),
+				configuration.eq(0)
 			]
 
 
@@ -201,11 +201,11 @@ class USBSuperSpeedDevice(Elaboratable):
 
 		# Tap our transmit and receive lines, so they can be externally analyzed.
 		m.d.comb += [
-			self.rx_data_tap   .tap(physical.source),
-			self.tx_data_tap   .tap(physical.sink),
+			self.rx_data_tap.tap(physical.source),
+			self.tx_data_tap.tap(physical.sink),
 
-			self.ep_tx_stream  .tap(protocol.endpoint_interface.tx, tap_ready = True),
-			self.ep_tx_length  .eq(protocol.endpoint_interface.tx_length)
+			self.ep_tx_stream.tap(protocol.endpoint_interface.tx, tap_ready = True),
+			self.ep_tx_length.eq(protocol.endpoint_interface.tx_length)
 		]
 
 

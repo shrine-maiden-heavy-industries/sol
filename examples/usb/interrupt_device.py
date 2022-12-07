@@ -94,8 +94,8 @@ class USBInterruptExample(Elaboratable):
 
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
-			usb.connect          .eq(1),
-			usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
+			usb.connect.eq(1),
+			usb.full_speed_only.eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
 		return m

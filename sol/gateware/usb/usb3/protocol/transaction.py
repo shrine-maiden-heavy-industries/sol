@@ -228,12 +228,12 @@ class TransactionPacketGenerator(Elaboratable):
 			# Create a response packet, and mark ourselves as sending it.
 			response = response_type()
 			m.d.comb += [
-				header_source.valid       .eq(1),
-				header_source.header      .eq(response),
+				header_source.valid.eq(1),
+				header_source.header.eq(response),
 
-				response.type             .eq(HeaderPacketType.TRANSACTION),
-				response.device_address   .eq(device_address),
-				response.endpoint_number  .eq(endpoint_number)
+				response.type.eq(HeaderPacketType.TRANSACTION),
+				response.device_address.eq(device_address),
+				response.endpoint_number.eq(endpoint_number)
 			]
 
 			# Next, fill in each of the fields:
@@ -255,10 +255,10 @@ class TransactionPacketGenerator(Elaboratable):
 
 				# In this state, we'll constantly latch in our parameters.
 				m.d.ss += [
-					endpoint_number  .eq(interface.endpoint_number),
-					data_error       .eq(interface.retry_required),
-					next_sequence    .eq(interface.next_sequence),
-					device_address   .eq(self.address)
+					endpoint_number.eq(interface.endpoint_number),
+					data_error.eq(interface.retry_required),
+					next_sequence.eq(interface.next_sequence),
+					device_address.eq(self.address)
 				]
 
 				with m.If(interface.send_ack):
@@ -369,10 +369,10 @@ class TransactionPacketReceiver(Elaboratable):
 
 					m.d.comb += [
 						# ... fill the fields out in our interface...
-						interface.endpoint_number  .eq(status_packet.endpoint_number),
+						interface.endpoint_number.eq(status_packet.endpoint_number),
 
 						# ... and report the event.
-						interface.status_received  .eq(1)
+						interface.status_received.eq(1)
 					]
 
 
@@ -388,16 +388,16 @@ class TransactionPacketReceiver(Elaboratable):
 
 					m.d.comb += [
 						# ... fill the fields out in our interface...
-						interface.endpoint_number    .eq(ack_packet.endpoint_number),
-						interface.retry_required     .eq(ack_packet.retry),
-						interface.next_sequence      .eq(ack_packet.data_sequence),
-						interface.packets_pending    .eq(ack_packet.packets_pending),
-						interface.direction          .eq(ack_packet.direction),
-						interface.host_error         .eq(ack_packet.host_error),
-						interface.number_of_packets  .eq(ack_packet.number_of_packets),
+						interface.endpoint_number.eq(ack_packet.endpoint_number),
+						interface.retry_required.eq(ack_packet.retry),
+						interface.next_sequence.eq(ack_packet.data_sequence),
+						interface.packets_pending.eq(ack_packet.packets_pending),
+						interface.direction.eq(ack_packet.direction),
+						interface.host_error.eq(ack_packet.host_error),
+						interface.number_of_packets.eq(ack_packet.number_of_packets),
 
 						# ... and report the event.
-						interface.ack_received       .eq(1)
+						interface.ack_received.eq(1)
 					]
 
 		return m

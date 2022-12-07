@@ -38,10 +38,10 @@ class USBInStreamInterface(StreamInterface):
 		''' Generates a list of connections that connect this stream to the provided UTMITransmitInterface. '''
 
 		return [
-			utmi_tx.valid  .eq(self.valid),
-			utmi_tx.data   .eq(self.payload),
+			utmi_tx.valid.eq(self.valid),
+			utmi_tx.data.eq(self.payload),
 
-			self.ready     .eq(utmi_tx.ready)
+			self.ready.eq(utmi_tx.ready)
 		]
 
 
@@ -81,9 +81,9 @@ class USBOutStreamInterface(Record):
 		''' Generates a list of connections that connect this stream to the provided UTMIReceiveInterface. '''
 
 		return [
-			self.valid     .eq(utmi_rx.rx_active),
-			self.next      .eq(utmi_rx.rx_valid),
-			self.data      .eq(utmi_rx.payload)
+			self.valid.eq(utmi_rx.rx_active),
+			self.next.eq(utmi_rx.rx_valid),
+			self.data.eq(utmi_rx.payload)
 		]
 
 
@@ -176,15 +176,15 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 
 				m.d.usb += [
 					# We have no data to output, so this can't be our first or last bytes...
-					self.first       .eq(0),
-					self.last        .eq(0),
-					out_stream.next  .eq(0),
+					self.first.eq(0),
+					self.last.eq(0),
+					out_stream.next.eq(0),
 
 					# ... and we can't have gotten a complete or invalid strobe that matters to us.
-					buffered_complete     .eq(0),
-					buffered_invalid      .eq(0),
-					self.complete_out     .eq(0),
-					self.invalid_out      .eq(0),
+					buffered_complete.eq(0),
+					buffered_invalid.eq(0),
+					self.complete_out.eq(0),
+					self.invalid_out.eq(0),
 				]
 
 				# Once we've received our first byte, buffer it, and mark it as our first byte.
@@ -200,30 +200,30 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 			# our last byte.
 			with m.State('RECEIVE_AND_TRANSMIT'):
 				m.d.usb += [
-					out_stream.valid  .eq(1),
-					out_stream.next   .eq(0)
+					out_stream.valid.eq(1),
+					out_stream.next.eq(0)
 				]
 
 				# Buffer any complete/invalid signals we get while receiving, so we don't output
 				# them before we finish outputting our processed stream.
 				m.d.usb += [
-					buffered_complete  .eq(buffered_complete | self.complete_in),
-					buffered_invalid   .eq(buffered_invalid  | self.invalid_in)
+					buffered_complete.eq(buffered_complete | self.complete_in),
+					buffered_invalid.eq(buffered_invalid  | self.invalid_in)
 				]
 
 				# If we get a new byte, emit our buffered byte, and store the incoming byte.
 				with m.If(in_stream.valid & in_stream.next):
 					m.d.usb += [
 						# Output our buffered byte...
-						out_stream.payload  .eq(buffered_byte),
-						out_stream.next     .eq(1),
+						out_stream.payload.eq(buffered_byte),
+						out_stream.next.eq(1),
 
 						# indicate whether our current byte was the first byte captured...
-						self.first          .eq(is_first_byte),
+						self.first.eq(is_first_byte),
 
 						# ... and store the new, incoming byte.
-						buffered_byte       .eq(in_stream.payload),
-						is_first_byte       .eq(0)
+						buffered_byte.eq(in_stream.payload),
+						is_first_byte.eq(0)
 					]
 
 				# Once we no longer have an active packet, transmit our _last_ byte,
@@ -232,25 +232,25 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 					m.d.usb += [
 
 						# Output our buffered byte...
-						out_stream.payload  .eq(buffered_byte),
-						out_stream.next     .eq(1),
-						self.first          .eq(is_first_byte),
+						out_stream.payload.eq(buffered_byte),
+						out_stream.next.eq(1),
+						self.first.eq(is_first_byte),
 
 						# ... and indicate that it's the last byte in our stream.
-						self.last           .eq(1)
+						self.last.eq(1)
 					]
 					m.next = 'OUTPUT_STROBES'
 
 			with m.State('OUTPUT_STROBES'):
 				m.d.usb += [
 					# We've just finished transmitting our processed stream; so clear our data strobes...
-					self.first        .eq(0),
-					self.last         .eq(0),
-					out_stream.next   .eq(0),
+					self.first.eq(0),
+					self.last.eq(0),
+					out_stream.next.eq(0),
 
 					# ... and output our buffered complete/invalid strobes.
-					self.complete_out .eq(buffered_complete),
-					self.invalid_out  .eq(buffered_invalid)
+					self.complete_out.eq(buffered_complete),
+					self.invalid_out.eq(buffered_invalid)
 				]
 				m.next = 'WAIT_FOR_FIRST_BYTE'
 
@@ -370,7 +370,7 @@ class USBRawSuperSpeedStream(StreamInterface):
 			# Create the operations necessary to perform our assignment with our endian swap...
 			endian_swap_operations = [
 				self.data.word_select(i, 8)  .eq(interface.data.word_select(rhs_word_index, 8)),
-				self.ctrl[i]                 .eq(interface.ctrl[rhs_word_index])
+				self.ctrl[i].eq(interface.ctrl[rhs_word_index])
 			]
 
 			#... and add it to our overall list of operations.

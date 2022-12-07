@@ -82,23 +82,23 @@ class USBStreamInEndpoint(Elaboratable):
 		m.d.comb += [
 
 			# Always generate ZLPs; in order to pass along when stream packets terminate.
-			tx_manager.generate_zlps    .eq(1),
+			tx_manager.generate_zlps.eq(1),
 
 			# We want to handle packets only that target our endpoint number.
-			tx_manager.active           .eq(interface.tokenizer.endpoint == self._endpoint_number),
+			tx_manager.active.eq(interface.tokenizer.endpoint == self._endpoint_number),
 
 			# Connect up our transfer manager to our input stream and flush control...
-			tx_manager.transfer_stream  .stream_eq(self.stream),
-			tx_manager.flush            .eq(self.flush),
+			tx_manager.transfer_stream.stream_eq(self.stream),
+			tx_manager.flush.eq(self.flush),
 
 			# ... and our output stream...
-			interface.tx                .stream_eq(tx_manager.packet_stream),
-			interface.tx_pid_toggle     .eq(tx_manager.data_pid),
+			interface.tx.stream_eq(tx_manager.packet_stream),
+			interface.tx_pid_toggle.eq(tx_manager.data_pid),
 
 			# ... and connect through our token/handshake signals.
-			interface.tokenizer         .connect(tx_manager.tokenizer),
-			tx_manager.handshakes_out   .connect(interface.handshakes_out),
-			interface.handshakes_in     .connect(tx_manager.handshakes_in)
+			interface.tokenizer.connect(tx_manager.tokenizer),
+			tx_manager.handshakes_out.connect(interface.handshakes_out),
+			interface.handshakes_in.connect(tx_manager.handshakes_in)
 		]
 
 		return m
@@ -190,11 +190,11 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 				# Once we get a send request, fill in our shift register, and start shifting.
 				with m.If(word_stream.valid):
 					m.d.usb += [
-						data_shift         .eq(word_stream.payload),
-						first_latched      .eq(word_stream.first),
-						last_latched       .eq(word_stream.last),
+						data_shift.eq(word_stream.payload),
+						first_latched.eq(word_stream.first),
+						last_latched.eq(word_stream.last),
 
-						bytes_to_send      .eq(self._byte_width - 1),
+						bytes_to_send.eq(self._byte_width - 1),
 					]
 					m.next = 'TRANSMIT'
 
@@ -211,15 +211,15 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 					# Pass through our First and Last signals, but only on the first and
 					# last bytes of our word, respectively.
 					m.d.comb += [
-						byte_stream.first  .eq(first_latched & is_first_byte),
-						byte_stream.last   .eq(last_latched  & is_last_byte)
+						byte_stream.first.eq(first_latched & is_first_byte),
+						byte_stream.last.eq(last_latched  & is_last_byte)
 					]
 
 					# ... if we have bytes left to send, move to the next one.
 					with m.If(bytes_to_send > 0):
 						m.d.usb += [
-							bytes_to_send .eq(bytes_to_send - 1),
-							data_shift    .eq(data_shift[8:]),
+							bytes_to_send.eq(bytes_to_send - 1),
+							data_shift.eq(data_shift[8:]),
 						]
 
 					# Otherwise, complete the frame.
@@ -229,11 +229,11 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 						# If we still have data to send, move to the next byte...
 						with m.If(self.stream.valid):
 							m.d.usb += [
-								data_shift     .eq(word_stream.payload),
-								first_latched  .eq(word_stream.first),
-								last_latched   .eq(word_stream.last),
+								data_shift.eq(word_stream.payload),
+								first_latched.eq(word_stream.first),
+								last_latched.eq(word_stream.last),
 
-								bytes_to_send  .eq(self._byte_width - 1),
+								bytes_to_send.eq(self._byte_width - 1),
 							]
 
 						# ... otherwise, move to our idle state.
@@ -314,9 +314,9 @@ class USBStreamOutEndpoint(Elaboratable):
 		# internally as our main stream.
 		m.submodules.boundary_detector = boundary_detector = USBOutStreamBoundaryDetector()
 		m.d.comb += [
-			interface.rx                   .stream_eq(boundary_detector.unprocessed_stream),
-			boundary_detector.complete_in  .eq(interface.rx_complete),
-			boundary_detector.invalid_in   .eq(interface.rx_invalid),
+			interface.rx.stream_eq(boundary_detector.unprocessed_stream),
+			boundary_detector.complete_in.eq(interface.rx_complete),
+			boundary_detector.invalid_in.eq(interface.rx_invalid),
 		]
 
 		rx       = boundary_detector.processed_stream
@@ -351,43 +351,43 @@ class USBStreamOutEndpoint(Elaboratable):
 
 			# We'll always populate our FIFO directly from the receive stream; but we'll also include our
 			# 'short packet detected' signal, as this indicates that we're detecting the last byte of a transfer.
-			fifo.write_data[0:8] .eq(rx.payload),
-			fifo.write_data[8]   .eq(rx_last & ~full_packet),
-			fifo.write_data[9]   .eq(rx_first & ~transfer_active),
-			fifo.write_en        .eq(okay_to_receive & rx.next & rx.valid & ~fifo.full),
+			fifo.write_data[0:8].eq(rx.payload),
+			fifo.write_data[8].eq(rx_last & ~full_packet),
+			fifo.write_data[9].eq(rx_first & ~transfer_active),
+			fifo.write_en.eq(okay_to_receive & rx.next & rx.valid & ~fifo.full),
 
 			# We'll keep data if our packet finishes with a valid CRC and no overflow; and discard it otherwise.
-			fifo.write_commit    .eq(targeting_endpoint & boundary_detector.complete_out & ~overflow),
-			fifo.write_discard   .eq(targeting_endpoint & (boundary_detector.invalid_out | (boundary_detector.complete_out & overflow))),
+			fifo.write_commit.eq(targeting_endpoint & boundary_detector.complete_out & ~overflow),
+			fifo.write_discard.eq(targeting_endpoint & (boundary_detector.invalid_out | (boundary_detector.complete_out & overflow))),
 
 			# We'll ACK each packet if it's received correctly; _or_ if we skipped the packet
 			# due to a PID sequence mismatch. If we get a PID sequence mismatch, we assume that
 			# we missed a previous ACK from the host; and ACK without accepting data [USB 2.0: 8.6.3].
-			interface.handshakes_out.ack  .eq(
+			interface.handshakes_out.ack.eq(
 				(data_response_requested & data_accepted) |
 				(ping_response_requested & sufficient_space) |
 				(data_response_requested & should_skip)
 			),
 
 			# We'll NAK any time we want to accept a packet, but we don't have enough room.
-			interface.handshakes_out.nak  .eq(
+			interface.handshakes_out.nak.eq(
 				(data_response_requested & ~data_accepted & ~should_skip) |
 				(ping_response_requested & ~sufficient_space)
 			),
 
 			# Our stream data always comes directly out of the FIFO; and is valid
 			# henever our FIFO actually has data for us to read.
-			stream.valid      .eq(~fifo.empty),
-			stream.payload    .eq(fifo.read_data[0:8]),
+			stream.valid.eq(~fifo.empty),
+			stream.payload.eq(fifo.read_data[0:8]),
 
 			# Our `last` bit comes directly from the FIFO; and we know a `first` bit immediately
 			# follows a `last` one.
-			stream.last       .eq(fifo.read_data[8]),
-			stream.first      .eq(fifo.read_data[9]),
+			stream.last.eq(fifo.read_data[8]),
+			stream.first.eq(fifo.read_data[9]),
 
 			# Move to the next byte in the FIFO whenever our stream is advaced.
-			fifo.read_en      .eq(stream.ready),
-			fifo.read_commit  .eq(1)
+			fifo.read_en.eq(stream.ready),
+			fifo.read_commit.eq(1)
 		]
 
 		# Count bytes in packet.

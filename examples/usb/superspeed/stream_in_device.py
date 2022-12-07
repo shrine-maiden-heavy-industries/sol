@@ -94,8 +94,8 @@ class USBSuperSpeedExample(Elaboratable):
 		# Always provide our counter as the input to our stream; it will be consumed
 		# whenever our stream endpoint can accept it.
 		m.d.comb += [
-			stream_in.data    .eq(counter),
-			stream_in.valid   .eq(0b1111)
+			stream_in.data.eq(counter),
+			stream_in.valid.eq(0b1111)
 		]
 
 		# Increment our counter whenever our endpoint is accepting data.

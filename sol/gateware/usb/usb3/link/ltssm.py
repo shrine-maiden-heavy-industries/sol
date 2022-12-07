@@ -189,8 +189,8 @@ class LTSSMController(Elaboratable):
 
 			# Clear our 'time-in-state' counter, and some of our mode flags.
 			m.d.ss += [
-				cycles_in_state         .eq(0),
-				self.request_hot_reset  .eq(0)
+				cycles_in_state.eq(0),
+				self.request_hot_reset.eq(0)
 			]
 
 			# If we have any additional entry conditions for the given state, apply them.
@@ -235,45 +235,45 @@ class LTSSMController(Elaboratable):
 		#
 
 		tasks_on_entry['Polling.LFPS'] = [
-			lfps_burst_seen    .eq(0),
-			target_lfps_count  .eq(16)
+			lfps_burst_seen.eq(0),
+			target_lfps_count.eq(16)
 		]
 
 		# Ensure we enter Polling.Active with fresh device state.
 		tasks_on_entry['Polling.Active'] = [
-			ts2_seen                  .eq(0),
-			hot_reset_seen            .eq(0),
-			loopback_seen             .eq(0),
-			disable_scrambling_seen   .eq(0),
+			ts2_seen.eq(0),
+			hot_reset_seen.eq(0),
+			loopback_seen.eq(0),
+			disable_scrambling_seen.eq(0),
 			self.request_no_scrambling.eq(self.disable_scrambling),
-			burst_minimum_met         .eq(0)
+			burst_minimum_met.eq(0)
 		]
 
 
 		# Clear our previous training state on entering recovery.
 		tasks_on_entry['Recovery.Active'] = [
-			ts2_seen                  .eq(0),
-			hot_reset_seen            .eq(0),
-			loopback_seen             .eq(0),
-			disable_scrambling_seen   .eq(0),
+			ts2_seen.eq(0),
+			hot_reset_seen.eq(0),
+			loopback_seen.eq(0),
+			disable_scrambling_seen.eq(0),
 			self.request_no_scrambling.eq(self.disable_scrambling),
-			burst_minimum_met         .eq(0)
+			burst_minimum_met.eq(0)
 		]
 
 		# Ensure we enter our primary training sequence with a fresh view of whether we've
 		# seen any of our training sets.
 		tasks_on_entry['Polling.RxEQ'] = [
-			ts2_seen                  .eq(0),
-			hot_reset_seen            .eq(0),
-			disable_scrambling_seen   .eq(0),
+			ts2_seen.eq(0),
+			hot_reset_seen.eq(0),
+			disable_scrambling_seen.eq(0),
 			self.request_no_scrambling.eq(self.disable_scrambling),
 		]
 
 
 		# Clear our previous training state on entering recovery.
 		tasks_on_entry['Hot Reset.Active'] = [
-			ts2_seen                  .eq(0),
-			self.request_hot_reset    .eq(1)
+			ts2_seen.eq(0),
+			self.request_hot_reset.eq(1)
 		]
 
 
@@ -289,11 +289,11 @@ class LTSSMController(Elaboratable):
 				m.d.comb += [
 
 					# Keep ourselves from transmitting until we're ready to send...
-					self.tx_electrical_idle   .eq(1),
+					self.tx_electrical_idle.eq(1),
 
 					# ... and prevent ourselves from presenting receiver terminations until
 					# our PHY has started up; so the other side doesn't start LFPS polling, yet.
-					self.engage_terminations  .eq(0)
+					self.engage_terminations.eq(0)
 				]
 
 
@@ -309,8 +309,8 @@ class LTSSMController(Elaboratable):
 			# we don't waste time performing link training if our link isn't there.
 			with m.State('Rx.Detect.Active'):
 				m.d.comb += [
-					self.tx_electrical_idle    .eq(1),
-					self.perform_rx_detection  .eq(1)
+					self.tx_electrical_idle.eq(1),
+					self.perform_rx_detection.eq(1)
 				]
 
 				with m.If(self.link_partner_detected):
@@ -356,8 +356,8 @@ class LTSSMController(Elaboratable):
 					# so we can meet our second condition.
 					with m.If(self.lfps_polling_detected & ~lfps_burst_seen):
 						m.d.ss += [
-							lfps_burst_seen    .eq(1),
-							target_lfps_count  .eq(self.lfps_cycles_sent + 4)
+							lfps_burst_seen.eq(1),
+							target_lfps_count.eq(self.lfps_cycles_sent + 4)
 						]
 
 					# If we've sent enough, -and- we meet our condition, move forward.
@@ -485,10 +485,10 @@ class LTSSMController(Elaboratable):
 
 				m.d.comb += [
 					# From this state onward, we have an active link, and we can thus enable data scrambling.
-					self.enable_scrambling       .eq(~self.request_no_scrambling & ~disable_scrambling_seen),
+					self.enable_scrambling.eq(~self.request_no_scrambling & ~disable_scrambling_seen),
 
 					# Generate our IDL handshake.
-					self.perform_idle_handshake  .eq(1)
+					self.perform_idle_handshake.eq(1)
 				]
 
 				# If a hot-reset is being requested, we'll enter Hot Reset.Active.
@@ -520,8 +520,8 @@ class LTSSMController(Elaboratable):
 				m.d.comb += [
 					# We're now ready for normal operation -- we'll mark our link as ready,
 					# and keep our normal scrambling enabled.
-					self.enable_scrambling  .eq(~self.request_no_scrambling & ~disable_scrambling_seen),
-					self.link_ready         .eq(1)
+					self.enable_scrambling.eq(~self.request_no_scrambling & ~disable_scrambling_seen),
+					self.link_ready.eq(1)
 				]
 
 				# If we've seen an event that requires link recovery, move into link recovery.
@@ -545,7 +545,7 @@ class LTSSMController(Elaboratable):
 				# As in Polling.Configuration, we'll send TS2s; but we'll send them with our
 				# Hot Reset bit set.
 				m.d.comb += [
-					self.send_ts2_burst     .eq(1),
+					self.send_ts2_burst.eq(1),
 				]
 
 				# If we don't achieve link training within 12mS, we'll assume that we've lost our
@@ -569,10 +569,10 @@ class LTSSMController(Elaboratable):
 
 				m.d.comb += [
 					# From this state onward, we have an active link, and we can thus enable data scrambling.
-					self.enable_scrambling       .eq(~self.request_no_scrambling & ~disable_scrambling_seen),
+					self.enable_scrambling.eq(~self.request_no_scrambling & ~disable_scrambling_seen),
 
 					# Generate our IDL handshake.
-					self.perform_idle_handshake  .eq(1)
+					self.perform_idle_handshake.eq(1)
 				]
 
 				# Once we've finished our Idle handshake, we can move on to U0.
@@ -656,8 +656,8 @@ class LTSSMController(Elaboratable):
 
 				m.d.comb += [
 					# Restore scrambling, and repeat our idle handshake.
-					self.enable_scrambling       .eq(~self.request_no_scrambling & ~disable_scrambling_seen),
-					self.perform_idle_handshake  .eq(1)
+					self.enable_scrambling.eq(~self.request_no_scrambling & ~disable_scrambling_seen),
+					self.perform_idle_handshake.eq(1)
 				]
 
 				# If a hot-reset is being requested, we'll enter Hot Reset.Active.
@@ -719,8 +719,8 @@ class LTSSMController(Elaboratable):
 				handle_warm_resets()
 
 				m.d.comb += [
-					self.tx_electrical_idle    .eq(1),
-					self.perform_rx_detection  .eq(1)
+					self.tx_electrical_idle.eq(1),
+					self.perform_rx_detection.eq(1)
 				]
 
 				# If we detect a link partner, we're still in our non-recoverable state.
@@ -740,8 +740,8 @@ class LTSSMController(Elaboratable):
 				handle_warm_resets()
 
 				m.d.comb += [
-					self.tx_electrical_idle    .eq(1),
-					self.engage_terminations   .eq(0)
+					self.tx_electrical_idle.eq(1),
+					self.engage_terminations.eq(0)
 				]
 
 				# FIXME: transition to SS.Disabled.Error if we get here three times without success.
@@ -753,8 +753,8 @@ class LTSSMController(Elaboratable):
 				handle_warm_resets()
 
 				m.d.comb += [
-					self.tx_electrical_idle    .eq(1),
-					self.engage_terminations   .eq(0)
+					self.tx_electrical_idle.eq(1),
+					self.engage_terminations.eq(0)
 				]
 
 		return m

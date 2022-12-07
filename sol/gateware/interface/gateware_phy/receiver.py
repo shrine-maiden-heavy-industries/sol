@@ -129,8 +129,8 @@ class RxClockDataRecovery(Elaboratable):
 			m.d.usb_io += [
 				self.line_state_se0  .eq(fsm.ongoing('SE0')),
 				self.line_state_se1  .eq(fsm.ongoing('SE1')),
-				self.line_state_dj   .eq(fsm.ongoing('DJ' )),
-				self.line_state_dk   .eq(fsm.ongoing('DK' )),
+				self.line_state_dj.eq(fsm.ongoing('DJ' )),
+				self.line_state_dk.eq(fsm.ongoing('DK' )),
 			]
 
 			# If we are in a transition state, then we can sample the pair and
@@ -592,9 +592,9 @@ class RxPipeline(Elaboratable):
 		#
 		m.submodules.nrzi = nrzi = RxNRZIDecoder()
 		m.d.comb += [
-			nrzi.i_valid  .eq(self.o_bit_strobe),
-			nrzi.i_dj     .eq(clock_data_recovery.line_state_dj),
-			nrzi.i_dk     .eq(clock_data_recovery.line_state_dk),
+			nrzi.i_valid.eq(self.o_bit_strobe),
+			nrzi.i_dj.eq(clock_data_recovery.line_state_dj),
+			nrzi.i_dk.eq(clock_data_recovery.line_state_dk),
 			nrzi.i_se0    .eq(clock_data_recovery.line_state_se0),
 		]
 
@@ -603,9 +603,9 @@ class RxPipeline(Elaboratable):
 		#
 		m.submodules.detect = detect = ResetInserter(self.reset)(RxPacketDetect())
 		m.d.comb += [
-			detect.i_valid  .eq(nrzi.o_valid),
+			detect.i_valid.eq(nrzi.o_valid),
 			detect.i_se0    .eq(nrzi.o_se0),
-			detect.i_data   .eq(nrzi.o_data),
+			detect.i_data.eq(nrzi.o_data),
 		]
 
 		#
@@ -637,29 +637,29 @@ class RxPipeline(Elaboratable):
 		flag_valid  = Signal()
 		m.submodules.payload_fifo = payload_fifo = AsyncFIFOBuffered(width = 8, depth = 4, r_domain = 'usb', w_domain = 'usb_io')
 		m.d.comb += [
-			payload_fifo.w_data  .eq(shifter.o_data[::-1]),
-			payload_fifo.w_en    .eq(shifter.o_put),
-			self.o_data_payload  .eq(payload_fifo.r_data),
-			self.o_data_strobe   .eq(payload_fifo.r_rdy),
-			payload_fifo.r_en    .eq(1)
+			payload_fifo.w_data.eq(shifter.o_data[::-1]),
+			payload_fifo.w_en.eq(shifter.o_put),
+			self.o_data_payload.eq(payload_fifo.r_data),
+			self.o_data_strobe.eq(payload_fifo.r_rdy),
+			payload_fifo.r_en.eq(1)
 		]
 
 		m.submodules.flags_fifo = flags_fifo = AsyncFIFOBuffered(width = 2, depth = 4, r_domain = 'usb', w_domain = 'usb_io')
 		m.d.comb += [
-			flags_fifo.w_data[1]  .eq(detect.o_pkt_start),
-			flags_fifo.w_data[0]  .eq(detect.o_pkt_end),
-			flags_fifo.w_en       .eq(detect.o_pkt_start | detect.o_pkt_end),
+			flags_fifo.w_data[1].eq(detect.o_pkt_start),
+			flags_fifo.w_data[0].eq(detect.o_pkt_end),
+			flags_fifo.w_en.eq(detect.o_pkt_start | detect.o_pkt_end),
 
-			flag_start            .eq(flags_fifo.r_data[1]),
-			flag_end              .eq(flags_fifo.r_data[0]),
-			flag_valid            .eq(flags_fifo.r_rdy),
-			flags_fifo.r_en       .eq(1),
+			flag_start.eq(flags_fifo.r_data[1]),
+			flag_end.eq(flags_fifo.r_data[0]),
+			flag_valid.eq(flags_fifo.r_rdy),
+			flags_fifo.r_en.eq(1),
 		]
 
 		# Packet flag signals (in 12MHz domain)
 		m.d.comb += [
-			self.o_pkt_start  .eq(flag_start & flag_valid),
-			self.o_pkt_end    .eq(flag_end & flag_valid),
+			self.o_pkt_start.eq(flag_start & flag_valid),
+			self.o_pkt_end.eq(flag_end & flag_valid),
 		]
 
 		with m.If(self.o_pkt_start):

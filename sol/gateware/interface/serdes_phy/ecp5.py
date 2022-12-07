@@ -295,14 +295,14 @@ class ECP5SerDesEqualizerInterface(Elaboratable):
 
 		# Build the value to be written into the SCI equalizer register.
 		m.d.comb += [
-			sci.dat_w[0]    .eq(self.enable_equalizer),
-			sci.dat_w[1:5]  .eq(self.equalizer_pole),
-			sci.dat_w[5:7]  .eq(self.equalizer_level),
+			sci.dat_w[0].eq(self.enable_equalizer),
+			sci.dat_w[1:5].eq(self.equalizer_pole),
+			sci.dat_w[5:7].eq(self.equalizer_level),
 
 			# Set up a write to the equalizer control register.
-			sci.chan_sel   .eq(self._channel),
-			sci.we         .eq(1),
-			sci.adr        .eq(self.SERDES_EQUALIZATION_REGISTER),
+			sci.chan_sel.eq(self._channel),
+			sci.we.eq(1),
+			sci.adr.eq(self.SERDES_EQUALIZATION_REGISTER),
 		]
 
 		return m
@@ -381,7 +381,7 @@ class ECP5SerDesEqualizer(Elaboratable):
 		# We'll track six bits, as we have four bits of pole and two bits of gain we want to try.
 		current_settings = Signal(6)
 		m.d.comb += [
-			interface.enable_equalizer                                .eq(1),
+			interface.enable_equalizer.eq(1),
 			Cat(interface.equalizer_level, interface.equalizer_pole)  .eq(current_settings)
 		]
 
@@ -409,8 +409,8 @@ class ECP5SerDesEqualizer(Elaboratable):
 				# ... and if this is a new best, store it.
 				with m.If(bit_errors_seen < best_bit_error_count):
 					m.d.pipe += [
-						best_bit_error_count    .eq(bit_errors_seen),
-						best_equalizer_setting  .eq(current_settings)
+						best_bit_error_count.eq(bit_errors_seen),
+						best_equalizer_setting.eq(current_settings)
 					]
 
 		# If we're not currently in training, always apply our known best settings.
@@ -736,13 +736,13 @@ class ECP5SerDes(Elaboratable):
 		# The SerDes needs to be brought up gradually; we'll do that here.
 		m.submodules.reset_sequencer = reset = ECP5SerDesResetSequencer()
 		m.d.comb += [
-			reset.reset         .eq(self.reset),
-			reset.tx_pll_locked .eq(~tx_lol),
-			reset.rx_has_signal .eq(~rx_los),
-			reset.rx_cdr_locked .eq(~rx_lol),
-			reset.rx_coding_err .eq(rx_err),
-			self.tx_ready       .eq(reset.tx_pcs_ready),
-			self.rx_ready       .eq(reset.rx_pcs_ready),
+			reset.reset.eq(self.reset),
+			reset.tx_pll_locked.eq(~tx_lol),
+			reset.rx_has_signal.eq(~rx_los),
+			reset.rx_cdr_locked.eq(~rx_lol),
+			reset.rx_coding_err.eq(rx_err),
+			self.tx_ready.eq(reset.tx_pcs_ready),
+			self.rx_ready.eq(reset.rx_pcs_ready),
 		]
 
 		# Generate the PIPE interface clock from the half rate transmit byte clock, and use it to drive
@@ -750,7 +750,7 @@ class ECP5SerDes(Elaboratable):
 		# The recovered Rx clock will not match the generated Tx clock; use the full rate transmit byte
 		# clock to drive the CTC FIFO in the SerDes, which will compensate for the difference.
 		m.d.comb += [
-			self.pclk           .eq(tx_clk_half),
+			self.pclk.eq(tx_clk_half),
 		]
 
 
@@ -763,8 +763,8 @@ class ECP5SerDes(Elaboratable):
 		m.submodules.sci = sci = ECP5SerDesConfigInterface(self)
 		m.submodules.sci_trans = sci_trans = ECP5SerDesRegisterTranslator(self, sci)
 		m.d.comb += [
-			sci_trans.tx_polarity   .eq(self.tx_polarity),
-			sci_trans.rx_polarity   .eq(self.rx_polarity),
+			sci_trans.tx_polarity.eq(self.tx_polarity),
+			sci_trans.rx_polarity.eq(self.rx_polarity),
 			sci_trans.rx_termination.eq(self.rx_termination),
 		]
 
@@ -1069,19 +1069,19 @@ class ECP5SerDes(Elaboratable):
 		m.d.comb += [
 			# Grab our received data directly from our SerDes; modifying things to match the
 			# SerDes Rx bus layout, which squishes status signals between our two geared words.
-			self.rx_data[0: 8]  .eq(rx_bus[ 0: 8]),
-			self.rx_data[8:16]  .eq(rx_bus[12:20]),
-			self.rx_datak[0]    .eq(rx_bus[8]),
-			self.rx_datak[1]    .eq(rx_bus[20]),
-			rx_status[0]        .eq(rx_bus[ 9:12]),
-			rx_status[1]        .eq(rx_bus[21:24]),
+			self.rx_data[0: 8].eq(rx_bus[ 0: 8]),
+			self.rx_data[8:16].eq(rx_bus[12:20]),
+			self.rx_datak[0].eq(rx_bus[8]),
+			self.rx_datak[1].eq(rx_bus[20]),
+			rx_status[0].eq(rx_bus[ 9:12]),
+			rx_status[1].eq(rx_bus[21:24]),
 
 			# Stick the data we'd like to transmit into the SerDes; again modifying things to match
 			# the transmit bus layout.
-			tx_bus[ 0: 8]       .eq(self.tx_data[0: 8]),
-			tx_bus[12:20]       .eq(self.tx_data[8:16]),
-			tx_bus[8]           .eq(self.tx_datak[0]),
-			tx_bus[20]          .eq(self.tx_datak[1]),
+			tx_bus[ 0: 8].eq(self.tx_data[0: 8]),
+			tx_bus[12:20].eq(self.tx_data[8:16]),
+			tx_bus[8].eq(self.tx_datak[0]),
+			tx_bus[20].eq(self.tx_datak[1]),
 		]
 
 		# The SerDes is providing us with two RxStatus words, one per byte; but we emit only one
@@ -1174,9 +1174,9 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 		m.submodules.lfps_generator = lfps_generator = LFPSSquareWaveGenerator(25e6, 250e6)
 		m.submodules.lfps_detector  = lfps_detector  = LFPSSquareWaveDetector(250e6)
 		m.d.comb += [
-			serdes.tx_gpio_en       .eq(lfps_generator.tx_gpio_en),
-			serdes.tx_gpio          .eq(lfps_generator.tx_gpio),
-			lfps_detector.rx_gpio   .eq(serdes.rx_gpio),
+			serdes.tx_gpio_en.eq(lfps_generator.tx_gpio_en),
+			serdes.tx_gpio.eq(lfps_generator.tx_gpio),
+			lfps_detector.rx_gpio.eq(serdes.rx_gpio),
 		]
 
 
@@ -1184,23 +1184,23 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 		# PIPE interface signaling.
 		#
 		m.d.comb += [
-			serdes.reset            .eq(self.reset),
-			self.pclk               .eq(serdes.pclk),
+			serdes.reset.eq(self.reset),
+			self.pclk.eq(serdes.pclk),
 
-			serdes.tx_elec_idle     .eq(self.tx_elec_idle),
-			serdes.rx_polarity      .eq(self.rx_polarity),
-			serdes.rx_termination   .eq(self.rx_termination),
-			lfps_generator.generate .eq(self.tx_detrx_lpbk & self.tx_elec_idle),
+			serdes.tx_elec_idle.eq(self.tx_elec_idle),
+			serdes.rx_polarity.eq(self.rx_polarity),
+			serdes.rx_termination.eq(self.rx_termination),
+			lfps_generator.generate.eq(self.tx_detrx_lpbk & self.tx_elec_idle),
 
-			self.phy_status         .eq(~serdes.tx_ready),
-			self.rx_valid           .eq(serdes.rx_ready),
-			self.rx_status          .eq(serdes.rx_status),
-			self.rx_elec_idle       .eq(~lfps_detector.present),
+			self.phy_status.eq(~serdes.tx_ready),
+			self.rx_valid.eq(serdes.rx_ready),
+			self.rx_status.eq(serdes.rx_status),
+			self.rx_elec_idle.eq(~lfps_detector.present),
 
-			serdes.tx_data          .eq(self.tx_data),
-			serdes.tx_datak         .eq(self.tx_datak),
-			self.rx_data            .eq(serdes.rx_data),
-			self.rx_datak           .eq(serdes.rx_datak),
+			serdes.tx_data.eq(self.tx_data),
+			serdes.tx_datak.eq(self.tx_datak),
+			self.rx_data.eq(serdes.rx_data),
+			self.rx_datak.eq(serdes.rx_datak),
 		]
 
 		return m

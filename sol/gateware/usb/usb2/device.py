@@ -224,10 +224,10 @@ class USBDevice(Elaboratable):
 		m.submodules.reset_sequencer = reset_sequencer = USBResetSequencer()
 
 		m.d.comb += [
-			reset_sequencer.bus_busy        .eq(self.bus_busy),
+			reset_sequencer.bus_busy.eq(self.bus_busy),
 
-			reset_sequencer.vbus_connected  .eq(~self.utmi.session_end),
-			reset_sequencer.line_state      .eq(self.utmi.line_state),
+			reset_sequencer.vbus_connected.eq(~self.utmi.session_end),
+			reset_sequencer.line_state.eq(self.utmi.line_state),
 		]
 
 
@@ -258,15 +258,15 @@ class USBDevice(Elaboratable):
 
 		m.d.comb += [
 			# Ensure our token detector only responds to tokens addressed to us.
-			token_detector.address  .eq(address),
+			token_detector.address.eq(address),
 
 			# Hook up our data_crc to our receive inputs.
-			data_crc.rx_data        .eq(self.utmi.rx_data),
-			data_crc.rx_valid       .eq(self.utmi.rx_valid),
+			data_crc.rx_data.eq(self.utmi.rx_data),
+			data_crc.rx_valid.eq(self.utmi.rx_valid),
 
 			# Connect our state signals to our subordinate components.
-			token_detector.speed    .eq(self.speed),
-			timer.speed             .eq(self.speed)
+			token_detector.speed.eq(self.speed),
+			timer.speed.eq(self.speed)
 		]
 
 		#
@@ -283,27 +283,27 @@ class USBDevice(Elaboratable):
 
 		m.d.comb += [
 			# Low-level hardware interface.
-			token_detector.interface                   .connect(endpoint_collection.tokenizer),
-			handshake_detector.detected                .connect(endpoint_collection.handshakes_in),
+			token_detector.interface.connect(endpoint_collection.tokenizer),
+			handshake_detector.detected.connect(endpoint_collection.handshakes_in),
 
 			# Device state.
-			endpoint_collection.speed                  .eq(self.speed),
-			endpoint_collection.active_config          .eq(configuration),
-			endpoint_collection.active_address         .eq(address),
+			endpoint_collection.speed.eq(self.speed),
+			endpoint_collection.active_config.eq(configuration),
+			endpoint_collection.active_address.eq(address),
 
 			# Receive interface.
-			receiver.stream                            .connect(endpoint_collection.rx),
-			endpoint_collection.rx_complete            .eq(receiver.packet_complete),
-			endpoint_collection.rx_invalid             .eq(receiver.crc_mismatch),
-			endpoint_collection.rx_ready_for_response  .eq(receiver.ready_for_response),
-			endpoint_collection.rx_pid_toggle          .eq(receiver.active_pid[3]),
+			receiver.stream.connect(endpoint_collection.rx),
+			endpoint_collection.rx_complete.eq(receiver.packet_complete),
+			endpoint_collection.rx_invalid.eq(receiver.crc_mismatch),
+			endpoint_collection.rx_ready_for_response.eq(receiver.ready_for_response),
+			endpoint_collection.rx_pid_toggle.eq(receiver.active_pid[3]),
 
 			# Transmit interface.
-			endpoint_collection.tx                     .attach(transmitter.stream),
-			handshake_generator.issue_ack              .eq(endpoint_collection.handshakes_out.ack),
-			handshake_generator.issue_nak              .eq(endpoint_collection.handshakes_out.nak),
-			handshake_generator.issue_stall            .eq(endpoint_collection.handshakes_out.stall),
-			transmitter.data_pid                       .eq(endpoint_collection.tx_pid_toggle),
+			endpoint_collection.tx.attach(transmitter.stream),
+			handshake_generator.issue_ack.eq(endpoint_collection.handshakes_out.ack),
+			handshake_generator.issue_nak.eq(endpoint_collection.handshakes_out.nak),
+			handshake_generator.issue_stall.eq(endpoint_collection.handshakes_out.stall),
+			transmitter.data_pid.eq(endpoint_collection.tx_pid_toggle),
 		]
 
 		# If an endpoint wants to update our address or configuration, accept the update.
@@ -340,11 +340,11 @@ class USBDevice(Elaboratable):
 
 		m.d.comb += [
 			# Connect our transmit multiplexer to the actual UTMI bus.
-			tx_multiplexer.output  .attach(self.utmi),
+			tx_multiplexer.output.attach(self.utmi),
 
 			# Connect up the transmit CRC interface to our UTMI bus.
-			data_crc.tx_valid      .eq(tx_multiplexer.output.valid & self.utmi.tx_ready),
-			data_crc.tx_data       .eq(tx_multiplexer.output.data),
+			data_crc.tx_valid.eq(tx_multiplexer.output.valid & self.utmi.tx_ready),
+			data_crc.tx_data.eq(tx_multiplexer.output.data),
 		]
 
 
@@ -355,23 +355,23 @@ class USBDevice(Elaboratable):
 		# On a bus reset, clear our address and configuration.
 		with m.If(reset_sequencer.bus_reset):
 			m.d.usb += [
-				address        .eq(0),
-				configuration  .eq(0),
+				address.eq(0),
+				configuration.eq(0),
 			]
 
 
 		# Device operating state controls.
 		m.d.comb += [
 			# Disable our host-mode pulldowns; as we're a device.
-			self.utmi.dm_pulldown            .eq(0),
-			self.utmi.dp_pulldown            .eq(0),
+			self.utmi.dm_pulldown.eq(0),
+			self.utmi.dp_pulldown.eq(0),
 
 			# Let our reset sequencer set our USB mode and speed.
-			reset_sequencer.low_speed_only   .eq(self.low_speed_only & ~self.always_fs),
-			reset_sequencer.full_speed_only  .eq(self.full_speed_only | self.always_fs),
-			self.utmi.op_mode                .eq(reset_sequencer.operating_mode),
-			self.utmi.xcvr_select            .eq(reset_sequencer.current_speed),
-			self.utmi.term_select            .eq(reset_sequencer.termination_select & self.connect),
+			reset_sequencer.low_speed_only.eq(self.low_speed_only & ~self.always_fs),
+			reset_sequencer.full_speed_only.eq(self.full_speed_only | self.always_fs),
+			self.utmi.op_mode.eq(reset_sequencer.operating_mode),
+			self.utmi.xcvr_select.eq(reset_sequencer.current_speed),
+			self.utmi.term_select.eq(reset_sequencer.termination_select & self.connect),
 		]
 
 		#
@@ -402,14 +402,14 @@ class USBDevice(Elaboratable):
 		# Device-state outputs.
 		#
 		m.d.comb += [
-			self.speed            .eq(reset_sequencer.current_speed),
-			self.suspended        .eq(reset_sequencer.suspended),
+			self.speed.eq(reset_sequencer.current_speed),
+			self.suspended.eq(reset_sequencer.suspended),
 
-			self.sof_detected     .eq(token_detector.interface.new_frame),
-			self.reset_detected   .eq(reset_sequencer.bus_reset),
+			self.sof_detected.eq(token_detector.interface.new_frame),
+			self.reset_detected.eq(reset_sequencer.bus_reset),
 
-			self.tx_activity_led  .eq(tx_multiplexer.output.valid),
-			self.rx_activity_led  .eq(self.utmi.rx_valid)
+			self.tx_activity_led.eq(tx_multiplexer.output.valid),
+			self.rx_activity_led.eq(self.utmi.rx_valid)
 		]
 
 		return m
@@ -695,9 +695,9 @@ try:
 				The :class:`USBDevice` object to be controlled.
 			'''
 			return [
-				device.connect      .eq(self.connect),
-				self.bus_reset      .eq(device.reset_detected),
-				self._speed.r_data  .eq(device.speed)
+				device.connect.eq(self.connect),
+				self.bus_reset.eq(device.reset_detected),
+				self._speed.r_data.eq(device.speed)
 			]
 
 

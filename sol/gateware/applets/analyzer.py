@@ -185,22 +185,22 @@ class USBAnalyzerApplet(Elaboratable):
 		# Strap our power controls to be in VBUS passthrough by default,
 		# on the target port.
 		m.d.comb += [
-			platform.request('power_a_port').o      .eq(0),
-			platform.request('pass_through_vbus').o .eq(1),
+			platform.request('power_a_port').o.eq(0),
+			platform.request('pass_through_vbus').o.eq(1),
 		]
 
 		# Set up our parameters.
 		m.d.comb += [
 
 			# Set our mode to non-driving and to the desired speed.
-			utmi.op_mode     .eq(0b01),
-			utmi.xcvr_select .eq(self.usb_speed),
+			utmi.op_mode.eq(0b01),
+			utmi.xcvr_select.eq(self.usb_speed),
 
 			# Disable all of our terminations, as we want to participate in
 			# passive observation.
-			utmi.dm_pulldown .eq(0),
-			utmi.dm_pulldown .eq(0),
-			utmi.term_select .eq(0)
+			utmi.dm_pulldown.eq(0),
+			utmi.dm_pulldown.eq(0),
+			utmi.term_select.eq(0)
 		]
 
 		# Create our USB uplink interface...
@@ -227,24 +227,24 @@ class USBAnalyzerApplet(Elaboratable):
 
 		m.d.comb += [
 			# Connect enable signal to host-controlled state register.
-			analyzer.capture_enable     .eq(state.current[0]),
+			analyzer.capture_enable.eq(state.current[0]),
 
 			# Flush endpoint when analyzer is idle with capture disabled.
-			stream_ep.flush             .eq(analyzer.idle & ~analyzer.capture_enable),
+			stream_ep.flush.eq(analyzer.idle & ~analyzer.capture_enable),
 
 			# USB stream uplink.
-			stream_ep.stream            .stream_eq(analyzer.stream),
+			stream_ep.stream.stream_eq(analyzer.stream),
 
-			usb.connect                 .eq(1),
+			usb.connect.eq(1),
 
 			# LED indicators.
-			platform.request('led', 0).o  .eq(analyzer.capturing),
-			platform.request('led', 1).o  .eq(analyzer.stream.valid),
-			platform.request('led', 2).o  .eq(analyzer.overrun),
+			platform.request('led', 0).o.eq(analyzer.capturing),
+			platform.request('led', 1).o.eq(analyzer.stream.valid),
+			platform.request('led', 2).o.eq(analyzer.overrun),
 
-			platform.request('led', 3).o  .eq(utmi.session_valid),
-			platform.request('led', 4).o  .eq(utmi.rx_active),
-			platform.request('led', 5).o  .eq(utmi.rx_error),
+			platform.request('led', 3).o.eq(utmi.session_valid),
+			platform.request('led', 4).o.eq(utmi.rx_active),
+			platform.request('led', 5).o.eq(utmi.rx_error),
 		]
 
 		# Return our elaborated module.

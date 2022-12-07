@@ -96,8 +96,8 @@ class ULPIRegisterWindow(Elaboratable):
 		# Keep our control signals low unless explicitly asserted.
 		m.d.usb += [
 			self.ulpi_out_req.eq(0),
-			self.ulpi_stop   .eq(0),
-			self.done        .eq(0)
+			self.ulpi_stop.eq(0),
+			self.done.eq(0)
 		]
 
 		with m.FSM(domain = 'usb') as fsm:
@@ -119,8 +119,8 @@ class ULPIRegisterWindow(Elaboratable):
 				# Constantly latch in our arguments while IDLE.
 				# We'll stop latching these in as soon as we're busy.
 				m.d.usb += [
-					current_address .eq(self.address),
-					current_write   .eq(self.write_data)
+					current_address.eq(self.address),
+					current_write.eq(self.write_data)
 				]
 
 				with m.If(self.read_request):
@@ -142,8 +142,8 @@ class ULPIRegisterWindow(Elaboratable):
 
 					# Once it is, start sending our command.
 					m.d.usb += [
-						self.ulpi_data_out .eq(self.COMMAND_REG_READ | self.address),
-						self.ulpi_out_req  .eq(1)
+						self.ulpi_data_out.eq(self.COMMAND_REG_READ | self.address),
+						self.ulpi_out_req.eq(1)
 					]
 
 
@@ -165,8 +165,8 @@ class ULPIRegisterWindow(Elaboratable):
 				# request, so the next cycle can properly act as a bus turnaround.
 				with m.Elif(self.ulpi_next):
 					m.d.usb += [
-						self.ulpi_out_req  .eq(0),
-						self.ulpi_data_out .eq(0),
+						self.ulpi_out_req.eq(0),
+						self.ulpi_data_out.eq(0),
 					]
 					m.next = 'READ_TURNAROUND'
 
@@ -184,8 +184,8 @@ class ULPIRegisterWindow(Elaboratable):
 
 				# Latch in the data, and indicate that we have new, valid data.
 				m.d.usb += [
-					self.read_data .eq(self.ulpi_data_in),
-					self.done      .eq(1)
+					self.read_data.eq(self.ulpi_data_in),
+					self.done.eq(1)
 				]
 
 			#
@@ -201,8 +201,8 @@ class ULPIRegisterWindow(Elaboratable):
 
 					# Once it is, start sending our command.
 					m.d.usb += [
-						self.ulpi_data_out .eq(self.COMMAND_REG_WRITE | self.address),
-						self.ulpi_out_req  .eq(1)
+						self.ulpi_data_out.eq(self.COMMAND_REG_WRITE | self.address),
+						self.ulpi_out_req.eq(1)
 					]
 
 			# SEND_WRITE_ADDRESS: Continue sending the write address until the
@@ -484,8 +484,8 @@ class ULPIRxEventDecoder(Elaboratable):
 
 		# Default our strobes to 0, unless asserted.
 		m.d.usb += [
-			self.rx_start  .eq(0),
-			self.rx_stop   .eq(0)
+			self.rx_start.eq(0),
+			self.rx_stop.eq(0)
 		]
 
 		# Sample the DATA lines whenever these conditions are met.
@@ -503,14 +503,14 @@ class ULPIRxEventDecoder(Elaboratable):
 		# Break the most recent RxCmd into its UTMI-equivalent signals.
 		# From table 3.8.1.2 in the ULPI spec; rev 1.1/Oct-20-2004.
 		m.d.comb += [
-			self.line_state      .eq(self.last_rx_command[0:2]),
-			self.vbus_valid      .eq(self.last_rx_command[2:4] == 0b11),
-			self.session_valid   .eq(self.last_rx_command[2:4] == 0b10),
-			self.session_end     .eq(self.last_rx_command[2:4] == 0b00),
-			self.rx_active       .eq(self.last_rx_command[4]),
-			self.rx_error        .eq(self.last_rx_command[4:6] == 0b11),
-			self.host_disconnect .eq(self.last_rx_command[4:6] == 0b10),
-			self.id_digital      .eq(self.last_rx_command[6]),
+			self.line_state.eq(self.last_rx_command[0:2]),
+			self.vbus_valid.eq(self.last_rx_command[2:4] == 0b11),
+			self.session_valid.eq(self.last_rx_command[2:4] == 0b10),
+			self.session_end.eq(self.last_rx_command[2:4] == 0b00),
+			self.rx_active.eq(self.last_rx_command[4]),
+			self.rx_error.eq(self.last_rx_command[4:6] == 0b11),
+			self.host_disconnect.eq(self.last_rx_command[4:6] == 0b10),
+			self.id_digital.eq(self.last_rx_command[6]),
 		]
 
 		return m
@@ -730,12 +730,12 @@ class ULPIControlTranslator(Elaboratable):
 				m.d.comb += [
 
 					# Control signals.
-					signals['write_done']              .eq(self.register_window.done),
+					signals['write_done'].eq(self.register_window.done),
 
 					# Register window signals.
-					self.register_window.address       .eq(address),
-					self.register_window.write_data    .eq(signals['write_value']),
-					self.register_window.write_request .eq(request_write),
+					self.register_window.address.eq(address),
+					self.register_window.write_data.eq(signals['write_value']),
+					self.register_window.write_request.eq(request_write),
 
 					# Status signals
 				]
@@ -888,8 +888,8 @@ class ULPITransmitTranslator(Elaboratable):
 					with m.If(bit_stuffing_disabled):
 						m.d.usb  += self.ulpi_out_req.eq(1),
 						m.d.comb += [
-							self.ulpi_data_out .eq(self.TRANSMIT_COMMAND),
-							self.tx_ready      .eq(0)
+							self.ulpi_data_out.eq(self.TRANSMIT_COMMAND),
+							self.tx_ready.eq(0)
 						]
 
 					# Otherwise, this transmission starts with a PID. Extract the PID from the first data byte
@@ -898,8 +898,8 @@ class ULPITransmitTranslator(Elaboratable):
 					with m.Else():
 						m.d.usb  += self.ulpi_out_req.eq(1),
 						m.d.comb += [
-							self.ulpi_data_out .eq(self.TRANSMIT_COMMAND | self.tx_data[0:4]),
-							self.tx_ready      .eq(self.ulpi_nxt)
+							self.ulpi_data_out.eq(self.TRANSMIT_COMMAND | self.tx_data[0:4]),
+							self.tx_ready.eq(self.ulpi_nxt)
 						]
 
 
@@ -912,9 +912,9 @@ class ULPITransmitTranslator(Elaboratable):
 			# are roughly equivalent; we'll just pass them through.
 			with m.State('TRANSMIT'):
 				m.d.comb += [
-					self.ulpi_data_out .eq(self.tx_data),
-					self.tx_ready      .eq(self.ulpi_nxt),
-					self.ulpi_stp      .eq(0),
+					self.ulpi_data_out.eq(self.tx_data),
+					self.tx_ready.eq(self.ulpi_nxt),
+					self.ulpi_stp.eq(0),
 				]
 
 				# Once the transmission has ended, we'll need to issue a ULPI stop.
@@ -930,11 +930,11 @@ class ULPITransmitTranslator(Elaboratable):
 					with m.If(bit_stuffing_disabled):
 
 						# Drive 0xFF as we stop, to generate a bit-stuff error. [ULPI: 3.8.2.3]
-						m.d.comb += self.ulpi_data_out .eq(0xFF)
+						m.d.comb += self.ulpi_data_out.eq(0xFF)
 
 					# Otherwise, we'll generate a normal stop.
 					with m.Else():
-						m.d.comb += self.ulpi_data_out .eq(0)
+						m.d.comb += self.ulpi_data_out.eq(0)
 
 
 		return m
@@ -1233,36 +1233,36 @@ class UTMITranslator(Elaboratable):
 
 		# Hook up our reset signal iff our ULPI bus has one.
 		if hasattr(self.ulpi, 'rst'):
-			m.d.comb += self.ulpi.rst  .eq(ResetSignal(raw_clock_domain)),
+			m.d.comb += self.ulpi.rst.eq(ResetSignal(raw_clock_domain)),
 
 
 		# Connect our ULPI control signals to each of our subcomponents.
 		m.d.comb += [
 
 			# Drive the bus whenever the target PHY isn't.
-			self.ulpi.data.oe            .eq(~self.ulpi.dir),
+			self.ulpi.data.oe.eq(~self.ulpi.dir),
 
 			# Generate our busy signal.
-			self.busy                    .eq(any_busy),
+			self.busy.eq(any_busy),
 
 			# Connect our data inputs to the event decoder.
 			# Note that the event decoder is purely passive.
 			rxevent_decoder.register_operation_in_progress.eq(register_window.busy),
-			self.last_rx_command          .eq(rxevent_decoder.last_rx_command),
+			self.last_rx_command.eq(rxevent_decoder.last_rx_command),
 
 			# Connect our inputs to our transmit translator.
-			transmit_translator.ulpi_nxt  .eq(self.ulpi.nxt),
-			transmit_translator.op_mode   .eq(self.op_mode),
-			transmit_translator.bus_idle  .eq(~control_translator.busy & ~self.ulpi.dir),
-			transmit_translator.tx_data   .eq(self.tx_data),
-			transmit_translator.tx_valid  .eq(self.tx_valid),
-			self.tx_ready                 .eq(transmit_translator.tx_ready),
+			transmit_translator.ulpi_nxt.eq(self.ulpi.nxt),
+			transmit_translator.op_mode.eq(self.op_mode),
+			transmit_translator.bus_idle.eq(~control_translator.busy & ~self.ulpi.dir),
+			transmit_translator.tx_data.eq(self.tx_data),
+			transmit_translator.tx_valid.eq(self.tx_valid),
+			self.tx_ready.eq(transmit_translator.tx_ready),
 
 			# Connect our inputs to our control translator / register window.
-			control_translator.bus_idle   .eq(~transmit_translator.busy),
-			register_window.ulpi_data_in  .eq(self.ulpi.data.i),
-			register_window.ulpi_dir      .eq(self.ulpi.dir),
-			register_window.ulpi_next     .eq(self.ulpi.nxt),
+			control_translator.bus_idle.eq(~transmit_translator.busy),
+			register_window.ulpi_data_in.eq(self.ulpi.data.i),
+			register_window.ulpi_dir.eq(self.ulpi.dir),
+			register_window.ulpi_next.eq(self.ulpi.nxt),
 		]
 
 		# Control our the source of our ULPI data output.
@@ -1270,16 +1270,16 @@ class UTMITranslator(Elaboratable):
 		# any register reads/writes.
 		with m.If(transmit_translator.ulpi_out_req):
 			m.d.comb += [
-				self.ulpi.data.o  .eq(transmit_translator.ulpi_data_out),
-				self.ulpi.stp     .eq(transmit_translator.ulpi_stp)
+				self.ulpi.data.o.eq(transmit_translator.ulpi_data_out),
+				self.ulpi.stp.eq(transmit_translator.ulpi_stp)
 			]
 		# Otherwise, yield control to the register handler.
 		# This is a slight optimization: since it properly generates NOPs
 		# while not in use, we can let it handle idle, as well, saving a mux.
 		with m.Else():
 			m.d.comb += [
-				self.ulpi.data.o  .eq(register_window.ulpi_data_out),
-				self.ulpi.stp     .eq(register_window.ulpi_stop)
+				self.ulpi.data.o.eq(register_window.ulpi_data_out),
+				self.ulpi.stp.eq(register_window.ulpi_stop)
 			]
 
 
@@ -1315,8 +1315,8 @@ class UTMITranslator(Elaboratable):
 
 		# RxValid: equivalent to NXT whenever a Rx is active.
 		m.d.usb += [
-			self.rx_data   .eq(self.ulpi.data.i),
-			self.rx_valid  .eq(self.ulpi.nxt & self.rx_active)
+			self.rx_data.eq(self.ulpi.data.i),
+			self.rx_valid.eq(self.ulpi.nxt & self.rx_active)
 		]
 
 		return m

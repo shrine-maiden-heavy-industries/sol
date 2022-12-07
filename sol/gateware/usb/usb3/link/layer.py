@@ -84,8 +84,8 @@ class USB3LinkLayer(Elaboratable):
 			# Note: we bring the physical layer's "raw" (non-descrambled) source to the TS detector,
 			# as we'll still need to detect non-scrambled TS1s and TS2s if they arrive during normal
 			# operation.
-			ts.sink              .tap(physical_layer.raw_source),
-			training_set_source  .stream_eq(ts.source)
+			ts.sink.tap(physical_layer.raw_source),
+			training_set_source.stream_eq(ts.source)
 		]
 
 
@@ -109,61 +109,61 @@ class USB3LinkLayer(Elaboratable):
 		m.submodules.ltssm = ltssm = LTSSMController(ss_clock_frequency = self._clock_frequency)
 
 		m.d.comb += [
-			ltssm.phy_ready                      .eq(physical_layer.ready),
+			ltssm.phy_ready.eq(physical_layer.ready),
 
 			# For now, we'll consider ourselves in USB reset iff we detect reset signaling.
 			# This should be expanded; ideally to also consider e.g. loss of VBUS on some devices.
-			ltssm.in_usb_reset                   .eq(physical_layer.lfps_reset_detected | ~physical_layer.vbus_present),
+			ltssm.in_usb_reset.eq(physical_layer.lfps_reset_detected | ~physical_layer.vbus_present),
 
 			# Link Partner Detection
-			physical_layer.perform_rx_detection  .eq(ltssm.perform_rx_detection),
-			ltssm.link_partner_detected          .eq(physical_layer.link_partner_detected),
-			ltssm.no_link_partner_detected       .eq(physical_layer.no_link_partner_detected),
+			physical_layer.perform_rx_detection.eq(ltssm.perform_rx_detection),
+			ltssm.link_partner_detected.eq(physical_layer.link_partner_detected),
+			ltssm.no_link_partner_detected.eq(physical_layer.no_link_partner_detected),
 
 			# Pass down our link controls to the physical layer.
-			physical_layer.tx_electrical_idle    .eq(ltssm.tx_electrical_idle),
-			physical_layer.engage_terminations   .eq(ltssm.engage_terminations),
-			physical_layer.invert_rx_polarity    .eq(ltssm.invert_rx_polarity),
-			physical_layer.train_equalizer       .eq(ltssm.train_equalizer),
+			physical_layer.tx_electrical_idle.eq(ltssm.tx_electrical_idle),
+			physical_layer.engage_terminations.eq(ltssm.engage_terminations),
+			physical_layer.invert_rx_polarity.eq(ltssm.invert_rx_polarity),
+			physical_layer.train_equalizer.eq(ltssm.train_equalizer),
 
 			# LFPS control.
-			ltssm.lfps_polling_detected          .eq(physical_layer.lfps_polling_detected),
-			physical_layer.send_lfps_polling     .eq(ltssm.send_lfps_polling),
-			ltssm.lfps_cycles_sent               .eq(physical_layer.lfps_cycles_sent),
+			ltssm.lfps_polling_detected.eq(physical_layer.lfps_polling_detected),
+			physical_layer.send_lfps_polling.eq(ltssm.send_lfps_polling),
+			ltssm.lfps_cycles_sent.eq(physical_layer.lfps_cycles_sent),
 
 			# Training set detectors
-			ltssm.tseq_detected                  .eq(ts.tseq_detected),
-			ltssm.ts1_detected                   .eq(ts.ts1_detected),
-			ltssm.inverted_ts1_detected          .eq(ts.inverted_ts1_detected),
-			ltssm.ts2_detected                   .eq(ts.ts2_detected),
-			ltssm.hot_reset_requested            .eq(ts.hot_reset_requested),
-			ltssm.loopback_requested             .eq(ts.loopback_requested),
-			ltssm.no_scrambling_requested        .eq(ts.no_scrambling_requested),
+			ltssm.tseq_detected.eq(ts.tseq_detected),
+			ltssm.ts1_detected.eq(ts.ts1_detected),
+			ltssm.inverted_ts1_detected.eq(ts.inverted_ts1_detected),
+			ltssm.ts2_detected.eq(ts.ts2_detected),
+			ltssm.hot_reset_requested.eq(ts.hot_reset_requested),
+			ltssm.loopback_requested.eq(ts.loopback_requested),
+			ltssm.no_scrambling_requested.eq(ts.no_scrambling_requested),
 
 			# Training set emitters
-			ts.send_tseq_burst                   .eq(ltssm.send_tseq_burst),
-			ts.send_ts1_burst                    .eq(ltssm.send_ts1_burst),
-			ts.send_ts2_burst                    .eq(ltssm.send_ts2_burst),
-			ts.request_hot_reset                 .eq(ltssm.request_hot_reset),
-			ts.request_no_scrambling             .eq(ltssm.request_no_scrambling),
-			ltssm.ts_burst_complete              .eq(ts.burst_complete),
+			ts.send_tseq_burst.eq(ltssm.send_tseq_burst),
+			ts.send_ts1_burst.eq(ltssm.send_ts1_burst),
+			ts.send_ts2_burst.eq(ltssm.send_ts2_burst),
+			ts.request_hot_reset.eq(ltssm.request_hot_reset),
+			ts.request_no_scrambling.eq(ltssm.request_no_scrambling),
+			ltssm.ts_burst_complete.eq(ts.burst_complete),
 
 			# Scrambling control.
-			physical_layer.enable_scrambling     .eq(ltssm.enable_scrambling),
+			physical_layer.enable_scrambling.eq(ltssm.enable_scrambling),
 
 			# Idle detection.
-			idle.enable                          .eq(ltssm.perform_idle_handshake),
-			ltssm.idle_handshake_complete        .eq(idle.idle_handshake_complete),
+			idle.enable.eq(ltssm.perform_idle_handshake),
+			ltssm.idle_handshake_complete.eq(idle.idle_handshake_complete),
 
 			# Link maintainance.
-			timers.enable                        .eq(ltssm.link_ready),
+			timers.enable.eq(ltssm.link_ready),
 
 			# Status signaling.
-			self.trained                         .eq(ltssm.link_ready),
-			self.in_reset                        .eq(ltssm.request_hot_reset | ltssm.in_usb_reset),
+			self.trained.eq(ltssm.link_ready),
+			self.in_reset.eq(ltssm.request_hot_reset | ltssm.in_usb_reset),
 
 			# Test and debug.
-			ltssm.disable_scrambling             .eq(self.disable_scrambling),
+			ltssm.disable_scrambling.eq(self.disable_scrambling),
 		]
 
 
@@ -179,15 +179,15 @@ class USB3LinkLayer(Elaboratable):
 		# Core transmitter.
 		m.submodules.transmitter = transmitter = PacketTransmitter()
 		m.d.comb += [
-			transmitter.sink                .tap(physical_layer.source),
-			transmitter.enable              .eq(ltssm.link_ready),
-			transmitter.usb_reset           .eq(self.in_reset),
+			transmitter.sink.tap(physical_layer.source),
+			transmitter.enable.eq(ltssm.link_ready),
+			transmitter.usb_reset.eq(self.in_reset),
 
-			transmitter.queue               .header_eq(hp_mux.source),
+			transmitter.queue.header_eq(hp_mux.source),
 
 			# Link state management handling.
-			timers.link_command_received  .eq(transmitter.link_command_received),
-			self.ready                    .eq(transmitter.bringup_complete),
+			timers.link_command_received.eq(transmitter.link_command_received),
+			self.ready.eq(transmitter.bringup_complete),
 		]
 
 
@@ -198,26 +198,26 @@ class USB3LinkLayer(Elaboratable):
 		#
 		m.submodules.header_rx = header_rx = HeaderPacketReceiver()
 		m.d.comb += [
-			header_rx.sink                   .tap(physical_layer.source),
-			header_rx.enable                 .eq(ltssm.link_ready),
-			header_rx.usb_reset              .eq(self.in_reset),
+			header_rx.sink.tap(physical_layer.source),
+			header_rx.enable.eq(ltssm.link_ready),
+			header_rx.usb_reset.eq(self.in_reset),
 
 			# Bring our header packet interface to the protocol layer.
-			self.header_source               .header_eq(header_rx.queue),
+			self.header_source.header_eq(header_rx.queue),
 
 			# Keepalive handling.
-			timers.link_command_transmitted  .eq(header_rx.source.valid),
-			header_rx.keepalive_required     .eq(timers.schedule_keepalive),
-			timers.packet_received           .eq(header_rx.packet_received),
+			timers.link_command_transmitted.eq(header_rx.source.valid),
+			header_rx.keepalive_required.eq(timers.schedule_keepalive),
+			timers.packet_received.eq(header_rx.packet_received),
 
 			# Transmitter event path.
-			header_rx.retry_required         .eq(transmitter.retry_required),
-			transmitter.lrty_pending         .eq(header_rx.lrty_pending),
-			header_rx.retry_received         .eq(transmitter.retry_received),
+			header_rx.retry_required.eq(transmitter.retry_required),
+			transmitter.lrty_pending.eq(header_rx.lrty_pending),
+			header_rx.retry_received.eq(transmitter.retry_received),
 
 			# For now, we'll reject all forms of power management by sending a REJECT
 			# whenever we receive an LGO (Link Go-to) request.
-			header_rx.reject_power_state     .eq(transmitter.lgo_received),
+			header_rx.reject_power_state.eq(transmitter.lgo_received),
 		]
 
 
@@ -237,13 +237,13 @@ class USB3LinkLayer(Elaboratable):
 		# Receiver.
 		m.submodules.data_rx = data_rx = DataPacketReceiver()
 		m.d.comb += [
-			data_rx.sink                .tap(physical_layer.source),
+			data_rx.sink.tap(physical_layer.source),
 
 			# Data interface to Protocol layer.
-			self.data_source            .stream_eq(data_rx.source),
-			self.data_header_from_host  .eq(data_rx.header),
-			self.data_source_complete   .eq(data_rx.packet_good),
-			self.data_source_invalid    .eq(data_rx.packet_bad),
+			self.data_source.stream_eq(data_rx.source),
+			self.data_header_from_host.eq(data_rx.header),
+			self.data_source_complete.eq(data_rx.packet_good),
+			self.data_source_invalid.eq(data_rx.packet_bad),
 		]
 
 		# Transmitter.
@@ -251,18 +251,18 @@ class USB3LinkLayer(Elaboratable):
 		hp_mux.add_producer(data_tx.header_source)
 
 		m.d.comb += [
-			transmitter.data_sink    .stream_eq(data_tx.data_source),
+			transmitter.data_sink.stream_eq(data_tx.data_source),
 
 			# Device state information.
-			data_tx.address          .eq(self.current_address),
+			data_tx.address.eq(self.current_address),
 
 			# Data interface from Protocol layer.
-			data_tx.data_sink        .stream_eq(self.data_sink),
-			data_tx.send_zlp         .eq(self.data_sink_send_zlp),
-			data_tx.sequence_number  .eq(self.data_sink_sequence_number),
-			data_tx.endpoint_number  .eq(self.data_sink_endpoint_number),
-			data_tx.data_length      .eq(self.data_sink_length),
-			data_tx.direction        .eq(self.data_sink_direction)
+			data_tx.data_sink.stream_eq(self.data_sink),
+			data_tx.send_zlp.eq(self.data_sink_send_zlp),
+			data_tx.sequence_number.eq(self.data_sink_sequence_number),
+			data_tx.endpoint_number.eq(self.data_sink_endpoint_number),
+			data_tx.data_length.eq(self.data_sink_length),
+			data_tx.direction.eq(self.data_sink_direction)
 		]
 
 
@@ -280,13 +280,13 @@ class USB3LinkLayer(Elaboratable):
 		with m.If(arbiter.idle):
 			m.d.comb += [
 				# Drive our idle stream with our IDL value (0x00)...
-				physical_layer.sink.valid    .eq(1),
-				physical_layer.sink.data     .eq(IDL.value),
-				physical_layer.sink.ctrl     .eq(IDL.ctrl),
+				physical_layer.sink.valid.eq(1),
+				physical_layer.sink.data.eq(IDL.value),
+				physical_layer.sink.ctrl.eq(IDL.ctrl),
 
 				# Let the physical layer know it can insert CTC skips whenever data is being accepted
 				# from our logical idle stream.
-				physical_layer.can_send_skp  .eq(1)
+				physical_layer.can_send_skp.eq(1)
 			]
 
 		# Otherwise, output our stream data.

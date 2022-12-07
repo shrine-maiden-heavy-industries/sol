@@ -133,8 +133,8 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 
 		# Connect up our I/O and our ILA streams.
 		m.d.comb += [
-			stream_ep.stream  .stream_eq(self.ila.stream),
-			usb.connect       .eq(connect)
+			stream_ep.stream.stream_eq(self.ila.stream),
+			usb.connect.eq(connect)
 		]
 
 		return m

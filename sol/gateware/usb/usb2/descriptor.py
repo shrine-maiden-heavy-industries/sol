@@ -111,8 +111,8 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 			descriptor_generators[(type_number, index)] = generator
 
 			m.d.comb += [
-				generator.max_length     .eq(length),
-				generator.start_position .eq(self.start_position)
+				generator.max_length.eq(length),
+				generator.start_position.eq(self.start_position)
 			]
 
 			# ... and attach it to this module.
@@ -133,8 +133,8 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 				with m.Case(type_number << 8 | index):
 
 					# ... connect the relevant generator to our output.
-					m.d.comb += generator.stream  .attach(self.tx)
-					m.d.usb += generator.start    .eq(self.start),
+					m.d.comb += generator.stream.attach(self.tx)
+					m.d.usb += generator.start.eq(self.start),
 
 			# If none of our descriptors match, stall any request that comes in.
 			with m.Case():
@@ -488,8 +488,8 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 				# ... and register the position and shape of our descriptor in memory.
 				m.d.sync += [
-					descriptor_data_base_address  .eq(rom_element_pointer),
-					descriptor_length             .eq(rom_element_count),
+					descriptor_data_base_address.eq(rom_element_pointer),
+					descriptor_length.eq(rom_element_count),
 				]
 
 				m.next = 'SEND_DESCRIPTOR'
@@ -502,15 +502,15 @@ class GetDescriptorHandlerBlock(Elaboratable):
 				byte_in_stream = position_in_stream.bit_select(0, 2)
 
 				m.d.comb += [
-					self.tx.valid       .eq(1),
+					self.tx.valid.eq(1),
 
 					# Always drive the stream from our current memory output...
-					rom_read_port.addr  .eq(descriptor_data_base_address + word_in_stream),
-					self.tx.payload     .eq(rom_read_port.data.word_select(3 - byte_in_stream, 8)),
+					rom_read_port.addr.eq(descriptor_data_base_address + word_in_stream),
+					self.tx.payload.eq(rom_read_port.data.word_select(3 - byte_in_stream, 8)),
 
 					# ... and base First and Last based on our current position in the stream.
-					self.tx.first       .eq(on_first_packet),
-					self.tx.last        .eq(on_last_packet)
+					self.tx.first.eq(on_first_packet),
+					self.tx.last.eq(on_last_packet)
 				]
 
 				# Once a given word is accepted, we're ready to move on.
@@ -519,8 +519,8 @@ class GetDescriptorHandlerBlock(Elaboratable):
 					# If we're not yet done, move to the next byte in the stream.
 					with m.If(~on_last_packet):
 						m.d.sync += [
-							position_in_stream  .eq(position_in_stream + 1),
-							bytes_sent          .eq(bytes_sent + 1),
+							position_in_stream.eq(position_in_stream + 1),
+							bytes_sent.eq(bytes_sent + 1),
 						]
 						m.d.comb += rom_read_port.addr.eq(descriptor_data_base_address+(position_in_stream + 1).bit_select(2, position_in_stream.width - 2)),
 
@@ -528,8 +528,8 @@ class GetDescriptorHandlerBlock(Elaboratable):
 					with m.Else():
 						# Reset some values, might not be really required
 						m.d.sync += [
-							descriptor_length             .eq(0),
-							descriptor_data_base_address  .eq(0)
+							descriptor_length.eq(0),
+							descriptor_data_base_address.eq(0)
 						]
 						m.next = 'IDLE'
 
@@ -539,7 +539,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 				m.d.comb += [
 					# Pulse `last` without `first` to indicate a ZLP.
 					self.tx.valid.eq(1),
-					self.tx.last .eq(1),
+					self.tx.last.eq(1),
 				]
 				m.next = 'IDLE'
 

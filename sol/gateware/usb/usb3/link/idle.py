@@ -67,7 +67,7 @@ class IdleHandshakeHandler(Elaboratable):
 		last_word_was_idle   = (last_word == 0) & (last_ctrl == 0)
 		current_word_is_idle = (data_word == 0) & (ctrl_word == 0)
 		m.d.comb += [
-			self.idle_detected  .eq(last_word_was_idle & current_word_is_idle)
+			self.idle_detected.eq(last_word_was_idle & current_word_is_idle)
 		]
 
 		#
@@ -96,8 +96,8 @@ class IdleHandshakeHandler(Elaboratable):
 		# When we're not idle, clear all of our state.
 		with m.Else():
 			m.d.ss += [
-				enable_counter  .eq(0),
-				seen_idle       .eq(0)
+				enable_counter.eq(0),
+				seen_idle.eq(0)
 			]
 
 		return m

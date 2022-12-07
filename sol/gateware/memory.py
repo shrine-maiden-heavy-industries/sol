@@ -118,10 +118,10 @@ class TransactionalizedFIFO(Elaboratable):
 
 		# Always connect up our memory's data/en ports to ours.
 		m.d.comb += [
-			self.read_data  .eq(read_port.data),
+			self.read_data.eq(read_port.data),
 
-			write_port.data .eq(self.write_data),
-			write_port.en   .eq(self.write_en & ~self.full)
+			write_port.data.eq(self.write_data),
+			write_port.en.eq(self.write_en & ~self.full)
 		]
 
 		#

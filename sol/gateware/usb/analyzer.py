@@ -107,13 +107,13 @@ class USBAnalyzer(Elaboratable):
 		m.d.comb += [
 
 			# We have data ready whenever there's data in the FIFO.
-			self.stream.valid    .eq((fifo_count != 0) & (self.idle | self.overrun)),
+			self.stream.valid.eq((fifo_count != 0) & (self.idle | self.overrun)),
 
 			# Our data_out is always the output of our read port...
-			self.stream.payload  .eq(mem_read_port.data),
+			self.stream.payload.eq(mem_read_port.data),
 
 
-			self.sampling       .eq(mem_write_port.en)
+			self.sampling.eq(mem_write_port.en)
 		]
 
 		# Once our consumer has accepted our current data, move to the next address.
@@ -122,7 +122,7 @@ class USBAnalyzer(Elaboratable):
 			m.d.comb += mem_read_port.addr.eq(read_location + 1)
 
 		with m.Else():
-			m.d.comb += mem_read_port.addr   .eq(read_location),
+			m.d.comb += mem_read_port.addr.eq(read_location),
 
 
 
@@ -134,8 +134,8 @@ class USBAnalyzer(Elaboratable):
 		data_pop   = Signal()
 		data_push  = Signal()
 		m.d.comb += [
-			data_pop   .eq(self.stream.ready & self.stream.valid),
-			data_push  .eq(fifo_new_data & ~fifo_full)
+			data_pop.eq(self.stream.ready & self.stream.valid),
+			data_push.eq(fifo_new_data & ~fifo_full)
 		]
 
 		# If we have both a read and a write, don't update the count,
@@ -155,9 +155,9 @@ class USBAnalyzer(Elaboratable):
 		#
 		with m.FSM(domain = 'usb') as f:
 			m.d.comb += [
-				self.idle      .eq(f.ongoing('START') | f.ongoing('IDLE')),
-				self.overrun   .eq(f.ongoing('OVERRUN')),
-				self.capturing .eq(f.ongoing('CAPTURE')),
+				self.idle.eq(f.ongoing('START') | f.ongoing('IDLE')),
+				self.overrun.eq(f.ongoing('OVERRUN')),
+				self.capturing.eq(f.ongoing('CAPTURE')),
 			]
 
 			# START: wait for capture to be enabled, but don't start mid-packet.
@@ -173,9 +173,9 @@ class USBAnalyzer(Elaboratable):
 				with m.Elif(self.utmi.rx_active):
 					m.next = 'CAPTURE'
 					m.d.usb += [
-						header_location  .eq(write_location),
-						write_location   .eq(write_location + self.HEADER_SIZE_BYTES),
-						packet_size      .eq(0),
+						header_location.eq(write_location),
+						write_location.eq(write_location + self.HEADER_SIZE_BYTES),
+						packet_size.eq(0),
 					]
 
 
@@ -186,17 +186,17 @@ class USBAnalyzer(Elaboratable):
 
 				# Capture data whenever RxValid is asserted.
 				m.d.comb += [
-					mem_write_port.addr  .eq(write_location),
-					mem_write_port.data  .eq(self.utmi.rx_data),
-					mem_write_port.en    .eq(byte_received),
-					fifo_new_data        .eq(byte_received),
+					mem_write_port.addr.eq(write_location),
+					mem_write_port.data.eq(self.utmi.rx_data),
+					mem_write_port.en.eq(byte_received),
+					fifo_new_data.eq(byte_received),
 				]
 
 				# Advance the write pointer each time we receive a bit.
 				with m.If(byte_received):
 					m.d.usb += [
-						write_location  .eq(write_location + 1),
-						packet_size     .eq(packet_size + 1)
+						write_location.eq(write_location + 1),
+						packet_size.eq(packet_size + 1)
 					]
 
 					# If this would be filling up our data memory,
@@ -225,10 +225,10 @@ class USBAnalyzer(Elaboratable):
 				# This will take two cycles, currently, as we're using a 2-byte header,
 				# but we only have an 8-bit write port.
 				m.d.comb += [
-					mem_write_port.addr  .eq(header_location),
-					mem_write_port.data  .eq(packet_size[8:16]),
-					mem_write_port.en    .eq(1),
-					fifo_new_data        .eq(1)
+					mem_write_port.addr.eq(header_location),
+					mem_write_port.data.eq(packet_size[8:16]),
+					mem_write_port.en.eq(1),
+					fifo_new_data.eq(1)
 				]
 				m.next = 'EOP_2'
 
@@ -239,10 +239,10 @@ class USBAnalyzer(Elaboratable):
 				# Note that, if this is an adjacent read, we should have
 				# just captured our packet header _during_ the stop turnaround.
 				m.d.comb += [
-					mem_write_port.addr  .eq(header_location + 1),
-					mem_write_port.data  .eq(packet_size[0:8]),
-					mem_write_port.en    .eq(1),
-					fifo_new_data        .eq(1)
+					mem_write_port.addr.eq(header_location + 1),
+					mem_write_port.data.eq(packet_size[0:8]),
+					mem_write_port.en.eq(1),
+					fifo_new_data.eq(1)
 				]
 				m.next = 'START'
 

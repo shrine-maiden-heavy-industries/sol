@@ -27,14 +27,14 @@ class USBSerialDeviceExample(Elaboratable):
 
 		m.d.comb += [
 			# Place the streams into a loopback configuration...
-			usb_serial.tx.payload  .eq(usb_serial.rx.payload),
-			usb_serial.tx.valid    .eq(usb_serial.rx.valid),
-			usb_serial.tx.first    .eq(usb_serial.rx.first),
-			usb_serial.tx.last     .eq(usb_serial.rx.last),
-			usb_serial.rx.ready    .eq(usb_serial.tx.ready),
+			usb_serial.tx.payload.eq(usb_serial.rx.payload),
+			usb_serial.tx.valid.eq(usb_serial.rx.valid),
+			usb_serial.tx.first.eq(usb_serial.rx.first),
+			usb_serial.tx.last.eq(usb_serial.rx.last),
+			usb_serial.rx.ready.eq(usb_serial.tx.ready),
 
 			# ... and always connect by default.
-			usb_serial.connect     .eq(1)
+			usb_serial.connect.eq(1)
 		]
 
 		return m

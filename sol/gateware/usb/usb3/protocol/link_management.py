@@ -108,10 +108,10 @@ class LinkManagementPacketHandler(Elaboratable):
 			# Create a response packet, and mark ourselves as sending it.
 			response = response_type()
 			m.d.comb += [
-				header_source.valid    .eq(1),
-				header_source.header   .eq(response),
+				header_source.valid.eq(1),
+				header_source.header.eq(response),
 
-				response.type          .eq(HeaderPacketType.LINK_MANAGEMENT)
+				response.type.eq(HeaderPacketType.LINK_MANAGEMENT)
 			]
 
 			# Next, fill in each of the fields:

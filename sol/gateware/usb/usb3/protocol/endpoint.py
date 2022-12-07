@@ -158,7 +158,7 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 					target_signal  = getattr(self.shared, signal_name)
 
 					# ... and connect them.
-					m.d.comb += target_signal   .eq(driving_signal)
+					m.d.comb += target_signal.eq(driving_signal)
 
 			# After the first element, all other entries should be created with Elif.
 			conditional = m.Elif
@@ -176,18 +176,18 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 			m.d.comb += [
 
 				# Rx interface.
-				interface.rx                     .tap(shared.rx),
-				interface.rx_header              .eq(shared.rx_header),
-				interface.rx_complete            .eq(shared.rx_complete),
-				interface.rx_invalid             .eq(shared.rx_invalid),
+				interface.rx.tap(shared.rx),
+				interface.rx_header.eq(shared.rx_header),
+				interface.rx_complete.eq(shared.rx_complete),
+				interface.rx_invalid.eq(shared.rx_invalid),
 
 				# Handshake exchange.
-				shared.handshakes_in             .connect(interface.handshakes_in),
+				shared.handshakes_in.connect(interface.handshakes_in),
 
 				# State signals.
-				interface.ep_reset               .eq(shared.config_changed),
-				interface.active_config          .eq(shared.active_config),
-				interface.active_address         .eq(shared.active_address)
+				interface.ep_reset.eq(shared.config_changed),
+				interface.active_config.eq(shared.active_config),
+				interface.active_address.eq(shared.active_address)
 			]
 
 		#
@@ -200,12 +200,12 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 			# and still get an appropriate priority encoder.
 			with m.If(interface.tx.valid.any() | interface.tx_zlp):
 				m.d.comb += [
-					shared.tx                  .stream_eq(interface.tx),
-					shared.tx_zlp              .eq(interface.tx_zlp),
-					shared.tx_direction        .eq(interface.tx_direction),
-					shared.tx_endpoint_number  .eq(interface.tx_endpoint_number),
-					shared.tx_sequence_number  .eq(interface.tx_sequence_number),
-					shared.tx_length           .eq(interface.tx_length)
+					shared.tx.stream_eq(interface.tx),
+					shared.tx_zlp.eq(interface.tx_zlp),
+					shared.tx_direction.eq(interface.tx_direction),
+					shared.tx_endpoint_number.eq(interface.tx_endpoint_number),
+					shared.tx_sequence_number.eq(interface.tx_sequence_number),
+					shared.tx_length.eq(interface.tx_length)
 				]
 
 

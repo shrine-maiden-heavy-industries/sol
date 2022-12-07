@@ -119,9 +119,9 @@ class USBControlEndpoint(Elaboratable):
 			m.submodules.crc = crc = USBDataPacketCRC()
 			crc.add_interface(interface.data_crc)
 			m.d.comb += [
-				crc.rx_data    .eq(self.utmi.rx_data),
-				crc.rx_valid   .eq(self.utmi.rx_valid),
-				crc.tx_valid   .eq(0)
+				crc.rx_data.eq(self.utmi.rx_data),
+				crc.rx_valid.eq(self.utmi.rx_valid),
+				crc.tx_valid.eq(0)
 			]
 
 			# ... and our tokenizer.
@@ -150,13 +150,13 @@ class USBControlEndpoint(Elaboratable):
 		# Create our SETUP packet decoder.
 		m.submodules.setup_decoder = setup_decoder = USBSetupDecoder(utmi = self.utmi)
 		m.d.comb += [
-			interface.data_crc   .connect(setup_decoder.data_crc),
-			interface.tokenizer  .connect(setup_decoder.tokenizer),
-			setup_decoder.speed  .eq(interface.speed),
+			interface.data_crc.connect(setup_decoder.data_crc),
+			interface.tokenizer.connect(setup_decoder.tokenizer),
+			setup_decoder.speed.eq(interface.speed),
 
 			# And attach our timer interface to both our local users and
 			# to our setup decoder.
-			interface.timer      .attach(setup_decoder.timer)
+			interface.timer.attach(setup_decoder.timer)
 
 		]
 
@@ -184,25 +184,25 @@ class USBControlEndpoint(Elaboratable):
 
 		# ... and hook it up.
 		m.d.comb += [
-			setup_decoder.packet                   .connect(request_handler.setup),
-			interface.tokenizer                    .connect(request_handler.tokenizer),
+			setup_decoder.packet.connect(request_handler.setup),
+			interface.tokenizer.connect(request_handler.tokenizer),
 
-			request_handler.tx                     .attach(interface.tx),
-			interface.handshakes_out.ack           .eq(setup_decoder.ack | request_handler.handshakes_out.ack),
-			interface.handshakes_out.nak           .eq(request_handler.handshakes_out.nak),
-			interface.handshakes_out.stall         .eq(request_handler.handshakes_out.stall),
-			interface.handshakes_in                .connect(request_handler.handshakes_in),
+			request_handler.tx.attach(interface.tx),
+			interface.handshakes_out.ack.eq(setup_decoder.ack | request_handler.handshakes_out.ack),
+			interface.handshakes_out.nak.eq(request_handler.handshakes_out.nak),
+			interface.handshakes_out.stall.eq(request_handler.handshakes_out.stall),
+			interface.handshakes_in.connect(request_handler.handshakes_in),
 
-			interface.address_changed              .eq(request_handler.address_changed),
-			interface.new_address                  .eq(request_handler.new_address),
+			interface.address_changed.eq(request_handler.address_changed),
+			interface.new_address.eq(request_handler.new_address),
 
-			request_handler.active_config          .eq(interface.active_config),
-			interface.config_changed               .eq(request_handler.config_changed),
-			interface.new_config                   .eq(request_handler.new_config),
+			request_handler.active_config.eq(interface.active_config),
+			interface.config_changed.eq(request_handler.config_changed),
+			interface.new_config.eq(request_handler.new_config),
 
 			# Fix our data PIDs to DATA1, for now, as we don't support multi-packet responses, yet.
 			# Per [USB2.0: 8.5.3], the first packet of the DATA or STATUS phase always carries a DATA1 PID.
-			interface.tx_pid_toggle                .eq(request_handler.tx_data_pid)
+			interface.tx_pid_toggle.eq(request_handler.tx_data_pid)
 		]
 
 
@@ -261,8 +261,8 @@ class USBControlEndpoint(Elaboratable):
 				# the request handler logic significantly.
 				with m.If(endpoint_targeted & interface.tokenizer.is_out):
 					m.d.comb += [
-						interface.rx                           .connect(request_handler.rx),
-						request_handler.rx_ready_for_response  .eq(interface.rx_ready_for_response)
+						interface.rx.connect(request_handler.rx),
+						request_handler.rx_ready_for_response.eq(interface.rx_ready_for_response)
 					]
 
 				# Once we get an IN token, we should move on to the STATUS stage. [USB2, 8.5.3]

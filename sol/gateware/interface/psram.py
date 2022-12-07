@@ -171,21 +171,21 @@ class HyperRAMInterface(Elaboratable):
 
 		# Provide defaults for our control/status signals.
 		m.d.sync += [
-			advance_clock       .eq(1),
-			reset_clock         .eq(0),
-			new_data_ready      .eq(0),
+			advance_clock.eq(1),
+			reset_clock.eq(0),
+			new_data_ready.eq(0),
 
-			self.bus.cs         .eq(1),
-			self.bus.rwds.oe    .eq(0),
-			self.bus.dq.oe      .eq(0),
+			self.bus.cs.eq(1),
+			self.bus.rwds.oe.eq(0),
+			self.bus.dq.oe.eq(0),
 		]
 
 		with m.FSM() as fsm:
 
 			# IDLE state: waits for a transaction request
 			with m.State('IDLE'):
-				m.d.sync += reset_clock      .eq(1)
-				m.d.comb += self.idle        .eq(1)
+				m.d.sync += reset_clock.eq(1)
+				m.d.comb += self.idle.eq(1)
 
 				# Once we have a transaction request, latch in our control
 				# signals, and assert our chip-select.
@@ -193,10 +193,10 @@ class HyperRAMInterface(Elaboratable):
 					m.next = 'LATCH_RWDS'
 
 					m.d.sync += [
-						is_read             .eq(~self.perform_write),
-						is_register         .eq(self.register_space),
-						is_multipage        .eq(~self.single_page),
-						current_address     .eq(self.address),
+						is_read.eq(~self.perform_write),
+						is_register.eq(self.register_space),
+						is_multipage.eq(~self.single_page),
+						current_address.eq(self.address),
 					]
 
 				with m.Else():
@@ -239,8 +239,8 @@ class HyperRAMInterface(Elaboratable):
 
 				# Output our first byte of our command.
 				m.d.sync += [
-					data_out  .eq(command_byte),
-					data_oe   .eq(1)
+					data_out.eq(command_byte),
+					data_oe.eq(1)
 				]
 
 			# Note: it's felt that this is more readable with each of these
@@ -250,36 +250,36 @@ class HyperRAMInterface(Elaboratable):
 
 			with m.State('SHIFT_COMMAND1'):
 				m.d.sync += [
-					data_out  .eq(current_address[19:27]),
-					data_oe   .eq(1)
+					data_out.eq(current_address[19:27]),
+					data_oe.eq(1)
 				]
 				m.next = 'SHIFT_COMMAND2'
 
 			with m.State('SHIFT_COMMAND2'):
 				m.d.sync += [
-					data_out  .eq(current_address[11:19]),
-					data_oe   .eq(1)
+					data_out.eq(current_address[11:19]),
+					data_oe.eq(1)
 				]
 				m.next = 'SHIFT_COMMAND3'
 
 			with m.State('SHIFT_COMMAND3'):
 				m.d.sync += [
-					data_out  .eq(current_address[ 3:16]),
-					data_oe   .eq(1)
+					data_out.eq(current_address[ 3:16]),
+					data_oe.eq(1)
 				]
 				m.next = 'SHIFT_COMMAND4'
 
 			with m.State('SHIFT_COMMAND4'):
 				m.d.sync += [
-					data_out  .eq(0),
-					data_oe   .eq(1)
+					data_out.eq(0),
+					data_oe.eq(1)
 				]
 				m.next = 'SHIFT_COMMAND5'
 
 			with m.State('SHIFT_COMMAND5'):
 				m.d.sync += [
-					data_out  .eq(current_address[0:3]),
-					data_oe   .eq(1)
+					data_out.eq(current_address[0:3]),
+					data_oe.eq(1)
 				]
 
 				# If we have a register write, we don't need to handle
@@ -326,8 +326,8 @@ class HyperRAMInterface(Elaboratable):
 				# Sample it, and indicate that we now have a valid piece of new data.
 				with m.If(self.bus.rwds.i != last_rwds):
 					m.d.sync += [
-						self.read_data[0:8]  .eq(data_in),
-						new_data_ready       .eq(1)
+						self.read_data[0:8].eq(data_in),
+						new_data_ready.eq(1)
 					]
 
 					# If our controller is done with the transcation, end it.
@@ -343,8 +343,8 @@ class HyperRAMInterface(Elaboratable):
 			# WRITE_DATA_MSB -- write the first of our two bytes of data to the to the PSRAM
 			with m.State('WRITE_DATA_MSB'):
 				m.d.sync += [
-					data_out  .eq(self.write_data[8:16]),
-					data_oe   .eq(1),
+					data_out.eq(self.write_data[8:16]),
+					data_oe.eq(1),
 				]
 				m.next = 'WRITE_DATA_LSB'
 
@@ -352,8 +352,8 @@ class HyperRAMInterface(Elaboratable):
 			# WRITE_DATA_LSB -- write the first of our two bytes of data to the to the PSRAM
 			with m.State('WRITE_DATA_LSB'):
 				m.d.sync += [
-					data_out  .eq(self.write_data[0:8]),
-					data_oe   .eq(1),
+					data_out.eq(self.write_data[0:8]),
+					data_oe.eq(1),
 				]
 				m.next = 'WRITE_DATA_LSB'
 
@@ -374,8 +374,8 @@ class HyperRAMInterface(Elaboratable):
 			# RECOVERY state: wait for the required period of time before a new transaction
 			with m.State('RECOVERY'):
 				m.d.sync += [
-					self.bus.cs   .eq(0),
-					advance_clock .eq(0)
+					self.bus.cs.eq(0),
+					advance_clock.eq(0)
 				]
 
 				# TODO: implement recovery
@@ -426,15 +426,15 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 		self.assertEqual((yield self.ram_signals.cs),      0)
 
 		# Request a register write to ID register 0.
-		yield self.dut.perform_write  .eq(1)
-		yield self.dut.register_space .eq(1)
-		yield self.dut.address        .eq(0x00BBCCDD)
-		yield self.dut.start_transfer .eq(1)
-		yield self.dut.final_word     .eq(1)
-		yield self.dut.write_data     .eq(0xBEEF)
+		yield self.dut.perform_write.eq(1)
+		yield self.dut.register_space.eq(1)
+		yield self.dut.address.eq(0x00BBCCDD)
+		yield self.dut.start_transfer.eq(1)
+		yield self.dut.final_word.eq(1)
+		yield self.dut.write_data.eq(0xBEEF)
 
 		# Simulate the RAM requesting a extended latency.
-		yield self.ram_signals.rwds.i .eq(1)
+		yield self.ram_signals.rwds.i.eq(1)
 		yield
 
 		# Ensure that upon requesting, CS goes high, and our clock starts low.
@@ -506,14 +506,14 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 		self.assertEqual((yield self.ram_signals.cs),      0)
 
 		# Request a register read of ID register 0.
-		yield self.dut.perform_write  .eq(0)
-		yield self.dut.register_space .eq(1)
-		yield self.dut.address        .eq(0x00BBCCDD)
-		yield self.dut.start_transfer .eq(1)
-		yield self.dut.final_word     .eq(1)
+		yield self.dut.perform_write.eq(0)
+		yield self.dut.register_space.eq(1)
+		yield self.dut.address.eq(0x00BBCCDD)
+		yield self.dut.start_transfer.eq(1)
+		yield self.dut.final_word.eq(1)
 
 		# Simulate the RAM requesting a extended latency.
-		yield self.ram_signals.rwds.i .eq(1)
+		yield self.ram_signals.rwds.i.eq(1)
 		yield
 
 		# Ensure that upon requesting, CS goes high, and our clock starts low.

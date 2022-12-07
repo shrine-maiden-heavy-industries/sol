@@ -260,11 +260,11 @@ class USBResetSequencer(Elaboratable):
 				# Afterwards, we'll take steps to differentiate a reset from a suspend.
 				with m.If(timer == self._CYCLES_3_MILLISECONDS):
 					m.d.usb += [
-						timer                    .eq(0),
+						timer.eq(0),
 
-						self.current_speed       .eq(USBSpeed.FULL),
-						self.operating_mode      .eq(UTMIOperatingMode.NORMAL),
-						self.termination_select  .eq(UTMITerminationSelect.LS_FS_NORMAL),
+						self.current_speed.eq(USBSpeed.FULL),
+						self.operating_mode.eq(UTMIOperatingMode.NORMAL),
+						self.termination_select.eq(UTMITerminationSelect.LS_FS_NORMAL),
 					]
 					m.next = 'DETECT_HS_SUSPEND'
 
@@ -278,14 +278,14 @@ class USBResetSequencer(Elaboratable):
 			# START_HS_DETECTION -- entry state for high-speed detection
 			with m.State('START_HS_DETECTION'):
 				m.d.usb += [
-					timer                    .eq(0),
+					timer.eq(0),
 
 					# Switch into High-speed chirp mode. Note that we'll need to leave our
 					# terminations set to '1' until we're sure this is a high-speed host;
 					# or the host will see our pull-up removal as a disconnect.
-					self.current_speed       .eq(USBSpeed.HIGH),
-					self.operating_mode      .eq(UTMIOperatingMode.CHIRP),
-					self.termination_select  .eq(UTMITerminationSelect.HS_CHIRP)
+					self.current_speed.eq(USBSpeed.HIGH),
+					self.operating_mode.eq(UTMIOperatingMode.CHIRP),
+					self.termination_select.eq(UTMITerminationSelect.HS_CHIRP)
 				]
 				m.next = 'PREPARE_FOR_CHIRP_0'
 
@@ -309,8 +309,8 @@ class USBResetSequencer(Elaboratable):
 				# Note that we don't need to check 'ready', as we care about the length
 				# of time, rather than the number of bits.
 				m.d.comb += [
-					self.tx.valid  .eq(1),
-					self.tx.data   .eq(0)
+					self.tx.valid.eq(1),
+					self.tx.data.eq(0)
 				]
 
 				# Once 2ms have passed, we can stop our chirp, and begin waiting for the
@@ -318,8 +318,8 @@ class USBResetSequencer(Elaboratable):
 				# we don't change our values in the middle of a bit.
 				with m.If((timer == self._CYCLES_2_MILLISECONDS)):
 					m.d.usb += [
-						timer        .eq(0),
-						valid_pairs  .eq(0)
+						timer.eq(0),
+						valid_pairs.eq(0)
 					]
 					m.next = 'AWAIT_HOST_K'
 
@@ -405,12 +405,12 @@ class USBResetSequencer(Elaboratable):
 
 				# Switch to high speed.
 				m.d.usb += [
-					timer                    .eq(0),
-					line_state_time          .eq(0),
+					timer.eq(0),
+					line_state_time.eq(0),
 
-					self.current_speed       .eq(USBSpeed.HIGH),
-					self.operating_mode      .eq(UTMIOperatingMode.NORMAL),
-					self.termination_select  .eq(UTMITerminationSelect.HS_NORMAL)
+					self.current_speed.eq(USBSpeed.HIGH),
+					self.operating_mode.eq(UTMIOperatingMode.NORMAL),
+					self.termination_select.eq(UTMITerminationSelect.HS_NORMAL)
 				]
 
 				m.next = 'HS_NON_RESET'
@@ -420,8 +420,8 @@ class USBResetSequencer(Elaboratable):
 			# because it didn't) complete our high-speed handshake; set it up accordingly.
 			with m.State('IS_LOW_OR_FULL_SPEED'):
 				m.d.usb += [
-					self.operating_mode      .eq(UTMIOperatingMode.NORMAL),
-					self.termination_select  .eq(UTMITerminationSelect.LS_FS_NORMAL)
+					self.operating_mode.eq(UTMIOperatingMode.NORMAL),
+					self.termination_select.eq(UTMITerminationSelect.LS_FS_NORMAL)
 				]
 
 				# If we're operating in low-speed only, drop down to low speed.

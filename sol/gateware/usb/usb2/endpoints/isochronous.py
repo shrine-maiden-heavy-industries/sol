@@ -124,10 +124,10 @@ class USBIsochronousInEndpoint(Elaboratable):
 			# Always pass our ``value`` directly through to our transmitter.
 			# We'll provide ``address``/``next_address`` to our user code to help
 			# orchestrate this timing.
-			out_stream.payload       .eq(self.value),
+			out_stream.payload.eq(self.value),
 
 			# Provide our data pid through to to the transmitter.
-			interface.tx_pid_toggle  .eq(next_data_pid)
+			interface.tx_pid_toggle.eq(next_data_pid)
 		]
 
 		#
@@ -139,8 +139,8 @@ class USBIsochronousInEndpoint(Elaboratable):
 			with m.State('IDLE'):
 				m.d.usb  += [
 					# Remain targeting the first byte in our frame.
-					self.address      .eq(0),
-					out_stream.first  .eq(0)
+					self.address.eq(0),
+					out_stream.first.eq(0)
 				]
 
 				m.d.comb += self.next_address.eq(0)
@@ -166,10 +166,10 @@ class USBIsochronousInEndpoint(Elaboratable):
 
 				m.d.comb += [
 					# Our data is always valid in this state...
-					out_stream.valid .eq(1),
+					out_stream.valid.eq(1),
 
 					# ... and we're terminating our packet if we're on the last byte of it.
-					out_stream.last  .eq(byte_terminates_send),
+					out_stream.last.eq(byte_terminates_send),
 				]
 
 				# ``address`` should always move to the value presented in
@@ -185,8 +185,8 @@ class USBIsochronousInEndpoint(Elaboratable):
 
 					# Mark the relevant byte as sent...
 					m.d.usb += [
-						bytes_left_in_frame   .eq(bytes_left_in_frame  - 1),
-						bytes_left_in_packet  .eq(bytes_left_in_packet - 1),
+						bytes_left_in_frame.eq(bytes_left_in_frame  - 1),
+						bytes_left_in_packet.eq(bytes_left_in_packet - 1),
 					]
 
 					# ... and advance to the next address.
@@ -199,10 +199,10 @@ class USBIsochronousInEndpoint(Elaboratable):
 							# Move to the next DATA pid, which is always one DATA PID less.
 							# [USB2.0: 5.9.2]. We'll reset this back to its maximum value when
 							# the next frame starts.
-							next_data_pid        .eq(next_data_pid - 1),
+							next_data_pid.eq(next_data_pid - 1),
 
 							# Mark our next packet as being a full one.
-							bytes_left_in_packet .eq(self._max_packet_size)
+							bytes_left_in_packet.eq(self._max_packet_size)
 						]
 						m.next = 'IDLE'
 
@@ -211,8 +211,8 @@ class USBIsochronousInEndpoint(Elaboratable):
 			with m.State('SEND_ZLP'):
 				# We'll request a ZLP by strobing LAST and VALID without strobing FIRST.
 				m.d.comb += [
-					out_stream.valid  .eq(1),
-					out_stream.last   .eq(1),
+					out_stream.valid.eq(1),
+					out_stream.last.eq(1),
 				]
 				m.next = 'IDLE'
 

@@ -193,7 +193,7 @@ class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
 		m.submodules.usb_reset = controller = PHYResetController()
 		m.d.comb += [
 			ResetSignal('usb')  .eq(controller.phy_reset),
-			self.usb_holdoff    .eq(controller.phy_stop)
+			self.usb_holdoff.eq(controller.phy_stop)
 		]
 
 
@@ -210,9 +210,9 @@ class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
 
 		# Generate and connect up our clocks.
 		m.d.comb += [
-			self.clk_usb                   .eq(self.generate_usb_clock(m, platform)),
-			self.clk_sync                  .eq(self.generate_sync_clock(m, platform)),
-			self.clk_fast                  .eq(self.generate_fast_clock(m, platform)),
+			self.clk_usb.eq(self.generate_usb_clock(m, platform)),
+			self.clk_sync.eq(self.generate_sync_clock(m, platform)),
+			self.clk_fast.eq(self.generate_fast_clock(m, platform)),
 
 			ClockSignal(domain = 'fast')     .eq(self.clk_fast),
 			ClockSignal(domain = 'sync')     .eq(self.clk_sync),

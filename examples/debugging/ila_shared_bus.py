@@ -51,13 +51,13 @@ class ILASharedBusExample(Elaboratable):
 		# Create an SPI bus for our ILA.
 		ila_spi = SPIBus()
 		m.d.comb += [
-			self.ila.spi .connect(ila_spi),
+			self.ila.spi.connect(ila_spi),
 
 			# For sharing, we'll connect the _inverse_ of the primary
 			# chip select to our ILA bus. This will allow us to send
 			# ILA data when CS is un-asserted, and register data when
 			# CS is asserted.
-			ila_spi.cs  .eq(~board_spi.cs)
+			ila_spi.cs.eq(~board_spi.cs)
 		]
 
 		# Create a set of registers...
@@ -67,8 +67,8 @@ class ILASharedBusExample(Elaboratable):
 		# ... and an SPI bus for them.
 		reg_spi = SPIBus()
 		m.d.comb += [
-			spi_registers.spi .connect(reg_spi),
-			reg_spi.cs        .eq(board_spi.cs)
+			spi_registers.spi.connect(reg_spi),
+			reg_spi.cs.eq(board_spi.cs)
 		]
 
 		# Multiplex our ILA and register SPI busses.

@@ -109,30 +109,30 @@ class UARTPeripheral(Peripheral, Elaboratable):
 			m.d.sync += self.enabled.eq(self._enabled.w_data)
 
 		m.d.comb += [
-			self._rx_data.r_data  .eq(self._rx_fifo.r_data),
-			self._rx_fifo.r_en    .eq(self._rx_data.r_stb),
-			self._rx_rdy.r_data   .eq(self._rx_fifo.r_rdy),
+			self._rx_data.r_data.eq(self._rx_fifo.r_data),
+			self._rx_fifo.r_en.eq(self._rx_data.r_stb),
+			self._rx_rdy.r_data.eq(self._rx_fifo.r_rdy),
 
-			self._rx_fifo.w_data  .eq(self._phy.rx.data),
-			self._rx_fifo.w_en    .eq(self._phy.rx.rdy),
-			self._phy.rx.ack      .eq(self._rx_fifo.w_rdy),
-			self._rx_err.r_data   .eq(self._phy.rx.err),
+			self._rx_fifo.w_data.eq(self._phy.rx.data),
+			self._rx_fifo.w_en.eq(self._phy.rx.rdy),
+			self._phy.rx.ack.eq(self._rx_fifo.w_rdy),
+			self._rx_err.r_data.eq(self._phy.rx.err),
 
-			self._tx_fifo.w_en    .eq(self._tx_data.w_stb & self.enabled),
-			self._tx_fifo.w_data  .eq(self._tx_data.w_data),
-			self._tx_rdy.r_data   .eq(self._tx_fifo.w_rdy),
+			self._tx_fifo.w_en.eq(self._tx_data.w_stb & self.enabled),
+			self._tx_fifo.w_data.eq(self._tx_data.w_data),
+			self._tx_rdy.r_data.eq(self._tx_fifo.w_rdy),
 
-			self._phy.tx.data     .eq(self._tx_fifo.r_data),
-			self._phy.tx.ack      .eq(self._tx_fifo.r_rdy),
-			self._tx_fifo.r_en    .eq(self._phy.tx.rdy),
+			self._phy.tx.data.eq(self._tx_fifo.r_data),
+			self._phy.tx.ack.eq(self._tx_fifo.r_rdy),
+			self._tx_fifo.r_en.eq(self._phy.tx.rdy),
 
-			self._rx_rdy_ev.stb   .eq(self._rx_fifo.r_rdy),
-			self._rx_err_ev.stb   .eq(self._phy.rx.err.any()),
-			self._tx_mty_ev.stb   .eq(~self._tx_fifo.r_rdy),
+			self._rx_rdy_ev.stb.eq(self._rx_fifo.r_rdy),
+			self._rx_err_ev.stb.eq(self._phy.rx.err.any()),
+			self._tx_mty_ev.stb.eq(~self._tx_fifo.r_rdy),
 
-			self.tx               .eq(self._phy.tx.o),
-			self._phy.rx.i        .eq(self.rx),
-			self.driving          .eq(~self._phy.tx.rdy)
+			self.tx.eq(self._phy.tx.o),
+			self._phy.rx.i.eq(self.rx),
+			self.driving.eq(~self._phy.tx.rdy)
 		]
 
 		return m

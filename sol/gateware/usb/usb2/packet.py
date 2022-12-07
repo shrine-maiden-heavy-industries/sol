@@ -335,16 +335,16 @@ class USBTokenDetector(Elaboratable):
 
 		# Generate our convenience status signals.
 		m.d.comb += [
-			self.interface.is_in     .eq(self.interface.pid == USBPacketID.IN),
-			self.interface.is_out    .eq(self.interface.pid == USBPacketID.OUT),
-			self.interface.is_setup  .eq(self.interface.pid == USBPacketID.SETUP),
-			self.interface.is_ping   .eq(self.interface.pid == USBPacketID.PING)
+			self.interface.is_in.eq(self.interface.pid == USBPacketID.IN),
+			self.interface.is_out.eq(self.interface.pid == USBPacketID.OUT),
+			self.interface.is_setup.eq(self.interface.pid == USBPacketID.SETUP),
+			self.interface.is_ping.eq(self.interface.pid == USBPacketID.PING)
 		]
 
 		# Keep our strobes un-asserted unless otherwise specified.
 		m.d.usb += [
-			self.interface.new_frame  .eq(0),
-			self.interface.new_token  .eq(0)
+			self.interface.new_frame.eq(0),
+			self.interface.new_token.eq(0)
 		]
 
 		with m.FSM(domain = 'usb'):
@@ -427,8 +427,8 @@ class USBTokenDetector(Elaboratable):
 					# token fields.
 					with m.If(current_pid == self.SOF_PID):
 						m.d.usb += [
-							self.interface.frame      .eq(token_data),
-							self.interface.new_frame  .eq(1),
+							self.interface.frame.eq(token_data),
+							self.interface.new_frame.eq(1),
 						]
 
 					# Otherwise, extract the address and endpoint from the token,
@@ -440,8 +440,8 @@ class USBTokenDetector(Elaboratable):
 						token_applicable = (token_data[0:7] == self.address) if self.filter_by_address else True
 						with m.If(token_applicable):
 							m.d.usb += [
-								self.interface.pid        .eq(current_pid),
-								self.interface.new_token  .eq(1),
+								self.interface.pid.eq(current_pid),
+								self.interface.new_token.eq(1),
 
 								Cat(self.interface.address, self.interface.endpoint).eq(token_data)
 							]
@@ -568,10 +568,10 @@ class USBHandshakeDetector(Elaboratable):
 
 		# Keep our strobes un-asserted unless otherwise specified.
 		m.d.usb += [
-			self.detected.ack    .eq(0),
-			self.detected.nak    .eq(0),
-			self.detected.stall  .eq(0),
-			self.detected.nyet   .eq(0),
+			self.detected.ack.eq(0),
+			self.detected.nak.eq(0),
+			self.detected.stall.eq(0),
+			self.detected.nyet.eq(0),
 		]
 
 
@@ -610,10 +610,10 @@ class USBHandshakeDetector(Elaboratable):
 				# and identify the event.
 				with m.If(~self.utmi.rx_active):
 					m.d.usb += [
-						self.detected.ack    .eq(active_pid == self.ACK_PID),
-						self.detected.nak    .eq(active_pid == self.NAK_PID),
-						self.detected.stall  .eq(active_pid == self.STALL_PID),
-						self.detected.nyet   .eq(active_pid == self.NYET_PID),
+						self.detected.ack.eq(active_pid == self.ACK_PID),
+						self.detected.nak.eq(active_pid == self.NAK_PID),
+						self.detected.stall.eq(active_pid == self.STALL_PID),
+						self.detected.nyet.eq(active_pid == self.NYET_PID),
 					]
 					m.next = 'IDLE'
 
@@ -870,12 +870,12 @@ class USBDataPacketReceiver(Elaboratable):
 			m.d.comb += [
 
 				# Connect our CRC generator...
-				crc.rx_data           .eq(self.utmi.rx_data),
-				crc.rx_valid          .eq(self.utmi.rx_valid),
-				crc.tx_valid          .eq(0),
+				crc.rx_data.eq(self.utmi.rx_data),
+				crc.rx_valid.eq(self.utmi.rx_valid),
+				crc.tx_valid.eq(0),
 
 				# ... and our timer.
-				timer.speed           .eq(self.speed)
+				timer.speed.eq(self.speed)
 			]
 
 
@@ -888,12 +888,12 @@ class USBDataPacketReceiver(Elaboratable):
 
 		# Keep our control signals + strobes un-asserted unless otherwise specified.
 		m.d.usb  += [
-			self.packet_complete .eq(0),
-			self.crc_mismatch    .eq(0),
+			self.packet_complete.eq(0),
+			self.crc_mismatch.eq(0),
 		]
 		m.d.comb += [
-			self.stream.next     .eq(0),
-			self.data_crc.start  .eq(0),
+			self.stream.next.eq(0),
+			self.data_crc.start.eq(0),
 		]
 
 
@@ -935,8 +935,8 @@ class USBDataPacketReceiver(Elaboratable):
 
 				with m.If(self.utmi.rx_valid):
 					m.d.usb += [
-						data_pipeline[8:]  .eq(self.utmi.rx_data),
-						last_byte_crc       .eq(self.data_crc.crc)
+						data_pipeline[8:].eq(self.utmi.rx_data),
+						last_byte_crc.eq(self.data_crc.crc)
 					]
 					m.next = 'RECEIVE_SECOND_BYTE'
 
@@ -951,11 +951,11 @@ class USBDataPacketReceiver(Elaboratable):
 
 				with m.If(self.utmi.rx_valid):
 					m.d.usb += [
-						data_pipeline[8:]   .eq(self.utmi.rx_data),
-						data_pipeline[0:8]  .eq(data_pipeline[8:]),
+						data_pipeline[8:].eq(self.utmi.rx_data),
+						data_pipeline[0:8].eq(data_pipeline[8:]),
 
-						last_byte_crc       .eq(self.data_crc.crc),
-						last_word_crc       .eq(last_byte_crc),
+						last_byte_crc.eq(self.data_crc.crc),
+						last_word_crc.eq(last_byte_crc),
 					]
 					m.next = 'RECEIVE_AND_EMIT'
 
@@ -975,19 +975,19 @@ class USBDataPacketReceiver(Elaboratable):
 
 					m.d.comb += [
 						# Emit the current packet...
-						self.stream.payload  .eq(data_pipeline[0:8]),
-						self.stream.next     .eq(1),
+						self.stream.payload.eq(data_pipeline[0:8]),
+						self.stream.next.eq(1),
 					]
 
 					m.d.usb += [
 
 						# ... capture the incoming one...
-						data_pipeline[8:]   .eq(self.utmi.rx_data),
-						data_pipeline[0:8]  .eq(data_pipeline[8:]),
+						data_pipeline[8:].eq(self.utmi.rx_data),
+						data_pipeline[0:8].eq(data_pipeline[8:]),
 
 						# ... and update our cached CRCs.
-						last_byte_crc       .eq(self.data_crc.crc),
-						last_word_crc       .eq(last_byte_crc),
+						last_byte_crc.eq(self.data_crc.crc),
+						last_word_crc.eq(last_byte_crc),
 					]
 
 
@@ -999,13 +999,13 @@ class USBDataPacketReceiver(Elaboratable):
 
 						# Indicate so...
 						m.d.usb += [
-							self.packet_id       .eq(self.active_pid),
-							self.packet_complete .eq(1)
+							self.packet_id.eq(self.active_pid),
+							self.packet_complete.eq(1)
 						]
 
 						# ... start counting our interpacket delay...
 						m.d.comb += [
-							self.timer.start  .eq(1)
+							self.timer.start.eq(1)
 						]
 
 						# ... and wait for it to complete.
@@ -1015,7 +1015,7 @@ class USBDataPacketReceiver(Elaboratable):
 					# Otherwise, flag this as a CRC mismatch.
 					with m.Else():
 						m.d.usb += [
-							self.crc_mismatch    .eq(1)
+							self.crc_mismatch.eq(1)
 						]
 
 						# ... and return to IDLE.
@@ -1196,9 +1196,9 @@ class USBDataPacketDeserializer(Elaboratable):
 			crc.add_interface(self.data_crc)
 
 			m.d.comb += [
-				crc.rx_data           .eq(self.utmi.rx_data),
-				crc.rx_valid          .eq(self.utmi.rx_valid),
-				crc.tx_valid           .eq(0)
+				crc.rx_data.eq(self.utmi.rx_data),
+				crc.rx_valid.eq(self.utmi.rx_valid),
+				crc.tx_valid.eq(0)
 			]
 
 		# CRC-16 tracking signals.
@@ -1216,8 +1216,8 @@ class USBDataPacketDeserializer(Elaboratable):
 		last_word          = Signal(16)
 
 		# Keep our control signals + strobes un-asserted unless otherwise specified.
-		m.d.usb += self.new_packet      .eq(0)
-		m.d.comb += self.data_crc.start  .eq(0)
+		m.d.usb += self.new_packet.eq(0)
+		m.d.comb += self.data_crc.start.eq(0)
 
 		with m.FSM(domain = 'usb'):
 
@@ -1242,8 +1242,8 @@ class USBDataPacketDeserializer(Elaboratable):
 					# If this is a data packet, capture it.
 					with m.If(is_valid_pid & is_data):
 						m.d.usb += [
-							active_pid          .eq(self.utmi.rx_data),
-							position_in_packet  .eq(0)
+							active_pid.eq(self.utmi.rx_data),
+							position_in_packet.eq(0)
 						]
 						m.next = 'CAPTURE_DATA'
 
@@ -1264,13 +1264,13 @@ class USBDataPacketDeserializer(Elaboratable):
 
 					with m.Else():
 						m.d.usb += [
-							active_packet[position_in_packet]  .eq(self.utmi.rx_data),
-							position_in_packet                 .eq(position_in_packet + 1),
+							active_packet[position_in_packet].eq(self.utmi.rx_data),
+							position_in_packet.eq(position_in_packet + 1),
 
-							last_word     .eq(Cat(last_word[8:], self.utmi.rx_data)),
+							last_word.eq(Cat(last_word[8:], self.utmi.rx_data)),
 
-							last_word_crc .eq(last_byte_crc),
-							last_byte_crc .eq(self.data_crc.crc),
+							last_word_crc.eq(last_byte_crc),
+							last_byte_crc.eq(self.data_crc.crc),
 						]
 
 
@@ -1279,9 +1279,9 @@ class USBDataPacketDeserializer(Elaboratable):
 
 					with m.If(last_word_crc == last_word):
 						m.d.usb += [
-							self.packet_id   .eq(active_pid),
-							self.length      .eq(position_in_packet - 2),
-							self.new_packet  .eq(1)
+							self.packet_id.eq(active_pid),
+							self.length.eq(position_in_packet - 2),
+							self.new_packet.eq(1)
 						]
 
 						for i in range(self._max_packet_size):
@@ -1418,10 +1418,10 @@ class USBDataPacketGenerator(Elaboratable):
 			crc.add_interface(self.crc)
 
 			m.d.comb += [
-				crc.rx_valid          .eq(0),
+				crc.rx_valid.eq(0),
 
-				crc.tx_data           .eq(self.stream.payload),
-				crc.tx_valid          .eq(self.tx.ready)
+				crc.tx_data.eq(self.stream.payload),
+				crc.tx_valid.eq(self.tx.ready)
 			]
 
 		with m.FSM(domain = 'usb'):
@@ -1452,14 +1452,14 @@ class USBDataPacketGenerator(Elaboratable):
 
 				m.d.comb += [
 					# Prepare for a new payload by starting a new CRC calculation.
-					self.crc.start     .eq(1),
+					self.crc.start.eq(1),
 
 					# Send the USB packet ID for our data packet...
-					self.tx.data       .eq(current_data_pid),
-					self.tx.valid      .eq(1),
+					self.tx.data.eq(current_data_pid),
+					self.tx.valid.eq(1),
 
 					# ... and don't consume any data.
-					self.stream.ready  .eq(0)
+					self.stream.ready.eq(0)
 				]
 
 				# Advance once the PHY accepts our PID.
@@ -1495,8 +1495,8 @@ class USBDataPacketGenerator(Elaboratable):
 
 				# Send the relevant CRC byte...
 				m.d.comb += [
-					self.tx.data       .eq(self.crc.crc[0:8]),
-					self.tx.valid      .eq(1),
+					self.tx.data.eq(self.crc.crc[0:8]),
+					self.tx.valid.eq(1),
 				]
 
 				# ... and move on to the next one.
@@ -1509,8 +1509,8 @@ class USBDataPacketGenerator(Elaboratable):
 
 				# Send the relevant CRC byte...
 				m.d.comb += [
-					self.tx.data       .eq(remaining_crc),
-					self.tx.valid      .eq(1),
+					self.tx.data.eq(remaining_crc),
+					self.tx.valid.eq(1),
 				]
 
 				# ... and return to idle.
@@ -1712,15 +1712,15 @@ class USBHandshakeGenerator(Elaboratable):
 				# in preparation for the next cycle.
 
 				with m.If(self.issue_ack):
-					m.d.usb += self.tx.data  .eq(self._PACKET_ACK),
+					m.d.usb += self.tx.data.eq(self._PACKET_ACK),
 					m.next = 'TRANSMIT'
 
 				with m.If(self.issue_nak):
-					m.d.usb += self.tx.data  .eq(self._PACKET_NAK),
+					m.d.usb += self.tx.data.eq(self._PACKET_NAK),
 					m.next = 'TRANSMIT'
 
 				with m.If(self.issue_stall):
-					m.d.usb += self.tx.data  .eq(self._PACKET_STALL),
+					m.d.usb += self.tx.data.eq(self._PACKET_STALL),
 					m.next = 'TRANSMIT'
 
 
@@ -1922,22 +1922,22 @@ class USBInterpacketTimer(Elaboratable):
 		with m.If(self.speed == USBSpeed.HIGH):
 			if not self._fs_only:
 				m.d.comb += [
-					rx_to_tx_at_min   .eq(counter == self._hs_rx_to_tx_delay[0]),
-					rx_to_tx_at_max   .eq(counter == self._hs_rx_to_tx_delay[1]),
-					tx_to_rx_timeout  .eq(counter == self._hs_tx_to_rx_timeout)
+					rx_to_tx_at_min.eq(counter == self._hs_rx_to_tx_delay[0]),
+					rx_to_tx_at_max.eq(counter == self._hs_rx_to_tx_delay[1]),
+					tx_to_rx_timeout.eq(counter == self._hs_tx_to_rx_timeout)
 				]
 		with m.Elif(self.speed == USBSpeed.FULL):
 			m.d.comb += [
-				rx_to_tx_at_min   .eq(counter == self._fs_rx_to_tx_delay[0]),
-				rx_to_tx_at_max   .eq(counter == self._fs_rx_to_tx_delay[1]),
-				tx_to_rx_timeout  .eq(counter == self._fs_tx_to_rx_timeout)
+				rx_to_tx_at_min.eq(counter == self._fs_rx_to_tx_delay[0]),
+				rx_to_tx_at_max.eq(counter == self._fs_rx_to_tx_delay[1]),
+				tx_to_rx_timeout.eq(counter == self._fs_tx_to_rx_timeout)
 			]
 		with m.Else():
 			if not self._fs_only:
 				m.d.comb += [
-					rx_to_tx_at_min   .eq(counter == self._hs_rx_to_tx_delay[0]),
-					rx_to_tx_at_max   .eq(counter == self._hs_rx_to_tx_delay[1]),
-					tx_to_rx_timeout  .eq(counter == self._hs_tx_to_rx_timeout)
+					rx_to_tx_at_min.eq(counter == self._hs_rx_to_tx_delay[0]),
+					rx_to_tx_at_max.eq(counter == self._hs_rx_to_tx_delay[1]),
+					tx_to_rx_timeout.eq(counter == self._hs_tx_to_rx_timeout)
 				]
 
 		# Tie our strobes to each of our consumers.

@@ -49,10 +49,10 @@ class UARTBridgeExample(Elaboratable):
 
 		# Hook everything up.
 		m.d.comb += [
-			stream.payload  .eq(letters[current_letter]),
-			stream.valid    .eq(counter == 0),
+			stream.payload.eq(letters[current_letter]),
+			stream.valid.eq(counter == 0),
 
-			uart.tx.o       .eq(transmitter.tx),
+			uart.tx.o.eq(transmitter.tx),
 		]
 
 		# If this platform has an output-enable control on its UART, drive it iff

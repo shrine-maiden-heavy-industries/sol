@@ -87,12 +87,12 @@ class StressTestEndpoint(Elaboratable):
 
 		m.d.comb += [
 			# Always send our constant value.
-			tx.payload .eq(self._constant),
+			tx.payload.eq(self._constant),
 
 			# Send bytes, whenever we have them.
-			tx.valid   .eq(bytes_to_send != 0),
-			tx.first   .eq(bytes_to_send == self._max_packet_size),
-			tx.last    .eq(bytes_to_send == 1)
+			tx.valid.eq(bytes_to_send != 0),
+			tx.first.eq(bytes_to_send == self._max_packet_size),
+			tx.last.eq(bytes_to_send == 1)
 		]
 
 		#
@@ -177,8 +177,8 @@ class USBStressTest(Elaboratable):
 
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
-			usb.connect          .eq(1),
-			usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
+			usb.connect.eq(1),
+			usb.full_speed_only.eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
 

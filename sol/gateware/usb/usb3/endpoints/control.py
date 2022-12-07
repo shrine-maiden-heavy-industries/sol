@@ -105,11 +105,11 @@ class USB3ControlEndpoint(Elaboratable):
 		#
 		m.submodules.setup_decoder = setup_decoder = SuperSpeedSetupDecoder()
 		m.d.comb += [
-			setup_decoder.sink       .tap(interface.rx),
-			setup_decoder.header_in  .eq(interface.rx_header),
+			setup_decoder.sink.tap(interface.rx),
+			setup_decoder.header_in.eq(interface.rx_header),
 
-			setup_decoder.rx_good    .eq(interface.rx_complete),
-			setup_decoder.rx_bad     .eq(interface.rx_invalid),
+			setup_decoder.rx_good.eq(interface.rx_complete),
+			setup_decoder.rx_bad.eq(interface.rx_invalid),
 		]
 
 
@@ -138,33 +138,33 @@ class USB3ControlEndpoint(Elaboratable):
 		# when the most recently header packet targets our endpoint number.
 		with m.If(interface.rx_header.endpoint_number == self._endpoint_number):
 			m.d.comb += [
-				request_interface.rx           .tap(interface.rx),
-				request_interface.rx_complete  .eq(interface.rx_complete),
-				request_interface.rx_invalid   .eq(interface.rx_invalid),
+				request_interface.rx.tap(interface.rx),
+				request_interface.rx_complete.eq(interface.rx_complete),
+				request_interface.rx_invalid.eq(interface.rx_invalid),
 			]
 
 		# The remainder of our signals are always hooked up.
 		m.d.comb += [
-			request_interface.rx_header    .eq(interface.rx_header),
+			request_interface.rx_header.eq(interface.rx_header),
 
 			# Transmit. Note that our transmit direction is always set to OUT; even though we're
 			# sending data to the host, per [USB3.2r1: 8.12.2].
-			interface.tx                   .stream_eq(request_interface.tx),
-			interface.tx_length            .eq(request_interface.tx_length),
-			interface.tx_sequence_number   .eq(0),
-			interface.tx_endpoint_number   .eq(self._endpoint_number),
-			interface.tx_direction         .eq(USBDirection.OUT),
+			interface.tx.stream_eq(request_interface.tx),
+			interface.tx_length.eq(request_interface.tx_length),
+			interface.tx_sequence_number.eq(0),
+			interface.tx_endpoint_number.eq(self._endpoint_number),
+			interface.tx_direction.eq(USBDirection.OUT),
 
 			# Status.
-			interface.handshakes_in        .connect(request_interface.handshakes_in),
-			interface.handshakes_out       .connect(request_interface.handshakes_out),
+			interface.handshakes_in.connect(request_interface.handshakes_in),
+			interface.handshakes_out.connect(request_interface.handshakes_out),
 
 			# Address / config management.
-			interface.address_changed      .eq(request_interface.address_changed),
-			interface.new_address          .eq(request_interface.new_address),
+			interface.address_changed.eq(request_interface.address_changed),
+			interface.new_address.eq(request_interface.new_address),
 
-			interface.config_changed       .eq(request_interface.config_changed),
-			interface.new_config           .eq(request_interface.new_config),
+			interface.config_changed.eq(request_interface.config_changed),
+			interface.new_config.eq(request_interface.new_config),
 
 		]
 
@@ -183,14 +183,14 @@ class USB3ControlEndpoint(Elaboratable):
 		# Note that our SETUP sequence number needs to be `1`.
 		with m.If(setup_decoder.packet.received):
 			m.d.comb += [
-				handshakes_out.retry_required   .eq(0),
-				handshakes_out.next_sequence    .eq(1),
-				handshakes_out.send_ack         .eq(1),
+				handshakes_out.retry_required.eq(0),
+				handshakes_out.next_sequence.eq(1),
+				handshakes_out.send_ack.eq(1),
 			]
 
 
 		# Always set the endpoint number in our handshakes.
-		m.d.comb += handshakes_out.endpoint_number  .eq(self._endpoint_number),
+		m.d.comb += handshakes_out.endpoint_number.eq(self._endpoint_number),
 
 		#
 		# DATA stage handling.

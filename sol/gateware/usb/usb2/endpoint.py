@@ -179,7 +179,7 @@ class USBEndpointMultiplexer(Elaboratable):
 					target_signal  = get_signal(self.shared, signal_name)
 
 					# ... and connect them.
-					m.d.comb += target_signal   .eq(driving_signal)
+					m.d.comb += target_signal.eq(driving_signal)
 
 			# After the first element, all other entries should be created with Elif.
 			conditional = m.Elif
@@ -207,26 +207,26 @@ class USBEndpointMultiplexer(Elaboratable):
 			m.d.comb += [
 
 				# CRC and timer shared signals interface.
-				interface.data_crc.crc           .eq(shared.data_crc.crc),
-				interface.timer.tx_allowed       .eq(shared.timer.tx_allowed),
-				interface.timer.tx_timeout       .eq(shared.timer.tx_timeout),
-				interface.timer.rx_timeout       .eq(shared.timer.rx_timeout),
+				interface.data_crc.crc.eq(shared.data_crc.crc),
+				interface.timer.tx_allowed.eq(shared.timer.tx_allowed),
+				interface.timer.tx_timeout.eq(shared.timer.tx_timeout),
+				interface.timer.rx_timeout.eq(shared.timer.rx_timeout),
 
 				# Detectors.
-				shared.handshakes_in             .connect(interface.handshakes_in),
-				shared.tokenizer                 .connect(interface.tokenizer),
+				shared.handshakes_in.connect(interface.handshakes_in),
+				shared.tokenizer.connect(interface.tokenizer),
 
 				# Rx interface.
-				shared.rx                        .connect(interface.rx),
-				interface.rx_complete            .eq(shared.rx_complete),
-				interface.rx_ready_for_response  .eq(shared.rx_ready_for_response),
-				interface.rx_invalid             .eq(shared.rx_invalid),
-				interface.rx_pid_toggle          .eq(shared.rx_pid_toggle),
+				shared.rx.connect(interface.rx),
+				interface.rx_complete.eq(shared.rx_complete),
+				interface.rx_ready_for_response.eq(shared.rx_ready_for_response),
+				interface.rx_invalid.eq(shared.rx_invalid),
+				interface.rx_pid_toggle.eq(shared.rx_pid_toggle),
 
 				# State signals.
-				interface.speed                  .eq(shared.speed),
-				interface.active_config          .eq(shared.active_config),
-				interface.active_address         .eq(shared.active_address)
+				interface.speed.eq(shared.speed),
+				interface.active_config.eq(shared.active_config),
+				interface.active_address.eq(shared.active_address)
 			]
 
 		#

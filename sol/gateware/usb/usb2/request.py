@@ -106,8 +106,8 @@ class USBRequestHandler(Elaboratable):
 		# Send a ZLP along our transmit interface.
 		# Our interface accepts 'valid' and 'last' without 'first' as a ZLP.
 		return [
-			tx.valid  .eq(1),
-			tx.last   .eq(1)
+			tx.valid.eq(1),
+			tx.last.eq(1)
 		]
 
 
@@ -183,7 +183,7 @@ class USBSetupDecoder(Elaboratable):
 
 		# Keep our output signals de-asserted unless specified.
 		m.d.usb += [
-			self.packet.received  .eq(0),
+			self.packet.received.eq(0),
 		]
 
 
@@ -220,14 +220,14 @@ class USBSetupDecoder(Elaboratable):
 						m.d.usb += [
 
 							# Parse the setup data itself...
-							request_type            .eq(data_handler.packet[0]),
-							self.packet.request     .eq(data_handler.packet[1]),
-							self.packet.value       .eq(Cat(data_handler.packet[2], data_handler.packet[3])),
-							self.packet.index       .eq(Cat(data_handler.packet[4], data_handler.packet[5])),
-							self.packet.length      .eq(Cat(data_handler.packet[6], data_handler.packet[7])),
+							request_type.eq(data_handler.packet[0]),
+							self.packet.request.eq(data_handler.packet[1]),
+							self.packet.value.eq(Cat(data_handler.packet[2], data_handler.packet[3])),
+							self.packet.index.eq(Cat(data_handler.packet[4], data_handler.packet[5])),
+							self.packet.length.eq(Cat(data_handler.packet[6], data_handler.packet[7])),
 
 							# ... and indicate that we have new data.
-							self.packet.received  .eq(1),
+							self.packet.received.eq(1),
 
 						]
 
@@ -439,7 +439,7 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 					target_signal  = get_signal(self.shared, signal_name)
 
 					# ... and connect them.
-					m.d.comb += target_signal   .eq(driving_signal)
+					m.d.comb += target_signal.eq(driving_signal)
 
 			# After the first element, all other entries should be created with Elif.
 			conditional = m.Elif
@@ -456,16 +456,16 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 		#
 		for interface in self._interfaces:
 			m.d.comb += [
-				shared.setup                     .connect(interface.setup),
-				shared.tokenizer                 .connect(interface.tokenizer),
+				shared.setup.connect(interface.setup),
+				shared.tokenizer.connect(interface.tokenizer),
 
-				interface.data_requested         .eq(shared.data_requested),
-				interface.status_requested       .eq(shared.status_requested),
-				shared.handshakes_in             .connect(interface.handshakes_in),
-				interface.active_config          .eq(shared.active_config),
+				interface.data_requested.eq(shared.data_requested),
+				interface.status_requested.eq(shared.status_requested),
+				shared.handshakes_in.connect(interface.handshakes_in),
+				interface.active_config.eq(shared.active_config),
 
-				shared.rx                        .connect(interface.rx),
-				interface.rx_ready_for_response  .eq(shared.rx_ready_for_response),
+				shared.rx.connect(interface.rx),
+				interface.rx_ready_for_response.eq(shared.rx_ready_for_response),
 			]
 
 		#
@@ -502,9 +502,9 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 		any_stall = functools.reduce(operator.__or__, (i.handshakes_out.stall for i in self._interfaces))
 
 		m.d.comb += [
-			shared.handshakes_out.ack    .eq(any_ack),
-			shared.handshakes_out.nak    .eq(any_nak),
-			shared.handshakes_out.stall  .eq(any_stall),
+			shared.handshakes_out.ack.eq(any_ack),
+			shared.handshakes_out.nak.eq(any_nak),
+			shared.handshakes_out.stall.eq(any_stall),
 		]
 
 		return m

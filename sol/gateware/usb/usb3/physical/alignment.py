@@ -58,8 +58,8 @@ class RxWordAligner(Elaboratable):
 		previous_ctrl = Signal.like(self.sink.ctrl)
 		with m.If(self.sink.valid):
 			m.d.ss += [
-				previous_data  .eq(self.sink.data),
-				previous_ctrl  .eq(self.sink.ctrl),
+				previous_data.eq(self.sink.data),
+				previous_ctrl.eq(self.sink.ctrl),
 			]
 
 		# Alignment register: stores how many words the data must be shifted by in order to
@@ -97,8 +97,8 @@ class RxWordAligner(Elaboratable):
 				with m.If(self.word_meets_alignment_criteria(shifted_data, shifted_ctrl)):
 					m.d.ss   += shift_to_apply.eq(i)
 					m.d.comb += [
-						changing_shift  .eq(shift_to_apply != i),
-						new_shift       .eq(i)
+						changing_shift.eq(shift_to_apply != i),
+						new_shift.eq(i)
 					]
 
 
@@ -110,19 +110,19 @@ class RxWordAligner(Elaboratable):
 
 		with m.If(changing_shift):
 			m.d.ss += [
-				self.source.data       .eq(shifted_data_slices[new_shift]),
-				self.source.ctrl       .eq(shifted_ctrl_slices[new_shift]),
-				self.source.valid      .eq(self.sink.valid),
+				self.source.data.eq(shifted_data_slices[new_shift]),
+				self.source.ctrl.eq(shifted_ctrl_slices[new_shift]),
+				self.source.valid.eq(self.sink.valid),
 
-				self.alignment_offset  .eq(new_shift),
+				self.alignment_offset.eq(new_shift),
 			]
 		with m.Else():
 			m.d.ss += [
-				self.source.data       .eq(shifted_data_slices[shift_to_apply]),
-				self.source.ctrl       .eq(shifted_ctrl_slices[shift_to_apply]),
-				self.source.valid      .eq(self.sink.valid),
+				self.source.data.eq(shifted_data_slices[shift_to_apply]),
+				self.source.ctrl.eq(shifted_ctrl_slices[shift_to_apply]),
+				self.source.valid.eq(self.sink.valid),
 
-				self.alignment_offset  .eq(shift_to_apply),
+				self.alignment_offset.eq(shift_to_apply),
 			]
 
 		return m

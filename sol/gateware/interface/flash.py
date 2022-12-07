@@ -53,8 +53,8 @@ class ECP5ConfigurationFlashInterface(Elaboratable):
 
 		# Connect up each of our other signals.
 		m.d.comb += [
-			self.bus.sdi   .eq(self.sdi),
-			self.sdo       .eq(self.bus.sdo)
+			self.bus.sdi.eq(self.sdi),
+			self.sdo.eq(self.bus.sdo)
 		]
 
 		if self.use_cs:

@@ -179,11 +179,11 @@ class DataPacketReceiver(Elaboratable):
 					m.d.ss += [
 						# Collect the fields from the DW...
 						header.crc16            .eq(sink.data[ 0:16]),
-						header.sequence_number  .eq(sink.data[16:19]),
-						header.dw3_reserved     .eq(sink.data[19:22]),
-						header.hub_depth        .eq(sink.data[22:25]),
-						header.delayed          .eq(sink.data[25]),
-						header.deferred         .eq(sink.data[26]),
+						header.sequence_number.eq(sink.data[16:19]),
+						header.dw3_reserved.eq(sink.data[19:22]),
+						header.hub_depth.eq(sink.data[22:25]),
+						header.delayed.eq(sink.data[25]),
+						header.deferred.eq(sink.data[26]),
 						header.crc5             .eq(sink.data[27:32]),
 
 						# ... and pipeline a CRC of the to the link control word.
@@ -205,14 +205,14 @@ class DataPacketReceiver(Elaboratable):
 				with m.Elif(stream_matches_symbols(sink, SDP, SDP, SDP, EPF)):
 					m.d.ss += [
 						# Update the header associated with the active packet.
-						self.header           .eq(header),
-						self.new_header       .eq(1),
+						self.header.eq(header),
+						self.new_header.eq(1),
 
 						# Read the data length from our header, in preparation to receive it.
-						data_bytes_remaining  .eq(header.dw1[16:]),
+						data_bytes_remaining.eq(header.dw1[16:]),
 
 						# Mark the next packet as the first packet in our stream.
-						source.first          .eq(1)
+						source.first.eq(1)
 					]
 
 					# Move to receiving data.
@@ -227,22 +227,22 @@ class DataPacketReceiver(Elaboratable):
 			with m.State('RECEIVE_PAYLOAD'):
 				m.d.comb += [
 					# Pass through most our data directly.
-					source.data         .eq(sink.data),
+					source.data.eq(sink.data),
 
 					# Manage each of our byte-valid bits directly.
-					source.valid[0]     .eq((data_bytes_remaining > 0) & sink.valid),
-					source.valid[1]     .eq((data_bytes_remaining > 1) & sink.valid),
-					source.valid[2]     .eq((data_bytes_remaining > 2) & sink.valid),
-					source.valid[3]     .eq((data_bytes_remaining > 3) & sink.valid),
+					source.valid[0].eq((data_bytes_remaining > 0) & sink.valid),
+					source.valid[1].eq((data_bytes_remaining > 1) & sink.valid),
+					source.valid[2].eq((data_bytes_remaining > 2) & sink.valid),
+					source.valid[3].eq((data_bytes_remaining > 3) & sink.valid),
 
 					# Advance our CRC according to how many bytes are currently valid.
-					crc32.advance_word  .eq(source.valid == 0b1111),
-					crc32.advance_3B    .eq(source.valid == 0b0111),
-					crc32.advance_2B    .eq(source.valid == 0b0011),
-					crc32.advance_1B    .eq(source.valid == 0b0001),
+					crc32.advance_word.eq(source.valid == 0b1111),
+					crc32.advance_3B.eq(source.valid == 0b0111),
+					crc32.advance_2B.eq(source.valid == 0b0011),
+					crc32.advance_1B.eq(source.valid == 0b0001),
 
 					# Mark this packet as the last one if we've a word or less remaining.
-					source.last         .eq(data_bytes_remaining <= 4)
+					source.last.eq(data_bytes_remaining <= 4)
 				]
 
 				with m.If(sink.valid):
@@ -261,8 +261,8 @@ class DataPacketReceiver(Elaboratable):
 					# future states. This is necessary for CRC validation when we have a data payload
 					# that's not evenly divisible into words; see the instantiation of ``previous_word``.
 					m.d.ss += [
-						previous_word   .eq(source.data),
-						previous_valid  .eq(source.valid)
+						previous_word.eq(source.data),
+						previous_valid.eq(source.valid)
 					]
 
 					# If we have another word to receive after this, decrement our count,
@@ -488,10 +488,10 @@ class DataPacketTransmitter(Elaboratable):
 
 				# Constantly latch in our data parameters until we get a new data packet.
 				m.d.ss += [
-					sequence_number  .eq(self.sequence_number),
-					endpoint_number  .eq(self.endpoint_number),
-					data_length      .eq(self.data_length),
-					direction        .eq(self.direction)
+					sequence_number.eq(self.sequence_number),
+					endpoint_number.eq(self.endpoint_number),
+					data_length.eq(self.data_length),
+					direction.eq(self.direction)
 				]
 
 				# Once our data goes valid, begin sending our data.
@@ -506,18 +506,18 @@ class DataPacketTransmitter(Elaboratable):
 			with m.State('SEND_HEADER'):
 				header = DataHeaderPacket()
 				m.d.comb += [
-					header_source.header    .eq(header),
-					header_source.valid     .eq(1),
+					header_source.header.eq(header),
+					header_source.valid.eq(1),
 
 					# We're sending a data packet from up to the host.
-					header.type             .eq(HeaderPacketType.DATA),
-					header.direction        .eq(direction),
-					header.device_address   .eq(self.address),
+					header.type.eq(HeaderPacketType.DATA),
+					header.direction.eq(direction),
+					header.device_address.eq(self.address),
 
 					# Fill in our input parameters...
-					header.data_sequence    .eq(sequence_number),
-					header.data_length      .eq(data_length),
-					header.endpoint_number  .eq(endpoint_number),
+					header.data_sequence.eq(sequence_number),
+					header.data_length.eq(data_length),
+					header.endpoint_number.eq(endpoint_number),
 				]
 
 				# Once our header is accepted, move on to passing through our payload.
@@ -539,18 +539,18 @@ class DataPacketTransmitter(Elaboratable):
 			with m.State('SEND_ZLP'):
 				header = DataHeaderPacket()
 				m.d.comb += [
-					header_source.header    .eq(header),
-					header_source.valid     .eq(1),
+					header_source.header.eq(header),
+					header_source.valid.eq(1),
 
 					# We're sending a data packet from up to the host.
-					header.type             .eq(HeaderPacketType.DATA),
-					header.direction        .eq(direction),
-					header.device_address   .eq(self.address),
+					header.type.eq(HeaderPacketType.DATA),
+					header.direction.eq(direction),
+					header.device_address.eq(self.address),
 
 					# Fill in our input parameters...
-					header.data_sequence    .eq(sequence_number),
-					header.data_length      .eq(0),
-					header.endpoint_number  .eq(endpoint_number),
+					header.data_sequence.eq(sequence_number),
+					header.data_length.eq(0),
+					header.endpoint_number.eq(endpoint_number),
 				]
 
 				# Once our header is accepted, we can move directly back to idle.

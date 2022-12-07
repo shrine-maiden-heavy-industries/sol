@@ -225,13 +225,13 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		#
 		m.domains.phy = ClockDomain(local = True, async_reset = True)
 		m.d.comb += [
-			phy.clk             .eq(self.clk),
+			phy.clk.eq(self.clk),
 			ClockSignal('phy')  .eq(phy.pclk),
 		]
 
 		m.submodules += ResetSynchronizer(phy.reset, domain = 'phy')
 		m.d.comb += [
-			phy.reset           .eq(self.reset),
+			phy.reset.eq(self.reset),
 		]
 
 
@@ -244,8 +244,8 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		else:
 			gear_index   = Signal(range(ratio))
 			gear_advance = Signal()
-			m.d.phy  += gear_index   .eq(gear_index + 1)
-			m.d.comb += gear_advance .eq(gear_index == ratio - 1)
+			m.d.phy  += gear_index.eq(gear_index + 1)
+			m.d.comb += gear_advance.eq(gear_index == ratio - 1)
 
 
 		#
@@ -271,14 +271,14 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		)
 
 		m.d.comb += [
-			phy.tx_data         .eq(geared_tx_data .word_select(gear_index, len(phy.tx_data))),
-			phy.tx_datak        .eq(geared_tx_datak.word_select(gear_index, len(phy.tx_datak)))
+			phy.tx_data.eq(geared_tx_data .word_select(gear_index, len(phy.tx_data))),
+			phy.tx_datak.eq(geared_tx_datak.word_select(gear_index, len(phy.tx_datak)))
 		]
 		# TxCompliance affects only the first transmitted symbol; keep that property after gearing.
 		with m.If(gear_index == 0):
-			m.d.comb += phy.tx_compliance   .eq(geared_tx_compliance)
+			m.d.comb += phy.tx_compliance.eq(geared_tx_compliance)
 		# TxOnesZeroes replaces all symbols on the transmit data bus.
-		m.d.comb += phy.tx_ones_zeroes  .eq(geared_tx_ones_zeroes)
+		m.d.comb += phy.tx_ones_zeroes.eq(geared_tx_ones_zeroes)
 
 		m.submodules.tx_fifo = tx_fifo = AsyncFIFOBuffered(
 			width = len(mac_tx_bus_signals),
@@ -287,10 +287,10 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 			r_domain = 'phy'
 		)
 		m.d.comb += [
-			tx_fifo.w_data      .eq(mac_tx_bus_signals),
-			tx_fifo.w_en        .eq(1),
-			phy_tx_bus_signals  .eq(tx_fifo.r_data),
-			tx_fifo.r_en        .eq(gear_advance)
+			tx_fifo.w_data.eq(mac_tx_bus_signals),
+			tx_fifo.w_en.eq(1),
+			phy_tx_bus_signals.eq(tx_fifo.r_data),
+			tx_fifo.r_en.eq(gear_advance)
 		]
 
 
@@ -323,12 +323,12 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		) for i in range(ratio))
 
 		m.d.comb += [
-			self.rx_data        .eq(Cat(geared_rx_data)),
-			self.rx_datak       .eq(Cat(geared_rx_datak))
+			self.rx_data.eq(Cat(geared_rx_data)),
+			self.rx_datak.eq(Cat(geared_rx_datak))
 		]
 		# RxValid is asserted if all of the symbols are valid.
 		with m.If(Cat(geared_rx_valid).any()):
-			m.d.comb += self.rx_valid       .eq(1)
+			m.d.comb += self.rx_valid.eq(1)
 		# Several different conditions can be indicated for different symbols transferred over
 		# RxData/RxDataK; when this happens, the condition with the highest priority is indicated.
 		# The complete priority order (lowest to highest) is:
@@ -342,13 +342,13 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		#   1. 8B/10B decode error
 		for rx_status_code in 0b011, 0b010, 0b001, 0b111, 0b110, 0b101, 0b100:
 			with m.If(Cat(geared_rx_status[i] == rx_status_code for i in range(ratio)).any()):
-				m.d.comb += self.rx_status      .eq(rx_status_code)
+				m.d.comb += self.rx_status.eq(rx_status_code)
 		# PhyStatus is asserted for one cycle once the PHY completes a request submitted by
 		# the MAC (and so will never be asserted for two adjacent cycles); or asserted continuously
 		# during certain power state transitions (in which case it is unimportant for which exact
 		# symbols it is asserted).
 		with m.If(Cat(geared_phy_status).any()):
-			m.d.comb += self.phy_status     .eq(1)
+			m.d.comb += self.phy_status.eq(1)
 
 		m.submodules.rx_fifo = rx_fifo = AsyncFIFOBuffered(
 			width = len(mac_rx_bus_signals),
@@ -359,11 +359,11 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		m.d.phy  += [
 			rx_fifo.w_data.word_select(gear_index, len(phy_rx_bus_signals))
 								.eq(phy_rx_bus_signals),
-			rx_fifo.w_en        .eq(gear_advance),
+			rx_fifo.w_en.eq(gear_advance),
 		]
 		m.d.comb += [
-			mac_rx_bus_signals  .eq(rx_fifo.r_data),
-			rx_fifo.r_en        .eq(1)
+			mac_rx_bus_signals.eq(rx_fifo.r_data),
+			rx_fifo.r_en.eq(1)
 		]
 
 
@@ -491,12 +491,12 @@ class GearedPIPEInterface(Elaboratable):
 			# Drive our I/O boundary clock with our PHY clock directly,
 			# and replace our geared clock with the relevant divided clock.
 			ClockSignal('ss_io')     .eq(self._io.pclk.i),
-			self.pclk                .eq(ClockSignal('ss')),
+			self.pclk.eq(ClockSignal('ss')),
 
 			# Drive our transmit clock with an DDR output driven from our full-rate clock.
 			# Re-creating the clock in this I/O cell ensures that our clock output is phase-aligned
 			# with the signals we create below. [UG471: pg128, 'Clock Forwarding']
-			self._io.tx_clk.o_clk    .eq(ClockSignal('ss_io_shifted')),
+			self._io.tx_clk.o_clk.eq(ClockSignal('ss_io_shifted')),
 			self._io.tx_clk.o0       .eq(1),
 			self._io.tx_clk.o1       .eq(0),
 		]
@@ -504,15 +504,15 @@ class GearedPIPEInterface(Elaboratable):
 		# Set up our geared I/O clocks.
 		m.d.comb += [
 			# Drive our transmit signals from our transmit-domain clocks...
-			self._io.tx_data.o_clk     .eq(ClockSignal('ss')),
-			self._io.tx_datak.o_clk    .eq(ClockSignal('ss')),
+			self._io.tx_data.o_clk.eq(ClockSignal('ss')),
+			self._io.tx_datak.o_clk.eq(ClockSignal('ss')),
 
 			# ... and drive our receive signals from our primary/receive domain clock.
-			self._io.rx_data.i_clk     .eq(ClockSignal('ss_shifted')),
-			self._io.rx_datak.i_clk    .eq(ClockSignal('ss_shifted')),
-			self._io.rx_valid.i_clk    .eq(ClockSignal('ss_shifted')),
-			self._io.phy_status.i_clk  .eq(ClockSignal('ss_shifted')),
-			self._io.rx_status.i_clk   .eq(ClockSignal('ss_shifted')),
+			self._io.rx_data.i_clk.eq(ClockSignal('ss_shifted')),
+			self._io.rx_datak.i_clk.eq(ClockSignal('ss_shifted')),
+			self._io.rx_valid.i_clk.eq(ClockSignal('ss_shifted')),
+			self._io.phy_status.i_clk.eq(ClockSignal('ss_shifted')),
+			self._io.rx_status.i_clk.eq(ClockSignal('ss_shifted')),
 		]
 
 		#
@@ -531,24 +531,24 @@ class GearedPIPEInterface(Elaboratable):
 		#
 		m.d.ss += [
 			# We'll capture rx_data bytes {0, 1} and _then_ {2, 3}.
-			self.rx_data [ 0:16]  .eq(self._io.rx_data.i0),
-			self.rx_data [16:32]  .eq(self._io.rx_data.i1),
-			self.rx_datak[ 0: 2]  .eq(self._io.rx_datak.i0),
-			self.rx_datak[ 2: 4]  .eq(self._io.rx_datak.i1),
+			self.rx_data [ 0:16].eq(self._io.rx_data.i0),
+			self.rx_data [16:32].eq(self._io.rx_data.i1),
+			self.rx_datak[ 0: 2].eq(self._io.rx_datak.i0),
+			self.rx_datak[ 2: 4].eq(self._io.rx_datak.i1),
 
 			# Split our RX_STATUS to march our other geared I/O.
-			self.phy_status[0]    .eq(self._io.phy_status.i0),
-			self.phy_status[1]    .eq(self._io.phy_status.i1),
+			self.phy_status[0].eq(self._io.phy_status.i0),
+			self.phy_status[1].eq(self._io.phy_status.i1),
 
-			self.rx_status[0]     .eq(self._io.rx_status.i0),
-			self.rx_status[1]     .eq(self._io.rx_status.i1),
+			self.rx_status[0].eq(self._io.rx_status.i0),
+			self.rx_status[1].eq(self._io.rx_status.i1),
 
 
 			# RX_VALID indicates that we have symbol lock; and thus should remain
 			# high throughout our whole stream. Accordingly, we can squish both values
 			# down into a single value without losing anything, as it should remain high
 			# once our signal has been trained.
-			self.rx_valid         .eq(self._io.rx_valid.i0 & self._io.rx_valid.i1),
+			self.rx_valid.eq(self._io.rx_valid.i0 & self._io.rx_valid.i1),
 		]
 
 

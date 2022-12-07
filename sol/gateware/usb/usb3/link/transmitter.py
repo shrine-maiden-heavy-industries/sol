@@ -84,14 +84,14 @@ class RawPacketTransmitter(Elaboratable):
 		# CRC-32, for payload packets
 		m.submodules.crc32 = crc32 = DataPacketPayloadCRC()
 		m.d.comb += [
-			crc32.data_input    .eq(self.data_sink.data),
+			crc32.data_input.eq(self.data_sink.data),
 
 			# Advance our CRC32 whenever we accept data from our sink,
 			# according to how many bytes are currently valid.
-			crc32.advance_word  .eq((data_sink.valid == 0b1111) & data_sink.ready),
-			crc32.advance_3B    .eq((data_sink.valid == 0b0111) & data_sink.ready),
-			crc32.advance_2B    .eq((data_sink.valid == 0b0011) & data_sink.ready),
-			crc32.advance_1B    .eq((data_sink.valid == 0b0001) & data_sink.ready),
+			crc32.advance_word.eq((data_sink.valid == 0b1111) & data_sink.ready),
+			crc32.advance_3B.eq((data_sink.valid == 0b0111) & data_sink.ready),
+			crc32.advance_2B.eq((data_sink.valid == 0b0011) & data_sink.ready),
+			crc32.advance_1B.eq((data_sink.valid == 0b0001) & data_sink.ready),
 		]
 
 
@@ -115,8 +115,8 @@ class RawPacketTransmitter(Elaboratable):
 			with m.State('IDLE'):
 				# Don't start our CRCs until we're sending the data section relevant to them.
 				m.d.comb += [
-					crc16.clear  .eq(1),
-					crc32.clear  .eq(1)
+					crc16.clear.eq(1),
+					crc32.clear.eq(1)
 				]
 
 				# Once we have a request, latch in our data, and start sending.
@@ -131,9 +131,9 @@ class RawPacketTransmitter(Elaboratable):
 				# Drive the bus with our header...
 				header_data, header_ctrl = get_word_for_symbols(SHP, SHP, SHP, EPF)
 				m.d.comb += [
-					source.valid  .eq(1),
-					source.data   .eq(header_data),
-					source.ctrl   .eq(header_ctrl),
+					source.valid.eq(1),
+					source.data.eq(header_data),
+					source.ctrl.eq(header_ctrl),
 				]
 
 				# ... and keep driving it until it's accepted.
@@ -149,9 +149,9 @@ class RawPacketTransmitter(Elaboratable):
 
 					# Drive the bus with the relevant data word...
 					m.d.comb += [
-						source.valid  .eq(1),
-						source.data   .eq(data_words[n]),
-						source.ctrl   .eq(0),
+						source.valid.eq(1),
+						source.data.eq(data_words[n]),
+						source.ctrl.eq(0),
 					]
 
 					# ... and keep driving it until it's accepted.
@@ -165,15 +165,15 @@ class RawPacketTransmitter(Elaboratable):
 
 				# Compose our data word
 				m.d.comb += [
-					source.valid        .eq(1),
-					source.data[ 0:16]  .eq(crc16.crc),
-					source.data[16:19]  .eq(header.sequence_number),
-					source.data[19:22]  .eq(header.dw3_reserved),
-					source.data[22:25]  .eq(header.hub_depth),
-					source.data[25]     .eq(header.delayed),
-					source.data[26]     .eq(header.deferred),
-					source.data[27:32]  .eq(compute_usb_crc5(source.data[16:27])),
-					source.ctrl         .eq(0)
+					source.valid.eq(1),
+					source.data[ 0:16].eq(crc16.crc),
+					source.data[16:19].eq(header.sequence_number),
+					source.data[19:22].eq(header.dw3_reserved),
+					source.data[22:25].eq(header.hub_depth),
+					source.data[25].eq(header.delayed),
+					source.data[26].eq(header.deferred),
+					source.data[27:32].eq(compute_usb_crc5(source.data[16:27])),
+					source.ctrl.eq(0)
 				]
 
 				# Once our final header packet word has been sent; decide what to do next.
@@ -199,9 +199,9 @@ class RawPacketTransmitter(Elaboratable):
 				# Send our start framing...
 				header_data, header_ctrl = get_word_for_symbols(SDP, SDP, SDP, EPF)
 				m.d.comb += [
-					source.valid  .eq(1),
-					source.data   .eq(header_data),
-					source.ctrl   .eq(header_ctrl),
+					source.valid.eq(1),
+					source.data.eq(header_data),
+					source.ctrl.eq(header_ctrl),
 				]
 
 				with m.If(source.ready):
@@ -225,8 +225,8 @@ class RawPacketTransmitter(Elaboratable):
 
 						# Capture the first word of our data-to-send into our pipeline...
 						m.d.ss   += [
-							pipelined_data_word   .eq(self.data_sink.data),
-							pipelined_data_valid  .eq(self.data_sink.valid)
+							pipelined_data_word.eq(self.data_sink.data),
+							pipelined_data_valid.eq(self.data_sink.valid)
 						]
 
 						# ... and accept that data, so our sender moves on to the next word.
@@ -248,8 +248,8 @@ class RawPacketTransmitter(Elaboratable):
 				# We'll always send our last pipelined value; so we can always have a valid 'last word'
 				# for our last word handler, which handles special cases like inserting our CRC.
 				m.d.comb += [
-					source.data         .eq(pipelined_data_word),
-					source.valid        .eq(1),
+					source.data.eq(pipelined_data_word),
+					source.valid.eq(1),
 				]
 
 				# Each time one of the words we're transmitting is accepted, we'll in turn accept a new
@@ -257,8 +257,8 @@ class RawPacketTransmitter(Elaboratable):
 				with m.If(source.ready):
 					m.d.comb += self.data_sink.ready.eq(1)
 					m.d.ss   += [
-						pipelined_data_word   .eq(self.data_sink.data),
-						pipelined_data_valid  .eq(self.data_sink.valid)
+						pipelined_data_word.eq(self.data_sink.data),
+						pipelined_data_valid.eq(self.data_sink.valid)
 					]
 
 					# When we're finally receiving our last packet, we're also finished computing our CRC.
@@ -275,8 +275,8 @@ class RawPacketTransmitter(Elaboratable):
 
 				# Send the final value captured from our pipeline; which we may modify slightly below.
 				m.d.comb += [
-					source.data         .eq(pipelined_data_word),
-					source.valid        .eq(1),
+					source.data.eq(pipelined_data_word),
+					source.valid.eq(1),
 				]
 
 				# If we didn't capture a full word, we'll need to stick pieces of our final CRC
@@ -314,30 +314,30 @@ class RawPacketTransmitter(Elaboratable):
 					# Send our full word.
 					with m.Case(0b1111):
 						m.d.comb += [
-							source.data  .eq(crc32.crc),
-							source.ctrl  .eq(0)
+							source.data.eq(crc32.crc),
+							source.ctrl.eq(0)
 						]
 
 					# If we had three valid bytes of data last time, we've sent one byte of CRC.
 					# Send the other three, followed by one END framing word.
 					with m.Case(0b0111):
 						m.d.comb += [
-							source.data  .eq(Cat(crc32.crc[8:32], END.value_const())),
-							source.ctrl  .eq(0b1000),
+							source.data.eq(Cat(crc32.crc[8:32], END.value_const())),
+							source.ctrl.eq(0b1000),
 						]
 
 					# Same, but for 2B valid and 2B CRC
 					with m.Case(0b0011):
 						m.d.comb += [
-							source.data  .eq(Cat(crc32.crc[16:32], END.value_const(repeat = 2))),
-							source.ctrl  .eq(0b1100),
+							source.data.eq(Cat(crc32.crc[16:32], END.value_const(repeat = 2))),
+							source.ctrl.eq(0b1100),
 						]
 
 					# Same, but for 1B valid and 3B CRC
 					with m.Case(0b0001):
 						m.d.comb += [
-							source.data  .eq(Cat(crc32.crc[24:32], END.value_const(repeat = 3))),
-							source.ctrl  .eq(0b1110),
+							source.data.eq(Cat(crc32.crc[24:32], END.value_const(repeat = 3))),
+							source.ctrl.eq(0b1110),
 						]
 
 
@@ -361,30 +361,30 @@ class RawPacketTransmitter(Elaboratable):
 					# Send our full word.
 					with m.Case(0b1111):
 						m.d.comb += [
-							source.data         .eq(framing_data),
-							source.ctrl         .eq(framing_ctrl),
+							source.data.eq(framing_data),
+							source.ctrl.eq(framing_ctrl),
 						]
 
 					# If we had three valid bytes of data last time, we've sent one byte of framing.
 					# Send the other three, followed by zeroes (logical IDL).
 					with m.Case(0b0111):
 						m.d.comb += [
-							source.data         .eq(framing_data[8:]),
-							source.ctrl         .eq(framing_ctrl[1:]),
+							source.data.eq(framing_data[8:]),
+							source.ctrl.eq(framing_ctrl[1:]),
 						]
 
 					# Same, but 2B frame and 2B IDL.
 					with m.Case(0b0011):
 						m.d.comb += [
-							source.data         .eq(framing_data[16:]),
-							source.ctrl         .eq(framing_ctrl[ 2:]),
+							source.data.eq(framing_data[16:]),
+							source.ctrl.eq(framing_ctrl[ 2:]),
 						]
 
 					# Same, but 1B frame and 3B IDL.
 					with m.Case(0b0001):
 						m.d.comb += [
-							source.data         .eq(framing_data[24:]),
-							source.ctrl         .eq(framing_ctrl[ 3:]),
+							source.data.eq(framing_data[24:]),
+							source.ctrl.eq(framing_ctrl[ 3:]),
 						]
 
 
@@ -400,9 +400,9 @@ class RawPacketTransmitter(Elaboratable):
 				# Send our abort framing...
 				framing_data, framing_ctrl = get_word_for_symbols(EDB, EDB, EDB, EPF)
 				m.d.comb += [
-					source.valid  .eq(1),
-					source.data   .eq(framing_data),
-					source.ctrl   .eq(framing_ctrl),
+					source.valid.eq(1),
+					source.data.eq(framing_data),
+					source.ctrl.eq(framing_ctrl),
 				]
 
 				# Once our framing is accepted, finish our payload.
@@ -577,18 +577,18 @@ class PacketTransmitter(Elaboratable):
 			# ... consume a credit, as we're going to be using up a receiver buffer, and
 			# schedule sending of that packet.
 			m.d.comb += [
-				credit_consumed  .eq(1),
-				enqueue_send     .eq(1)
+				credit_consumed.eq(1),
+				enqueue_send.eq(1)
 			]
 
 			# Assign the packet a sequence number, and capture it into the buffer for transmission.
 			# [USB3.0r1: 7.2.4.1.1]: 'A header packet that is re-transmitted shall maintain its
 			# originally assigned Header Sequence Number.'
 			m.d.ss += [
-				buffers[write_pointer]                  .eq(self.queue.header),
-				buffers[write_pointer].sequence_number  .eq(transmit_sequence_number),
-				write_pointer                           .eq(write_pointer + 1),
-				transmit_sequence_number                .eq(transmit_sequence_number + 1)
+				buffers[write_pointer].eq(self.queue.header),
+				buffers[write_pointer].sequence_number.eq(transmit_sequence_number),
+				write_pointer.eq(write_pointer + 1),
+				transmit_sequence_number.eq(transmit_sequence_number + 1)
 			]
 
 
@@ -597,9 +597,9 @@ class PacketTransmitter(Elaboratable):
 		#
 		m.submodules.packet_tx = packet_tx = RawPacketTransmitter()
 		m.d.comb += [
-			packet_tx.header     .eq(buffers[read_pointer]),
-			packet_tx.data_sink  .stream_eq(self.data_sink),
-			self.source          .stream_eq(packet_tx.source)
+			packet_tx.header.eq(buffers[read_pointer]),
+			packet_tx.data_sink.stream_eq(self.data_sink),
+			self.source.stream_eq(packet_tx.source)
 		]
 
 
@@ -666,8 +666,8 @@ class PacketTransmitter(Elaboratable):
 		# Core link command receiver.
 		m.submodules.lc_detector = lc_detector = LinkCommandDetector()
 		m.d.comb += [
-			lc_detector.sink            .tap(self.sink),
-			self.link_command_received  .eq(lc_detector.new_command)
+			lc_detector.sink.tap(self.sink),
+			self.link_command_received.eq(lc_detector.new_command)
 		]
 
 		# Keep track of which credit we expect to get back next.
@@ -705,10 +705,10 @@ class PacketTransmitter(Elaboratable):
 					# numbers, and indicate we're done with bringup.
 					with m.If(~self.bringup_complete):
 						m.d.ss += [
-							self.bringup_complete     .eq(1),
+							self.bringup_complete.eq(1),
 
-							next_expected_ack_number  .eq(lc_detector.subtype + 1),
-							transmit_sequence_number  .eq(lc_detector.subtype + 1)
+							next_expected_ack_number.eq(lc_detector.subtype + 1),
+							transmit_sequence_number.eq(lc_detector.subtype + 1)
 						]
 
 					# If the credit matches the sequence we're expecting, we can accept it!
@@ -751,8 +751,8 @@ class PacketTransmitter(Elaboratable):
 
 					# We don't handle LGO requests locally; so instead, we'll pass this back to the link layer.
 					m.d.comb += [
-						self.lgo_received  .eq(1),
-						self.lgo_target    .eq(lc_detector.subtype)
+						self.lgo_received.eq(1),
+						self.lgo_target.eq(lc_detector.subtype)
 					]
 
 
@@ -790,17 +790,17 @@ class PacketTransmitter(Elaboratable):
 		#
 		with m.If(~self.enable):
 			m.d.ss += [
-				self.bringup_complete     .eq(0),
+				self.bringup_complete.eq(0),
 
-				next_expected_credit      .eq(0),
-				credits_available         .eq(0),
+				next_expected_credit.eq(0),
+				credits_available.eq(0),
 
-				packets_to_send           .eq(0),
-				packets_awaiting_ack      .eq(0),
-				read_pointer              .eq(0),
-				write_pointer             .eq(0),
-				ack_pointer               .eq(0),
-				retry_pending             .eq(0),
+				packets_to_send.eq(0),
+				packets_awaiting_ack.eq(0),
+				read_pointer.eq(0),
+				write_pointer.eq(0),
+				ack_pointer.eq(0),
+				retry_pending.eq(0),
 			]
 
 
@@ -808,8 +808,8 @@ class PacketTransmitter(Elaboratable):
 		# Debug outputs.
 		#
 		m.d.comb += [
-			self.credits_available  .eq(credits_available),
-			self.packets_to_send    .eq(packets_to_send)
+			self.credits_available.eq(credits_available),
+			self.packets_to_send.eq(packets_to_send)
 		]
 
 

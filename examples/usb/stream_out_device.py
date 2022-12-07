@@ -89,8 +89,8 @@ class USBStreamOutDeviceExample(Elaboratable):
 		# Always stream our USB data directly onto our User I/O and LEDS.
 		with m.If(stream_ep.stream.valid):
 			m.d.usb += [
-				leds     .eq(stream_ep.stream.payload),
-				user_io  .eq(stream_ep.stream.payload),
+				leds.eq(stream_ep.stream.payload),
+				user_io.eq(stream_ep.stream.payload),
 			]
 
 		# Always accept data as it comes in.
@@ -99,8 +99,8 @@ class USBStreamOutDeviceExample(Elaboratable):
 
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
-			usb.connect          .eq(1),
-			usb.full_speed_only  .eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
+			usb.connect.eq(1),
+			usb.full_speed_only.eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
 

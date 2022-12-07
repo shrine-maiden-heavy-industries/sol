@@ -96,13 +96,13 @@ class USBStreamOutDeviceExample(Elaboratable):
 		stream_out = stream_out_ep.stream
 
 		m.d.comb += [
-			stream_in.payload           .eq(stream_out.payload),
-			stream_in.valid             .eq(stream_out.valid),
-			stream_in.first             .eq(stream_out.first),
-			stream_in.last              .eq(stream_out.last),
-			stream_out.ready            .eq(stream_in.ready),
+			stream_in.payload.eq(stream_out.payload),
+			stream_in.valid.eq(stream_out.valid),
+			stream_in.first.eq(stream_out.first),
+			stream_in.last.eq(stream_out.last),
+			stream_out.ready.eq(stream_in.ready),
 
-			usb.connect                 .eq(1)
+			usb.connect.eq(1)
 		]
 
 		return m

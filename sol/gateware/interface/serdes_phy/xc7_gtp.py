@@ -1005,8 +1005,8 @@ class XC7GTPSerDesPIPE(PIPEInterface, Elaboratable):
 		#
 		m.submodules.lfps_generator = lfps_generator = LFPSSquareWaveGenerator(25e6, 250e6)
 		m.d.comb += [
-			serdes.tx_gpio_en       .eq(lfps_generator.tx_gpio_en),
-			serdes.tx_gpio          .eq(lfps_generator.tx_gpio),
+			serdes.tx_gpio_en.eq(lfps_generator.tx_gpio_en),
+			serdes.tx_gpio.eq(lfps_generator.tx_gpio),
 		]
 
 
@@ -1014,25 +1014,25 @@ class XC7GTPSerDesPIPE(PIPEInterface, Elaboratable):
 		# PIPE interface signaling.
 		#
 		m.d.comb += [
-			qpll.reset              .eq(self.reset),
-			serdes.reset            .eq(self.reset),
-			self.pclk               .eq(serdes.pclk),
+			qpll.reset.eq(self.reset),
+			serdes.reset.eq(self.reset),
+			self.pclk.eq(serdes.pclk),
 
-			serdes.tx_elec_idle     .eq(self.tx_elec_idle),
-			serdes.rx_polarity      .eq(self.rx_polarity),
-			serdes.rx_eq_training   .eq(self.rx_eq_training),
-			serdes.rx_termination   .eq(self.rx_termination),
-			lfps_generator.generate .eq(self.tx_detrx_lpbk & self.tx_elec_idle),
+			serdes.tx_elec_idle.eq(self.tx_elec_idle),
+			serdes.rx_polarity.eq(self.rx_polarity),
+			serdes.rx_eq_training.eq(self.rx_eq_training),
+			serdes.rx_termination.eq(self.rx_termination),
+			lfps_generator.generate.eq(self.tx_detrx_lpbk & self.tx_elec_idle),
 
-			self.phy_status         .eq(~serdes.tx_ready),
-			self.rx_valid           .eq(serdes.rx_valid),
-			self.rx_status          .eq(serdes.rx_status),
-			self.rx_elec_idle       .eq(serdes.rx_elec_idle),
+			self.phy_status.eq(~serdes.tx_ready),
+			self.rx_valid.eq(serdes.rx_valid),
+			self.rx_status.eq(serdes.rx_status),
+			self.rx_elec_idle.eq(serdes.rx_elec_idle),
 
-			serdes.tx_data          .eq(self.tx_data),
-			serdes.tx_datak         .eq(self.tx_datak),
-			self.rx_data            .eq(serdes.rx_data),
-			self.rx_datak           .eq(serdes.rx_datak),
+			serdes.tx_data.eq(self.tx_data),
+			serdes.tx_datak.eq(self.tx_datak),
+			self.rx_data.eq(serdes.rx_data),
+			self.rx_datak.eq(serdes.rx_datak),
 		]
 
 		return m

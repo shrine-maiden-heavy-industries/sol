@@ -229,16 +229,16 @@ class ConstantStreamGenerator(Elaboratable):
 
 				# Keep ourselves at the beginning of the stream, but don't yet count.
 				m.d.sync += [
-					position_in_stream  .eq(start_position),
-					bytes_sent          .eq(0)
+					position_in_stream.eq(start_position),
+					bytes_sent.eq(0)
 				]
 				m.d.comb += [
-					rom_read_port.addr  .eq(start_position),
+					rom_read_port.addr.eq(start_position),
 				]
 
 				# Latch the maximum length.
 				m.d.sync += [
-					max_length          .eq(self.max_length),
+					max_length.eq(self.max_length),
 				]
 
 				# Once the user requests that we start, move to our stream being valid.
@@ -250,12 +250,12 @@ class ConstantStreamGenerator(Elaboratable):
 			with m.State('STREAMING'):
 				m.d.comb += [
 					# Always drive the stream from our current memory output...
-					rom_read_port.addr   .eq(position_in_stream),
-					self.stream.payload  .eq(rom_read_port.data),
+					rom_read_port.addr.eq(position_in_stream),
+					self.stream.payload.eq(rom_read_port.data),
 
 					## ... and base First and Last based on our current position in the stream.
-					self.stream.first    .eq(on_first_packet),
-					self.stream.last     .eq(on_last_packet)
+					self.stream.first.eq(on_first_packet),
+					self.stream.last.eq(on_last_packet)
 				]
 
 				# Our ``valid`` flag requires a bunch of special handling, since it could be
@@ -686,8 +686,8 @@ class StreamSerializer(Elaboratable):
 
 		m.d.comb += [
 			# Create first and last based on our stream position.
-			self.stream.first    .eq(on_first_packet & self.stream.valid),
-			self.stream.last     .eq(on_last_packet  & self.stream.valid)
+			self.stream.first.eq(on_first_packet & self.stream.valid),
+			self.stream.last.eq(on_last_packet  & self.stream.valid)
 		]
 
 

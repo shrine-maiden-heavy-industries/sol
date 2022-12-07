@@ -63,11 +63,11 @@ class PIPEPhyExample(Elaboratable):
 
 			m.d.comb += [
 				# ILA
-				self.serdes_rx    .eq(serdes.source.data),
-				self.ctrl         .eq(serdes.source.ctrl),
-				self.valid        .eq(serdes.source.valid),
-				self.rx_gpio      .eq(serdes.rx_gpio),
-				self.ila.trigger  .eq(~serdes.rx_gpio)
+				self.serdes_rx.eq(serdes.source.data),
+				self.ctrl.eq(serdes.source.ctrl),
+				self.valid.eq(serdes.source.valid),
+				self.rx_gpio.eq(serdes.rx_gpio),
+				self.ila.trigger.eq(~serdes.rx_gpio)
 			]
 
 		# Return our elaborated module.

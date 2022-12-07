@@ -58,16 +58,16 @@ class LEDRequestHandler(SuperSpeedRequestHandler):
 					# or not. If it was received incorrectly, we'll set the ``retry`` bit.
 					with m.If(interface.rx_complete | interface.rx_invalid):
 						m.d.comb += [
-							interface.handshakes_out.retry_required   .eq(interface.rx_invalid),
-							interface.handshakes_out.next_sequence    .eq(1),
-							interface.handshakes_out.send_ack         .eq(1)
+							interface.handshakes_out.retry_required.eq(interface.rx_invalid),
+							interface.handshakes_out.next_sequence.eq(1),
+							interface.handshakes_out.send_ack.eq(1)
 						]
 
 					# Once the receive is complete, respond with an ACK.
 					with m.If(interface.status_requested):
 						m.d.comb += [
-							interface.handshakes_out.next_sequence    .eq(1),
-							interface.handshakes_out.send_ack         .eq(1)
+							interface.handshakes_out.next_sequence.eq(1),
+							interface.handshakes_out.send_ack.eq(1)
 						]
 
 

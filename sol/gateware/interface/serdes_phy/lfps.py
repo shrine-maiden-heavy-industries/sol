@@ -107,8 +107,8 @@ class LFPSSquareWaveDetector(Elaboratable):
 		# time high, and thus the value we'll use for comparison.
 		with m.Elif(last_gpio):
 			m.d.pipe += [
-				total_time_high    .eq(current_time_high),
-				current_time_high  .eq(0)
+				total_time_high.eq(current_time_high),
+				current_time_high.eq(0)
 			]
 
 
@@ -139,8 +139,8 @@ class LFPSSquareWaveDetector(Elaboratable):
 		# time high, and thus the value we'll use for comparison.
 		with m.Elif(~last_gpio):
 			m.d.pipe += [
-				total_time_low    .eq(current_time_low),
-				current_time_low  .eq(0)
+				total_time_low.eq(current_time_low),
+				current_time_low.eq(0)
 			]
 
 
@@ -193,7 +193,7 @@ class LFPSSquareWaveGenerator(Elaboratable):
 		with m.If(self.generate):
 			m.d.comb += [
 				self.tx_gpio_en.eq(1),
-				self.tx_gpio   .eq(square_wave),
+				self.tx_gpio.eq(square_wave),
 			]
 
 		return m

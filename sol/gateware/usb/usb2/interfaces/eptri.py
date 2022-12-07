@@ -113,23 +113,23 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 
 			# We'll write to the active FIFO whenever the last received token is a SETUP
 			# token, and we have incoming data; and we'll always write the data received
-			fifo.w_en                .eq(token.is_setup & rx.valid & rx.next),
-			fifo.w_data              .eq(rx.payload),
+			fifo.w_en.eq(token.is_setup & rx.valid & rx.next),
+			fifo.w_data.eq(rx.payload),
 
 			# We'll advance the FIFO whenever our CPU reads from the data CSR;
 			# and we'll always read our data from the FIFO.
-			fifo.r_en                .eq(self.data.r_stb),
-			self.data.r_data         .eq(fifo.r_data),
+			fifo.r_en.eq(self.data.r_stb),
+			self.data.r_data.eq(fifo.r_data),
 
 			# Pass the FIFO status on to our CPU.
-			self.have.r_data         .eq(fifo.r_rdy),
+			self.have.r_data.eq(fifo.r_rdy),
 
 			# Always acknowledge SETUP packets as they arrive.
-			handshakes_out.ack       .eq(token.is_setup & interface.rx_ready_for_response),
+			handshakes_out.ack.eq(token.is_setup & interface.rx_ready_for_response),
 
 			# Trigger a SETUP interrupt as we ACK the setup packet, since that's also the point
 			# where we know we're done receiving data.
-			self.setup_received.stb  .eq(handshakes_out.ack)
+			self.setup_received.stb.eq(handshakes_out.ack)
 		]
 
 		#
@@ -141,8 +141,8 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 		m.d.comb += self._address.r_data.eq(interface.active_address)
 		with m.If(self._address.w_stb):
 			m.d.comb += [
-				interface.address_changed  .eq(1),
-				interface.new_address      .eq(self._address.w_data),
+				interface.address_changed.eq(1),
+				interface.new_address.eq(self._address.w_data),
 			]
 
 
@@ -270,8 +270,8 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 		m.d.comb += [
 			# Whenever the user DATA register is written to, add the relevant data to our FIFO.
-			fifo.w_en         .eq(self.data.w_stb),
-			fifo.w_data       .eq(self.data.w_data),
+			fifo.w_en.eq(self.data.w_stb),
+			fifo.w_data.eq(self.data.w_data),
 		]
 
 		# Keep track of the amount of data in our FIFO.
@@ -309,8 +309,8 @@ class InFIFOInterface(Peripheral, Elaboratable):
 		with m.If(self.reset.w_stb):
 			for i in range(16):
 				m.d.usb += [
-					endpoint_stalled[i]   .eq(0),
-					endpoint_data_pid[i]  .eq(0),
+					endpoint_stalled[i].eq(0),
+					endpoint_data_pid[i].eq(0),
 				]
 
 
@@ -323,8 +323,8 @@ class InFIFOInterface(Peripheral, Elaboratable):
 		# phase always carries a DATA1 PID.
 		with m.If(token.is_setup & token.new_token):
 			m.d.usb += [
-				endpoint_stalled[token.endpoint]   .eq(0),
-				endpoint_data_pid[token.endpoint]  .eq(1)
+				endpoint_stalled[token.endpoint].eq(0),
+				endpoint_data_pid[token.endpoint].eq(1)
 			]
 
 
@@ -332,8 +332,8 @@ class InFIFOInterface(Peripheral, Elaboratable):
 		# Status registers.
 		#
 		m.d.comb += [
-			self.have.r_data  .eq(fifo.r_rdy),
-			self.pid.r_data   .eq(endpoint_data_pid[self.epno.r_data])
+			self.have.r_data.eq(fifo.r_rdy),
+			self.pid.r_data.eq(endpoint_data_pid[self.epno.r_data])
 		]
 
 		#
@@ -426,8 +426,8 @@ class InFIFOInterface(Peripheral, Elaboratable):
 			# Send our response.
 			with m.State('SEND_ZLP'):
 				m.d.comb += [
-					tx.valid  .eq(1),
-					tx.last   .eq(1)
+					tx.valid.eq(1),
+					tx.last.eq(1)
 				]
 				m.d.comb += self._done_irq.stb.eq(1)
 				m.next = 'IDLE'
@@ -438,14 +438,14 @@ class InFIFOInterface(Peripheral, Elaboratable):
 				last_byte = (bytes_in_fifo == 1)
 
 				m.d.comb += [
-					tx.valid    .eq(1),
-					tx.last     .eq(last_byte),
+					tx.valid.eq(1),
+					tx.last.eq(last_byte),
 
 					# Drive our transmit data directly from our FIFO...
-					tx.payload  .eq(fifo.r_data),
+					tx.payload.eq(fifo.r_data),
 
 					# ... and advance our FIFO each time a data byte is transmitted.
-					fifo.r_en   .eq(tx.ready)
+					fifo.r_en.eq(tx.ready)
 				]
 
 				# After we've sent a byte, drop our first flag.
@@ -608,8 +608,8 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		# If we've just ACK'd a receive, clear our enable and un-prime the given endpoint.
 		with m.If(interface.handshakes_out.ack & token.is_out):
 			m.d.usb += [
-				self.enable.r_data                .eq(0),
-				endpoint_primed[token.endpoint]   .eq(0),
+				self.enable.r_data.eq(0),
+				endpoint_primed[token.endpoint].eq(0),
 			]
 
 		# Set the value of our endpoint `stall` based on our `stall` register...
@@ -625,8 +625,8 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		# phase always carries a DATA1 PID.
 		with m.If(token.is_setup & token.new_token):
 			m.d.usb += [
-				endpoint_stalled[token.endpoint]   .eq(0),
-				endpoint_data_pid[token.endpoint]  .eq(1)
+				endpoint_stalled[token.endpoint].eq(0),
+				endpoint_data_pid[token.endpoint].eq(1)
 			]
 
 		#
@@ -663,31 +663,31 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 
 		m.d.comb += [
 			# We'll write to the endpoint iff we've valid data, and we're allowed receive.
-			fifo.w_en         .eq(allow_receive & rx.valid & rx.next & ~is_redundant_packet),
-			fifo.w_data       .eq(rx.payload),
+			fifo.w_en.eq(allow_receive & rx.valid & rx.next & ~is_redundant_packet),
+			fifo.w_data.eq(rx.payload),
 
 			# We'll advance the FIFO whenever our CPU reads from the data CSR;
 			# and we'll always read our data from the FIFO.
-			fifo.r_en         .eq(self.data.r_stb),
-			self.data.r_data  .eq(fifo.r_data),
+			fifo.r_en.eq(self.data.r_stb),
+			self.data.r_data.eq(fifo.r_data),
 
 			# Pass the FIFO status on to our CPU.
-			self.have.r_data  .eq(fifo.r_rdy),
+			self.have.r_data.eq(fifo.r_rdy),
 
 			# If we've just finished an allowed receive, ACK.
-			handshakes_out.ack    .eq(ack_receive | ack_ping | ack_redundant_packet),
+			handshakes_out.ack.eq(ack_receive | ack_ping | ack_redundant_packet),
 
 			# Trigger our DONE interrupt once we ACK a received/allowed packet.
-			self._done_irq.stb    .eq(ack_receive),
+			self._done_irq.stb.eq(ack_receive),
 
 			# If we were stalled, stall.
-			handshakes_out.stall  .eq(stalled & interface.rx_ready_for_response),
+			handshakes_out.stall.eq(stalled & interface.rx_ready_for_response),
 
 			# If we're not ACK'ing or STALL'ing, NAK all packets.
-			handshakes_out.nak    .eq(nak_receive | nak_ping),
+			handshakes_out.nak.eq(nak_receive | nak_ping),
 
 			# Always indicate the current DATA PID in the PID register.
-			self.pid.r_data       .eq(endpoint_data_pid[self.epno.r_data])
+			self.pid.r_data.eq(endpoint_data_pid[self.epno.r_data])
 		]
 
 		# Whenever we capture data, update our associated endpoint number

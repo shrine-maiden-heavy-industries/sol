@@ -39,8 +39,8 @@ class ControlRequestHandler(USBRequestHandler):
 		# Accept the relevant value after the packet is ACK'd...
 		with m.If(self.interface.handshakes_in.ack):
 			m.d.comb += [
-				write_strobe      .eq(1),
-				new_value_signal  .eq(self.interface.setup.value[0:7])
+				write_strobe.eq(1),
+				new_value_signal.eq(self.interface.setup.value[0:7])
 			]
 
 			# ... and then return to idle.
@@ -59,9 +59,9 @@ class ControlRequestHandler(USBRequestHandler):
 
 		# Connect our transmitter up to the output stream...
 		m.d.comb += [
-			transmitter.stream          .attach(self.interface.tx),
+			transmitter.stream.attach(self.interface.tx),
 			Cat(transmitter.data[0:length]).eq(data),
-			transmitter.max_length      .eq(length)
+			transmitter.max_length.eq(length)
 		]
 
 		# ... trigger it to respond when data's requested...

@@ -183,13 +183,13 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		# we can just unconditionally connect these.
 		m.d.comb += [
 			# We'll only ever -write- data from our input stream...
-			buffer_write_ports[0].data   .eq(in_stream.payload),
-			buffer_write_ports[0].addr   .eq(write_fill_count >> 2),
-			buffer_write_ports[1].data   .eq(in_stream.payload),
-			buffer_write_ports[1].addr   .eq(write_fill_count >> 2),
+			buffer_write_ports[0].data.eq(in_stream.payload),
+			buffer_write_ports[0].addr.eq(write_fill_count >> 2),
+			buffer_write_ports[1].data.eq(in_stream.payload),
+			buffer_write_ports[1].addr.eq(write_fill_count >> 2),
 
 			# ... and we'll only ever -send- data from the Read buffer; in the SEND_PACKET state.
-			buffer_read.addr             .eq(send_position),
+			buffer_read.addr.eq(send_position),
 		]
 
 
@@ -223,8 +223,8 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 				# We can't yet send data; so we'll send an NRDY transaction packet.
 				with m.If(in_token_received):
-					m.d.comb += handshakes_out.send_nrdy  .eq(1)
-					m.d.ss   += erdy_required             .eq(1)
+					m.d.comb += handshakes_out.send_nrdy.eq(1)
+					m.d.ss   += erdy_required.eq(1)
 
 				# If we have valid data that will end our packet, we're no longer waiting for data.
 				# We'll now wait for the host to request data from us.
@@ -242,7 +242,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 							ping_pong_toggle.eq(~ping_pong_toggle),
 
 							# Mark our current stream as no longer having ended.
-							read_stream_ended  .eq(0)
+							read_stream_ended.eq(0)
 						]
 
 						# If we've already sent an NRDY token, we'll need to request an IN token
@@ -279,7 +279,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 					with m.If(read_fill_count):
 						m.next = 'SEND_PACKET'
 						m.d.ss += [
-							last_packet_was_zlp  .eq(0)
+							last_packet_was_zlp.eq(0)
 						]
 
 					# Otherwise, we entered a transmit path without any data in the buffer.
@@ -289,8 +289,8 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 						# ... and clear the need to follow up with one, since we've just sent a short packet.
 						m.d.ss += [
-							read_stream_ended    .eq(0),
-							last_packet_was_zlp  .eq(1)
+							read_stream_ended.eq(0),
+							last_packet_was_zlp.eq(1)
 						]
 
 						# We've now completed a packet send; so wait for it to be acknowledged.
@@ -303,16 +303,16 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 				m.d.comb += [
 					# Apply our general transfer information.
-					interface.tx_direction        .eq(USBDirection.IN),
-					interface.tx_sequence_number  .eq(sequence_number),
-					interface.tx_length           .eq(read_fill_count),
-					interface.tx_endpoint_number  .eq(self._endpoint_number),
+					interface.tx_direction.eq(USBDirection.IN),
+					interface.tx_sequence_number.eq(sequence_number),
+					interface.tx_length.eq(read_fill_count),
+					interface.tx_endpoint_number.eq(self._endpoint_number),
 				]
 
 				with m.If(~out_stream.valid.any() | out_stream.ready):
 					# Once we emitted a word of data for our receiver, move to the next word in our packet.
-					m.d.ss   += send_position     .eq(send_position + 1)
-					m.d.comb += buffer_read.addr  .eq(send_position + 1)
+					m.d.ss   += send_position.eq(send_position + 1)
+					m.d.comb += buffer_read.addr.eq(send_position + 1)
 
 					# We're on our last word whenever the next word would be contain the end of our data.
 					first_word = (send_position == 0)
@@ -321,11 +321,11 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 					m.d.ss += [
 						# Block RAM often has a large clock-to-dout delay; register the output to
 						# improve timings.
-						out_stream.payload        .eq(buffer_read.data),
+						out_stream.payload.eq(buffer_read.data),
 
 						# Let our transmitter know the packet boundaries.
-						out_stream.first          .eq(first_word),
-						out_stream.last           .eq(last_word),
+						out_stream.first.eq(first_word),
+						out_stream.last.eq(last_word),
 					]
 
 					# Figure out which bytes of our stream are valid. Normally; this is all of them,
@@ -368,7 +368,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 				m.d.ss   += out_stream.valid.eq(0)
 
 				# Reset our send-position for the next data packet.
-				m.d.ss   += send_position   .eq(0)
+				m.d.ss   += send_position.eq(0)
 				m.d.comb += buffer_read.addr.eq(0)
 
 				# In USB3, an ACK handshake can act as an ACK, an error indicator, and/or an IN token.
@@ -424,8 +424,8 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 								# ... and clear the need to follow up with one, since we've just sent a short packet.
 								m.d.ss += [
-									read_stream_ended    .eq(0),
-									last_packet_was_zlp  .eq(1)
+									read_stream_ended.eq(0),
+									last_packet_was_zlp.eq(1)
 								]
 
 							# Otherwise, we'll wait for an attempt to send data before we generate a ZLP.
@@ -440,16 +440,16 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 						packet_completing = in_stream.valid & (write_fill_count + 4 >= self._max_packet_size)
 						with m.Elif(~in_stream.ready | packet_completing):
 							m.d.comb += [
-								advance_sequence   .eq(1),
+								advance_sequence.eq(1),
 							]
 							m.d.ss += [
-								ping_pong_toggle   .eq(~ping_pong_toggle),
-								read_stream_ended  .eq(0),
+								ping_pong_toggle.eq(~ping_pong_toggle),
+								read_stream_ended.eq(0),
 							]
 
 							with m.If(is_in_token):
 								m.d.ss += [
-									last_packet_was_zlp  .eq(0)
+									last_packet_was_zlp.eq(0)
 								]
 								m.next = 'SEND_PACKET'
 

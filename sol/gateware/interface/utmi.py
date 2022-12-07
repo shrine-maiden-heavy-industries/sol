@@ -59,10 +59,10 @@ class UTMITransmitInterface(Record):
 		'''
 
 		return [
-			utmi_bus.tx_data   .eq(self.data),
-			utmi_bus.tx_valid  .eq(self.valid),
+			utmi_bus.tx_data.eq(self.data),
+			utmi_bus.tx_valid.eq(self.valid),
 
-			self.ready          .eq(utmi_bus.tx_ready),
+			self.ready.eq(utmi_bus.tx_ready),
 		]
 
 

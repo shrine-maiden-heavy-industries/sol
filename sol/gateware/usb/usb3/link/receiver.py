@@ -121,11 +121,11 @@ class RawHeaderPacketReceiver(Elaboratable):
 					m.d.ss += [
 						# Collect the fields from the DW...
 						packet.crc16            .eq(sink.data[ 0:16]),
-						packet.sequence_number  .eq(sink.data[16:19]),
-						packet.dw3_reserved     .eq(sink.data[19:22]),
-						packet.hub_depth        .eq(sink.data[22:25]),
-						packet.delayed          .eq(sink.data[25]),
-						packet.deferred         .eq(sink.data[26]),
+						packet.sequence_number.eq(sink.data[16:19]),
+						packet.dw3_reserved.eq(sink.data[19:22]),
+						packet.hub_depth.eq(sink.data[22:25]),
+						packet.delayed.eq(sink.data[25]),
+						packet.deferred.eq(sink.data[26]),
 						packet.crc5             .eq(sink.data[27:32]),
 
 						# ... and pipeline a CRC of the to the link control word.
@@ -155,8 +155,8 @@ class RawHeaderPacketReceiver(Elaboratable):
 				# We'll output our packet, and then return to IDLE.
 				with m.Else():
 					m.d.ss += [
-						self.new_packet  .eq(1),
-						self.packet      .eq(packet)
+						self.new_packet.eq(1),
+						self.packet.eq(packet)
 					]
 
 				m.next = 'WAIT_FOR_HPSTART'
@@ -461,20 +461,20 @@ class HeaderPacketReceiver(Elaboratable):
 		m.submodules.receiver = rx = RawHeaderPacketReceiver()
 		m.d.comb += [
 			# Our receiver passively monitors the data received for header packets.
-			rx.sink                   .tap(self.sink),
+			rx.sink.tap(self.sink),
 
 			# Ensure it's always up to date about what sequence numbers we expect.
-			rx.expected_sequence      .eq(expected_sequence_number),
+			rx.expected_sequence.eq(expected_sequence_number),
 
 			# If we ever get a bad header packet sequence, we're required to retrain
 			# the link [USB3.2r1: 7.2.4.1.5]. Pass the event through directly.
-			self.recovery_required    .eq(rx.bad_sequence & ~ignore_packets),
+			self.recovery_required.eq(rx.bad_sequence & ~ignore_packets),
 
 			# Notify the link layer when packets are received, for keeping track of our timers.
-			self.packet_received      .eq(rx.new_packet),
+			self.packet_received.eq(rx.new_packet),
 
 			# Notify the link layer if any bad packets are received; for diagnostics.
-			self.bad_packet_received  .eq(rx.bad_packet)
+			self.bad_packet_received.eq(rx.bad_packet)
 		]
 
 
@@ -482,18 +482,18 @@ class HeaderPacketReceiver(Elaboratable):
 		with m.If(rx.new_packet & ~ignore_packets):
 			m.d.ss += [
 				# Load our header packet into the next write buffer...
-				buffers[write_pointer]    .eq(rx.packet),
+				buffers[write_pointer].eq(rx.packet),
 
 				# ... advance to the next buffer and sequence number...
-				write_pointer             .eq(write_pointer + 1),
-				expected_sequence_number  .eq(expected_sequence_number + 1),
+				write_pointer.eq(write_pointer + 1),
+				expected_sequence_number.eq(expected_sequence_number + 1),
 			]
 			m.d.comb += [
 				# ... mark the buffer space as occupied by valid data ...
-				reserve_buffer            .eq(1),
+				reserve_buffer.eq(1),
 
 				# ... and queue an ACK for this packet.
-				enqueue_ack               .eq(1)
+				enqueue_ack.eq(1)
 			]
 
 
@@ -506,13 +506,13 @@ class HeaderPacketReceiver(Elaboratable):
 				# First, we'll need to schedule transmission of an LBAD, which notifies the other
 				# side that we received a bad packet; and that it'll need to transmit all unack'd
 				# header packets to us again.
-				lbad_pending    .eq(1),
+				lbad_pending.eq(1),
 
 				# Next, we'll need to make sure we don't receive packets out of sequence. This means
 				# we'll have to start ignoring packets until the other side responds to the LBAD.
 				# The other side respond with an Retry link command (LRTY) once it's safe for us to
 				# pay attention to packets again.
-				ignore_packets  .eq(1)
+				ignore_packets.eq(1)
 			]
 
 
@@ -527,10 +527,10 @@ class HeaderPacketReceiver(Elaboratable):
 		#
 		m.d.comb += [
 			# As long as we have at least one buffer filled, we have header packets pending.
-			self.queue.valid    .eq(buffers_filled > 0),
+			self.queue.valid.eq(buffers_filled > 0),
 
 			# Always provide the value of our oldest packet out to our consumer.
-			self.queue.header    .eq(buffers[read_pointer])
+			self.queue.header.eq(buffers[read_pointer])
 		]
 
 
@@ -543,10 +543,10 @@ class HeaderPacketReceiver(Elaboratable):
 
 			m.d.comb += [
 				# First, we'll free the buffer associated with the relevant packet...
-				release_buffer        .eq(1),
+				release_buffer.eq(1),
 
 				# ... and request that our link partner be notified of the new space.
-				enqueue_credit_issue  .eq(1)
+				enqueue_credit_issue.eq(1)
 			]
 
 
@@ -555,8 +555,8 @@ class HeaderPacketReceiver(Elaboratable):
 		#
 		m.submodules.lc_generator = lc_generator = LinkCommandGenerator()
 		m.d.comb += [
-			self.source             .stream_eq(lc_generator.source),
-			self.link_command_sent  .eq(lc_generator.done),
+			self.source.stream_eq(lc_generator.source),
+			self.link_command_sent.eq(lc_generator.done),
 		]
 
 
@@ -603,34 +603,34 @@ class HeaderPacketReceiver(Elaboratable):
 					m.d.ss += [
 						# -Resetting our pending ACKs to 1, so we perform an sequence number advertisement
 						#  when we're next enabled.
-						acks_to_send          .eq(1),
+						acks_to_send.eq(1),
 
 						# -Decreasing our next sequence number; so we maintain a continuity of sequence numbers
 						#  without counting the advertising one. This doesn't seem to be be strictly necessary
 						#  per the spec; but seem to make analyzers happier, so we'll go with it.
-						next_header_to_ack    .eq(next_header_to_ack - 1),
+						next_header_to_ack.eq(next_header_to_ack - 1),
 
 						# - Clearing all of our buffers.
-						read_pointer          .eq(0),
-						write_pointer         .eq(0),
-						buffers_filled        .eq(0),
+						read_pointer.eq(0),
+						write_pointer.eq(0),
+						buffers_filled.eq(0),
 
 						# - Preparing to re-issue all of our buffer credits.
-						next_credit_to_issue  .eq(0),
-						credits_to_issue      .eq(self._buffer_count),
+						next_credit_to_issue.eq(0),
+						credits_to_issue.eq(self._buffer_count),
 
 						# - Clear our pending events.
-						lrty_pending          .eq(0),
-						lbad_pending          .eq(0),
-						keepalive_pending     .eq(0),
-						ignore_packets        .eq(0)
+						lrty_pending.eq(0),
+						lbad_pending.eq(0),
+						keepalive_pending.eq(0),
+						ignore_packets.eq(0)
 					]
 
 					# If this is a USB Reset, also reset our sequences.
 					with m.If(self.usb_reset):
 						m.d.ss += [
-							expected_sequence_number  .eq(0),
-							next_header_to_ack        .eq(-1)
+							expected_sequence_number.eq(0),
+							next_header_to_ack.eq(-1)
 						]
 
 
@@ -640,17 +640,17 @@ class HeaderPacketReceiver(Elaboratable):
 
 				# Send an LGOOD command, acknowledging the last received packet header.
 				m.d.comb += [
-					lc_generator.generate      .eq(1),
-					lc_generator.command       .eq(LinkCommand.LGOOD),
-					lc_generator.subtype       .eq(next_header_to_ack)
+					lc_generator.generate.eq(1),
+					lc_generator.command.eq(LinkCommand.LGOOD),
+					lc_generator.subtype.eq(next_header_to_ack)
 				]
 
 				# Wait until our link command is done, and then move on.
 				with m.If(lc_generator.done):
 					# Move to the next header packet in the sequence, and decrease
 					# the number of outstanding ACKs.
-					m.d.comb += dequeue_ack         .eq(1)
-					m.d.ss   += next_header_to_ack  .eq(next_header_to_ack + 1)
+					m.d.comb += dequeue_ack.eq(1)
+					m.d.ss   += next_header_to_ack.eq(next_header_to_ack + 1)
 
 					# If this was the last ACK we had to send, move back to our dispatch state.
 					with m.If(acks_to_send == 1):
@@ -663,16 +663,16 @@ class HeaderPacketReceiver(Elaboratable):
 
 				# Send an LCRD command, indicating that we have a free buffer.
 				m.d.comb += [
-					lc_generator.generate      .eq(1),
-					lc_generator.command       .eq(LinkCommand.LCRD),
-					lc_generator.subtype       .eq(next_credit_to_issue)
+					lc_generator.generate.eq(1),
+					lc_generator.command.eq(LinkCommand.LCRD),
+					lc_generator.subtype.eq(next_credit_to_issue)
 				]
 
 				# Wait until our link command is done, and then move on.
 				with m.If(lc_generator.done):
 					# Move to the next credit...
-					m.d.comb += dequeue_credit_issue  .eq(1)
-					m.d.ss   += next_credit_to_issue  .eq(next_credit_to_issue + 1)
+					m.d.comb += dequeue_credit_issue.eq(1)
+					m.d.ss   += next_credit_to_issue.eq(next_credit_to_issue + 1)
 
 					# If this was the last credit we had to issue, move back to our dispatch state.
 					with m.If(credits_to_issue == 1):
@@ -682,8 +682,8 @@ class HeaderPacketReceiver(Elaboratable):
 			# SEND_LBAD -- we've received a bad header packet; we'll need to let the other side know.
 			with m.State('SEND_LBAD'):
 				m.d.comb += [
-					lc_generator.generate      .eq(1),
-					lc_generator.command       .eq(LinkCommand.LBAD),
+					lc_generator.generate.eq(1),
+					lc_generator.command.eq(LinkCommand.LBAD),
 				]
 
 				# Once we've sent the LBAD, we can mark is as no longer pending and return to our dispatch.
@@ -697,8 +697,8 @@ class HeaderPacketReceiver(Elaboratable):
 			# We'll do our transmitter a favor and do so.
 			with m.State('SEND_LRTY'):
 				m.d.comb += [
-					lc_generator.generate      .eq(1),
-					lc_generator.command       .eq(LinkCommand.LRTY)
+					lc_generator.generate.eq(1),
+					lc_generator.command.eq(LinkCommand.LRTY)
 				]
 
 				with m.If(lc_generator.done):
@@ -715,8 +715,8 @@ class HeaderPacketReceiver(Elaboratable):
 				command = LinkCommand.LDN if self._is_downstream_facing else LinkCommand.LUP
 
 				m.d.comb += [
-					lc_generator.generate      .eq(1),
-					lc_generator.command       .eq(command)
+					lc_generator.generate.eq(1),
+					lc_generator.command.eq(command)
 				]
 
 				# Once we've send the keepalive, we can mark is as no longer pending and return to our dispatch.
@@ -730,8 +730,8 @@ class HeaderPacketReceiver(Elaboratable):
 			# We'll send an LXU packet to inform the other side of the rejection.
 			with m.State('SEND_LXU'):
 				m.d.comb += [
-					lc_generator.generate      .eq(1),
-					lc_generator.command       .eq(LinkCommand.LXU)
+					lc_generator.generate.eq(1),
+					lc_generator.command.eq(LinkCommand.LXU)
 				]
 
 				with m.If(lc_generator.done):

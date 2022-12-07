@@ -65,7 +65,7 @@ class PHYResetController(Elaboratable):
 			# on every FPGA configuration.
 			with m.State('STARTUP_RESET'):
 				m.d.comb += [
-					self.reset        .eq(1),
+					self.reset.eq(1),
 				]
 
 				# Once we've extended past a reset time, we can move on.
@@ -173,8 +173,8 @@ class LinkPartnerDetector(Elaboratable):
 				# Per [TUSB1310A, 5.3.5.2], we should hold our detection control high until
 				# PhyStatus pulses high; when we'll get the results of our detection.
 				m.d.comb += [
-					self.power_state        .eq(2),
-					self.detection_control  .eq(1)
+					self.power_state.eq(2),
+					self.detection_control.eq(1)
 				]
 
 				# When we see PhyStatus strobe high, we know our result is in RxStatus.

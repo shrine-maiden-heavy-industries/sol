@@ -145,13 +145,13 @@ class TSBurstDetector(Elaboratable):
 						if self._include_config:
 							m.d.ss += [
 								# Bit 0 of Symbol 5 => Hot Reset
-								self.hot_reset           .eq(data.word_select(1, 8)[0]),
+								self.hot_reset.eq(data.word_select(1, 8)[0]),
 
 								# Bit 2 of Symbol 5 => Requests Loopback Mode
-								self.loopback_requested  .eq(data.word_select(1, 8)[2]),
+								self.loopback_requested.eq(data.word_select(1, 8)[2]),
 
 								# Bit 3 of Symbol 5 = > Requests we not use scrambling.
-								self.scrambling_disabled .eq(data.word_select(1, 8)[3]),
+								self.scrambling_disabled.eq(data.word_select(1, 8)[3]),
 							]
 
 					with m.Else():
@@ -169,8 +169,8 @@ class TSBurstDetector(Elaboratable):
 				# and indicate that we've completed a detection.
 				with m.If(consecutive_set_count + 1 == self._detection_threshold):
 					m.d.ss   += [
-						consecutive_set_count  .eq(0),
-						self.detected          .eq(1)
+						consecutive_set_count.eq(0),
+						self.detected.eq(1)
 					]
 
 				# Otherwise, increase the number of consecutive sets seen.
@@ -238,11 +238,11 @@ class TSEmitter(Elaboratable):
 				with m.State(f'WORD_{i}'):
 					is_last_word = (i + 1 == len(self._set_data))
 					m.d.comb += [
-						self.source.valid  .eq(1),
-						self.source.data   .eq(self._set_data[i]),
-						self.source.ctrl   .eq(self._first_word_ctrl if i == 0 else 0b0000),
-						self.source.first  .eq(i == 0),
-						self.source.last   .eq(is_last_word)
+						self.source.valid.eq(1),
+						self.source.data.eq(self._set_data[i]),
+						self.source.ctrl.eq(self._first_word_ctrl if i == 0 else 0b0000),
+						self.source.first.eq(i == 0),
+						self.source.last.eq(is_last_word)
 					]
 
 					# If this is the first data word of our Training Set, we'll optionally set
@@ -337,8 +337,8 @@ class TSTransceiver(Elaboratable):
 			sets_in_burst   = 32
 		)
 		m.d.comb += [
-			tseq_detector.sink  .tap(self.sink),
-			self.tseq_detected  .eq(tseq_detector.detected)
+			tseq_detector.sink.tap(self.sink),
+			self.tseq_detected.eq(tseq_detector.detected)
 		]
 
 		# TS1 detector
@@ -347,8 +347,8 @@ class TSTransceiver(Elaboratable):
 			sets_in_burst   = 8
 		)
 		m.d.comb += [
-			ts1_detector.sink   .tap(self.sink),
-			self.ts1_detected   .eq(ts1_detector.detected)
+			ts1_detector.sink.tap(self.sink),
+			self.ts1_detected.eq(ts1_detector.detected)
 		]
 
 		# Inverted TS1 detector
@@ -357,8 +357,8 @@ class TSTransceiver(Elaboratable):
 			sets_in_burst   = 8
 		)
 		m.d.comb += [
-			inverted_ts1_detector.sink  .tap(self.sink),
-			self.inverted_ts1_detected  .eq(inverted_ts1_detector.detected)
+			inverted_ts1_detector.sink.tap(self.sink),
+			self.inverted_ts1_detected.eq(inverted_ts1_detector.detected)
 		]
 
 		# TS2 detector
@@ -368,11 +368,11 @@ class TSTransceiver(Elaboratable):
 			include_config  = True
 		)
 		m.d.comb += [
-			ts2_detector.sink   .tap(self.sink),
-			self.ts2_detected   .eq(ts2_detector.detected),
+			ts2_detector.sink.tap(self.sink),
+			self.ts2_detected.eq(ts2_detector.detected),
 
-			self.hot_reset_requested    .eq(ts2_detector.hot_reset),
-			self.loopback_requested     .eq(ts2_detector.loopback_requested),
+			self.hot_reset_requested.eq(ts2_detector.hot_reset),
+			self.loopback_requested.eq(ts2_detector.loopback_requested),
 			self.no_scrambling_requested.eq(ts2_detector.scrambling_disabled),
 		]
 
@@ -389,8 +389,8 @@ class TSTransceiver(Elaboratable):
 		)
 		with m.If(self.send_tseq_burst):
 			m.d.comb += [
-				tseq_generator.start .eq(1),
-				self.source          .stream_eq(tseq_generator.source)
+				tseq_generator.start.eq(1),
+				self.source.stream_eq(tseq_generator.source)
 			]
 
 		# TS1 generator
@@ -400,8 +400,8 @@ class TSTransceiver(Elaboratable):
 		)
 		with m.If(self.send_ts1_burst):
 			m.d.comb += [
-				ts1_generator.start  .eq(1),
-				self.source          .stream_eq(ts1_generator.source)
+				ts1_generator.start.eq(1),
+				self.source.stream_eq(ts1_generator.source)
 			]
 
 		# TS2 Generator
@@ -412,11 +412,11 @@ class TSTransceiver(Elaboratable):
 		)
 		with m.If(self.send_ts2_burst):
 			m.d.comb += [
-				ts2_generator.start                 .eq(1),
-				ts2_generator.request_hot_reset     .eq(self.request_hot_reset),
-				ts2_generator.request_loopback      .eq(self.request_loopback),
-				ts2_generator.request_no_scrambling .eq(self.request_no_scrambling),
-				self.source                         .stream_eq(ts2_generator.source),
+				ts2_generator.start.eq(1),
+				ts2_generator.request_hot_reset.eq(self.request_hot_reset),
+				ts2_generator.request_loopback.eq(self.request_loopback),
+				ts2_generator.request_no_scrambling.eq(self.request_no_scrambling),
+				self.source.stream_eq(ts2_generator.source),
 			]
 
 		#
@@ -426,8 +426,8 @@ class TSTransceiver(Elaboratable):
 		ts1_transmitting  = ts1_generator.source.valid
 		ts2_transmitting  = ts2_generator.source.valid
 		m.d.comb += [
-			self.transmitting   .eq(tseq_transmitting   | ts1_transmitting   | ts2_transmitting),
-			self.burst_complete .eq(tseq_generator.done | ts1_generator.done | ts2_generator.done),
+			self.transmitting.eq(tseq_transmitting   | ts1_transmitting   | ts2_transmitting),
+			self.burst_complete.eq(tseq_generator.done | ts1_generator.done | ts2_generator.done),
 		]
 
 		return m

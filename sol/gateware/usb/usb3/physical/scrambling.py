@@ -209,15 +209,15 @@ class Scrambler(Elaboratable):
 		# Create our inner LFSR, which should advance whenever our input streams do.
 		m.submodules.lfsr = lfsr = ScramblerLFSR(initial_value = self._initial_value)
 		m.d.comb += [
-			lfsr.clear    .eq(self.clear | comma_present),
-			lfsr.advance  .eq(sink.valid & source.ready & ~self.hold)
+			lfsr.clear.eq(self.clear | comma_present),
+			lfsr.advance.eq(sink.valid & source.ready & ~self.hold)
 		]
 
 		# Pass through non-scrambled signals directly.
 		m.d.comb += [
-			source.ctrl   .eq(sink.ctrl),
-			source.valid  .eq(sink.valid),
-			sink.ready    .eq(source.ready)
+			source.ctrl.eq(sink.ctrl),
+			source.valid.eq(sink.valid),
+			sink.ready.eq(source.ready)
 		]
 
 

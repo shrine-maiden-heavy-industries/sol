@@ -63,8 +63,8 @@ class LinkCommandDetector(Elaboratable):
 		# Create our ``command_class`` and ``command_type`` aliases,
 		# which are always just slices of our command.
 		m.d.comb += [
-			self.command_class  .eq(self.command[2:4]),
-			self.command_type   .eq(self.command[0:2])
+			self.command_class.eq(self.command[2:4]),
+			self.command_type.eq(self.command[0:2])
 		]
 
 		# Assume we don't have a new command, unless asserted below.
@@ -107,11 +107,11 @@ class LinkCommandDetector(Elaboratable):
 						m.d.ss += [
 
 							# Copy our fields out of the link command...
-							self.command      .eq(link_command_word[7:11]),
-							self.subtype      .eq(link_command_word[0: 4]),
+							self.command.eq(link_command_word[7:11]),
+							self.subtype.eq(link_command_word[0: 4]),
 
 							# ... and indicate that we've received a new command
-							self.new_command  .eq(1)
+							self.new_command.eq(1)
 						]
 
 					# No matter the word's validity, we'll move back to waiting for a new command header;
@@ -180,8 +180,8 @@ class LinkCommandGenerator(Elaboratable):
 
 					# ... latch in our command and subtype ...
 					m.d.ss += [
-						latched_command  .eq(self.command),
-						latched_subtype  .eq(self.subtype)
+						latched_command.eq(self.command),
+						latched_subtype.eq(self.subtype)
 					]
 					m.next = 'TRANSMIT_HEADER'
 
@@ -191,9 +191,9 @@ class LinkCommandGenerator(Elaboratable):
 				# Drive the bus with our header...
 				header_data, header_ctrl = get_word_for_symbols(SLC, SLC, SLC, EPF)
 				m.d.comb += [
-					self.source.valid  .eq(1),
-					self.source.data   .eq(header_data),
-					self.source.ctrl   .eq(header_ctrl),
+					self.source.valid.eq(1),
+					self.source.data.eq(header_data),
+					self.source.ctrl.eq(header_ctrl),
 				]
 
 				# ... and keep driving it until it's accepted.
@@ -208,16 +208,16 @@ class LinkCommandGenerator(Elaboratable):
 				# Drive our command onto the bus...
 				m.d.comb += [
 					# First, build our core command...
-					link_command[ 0: 4]      .eq(latched_subtype),
-					link_command[ 4: 7]      .eq(0),  # Reserved.
-					link_command[ 7:11]      .eq(latched_command),
-					link_command[11:16]      .eq(compute_usb_crc5(link_command[0:11])),
+					link_command[ 0: 4].eq(latched_subtype),
+					link_command[ 4: 7].eq(0),  # Reserved.
+					link_command[ 7:11].eq(latched_command),
+					link_command[11:16].eq(compute_usb_crc5(link_command[0:11])),
 
 					# ... and then duplicate it as a command onto the output.
-					self.source.valid        .eq(1),
-					self.source.data[ 0:16]  .eq(link_command),
-					self.source.data[16:32]  .eq(link_command),
-					self.source.ctrl         .eq(0)
+					self.source.valid.eq(1),
+					self.source.data[ 0:16].eq(link_command),
+					self.source.data[16:32].eq(link_command),
+					self.source.ctrl.eq(0)
 				]
 
 				# ... and keep driving it until it's accepted.

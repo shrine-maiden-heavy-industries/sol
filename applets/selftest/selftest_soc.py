@@ -49,8 +49,8 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		# ... and update them on each register write.
 		with m.If(self._output.w_stb):
 			m.d.sync += [
-				self._output.r_data  .eq(self._output.w_data),
-				leds                 .eq(self._output.w_data),
+				self._output.r_data.eq(self._output.w_data),
+				leds.eq(self._output.w_data),
 			]
 
 		return m
@@ -90,15 +90,15 @@ class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 
 		# Connect up the window.
 		m.d.comb += [
-			ulpi_reg_window.ulpi_data_in  .eq(target_ulpi.data.i),
-			ulpi_reg_window.ulpi_dir      .eq(target_ulpi.dir.i),
-			ulpi_reg_window.ulpi_next     .eq(target_ulpi.nxt.i),
+			ulpi_reg_window.ulpi_data_in.eq(target_ulpi.data.i),
+			ulpi_reg_window.ulpi_dir.eq(target_ulpi.dir.i),
+			ulpi_reg_window.ulpi_next.eq(target_ulpi.nxt.i),
 
-			target_ulpi.clk               .eq(ClockSignal('usb')),
-			target_ulpi.rst               .eq(ResetSignal('usb')),
-			target_ulpi.stp               .eq(ulpi_reg_window.ulpi_stop),
-			target_ulpi.data.o            .eq(ulpi_reg_window.ulpi_data_out),
-			target_ulpi.data.oe           .eq(~target_ulpi.dir.i)
+			target_ulpi.clk.eq(ClockSignal('usb')),
+			target_ulpi.rst.eq(ResetSignal('usb')),
+			target_ulpi.stp.eq(ulpi_reg_window.ulpi_stop),
+			target_ulpi.data.o.eq(ulpi_reg_window.ulpi_data_out),
+			target_ulpi.data.oe.eq(~target_ulpi.dir.i)
 		]
 
 		#
@@ -163,11 +163,11 @@ class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 
 		# Hook up our PSRAM.
 		m.d.comb += [
-			ram_bus.reset          .eq(0),
-			psram.single_page      .eq(0),
-			psram.perform_write    .eq(0),
-			psram.register_space   .eq(1),
-			psram.final_word       .eq(1),
+			ram_bus.reset.eq(0),
+			psram.single_page.eq(0),
+			psram.perform_write.eq(0),
+			psram.register_space.eq(1),
+			psram.final_word.eq(1),
 		]
 
 		#
@@ -248,8 +248,8 @@ class SelftestCore(Elaboratable):
 		# ... and connect up its UART.
 		uart_io  = platform.request('uart', 0)
 		m.d.comb += [
-			uart_io.tx         .eq(self.uart.tx),
-			self.uart.rx       .eq(uart_io.rx),
+			uart_io.tx.eq(self.uart.tx),
+			self.uart.rx.eq(uart_io.rx),
 		]
 
 		if hasattr(uart_io.tx, 'oe'):

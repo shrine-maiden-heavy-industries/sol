@@ -428,10 +428,10 @@ class DataPacketPayloadCRC(Elaboratable):
 
 		# Convert from our intermediary 'running CRC' format into the correct CRC32 outputs.
 		m.d.comb += [
-			self.crc          .eq(~crc[::-1]),
-			self.next_crc_3B  .eq(~next_crc_3B[::-1]),
-			self.next_crc_2B  .eq(~next_crc_2B[::-1]),
-			self.next_crc_1B  .eq(~next_crc_1B[::-1])
+			self.crc.eq(~crc[::-1]),
+			self.next_crc_3B.eq(~next_crc_3B[::-1]),
+			self.next_crc_2B.eq(~next_crc_2B[::-1]),
+			self.next_crc_1B.eq(~next_crc_1B[::-1])
 		]
 
 		return m

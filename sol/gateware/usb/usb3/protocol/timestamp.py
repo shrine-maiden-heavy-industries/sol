@@ -51,9 +51,9 @@ class TimestampPacketReceiver(Elaboratable):
 			# ... and extract its fields.
 			packet = self.header_sink.header
 			m.d.ss += [
-				self.update_received       .eq(1),
-				self.bus_interval_counter  .eq(packet.dw0[ 5:19]),
-				self.delta                 .eq(packet.dw0[19:32])
+				self.update_received.eq(1),
+				self.bus_interval_counter.eq(packet.dw0[ 5:19]),
+				self.delta.eq(packet.dw0[19:32])
 			]
 		with m.Else():
 			m.d.ss += self.update_received.eq(0)

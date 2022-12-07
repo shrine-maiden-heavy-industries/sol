@@ -55,8 +55,8 @@ class StandardRequestHandler(Elaboratable):
 				m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
 
 			m.d.comb += [
-				write_strobe      .eq(1),
-				new_value_signal  .eq(self.interface.setup.value[0:7])
+				write_strobe.eq(1),
+				new_value_signal.eq(self.interface.setup.value[0:7])
 			]
 
 			# ... and then return to idle.
@@ -85,13 +85,13 @@ class StandardRequestHandler(Elaboratable):
 		# Provide our output stream with our simple word.
 		tx_valid = Signal(4)
 		m.d.comb += [
-			self.interface.tx.valid   .eq(tx_valid),
+			self.interface.tx.valid.eq(tx_valid),
 
-			self.interface.tx.first   .eq(1),
-			self.interface.tx.last    .eq(1),
+			self.interface.tx.first.eq(1),
+			self.interface.tx.last.eq(1),
 
-			self.interface.tx.data    .eq(data),
-			self.interface.tx_length  .eq(length)
+			self.interface.tx.data.eq(data),
+			self.interface.tx_length.eq(length)
 		]
 
 		# When data is requested, start sending.
@@ -132,8 +132,8 @@ class StandardRequestHandler(Elaboratable):
 			stream_type = SuperSpeedStreamInterface
 		)
 		m.d.comb += [
-			get_descriptor_handler.value  .eq(setup.value),
-			get_descriptor_handler.length .eq(setup.length),
+			get_descriptor_handler.value.eq(setup.value),
+			get_descriptor_handler.length.eq(setup.length),
 		]
 
 
@@ -192,15 +192,15 @@ class StandardRequestHandler(Elaboratable):
 				# GET_DESCRIPTOR -- The host is asking for a USB descriptor -- for us to 'self describe'.
 				with m.State('GET_DESCRIPTOR'):
 					m.d.comb += [
-						interface.tx                    .stream_eq(get_descriptor_handler.tx),
-						interface.tx_length             .eq(get_descriptor_handler.tx_length),
+						interface.tx.stream_eq(get_descriptor_handler.tx),
+						interface.tx_length.eq(get_descriptor_handler.tx_length),
 
-						handshake_generator.send_stall  .eq(get_descriptor_handler.stall)
+						handshake_generator.send_stall.eq(get_descriptor_handler.stall)
 					]
 
 					# Respond to our data stage with a descriptor...
 					with m.If(interface.data_requested):
-						m.d.comb += get_descriptor_handler.start  .eq(1),
+						m.d.comb += get_descriptor_handler.start.eq(1),
 
 					# ... and ACK our status stage.
 					with m.If(interface.status_requested):

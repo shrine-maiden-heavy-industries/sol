@@ -45,8 +45,8 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		# ... and update them on each register write.
 		with m.If(self._output.w_stb):
 			m.d.sync += [
-				self._output.r_data  .eq(self._output.w_data),
-				leds                 .eq(self._output.w_data),
+				self._output.r_data.eq(self._output.w_data),
+				leds.eq(self._output.w_data),
 			]
 
 		return m
@@ -90,8 +90,8 @@ class SolCPUExample(Elaboratable):
 		# Connect up our UART.
 		uart_io = platform.request('uart', 0)
 		m.d.comb += [
-			uart_io.tx         .eq(self.uart_pins.tx),
-			self.uart_pins.rx  .eq(uart_io.rx)
+			uart_io.tx.eq(self.uart_pins.tx),
+			self.uart_pins.rx.eq(uart_io.rx)
 		]
 
 		return m

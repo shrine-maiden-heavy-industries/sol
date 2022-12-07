@@ -38,9 +38,9 @@ class DebugControllerFlashBridge(Elaboratable):
 
 		m.submodules += spi_flash_passthrough
 		m.d.comb += [
-			spi_flash_passthrough.sck   .eq(board_spi.sck),
-			spi_flash_passthrough.sdi   .eq(board_spi.sdi),
-			flash_sdo                   .eq(spi_flash_passthrough.sdo),
+			spi_flash_passthrough.sck.eq(board_spi.sck),
+			spi_flash_passthrough.sdi.eq(board_spi.sdi),
+			flash_sdo.eq(spi_flash_passthrough.sdo),
 		]
 
 		#
@@ -57,10 +57,10 @@ class DebugControllerFlashBridge(Elaboratable):
 
 		# Connect our register interface to our board SPI.
 		m.d.comb += [
-			spi_registers.spi.sck .eq(spi.sck),
-			spi_registers.spi.sdi .eq(spi.sdi),
-			gateware_sdo          .eq(spi_registers.spi.sdo),
-			spi_registers.spi.cs  .eq(spi.cs)
+			spi_registers.spi.sck.eq(spi.sck),
+			spi_registers.spi.sdi.eq(spi.sdi),
+			gateware_sdo.eq(spi_registers.spi.sdo),
+			spi_registers.spi.cs.eq(spi.cs)
 		]
 
 		return m

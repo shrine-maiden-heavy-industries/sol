@@ -63,8 +63,8 @@ class USB3ProtocolLayer(Elaboratable):
 		hp_mux.add_producer(lmp_handler.header_source)
 
 		m.d.comb += [
-			lmp_handler.usb_reset     .eq(link.in_reset),
-			lmp_handler.link_ready    .eq(link.ready),
+			lmp_handler.usb_reset.eq(link.in_reset),
+			lmp_handler.link_ready.eq(link.ready),
 		]
 
 		#
@@ -108,22 +108,22 @@ class USB3ProtocolLayer(Elaboratable):
 		endpoint_interface = self.endpoint_interface
 		m.d.comb += [
 			# Rx interface.
-			endpoint_interface.rx           .tap(link.data_source),
-			endpoint_interface.rx_header    .eq(link.data_header_from_host),
-			endpoint_interface.rx_complete  .eq(link.data_source_complete),
-			endpoint_interface.rx_invalid   .eq(link.data_source_invalid),
+			endpoint_interface.rx.tap(link.data_source),
+			endpoint_interface.rx_header.eq(link.data_header_from_host),
+			endpoint_interface.rx_complete.eq(link.data_source_complete),
+			endpoint_interface.rx_invalid.eq(link.data_source_invalid),
 
 			# Tx interface.
-			link.data_sink                  .stream_eq(endpoint_interface.tx),
-			link.data_sink_send_zlp         .eq(endpoint_interface.tx_zlp),
-			link.data_sink_length           .eq(endpoint_interface.tx_length),
-			link.data_sink_endpoint_number  .eq(endpoint_interface.tx_endpoint_number),
-			link.data_sink_sequence_number  .eq(endpoint_interface.tx_sequence_number),
-			link.data_sink_direction        .eq(endpoint_interface.tx_direction),
+			link.data_sink.stream_eq(endpoint_interface.tx),
+			link.data_sink_send_zlp.eq(endpoint_interface.tx_zlp),
+			link.data_sink_length.eq(endpoint_interface.tx_length),
+			link.data_sink_endpoint_number.eq(endpoint_interface.tx_endpoint_number),
+			link.data_sink_sequence_number.eq(endpoint_interface.tx_sequence_number),
+			link.data_sink_direction.eq(endpoint_interface.tx_direction),
 
 			# Handshake exchange interface.
-			tp_generator.interface          .connect(endpoint_interface.handshakes_out),
-			tp_receiver.interface           .connect(endpoint_interface.handshakes_in)
+			tp_generator.interface.connect(endpoint_interface.handshakes_out),
+			tp_receiver.interface.connect(endpoint_interface.handshakes_in)
 		]
 
 

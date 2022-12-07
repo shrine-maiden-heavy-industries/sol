@@ -77,8 +77,8 @@ class StandardRequestHandler(ControlRequestHandler):
 		# Handler for Get Descriptor requests; responds with our various fixed descriptors.
 		m.submodules.get_descriptor = get_descriptor_handler = descriptor_handler_type(self.descriptors)
 		m.d.comb += [
-			get_descriptor_handler.value  .eq(setup.value),
-			get_descriptor_handler.length .eq(setup.length),
+			get_descriptor_handler.value.eq(setup.value),
+			get_descriptor_handler.length.eq(setup.length),
 		]
 
 		# Handler for various small-constant-response requests (GET_CONFIGURATION, GET_STATUS).
@@ -97,10 +97,10 @@ class StandardRequestHandler(ControlRequestHandler):
 
 					m.d.usb += [
 						# Start at the beginning of our next / fresh GET_DESCRIPTOR request.
-						get_descriptor_handler.start_position  .eq(0),
+						get_descriptor_handler.start_position.eq(0),
 
 						# Always start our responses with DATA1 pids, per [USB 2.0: 8.5.3].
-						self.interface.tx_data_pid             .eq(1)
+						self.interface.tx_data_pid.eq(1)
 					]
 
 					# If we've received a new setup packet, handle it.
@@ -152,8 +152,8 @@ class StandardRequestHandler(ControlRequestHandler):
 					expecting_ack = Signal()
 
 					m.d.comb += [
-						get_descriptor_handler.tx  .attach(tx),
-						handshake_generator.stall  .eq(get_descriptor_handler.stall)
+						get_descriptor_handler.tx.attach(tx),
+						handshake_generator.stall.eq(get_descriptor_handler.stall)
 					]
 
 					# Respond to our data stage with a descriptor...
@@ -173,13 +173,13 @@ class StandardRequestHandler(ControlRequestHandler):
 
 							# We've received an ACK; so mark the section we've sent of the descriptor as
 							# received, and move forward...
-							get_descriptor_handler.start_position  .eq(next_start_position),
+							get_descriptor_handler.start_position.eq(next_start_position),
 
 							# ... and toggle our data PID.
-							self.interface.tx_data_pid             .eq(~self.interface.tx_data_pid),
+							self.interface.tx_data_pid.eq(~self.interface.tx_data_pid),
 
 							# We've got the ACK we expected.
-							expecting_ack                          .eq(0),
+							expecting_ack.eq(0),
 						]
 
 					# ... and ACK our status stage.

@@ -83,9 +83,9 @@ class HeaderQueue(Record):
 	def header_eq(self, other):
 		''' Connects a producer (self) up to a consumer. '''
 		return [
-			self.valid   .eq(other.valid),
-			self.header  .eq(other.header),
-			other.ready  .eq(self.ready)
+			self.valid.eq(other.valid),
+			self.header.eq(other.header),
+			other.ready.eq(self.ready)
 		]
 
 
@@ -150,8 +150,8 @@ class HeaderQueueDemultiplexer(Elaboratable):
 		# Share the ``valid`` signal and header itself with every consumer.
 		for consumer in self._consumers:
 			m.d.comb += [
-				consumer.valid   .eq(self.sink.valid),
-				consumer.header  .eq(self.sink.header),
+				consumer.valid.eq(self.sink.valid),
+				consumer.header.eq(self.sink.header),
 			]
 
 		# OR together all of the ``ready`` signals to produce our multiplex'd ready.

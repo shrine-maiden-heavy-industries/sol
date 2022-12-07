@@ -115,15 +115,15 @@ class SPIDeviceInterface(Elaboratable):
 		# (and latch in the next word to be sent).
 		with m.If(self.word_accepted):
 			m.d.sync += [
-				self.word_in       .eq(current_rx),
-				self.word_complete .eq(1)
+				self.word_in.eq(current_rx),
+				self.word_complete.eq(1)
 			]
 		with m.Else():
 			m.d.sync += self.word_complete.eq(0)
 
 		# De-assert our control signals unless explicitly asserted.
 		m.d.sync += [
-			self.word_accepted .eq(0),
+			self.word_accepted.eq(0),
 		]
 
 		# If the chip is selected, process our I/O:
@@ -134,8 +134,8 @@ class SPIDeviceInterface(Elaboratable):
 			# Shift in data on each sample edge.
 			with m.If(sample_edge):
 				m.d.sync += [
-					bit_count    .eq(bit_count + 1),
-					is_first_bit .eq(0)
+					bit_count.eq(bit_count + 1),
+					is_first_bit.eq(0)
 				]
 
 				if self.msb_first:
@@ -146,8 +146,8 @@ class SPIDeviceInterface(Elaboratable):
 				# If we're just completing a word, handle I/O.
 				with m.If(bit_count + 1 == self.word_size):
 					m.d.sync += [
-						self.word_accepted .eq(1),
-						current_tx         .eq(self.word_out)
+						self.word_accepted.eq(1),
+						current_tx.eq(self.word_out)
 					]
 
 
@@ -160,9 +160,9 @@ class SPIDeviceInterface(Elaboratable):
 
 		with m.Else():
 			m.d.sync += [
-				current_tx   .eq(self.word_out),
-				bit_count    .eq(0),
-				is_first_bit .eq(1)
+				current_tx.eq(self.word_out),
+				bit_count.eq(0),
+				is_first_bit.eq(1)
 			]
 
 		return m
@@ -356,8 +356,8 @@ class SPICommandInterface(Elaboratable):
 
 		with m.FSM() as fsm:
 			m.d.comb += [
-				self.idle     .eq(fsm.ongoing('IDLE')),
-				self.stalled  .eq(fsm.ongoing('STALL')),
+				self.idle.eq(fsm.ongoing('IDLE')),
+				self.stalled.eq(fsm.ongoing('STALL')),
 			]
 
 			# STALL: entered when we can't accept new bits -- either when
@@ -389,16 +389,16 @@ class SPICommandInterface(Elaboratable):
 				with m.If(bit_count < self.command_size):
 					with m.If(sample_edge):
 						m.d.sync += [
-							bit_count       .eq(bit_count + 1),
-							current_command .eq(Cat(spi.sdi, current_command[:-1]))
+							bit_count.eq(bit_count + 1),
+							current_command.eq(Cat(spi.sdi, current_command[:-1]))
 						]
 
 				# ... and then pass that command out to our controller.
 				with m.Else():
 					m.d.sync += [
-						bit_count          .eq(0),
-						self.command_ready .eq(1),
-						self.command       .eq(current_command)
+						bit_count.eq(0),
+						self.command_ready.eq(1),
+						self.command.eq(current_command)
 					]
 					m.next = 'PROCESSING'
 
@@ -427,16 +427,16 @@ class SPICommandInterface(Elaboratable):
 				with m.If(bit_count < self.word_size):
 					with m.If(sample_edge):
 						m.d.sync += [
-							bit_count    .eq(bit_count + 1),
-							current_word .eq(Cat(spi.sdi, current_word[:-1]))
+							bit_count.eq(bit_count + 1),
+							current_word.eq(Cat(spi.sdi, current_word[:-1]))
 						]
 
 				# ... and then output that word on our bus.
 				with m.Else():
 					m.d.sync += [
-						bit_count          .eq(0),
-						self.word_complete .eq(1),
-						self.word_received .eq(current_word)
+						bit_count.eq(0),
+						self.word_complete.eq(1),
+						self.word_received.eq(current_word)
 					]
 
 					# Stay in the stall state until CS is de-asserted.
@@ -675,9 +675,9 @@ class SPIRegisterInterface(Elaboratable):
 
 		# Connect up our SPI transceiver submodule.
 		m.d.comb += [
-			self.interface.spi  .connect(self.spi),
-			self.idle           .eq(self.interface.idle),
-			self.stalled        .eq(self.interface.stalled)
+			self.interface.spi.connect(self.spi),
+			self.idle.eq(self.interface.idle),
+			self.stalled.eq(self.interface.stalled)
 		]
 
 
@@ -691,7 +691,7 @@ class SPIRegisterInterface(Elaboratable):
 		# Split the command into our 'write' and 'address' signals.
 		m.d.comb += [
 			self._is_write.eq(self.interface.command[-1]),
-			self._address .eq(self.interface.command[0:-1])
+			self._address.eq(self.interface.command[0:-1])
 		]
 
 		# Create the control/write logic for each of our registers.
@@ -815,8 +815,8 @@ class SPIMultiplexer(Elaboratable):
 		# Connect each of our shared inputs.
 		for bus in self.multiplexed_busses:
 			m.d.comb += [
-				bus.sck .eq(self.shared_lines.sck),
-				bus.sdi .eq(self.shared_lines.sdi)
+				bus.sck.eq(self.shared_lines.sck),
+				bus.sdi.eq(self.shared_lines.sdi)
 			]
 
 

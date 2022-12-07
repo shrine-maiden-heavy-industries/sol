@@ -134,13 +134,13 @@ class GatewarePHY(Elaboratable):
 		# signal. Otherwise, we'll pretend ``vbus_valid`` is always true, for compatibility.
 		if hasattr(self._io, 'vbus_valid'):
 			m.d.comb += [
-				self.vbus_valid   .eq(self._io.vbus_valid),
-				self.session_end  .eq(~self._io.vbus_valid)
+				self.vbus_valid.eq(self._io.vbus_valid),
+				self.session_end.eq(~self._io.vbus_valid)
 			]
 		else:
 			m.d.comb += [
-				self.vbus_valid   .eq(1),
-				self.session_end  .eq(0)
+				self.vbus_valid.eq(1),
+				self.session_end.eq(0)
 			]
 
 
@@ -171,17 +171,17 @@ class GatewarePHY(Elaboratable):
 			m.d.comb += [
 
 				# UTMI Transmit data.
-				transmitter.i_data_payload  .eq(self.tx_data),
-				transmitter.i_oe            .eq(self.tx_valid),
-				self.tx_ready               .eq(transmitter.o_data_strobe),
+				transmitter.i_data_payload.eq(self.tx_data),
+				transmitter.i_oe.eq(self.tx_valid),
+				self.tx_ready.eq(transmitter.o_data_strobe),
 
 				# USB output.
-				self._io.d_p.o   .eq(transmitter.o_usbp),
-				self._io.d_n.o   .eq(transmitter.o_usbn),
+				self._io.d_p.o.eq(transmitter.o_usbp),
+				self._io.d_n.o.eq(transmitter.o_usbn),
 
 				# USB tri-state control.
-				self._io.d_p.oe  .eq(transmitter.o_oe),
-				self._io.d_n.oe  .eq(transmitter.o_oe),
+				self._io.d_p.oe.eq(transmitter.o_oe),
+				self._io.d_n.oe.eq(transmitter.o_oe),
 			]
 
 
@@ -190,20 +190,20 @@ class GatewarePHY(Elaboratable):
 		with m.Elif(in_non_encoding_mode):
 			m.d.comb += [
 				# USB output.
-				self._io.d_p.o   .eq(self.tx_data),
-				self._io.d_n.o   .eq(~self.tx_data),
+				self._io.d_p.o.eq(self.tx_data),
+				self._io.d_n.o.eq(~self.tx_data),
 
 				# USB tri-state control.
-				self._io.d_p.oe  .eq(self.tx_valid),
-				self._io.d_n.oe  .eq(self.tx_valid)
+				self._io.d_p.oe.eq(self.tx_valid),
+				self._io.d_n.oe.eq(self.tx_valid)
 			]
 
 		# When we're in other modes (non-driving or invalid), we'll not output at all.
 		# This block does nothing, as signals default to zero, but it makes the intention obvious.
 		with m.Else():
 			m.d.comb += [
-				self._io.d_p.oe  .eq(0),
-				self._io.d_n.oe  .eq(0),
+				self._io.d_p.oe.eq(0),
+				self._io.d_n.oe.eq(0),
 			]
 
 		# Generate our USB clock strobe, which should pulse at 12MHz.
@@ -219,15 +219,15 @@ class GatewarePHY(Elaboratable):
 
 			# We'll listen for packets on D+ and D- _whenever we're not transmitting._.
 			# (If we listen while we're transmitting, we'll hear our own packets.)
-			receiver.i_usbp  .eq(self._io.d_p & ~transmitter.o_oe),
-			receiver.i_usbn  .eq(self._io.d_n & ~transmitter.o_oe),
+			receiver.i_usbp.eq(self._io.d_p & ~transmitter.o_oe),
+			receiver.i_usbn.eq(self._io.d_n & ~transmitter.o_oe),
 
-			self.rx_data     .eq(receiver.o_data_payload),
-			self.rx_valid    .eq(receiver.o_data_strobe & receiver.o_pkt_in_progress),
-			self.rx_active   .eq(receiver.o_pkt_in_progress),
-			self.rx_error    .eq(receiver.o_receive_error)
+			self.rx_data.eq(receiver.o_data_payload),
+			self.rx_valid.eq(receiver.o_data_strobe & receiver.o_pkt_in_progress),
+			self.rx_active.eq(receiver.o_pkt_in_progress),
+			self.rx_error.eq(receiver.o_receive_error)
 		]
-		m.d.usb += self.rx_complete .eq(receiver.o_pkt_end)
+		m.d.usb += self.rx_complete.eq(receiver.o_pkt_end)
 
 
 		return m

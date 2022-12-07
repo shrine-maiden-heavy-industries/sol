@@ -86,8 +86,8 @@ class EptriDeviceExample(Elaboratable):
 		# Connect up our UART.
 		uart_io = platform.request('uart', 0)
 		m.d.comb += [
-			uart_io.tx         .eq(self.uart_pins.tx),
-			self.uart_pins.rx  .eq(uart_io.rx)
+			uart_io.tx.eq(self.uart_pins.tx),
+			self.uart_pins.rx.eq(uart_io.rx)
 		]
 
 		# Create our USB device.

@@ -127,18 +127,18 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		power_passthrough = platform.request('pass_through_vbus')
 		with m.If(power_test_reg[0:2] == 1):
 			m.d.comb += [
-				power_a_port       .eq(1),
-				power_passthrough  .eq(0)
+				power_a_port.eq(1),
+				power_passthrough.eq(0)
 			]
 		with m.Elif(power_test_reg[0:2] == 2):
 			m.d.comb += [
-				power_a_port       .eq(0),
-				power_passthrough  .eq(1)
+				power_a_port.eq(0),
+				power_passthrough.eq(1)
 			]
 		with m.Else():
 			m.d.comb += [
-				power_a_port       .eq(0),
-				power_passthrough  .eq(0)
+				power_a_port.eq(0),
+				power_passthrough.eq(0)
 			]
 
 		#
@@ -159,9 +159,9 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		for i in range(2):
 			pin = platform.request('user_io', i)
 			m.d.comb += [
-				pin.oe         .eq(user_io_dir[i]),
-				user_io_in[i]  .eq(pin.i),
-				pin.o          .eq(user_io_out[i])
+				pin.oe.eq(user_io_dir[i]),
+				user_io_in[i].eq(pin.i),
+				pin.o.eq(user_io_out[i])
 			]
 
 
@@ -196,13 +196,13 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		# Hook up our PSRAM.
 		m.d.comb += [
-			ram_bus.reset          .eq(0),
-			psram.single_page      .eq(0),
-			psram.perform_write    .eq(0),
-			psram.register_space   .eq(1),
-			psram.final_word       .eq(1),
-			psram.start_transfer   .eq(psram_address_changed),
-			psram.address          .eq(psram_address),
+			ram_bus.reset.eq(0),
+			psram.single_page.eq(0),
+			psram.perform_write.eq(0),
+			psram.register_space.eq(1),
+			psram.final_word.eq(1),
+			psram.start_transfer.eq(psram_address_changed),
+			psram.address.eq(psram_address),
 		]
 
 		return m
@@ -217,15 +217,15 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		m.submodules  += ulpi_reg_window
 
 		m.d.comb += [
-			ulpi_reg_window.ulpi_data_in  .eq(target_ulpi.data.i),
-			ulpi_reg_window.ulpi_dir      .eq(target_ulpi.dir.i),
-			ulpi_reg_window.ulpi_next     .eq(target_ulpi.nxt.i),
+			ulpi_reg_window.ulpi_data_in.eq(target_ulpi.data.i),
+			ulpi_reg_window.ulpi_dir.eq(target_ulpi.dir.i),
+			ulpi_reg_window.ulpi_next.eq(target_ulpi.nxt.i),
 
-			target_ulpi.clk      .eq(ClockSignal('usb')),
-			target_ulpi.rst      .eq(ResetSignal('usb')),
-			target_ulpi.stp      .eq(ulpi_reg_window.ulpi_stop),
-			target_ulpi.data.o   .eq(ulpi_reg_window.ulpi_data_out),
-			target_ulpi.data.oe  .eq(~target_ulpi.dir.i)
+			target_ulpi.clk.eq(ClockSignal('usb')),
+			target_ulpi.rst.eq(ResetSignal('usb')),
+			target_ulpi.stp.eq(ulpi_reg_window.ulpi_stop),
+			target_ulpi.data.o.eq(ulpi_reg_window.ulpi_data_out),
+			target_ulpi.data.oe.eq(~target_ulpi.dir.i)
 		]
 
 		register_address_change  = Signal()
