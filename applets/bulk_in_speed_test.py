@@ -138,7 +138,8 @@ else:
 	MAX_BULK_PACKET_SIZE = 64 if os.getenv('SOL_FULL_ONLY') else 512
 
 	class USBInSpeedTestDevice(Elaboratable):
-		''' Simple device that sends data to the host as fast as hardware can.
+		'''
+		Simple device that sends data to the host as fast as hardware can.
 
 		This is paired with the python code below to evaluate SOL throughput.
 		'''

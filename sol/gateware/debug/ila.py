@@ -819,8 +819,11 @@ class ILAFrontend(metaclass = ABCMeta):
 
 	def __init__(self, ila):
 		'''
-		Parameters:
-			ila -- The ILA object to work with.
+		Parameters
+		----------
+		ila
+			The ILA object to work with.
+
 		'''
 		self.ila = ila
 		self.samples = None
@@ -885,15 +888,23 @@ class ILAFrontend(metaclass = ABCMeta):
 
 
 	def emit_vcd(self, filename, *, gtkw_filename = None, add_clock = True):
-		''' Emits a VCD file containing the ILA samples.
+		'''
+		Emits a VCD file containing the ILA samples.
 
-		Parameters:
-			filename      -- The filename to write to, or '-' to write to stdout.
-			gtkw_filename -- If provided, a gtkwave save file will be generated that
-							 automatically displays all of the relevant signals in the
-							 order provided to the ILA.
-			add_clock     -- If true or not provided, adds a replica of the ILA's sample
-							 clock to make change points easier to see.
+		Parameters
+		----------
+		filename
+			The filename to write to, or '-' to write to stdout.
+
+		gtkw_filename
+			If provided, a gtkwave save file will be generated that
+			automatically displays all of the relevant signals in the
+			order provided to the ILA.
+
+		add_clock
+			If true or not provided, adds a replica of the ILA's sample
+			clock to make change points easier to see.
+
 		'''
 
 		# Select the file-like object we're working with.
@@ -945,12 +956,21 @@ class ILAFrontend(metaclass = ABCMeta):
 
 
 	def _emit_gtkw(self, filename, dump_filename, *, add_clock = True):
-		''' Emits a GTKWave save file to accompany a generated VCD.
+		'''
+		Emits a GTKWave save file to accompany a generated VCD.
 
-		Parameters:
-			filename      -- The filename to write the GTKW save to.
-			dump_filename -- The filename of the VCD that should be opened with this save.
-			add_clock     -- True iff a clock signal should be added to the GTKW save.
+		Parameters
+		----------
+		filename
+			The filename to write the GTKW save to.
+
+		dump_filename
+			The filename of the VCD that should be opened with this save.
+
+		add_clock
+			True iff a clock signal should be added to the GTKW save.
+
+
 		'''
 
 		with open(filename, 'w') as f:

@@ -25,7 +25,8 @@ from .memory                 import WishboneRAM, WishboneROM
 
 
 class SimpleSoC(CPUSoC, Elaboratable):
-	''' Class used for building simple, example system-on-a-chip architectures.
+	'''
+	Class used for building simple, example system-on-a-chip architectures.
 
 	Intended to facilitate demonstrations (and very simple USB devices) by providing
 	a wrapper that can be updated as the Torii-based-SoC landscape changes. Hopefully,
@@ -46,8 +47,11 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 	def __init__(self, clock_frequency = int(60e6)):
 		'''
-		Parameters:
-			clock_frequency -- The frequency of our `sync` domain, in MHz.
+		Parameters
+		----------
+		clock_frequency
+			The frequency of our `sync` domain, in MHz.
+
 		'''
 
 		self.clk_freq = clock_frequency
@@ -84,13 +88,22 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def add_rom(self, data, size, addr = 0, is_main_rom = True):
-		''' Creates a simple ROM and adds it to the design.
+		'''
+		Creates a simple ROM and adds it to the design.
 
-		Parameters:
-			data -- The data to fill the relevant ROM.
-			size -- The size for the rom that should be created.
-			addr -- The address at which the ROM should reside.
-			'''
+		Parameters
+		----------
+		data
+			The data to fill the relevant ROM.
+
+		size
+			The size for the rom that should be created.
+
+		addr
+			The address at which the ROM should reside.
+
+
+		'''
 
 		# Figure out how many address bits we'll need to address the given memory size.
 		addr_width = (size - 1).bit_length()
@@ -103,11 +116,17 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def add_ram(self, size: int, addr: int = None, is_main_mem: bool = True):
-		''' Creates a simple RAM and adds it to our design.
+		'''
+		Creates a simple RAM and adds it to our design.
 
-		Parameters:
-			size -- The size of the RAM, in bytes. Will be rounded up to the nearest power of two.
-			addr -- The address at which to place the RAM.
+		Parameters
+		----------
+		size
+			The size of the RAM, in bytes. Will be rounded up to the nearest power of two.
+
+		addr
+			The address at which to place the RAM.
+
 		'''
 
 		# Figure out how many address bits we'll need to address the given memory size.
@@ -122,7 +141,8 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def add_peripheral(self, p, *, as_submodule = True, **kwargs):
-		''' Adds a peripheral to the SoC.
+		'''
+		Adds a peripheral to the SoC.
 
 		For now, this is identical to adding a peripheral to the SoC's wishbone bus.
 		For convenience, returns the peripheral provided.
@@ -158,7 +178,8 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def add_bios_and_peripherals(self, uart_pins, uart_baud_rate = 115200, fixed_addresses = False):
-		''' Adds a simple BIOS that allows loading firmware, and the requisite peripherals.
+		'''
+		Adds a simple BIOS that allows loading firmware, and the requisite peripherals.
 
 		Automatically adds the following peripherals:
 			self.uart      -- An AsyncSerialPeripheral used for serial I/O.
@@ -166,9 +187,14 @@ class SimpleSoC(CPUSoC, Elaboratable):
 			self.rom       -- A ROM memory used for the BIOS.
 			self.ram       -- The RAM used by the BIOS; not typically the program RAM.
 
-		Parameters:
-			uart_pins      -- The UARTResource to be used for UART communications; or an equivalent record.
-			uart_baud_rate -- The baud rate to be used by the BIOS' uart.
+		Parameters
+		----------
+		uart_pins
+			The UARTResource to be used for UART communications; or an equivalent record.
+
+		uart_baud_rate
+			The baud rate to be used by the BIOS' uart.
+
 		'''
 
 		self._build_bios = True
@@ -245,13 +271,17 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def resources(self, omit_bios_mem = True):
-		''' Creates an iterator over each of the device's addressable resources.
+		'''
+		Creates an iterator over each of the device's addressable resources.
 
 		Yields (resource, address, size) for each resource.
 
-		Parameters:
-			omit_bios_mem -- If True, BIOS-related memories are skipped when generating our
-							 resource listings. This hides BIOS resources from the application.
+		Parameters
+		----------
+		omit_bios_mem
+			If True, BIOS-related memories are skipped when generating our
+			resource listings. This hides BIOS resources from the application.
+
 		'''
 
 		# Grab the memory map for this SoC...
@@ -275,14 +305,20 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def build(self, name = None, build_dir = 'build'):
-		''' Builds any internal artifacts necessary to create our CPU.
+		'''
+		Builds any internal artifacts necessary to create our CPU.
 
 		This is usually used for e.g. building our BIOS.
 
-		Parmeters:
-			name      -- The name for the SoC design.
-			build_dir -- The directory where our main Torii build is being performed.
-						 We'll build in a subdirectory of it.
+		Parameters
+		----------
+		name
+			The name for the SoC design.
+
+		build_dir
+			The directory where our main Torii build is being performed.
+			We'll build in a subdirectory of it.
+
 		'''
 
 		# If we're building a BIOS, let our superclass build a BIOS for us.
@@ -295,11 +331,17 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def _range_for_peripheral(self, target_peripheral):
-		''' Returns size information for the given peripheral.
+		'''
+		Returns size information for the given peripheral.
 
-		Returns:
-			addr, size -- if the given size is known; or
-			None, None    if not
+		Returns
+		-------
+		addr, size
+			if the given size is known; or
+
+		None, None
+			if not
+
 		'''
 
 
@@ -315,12 +357,14 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def _emit_minerva_basics(self, emit):
-		''' Emits the standard Minerva RISC-V CSR functionality.
+		'''
+		Emits the standard Minerva RISC-V CSR functionality.
 
 		Parameters
 		----------
 		emit: callable(str)
 			The function used to print the code lines to the output stream.
+
 		'''
 
 
@@ -390,12 +434,18 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def generate_c_header(self, macro_name = 'SOC_RESOURCES', file = None, platform_name = 'Generic Platform'):
-		''' Generates a C header file that simplifies access to the platform's resources.
+		'''
+		Generates a C header file that simplifies access to the platform's resources.
 
-		Parameters:
-			macro_name -- Optional. The name of the guard macro for the C header, as a string without spaces.
-			file       -- Optional. If provided, this will be treated as the file= argument to the print()
-						  function. This can be used to generate file content instead of printing to the terminal.
+		Parameters
+		----------
+		macro_name
+			Optional. The name of the guard macro for the C header, as a string without spaces.
+
+		file
+			Optional. If provided, this will be treated as the file= argument to the print()
+			function. This can be used to generate file content instead of printing to the terminal.
+
 		'''
 
 		def emit(content):
@@ -492,11 +542,15 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 
 	def generate_ld_script(self, file = None):
-		''' Generates an ldscript that holds our primary RAM and ROM regions.
+		'''
+		Generates an ldscript that holds our primary RAM and ROM regions.
 
-		Parameters:
-			file       -- Optional. If provided, this will be treated as the file= argument to the print()
-						  function. This can be used to generate file content instead of printing to the terminal.
+		Parameters
+		----------
+		file
+			Optional. If provided, this will be treated as the file= argument to the print()
+			function. This can be used to generate file content instead of printing to the terminal.
+
 		'''
 
 		def emit(content):

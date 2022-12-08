@@ -17,7 +17,8 @@ from .test          import SolGatewareTestCase, sync_test_case
 
 
 class TransactionalizedFIFO(Elaboratable):
-	''' Transactionalized, buffer first-in-first-out queue.
+	'''
+	Transactionalized, buffer first-in-first-out queue.
 
 	This FIFO is 'transactionalized', which means that it allows sets of reads and writes to be 'undone'.
 	Effectively, this FIFO allows 'rewinding' its read and write pointers to a previous point in time,

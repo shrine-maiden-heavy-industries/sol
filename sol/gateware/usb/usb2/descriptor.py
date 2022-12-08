@@ -27,9 +27,14 @@ class USBDescriptorStreamGenerator(ConstantStreamGenerator):
 
 	def __init__(self, data):
 		'''
-		Parameters:
-			descriptor_number -- The descriptor number represented.
-			data              -- The raw bytes (or equivalent) for the descriptor.
+		Parameters
+		----------
+		descriptor_number
+			The descriptor number represented.
+
+		data
+			The raw bytes (or equivalent) for the descriptor.
+
 		'''
 
 		# Always create USB descriptors in the USB domain; always have a maximum length field that can
@@ -58,9 +63,12 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 
 	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length = 64):
 		'''
-		Parameteres:
-			descriptor_collection -- The DeviceDescriptorCollection containing the descriptors
-									 to use for this device.
+		Parameteres
+		-----------
+		descriptor_collection
+			The DeviceDescriptorCollection containing the descriptors
+			to use for this device.
+
 		'''
 
 		self._descriptors = descriptor_collection
@@ -173,10 +181,13 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		----------
 		descriptor_collection: DeviceDescriptorCollection
 			The DeviceDescriptorCollection containing the descriptors to use for this device.
+
 		max_packet_length: int
 			Maximum packet length.
+
 		domain: string
 			The clock domain this generator should belong to. Defaults to 'usb'.
+
 		'''
 
 		self._descriptors        = descriptor_collection
@@ -202,7 +213,8 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		return (n + (cls.ELEMENT_SIZE - 1)) // cls.ELEMENT_SIZE
 
 	def generate_rom_content(self):
-		''' Generates the contents of the ROM used to hold descriptors.
+		'''
+		Generates the contents of the ROM used to hold descriptors.
 
 		Memory layout
 		-------------

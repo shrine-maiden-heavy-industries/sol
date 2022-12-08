@@ -14,7 +14,8 @@ from torii.lib.coding import Encoder
 
 
 class OneHotMultiplexer(Elaboratable):
-	''' Gateware that merges a collection of busses into a single bus.
+	'''
+	Gateware that merges a collection of busses into a single bus.
 
 	The busses joined must meet the following conditions:
 		- The relevant type must have a signal that indicates when its data should be
@@ -29,18 +30,29 @@ class OneHotMultiplexer(Elaboratable):
 
 	def __init__(self, *, interface_type, valid_field = 'valid', mux_signals = (), or_signals = (), pass_signals = ()):
 		'''
-		Parameters:
-			interface_type  -- The type of interface we'll be multiplexing.
-			valid_field     -- The name of the field that indicates the relevant object's validity.
-			mux_signals     -- An iterable of {signal names to be multiplexed, or functions that
-							   accept instances of the relevant interface type and return a Signal}.
-							   Signals listed here are passed through iff their one-hot `valid` signal is high.
-			or_signals      -- An itereable of {signals names to be multiplexed, or functions that accept
-							   an instance of the relevant interface type and return a Signal}. Signals listed
-							   here are OR'd together without multiplexing; it's expected that these signals will
-							   only be high when their corresponding `valid` signal is high.
-			pass_signals    -- A list of signals that should be passed back from the output interface to each
-							   of our input interfaces.
+		Parameters
+		----------
+		interface_type
+			The type of interface we'll be multiplexing.
+
+		valid_field
+			The name of the field that indicates the relevant object's validity.
+
+		mux_signals
+			An iterable of {signal names to be multiplexed, or functions that
+			accept instances of the relevant interface type and return a Signal}.
+			Signals listed here are passed through iff their one-hot `valid` signal is high.
+
+		or_signals
+			An itereable of {signals names to be multiplexed, or functions that accept
+			an instance of the relevant interface type and return a Signal}. Signals listed
+			here are OR'd together without multiplexing; it's expected that these signals will
+			only be high when their corresponding `valid` signal is high.
+
+		pass_signals
+			A list of signals that should be passed back from the output interface to each
+			of our input interfaces.
+
 		'''
 
 		self._valid_field  = valid_field

@@ -121,7 +121,8 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 
 
 class USBAnalyzerApplet(Elaboratable):
-	''' Gateware that serves as a generic USB analyzer backend.
+	'''
+	Gateware that serves as a generic USB analyzer backend.
 
 	WARNING: This is _incomplete_! It's missing:
 		- DRAM backing for analysis
@@ -253,7 +254,8 @@ class USBAnalyzerApplet(Elaboratable):
 
 
 class USBAnalyzerConnection:
-	''' Class representing a connection to a SOL USB analyzer.
+	'''
+	Class representing a connection to a SOL USB analyzer.
 
 	This abstracts away connection details, so we can rapidly change the way things
 	work without requiring changes in e.g. our ViewSB frontend.
@@ -314,12 +316,16 @@ class USBAnalyzerConnection:
 
 
 	def read_raw_packet(self):
-		''' Reads a raw packet from our USB Analyzer. Blocks until a packet is complete.
+		'''
+		Reads a raw packet from our USB Analyzer. Blocks until a packet is complete.
 
-		Returns: packet, timestamp, flags:
+		Returns
+		-------
+		packet, timestamp, flags:
 			packet    -- The raw packet data, as bytes.
 			timestamp -- The timestamp at which the packet was taken, in microseconds.
 			flags     -- Flags indicating connection status. Format TBD.
+
 		'''
 
 		size = 0

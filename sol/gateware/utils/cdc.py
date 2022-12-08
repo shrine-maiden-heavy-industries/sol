@@ -20,19 +20,31 @@ from ..test import SolGatewareTestCase, sync_test_case
 
 
 def synchronize(m, signal, *, output = None, o_domain = 'sync', stages = 2):
-	''' Convenience function. Synchronizes a signal, or equivalent collection.
+	'''
+	Convenience function. Synchronizes a signal, or equivalent collection.
 
-	Parameters:
-		input   -- The signal to be synchronized.
-		output  -- The signal to output the result of the synchronization
-				   to, or None to have one created for you.
-		domain  -- The name of the domain to be synchronized to.
-		stages  -- The depth (in FFs) of the synchronization chain.
-				   Longer incurs more delay. Must be >= 2 to avoid metastability.
+	Parameters
+	----------
+	input
+		The signal to be synchronized.
 
-	Returns:
-		record  -- The post-synchronization signal. Will be equivalent to the
-				   `output` record if provided, or a new, created signal otherwise.
+	output
+		The signal to output the result of the synchronization
+		to, or None to have one created for you.
+
+	domain
+		The name of the domain to be synchronized to.
+
+	stages
+		The depth (in FFs) of the synchronization chain.
+		Longer incurs more delay. Must be >= 2 to avoid metastability.
+
+	Returns
+	-------
+	record
+		The post-synchronization signal. Will be equivalent to the
+		`output` record if provided, or a new, created signal otherwise.
+
 	'''
 
 	# Quick function to create a synchronizer with our domain and stages.
@@ -107,18 +119,29 @@ class SynchronizedTest(TestCase):
 
 
 def stretch_strobe_signal(m, strobe, *, to_cycles, output = None, domain = None, allow_delay = False):
-	''' Stretches a given strobe to the given number of cycles.
+	'''
+	Stretches a given strobe to the given number of cycles.
 
-	Parameters:
-		strobe    -- The strobe signal to stretch.
-		to_cycles -- The number of cycles to stretch the given strobe to. Must be >= 1.
+	Parameters
+	----------
+	strobe
+		The strobe signal to stretch.
 
-		output    -- If provided, the given signal will be used as the output signal.
-		domain    -- If provided, the given domain _object_ will be used in lieu of the sync domain.
+	to_cycles
+		The number of cycles to stretch the given strobe to. Must be >= 1.
 
-	 Returns the output signal. If output is provided, this is the same signal; otherwise, it is the
-	 signal that was created internally.
-	 '''
+	output
+		If provided, the given signal will be used as the output signal.
+
+	domain
+		If provided, the given domain _object_ will be used in lieu of the sync domain.
+
+	Returns
+	-------
+	The output signal. If output is provided, this is the same signal; otherwise, it is the
+	signal that was created internally.
+
+	'''
 
 	# Assume the sync domain if no domain is provided.
 	if domain is None:

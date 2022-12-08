@@ -22,7 +22,8 @@ CONSTANT_TO_SEND     = 0x00
 
 
 class StressTestEndpoint(Elaboratable):
-	''' Endpoint interface that transmits a constant to the host, without buffering.
+	'''
+	Endpoint interface that transmits a constant to the host, without buffering.
 
 	Attributes
 	----------
@@ -108,7 +109,8 @@ class StressTestEndpoint(Elaboratable):
 
 
 class USBStressTest(Elaboratable):
-	''' Simple device with a custom endpoint that stress tests USB hardware.
+	'''
+	Simple device with a custom endpoint that stress tests USB hardware.
 
 	This:
 		- Uses no buffering whatsoever; every time the host requests data, we directly

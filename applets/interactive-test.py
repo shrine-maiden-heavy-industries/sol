@@ -55,7 +55,8 @@ REGISTER_RAM_REG_ADDR   = 20
 REGISTER_RAM_VALUE      = 21
 
 class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
-	''' Hardware meant to demonstrate use of the Debug Controller's register interface.
+	'''
+	Hardware meant to demonstrate use of the Debug Controller's register interface.
 
 	Registers:
 		0 -- register/address size auto-negotiation for Apollo
@@ -256,13 +257,20 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 
 	def assertPhyRegister(self, phy_register_base: int, register: int, expected_value: int):
-		''' Asserts that a PHY register contains a given value.
+		'''
+		Asserts that a PHY register contains a given value.
 
-		Parameters:
-			phy_register_base -- The base address of the PHY window in the debug SPI
-								 address range.
-			register          -- The PHY register to check.
-			value             -- The expected value of the relevant PHY register.
+		Parameters
+		----------
+		phy_register_base
+			The base address of the PHY window in the debug SPI address range.
+
+		register
+			The PHY register to check.
+
+		value
+			The expected value of the relevant PHY register.
+
 		'''
 
 		# Set the address of the ULPI register we're going to read from.
@@ -278,12 +286,17 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 
 	def assertPhyReadBack(self, phy_register_base: int, value: int):
-		''' Writes a value to the PHY scratch register and asserts that the read-back matches.
+		'''
+		Writes a value to the PHY scratch register and asserts that the read-back matches.
 
-		Parameters:
-			phy_register_base -- The base address of the PHY window in the debug SPI
-								 address range.
-			value             -- The value written to the scratch register.
+		Parameters
+		----------
+		phy_register_base
+			The base address of the PHY window in the debug SPI address range.
+
+		value
+			The value written to the scratch register.
+
 		'''
 
 		# Set the address of the ULPI register we're going to read from.

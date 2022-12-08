@@ -18,7 +18,8 @@ from torii import *
 
 
 class LTSSMController(Elaboratable):
-	''' Link Training and Status State Machine
+	'''
+	Link Training and Status State Machine
 
 	This state machine orchestrates USB bringup, link training, and power saving.
 	It is implemented according to chaper 7.5 of the USB 3.2 specification [USB3.2r1; 7.5].

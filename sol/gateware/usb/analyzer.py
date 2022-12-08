@@ -15,7 +15,8 @@ from ..test   import SolGatewareTestCase, usb_domain_test_case
 
 
 class USBAnalyzer(Elaboratable):
-	''' Core USB analyzer; backed by a small ringbuffer in FPGA block RAM.
+	'''
+	Core USB analyzer; backed by a small ringbuffer in FPGA block RAM.
 
 	If you're looking to instantiate a full analyzer, you'll probably want to grab
 	one of the DRAM-based ringbuffer variants (which are currently forthcoming).
@@ -55,8 +56,11 @@ class USBAnalyzer(Elaboratable):
 
 	def __init__(self, *, utmi_interface, mem_depth = 65536):
 		'''
-		Parameters:
-			utmi_interface -- A record or elaboratable that presents a UTMI interface.
+		Parameters
+		----------
+		utmi_interface
+			A record or elaboratable that presents a UTMI interface.
+
 		'''
 
 		self.utmi = utmi_interface

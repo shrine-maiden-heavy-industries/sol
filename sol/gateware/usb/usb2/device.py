@@ -93,9 +93,7 @@ class USBDevice(Elaboratable):
 	'''
 
 	def __init__(self, *, bus, handle_clocking = True):
-		'''
-		Parameters:
-		'''
+		''' '''
 
 		# If this looks more like a ULPI bus than a UTMI bus, translate it.
 		if hasattr(bus, 'dir'):

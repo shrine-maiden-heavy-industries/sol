@@ -13,22 +13,31 @@ from torii import Cat, Instance, Signal
 
 # FIXME: move this out of here and into an ECP5-specific set of functionality
 def delay(m, signal, interval, *, out = None):
-	''' Creates a delayed copy of a given I/O signal.
+	'''
+	Creates a delayed copy of a given I/O signal.
 
 	Currently only works at the FPGA's I/O boundary, and only on ECP5s.
 
-	Parameters:
-		signal -- The signal to be delayed. Must be either an I/O
-				  signal connected directly to a platform resource.
-		delay  -- Delay, in arbitrary units. These units will vary
-				  from unit to unit, but seem to be around 300ps on
-				  most ECP5 FPGAs. On ECP5s, maxes out at 127.
-		out    -- The signal to received the delayed signal; or
-				  None ot have a signal created for you.
+	Parameters
+	----------
+	signal
+		The signal to be delayed. Must be either an I/O
+		signal connected directly to a platform resource.
 
-	Returns:
-		delayed -- The delayed signal. Will be equivalent to 'out'
-				   if provided; or a new signal otherwise.
+	delay
+		Delay, in arbitrary units. These units will vary
+		from unit to unit, but seem to be around 300ps on
+		most ECP5 FPGAs. On ECP5s, maxes out at 127.
+
+	out
+		The signal to received the delayed signal; or
+		None ot have a signal created for you.
+
+	Returns
+	-------
+	delayed
+		The delayed signal. Will be equivalent to 'out'
+		if provided; or a new signal otherwise.
 	'''
 
 	# If we're not being passed our output signal, create one.

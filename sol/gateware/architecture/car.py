@@ -18,7 +18,8 @@ from ..utils.cdc import stretch_strobe_signal
 
 
 class PHYResetController(Elaboratable):
-	''' Gateware that implements a short power-on-reset pulse to reset an attached PHY.
+	'''
+	Gateware that implements a short power-on-reset pulse to reset an attached PHY.
 
 	I/O ports:
 
@@ -27,12 +28,19 @@ class PHYResetController(Elaboratable):
 	'''
 
 	def __init__(self, *, clock_frequency = 60e6, reset_length = 2e-6, stop_length = 2e-6, power_on_reset = True):
-		''' Params:
+		'''
 
-			reset_length   -- The length of a reset pulse, in seconds.
-			stop_length    -- The length of time STP should be asserted after reset.
-			power_on_reset -- If True or omitted, the reset will be applied once the firmware
-							  is configured.
+		Parameters
+		----------
+		reset_length
+			The length of a reset pulse, in seconds.
+
+		stop_length
+			The length of time STP should be asserted after reset.
+
+		power_on_reset
+			If True or omitted, the reset will be applied once the firmware is configured.
+
 		'''
 
 		from math import ceil
@@ -131,7 +139,8 @@ class PHYResetControllerTest(SolGatewareTestCase):
 
 
 class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
-	''' Helper that generates the clock domains used in a SOL board.
+	'''
+	Helper that generates the clock domains used in a SOL board.
 
 	Note that this module should create three in-phase clocks; so these domains
 	should not require explicit boundary crossings.
@@ -146,9 +155,14 @@ class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
 
 	def __init__(self, *, clock_signal_name = None, clock_signal_frequency = 60.0):
 		'''
-		Parameters:
-			clock_signal_name      = The clock signal name to use; or None to use the platform's default clock.
-			clock_signal_frequency = The frequency of clock_signal_name; default to 60MHz.
+		Parameters
+		----------
+		clock_signal_name
+			The clock signal name to use; or None to use the platform's default clock.
+
+		clock_signal_frequency
+			The frequency of clock_signal_name; default to 60MHz.
+
 		'''
 
 		self.clock_name      = clock_signal_name
@@ -243,12 +257,15 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 
 	def __init__(self, *, clock_frequencies = None, clock_signal_name = None):
 		'''
-		Parameters:
-			clock_frequencies -- A dictionary mapping 'fast', 'sync', and 'usb' to the clock
-								 frequencies for those domains, in MHz. Valid choices for each
-								 domain are 60, 120, and 240. If not provided, fast will be
-								 assumed to be 240, sync will assumed to be 120, and usb will
-								 be assumed to be a standard 60.
+		Parameters
+		----------
+		clock_frequencies
+			A dictionary mapping 'fast', 'sync', and 'usb' to the clock
+			frequencies for those domains, in MHz. Valid choices for each
+			domain are 60, 120, and 240. If not provided, fast will be
+			assumed to be 240, sync will assumed to be 120, and usb will
+			be assumed to be a standard 60.
+
 		'''
 		super().__init__(clock_signal_name = clock_signal_name)
 		self.clock_frequencies = clock_frequencies

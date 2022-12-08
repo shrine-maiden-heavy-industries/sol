@@ -15,7 +15,8 @@ from sol.usb2               import USBDevice, USBStreamInEndpoint, USBStreamOutE
 
 
 class USBStreamOutDeviceExample(Elaboratable):
-	''' Simple device that demonstrates use of a bulk-OUT endpoint.
+	'''
+	Simple device that demonstrates use of a bulk-OUT endpoint.
 
 	Captures streaming data, and outputs it over the User I/O.
 	'''

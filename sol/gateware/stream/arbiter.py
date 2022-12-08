@@ -20,12 +20,16 @@ class StreamMultiplexer(Elaboratable):
 	----------
 	output: StreamInterface(), output stream
 		Our output interface; has all of the active busses merged together.
+
 	'''
 
 	def __init__(self, stream_type = StreamInterface):
 		'''
-		Parameters:
-			stream_type   -- The type of stream we'll be multiplexing. Must be a subclass of StreamInterface.
+		Parameters
+		----------
+		stream_type
+			The type of stream we'll be multiplexing. Must be a subclass of StreamInterface.
+
 		'''
 
 		# Collection that stores each of the interfaces added to this bus.
@@ -68,7 +72,8 @@ class StreamMultiplexer(Elaboratable):
 
 
 class StreamArbiter(Elaboratable):
-	''' Gateware that merges a collection of StreamInterfaces into a single interface.
+	'''
+	Gateware that merges a collection of StreamInterfaces into a single interface.
 
 	This variant uses a simple priority scheduler; and will use a standard valid/ready handshake
 	to schedule a single stream to communicate at a time. Bursts of ``valid`` will never be interrupted,
@@ -89,6 +94,7 @@ class StreamArbiter(Elaboratable):
 		If provided, sets the type of stream we'll be multiplexing (and thus our output type).
 	domain: str
 		The name of the domain in which this arbiter should operate. Defaults to '	sync'	.
+
 	'''
 
 	def __init__(self, *, stream_type = StreamInterface, domain = '	sync'	):
@@ -105,7 +111,8 @@ class StreamArbiter(Elaboratable):
 
 
 	def add_stream(self, stream):
-		''' Adds a stream to our arbiter.
+		'''
+		Adds a stream to our arbiter.
 
 		Parameters
 		----------

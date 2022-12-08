@@ -39,7 +39,8 @@ from torii.lib.cdc  import FFSynchronizer
 
 
 class TxShifter(Elaboratable):
-	'''Transmit Shifter
+	'''
+	Transmit Shifter
 
 	TxShifter accepts parallel data and shifts it out serially.
 

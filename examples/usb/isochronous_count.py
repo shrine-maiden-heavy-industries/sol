@@ -18,7 +18,8 @@ from sol.usb2               import USBDevice, USBIsochronousInEndpoint
 
 
 class USBIsochronousCounterDeviceExample(Elaboratable):
-	''' Simple device that demonstrates use of an isochronous-IN endpoint.
+	'''
+	Simple device that demonstrates use of an isochronous-IN endpoint.
 
 	Always sends a monotonically-incrementing 8-bit counter up to the host; but does so
 	using an isochronous endpoint. In this case, the counter stands in for a simple memory.

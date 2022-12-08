@@ -20,7 +20,8 @@ from .            import StreamInterface
 
 
 class ConstantStreamGenerator(Elaboratable):
-	''' Gateware that generates stream of constant data.
+	'''
+	Gateware that generates stream of constant data.
 
 	Attributes
 	----------
@@ -97,7 +98,8 @@ class ConstantStreamGenerator(Elaboratable):
 
 
 	def _get_initializer_value(self):
-		''' Returns this geneartor's data in a form usable as a ROM initializer.
+		'''
+		Returns this geneartor's data in a form usable as a ROM initializer.
 
 		Returns
 		-------
@@ -624,7 +626,8 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 
 
 class StreamSerializer(Elaboratable):
-	''' Gateware that serializes a short Array input onto a stream.
+	'''
+	Gateware that serializes a short Array input onto a stream.
 
 	I/O port:
 		I: start        -- Strobe that indicates when the stream should be started.
@@ -640,13 +643,24 @@ class StreamSerializer(Elaboratable):
 
 	def __init__(self, data_length, domain = 'sync', data_width = 8, stream_type = StreamInterface, max_length_width = None):
 		'''
-		Parameters:
-			data_length        -- The length of the data to be transmitted.
-			domain             -- The clock domain this generator should belong to. Defaults to 'sync'.
-			data_width         -- The width of the constant payload
-			stream_type        -- The type of stream we'll be multiplexing. Must be a subclass of StreamInterface.
-			max_length_width   -- If provided, a `max_length` signal will be present that can limit the total length
-								  transmitted.
+		Parameters
+		----------
+		data_length
+			The length of the data to be transmitted.
+
+		domain
+			The clock domain this generator should belong to. Defaults to 'sync'.
+
+		data_width
+			The width of the constant payload
+
+		stream_type
+			The type of stream we'll be multiplexing. Must be a subclass of StreamInterface.
+
+		max_length_width
+			If provided, a `max_length` signal will be present that can limit the total length
+			transmitted.
+
 		'''
 
 		self.domain      = domain

@@ -45,7 +45,8 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def provision_dut(self, dut):
-		''' Hook that allows us to add any desired properties to the DUT before simulation.
+		'''
+		Hook that allows us to add any desired properties to the DUT before simulation.
 
 		This method is called before initial elaboration; so functions that modify devices
 		before elaboration can be used.
@@ -92,7 +93,8 @@ class USBDeviceTest(SolGatewareTestCase):
 
 	@staticmethod
 	def bits_to_octets(bits):
-		''' Converts a string of bits to octets.
+		'''
+		Converts a string of bits to octets.
 
 		For compatibility with antmicro's USB-testbench functions.
 		'''
@@ -123,13 +125,21 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def send_token(self, pid, *, endpoint = 0, address = None):
-		''' Issues a token packet to the simulated USB device.
+		'''
+		Issues a token packet to the simulated USB device.
 
-		Parameters:
-			pid      -- The PID of the packet to be sent.
-			endpoint -- The endpoint on which the token should be sent.
-			address  -- The address of the device to be targeted.
-						If omitted, the most recently set-address'd address is used.
+		Parameters
+		----------
+		pid
+			The PID of the packet to be sent.
+
+		endpoint
+			The endpoint on which the token should be sent.
+
+		address
+			The address of the device to be targeted.
+			If omitted, the most recently set-address'd address is used.
+
 		'''
 
 		# Grab the raw bits that make up our token from the Antmicro library...
@@ -142,11 +152,17 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def send_data(self, pid, *octets):
-		''' Sends a data packet to the simulated USB device.
+		'''
+		Sends a data packet to the simulated USB device.
 
-		Parameters:
-			pid  -- The PID to send the provided packet with.
-			*data -- The data to be sent.
+		Parameters
+		----------
+		pid
+			The PID to send the provided packet with.
+
+		*data
+			The data to be sent.
+
 		'''
 
 		bits = usb_packet.data_packet(pid, octets)
@@ -156,10 +172,14 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def send_handshake(self, pid):
-		''' Issues a handshake packet to the simulated USB device.
+		'''
+		Issues a handshake packet to the simulated USB device.
 
-		Parameters:
-			pid      -- The PID of the packet to be sent.
+		Parameters
+		----------
+		pid
+			The PID of the packet to be sent.
+
 		'''
 
 		# Ensure we have an USBPacketID-wrapped PID.
@@ -207,16 +227,30 @@ class USBDeviceTest(SolGatewareTestCase):
 
 	def out_transaction(self, *octets, endpoint = 0, token_pid = USBPacketID.OUT,
 		data_pid = USBPacketID.DATA0, expect_handshake = None):
-		''' Performs an OUT transaction.
+		'''
+		Performs an OUT transaction.
 
-		Parameters:
-			*octets          -- The data to send.
-			endpoint         -- The endpoint on which to send the relevant data.
-			token_pid        -- The token PID to send. Defaults to OUT.
-			data_pid         -- The data PID to send. Defalts to DATA0.
-			expect_handshake -- If provided, we'll assert that a given handshake is provided.
+		Parameters
+		----------
+		*octets
+			The data to send.
 
-		Returns the handshake received.
+		endpoint
+			The endpoint on which to send the relevant data.
+
+		token_pid
+			The token PID to send. Defaults to OUT.
+
+		data_pid
+			The data PID to send. Defaults to DATA0.
+
+		expect_handshake
+			If provided, we'll assert that a given handshake is provided.
+
+		Returns
+		-------
+			The handshake received.
+
 		'''
 
 		# Issue the token...
@@ -239,15 +273,27 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def out_transfer(self, *octets, endpoint = 0, data_pid = USBPacketID.DATA0, max_packet_size = 64):
-		''' Performs an OUT transaction.
+		'''
+		Performs an OUT transfer.
 
-		Parameters:
-			*octets          -- The data to send.
-			endpoint         -- The endpoint on which to send the relevant data.
-			data_pid         -- The first data PID to send. Defalts to DATA0.
-			max_packet_size  -- The maximum packet size for the current endpoint.
+		Parameters
+		----------
+		*octets
+			The data to send.
 
-		Returns the final handshake received.
+		endpoint
+			The endpoint on which to send the relevant data.
+
+		data_pid
+			The first data PID to send. Defaults to DATA0.
+
+		max_packet_size
+			The maximum packet size for the current endpoint.
+
+		Returns
+		-------
+		The final handshake received.
+
 		'''
 
 		to_send  = octets[:]
@@ -290,16 +336,28 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def in_transaction(self, endpoint = 0, data_pid = None, handshake = USBPacketID.ACK):
-		''' Performs an IN transaction.
+		'''
+		Performs an IN transaction.
 
-		Parameters:
-			endpoint    -- The endpoint on which to fetch the relevant data.
-			data_pid    -- The data PID to expect, or None if we don't are.
-			handshake   -- The response we should give after receiving data.
+		Parameters
+		----------
+		endpoint
+			The endpoint on which to fetch the relevant data.
 
-		Returns:
-			handshake   -- The handshake retrieved in response.
-			data        -- A list of octets received.
+		data_pid
+			The data PID to expect, or None if we don't are.
+
+		handshake
+			The response we should give after receiving data.
+
+		Returns
+		-------
+		handshake
+			The handshake retrieved in response.
+
+		data
+			A list of octets received.
+
 		'''
 
 		# Issue the IN token...
@@ -331,16 +389,29 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def in_transfer(self, endpoint = 0, data_pid = None, handshake = USBPacketID.ACK):
-		''' Performs an IN transaction.
+		'''
+		Performs an IN transfer.
 
-		Parameters:
-			endpoint    -- The endpoint on which to fetch the relevant data.
-			data_pid    -- The data PID to expect, or None if we don't are.
-			handshake   -- The response we should give after receiving data.
+		Parameters
+		----------
+		endpoint
+			The endpoint on which to fetch the relevant data.
 
-		Returns:
-			handshake   -- The last data handshake received.
-			data        -- A list of octets received.
+		data_pid
+			The data PID to expect, or None if we don't are.
+
+		handshake
+			The response we should give after receiving data.
+
+
+		Returns
+		-------
+		handshake
+			The last data handshake received.
+
+		data
+			A list of octets received.
+
 		'''
 
 		naks = 0
@@ -375,7 +446,8 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def setup_transaction(self, request_type, request, value = 0, index = 0, length = 0):
-		''' Sends a SETUP transaction. All arguments match their SETUP packet definitions.
+		'''
+		Sends a SETUP transaction. All arguments match their SETUP packet definitions.
 
 		Returns the handshake received.
 		'''
@@ -405,13 +477,19 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def control_request_in(self, request_type, request, value = 0, index = 0, length = 0):
-		''' Performs an IN control request, and returns the results.
+		'''
+		Performs an IN control request, and returns the results.
 
 		Arguments match the SETUP packets.
 
-		Returns:
-			handshake -- The handshake value returned.
-			data      -- A list of octets returned.
+		Returns
+		-------
+		handshake
+			The handshake value returned.
+
+		data
+			A list of octets returned.
+
 		'''
 
 		naks = 0
@@ -499,12 +577,20 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def get_descriptor(self, descriptor_type, index = 0, length = 64):
-		''' Performs a GET_DESCRIPTOR request; fetching a USB descriptor.
+		'''
+		Performs a GET_DESCRIPTOR request; fetching a USB descriptor.
 
-		Parameters:
-			descriptor_type -- The descriptor type number to fetch.
-			index           -- The descriptor index to fetch.
-			length          -- The requested length to read.
+		Parameters
+		----------
+		descriptor_type
+			The descriptor type number to fetch.
+
+		index
+			The descriptor index to fetch.
+
+		length
+			The requested length to read.
+
 		'''
 
 		# The type is stored in the MSB of the value; and the index in the LSB.
@@ -516,10 +602,14 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def set_address(self, new_address, update_address = True):
-		''' Performs a SET_ADDRESS request; setting the device address.
+		'''
+		Performs a SET_ADDRESS request; setting the device address.
 
-		Parameters:
-			new_address -- The address to apply.
+		Parameters
+		----------
+		new_address
+			The address to apply.
+
 		'''
 
 		response_pid = yield from self.control_request_out(0,
@@ -532,11 +622,16 @@ class USBDeviceTest(SolGatewareTestCase):
 
 
 	def set_configuration(self, number):
-		''' Performs a SET_CONFIGURATION request; configuring the device.
-
-		Parameters:
-			number -- The configuration to select.
 		'''
+		Performs a SET_CONFIGURATION request; configuring the device.
+
+		Parameters
+		----------
+		number
+			The configuration to select.
+
+		'''
+
 		response_pid = yield from self.control_request_out(0,
 			USBStandardRequests.SET_CONFIGURATION, value = number)
 		return response_pid

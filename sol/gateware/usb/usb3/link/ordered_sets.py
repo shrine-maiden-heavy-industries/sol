@@ -188,7 +188,8 @@ class TSBurstDetector(Elaboratable):
 
 
 class TSEmitter(Elaboratable):
-	''' Training Set Emitter
+	'''
+	Training Set Emitter
 
 	Generic Training Sequence Ordered Set generator.
 
@@ -285,7 +286,8 @@ class TSEmitter(Elaboratable):
 
 
 class TSTransceiver(Elaboratable):
-	'''Training Sequence Unit
+	'''
+	Training Sequence Unit
 
 	Detect/generate the Training Sequence Ordered Sets required for a USB3.0 link with simple
 	control/status signals.

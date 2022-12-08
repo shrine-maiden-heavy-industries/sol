@@ -520,9 +520,12 @@ class StallOnlyRequestHandler(Elaboratable):
 
 	def __init__(self, stall_condition):
 		'''
-		Parameters:
-			stall_condition -- A function that accepts a SetupRequest packet, and returns
-							   an Torii conditional indicating whether we should stall.
+		Parameters
+		----------
+		stall_condition
+			A function that accepts a SetupRequest packet, and returns
+			n Torii conditional indicating whether we should stall.
+
 		'''
 
 		self.condition = stall_condition

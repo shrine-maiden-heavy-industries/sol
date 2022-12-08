@@ -18,7 +18,8 @@ from sol.usb2               import USBDevice, USBSignalInEndpoint
 
 
 class USBInterruptExample(Elaboratable):
-	''' Simple example of a USB device that presents an interrupt endpoint.
+	'''
+	Simple example of a USB device that presents an interrupt endpoint.
 
 	This demonstrates use of the ``USBSignalInEndpoint``, which reports the value
 	of a status signal when polled. Here, we'll create a 32-bit counter, and report

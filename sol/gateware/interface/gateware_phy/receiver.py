@@ -281,7 +281,8 @@ class RxNRZIDecoder(Elaboratable):
 
 
 class RxPacketDetect(Elaboratable):
-	'''Packet Detection
+	'''
+	Packet Detection
 
 	Full Speed packets begin with the following sequence:
 
@@ -394,7 +395,8 @@ class RxPacketDetect(Elaboratable):
 
 
 class RxBitstuffRemover(Elaboratable):
-	'''RX Bitstuff Removal
+	'''
+	RX Bitstuff Removal
 
 	Long sequences of 1's would cause the receiver to lose it's lock on the
 	transmitter's clock.  USB solves this with bitstuffing.  A '0' is stuffed
@@ -482,7 +484,8 @@ class RxBitstuffRemover(Elaboratable):
 
 
 class RxShifter(Elaboratable):
-	'''RX Shifter
+	'''
+	RX Shifter
 
 	A shifter is responsible for shifting in serial bits and presenting them
 	as parallel data.  The shifter knows how many bits to shift and has

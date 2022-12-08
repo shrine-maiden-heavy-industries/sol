@@ -68,7 +68,10 @@ class USB3ControlEndpoint(Elaboratable):
 		This will handle all Standard-type requests; so any additional request handlers
 		must not handle Standard requests.
 
-		Parameters:
+		Parameters
+		----------
+		descriptors
+			The descriptor collection to add.
 
 		'''
 		handler = StandardRequestHandler(descriptors)

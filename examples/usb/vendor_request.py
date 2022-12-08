@@ -72,7 +72,8 @@ class LEDRequestHandler(USBRequestHandler):
 
 
 class USBVendorDeviceExample(Elaboratable):
-	''' Simple example of a device that operates via vendor requests.
+	'''
+	Simple example of a device that operates via vendor requests.
 
 	Sets LEDs to the value set in vendor request 0.
 	'''

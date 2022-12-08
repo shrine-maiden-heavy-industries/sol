@@ -17,7 +17,8 @@ from sol.usb2               import USBDevice, USBStreamInEndpoint
 
 
 class USBCounterDeviceExample(Elaboratable):
-	''' Simple device that demonstrates use of a bulk-IN endpoint.
+	'''
+	Simple device that demonstrates use of a bulk-IN endpoint.
 
 	Always sends a monotonically-incrementing 8-bit counter up to the host.
 	This is useful for two things:

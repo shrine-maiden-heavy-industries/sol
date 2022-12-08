@@ -84,7 +84,8 @@ _ResetLFPS         = LFPS(burst = _ResetLFPSBurst)
 #
 
 class LFPSDetector(Elaboratable):
-	''' LFPS Signaling Detector
+	'''
+	LFPS Signaling Detector
 
 	Compares received (and demodulated) LFPS signaling with a specified pattern.
 
@@ -208,7 +209,8 @@ class LFPSDetector(Elaboratable):
 
 
 class LFPSGenerator(Elaboratable):
-	''' LFPS Signaling Generator
+	'''
+	LFPS Signaling Generator
 
 	Transmits (to be modulated) LFPS signaling that follows a specified pattern.
 

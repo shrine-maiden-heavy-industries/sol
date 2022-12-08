@@ -16,15 +16,21 @@ from .                 import USBSpeed
 
 
 def _generate_wide_incrementer(m, platform, adder_input):
-	''' Attempts to create an optimal wide-incrementer for counters.
+	'''
+	Attempts to create an optimal wide-incrementer for counters.
 
 	Yosys on certain platforms (ice40 UltraPlus) doesn't currently use hardware resources
 	effectively for wide adders. We'll manually instantiate the relevant resources
 	to get rid of an 18-bit carry chain; avoiding a long critical path.
 
-	Parameters:
-		platform    -- The platform we're working with.
-		adder_input -- The input to our incrementer.
+	Parameters
+	----------
+	platform
+		The platform we're working with.
+
+	adder_input
+		The input to our incrementer.
+
 	'''
 
 	# If this isn't an iCE40 UltraPlus, let Yosys do its thing.

@@ -27,13 +27,24 @@ class StreamDeserializer(Elaboratable):
 
 	def __init__(self, dataLength, streamType = USBOutStreamInterface, domain = 'sync', dataWidth = 8, maxLengthWidth = None):
 		'''
-		Parameters:
-			dataLength      -- The length of the data to be received.
-			domain          -- The clock domain this deserializer should belong to. Defaults to 'sync'.
-			dataWidth       -- The width of the data chunks
-			streamType      -- The stream we'll be consuming. Must be a subclass of USBOutStreamInterface
-			maxLengthWidth  -- If provided, a `maxLength` signal will be present that can limit the total length
-							   consumed from the stream.
+		Parameters
+		----------
+		dataLength
+			The length of the data to be received.
+
+		domain
+			The clock domain this deserializer should belong to. Defaults to 'sync'.
+
+		dataWidth
+			The width of the data chunks
+
+		streamType
+			The stream we'll be consuming. Must be a subclass of USBOutStreamInterface
+
+		maxLengthWidth
+			If provided, a `maxLength` signal will be present that can limit the total length
+			consumed from the stream.
+
 		'''
 
 		self.domain = domain

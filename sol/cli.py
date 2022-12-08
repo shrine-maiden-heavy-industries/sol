@@ -42,12 +42,16 @@ def cli(fragment, *pos_args, cli_soc : Optional[Any] = None, **kwargs):
 		If the user's options resulted in the board being programmed, this returns the fragment
 		that was programmed onto the board. Otherwise, it returns None.
 
-	Parameters:
-		fragment  -- The fragment instance to be built; or a callable that returns a fragment,
-						such as a Elaborable type. If the latter is provided, any keyword or positional
-						arguments not specified here will be passed to this callable.
-		cli_soc   -- Optional. If a SoC design provides a SimpleSoc, options will be provided for generating
-						build artifacts, such as header or linker files; instead of elaborating a design.
+	Parameters
+	----------
+	fragment
+		The fragment instance to be built; or a callable that returns a fragment,
+		such as a Elaborable type. If the latter is provided, any keyword or positional
+		arguments not specified here will be passed to this callable.
+
+	cli_soc
+		Optional. If a SoC design provides a SimpleSoc, options will be provided for generating
+		build artifacts, such as header or linker files; instead of elaborating a design.
 	'''
 
 	from .gateware.platform import get_appropriate_platform

@@ -304,16 +304,23 @@ class JTAGRegisterInterface(SPIRegisterInterface):
 
 	def __init__(self, address_size = 15, register_size = 32, default_read_value = 0, support_size_autonegotiation = True):
 		'''
-		Parameters:
-			address_size       -- the size of an address, in bits; recommended to be one bit
-								  less than a binary number, as the write command is formed by adding a one-bit
-								  write flag to the start of every address
-			register_size      -- The size of any given register, in bits.
-			default_read_value -- The read value read from a non-existent or write-only register.
+		Parameters
+		----------
+		address_size
+			The size of an address, in bits; recommended to be one bit
+			less than a binary number, as the write command is formed by adding a one-bit
+			write flag to the start of every address
 
-			support_size_autonegotiation --
-				If set, register 0 is used as a size auto-negotiation register. Functionally equivalent to
-				calling .support_size_autonegotiation(); see its documentation for details on autonegotiation.
+		register_size
+			The size of any given register, in bits.
+
+		default_read_value
+			The read value read from a non-existent or write-only register.
+
+		support_size_autonegotiation
+			If set, register 0 is used as a size auto-negotiation register. Functionally equivalent to
+			calling .support_size_autonegotiation(); see its documentation for details on autonegotiation.
+
 		'''
 
 		self.address_size  = address_size

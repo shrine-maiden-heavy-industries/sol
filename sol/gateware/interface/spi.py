@@ -28,7 +28,8 @@ class SPIBus(Record):
 
 
 class SPIDeviceInterface(Elaboratable):
-	''' Simple word-oriented SPI interface.
+	'''
+	Simple word-oriented SPI interface.
 
 	I/O signals:
 		B: spi           -- the SPI bus to work with
@@ -40,12 +41,23 @@ class SPIDeviceInterface(Elaboratable):
 
 	def __init__(self, *, word_size = 8, clock_polarity = 0, clock_phase = 0, msb_first = True, cs_idles_high = False):
 		'''
-		Parameters:
-			word_size      -- The size of each transmitted word, in bits.
-			clock_polarity -- The SPI-standard clock polarity. 0 for idle low, 1 for idle high.
-			clock_phase    -- The SPI-standard clock phase. 1 to capture on the leading edge, or 0 for on the trailing
-			msb_first      -- If true, or not provided, data will be transmitted MSB first (standard).
-			cs_idles_high  -- If provided, data will be captured when CS goes _low_, rather than high.
+		Parameters
+		----------
+		word_size
+			The size of each transmitted word, in bits.
+
+		clock_polarity
+			The SPI-standard clock polarity. 0 for idle low, 1 for idle high.
+
+		clock_phase
+			The SPI-standard clock phase. 1 to capture on the leading edge, or 0 for on the trailing
+
+		msb_first
+			If true, or not provided, data will be transmitted MSB first (standard).
+
+		cs_idles_high
+			If provided, data will be captured when CS goes _low_, rather than high.
+
 		'''
 
 		self.word_size      = word_size
@@ -69,11 +81,15 @@ class SPIDeviceInterface(Elaboratable):
 
 
 	def spi_edge_detectors(self, m):
-		''' Generates edge detectors for the sample and output clocks, based on the current SPI mode.
+		'''
+		Generates edge detectors for the sample and output clocks, based on the current SPI mode.
 
-		Returns:
-			sample_edge, output_edge -- signals that pulse high for a single cycle when we should
-										sample and change our outputs, respectively
+		Returns
+		-------
+		sample_edge, output_edge
+			signals that pulse high for a single cycle when we should
+			sample and change our outputs, respectively
+
 		'''
 
 		# Select whether we're working with an inverted or un-inverted serial clock.
@@ -170,7 +186,8 @@ class SPIDeviceInterface(Elaboratable):
 
 
 class SPIGatewareTestCase(SolGatewareTestCase):
-	''' Extended version of the SolGatewareTestCase.
+	'''
+	Extended version of the SolGatewareTestCase.
 
 	Adds three SPI-simulation methods:
 		-spi_send_bit
@@ -287,7 +304,8 @@ class SPIDeviceInterfaceTest(SPIGatewareTestCase):
 
 
 class SPICommandInterface(Elaboratable):
-	''' Variant of an SPIDeviceInterface that accepts command-prefixed data.
+	'''
+	Variant of an SPIDeviceInterface that accepts command-prefixed data.
 
 	I/O signals:
 		I: sck           -- SPI clock, from the SPI master
@@ -446,7 +464,9 @@ class SPICommandInterface(Elaboratable):
 
 
 class SPIRegisterInterface(Elaboratable):
-	''' SPI device interface that allows for register reads and writes via SPI.
+	'''
+	SPI device interface that allows for register reads and writes via SPI.
+
 	The SPI transaction format matches:
 
 		in:  WAAAAAAA[...] VVVVVVVV[...]
@@ -472,16 +492,23 @@ class SPIRegisterInterface(Elaboratable):
 
 	def __init__(self, address_size = 15, register_size = 32, default_read_value = 0, support_size_autonegotiation = True):
 		'''
-		Parameters:
-			address_size       -- the size of an address, in bits; recommended to be one bit
-								  less than a binary number, as the write command is formed by adding a one-bit
-								  write flag to the start of every address
-			register_size      -- The size of any given register, in bits.
-			default_read_value -- The read value read from a non-existent or write-only register.
+		Parameters
+		----------
+		address_size
+			the size of an address, in bits; recommended to be one bit
+			less than a binary number, as the write command is formed by adding a one-bit
+			write flag to the start of every address
 
-			support_size_autonegotiation --
-				If set, register 0 is used as a size auto-negotiation register. Functionally equivalent to
-				calling .support_size_autonegotiation(); see its documentation for details on autonegotiation.
+		register_size
+			The size of any given register, in bits.
+
+		default_read_value
+			The read value read from a non-existent or write-only register.
+
+		support_size_autonegotiation
+			If set, register 0 is used as a size auto-negotiation register. Functionally equivalent to
+			calling .support_size_autonegotiation(); see its documentation for details on autonegotiation.
+
 		'''
 
 		self.address_size  = address_size
@@ -523,7 +550,8 @@ class SPIRegisterInterface(Elaboratable):
 
 
 	def support_size_autonegotiation(self):
-		''' Support autonegotiation of register and address size. Consumes address 0.
+		'''
+		Support autonegotiation of register and address size. Consumes address 0.
 
 		Auto-negotiation of size is relatively simple: the host sends a string of zeroes over
 		the SPI bus, and we respond with:
@@ -538,19 +566,29 @@ class SPIRegisterInterface(Elaboratable):
 
 
 	def add_sfr(self, address, *, read = None, write_signal = None, write_strobe = None, read_strobe = None):
-		''' Adds a special function register to the given command interface.
+		'''
+		Adds a special function register to the given command interface.
 
-		Parameters:
-			address       -- the register's address, as a big-endian integer
-			read          -- a Signal or integer constant representing the
-							 value to be read at the given address; if not provided, the default
-							 value will be read
-			read_strobe   -- a Signal that is asserted when a read is completed; if not provided,
-							 the relevant strobe will be left unconnected
-			write_signal  -- a Signal set to the value to be written when a write is requested;
-							 if not provided, writes will be ignored
-			wrote_strobe  -- a Signal that goes high when a value is available for a write request
-		 '''
+		Parameters
+		----------
+		address
+			the register's address, as a big-endian integer
+
+		read
+			a Signal or integer constant representing the
+			value to be read at the given address; if not provided, the default
+			value will be read
+
+		read_strobe
+			a Signal that is asserted when a read is completed; if not provided,
+							the relevant strobe will be left unconnected
+		write_signal
+			a Signal set to the value to be written when a write is requested;
+							if not provided, writes will be ignored
+		wrote_strobe
+			a Signal that goes high when a value is available for a write request
+
+		'''
 
 		assert address < (2 ** self.address_size)
 		self._ensure_register_is_unused(address)
@@ -566,15 +604,23 @@ class SPIRegisterInterface(Elaboratable):
 
 
 	def add_read_only_register(self, address, *, read, read_strobe = None):
-		''' Adds a read-only register.
+		'''
+		Adds a read-only register.
 
-		Parameters:
-			address       -- the register's address, as a big-endian integer
-			read          -- a Signal or integer constant representing the
-							 value to be read at the given address; if not provided, the default
-							 value will be read
-			read_strobe   -- a Signal that is asserted when a read is completed; if not provided,
-							 the relevant strobe will be left unconnected
+		Parameters
+		----------
+		address
+			the register's address, as a big-endian integer
+
+		read
+			a Signal or integer constant representing the
+			value to be read at the given address; if not provided, the default
+			value will be read
+
+		read_strobe
+			a Signal that is asserted when a read is completed; if not provided,
+			the relevant strobe will be left unconnected
+
 		'''
 		self.add_sfr(address, read = read, read_strobe = read_strobe)
 
@@ -582,21 +628,38 @@ class SPIRegisterInterface(Elaboratable):
 
 	def add_register(self, address, *, value_signal = None, size = None, name = None, read_strobe = None,
 		write_strobe = None, reset = 0):
-		''' Adds a standard, memory-backed register.
-
-			Parameters:
-				address       -- the register's address, as a big-endian integer
-				value_signal  -- the signal that will store the register's value; if omitted
-								 a storage register will be created automatically
-				size          -- if value_signal isn't provided, this sets the size of the created register
-				reset         -- if value_signal isn't provided, this sets the reset value of the created register
-				read_strobe   -- a Signal to be asserted when the register is read; ignored if not provided
-				write_strobe  -- a Signal to be asserted when the register is written; ignored if not provided
-
-			Returns:
-				value_signal  -- a signal that stores the register's value; which may be the value_signal arg,
-								 or may be a signal created during execution
 		'''
+		Adds a standard, memory-backed register.
+
+		Parameters
+		----------
+		address
+			the register's address, as a big-endian integer
+
+		value_signal
+			the signal that will store the register's value; if omitted
+			a storage register will be created automatically
+
+		size
+			if value_signal isn't provided, this sets the size of the created register
+
+		reset
+			if value_signal isn't provided, this sets the reset value of the created register
+
+		read_strobe
+			a Signal to be asserted when the register is read; ignored if not provided
+
+		write_strobe
+			a Signal to be asserted when the register is written; ignored if not provided
+
+		Returns
+		-------
+		value_signal
+			a signal that stores the register's value; which may be the value_signal arg,
+			or may be a signal created during execution
+
+		'''
+
 		self._ensure_register_is_unused(address)
 
 		# Generate a name for the register, if we don't already have one.
@@ -786,9 +849,12 @@ class SPIMultiplexer(Elaboratable):
 
 	def __init__(self, multiplexed_busses):
 		'''
-		Parameters:
-			multiplexed_busses -- A list of SPI busses to be multiplexed. The active bus will
-								  be selected based on each bus's chip-select signals.
+		Parameters
+		----------
+		multiplexed_busses
+			A list of SPI busses to be multiplexed. The active bus will
+			be selected based on each bus's chip-select signals.
+
 		'''
 		self.multiplexed_busses = multiplexed_busses
 
