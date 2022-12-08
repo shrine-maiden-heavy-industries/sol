@@ -269,7 +269,8 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		# For now, we only support layouts with consecutive indexes.
 		# Ensure this is the case.
 		for type_number, indexes in sorted(descriptors.items()):
-			assert max(indexes.keys()) == len(indexes) - 1, 'descriptors have non-contiguous indices!'
+			if max(indexes.keys()) != len(indexes) - 1:
+				raise ValueError('descriptors have non-contiguous indices!')
 
 
 		#
@@ -348,7 +349,11 @@ class GetDescriptorHandlerBlock(Elaboratable):
 				aligned_size = self._align_to_element_size(len(raw_descriptor))
 				next_free_address += aligned_size * self.ELEMENT_SIZE
 
-		assert total_size == len(rom)
+		if total_size != len(rom):
+			raise ValueError(
+				'The total size of the descriptor table is not the same size as the ROM'
+				f' {total_size} != {len(rom)}'
+			)
 
 
 		#

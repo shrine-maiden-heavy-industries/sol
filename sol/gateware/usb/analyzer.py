@@ -65,7 +65,8 @@ class USBAnalyzer(Elaboratable):
 
 		self.utmi = utmi_interface
 
-		assert (mem_depth % 2) == 0, 'mem_depth must be a power of 2'
+		if (mem_depth % 2) != 0:
+			raise ValueError('mem_depth must be a power of 2')
 
 		# Internal storage memory.
 		self.mem = Memory(width = 8, depth = mem_depth, name = 'analysis_ringbuffer')

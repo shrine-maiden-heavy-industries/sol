@@ -327,7 +327,9 @@ class GTXChannel(Elaboratable):
 		#
 
 		# Ensure we have a valid PLL/CDR configuration.
-		assert pll.config['linerate'] < 6.6e9
+		if pll.config['linerate'] >= 6.6e9:
+			raise ValueError(f'PLL linerate of {pll.config["linerate"]} must be less than 6.6e9')
+
 
 		# We support both QPLL and CPLL clock sources.
 		use_cpll = isinstance(pll, GTXChannelPLL)

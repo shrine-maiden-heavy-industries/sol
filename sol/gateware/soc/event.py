@@ -132,7 +132,7 @@ class InterruptSource(Elaboratable):
 			elif event.mode == 'fall':
 				m.d.comb += event_trigger.eq(event_stb_r & ~event.stb)
 			else:
-				assert False # :nocov:
+				raise ValueError(f'event.mode must be one of {{level, rise, fall}} not {event.mode!r}') # :nocov:
 
 			with m.If(event_trigger):
 				m.d.sync += self.pending.r_data[i].eq(1)

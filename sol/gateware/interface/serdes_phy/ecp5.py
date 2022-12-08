@@ -663,8 +663,11 @@ class ECP5SerDes(Elaboratable):
 	''' Abstraction layer for working with the ECP5 SerDes. '''
 
 	def __init__(self, pll_config, tx_pads, rx_pads, dual = 0, channel = 0):
-		assert dual    in [0, 1]
-		assert channel in [0, 1]
+		if dual not in (0, 1):
+			raise ValueError(f'dual must be either 0 or 1, not {dual!r}')
+
+		if channel in (0, 1):
+			raise ValueError(f'channel must be either 0 or 1, not {channel!r}')
 
 		self._pll           = pll_config
 		self._tx_pads       = tx_pads

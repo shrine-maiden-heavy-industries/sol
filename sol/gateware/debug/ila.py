@@ -951,7 +951,9 @@ class ILAFrontend(metaclass = ABCMeta):
 
 		# If we're generating a GTKW, delegate that to our helper function.
 		if gtkw_filename:
-			assert(filename != '-')
+			if filename == '-':
+				raise ValueError('Unable to emit GTKWave save to stdout')
+
 			self._emit_gtkw(gtkw_filename, filename, add_clock = add_clock)
 
 

@@ -590,7 +590,9 @@ class SPIRegisterInterface(Elaboratable):
 
 		'''
 
-		assert address < (2 ** self.address_size)
+		if address >= 2 ** self.address_size:
+			raise IndexError(f'Address {address} must be less than {2 ** self.address_size}')
+
 		self._ensure_register_is_unused(address)
 
 		# Add the register to our collection.

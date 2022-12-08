@@ -102,7 +102,8 @@ class USBDeviceTest(SolGatewareTestCase):
 		bits   = bits[:]
 		octets = []
 
-		assert (len(bits) % 8) == 0
+		if (len(bits) % 8) != 0:
+			raise ValueError('The length of bits must be divisible by 8')
 
 		while bits:
 			# Grab an octet worth of bits..

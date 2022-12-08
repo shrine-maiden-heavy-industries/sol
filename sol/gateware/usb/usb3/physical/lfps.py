@@ -52,8 +52,11 @@ class LFPSTiming:
 		self.t_typ = t_typ
 		self.t_min = t_min
 		self.t_max = t_max
-		assert t_min is not None
-		assert t_max is not None
+
+		if t_min is None or t_max is None:
+			raise ValueError(
+				f'Both t_min and t_max must not be None, got {t_min!r} and {t_max!r}'
+			)
 
 		self.range = (t_min, t_max)
 

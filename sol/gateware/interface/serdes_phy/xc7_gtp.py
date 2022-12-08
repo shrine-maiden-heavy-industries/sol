@@ -25,7 +25,10 @@ Open = Signal
 
 class GTPQuadPLL(Elaboratable):
 	def __init__(self, refclk, refclk_freq, linerate, channel = 0):
-		assert channel in [0, 1]
+
+		if channel not in (0, 1):
+			raise ValueError(f'channel must be either 0 or 1 not {channel!r}')
+
 		self.channel     = channel
 
 		self._refclk      = refclk
@@ -220,7 +223,8 @@ class GTPChannel(Elaboratable):
 		#
 
 		# Ensure we have a valid PLL/CDR configuration.
-		assert qpll.config['linerate'] < 6.6e9
+		if qpll.config['linerate'] >= 6.6e9:
+			raise ValueError(f'PLL linerate of {qpll.config["linerate"]} must be less than 6.6e9')
 
 		# From [UG482: Table 4-14]: CDR Recommended Settings for Protocols with SSC
 		rxcdr_cfgs = {

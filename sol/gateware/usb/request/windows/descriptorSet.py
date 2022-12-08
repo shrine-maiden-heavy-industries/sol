@@ -117,8 +117,11 @@ class GetDescriptorSetHandler(Elaboratable):
 		'''
 
 		descriptors = self._descriptors.descriptors
-		assert max(descriptors.keys()) == len(descriptors), 'descriptor sets have non-contiguous vendor codes!'
-		assert min(descriptors.keys()) == 1, 'descriptor sets must start at vendor code 1'
+		if max(descriptors.keys()) != len(descriptors):
+			raise ValueError('descriptor sets have non-contiguous vendor codes!')
+
+		if min(descriptors.keys()) != 1:
+			raise ('descriptor sets must start at vendor code 1')
 
 		maxVendorCode = max(descriptors.keys())
 		maxDescriptorSize = 0
@@ -146,7 +149,12 @@ class GetDescriptorSetHandler(Elaboratable):
 			alignedSize = self._alignToElementSize(descriptorSetLen)
 			nextFreeAddress += alignedSize * self.elementSize
 
-		assert totalSize == len(rom)
+		if totalSize != len(rom):
+			raise ValueError(
+				'The total size of the descriptor table is not the same size as the ROM'
+				f' {totalSize} != {len(rom)}'
+			)
+
 		elementSize = self.elementSize
 		romEntries = (rom[i:i + elementSize] for i in range(0, totalSize, elementSize))
 		initialiser = [structUnpack('>I', romEntry)[0] for romEntry in romEntries]

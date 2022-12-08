@@ -50,7 +50,9 @@ class LFPSSquareWaveDetector(Elaboratable):
 		# Our multipliers allow for up to a 10% devication in duty cycle.
 		self._half_cycle_min = ceil(pipe_clock_frequency * (_LFPS_PERIOD_MIN / 2) * 0.8) - 1
 		self._half_cycle_max = ceil(pipe_clock_frequency * (_LFPS_PERIOD_MAX / 2) * 1.2) + 1
-		assert self._half_cycle_min >= 1
+
+		if self._half_cycle_min < 1:
+			raise ValueError(f'Cycle minimum too low, must be at least one, is {self._half_cycle_min}')
 
 
 		#
@@ -164,7 +166,12 @@ class LFPSSquareWaveGenerator(Elaboratable):
 
 		# Compute the cycles in one half-period, and make sure the final period is within the spec.
 		self._half_cycle = ceil(pipe_clock_frequency / (2 * lfps_frequency))
-		assert _LFPS_PERIOD_MIN <= (2 * self._half_cycle) / pipe_clock_frequency <= _LFPS_PERIOD_MAX
+
+		if not (_LFPS_PERIOD_MIN <= (2 * self._half_cycle) / pipe_clock_frequency <= _LFPS_PERIOD_MAX):
+			raise ValueError(
+				f'pipe_clock_frequency of {pipe_clock_frequency} results in a period value outside '
+				f'the range of [{_LFPS_PERIOD_MIN}, {_LFPS_PERIOD_MAX}]'
+			)
 
 
 		#

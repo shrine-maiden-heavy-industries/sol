@@ -190,8 +190,10 @@ else:
 			ulpi = platform.request(platform.default_usb_connection)
 			m.submodules.usb = usb = USBDevice(bus = ulpi)
 
-			assert not usb.always_fs or os.getenv('SOL_FULL_ONLY'), \
-				   'SOL_FULL_ONLY must be set for devices with a full speed only PHY'
+			if not usb.always_fs or os.getenv('SOL_FULL_ONLY'):
+				raise ValueError(
+					'SOL_FULL_ONLY must be set for devices with a full speed only PHY'
+				)
 
 			# Add our standard control endpoint to the device.
 			descriptors = self.create_descriptors()
