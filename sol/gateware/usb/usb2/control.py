@@ -7,7 +7,6 @@
 
 ''' Low-level USB transciever gateware -- control transfer components. '''
 
-import unittest
 
 from torii                  import Elaboratable, Module
 
@@ -308,7 +307,3 @@ class USBControlEndpoint(Elaboratable):
 					m.d.comb += interface.handshakes_out.ack.eq(1)
 
 		return m
-
-
-if __name__ == '__main__':
-	unittest.main()
