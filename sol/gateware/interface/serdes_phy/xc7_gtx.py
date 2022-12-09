@@ -153,40 +153,34 @@ class GTXQuadPLL(Elaboratable):
 
 	def __repr__(self):
 		config = self.config
-		r = '''
-GTXQuadPLL
-==========
-  overview:
-  ---------
-	   +---------------------------------------------------------------+
-	   |                                                               |
-	   |           +---------------------------+ +------------+        |
-	   |  +-----+  | Phase Frequency Detector  | | Upper Band | +----+ |
-CLKIN +---> /M  +-->       Charge Pump         +->    VCO     +-> /2 +--> CLKOUT
-	   |  +-----+  |       Loop Filter         | | Lower Band | +----+ |
-	   |           +---------------------------+ +-----+------+        |
-	   |             ^                                 |               |
-	   |             |    +-----+                      |               |
-	   |             +----+ /N  <----------------------+               |
-	   |                  +-----+                                      |
-	   +---------------------------------------------------------------+
+		return f'''
+	GTXQuadPLL
+	==========
+	overview:
+	---------
+		+---------------------------------------------------------------+
+		|                                                               |
+		|           +---------------------------+ +------------+        |
+		|  +-----+  | Phase Frequency Detector  | | Upper Band | +----+ |
+	CLKIN +---> /M  +-->       Charge Pump         +->    VCO     +-> /2 +--> CLKOUT
+		|  +-----+  |       Loop Filter         | | Lower Band | +----+ |
+		|           +---------------------------+ +-----+------+        |
+		|             ^                                 |               |
+		|             |    +-----+                      |               |
+		|             +----+ /N  <----------------------+               |
+		|                  +-----+                                      |
+		+---------------------------------------------------------------+
 							+-------+
-				   CLKOUT +->  2/D  +-> LINERATE
+					CLKOUT +->  2/D  +-> LINERATE
 							+-------+
-  config:
-  -------
-	CLKIN    = {clkin}MHz
-	CLKOUT   = CLKIN x N / (2 x M) = {clkin}MHz x {n} / (2 x {m})
-			 = {vco_freq}GHz
-	LINERATE = CLKOUT x 2 / D = {vco_freq}GHz x 2 / {d}
-			 = {linerate}GHz
-'''.format(clkin    = config['clkin']/1e6,
-		   n        = config['n'],
-		   m        = config['m'],
-		   vco_freq = config['vco_freq']/1e9,
-		   d        = config['d'],
-		   linerate = config['linerate']/1e9)
-		return r
+	config:
+	-------
+	CLKIN		= {config['clkin']/1e6}MHz
+	CLKOUT		= CLKIN x N / (2 x M) = {config['clkin']/1e6}MHz x {config['n']} / (2 x {config['m']})
+				= {config['vco_freq']/1e9}GHz
+	LINERATE	= CLKOUT x 2 / D = {config['vco_freq']/1e9}GHz x 2 / {config['d']}
+				= {config['linerate']/1e9}GHz
+'''
 
 
 class GTXChannelPLL(Elaboratable):
@@ -227,41 +221,35 @@ class GTXChannelPLL(Elaboratable):
 
 	def __repr__(self):
 		config = self.config
-		r = '''
-GTXChannelPLL
-=============
-  overview:
-  ---------
-	   +--------------------------------------------------+
-	   |                                                  |
-	   |            +---------------------------+ +-----+ |
-	   |   +-----+  | Phase Frequency Detector  | |     | |
-CLKIN +----> /M  +-->       Charge Pump         +-> VCO +---> CLKOUT
-	   |   +-----+  |       Loop Filter         | |     | |
-	   |            +---------------------------+ +--+--+ |
-	   |              ^                              |    |
-	   |              |    +-------+    +-------+    |    |
-	   |              +----+  /N2  <----+  /N1  <----+    |
-	   |                   +-------+    +-------+         |
-	   +--------------------------------------------------+
+		return f'''
+	GTXChannelPLL
+	=============
+	overview:
+	---------
+		+--------------------------------------------------+
+		|                                                  |
+		|            +---------------------------+ +-----+ |
+		|   +-----+  | Phase Frequency Detector  | |     | |
+	CLKIN +----> /M  +-->       Charge Pump         +-> VCO +---> CLKOUT
+		|   +-----+  |       Loop Filter         | |     | |
+		|            +---------------------------+ +--+--+ |
+		|              ^                              |    |
+		|              |    +-------+    +-------+    |    |
+		|              +----+  /N2  <----+  /N1  <----+    |
+		|                   +-------+    +-------+         |
+		+--------------------------------------------------+
 							+-------+
-				   CLKOUT +->  2/D  +-> LINERATE
+					CLKOUT +->  2/D  +-> LINERATE
 							+-------+
-  config:
-  -------
-	CLKIN    = {clkin}MHz
-	CLKOUT   = CLKIN x (N1 x N2) / M = {clkin}MHz x ({n1} x {n2}) / {m}
-			 = {vco_freq}GHz
-	LINERATE = CLKOUT x 2 / D = {vco_freq}GHz x 2 / {d}
-			 = {linerate}GHz
-'''.format(clkin    = config['clkin']/1e6,
-		   n1       = config['n1'],
-		   n2       = config['n2'],
-		   m        = config['m'],
-		   vco_freq = config['vco_freq']/1e9,
-		   d        = config['d'],
-		   linerate = config['linerate']/1e9)
-		return r
+	config:
+	-------
+	CLKIN		= {config['clkin']/1e6}MHz
+	CLKOUT		= CLKIN x (N1 x N2) / M = {config['clkin']/1e6}MHz x ({config['n1']} x {config['n2']}) / {config['m']}
+				= {config['vco_freq']/1e9}GHz
+	LINERATE	= CLKOUT x 2 / D = {config['vco_freq']/1e9}GHz x 2 / {config['d']}
+				= {config['linerate']/1e9}GHz
+'''
+
 
 
 class GTXChannel(Elaboratable):
@@ -319,7 +307,7 @@ class GTXChannel(Elaboratable):
 
 		# Aliases.
 		pll        = self._pll
-		io_words   = self._io_words
+		io_words   = self._io_words		# noqa: F841
 		data_width = self._data_width
 
 		#
@@ -392,9 +380,11 @@ class GTXChannel(Elaboratable):
 		m.submodules.rx_term = rx_term = DRPFieldController(
 			addr = 0x0011, bits = slice(4, 6), reset = 0b10) # RX_CM_SEL
 		m.d.comb += [
-			rx_term.value.eq(Mux(self.rx_termination,
-								 0b11,    # Programmable
-								 0b10)),  # Floating
+			rx_term.value.eq(Mux(
+				self.rx_termination,
+				0b11,	# Programmable
+				0b10	# Floating
+			)),
 		]
 
 		m.submodules.drp_arbiter = drp_arbiter = DRPArbiter()

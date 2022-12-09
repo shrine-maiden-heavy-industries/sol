@@ -728,7 +728,7 @@ class ECP5SerDes(Elaboratable):
 		rx_err      = Signal()
 		rx_ctc_urun = Signal()
 		rx_ctc_orun = Signal()
-		rx_align    = Signal()
+		rx_align    = Signal()		# noqa: F841
 		rx_bus      = Signal(24)
 
 
@@ -797,15 +797,17 @@ class ECP5SerDes(Elaboratable):
 				20: '0b000',
 				16: '0b010',
 				10: '0b001',
-				 8: '0b011'}[self._pll.config['mult']],
+				8: '0b011'
+			}[self._pll.config['mult']],
 			p_D_TX_MAX_RATE         = '5.0',    # 5.0 Gbps
 			p_D_TX_VCO_CK_DIV       = {
 				32: '0b111',
 				16: '0b110',
-				 8: '0b101',
-				 4: '0b100',
-				 2: '0b010',
-				 1: '0b000'}[1],                # DIV/1
+				8 : '0b101',
+				4 : '0b100',
+				2 : '0b010',
+				1 : '0b000'
+			}[1],                # DIV/1
 			p_D_BITCLK_LOCAL_EN     = '0b1',    # Use clock from local PLL
 
 			# DCU — clock multiplier unit
@@ -891,10 +893,11 @@ class ECP5SerDes(Elaboratable):
 			p_CHX_RX_DCO_CK_DIV     = {
 				32: '0b111',
 				16: '0b110',
-				 8: '0b101',
-				 4: '0b100',
-				 2: '0b010',
-				 1: '0b000'}[1],                # DIV/1
+				8 : '0b101',
+				4 : '0b100',
+				2 : '0b010',
+				1 : '0b000'
+			}[1],                # DIV/1
 
 			# begin undocumented (Clarity Designer values for 5 Gbps PCIe used)
 			p_CHX_DCOATDCFG         = '0b00',
@@ -1037,7 +1040,7 @@ class ECP5SerDes(Elaboratable):
 
 			# SCI interface ------------------------------------------------------------------------
 			**{'i_D_SCIWDATA%d' % n: sci.sci_wdata[n] for n in range(8)},
-			**{'i_D_SCIADDR%d'  % n: sci.sci_addr [n] for n in range(6)},
+			**{'i_D_SCIADDR%d'  % n: sci.sci_addr[n] for n in range(6)},
 			**{'o_D_SCIRDATA%d' % n: sci.sci_rdata[n] for n in range(8)},
 			i_D_SCIENAUX  = sci.dual_sel,
 			i_D_SCISELAUX = sci.dual_sel,
@@ -1049,7 +1052,7 @@ class ECP5SerDes(Elaboratable):
 
 		# Translate the 'CHX' string to the correct channel name in each of our SerDes parameters,
 		# and create our SerDes instance.
-		serdes_params = {k.replace('CHX', f'CH{self._channel}'):v for (k,v) in serdes_params.items()}
+		serdes_params = {k.replace('CHX', f'CH{self._channel}'): v for (k, v) in serdes_params.items()}
 		m.submodules.serdes = serdes = Instance('DCUA', **serdes_params)
 
 		# Bind our SerDes to the correct location inside the FPGA.
@@ -1060,8 +1063,10 @@ class ECP5SerDes(Elaboratable):
 		# of the 8b10b encoding space. We use it to drive the comma aligner and reset sequencer.
 		# This signal is registered so that it can be sampled from asynchronous domains.
 		m.d.pipe += [
-			rx_err.eq(rx_bus[8]  & (rx_bus[ 0: 8] == 0xee) |
-					  rx_bus[20] & (rx_bus[12:20] == 0xee)),
+			rx_err.eq(
+				rx_bus[8]  & (rx_bus[ 0: 8] == 0xee) |
+				rx_bus[20] & (rx_bus[12:20] == 0xee)
+			),
 		]
 
 		#

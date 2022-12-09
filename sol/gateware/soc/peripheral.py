@@ -152,8 +152,10 @@ class Peripheral:
 		self._csr_banks.append((bank, addr, alignment))
 		return bank
 
-	def window(self, *, addr_width, data_width, granularity = None, features = frozenset(),
-			   alignment = 0, addr = None, sparse = None):
+	def window(
+		self, *, addr_width, data_width, granularity = None, features = frozenset(),
+		alignment = 0, addr = None, sparse = None
+	):
 		'''Request a window to a subordinate bus.
 
 		See :meth:`torii.lib.soc.wishbone.Decoder.add` for details.
@@ -165,8 +167,10 @@ class Peripheral:
 		window = wishbone.Interface(addr_width = addr_width, data_width = data_width,
 									granularity = granularity, features = features)
 		granularity_bits = log2_int(data_width // window.granularity)
-		window.memory_map = MemoryMap(addr_width = addr_width + granularity_bits,
-									  data_width = window.granularity, alignment = alignment)
+		window.memory_map = MemoryMap(
+			addr_width = addr_width + granularity_bits,
+			data_width = window.granularity, alignment = alignment
+		)
 		self._windows.append((window, addr, sparse))
 		return window
 

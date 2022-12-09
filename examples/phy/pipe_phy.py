@@ -22,7 +22,7 @@ class PIPEPhyExample(Elaboratable):
 
 		# Create our core PIPE PHY. Since PHY configuration is per-board, we'll just ask
 		# our platform for a pre-configured USB3 PHY.
-		m.submodules.phy = phy = platform.create_usb3_phy()
+		m.submodules.phy = platform.create_usb3_phy()
 
 		# Return our elaborated module.
 		return m

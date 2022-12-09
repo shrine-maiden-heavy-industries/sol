@@ -160,7 +160,7 @@ class USBEndpointMultiplexer(Elaboratable):
 				bus = getattr(interface, sub_bus)
 				return getattr(bus, name)
 			else:
-				return  getattr(interface, name)
+				return getattr(interface, name)
 
 
 		# We're building an if-elif tree; so we should start with an If entry.

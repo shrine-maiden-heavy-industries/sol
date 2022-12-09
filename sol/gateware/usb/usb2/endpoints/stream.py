@@ -324,7 +324,9 @@ class USBStreamOutEndpoint(Elaboratable):
 		rx_last  = boundary_detector.last
 
 		# Create a Rx FIFO.
-		m.submodules.fifo = fifo = TransactionalizedFIFO(width = 10, depth = self._buffer_size, name = 'rx_fifo', domain = 'usb')
+		m.submodules.fifo = fifo = TransactionalizedFIFO(
+			width = 10, depth = self._buffer_size, name = 'rx_fifo', domain = 'usb'
+		)
 
 
 		#
@@ -358,7 +360,9 @@ class USBStreamOutEndpoint(Elaboratable):
 
 			# We'll keep data if our packet finishes with a valid CRC and no overflow; and discard it otherwise.
 			fifo.write_commit.eq(targeting_endpoint & boundary_detector.complete_out & ~overflow),
-			fifo.write_discard.eq(targeting_endpoint & (boundary_detector.invalid_out | (boundary_detector.complete_out & overflow))),
+			fifo.write_discard.eq(
+				targeting_endpoint & (boundary_detector.invalid_out | (boundary_detector.complete_out & overflow))
+			),
 
 			# We'll ACK each packet if it's received correctly; _or_ if we skipped the packet
 			# due to a PID sequence mismatch. If we get a PID sequence mismatch, we assume that

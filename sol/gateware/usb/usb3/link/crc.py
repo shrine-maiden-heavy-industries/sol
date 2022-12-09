@@ -1,4 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
+# The line below is a hack to disable flake8 from yelling about the massive polynomial tables
+# Eventually it'll be cleaned up, but as it's the only flake8 issue in this file left, it'll wait
+# flake8: noqa
 #
 # This file is part of SOL.
 #
@@ -38,11 +41,11 @@ def compute_usb_crc5(protected_bits):
 
 	# Implements the CRC polynomial from the USB specification.
 	return Cat(
-			xor_bits(10, 9, 8, 5, 4, 2),
-		   ~xor_bits(10, 9, 8, 7, 4, 3, 1),
-			xor_bits(10, 9, 8, 7, 6, 3, 2, 0),
-			xor_bits(10, 7, 6, 4, 1),
-			xor_bits(10, 9, 6, 5, 3, 0)
+		xor_bits(10, 9, 8, 5, 4, 2),
+		~xor_bits(10, 9, 8, 7, 4, 3, 1),
+		xor_bits(10, 9, 8, 7, 6, 3, 2, 0),
+		xor_bits(10, 7, 6, 4, 1),
+		xor_bits(10, 9, 6, 5, 3, 0)
 	)
 
 
@@ -99,38 +102,38 @@ class HeaderPacketCRC(Elaboratable):
 		# This is hideous, but it's lifted directly from the specification, so it's probably safer
 		# not to try and 'clean it up' by expanding the polynomial ourselves.
 		return Cat(
-			xor_past_bits(4, 5, 7, 10, 12, 13, 15)
-				^ xor_data_bits(0, 4, 8, 12, 13, 15, 20, 21, 23, 26, 28, 29, 31),
-			xor_past_bits(0, 4, 6, 7, 8, 10, 11, 12, 14, 15)
-				^ xor_data_bits(0, 1, 4, 5, 8, 9, 12, 14, 15, 16, 20, 22, 23, 24, 26, 27, 28, 30, 31),
-			xor_past_bits(0, 1, 5, 7, 8, 9, 11, 12, 13, 15)
-				^ xor_data_bits(1, 2, 5, 6, 9, 10, 13, 15, 16, 17, 21, 23, 24, 25, 27, 28, 29, 31),
-			xor_past_bits(0, 1, 2, 4, 5, 6, 7, 8, 9, 14, 15)
-				^ xor_data_bits(0, 2, 3, 4, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 30, 31),
-			xor_past_bits(0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 15)
-				^ xor_data_bits(1, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 31),
-			xor_past_bits(0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11)
-				^ xor_data_bits(2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27),
-			xor_past_bits(0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12)
-				^ xor_data_bits(3, 5, 6, 7, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28),
-			xor_past_bits(0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13)
-				^ xor_data_bits(4, 6, 7, 8, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29),
-			xor_past_bits(0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14)
-				^ xor_data_bits(5, 7, 8, 9, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 26, 27, 28, 29, 30),
-			xor_past_bits(0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15)
-				^ xor_data_bits(6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31),
-			xor_past_bits(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15)
-				^ xor_data_bits(7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 29, 30, 31),
-			xor_past_bits(0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15)
-				^ xor_data_bits(8, 10, 11, 12, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 31),
-			xor_past_bits(0, 1, 3, 6, 8, 9, 11, 12, 14)
-				^ xor_data_bits(0, 4, 8, 9, 11, 16, 17, 19, 22, 24, 25, 27, 28, 30),
-			xor_past_bits(1, 2, 4, 7, 9, 10, 12, 13, 15)
-				^ xor_data_bits(1, 5, 9, 10, 12, 17, 18, 20, 23, 25, 26, 28, 29, 31),
-			xor_past_bits(2, 3, 5, 8, 10, 11, 13, 14)
-				^ xor_data_bits(2, 6, 10, 11, 13, 18, 19, 21, 24, 26, 27, 29, 30),
-			xor_past_bits(3, 4, 6, 9, 11, 12, 14, 15)
-				^ xor_data_bits(3, 7, 11, 12, 14, 19, 20, 22, 25, 27, 28, 30, 31),
+			xor_past_bits(4, 5, 7, 10, 12, 13, 15) ^
+			xor_data_bits(0, 4, 8, 12, 13, 15, 20, 21, 23, 26, 28, 29, 31),
+			xor_past_bits(0, 4, 6, 7, 8, 10, 11, 12, 14, 15) ^
+			xor_data_bits(0, 1, 4, 5, 8, 9, 12, 14, 15, 16, 20, 22, 23, 24, 26, 27, 28, 30, 31),
+			xor_past_bits(0, 1, 5, 7, 8, 9, 11, 12, 13, 15) ^
+			xor_data_bits(1, 2, 5, 6, 9, 10, 13, 15, 16, 17, 21, 23, 24, 25, 27, 28, 29, 31),
+			xor_past_bits(0, 1, 2, 4, 5, 6, 7, 8, 9, 14, 15) ^
+			xor_data_bits(0, 2, 3, 4, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 24, 25, 30, 31),
+			xor_past_bits(0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 15) ^
+			xor_data_bits(1, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 31),
+			xor_past_bits(0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11) ^
+			xor_data_bits(2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27),
+			xor_past_bits(0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12) ^
+			xor_data_bits(3, 5, 6, 7, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28),
+			xor_past_bits(0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13) ^
+			xor_data_bits(4, 6, 7, 8, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 29),
+			xor_past_bits(0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14) ^
+			xor_data_bits(5, 7, 8, 9, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 25, 26, 27, 28, 29, 30),
+			xor_past_bits(0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15) ^
+			xor_data_bits(6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31),
+			xor_past_bits(1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15) ^
+			xor_data_bits(7, 9, 10, 11, 13, 14, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 29, 30, 31),
+			xor_past_bits(0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15) ^
+			xor_data_bits(8, 10, 11, 12, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30, 31),
+			xor_past_bits(0, 1, 3, 6, 8, 9, 11, 12, 14) ^
+			xor_data_bits(0, 4, 8, 9, 11, 16, 17, 19, 22, 24, 25, 27, 28, 30),
+			xor_past_bits(1, 2, 4, 7, 9, 10, 12, 13, 15) ^
+			xor_data_bits(1, 5, 9, 10, 12, 17, 18, 20, 23, 25, 26, 28, 29, 31),
+			xor_past_bits(2, 3, 5, 8, 10, 11, 13, 14) ^
+			xor_data_bits(2, 6, 10, 11, 13, 18, 19, 21, 24, 26, 27, 29, 30),
+			xor_past_bits(3, 4, 6, 9, 11, 12, 14, 15) ^
+			xor_data_bits(3, 7, 11, 12, 14, 19, 20, 22, 25, 27, 28, 30, 31),
 		)
 
 
@@ -221,8 +224,11 @@ class DataPacketPayloadCRC(Elaboratable):
 		''' Generates the next round of our CRC; given a full input word . '''
 
 		# Helper functions that help us more clearly match the expanded polynomial form.
-		d = lambda i : data_in[len(data_in) - i - 1]
-		q = lambda i : current_crc[i]
+		def d(i):
+			return data_in[len(data_in) - i - 1]
+
+		def q(i):
+			return current_crc[i]
 
 		# These lines are extremely long, but there doesn't seem any advantage in clarity to splitting them.
 		return Cat(
@@ -265,8 +271,12 @@ class DataPacketPayloadCRC(Elaboratable):
 		''' Generates the next round of our CRC; given a 3B trailing input word . '''
 
 		# Helper functions that help us more clearly match the expanded polynomial form.
-		d = lambda i : data_in[len(data_in) - i - 1]
-		q = lambda i : current_crc[i]
+		def d(i):
+			return data_in[len(data_in) - i - 1]
+
+		def q(i):
+			return current_crc[i]
+
 
 		# These lines are extremely long, but there doesn't seem any advantage in clarity to splitting them.
 		return Cat(
@@ -309,8 +319,12 @@ class DataPacketPayloadCRC(Elaboratable):
 		''' Generates the next round of our CRC; given a 2B trailing input word . '''
 
 		# Helper functions that help us more clearly match the expanded polynomial form.
-		d = lambda i : data_in[len(data_in) - i - 1]
-		q = lambda i : current_crc[i]
+		def d(i):
+			return data_in[len(data_in) - i - 1]
+
+		def q(i):
+			return current_crc[i]
+
 
 		# These lines are extremely long, but there doesn't seem any advantage in clarity to splitting them.
 		return Cat(
@@ -353,8 +367,11 @@ class DataPacketPayloadCRC(Elaboratable):
 		''' Generates the next round of our CRC; given a 2B trailing input word . '''
 
 		# Helper functions that help us more clearly match the expanded polynomial form.
-		d = lambda i : data_in[len(data_in) - i - 1]
-		q = lambda i : current_crc[i]
+		def d(i):
+			return data_in[len(data_in) - i - 1]
+
+		def q(i):
+			return current_crc[i]
 
 		return Cat(
 			q(24) ^ q(30) ^ d(0) ^ d(6),
@@ -444,7 +461,7 @@ class DataPacketPayloadCRCTest(SolSSGatewareTestCase):
 	def test_aligned_crc(self):
 		dut = self.dut
 
-		#yield dut.advance_word.eq(1)
+		# yield dut.advance_word.eq(1)
 
 		for i in (0x02000112, 0x40000000):
 			yield dut.data_input.eq(i)
@@ -459,7 +476,7 @@ class DataPacketPayloadCRCTest(SolSSGatewareTestCase):
 
 
 		# Aligned section of a real USB data capture, from a USB flash drive.
-		aligned_section =[
+		aligned_section = [
 			0x03000112,
 			0x09000000,
 			0x520013FE,

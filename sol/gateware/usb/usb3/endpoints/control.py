@@ -97,7 +97,9 @@ class USB3ControlEndpoint(Elaboratable):
 		if (single_handler and isinstance(self._request_handlers[0], StandardRequestHandler)):
 
 			# Add a handler that will stall any non-standard request.
-			stall_condition = lambda setup : setup.type != USBRequestType.STANDARD
+			def stall_condition(setup):
+				return setup.type != USBRequestType.STANDARD
+
 			self.add_request_handler(StallOnlyRequestHandler(stall_condition))
 
 

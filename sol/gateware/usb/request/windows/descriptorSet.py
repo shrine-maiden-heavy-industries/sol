@@ -114,7 +114,7 @@ class GetDescriptorSetHandler(Elaboratable):
 				  The memory object uses 32-bit entries which the descriptor gateware accesses accordingly.
 				* The length of the largest held descriptor.
 				* The highest Vendor code number used by the descriptors for retrieval.
-		'''
+		''' # noqa: E101
 
 		descriptors = self._descriptors.descriptors
 		if max(descriptors.keys()) != len(descriptors):

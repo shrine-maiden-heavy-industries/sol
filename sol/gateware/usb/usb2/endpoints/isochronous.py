@@ -58,7 +58,8 @@ class USBIsochronousInEndpoint(Elaboratable):
 	max_packet_size: int
 		The maximum packet size for this endpoint. Should match the wMaxPacketSize provided in the
 		USB endpoint descriptor.
-	'''
+
+	''' # noqa: E101
 
 	_MAX_FRAME_DATA = 1024 * 3
 

@@ -211,9 +211,9 @@ class USBSerialDevice(Elaboratable):
 
 		# Attach class-request handlers that stall any vendor or reserved requests,
 		# as we don't have or need any.
-		stall_condition = lambda setup : \
-			(setup.type == USBRequestType.VENDOR) | \
-			(setup.type == USBRequestType.RESERVED)
+		def stall_condition(setup):
+			return (setup.type == USBRequestType.VENDOR) | (setup.type == USBRequestType.RESERVED)
+
 		control_ep.add_request_handler(StallOnlyRequestHandler(stall_condition))
 
 		# Create our status/communications endpoint; but don't ever drive its stream.

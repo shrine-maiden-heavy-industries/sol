@@ -255,7 +255,7 @@ class ConstantStreamGenerator(Elaboratable):
 					rom_read_port.addr.eq(position_in_stream),
 					self.stream.payload.eq(rom_read_port.data),
 
-					## ... and base First and Last based on our current position in the stream.
+					# ... and base First and Last based on our current position in the stream.
 					self.stream.first.eq(on_first_packet),
 					self.stream.last.eq(on_last_packet)
 				]
@@ -635,13 +635,16 @@ class StreamSerializer(Elaboratable):
 
 		I: data[]       -- The data stream to be sent out. Length is set by the data_length initializer argument.
 		I: max_length[] -- The maximum length to be sent. Defaults to the length of the stream.
-						   Only present if the `max_length_width` parameter is provided on creation.
+							Only present if the `max_length_width` parameter is provided on creation.
 
 		*: stream       -- The generated stream interface.
 
 	'''
 
-	def __init__(self, data_length, domain = 'sync', data_width = 8, stream_type = StreamInterface, max_length_width = None):
+	def __init__(
+		self, data_length, domain = 'sync', data_width = 8, stream_type = StreamInterface,
+		max_length_width = None
+	):
 		'''
 		Parameters
 		----------

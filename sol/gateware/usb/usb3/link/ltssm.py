@@ -351,7 +351,7 @@ class LTSSMController(Elaboratable):
 					# If we see a TS1, and we're not in strict mode, move forward without
 					# necessarily seeing a LFPS burst ourselves.
 					with m.If(self._loosen_requirements & self.ts1_detected):
-							transition_to_state('Polling.RxEQ')
+						transition_to_state('Polling.RxEQ')
 
 					# If this is the first burst we've seen, move our target forward;
 					# so we can meet our second condition.
@@ -363,7 +363,7 @@ class LTSSMController(Elaboratable):
 
 					# If we've sent enough, -and- we meet our condition, move forward.
 					with m.If(lfps_burst_seen):
-							transition_to_state('Polling.RxEQ')
+						transition_to_state('Polling.RxEQ')
 
 
 				# If we haven't yet sent 16 bursts, track how many bursts we have sent.

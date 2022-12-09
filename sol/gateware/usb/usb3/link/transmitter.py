@@ -285,15 +285,15 @@ class RawPacketTransmitter(Elaboratable):
 				with m.Switch(pipelined_data_valid):
 
 					# 3 valid bytes, 1 byte of CRC
-					with m.Case (0b0111):
+					with m.Case(0b0111):
 						m.d.comb += source.data[24:32].eq(crc32.crc[0:8])
 
 					# 2 valid bytes, 2 bytes of CRC
-					with m.Case (0b0011):
+					with m.Case(0b0011):
 						m.d.comb += source.data[16:32].eq(crc32.crc[0:16])
 
 					# 1 valid byte, 3 bytes of CRC
-					with m.Case (0b0001):
+					with m.Case(0b0001):
 						m.d.comb += source.data[8:32].eq(crc32.crc[0:24])
 
 

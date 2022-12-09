@@ -304,11 +304,11 @@ class USBTokenDetector(Elaboratable):
 
 		# Implements the CRC polynomial from the USB specification.
 		return Cat(
-			 xor_bits(10, 9, 8, 5, 4, 2),
+			xor_bits(10, 9, 8, 5, 4, 2),
 			~xor_bits(10, 9, 8, 7, 4, 3, 1),
-			 xor_bits(10, 9, 8, 7, 6, 3, 2, 0),
-			 xor_bits(10, 7, 6, 4, 1),
-			 xor_bits(10, 9, 6, 5, 3, 0)
+			xor_bits(10, 9, 8, 7, 6, 3, 2, 0),
+			xor_bits(10, 7, 6, 4, 1),
+			xor_bits(10, 9, 6, 5, 3, 0)
 		)
 
 
@@ -724,7 +724,8 @@ class USBDataPacketCRC(Elaboratable):
 
 	def _generate_next_crc(self, current_crc, data_in):
 		''' Generates the next round of a bytewise USB CRC16. '''
-		xor_reduce = lambda bits : functools.reduce(operator.__xor__, bits)
+		def xor_reduce(bits):
+			return functools.reduce(operator.__xor__, bits)
 
 		# Extracted from the USB spec's definition of the CRC16 polynomial.
 		return Cat(
@@ -1046,7 +1047,7 @@ class USBDataPacketReceiverTest(USBPacketizerTest):
 
 	@usb_domain_test_case
 	def test_data_receive(self):
-		dut = self.dut
+		dut = self.dut	# noqa: F841
 		stream = self.dut.stream
 
 
@@ -1115,7 +1116,7 @@ class USBDataPacketReceiverTest(USBPacketizerTest):
 
 	@usb_domain_test_case
 	def test_zlp(self):
-		dut = self.dut
+		dut = self.dut	# noqa: F841
 		stream = self.dut.stream
 
 		#    0x4B        # DATA1

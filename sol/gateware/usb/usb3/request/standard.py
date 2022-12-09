@@ -137,9 +137,9 @@ class StandardRequestHandler(Elaboratable):
 		]
 
 
-		##
-		## Handlers.
-		##
+		#
+		# Handlers.
+		#
 		with m.If(setup.type == USBRequestType.STANDARD):
 			with m.FSM(domain = 'ss'):
 
@@ -216,7 +216,7 @@ class StandardRequestHandler(Elaboratable):
 				# SET_ISOCH_DELAY -- The host is trying to inform us of our isochronous delay.
 				with m.State('SET_ISOCH_DELAY'):
 					# TODO: store this data aside once we support ISOCH
-					#self.handle_register_write_request(m, interface.new_config, interface.config_changed)
+					# self.handle_register_write_request(m, interface.new_config, interface.config_changed)
 
 					# ACK our status stage, when appropriate.
 					with m.If(self.interface.status_requested):

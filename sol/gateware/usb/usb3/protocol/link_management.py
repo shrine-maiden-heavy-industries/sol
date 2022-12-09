@@ -102,6 +102,7 @@ class LinkManagementPacketHandler(Elaboratable):
 		# LMP transmitter.
 		#
 
+
 		def send_packet_response(response_type, **fields):
 			''' Helper that allows us to easily define a packet-send state.'''
 

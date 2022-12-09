@@ -41,7 +41,8 @@ class LinkMaintenanceTimers(Elaboratable):
 	----------
 	ss_clock_frequency: float
 		The frequency of our ``ss`` domain clock, in Hz.
-	'''
+
+	''' # noqa: E101
 
 	KEEPALIVE_TIMEOUT = 10e-6
 	RECOVERY_TIMEOUT  = 1e-3

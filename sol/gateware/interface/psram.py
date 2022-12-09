@@ -38,7 +38,8 @@ class HyperBus(Record):
 
 
 class HyperRAMInterface(Elaboratable):
-	''' Gateware interface to HyperRAM series self-refreshing DRAM chips.
+	'''
+	Gateware interface to HyperRAM series self-refreshing DRAM chips.
 
 	I/O port:
 		B: bus              -- The primary physical connection to the DRAM chip.
@@ -57,18 +58,24 @@ class HyperRAMInterface(Elaboratable):
 
 		O: idle             -- High whenever the transmitter is idle (and thus we can start a new piece of data.)
 		O: new_data_ready   -- Strobe that indicates when new data is ready for reading
-	'''
+
+	''' # noqa: E101
 
 	LOW_LATENCY_EDGES  = 6
 	HIGH_LATENCY_EDGES = 14
 
 	def __init__(self, *, bus, in_skew = None, out_skew = None, clock_skew = None):
 		'''
-		Parmeters:
-			bus           -- The RAM record that should be connected to this RAM chip.
-			data_skews    -- If provided, adds an input delay to each line of the data input.
-							 Can be provided as a single delay number, or an interable of eight
-							 delays to separately delay each of the input lines.
+		Parameters
+		----------
+		bus
+			The RAM record that should be connected to this RAM chip.
+
+		data_skews
+			If provided, adds an input delay to each line of the data input.
+			Can be provided as a single delay number, or an interable of eight
+			delays to separately delay each of the input lines.
+
 		'''
 
 		self.in_skew    = in_skew
@@ -180,7 +187,7 @@ class HyperRAMInterface(Elaboratable):
 			self.bus.dq.oe.eq(0),
 		]
 
-		with m.FSM() as fsm:
+		with m.FSM():
 
 			# IDLE state: waits for a transaction request
 			with m.State('IDLE'):
@@ -336,7 +343,7 @@ class HyperRAMInterface(Elaboratable):
 						m.d.sync += advance_clock.eq(0)
 
 					with m.Else():
-						#m.next = 'READ_DATA_MSB'
+						# m.next = 'READ_DATA_MSB'
 						m.next = 'RECOVERY'
 
 
@@ -367,7 +374,7 @@ class HyperRAMInterface(Elaboratable):
 					m.d.sync += advance_clock.eq(0)
 
 				with m.Else():
-					#m.next = 'READ_DATA_MSB'
+					# m.next = 'READ_DATA_MSB'
 					m.next = 'RECOVERY'
 
 

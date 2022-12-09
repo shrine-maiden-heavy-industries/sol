@@ -7,8 +7,8 @@
 # Try to import the SoC modules, will fail if lambdasoc is not installed
 try:
 
-	from .simplesoc import SimpleSoC
-	from .uart      import UARTPeripheral
+	from .simplesoc import SimpleSoC		# noqa: F401
+	from .uart      import UARTPeripheral	# noqa: F401
 
 	__all__ = (
 		'SimpleSoC',

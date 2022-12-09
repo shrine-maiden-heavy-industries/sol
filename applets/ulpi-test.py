@@ -136,6 +136,6 @@ if __name__ == '__main__':
 		packet_as_string = bytes(packet)
 		print(f'{packet_as_string}: {packet_hex}')
 
-		#byte = get_next_byte()
-		#print(f'{byte:02x} ', end = ')
-		#sys.stdout.flush()
+		# byte = get_next_byte()
+		# print(f'{byte:02x} ', end = ')
+		# sys.stdout.flush()

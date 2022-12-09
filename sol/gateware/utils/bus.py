@@ -26,7 +26,8 @@ class OneHotMultiplexer(Elaboratable):
 
 	I/O port:
 		O*: output -- Our output interface; carries the signal merged from all input busses.
-	'''
+
+	''' # noqa: E101
 
 	def __init__(self, *, interface_type, valid_field = 'valid', mux_signals = (), or_signals = (), pass_signals = ()):
 		'''
@@ -87,13 +88,18 @@ class OneHotMultiplexer(Elaboratable):
 
 	@staticmethod
 	def _get_signal(interface, name_or_function):
-		''' Fetches a signal from the given interface.
+		'''
+		Fetches a signal from the given interface.
 
-		Parameter:
-			interface        -- The interface to fetch the relevant signal from.
-			name_or_function -- The name of the signal to retrieve; or a function that
-								returns the relevant signal given the interface.
-		 '''
+		Parameters
+		----------
+		interface
+			The interface to fetch the relevant signal from.
+
+		name_or_function
+			The name of the signal to retrieve; or a function that
+			returns the relevant signal given the interface.
+		'''
 
 		if callable(name_or_function):
 			return name_or_function(interface)

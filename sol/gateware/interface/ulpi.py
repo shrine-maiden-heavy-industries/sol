@@ -585,7 +585,8 @@ class ULPIRxEventDecoderTest(SolGatewareTestCase):
 
 
 class ULPIControlTranslator(Elaboratable):
-	''' Gateware that translates ULPI control signals to their UTMI equivalents.
+	'''
+	Gateware that translates ULPI control signals to their UTMI equivalents.
 
 	I/O port:
 		I: bus_idle       -- Indicates that the ULPI bus is idle, and thus capable of
@@ -606,16 +607,22 @@ class ULPIControlTranslator(Elaboratable):
 		I: dischrg_vbus   -- when set, connects a resistor from VBUS to 3V3 to charge VBUS above SessValid
 
 		O: busy           -- true iff the control translator is actively performing an operation
-	'''
+
+	''' # noqa: E101
 
 	def __init__(self, *, register_window, own_register_window = False):
 		'''
-		Parmaeters:
-			register_window     -- The ULPI register window to work with.
-			own_register_window -- True iff we're the owner of this register window.
-								   Typically, we'll use the register window for a broader controller;
-								   but this can be set to True to indicate that we need to consider this
-								   register window our own, and thus a submodule.
+		Parameters
+		----------
+		register_window
+			The ULPI register window to work with.
+
+		own_register_window
+			True iff we're the owner of this register window.
+			Typically, we'll use the register window for a broader controller;
+			but this can be set to True to indicate that we need to consider this
+			register window our own, and thus a submodule.
+
 		'''
 
 		self.register_window     = register_window
@@ -649,15 +656,23 @@ class ULPIControlTranslator(Elaboratable):
 
 
 	def add_composite_register(self, m, address, value, *, reset_value = 0):
-		''' Adds a ULPI register that's composed of multiple control signals.
+		'''
+		Adds a ULPI register that's composed of multiple control signals.
 
-		Params:
-			address      -- The register number in the ULPI register space.
-			value       -- An 8-bit signal composing the bits that should be placed in
-						   the given register.
+		Parameters
+		----------
+		address
+			The register number in the ULPI register space.
 
-			reset_value -- If provided, the given value will be assumed as the reset value
-						-- of the given register; allowing us to avoid an initial write.
+		value
+			An 8-bit signal composing the bits that should be placed in
+			the given register.
+
+
+		reset_value
+			If provided, the given value will be assumed as the reset value
+			of the given register; allowing us to avoid an initial write.
+
 		'''
 
 		current_register_value = Signal(8, reset = reset_value, name = f'current_register_value_{address:02x}')
@@ -817,7 +832,8 @@ class ControlTranslatorTest(SolGatewareTestCase):
 
 
 class ULPITransmitTranslator(Elaboratable):
-	''' Accepts UTMI transmit signals, and converts them into ULPI equivalents.
+	'''
+	Accepts UTMI transmit signals, and converts them into ULPI equivalents.
 
 	I/O port:
 		I: tx_data[8]      -- The data to be transmitted.
@@ -835,7 +851,8 @@ class ULPITransmitTranslator(Elaboratable):
 		O: ulpi_stp        -- The STP signal for the relevant ULPI bus.
 
 		O: busy            -- True iff this module is using the bus.
-	'''
+
+	''' # noqa: E101
 
 
 	# Prefix for ULPI transmit commands.
@@ -1023,8 +1040,8 @@ class ULPITransmitTranslatorTest(SolGatewareTestCase):
 
 		# ... we should get a cycle of STP.
 		yield
-		#self.assertEqual((yield dut.ulpi_data_out), 0)
-		#self.assertEqual((yield dut.ulpi_stp),      1)
+		# self.assertEqual((yield dut.ulpi_data_out), 0)
+		# self.assertEqual((yield dut.ulpi_stp),      1)
 
 		# ... followed by idle.
 		yield
@@ -1032,7 +1049,8 @@ class ULPITransmitTranslatorTest(SolGatewareTestCase):
 
 
 class UTMITranslator(Elaboratable):
-	''' Gateware that translates a ULPI interface into a simpler UTMI one.
+	'''
+	Gateware that translates a ULPI interface into a simpler UTMI one.
 
 	I/O port:
 
@@ -1068,7 +1086,7 @@ class UTMITranslator(Elaboratable):
 		I: manual_read   -- Strobe that triggers a diagnostic read.
 		I: manual_write  -- Strobe that triggers a diagnostic write.
 
-	'''
+	''' # noqa: E101
 
 	# UTMI status signals translated from the ULPI bus.
 	RXEVENT_STATUS_SIGNALS = [
@@ -1096,20 +1114,29 @@ class UTMITranslator(Elaboratable):
 
 
 	def __init__(self, *, ulpi, use_platform_registers = True, handle_clocking = True):
-		''' Params:
+		'''
+		Parameters
+		----------
+		ulpi
+			The ULPI bus to communicate with.
 
-			ulpi                   -- The ULPI bus to communicate with.
-			use_platform_registers -- If True (or not provided), any extra registers writes provided in
-									  the platform definition will be applied automatically.
-			handle_clocking        -- True iff we should attempt to automatically handle ULPI clocking. If
-									  the `clk` ULPI signal is an input, it will be used to provide the 'usb'
-									  domain clock. If the ULPI signal is an output, it will driven with our
-									  'usb' domain clock. If False, it will be the user's responsibility to
-									  handle clocking.
+		use_platform_registers
+			If True (or not provided), any extra registers writes provided in
+			the platform definition will be applied automatically.
 
-			Note that it's recommended that multi-PHY systems either use a single clock for all PHYs
-			(assuming the PHYs support clock input), or that individual clock domains be created for each
-			PHY using a DomainRenamer.
+		handle_clocking
+			True iff we should attempt to automatically handle ULPI clocking. If
+			the `clk` ULPI signal is an input, it will be used to provide the 'usb'
+			domain clock. If the ULPI signal is an output, it will driven with our
+			'usb' domain clock. If False, it will be the user's responsibility to
+			handle clocking.
+
+		Note
+		----
+		It's recommended that multi-PHY systems either use a single clock for all PHYs
+		(assuming the PHYs support clock input), or that individual clock domains be created for each
+		PHY using a DomainRenamer.
+
 		'''
 
 		self.use_platform_registers = use_platform_registers
@@ -1152,16 +1179,24 @@ class UTMITranslator(Elaboratable):
 
 
 	def add_extra_register(self, write_address, write_value, *, default_value = None):
-		''' Adds logic to configure an extra ULPI register. Useful for configuring vendor registers.
+		'''
+		Adds logic to configure an extra ULPI register. Useful for configuring vendor registers.
 
-		Params:
-			write_address -- The write address of the target ULPI register.
-			write_value   -- The value to be written. If a Signal is provided; the given register will be
-							 set post-reset, if necessary; and then dynamically updated each time the signal changes.
-							 If an integer constant is provided, this value will be written once upon startup.
-			default_value -- The default value the register is expected to have post-reset; used to determine
-							 if the value needs to be updated post-reset. If a Signal is provided for write_value,
-							 this must be provided; if an integer is provided for write_value, this is optional.
+		Parameters
+		----------
+		write_address
+			The write address of the target ULPI register.
+
+		write_value
+			The value to be written. If a Signal is provided; the given register will be
+			set post-reset, if necessary; and then dynamically updated each time the signal changes.
+			If an integer constant is provided, this value will be written once upon startup.
+
+		default_value
+			The default value the register is expected to have post-reset; used to determine
+			if the value needs to be updated post-reset. If a Signal is provided for write_value,
+			this must be provided; if an integer is provided for write_value, this is optional.
+
 		'''
 
 		# Ensure we have a default_value if we have a Signal(); as this will determine
@@ -1227,8 +1262,10 @@ class UTMITranslator(Elaboratable):
 
 			# Clocks that don't seem to be I/O pins aren't what we're expecting; fail out.
 			else:
-				raise TypeError(f'ULPI `clk` was an unexpected type {type(self.ulpi.clk)}.' \
-					' You may need to handle clocking manually.')
+				raise TypeError(
+					f'ULPI `clk` was an unexpected type {type(self.ulpi.clk)}.'
+					' You may need to handle clocking manually.'
+				)
 
 
 		# Hook up our reset signal iff our ULPI bus has one.

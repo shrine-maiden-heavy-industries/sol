@@ -77,7 +77,7 @@ class USBResetSequencer(Elaboratable):
 
 	bus_reset: Signal(), output
 		Strobe; pulses high for one cycle when a bus reset is detected. This signal indicates that the
-		 device should return to unaddressed, unconfigured, and should not longer be in High Speed mode.
+		device should return to unaddressed, unconfigured, and should not longer be in High Speed mode.
 	suspended: Signal(), output
 		Held high while the USB device should be in suspend. This technically indicates that the device should
 		drop down to consuming suspend current (<= 2.5mA), but very few devices are compliant with this requirement.
@@ -95,7 +95,7 @@ class USBResetSequencer(Elaboratable):
 		whether we're in chirp mode (1).
 
 	tx: UTMITransmitInterface, output stream
-					 -- Our UTMI transmit interface; used to drive chirp signaling onto the bus.
+		Our UTMI transmit interface; used to drive chirp signaling onto the bus.
 	'''
 
 	# Constants for our line states at various speeds.

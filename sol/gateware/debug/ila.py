@@ -306,8 +306,8 @@ class SyncSerialILA(Elaboratable):
 		The clock domain in which the ILA should operate.
 	samples_pretrigger: int
 		The number of our samples which should be captured _before_ the trigger.
-								  This also can act like an implicit synchronizer; so asynchronous inputs
-								  are allowed if this number is >= 2.
+		This also can act like an implicit synchronizer; so asynchronous inputs
+		are allowed if this number is >= 2.
 
 	clock_polarity: int, 0 or 1
 		Clock polarity for the output SPI transciever. Optional.
@@ -800,7 +800,7 @@ class AsyncSerialILA(Elaboratable):
 			byte_width = self.bytes_per_sample,
 			divisor = self.divisor
 		)
-		m.d.comb + = [
+		m.d.comb += [
 			uart.stream.stream_eq(ila.stream),
 			self.tx.eq(uart.tx)
 		]
@@ -913,12 +913,12 @@ class ILAFrontend(metaclass = ABCMeta):
 			close_after = False
 		else:
 			stream = open(filename, 'w')
-			close_after = True
+			close_after = True # noqa: F841
 
 		# Create our basic VCD.
 		with VCDWriter(stream, timescale = '1 ns', date = 'today') as writer:
-			first_timestamp = math.inf
-			last_timestamp  = 0
+			first_timestamp = math.inf	# noqa: F841
+			last_timestamp  = 0			# noqa: F841
 
 			signals = {}
 

@@ -18,14 +18,17 @@ class StreamDeserializer(Elaboratable):
 		O: done         -- Strobe that pulses high when we finish reception.
 
 		O: data         -- The data stream receieved. Length is set by the dataLength initializer argument.
-		I: maxLength[] -- The maximum length to be received. Defaults to the length of the stream.
-						   Only present if the `maxLengthWidth` parameter is provided on creation.
+		I: maxLength[]  -- The maximum length to be received. Defaults to the length of the stream.
+							Only present if the `maxLengthWidth` parameter is provided on creation.
 
 		*: stream       -- The stream being consumed.
 
 	'''
 
-	def __init__(self, dataLength, streamType = USBOutStreamInterface, domain = 'sync', dataWidth = 8, maxLengthWidth = None):
+	def __init__(
+		self, dataLength, streamType = USBOutStreamInterface, domain = 'sync', dataWidth = 8,
+		maxLengthWidth = None
+	):
 		'''
 		Parameters
 		----------

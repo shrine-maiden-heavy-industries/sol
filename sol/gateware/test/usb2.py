@@ -217,6 +217,7 @@ class USBDeviceTest(SolGatewareTestCase):
 	# More complex transaction helpers.
 	#
 
+
 	def interpacket_delay(self):
 		''' Waits for a period appropriate between each packet. '''
 

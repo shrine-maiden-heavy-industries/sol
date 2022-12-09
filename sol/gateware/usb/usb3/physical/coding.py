@@ -69,7 +69,7 @@ def get_word_for_symbols(*target_symbols):
 
 	# Create constants that match the target data/ctrl bits for the given set of symbols.
 	target_data = Cat(symbol.value_const() for symbol in target_symbols)
-	target_ctrl = Cat(symbol.ctrl_const() for  symbol in target_symbols)
+	target_ctrl = Cat(symbol.ctrl_const() for symbol in target_symbols)
 
 	return target_data, target_ctrl
 

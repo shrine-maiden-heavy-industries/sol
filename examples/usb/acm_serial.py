@@ -22,8 +22,9 @@ class USBSerialDeviceExample(Elaboratable):
 
 		# Create our USB-to-serial converter.
 		ulpi = platform.request(platform.default_usb_connection)
-		m.submodules.usb_serial = usb_serial = \
-				USBSerialDevice(bus = ulpi, idVendor = 0x16d0, idProduct = 0x0f3b)
+		m.submodules.usb_serial = usb_serial = USBSerialDevice(
+			bus = ulpi, idVendor = 0x16d0, idProduct = 0x0f3b
+		)
 
 		m.d.comb += [
 			# Place the streams into a loopback configuration...

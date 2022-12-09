@@ -139,7 +139,9 @@ class USBControlEndpoint(Elaboratable):
 		if (single_handler and isinstance(self._request_handlers[0], StandardRequestHandler)):
 
 			# Add a handler that will stall any non-standard request.
-			stall_condition = lambda setup : setup.type != USBRequestType.STANDARD
+			def stall_condition(setup):
+				return setup.type != USBRequestType.STANDARD
+
 			self.add_request_handler(StallOnlyRequestHandler(stall_condition))
 
 
@@ -248,7 +250,10 @@ class USBControlEndpoint(Elaboratable):
 					m.d.comb += request_handler.data_requested.eq(1)
 
 				# Once we get an OUT token, we should move on to the STATUS stage. [USB2, 8.5.3]
-				with m.If(endpoint_targeted & interface.tokenizer.new_token & (interface.tokenizer.is_out | interface.tokenizer.is_ping)):
+				with m.If(
+					endpoint_targeted & interface.tokenizer.new_token &
+					(interface.tokenizer.is_out | interface.tokenizer.is_ping)
+				):
 					m.next = 'STATUS_OUT'
 
 

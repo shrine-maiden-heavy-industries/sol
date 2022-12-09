@@ -508,7 +508,7 @@ class TxPipeline(Elaboratable):
 						m.next = 'IDLE'
 
 				with m.Else():
-						m.d.usb += state_gray.eq(0b11)
+					m.d.usb += state_gray.eq(0b11)
 
 			with m.State('STUFF_LAST_BIT'):
 				m.d.usb += state_gray.eq(0b10)

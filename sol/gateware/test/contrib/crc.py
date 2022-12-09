@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# flake8: noqa
 # -*- Mode: Python; py-indent-offset: 4 -*-
 #
 # Copyright (C) 2005,2007  Ray Burr

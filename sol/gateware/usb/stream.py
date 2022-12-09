@@ -66,8 +66,11 @@ class USBOutStreamInterface(Record):
 
 	def __init__(self, payload_width = 8):
 		'''
-		Parameter:
-			payload_width -- The width of the payload packets.
+		Parameters
+		----------
+		payload_width
+			The width of the payload packets.
+
 		'''
 		super().__init__([
 			('valid',    1,             DIR_FANOUT),
@@ -343,7 +346,7 @@ class USBRawSuperSpeedStream(StreamInterface):
 		''' Extend the global ``stream_eq`` operator to swap endianness. '''
 
 		# If we're not performing an endian swap, delegate directly to our parent.
-		if endian_swap == False:
+		if not endian_swap:
 			return super().stream_eq(interface, omit = omit, **kwargs)
 
 		# Otherwise, perform our full endian swap.
@@ -365,7 +368,7 @@ class USBRawSuperSpeedStream(StreamInterface):
 
 			# Figure out what word we want to grab from, on the RHS.
 			# It only matters that this is the word opposite of the word we're reading in the LHS.
-			rhs_word_index = (payload_words - i) -1
+			rhs_word_index = (payload_words - i) - 1
 
 			# Create the operations necessary to perform our assignment with our endian swap...
 			endian_swap_operations = [
@@ -373,7 +376,7 @@ class USBRawSuperSpeedStream(StreamInterface):
 				self.ctrl[i].eq(interface.ctrl[rhs_word_index])
 			]
 
-			#... and add it to our overall list of operations.
+			# ... and add it to our overall list of operations.
 			operations.extend(endian_swap_operations)
 
 

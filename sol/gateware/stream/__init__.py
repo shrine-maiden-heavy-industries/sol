@@ -11,7 +11,8 @@ from torii import Record
 
 
 class StreamInterface(Record):
-	''' Simple record implementing a unidirectional data stream.
+	'''
+	Simple record implementing a unidirectional data stream.
 
 	This class is similar to LiteX's streams; but instances may be optimized for
 	interaction with USB PHYs. Accordingly, some uses may add restrictions; this
@@ -43,8 +44,10 @@ class StreamInterface(Record):
 
 	def __init__(self, payload_width = 8, valid_width = 1, extra_fields = None):
 		'''
-		Parameter:
-			payload_width -- The width of the payload packets.
+		Parameters
+		----------
+		payload_width
+			The width of the payload packets.
 		'''
 
 		# If we don't have any extra fields, use an empty list in its place.

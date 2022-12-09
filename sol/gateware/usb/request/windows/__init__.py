@@ -14,7 +14,8 @@ __all__ = (
 )
 
 class WindowsRequestHandler(USBRequestHandler):
-	''' The platform-specific handler for Windows requests.
+	'''
+	The platform-specific handler for Windows requests.
 
 	Parameters
 	----------
@@ -49,7 +50,8 @@ class WindowsRequestHandler(USBRequestHandler):
 	* Once the data phase concludes and the status phase begins, we then respond to the host with an all-clear ACK
 	* If either the :py:class:`dragonBoot.windows.descriptorSet.GetDescriptorSetHandler` or the status phase
 	  concludes, we return to :code:`IDLE`.
-	'''
+	''' # noqa: E101, E501
+
 	def __init__(self, descriptors : PlatformDescriptorCollection, maxPacketSize = 64):
 		self.descriptors = descriptors
 		self._maxPacketSize = maxPacketSize

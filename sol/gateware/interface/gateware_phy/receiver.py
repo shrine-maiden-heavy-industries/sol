@@ -638,7 +638,9 @@ class RxPipeline(Elaboratable):
 		flag_start  = Signal()
 		flag_end    = Signal()
 		flag_valid  = Signal()
-		m.submodules.payload_fifo = payload_fifo = AsyncFIFOBuffered(width = 8, depth = 4, r_domain = 'usb', w_domain = 'usb_io')
+		m.submodules.payload_fifo = payload_fifo = AsyncFIFOBuffered(
+			width = 8, depth = 4, r_domain = 'usb', w_domain = 'usb_io'
+		)
 		m.d.comb += [
 			payload_fifo.w_data.eq(shifter.o_data[::-1]),
 			payload_fifo.w_en.eq(shifter.o_put),

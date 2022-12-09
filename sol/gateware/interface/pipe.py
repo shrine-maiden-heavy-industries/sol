@@ -182,7 +182,8 @@ class PIPEInterface(Elaboratable):
 
 
 class AsyncPIPEInterface(PIPEInterface, Elaboratable):
-	''' Gateware that transfers PIPE interface signals between clock domains.
+	'''
+	Gateware that transfers PIPE interface signals between clock domains.
 
 	The PIPE specification defines the PHY interface signals to be synchronous to a PHY-generated
 	clock ``pclk``, and asynchronous if ``pclk`` is not running. The MAC will typically not be
@@ -203,12 +204,14 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 	The ``pclk`` signal is driven by the clock of this domain.
 
 	This gateware does not currently support asynchronous signaling in the deepest PHY power state.
-	'''
+	''' # noqa: E101
 
 	def __init__(self, phy, *, width, domain = 'ss'):
 		if width < phy.width:
-			raise ValueError(f'Async PIPE interface cannot adapt PHY data bus width {phy.width} '
-							 f'to MAC data bus width {width}')
+			raise ValueError(
+				f'Async PIPE interface cannot adapt PHY data bus width {phy.width} '
+				f'to MAC data bus width {width}'
+			)
 		super().__init__(width = width)
 		self.phy            = phy
 		self._domain        = domain
@@ -520,8 +523,8 @@ class GearedPIPEInterface(Elaboratable):
 		#
 		m.d.ss += [
 			# We'll output tx_data bytes {0, 1} and _then_ {2, 3}.
-			self._io.tx_data.o0   .eq(self.tx_data [ 0:16]),
-			self._io.tx_data.o1   .eq(self.tx_data [16:32]),
+			self._io.tx_data.o0   .eq(self.tx_data[ 0:16]),
+			self._io.tx_data.o1   .eq(self.tx_data[16:32]),
 			self._io.tx_datak.o0  .eq(self.tx_datak[ 0: 2]),
 			self._io.tx_datak.o1  .eq(self.tx_datak[ 2: 4])
 		]
@@ -531,8 +534,8 @@ class GearedPIPEInterface(Elaboratable):
 		#
 		m.d.ss += [
 			# We'll capture rx_data bytes {0, 1} and _then_ {2, 3}.
-			self.rx_data [ 0:16].eq(self._io.rx_data.i0),
-			self.rx_data [16:32].eq(self._io.rx_data.i1),
+			self.rx_data[ 0:16].eq(self._io.rx_data.i0),
+			self.rx_data[16:32].eq(self._io.rx_data.i1),
 			self.rx_datak[ 0: 2].eq(self._io.rx_datak.i0),
 			self.rx_datak[ 2: 4].eq(self._io.rx_datak.i1),
 

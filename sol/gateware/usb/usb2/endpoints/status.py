@@ -79,7 +79,7 @@ class USBSignalInEndpoint(Elaboratable):
 		if self._signal_domain == 'usb':
 			target_signal = self.signal
 		else:
-			target_signal = synchronize(m, self.signal, o_domain = 'usb')
+			target_signal = synchronize(m, self.signal, o_domain = 'usb')	# noqa: F841
 
 
 		# Store a latched version of our signal, captured before we start a transmission.

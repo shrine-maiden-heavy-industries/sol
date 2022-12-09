@@ -247,7 +247,9 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		# to an arbiter, so they both share use of the single bus.
 
 		# Create the arbiter around our main bus...
-		m.submodules.bus_arbiter = arbiter = wishbone.Arbiter(addr_width = 30, data_width = 32, granularity = 8, features = {'cti', 'bte'})
+		m.submodules.bus_arbiter = arbiter = wishbone.Arbiter(
+			addr_width = 30, data_width = 32, granularity = 8, features = {'cti', 'bte'}
+		)
 		m.d.comb += arbiter.bus.connect(self.bus_decoder.bus)
 
 		# ... and connect it to the CPU instruction and data busses.

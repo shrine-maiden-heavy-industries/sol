@@ -73,7 +73,8 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		# Instantiate our core JTAG interface, and hook it up to our signals.
 		# This essentially grabs a connection to the ECP5's JTAG data chain when the ER1 or ER2
 		# instructions are loaded into its instruction register.
-		m.submodules.jtag = jtag = Instance('JTAGG',
+		m.submodules.jtag = Instance(
+			'JTAGG',
 			o_JTCK   = jtck,
 			o_JTDI   = self.sdi,
 			i_JTDO1  = self.sdo,
@@ -114,6 +115,7 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 	# Helpers that let us treat this object like a record, so it can be used
 	# interchangeably with requested I/O objects.
 	#
+
 
 	@ValueCastable.lowermethod
 	def as_value(self):
@@ -277,8 +279,8 @@ class JTAGCommandInterface(Elaboratable):
 
 		# Connect up our 'data/command ready' signals.
 		m.d.comb += [
-		   command_ready.eq(falling_edge_detected(m, shifting_instruction)),
-		   data_ready.eq(falling_edge_detected(m, shifting_data)),
+			command_ready.eq(falling_edge_detected(m, shifting_instruction)),
+			data_ready.eq(falling_edge_detected(m, shifting_data)),
 		]
 
 		# Latch our output data when new data is ready.

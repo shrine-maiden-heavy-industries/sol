@@ -45,20 +45,21 @@ class USBDescriptorStreamGenerator(ConstantStreamGenerator):
 
 
 class GetDescriptorHandlerDistributed(Elaboratable):
-	''' Gateware that handles responding to GetDescriptor requests.
+	'''
+	Gateware that handles responding to GetDescriptor requests.
 
 	Currently does not support descriptors in multiple languages.
 
 	I/O port:
-		I: value[16]  -- The value field associated with the Get Descriptor request.
-						 Contains the descriptor type and index.
-		I: length[16] -- The length field associated with the Get Descriptor request.
-						 Determines the maximum amount allowed in a response.
+		I: value[16]  - The value field associated with the Get Descriptor request.
+						Contains the descriptor type and index.
+		I: length[16] - The length field associated with the Get Descriptor request.
+						Determines the maximum amount allowed in a response.
 
-		I: start      -- Strobe that indicates when a descriptor should be transmitted.
+		I: start      - Strobe that indicates when a descriptor should be transmitted.
 
-		*: tx         -- The USBInStreamInterface that streams our descriptor data.
-		O: stall      -- Pulsed if a STALL handshake should be generated, instead of a response.
+		*: tx         - The USBInStreamInterface that streams our descriptor data.
+		O: stall      - Pulsed if a STALL handshake should be generated, instead of a response.
 	'''
 
 	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length = 64):
@@ -153,21 +154,22 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 
 
 class GetDescriptorHandlerBlock(Elaboratable):
-	''' Gateware that handles responding to GetDescriptor requests.
+	'''
+	Gateware that handles responding to GetDescriptor requests.
 
 	Currently does not support descriptors in multiple languages.
 
 	I/O port:
-		I: value[16]      -- The value field associated with the Get Descriptor request.
-							 Contains the descriptor type and index.
-		I: length[16]     -- The length field associated with the Get Descriptor request.
-							 Determines the maximum amount allowed in a response.
+		I: value[16]      - The value field associated with the Get Descriptor request.
+							Contains the descriptor type and index.
+		I: length[16]     - The length field associated with the Get Descriptor request.
+							Determines the maximum amount allowed in a response.
 
-		I: start          -- Strobe that indicates when a descriptor should be transmitted.
-		I: start_position -- Specifies the starting position of the descriptor data to be transmitted.
+		I: start          - Strobe that indicates when a descriptor should be transmitted.
+		I: start_position - Specifies the starting position of the descriptor data to be transmitted.
 
-		*: tx             -- The USBInStreamInterface that streams our descriptor data.
-		O: stall          -- Pulsed if a STALL handshake should be generated, instead of a response.
+		*: tx             - The USBInStreamInterface that streams our descriptor data.
+		O: stall          - Pulsed if a STALL handshake should be generated, instead of a response.
 	'''
 
 	ELEMENT_SIZE = 4
@@ -324,7 +326,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 			# ... store the base address, for our subsequent fill...
 			type_index_base_address[type_number] = next_free_address
 
-			#... and move to the next entry.
+			# ... and move to the next entry.
 			next_free_address += len(indexes) * self.ELEMENT_SIZE
 
 
@@ -393,7 +395,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 		# Create convenience aliases to the upper and lower half of the ROM.
 		rom_upper_half = rom_read_port.data.word_select(1, 16)
-		rom_lower_half = rom_read_port.data.word_select(0, 16)
+		rom_lower_half = rom_read_port.data.word_select(0, 16)	# noqa: F841
 
 		# All of our ROM's metadata is composed of elements formatted as (count, pointer).
 		# Grab a quick reference to the ROM's upper half, which stores the count...
@@ -539,7 +541,9 @@ class GetDescriptorHandlerBlock(Elaboratable):
 							position_in_stream.eq(position_in_stream + 1),
 							bytes_sent.eq(bytes_sent + 1),
 						]
-						m.d.comb += rom_read_port.addr.eq(descriptor_data_base_address+(position_in_stream + 1).bit_select(2, position_in_stream.width - 2)),
+						m.d.comb += rom_read_port.addr.eq(
+							descriptor_data_base_address+(position_in_stream + 1).bit_select(2, position_in_stream.width - 2)
+						),
 
 					# Otherwise, we've finished! Return to IDLE.
 					with m.Else():
@@ -696,7 +700,9 @@ class GetDescriptorHandlerBlockTest(SolUSBGatewareTestCase):
 		for type_number, index, raw_descriptor in self.descriptors:
 			if len(raw_descriptor) > 1:
 				yield from self._test_descriptor(type_number, index, raw_descriptor, 0, min(8, len(raw_descriptor)-1))
-				yield from self._test_descriptor(type_number, index, raw_descriptor, 0, min(8, len(raw_descriptor)-1), delay_ready = 10)
+				yield from self._test_descriptor(
+					type_number, index, raw_descriptor, 0, min(8, len(raw_descriptor)-1), delay_ready = 10
+				)
 
 	@usb_domain_test_case
 	def test_all_descriptors_with_offset_and_length(self):

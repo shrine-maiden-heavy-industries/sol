@@ -116,7 +116,7 @@ class USBStressTest(Elaboratable):
 		- Uses no buffering whatsoever; every time the host requests data, we directly
 		  provide a constant value. This ensures that we go as fast as possible.
 		- Sends a stream with maximum transition rate (all NRZI toggles).
-	'''
+	''' # noqa: E101
 
 	def create_descriptors(self):
 		''' Create the descriptors we want to use for our device. '''

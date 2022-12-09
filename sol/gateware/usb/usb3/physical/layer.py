@@ -130,8 +130,8 @@ class USB3PhysicalLayer(Elaboratable):
 			rx_detect.phy_status.eq(phy.phy_status),
 			rx_detect.rx_status.eq(phy.rx_status),
 
-			#self.link_partner_detected.eq(rx_detect.new_result & rx_detect.partner_present),
-			#self.no_link_partner_detected.eq(rx_detect.new_result & ~rx_detect.partner_present)
+			# self.link_partner_detected.eq(rx_detect.new_result & rx_detect.partner_present),
+			# self.no_link_partner_detected.eq(rx_detect.new_result & ~rx_detect.partner_present)
 
 			# FIXME: this is temporary; it speeds up partner detection, but isn't strictly correct.
 			# (This incorrectly attempts to do link training on USB2 hosts, too).

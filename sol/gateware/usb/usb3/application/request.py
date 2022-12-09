@@ -188,7 +188,7 @@ class SuperSpeedSetupDecoder(Elaboratable):
 				# and thus isn't a valid setup packet. Ignore it, and go back to waiting
 				# for our first packet.
 				with m.If(self.rx_bad):
-						m.next = 'WAIT_FOR_FIRST'
+					m.next = 'WAIT_FOR_FIRST'
 
 			# WAIT_FOR_VALID -- we've now received all of our data; and we're just waiting
 			# for an indication of  whether the data is good or bad.
@@ -289,13 +289,19 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 
 
 	def _multiplex_signals(self, m, *, when, multiplex, sub_bus = None):
-		''' Helper that creates a simple priority-encoder multiplexer.
+		'''
+		Helper that creates a simple priority-encoder multiplexer.
 
-		Parmeters:
-			when      -- The name of the interface signal that indicates that the `multiplex` signals
-						 should be selected for output. If this signals should be multiplex, it
-						 should be included in `multiplex`.
-			multiplex -- The names of the interface signals to be multiplexed.
+		Parameters
+		----------
+		when
+			The name of the interface signal that indicates that the `multiplex` signals
+			should be selected for output. If this signals should be multiplex, it
+			should be included in `multiplex`.
+
+		multiplex
+			The names of the interface signals to be multiplexed.
+
 		'''
 
 		def get_signal(interface, name):
@@ -305,7 +311,7 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 				bus = getattr(interface, sub_bus)
 				return getattr(bus, name)
 			else:
-				return  getattr(interface, name)
+				return getattr(interface, name)
 
 
 		# We're building an if-elif tree; so we should start with an If entry.

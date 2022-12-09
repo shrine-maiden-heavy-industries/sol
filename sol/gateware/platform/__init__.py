@@ -12,7 +12,7 @@ import os
 from torii                              import Record
 from torii.platform.vendor.lattice_ecp5 import LatticeECP5Platform
 
-from .core                              import NullPin
+# from .core                              import NullPin
 from .luna_r0_1                         import LUNAPlatformRev0D1
 from .luna_r0_2                         import LUNAPlatformRev0D2
 from .luna_r0_3                         import LUNAPlatformRev0D3

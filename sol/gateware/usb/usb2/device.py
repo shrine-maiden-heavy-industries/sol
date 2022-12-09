@@ -714,7 +714,7 @@ try:
 			return m
 
 
-except ImportError as e:
+except ImportError:
 	pass
 
 
