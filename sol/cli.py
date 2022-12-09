@@ -118,19 +118,19 @@ def cli(fragment, *pos_args, cli_soc : Optional[Any] = None, **kwargs):
 			'--generate-c-header',
 			action  = 'store_true',
 			default = False,
-			help    = 'If provided, a C header file for this design\'s SoC will be printed to the stdout. Other options ignored.'
+			help    = 'Print the C header file for this design\'s SoC will to stdout then exit.'
 		)
 		parser.add_argument(
 			'--generate-ld-script',
 			action  = 'store_true',
 			default = False,
-			help    = 'If provided, a linker script for design\'s SoC memory regions be printed to the stdout. Other options ignored.'
+			help    = 'Print the linker script for design\'s SoC memory regions to stdout then exit.'
 		)
 		parser.add_argument(
 			'--get-fw-address',
 			action  = 'store_true',
 			default = False,
-			help    = 'If provided, the utility will print the address firmware should be loaded to to stdout. Other options ignored.'
+			help    = 'Print the address firmware should be loaded at to stdout then exit.'
 		)
 
 
