@@ -10,8 +10,8 @@ from torii                  import Elaboratable, Module
 
 from usb_construct.emitters import DeviceDescriptorCollection
 
-from sol.cli                import cli
-from sol.usb2               import USBDevice, USBStreamInEndpoint, USBStreamOutEndpoint
+from sol_usb.cli                import cli
+from sol_usb.usb2               import USBDevice, USBStreamInEndpoint, USBStreamOutEndpoint
 
 
 class USBStreamOutDeviceExample(Elaboratable):

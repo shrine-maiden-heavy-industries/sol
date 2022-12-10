@@ -2,8 +2,8 @@
 
 from torii import Signal, Cat
 
-from sol.gateware.debug.ila import IntegratedLogicAnalyzer, SyncSerialILA, StreamILA
-from sol.gateware.test      import SolGatewareTestCase, sync_test_case
+from sol_usb.gateware.debug.ila import IntegratedLogicAnalyzer, SyncSerialILA, StreamILA
+from sol_usb.gateware.test      import SolGatewareTestCase, sync_test_case
 
 from .interface.test_spi    import SPIGatewareTestCase
 

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from sol.gateware.usb.usb3.link.data import DataPacketReceiver
-from sol.gateware.test               import SolSSGatewareTestCase, ss_domain_test_case
+from sol_usb.gateware.usb.usb3.link.data import DataPacketReceiver
+from sol_usb.gateware.test               import SolSSGatewareTestCase, ss_domain_test_case
 
 class DataPacketReceiverTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = DataPacketReceiver

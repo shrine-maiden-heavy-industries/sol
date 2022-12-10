@@ -11,9 +11,9 @@ from torii                  import *
 from usb_construct.emitters import SuperSpeedDeviceDescriptorCollection
 from usb_construct.types    import USBRequestType
 
-from sol.cli                import cli
-from sol.gateware.platform  import NullPin
-from sol.usb3               import SuperSpeedRequestHandler, USBSuperSpeedDevice
+from sol_usb.cli                import cli
+from sol_usb.gateware.platform  import NullPin
+from sol_usb.usb3               import SuperSpeedRequestHandler, USBSuperSpeedDevice
 
 
 class LEDRequestHandler(SuperSpeedRequestHandler):

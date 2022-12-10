@@ -9,8 +9,8 @@
 
 from torii                        import *
 
-from sol.cli                      import cli
-from sol.gateware.usb.devices.ila import (
+from sol_usb.cli                      import cli
+from sol_usb.gateware.usb.devices.ila import (
 	USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
 )
 

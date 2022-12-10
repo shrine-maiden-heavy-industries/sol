@@ -21,14 +21,14 @@ from torii                            import Elaboratable, Module, Signal
 from usb_construct.emitters           import DeviceDescriptorCollection
 from usb_construct.types              import USBRequestType
 
-from sol.gateware.architecture.car    import SolECP5DomainGenerator
-from sol.gateware.interface.ulpi      import UTMITranslator
-from sol.gateware.platform            import get_appropriate_platform
-from sol.gateware.stream.generator    import StreamSerializer
-from sol.gateware.usb.analyzer        import USBAnalyzer
-from sol.gateware.usb.request.control import ControlRequestHandler
-from sol.gateware.usb.stream          import USBInStreamInterface
-from sol.usb2                         import USBDevice, USBStreamInEndpoint
+from sol_usb.gateware.architecture.car    import SolECP5DomainGenerator
+from sol_usb.gateware.interface.ulpi      import UTMITranslator
+from sol_usb.gateware.platform            import get_appropriate_platform
+from sol_usb.gateware.stream.generator    import StreamSerializer
+from sol_usb.gateware.usb.analyzer        import USBAnalyzer
+from sol_usb.gateware.usb.request.control import ControlRequestHandler
+from sol_usb.gateware.usb.stream          import USBInStreamInterface
+from sol_usb.usb2                         import USBDevice, USBStreamInEndpoint
 
 USB_SPEED_HIGH       = 0b00
 USB_SPEED_FULL       = 0b01

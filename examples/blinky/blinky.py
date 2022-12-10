@@ -8,8 +8,8 @@
 
 from torii                 import Signal, Module, Elaboratable, Cat
 
-from sol.cli               import cli
-from sol.gateware.platform import NullPin
+from sol_usb.cli               import cli
+from sol_usb.gateware.platform import NullPin
 
 class Blinky(Elaboratable):
 	''' Hardware module that validates basic SOL functionality. '''

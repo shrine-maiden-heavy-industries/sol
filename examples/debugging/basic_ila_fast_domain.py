@@ -10,10 +10,10 @@ from apollo_fpga                   import create_ila_frontend
 
 from torii                         import Cat, Elaboratable, Module, Signal
 
-from sol.cli                       import cli
-from sol.gateware.architecture.car import SolECP5DomainGenerator
-from sol.gateware.debug.ila        import SyncSerialILA
-from sol.gateware.utils.cdc        import synchronize
+from sol_usb.cli                       import cli
+from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
+from sol_usb.gateware.debug.ila        import SyncSerialILA
+from sol_usb.gateware.utils.cdc        import synchronize
 
 #
 # Clock frequencies for each of the domains.

@@ -10,8 +10,8 @@ from torii                  import *
 
 from usb_construct.emitters import SuperSpeedDeviceDescriptorCollection
 
-from sol.cli                import cli
-from sol.usb3               import USBSuperSpeedDevice
+from sol_usb.cli                import cli
+from sol_usb.usb3               import USBSuperSpeedDevice
 
 
 class USBSuperSpeedExample(Elaboratable):

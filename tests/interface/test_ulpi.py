@@ -2,10 +2,10 @@
 
 from torii                       import Record
 
-from sol.gateware.interface.ulpi import (
+from sol_usb.gateware.interface.ulpi import (
 	ULPIRegisterWindow, ULPIRxEventDecoder, ULPIControlTranslator, ULPITransmitTranslator
 )
-from sol.gateware.test           import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.test           import SolGatewareTestCase, usb_domain_test_case
 
 class TestULPIRegisters(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = ULPIRegisterWindow

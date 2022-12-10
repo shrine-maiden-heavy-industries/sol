@@ -53,7 +53,7 @@ def docs(session: nox.Session) -> None:
 	out_dir = (BUILD_DIR / 'docs')
 	shutil.rmtree(out_dir, ignore_errors = True)
 	session.install('-r', str(DOCS_DIR / 'requirements.txt'))
-	session.install('.')
+	session.install('.[platform]')
 	session.run('sphinx-build', '-b', 'html', str(DOCS_DIR), str(out_dir))
 
 @nox.session

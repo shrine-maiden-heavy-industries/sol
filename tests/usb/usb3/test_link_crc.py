@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from sol.gateware.usb.usb3.link.crc import DataPacketPayloadCRC
-from sol.gateware.test              import SolSSGatewareTestCase, ss_domain_test_case
+from sol_usb.gateware.usb.usb3.link.crc import DataPacketPayloadCRC
+from sol_usb.gateware.test              import SolSSGatewareTestCase, ss_domain_test_case
 
 class DataPacketPayloadCRCTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = DataPacketPayloadCRC

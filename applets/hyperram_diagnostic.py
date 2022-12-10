@@ -14,10 +14,10 @@ from prompt_toolkit                import print_formatted_text as pprint
 
 from torii                         import Elaboratable, Module, Signal
 
-from sol.cli                       import cli
-from sol.gateware.architecture.car import SolECP5DomainGenerator
-from sol.gateware.interface.jtag   import JTAGRegisterInterface
-from sol.gateware.interface.psram  import HyperRAMInterface
+from sol_usb.cli                       import cli
+from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
+from sol_usb.gateware.interface.jtag   import JTAGRegisterInterface
+from sol_usb.gateware.interface.psram  import HyperRAMInterface
 
 REGISTER_RAM_REG_ADDR   = 2
 REGISTER_RAM_VALUE      = 3

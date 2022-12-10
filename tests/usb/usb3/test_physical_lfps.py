@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 from math                                import ceil
-from sol.gateware.usb.usb3.physical.lfps import (
+from sol_usb.gateware.usb.usb3.physical.lfps import (
 	LFPSGenerator, _PollingLFPS, _PollingLFPSBurst, _PollingLFPSRepeat
 )
-from sol.gateware.test.utils             import SolSSGatewareTestCase, ss_domain_test_case
+from sol_usb.gateware.test.utils             import SolSSGatewareTestCase, ss_domain_test_case
 
 
 class LFPSGeneratorTest(SolSSGatewareTestCase):

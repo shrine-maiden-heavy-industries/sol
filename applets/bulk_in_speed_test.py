@@ -18,9 +18,9 @@ from usb_construct.emitters import (
 	DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
 )
 
-from sol.cli                import cli, setup_logger
-from sol.usb2               import USBDevice, USBStreamInEndpoint
-from sol.usb3               import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
+from sol_usb.cli                import cli, setup_logger
+from sol_usb.usb2               import USBDevice, USBStreamInEndpoint
+from sol_usb.usb3               import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
 
 VENDOR_ID  = 0x16d0
 PRODUCT_ID = 0x0f3b

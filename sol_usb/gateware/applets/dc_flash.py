@@ -7,9 +7,9 @@
 
 from torii                        import Elaboratable, Module, Signal
 
-from sol.gateware.interface.flash import ECP5ConfigurationFlashInterface
-from sol.gateware.interface.spi   import SPIRegisterInterface
-from sol.gateware.utils.cdc       import synchronize
+from sol_usb.gateware.interface.flash import ECP5ConfigurationFlashInterface
+from sol_usb.gateware.interface.spi   import SPIRegisterInterface
+from sol_usb.gateware.utils.cdc       import synchronize
 
 REGISTER_ID             = 1
 

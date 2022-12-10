@@ -12,8 +12,8 @@ from torii                  import Elaboratable, Module, Signal
 
 from usb_construct.emitters import DeviceDescriptorCollection
 
-from sol.cli                import cli
-from sol.usb2               import USBDevice, USBStreamInEndpoint
+from sol_usb.cli                import cli
+from sol_usb.usb2               import USBDevice, USBStreamInEndpoint
 
 
 class USBCounterDeviceExample(Elaboratable):

@@ -2,8 +2,8 @@
 
 from torii                        import Record
 
-from sol.gateware.interface.psram import HyperRAMInterface
-from sol.gateware.test            import SolGatewareTestCase, sync_test_case
+from sol_usb.gateware.interface.psram import HyperRAMInterface
+from sol_usb.gateware.test            import SolGatewareTestCase, sync_test_case
 
 
 class TestHyperRAMInterface(SolGatewareTestCase):

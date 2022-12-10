@@ -10,10 +10,10 @@ from torii                        import *
 from lambdasoc.periph             import Peripheral
 from lambdasoc.periph.timer       import TimerPeripheral
 
-from sol.cli                      import cli
-from sol.gateware.interface.psram import HyperRAMInterface
-from sol.gateware.interface.ulpi  import ULPIRegisterWindow
-from sol.gateware.soc             import SimpleSoC, UARTPeripheral
+from sol_usb.cli                      import cli
+from sol_usb.gateware.interface.psram import HyperRAMInterface
+from sol_usb.gateware.interface.ulpi  import ULPIRegisterWindow
+from sol_usb.gateware.soc             import SimpleSoC, UARTPeripheral
 
 # Run our tests at a slower clock rate, for now.
 # TODO: bump up the fast clock rate, to test the HyperRAM at speed?

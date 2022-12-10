@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from sol.gateware.usb.usb2.transfer import USBInTransferManager
-from sol.gateware.test              import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.usb.usb2.transfer import USBInTransferManager
+from sol_usb.gateware.test              import SolGatewareTestCase, usb_domain_test_case
 
 
 class USBInTransferManagerTest(SolGatewareTestCase):

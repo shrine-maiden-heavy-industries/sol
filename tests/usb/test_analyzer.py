@@ -2,8 +2,8 @@
 
 from torii                     import Record, Module
 
-from sol.gateware.usb.analyzer import USBAnalyzer
-from sol.gateware.test         import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.usb.analyzer import USBAnalyzer
+from sol_usb.gateware.test         import SolGatewareTestCase, usb_domain_test_case
 
 class USBAnalyzerTest(SolGatewareTestCase):
 
@@ -134,7 +134,7 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 
 	def instantiate_dut(self):
 
-		from sol.gateware.interface.ulpi import UTMITranslator
+		from sol_usb.gateware.interface.ulpi import UTMITranslator
 
 		self.ulpi = Record([
 			('data', [

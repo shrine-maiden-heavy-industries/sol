@@ -34,7 +34,7 @@ def doc_version():
 		return 'latest'
 
 setup(
-	name             = 'sol',
+	name             = 'sol-usb',
 	use_scm_version  = scm_version(),
 	author           = 'Katherine Temkin',
 	author_email     = 'k@ktemkin.com',

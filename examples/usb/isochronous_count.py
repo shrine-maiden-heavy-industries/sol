@@ -13,8 +13,8 @@ from torii                  import Elaboratable, Module
 from usb_construct.emitters import DeviceDescriptorCollection
 from usb_construct.types    import USBTransferType
 
-from sol.cli                import cli
-from sol.usb2               import USBDevice, USBIsochronousInEndpoint
+from sol_usb.cli                import cli
+from sol_usb.usb2               import USBDevice, USBIsochronousInEndpoint
 
 
 class USBIsochronousCounterDeviceExample(Elaboratable):

@@ -2,13 +2,13 @@
 
 from torii                        import Record
 
-from sol.gateware.usb.usb2.packet import (
+from sol_usb.gateware.usb.usb2.packet import (
 	USBTokenDetector, USBHandshakeDetector, USBDataPacketReceiver, USBDataPacketDeserializer,
 	USBDataPacketGenerator, USBHandshakeGenerator, USBInterpacketTimer,
 	InterpacketTimerInterface
 )
-from sol.gateware.usb.usb2        import USBSpeed
-from sol.gateware.test            import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.usb.usb2        import USBSpeed
+from sol_usb.gateware.test            import SolGatewareTestCase, usb_domain_test_case
 
 class USBPacketizerTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None

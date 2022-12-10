@@ -12,9 +12,9 @@ from torii                          import Elaboratable, Module, Signal
 
 from usb_construct.emitters         import DeviceDescriptorCollection
 
-from sol.cli                        import cli
-from sol.gateware.usb.usb2.device   import USBDevice
-from sol.gateware.usb.usb2.endpoint import EndpointInterface
+from sol_usb.cli                        import cli
+from sol_usb.gateware.usb.usb2.device   import USBDevice
+from sol_usb.gateware.usb.usb2.endpoint import EndpointInterface
 
 BULK_ENDPOINT_NUMBER = 1
 MAX_BULK_PACKET_SIZE = 64 if os.getenv('SOL_FULL_ONLY') else 256

@@ -12,11 +12,11 @@ from torii                         import (
 	Cat, ClockSignal, Elaboratable, Module, ResetSignal, Signal
 )
 
-from sol.cli                       import cli
-from sol.gateware.architecture.car import SolECP5DomainGenerator
-from sol.gateware.interface.jtag   import JTAGRegisterInterface
-from sol.gateware.interface.psram  import HyperRAMInterface
-from sol.gateware.interface.ulpi   import ULPIRegisterWindow
+from sol_usb.cli                       import cli
+from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
+from sol_usb.gateware.interface.jtag   import JTAGRegisterInterface
+from sol_usb.gateware.interface.psram  import HyperRAMInterface
+from sol_usb.gateware.interface.ulpi   import ULPIRegisterWindow
 
 
 CLOCK_FREQUENCIES = {

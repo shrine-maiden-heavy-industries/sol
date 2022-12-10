@@ -15,10 +15,10 @@ from apollo_fpga                import ApolloDebugger, ApolloILAFrontend
 
 from torii                      import Cat, Elaboratable, Module, Signal
 
-from sol.cli                    import cli
-from sol.gateware.debug.ila     import SyncSerialILA
-from sol.gateware.interface.spi import SPIBus, SPIMultiplexer, SPIRegisterInterface
-from sol.gateware.utils.cdc     import synchronize
+from sol_usb.cli                    import cli
+from sol_usb.gateware.debug.ila     import SyncSerialILA
+from sol_usb.gateware.interface.spi import SPIBus, SPIMultiplexer, SPIRegisterInterface
+from sol_usb.gateware.utils.cdc     import synchronize
 
 REGISTER_ID  = 1
 REGISTER_ILA = 2

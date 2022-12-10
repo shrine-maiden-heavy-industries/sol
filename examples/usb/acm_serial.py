@@ -8,8 +8,8 @@
 
 from torii            import Elaboratable, Module
 
-from sol.cli          import cli
-from sol.full_devices import USBSerialDevice
+from sol_usb.cli          import cli
+from sol_usb.full_devices import USBSerialDevice
 
 class USBSerialDeviceExample(Elaboratable):
 	''' Device that acts as a 'USB-to-serial' loopback using our premade gateware. '''

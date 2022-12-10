@@ -10,10 +10,10 @@ from apollo_fpga            import create_ila_frontend
 
 from torii                  import *
 
-from sol.cli                import cli
-from sol.gateware.debug.ila import SyncSerialILA
-from sol.gateware.platform  import NullPin
-from sol.gateware.utils.cdc import synchronize
+from sol_usb.cli                import cli
+from sol_usb.gateware.debug.ila import SyncSerialILA
+from sol_usb.gateware.platform  import NullPin
+from sol_usb.gateware.utils.cdc import synchronize
 
 
 class ILAExample(Elaboratable):

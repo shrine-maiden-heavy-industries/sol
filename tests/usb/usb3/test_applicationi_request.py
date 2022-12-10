@@ -2,8 +2,8 @@
 
 from usb_construct.types                       import USBRequestRecipient, USBRequestType
 
-from sol.gateware.usb.usb3.application.request import SuperSpeedSetupDecoder
-from sol.gateware.test                         import (
+from sol_usb.gateware.usb.usb3.application.request import SuperSpeedSetupDecoder
+from sol_usb.gateware.test                         import (
 	SolSSGatewareTestCase, ss_domain_test_case
 )
 

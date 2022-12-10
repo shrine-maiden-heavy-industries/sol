@@ -9,7 +9,7 @@
 
 from torii   import *
 
-from sol.cli import cli
+from sol_usb.cli import cli
 
 class PIPEPhyExample(Elaboratable):
 	''' Hardware module that demonstrates grabbing a PHY resource with gearing. '''

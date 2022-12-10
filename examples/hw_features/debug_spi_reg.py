@@ -8,10 +8,10 @@
 
 from torii                      import Cat, Elaboratable, Module
 
-from sol.cli                    import cli
-from sol.gateware.interface.spi import SPIRegisterInterface
-from sol.gateware.platform      import NullPin
-from sol.gateware.utils.cdc     import synchronize
+from sol_usb.cli                    import cli
+from sol_usb.gateware.interface.spi import SPIRegisterInterface
+from sol_usb.gateware.platform      import NullPin
+from sol_usb.gateware.utils.cdc     import synchronize
 
 
 class DebugSPIRegisterExample(Elaboratable):

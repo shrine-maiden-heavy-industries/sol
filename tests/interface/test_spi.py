@@ -2,8 +2,8 @@
 
 from torii                      import Signal
 
-from sol.gateware.interface.spi import SPIDeviceInterface, SPIRegisterInterface
-from sol.gateware.test          import SolGatewareTestCase, sync_test_case
+from sol_usb.gateware.interface.spi import SPIDeviceInterface, SPIRegisterInterface
+from sol_usb.gateware.test          import SolGatewareTestCase, sync_test_case
 
 class SPIGatewareTestCase(SolGatewareTestCase):
 	'''

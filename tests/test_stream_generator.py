@@ -1,9 +1,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 
-from sol.gateware.stream.generator import ConstantStreamGenerator
-from sol.gateware.usb.stream       import SuperSpeedStreamInterface
-from sol.gateware.test             import (
+from sol_usb.gateware.stream.generator import ConstantStreamGenerator
+from sol_usb.gateware.usb.stream       import SuperSpeedStreamInterface
+from sol_usb.gateware.test             import (
 	SolSSGatewareTestCase, SolUSBGatewareTestCase, ss_domain_test_case, usb_domain_test_case
 )
 

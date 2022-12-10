@@ -13,12 +13,12 @@ from apollo_fpga                   import ApolloDebugger
 
 from torii                         import ClockSignal, Elaboratable, Module, Signal
 
-from sol.cli                       import cli
-from sol.gateware.architecture.car import SolECP5DomainGenerator
-from sol.gateware.interface.spi    import SPIRegisterInterface
-from sol.gateware.interface.ulpi   import UTMITranslator
-from sol.gateware.usb.analyzer     import USBAnalyzer
-from sol.gateware.utils.cdc        import synchronize
+from sol_usb.cli                       import cli
+from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
+from sol_usb.gateware.interface.spi    import SPIRegisterInterface
+from sol_usb.gateware.interface.ulpi   import UTMITranslator
+from sol_usb.gateware.usb.analyzer     import USBAnalyzer
+from sol_usb.gateware.utils.cdc        import synchronize
 
 DATA_AVAILABLE  = 1
 ANALYZER_RESULT = 2

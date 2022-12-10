@@ -8,9 +8,9 @@
 
 from torii                      import Elaboratable, Module
 
-from sol.cli                    import cli
-from sol.gateware.interface.spi import SPIDeviceInterface
-from sol.gateware.utils.cdc     import synchronize
+from sol_usb.cli                    import cli
+from sol_usb.gateware.interface.spi import SPIDeviceInterface
+from sol_usb.gateware.utils.cdc     import synchronize
 
 
 class DebugSPIExample(Elaboratable):

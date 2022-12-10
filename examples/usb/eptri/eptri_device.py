@@ -16,10 +16,10 @@ from lambdasoc.periph.timer                 import TimerPeripheral
 from torii                                  import Elaboratable, Module
 from torii.hdl.rec                          import Record
 
-from sol.cli                                import cli
-from sol.gateware.soc                       import SimpleSoC
-from sol.gateware.usb.usb2.device           import USBDevice, USBDeviceController
-from sol.gateware.usb.usb2.interfaces.eptri import (
+from sol_usb.cli                                import cli
+from sol_usb.gateware.soc                       import SimpleSoC
+from sol_usb.gateware.usb.usb2.device           import USBDevice, USBDeviceController
+from sol_usb.gateware.usb.usb2.interfaces.eptri import (
 	InFIFOInterface, OutFIFOInterface, SetupFIFOInterface
 )
 

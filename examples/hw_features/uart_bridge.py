@@ -14,8 +14,8 @@ and you should see 'Hello World' 'typed' repeatedly.
 
 from torii                       import Signal, Elaboratable, Module, Array, Cat
 
-from sol.cli                     import cli
-from sol.gateware.interface.uart import UARTTransmitter
+from sol_usb.cli                     import cli
+from sol_usb.gateware.interface.uart import UARTTransmitter
 
 
 class UARTBridgeExample(Elaboratable):
