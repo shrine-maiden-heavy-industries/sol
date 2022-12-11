@@ -27,4 +27,4 @@ Unreleased template stuff
 
 #
 
-[unreleased]: https://github.com/shrine-maiden-heavy-industries/torii-hdl/compare/v0.1.0...main
+[unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.1.0...main
