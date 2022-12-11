@@ -1,9 +1,7 @@
-tox
-pyusb
--e git://github.com/shrine-maiden-heavy-industries/torii-hdl.git#egg=torii
--e git://github.com/shrine-maiden-heavy-industries/torii-boards.git#egg=torii_boards
--e git://github.com/shrine-maiden-heavy-industries/usb-construct.git@main#egg=usb-construct
--e git://github.com/shrine-maiden-heavy-industries/sol.git#egg=sol
--e git://github.com/lambdaconcept/minerva.git#egg=minerva
-pyvcd
-pyserial~=3.4
+setuptools_scm
+sphinx
+sphinx-rtd-theme
+sphinxcontrib-platformpicker
+wavedrom
+sphinxcontrib-wavedrom
+myst-parser
