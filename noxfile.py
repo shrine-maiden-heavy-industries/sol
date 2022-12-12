@@ -72,7 +72,7 @@ def mypy(session: nox.Session) -> None:
 @nox.session
 def flake8(session: nox.Session) -> None:
 	session.install('flake8')
-	session.run('flake8', './sol')
+	session.run('flake8', './sol_usb')
 	session.run('flake8', './applets')
 	session.run('flake8', './examples')
 	session.run('flake8', './tests')
