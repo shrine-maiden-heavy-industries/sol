@@ -2,10 +2,10 @@
 
 # NOTE: This test is currently b0rken :(
 
-from sol_usb.gateware.usb.usb2       import USBSpeed
+# from sol_usb.gateware.usb.usb2       import USBSpeed
 from sol_usb.gateware.usb.usb2.reset import USBResetSequencer
-from sol_usb.gateware.interface.utmi import UTMIOperatingMode, UTMITerminationSelect
-from sol_usb.gateware.test           import SolGatewareTestCase, usb_domain_test_case
+# from sol_usb.gateware.interface.utmi import UTMIOperatingMode, UTMITerminationSelect
+from sol_usb.gateware.test           import SolGatewareTestCase # , usb_domain_test_case
 
 
 class USBResetSequencerTest(SolGatewareTestCase):
