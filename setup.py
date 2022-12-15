@@ -50,7 +50,7 @@ setup(
 	description      = 'Torii HDL framework for FPGA-based USB solutions',
 	python_requires  = '~=3.9',
 	zip_safe         = True,
-	url              = 'https://github.com/shrine-maiden-heavy-industries/sol',
+	url              = 'https://sol.shmdn.link/',
 
 	long_description = README_FILE.read_text(),
 	long_description_content_type = 'text/markdown',
@@ -127,7 +127,7 @@ setup(
 	],
 
 	project_urls     = {
-		'Documentation': 'https://shrine-maiden-heavy-industries.github.io/sol/',
+		'Documentation': 'https://sol.shmdn.link/',
 		'Source Code'  : 'https://github.com/shrine-maiden-heavy-industries/sol',
 		'Bug Tracker'  : 'https://github.com/shrine-maiden-heavy-industries/sol/issues',
 	},

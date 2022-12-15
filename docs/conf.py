@@ -61,8 +61,8 @@ todo_include_todos     = True
 
 intersphinx_mapping = {
 	'python': ('https://docs.python.org/3', None),
-	'torii': ('https://shrine-maiden-heavy-industries.github.io/torii-hdl/', None),
-	'usb_construct': ('https://shrine-maiden-heavy-industries.github.io/usb-construct/', None)
+	'torii': ('https://torii.shmdn.link/', None),
+	'usb_construct': ('https://usb-construct.shmdn.link/', None)
 }
 
 
@@ -92,7 +92,7 @@ html_context = {
 }
 
 
-html_baseurl     = 'https://shrine-maiden-heavy-industries.github.io/sol/'
+html_baseurl     = 'https://sol.shmdn.link/'
 html_theme       = 'sphinx_rtd_theme'
 html_copy_source = False
 
