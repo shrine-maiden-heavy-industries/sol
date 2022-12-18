@@ -17,7 +17,16 @@ Unreleased template stuff
 ### Security
 -->
 
+
 ## [Unreleased]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.2.0]
 
 ### Added
 
@@ -49,5 +58,6 @@ Unreleased template stuff
 
 No changelog is provided for this version as it is a hold-over / demarcation of the divergence from [LUNA](https://github.com/greatscottgadgets/luna/).
 
-[Unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.1.0...main
+[Unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.2.0...main
+[0.2.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/hw-r0.4...v0.1.0
