@@ -95,7 +95,7 @@ setup(
 		)
 	),
 	package_data      = {
-		'sol': [
+		'sol_usb': [
 			'py.typed'
 		],
 	},
