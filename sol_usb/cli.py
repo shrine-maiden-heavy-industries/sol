@@ -7,19 +7,20 @@ from pathlib           import Path
 from shutil            import rmtree
 from sys               import argv, exit
 from tempfile          import mkdtemp
-from typing            import Any, Optional
+from typing            import Any, Optional, Callable, Union
 
 from rich              import traceback
 from rich.logging      import RichHandler
 
 from torii.hdl._unused import MustUse
+from torii.hdl.ir      import Fragment
 
 __all__ = (
 	'cli',
 	'setup_logger',
 )
 
-def setup_logger(args : Optional[Namespace] = None) -> None:
+def setup_logger(args: Optional[Namespace] = None) -> None:
 	level = log.INFO
 	if args is not None and args.verbose:
 		level = log.DEBUG
@@ -35,7 +36,11 @@ def setup_logger(args : Optional[Namespace] = None) -> None:
 		]
 	)
 
-def cli(fragment, *pos_args, cli_soc : Optional[Any] = None, **kwargs):
+def cli(
+	fragment: Union[Fragment, Callable[..., Fragment]], *pos_args,
+	cli_soc: Optional[Any] = None,
+	**kwargs
+) -> Optional[Fragment]:
 	'''
 	Runs a default CLI that assists in building and running gateware.
 
@@ -44,10 +49,13 @@ def cli(fragment, *pos_args, cli_soc : Optional[Any] = None, **kwargs):
 
 	Parameters
 	----------
-	fragment
+	fragment : Union[torii.hdl.ir.Fragment, Callable[..., torii.hdl.ir.Fragment]]
 		The fragment instance to be built; or a callable that returns a fragment,
 		such as a Elaborable type. If the latter is provided, any keyword or positional
 		arguments not specified here will be passed to this callable.
+
+	pos_args :
+		Arguments to pass to ``fragment`` if it is a Callable[..., torii.hdl.ir.Fragment].
 
 	cli_soc
 		Optional. If a SoC design provides a SimpleSoc, options will be provided for generating
@@ -238,5 +246,3 @@ def cli(fragment, *pos_args, cli_soc : Optional[Any] = None, **kwargs):
 	finally:
 		if not args.keep_files:
 			rmtree(build_dir)
-
-	return None
