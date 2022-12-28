@@ -68,7 +68,6 @@ class StandardRequestHandler(ControlRequestHandler):
 		handshake_generator = interface.handshakes_out
 		tx                  = interface.tx
 
-
 		#
 		# Submodules
 		#
@@ -87,7 +86,6 @@ class StandardRequestHandler(ControlRequestHandler):
 		# Handler for various small-constant-response requests (GET_CONFIGURATION, GET_STATUS).
 		m.submodules.transmitter = transmitter = \
 			StreamSerializer(data_length = 2, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 2)
-
 
 		#
 		# Handlers.
@@ -129,7 +127,6 @@ class StandardRequestHandler(ControlRequestHandler):
 								with m.Case():
 									m.next = 'UNHANDLED'
 
-
 				# GET_STATUS -- Fetch the device's status.
 				# For now, we'll always return '0'.
 				with m.State('GET_STATUS'):
@@ -137,17 +134,14 @@ class StandardRequestHandler(ControlRequestHandler):
 					# TODO: copy the remote wakeup and bus-powered attributes from bmAttributes of the relevant descriptor?
 					self.handle_simple_data_request(m, transmitter, 0, length = 2)
 
-
 				# SET_ADDRESS -- The host is trying to assign us an address.
 				with m.State('SET_ADDRESS'):
 					self.handle_register_write_request(m, interface.new_address, interface.address_changed)
-
 
 				# SET_CONFIGURATION -- The host is trying to select an active configuration.
 				with m.State('SET_CONFIGURATION'):
 					# TODO: stall if we don't have a relevant configuration
 					self.handle_register_write_request(m, interface.new_config, interface.config_changed)
-
 
 				# GET_DESCRIPTOR -- The host is asking for a USB descriptor -- for us to 'self describe'.
 				with m.State('GET_DESCRIPTOR'):
@@ -198,7 +192,6 @@ class StandardRequestHandler(ControlRequestHandler):
 				# GET_CONFIGURATION -- The host is asking for the active configuration number.
 				with m.State('GET_CONFIGURATION'):
 					self.handle_simple_data_request(m, transmitter, interface.active_config)
-
 
 				# UNHANDLED -- we've received a request we're not prepared to handle
 				with m.State('UNHANDLED'):
