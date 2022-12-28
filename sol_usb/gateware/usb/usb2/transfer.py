@@ -205,7 +205,7 @@ class USBInTransferManager(Elaboratable):
 		# If we have valid data that will end our packet, we're no longer waiting for data.
 		# We'll now wait for the host to request data from us.
 		packet_complete = (write_fill_count + 1 == self._max_packet_size)
-		will_end_packet = in_stream.last | packet_complete
+		will_end_packet = packet_complete | in_stream.last
 
 		# Similarly, if we receive a request to flush what data we have, we want to transition
 		# to waiting for the host to request the data from us.
