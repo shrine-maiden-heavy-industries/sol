@@ -8,14 +8,16 @@
 
 import functools
 import operator
+from abc           import abstractmethod
 
-from torii        import Cat, Elaboratable, Module, Signal
+from torii         import Cat, Elaboratable, Module, Signal
+from torii.hdl.dsl import Operator
 
-from ...utils.bus import OneHotMultiplexer
-from ..request    import SetupPacket
-from ..stream     import USBInStreamInterface, USBOutStreamInterface
-from .            import USBSpeed
-from .packet      import (
+from ...utils.bus  import OneHotMultiplexer
+from ..request     import SetupPacket
+from ..stream      import USBInStreamInterface, USBOutStreamInterface
+from .             import USBSpeed
+from .packet       import (
 	DataCRCInterface, HandshakeExchangeInterface, InterpacketTimerInterface,
 	TokenDetectorInterface, USBDataPacketDeserializer, USBInterpacketTimer,
 	USBTokenDetector
@@ -105,6 +107,9 @@ class USBRequestHandler(Elaboratable):
 			tx.last.eq(1)
 		]
 
+	@abstractmethod
+	def handler_condition(self, setup : SetupPacket) -> Operator:
+		raise NotImplementedError('You must implement handler_condition on your request handler.')
 
 class USBSetupDecoder(Elaboratable):
 	''' Gateware responsible for detecting Setup transactions.
