@@ -21,7 +21,6 @@ from .packet      import (
 	USBTokenDetector
 )
 
-
 class RequestHandlerInterface:
 	'''
 	Record representing a connection between a control endpoint and a request handler.
@@ -80,7 +79,6 @@ class RequestHandlerInterface:
 		self.handshakes_in         = HandshakeExchangeInterface(is_detector = False)
 		self.tx_data_pid           = Signal(reset = 1)
 
-
 class USBRequestHandler(Elaboratable):
 	''' Base class for USB request handler modules.
 
@@ -94,7 +92,6 @@ class USBRequestHandler(Elaboratable):
 		# I/O port:
 		#
 		self.interface = RequestHandlerInterface()
-
 
 	def send_zlp(self):
 		''' Returns the statements necessary to send a zero-length packet.'''
@@ -153,7 +150,6 @@ class USBSetupDecoder(Elaboratable):
 		self.packet        = SetupPacket()
 		self.ack           = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -170,7 +166,6 @@ class USBSetupDecoder(Elaboratable):
 
 			m.d.comb += timer.speed.eq(self.speed)
 
-
 		# Create a data-packet-deserializer, which we'll use to capture the
 		# contents of the setup data packets.
 		m.submodules.data_handler = data_handler = \
@@ -186,7 +181,6 @@ class USBSetupDecoder(Elaboratable):
 			self.packet.received.eq(0),
 		]
 
-
 		with m.FSM(domain = 'usb'):
 
 			# IDLE -- we haven't yet detected a SETUP transaction directed at us
@@ -197,7 +191,6 @@ class USBSetupDecoder(Elaboratable):
 				# the next data packet is going to be for us.
 				with m.If(pid_matches & self.tokenizer.new_token):
 					m.next = 'READ_DATA'
-
 
 			# READ_DATA -- we've just seen a SETUP token, and are waiting for the
 			# data payload of the transaction, which contains the setup packet.
@@ -253,7 +246,6 @@ class USBSetupDecoder(Elaboratable):
 					with m.Else():
 						m.next = 'IDLE'
 
-
 			# INTERPACKET -- wait for an inter-packet delay before responding
 			with m.State('INTERPACKET_DELAY'):
 
@@ -263,7 +255,6 @@ class USBSetupDecoder(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
 
 class USBRequestHandlerMultiplexer(Elaboratable):
 	'''
@@ -287,7 +278,6 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 		#
 		self._interfaces = []
 
-
 	def add_interface(self, interface: RequestHandlerInterface):
 		'''
 		Adds a RequestHandlerInterface to the multiplexer.
@@ -296,7 +286,6 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 		driving requests at a time.
 		'''
 		self._interfaces.append(interface)
-
 
 	def _multiplex_signals(self, m, *, when, multiplex, sub_bus = None):
 		'''
@@ -323,7 +312,6 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 			else:
 				return getattr(interface, name)
 
-
 		# We're building an if-elif tree; so we should start with an If entry.
 		conditional = m.If
 
@@ -345,12 +333,9 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 			# After the first element, all other entries should be created with Elif.
 			conditional = m.Elif
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 		shared = self.shared
-
 
 		#
 		# Pass through signals being routed -to- our pre-mux interfaces.
@@ -410,7 +395,6 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 
 		return m
 
-
 class StallOnlyRequestHandler(Elaboratable):
 	'''
 	Simple gateware request handler that only conditionally stalls requests.
@@ -436,7 +420,6 @@ class StallOnlyRequestHandler(Elaboratable):
 		# I/O port
 		#
 		self.interface = RequestHandlerInterface()
-
 
 	def elaborate(self, platform):
 		m = Module()
