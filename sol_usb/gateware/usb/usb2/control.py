@@ -7,17 +7,19 @@
 
 ''' Low-level USB transciever gateware -- control transfer components. '''
 
-
-from torii                  import Elaboratable, Module
+from typing                 import List
+from torii                  import Elaboratable, Module, Cat
+from torii.hdl.dsl          import Operator
 
 from usb_construct.emitters import DeviceDescriptorCollection
 from usb_construct.types    import USBRequestType
 
+from ..request.interface    import SetupPacket
 from ..request.standard     import StandardRequestHandler
 from .endpoint              import EndpointInterface
 from .packet                import USBDataPacketCRC, USBInterpacketTimer, USBTokenDetector
 from .request               import (
-	StallOnlyRequestHandler, USBRequestHandlerMultiplexer, USBSetupDecoder
+	StallOnlyRequestHandler, USBRequestHandlerMultiplexer, USBSetupDecoder, USBRequestHandler
 )
 
 
@@ -64,7 +66,7 @@ class USBControlEndpoint(Elaboratable):
 		#
 
 		# List of the modules that will handle control requests.
-		self._request_handlers = []
+		self._request_handlers: List[USBRequestHandler] = []
 
 
 	def add_request_handler(self, request_handler):
@@ -127,22 +129,18 @@ class USBControlEndpoint(Elaboratable):
 			m.submodules.token_detector = tokenizer = USBTokenDetector(utmi = self.utmi)
 			m.d.comb += tokenizer.interface.connect(interface.tokenizer)
 
-
 		#
-		# Convenience feature:
+		# Create the stall request handler to handle otherwise-unhandled conditions for the
+		# control endpoint. This relies on the user having implemented their handling
+		# conditions properly using USBRequestHandler.handler_condition().
 		#
-		# If we have -only- a standard request handler, automatically add a handler that will
-		# stall all other requests.
-		#
-		single_handler = (len(self._request_handlers) == 1)
-		if (single_handler and isinstance(self._request_handlers[0], StandardRequestHandler)):
-
-			# Add a handler that will stall any non-standard request.
-			def stall_condition(setup):
-				return setup.type != USBRequestType.STANDARD
-
-			self.add_request_handler(StallOnlyRequestHandler(stall_condition))
-
+		def stall_condition(setup: SetupPacket) -> Operator:
+			return ~Cat(
+				handler.handler_condition(setup)
+				for handler in self._request_handlers
+				if not isinstance(handler, StallOnlyRequestHandler)
+			).any()
+		self.add_request_handler(StallOnlyRequestHandler(stall_condition = stall_condition))
 
 		#
 		# Submodules
