@@ -11,24 +11,25 @@
 
 import errno
 import time
-from datetime                         import datetime
-from enum                             import IntEnum
-
 import usb
+from datetime                               import datetime
+from enum                                   import IntEnum
 
-from torii                            import Elaboratable, Module, Signal
+from torii                                  import Elaboratable, Module, Signal
+from torii.hdl.dsl                          import Operator
 
-from usb_construct.emitters           import DeviceDescriptorCollection
-from usb_construct.types              import USBRequestType
+from usb_construct.emitters                 import DeviceDescriptorCollection
+from usb_construct.types                    import USBRequestType
 
-from sol_usb.gateware.architecture.car    import SolECP5DomainGenerator
-from sol_usb.gateware.interface.ulpi      import UTMITranslator
-from sol_usb.gateware.platform            import get_appropriate_platform
-from sol_usb.gateware.stream.generator    import StreamSerializer
-from sol_usb.gateware.usb.analyzer        import USBAnalyzer
-from sol_usb.gateware.usb.request.control import ControlRequestHandler
-from sol_usb.gateware.usb.stream          import USBInStreamInterface
-from sol_usb.usb2                         import USBDevice, USBStreamInEndpoint
+from sol_usb.gateware.architecture.car      import SolECP5DomainGenerator
+from sol_usb.gateware.interface.ulpi        import UTMITranslator
+from sol_usb.gateware.platform              import get_appropriate_platform
+from sol_usb.gateware.stream.generator      import StreamSerializer
+from sol_usb.gateware.usb.analyzer          import USBAnalyzer
+from sol_usb.gateware.usb.request.control   import ControlRequestHandler
+from sol_usb.gateware.usb.stream            import USBInStreamInterface
+from sol_usb.gateware.usb.request.interface import SetupPacket
+from sol_usb.usb2                           import USBDevice, USBStreamInEndpoint
 
 USB_SPEED_HIGH       = 0b00
 USB_SPEED_FULL       = 0b01
@@ -40,7 +41,6 @@ USB_PRODUCT_ID       = 0x615b
 BULK_ENDPOINT_NUMBER  = 1
 BULK_ENDPOINT_ADDRESS = 0x80 | BULK_ENDPOINT_NUMBER
 MAX_BULK_PACKET_SIZE  = 512
-
 
 class USBAnalyzerState(Elaboratable):
 
@@ -55,11 +55,9 @@ class USBAnalyzerState(Elaboratable):
 			m.d.sync += self.current.eq(self.next)
 		return m
 
-
 class USBAnalyzerVendorRequests(IntEnum):
 	GET_STATE = 0
 	SET_STATE = 1
-
 
 class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 
@@ -99,7 +97,6 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 							with m.Case():
 								m.next = 'UNHANDLED'
 
-
 				# GET_STATE -- Fetch the device's state
 				with m.State('GET_STATE'):
 					self.handle_simple_data_request(m, transmitter, self.state.current, length = 1)
@@ -119,6 +116,8 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 
 		return m
 
+	def handler_condition(self, setup: SetupPacket) -> Operator:
+		return setup.type == USBRequestType.VENDOR
 
 class USBAnalyzerApplet(Elaboratable):
 	'''
