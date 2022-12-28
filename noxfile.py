@@ -7,6 +7,7 @@ from setuptools_scm import (
 )
 
 import nox
+from nox.sessions   import Session
 
 ROOT_DIR  = Path(__file__).parent
 
@@ -37,7 +38,7 @@ def sol_version() -> str:
 	)
 
 @nox.session(reuse_venv = True)
-def test(session: nox.Session) -> None:
+def test(session: Session) -> None:
 	out_dir = (BUILD_DIR / 'tests')
 	out_dir.mkdir(parents = True, exist_ok = True)
 
@@ -49,7 +50,7 @@ def test(session: nox.Session) -> None:
 	)
 
 @nox.session
-def docs(session: nox.Session) -> None:
+def docs(session: Session) -> None:
 	out_dir = (BUILD_DIR / 'docs')
 	shutil.rmtree(out_dir, ignore_errors = True)
 	session.install('-r', str(DOCS_DIR / 'requirements.txt'))
@@ -57,7 +58,7 @@ def docs(session: nox.Session) -> None:
 	session.run('sphinx-build', '-b', 'html', str(DOCS_DIR), str(out_dir))
 
 @nox.session
-def mypy(session: nox.Session) -> None:
+def mypy(session: Session) -> None:
 	out_dir = (BUILD_DIR / 'mypy')
 	out_dir.mkdir(parents = True, exist_ok = True)
 
@@ -70,7 +71,7 @@ def mypy(session: nox.Session) -> None:
 	)
 
 @nox.session
-def flake8(session: nox.Session) -> None:
+def flake8(session: Session) -> None:
 	session.install('flake8')
 	session.run('flake8', './sol_usb')
 	session.run('flake8', './applets')
@@ -78,14 +79,14 @@ def flake8(session: nox.Session) -> None:
 	session.run('flake8', './tests')
 
 @nox.session
-def build_dists(session: nox.Session) -> None:
+def build_dists(session: Session) -> None:
 	session.install('build')
 	session.run('python', '-m', 'build',
 		'-o', str(DIST_DIR)
 	)
 
 @nox.session
-def upload_dist(session: nox.Session) -> None:
+def upload_dist(session: Session) -> None:
 	session.install('twine')
 	build_dists(session)
 	session.log(f'Uploading sol-{sol_version()} to PyPi')
