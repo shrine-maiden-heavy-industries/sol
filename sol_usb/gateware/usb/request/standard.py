@@ -13,7 +13,8 @@ import os
 import unittest
 from typing                 import Callable, Iterable
 
-from torii                  import *
+from torii                  import Module, Signal
+from torii.hdl.dsl          import Operator
 from torii.hdl.ast          import Const, Value
 
 from usb_construct.emitters import DeviceDescriptorCollection
@@ -204,6 +205,8 @@ class StandardRequestHandler(ControlRequestHandler):
 
 		return m
 
+	def handler_condition(self, setup: SetupPacket) -> Operator:
+		return setup.type == USBRequestType.STANDARD
 
 if __name__ == '__main__':
 	unittest.main(warnings = 'ignore')
