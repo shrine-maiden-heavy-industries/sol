@@ -8,9 +8,10 @@
 
 
 
-from torii    import Elaboratable, Memory, Module, Signal
+from torii          import Elaboratable, Module, Signal, DomainRenamer
+from torii.lib.fifo import SyncFIFOBuffered
 
-from ..stream import StreamInterface
+from ..stream       import StreamInterface
 
 
 class USBAnalyzer(Elaboratable):
@@ -51,6 +52,7 @@ class USBAnalyzer(Elaboratable):
 	HEADER_SIZE_BYTES = HEADER_SIZE_BITS // 8
 
 	# Support a maximum payload size of 1024B, plus a 1-byte PID and a 2-byte CRC16.
+	# Please note, this is less than the max actual size of 8192B from the USB spec(!)
 	MAX_PACKET_SIZE_BYTES = 1024 + 1 + 2
 
 	def __init__(self, *, utmi_interface, mem_depth = 65536):
@@ -67,8 +69,7 @@ class USBAnalyzer(Elaboratable):
 		if (mem_depth % 2) != 0:
 			raise ValueError('mem_depth must be a power of 2')
 
-		# Internal storage memory.
-		self.mem = Memory(width = 8, depth = mem_depth, name = 'analysis_ringbuffer')
+		# Internal storage item count
 		self.mem_size = mem_depth
 
 		#
@@ -88,87 +89,48 @@ class USBAnalyzer(Elaboratable):
 	def elaborate(self, platform):
 		m = Module()
 
-		# Memory read and write ports.
-		m.submodules.read  = mem_read_port  = self.mem.read_port(domain = 'usb')
-		m.submodules.write = mem_write_port = self.mem.write_port(domain = 'usb')
-
-		# Store the memory address of our active packet header, which will store
-		# packet metadata like the packet size.
-		header_location = Signal.like(mem_write_port.addr)
-		write_location  = Signal.like(mem_write_port.addr)
-
-		# Read FIFO status.
-		read_location   = Signal.like(mem_read_port.addr)
-		fifo_count      = Signal.like(mem_read_port.addr, reset = 0)
-		fifo_new_data   = Signal()
+		# Internal storage
+		m.submodules.ringbuffer = data_buffer = DomainRenamer('usb')(
+			SyncFIFOBuffered(width = 8, depth = self.mem_size)
+		)
+		m.submodules.packet_buffer = packet_buffer = DomainRenamer('usb')(
+			SyncFIFOBuffered(width = 8, depth = USBAnalyzer.MAX_PACKET_SIZE_BYTES)
+		)
+		m.submodules.length_buffer = length_buffer = DomainRenamer('usb')(
+			SyncFIFOBuffered(width = 16, depth = 512)
+		)
 
 		# Current receive status.
-		packet_size     = Signal(16)
+		captured_packet_length = Signal(16)
+		packet_length = Signal(16)
+		packet_transferred = Signal(17)
 
-		#
 		# Read FIFO logic.
-		#
 		m.d.comb += [
 
 			# We have data ready whenever there's data in the FIFO.
-			self.stream.valid.eq((fifo_count != 0) & (self.idle | self.overrun)),
-
+			self.stream.valid.eq(data_buffer.r_rdy),
 			# Our data_out is always the output of our read port...
-			self.stream.payload.eq(mem_read_port.data),
+			self.stream.payload.eq(data_buffer.r_data),
+			# Read more data out for as long as the ready signal is asserted
+			data_buffer.r_en.eq(self.stream.ready),
 
+			self.sampling.eq(packet_buffer.w_en),
 
-			self.sampling.eq(mem_write_port.en)
+			length_buffer.w_en.eq(0),
 		]
 
-		# Once our consumer has accepted our current data, move to the next address.
-		with m.If(self.stream.ready & self.stream.valid):
-			m.d.usb += read_location.eq(read_location + 1)
-			m.d.comb += mem_read_port.addr.eq(read_location + 1)
-
-		with m.Else():
-			m.d.comb += mem_read_port.addr.eq(read_location),
-
-
-
-		#
-		# FIFO count handling.
-		#
-		fifo_full = (fifo_count == self.mem_size)
-
-		data_pop   = Signal()
-		data_push  = Signal()
-		m.d.comb += [
-			data_pop.eq(self.stream.ready & self.stream.valid),
-			data_push.eq(fifo_new_data & ~fifo_full)
-		]
-
-		# If we have both a read and a write, don't update the count,
-		# as we've both added one and subtracted one.
-		with m.If(data_push & data_pop):
-			pass
-
-		# Otherwise, add when data's added, and subtract when data's removed.
-		with m.Elif(data_push):
-			m.d.usb += fifo_count.eq(fifo_count + 1)
-		with m.Elif(data_pop):
-			m.d.usb += fifo_count.eq(fifo_count - 1)
-
-
-		#
 		# Core analysis FSM.
-		#
-		with m.FSM(domain = 'usb') as f:
+		with m.FSM(domain = 'usb', name = 'capture') as fsm:
 			m.d.comb += [
-				self.idle.eq(f.ongoing('IDLE')),
-				self.overrun.eq(f.ongoing('OVERRUN')),
-				self.capturing.eq(f.ongoing('CAPTURE')),
+				self.idle.eq(fsm.ongoing('IDLE')),
+				self.capturing.eq(fsm.ongoing('CAPTURE')),
 			]
 
 			# START: wait for capture to be enabled, but don't start mid-packet.
 			with m.State('START'):
 				with m.If(~self.utmi.rx_active & self.capture_enable):
 					m.next = 'IDLE'
-
 
 			# IDLE: If capture is enabled, wait for an active receive.
 			with m.State('IDLE'):
@@ -178,98 +140,102 @@ class USBAnalyzer(Elaboratable):
 					m.next = 'START'
 				# We got a new active receive, capture it
 				with m.Elif(self.utmi.rx_active):
+					m.d.usb += captured_packet_length.eq(0)
 					m.next = 'CAPTURE'
-					m.d.usb += [
-						header_location.eq(write_location),
-						write_location.eq(write_location + self.HEADER_SIZE_BYTES),
-						packet_size.eq(0),
-					]
-
 
 			# Capture data until the packet is complete.
 			with m.State('CAPTURE'):
 
 				byte_received = self.utmi.rx_valid & self.utmi.rx_active
 
-				# Capture data whenever RxValid is asserted.
+				# Capture data whenever rx_valid is asserted.
 				m.d.comb += [
-					mem_write_port.addr.eq(write_location),
-					mem_write_port.data.eq(self.utmi.rx_data),
-					mem_write_port.en.eq(byte_received),
-					fifo_new_data.eq(byte_received),
+					packet_buffer.w_data.eq(self.utmi.rx_data),
+					packet_buffer.w_en.eq(byte_received),
 				]
 
-				# Advance the write pointer each time we receive a bit.
+				# Add to the packet size every time we receive a byte.
 				with m.If(byte_received):
-					m.d.usb += [
-						write_location.eq(write_location + 1),
-						packet_size.eq(packet_size + 1)
-					]
+					m.d.usb += captured_packet_length.eq(captured_packet_length + 1)
 
-					# If this would be filling up our data memory,
-					# move to the OVERRUN state.
-					with m.If(fifo_count == self.mem_size - 1 - self.HEADER_SIZE_BYTES):
-						m.next = 'OVERRUN'
-
-				# If we've stopped receiving, move to the 'finalize' state.
+				# If we've stopped receiving, go back to idle to wait for more.
 				with m.If(~self.utmi.rx_active):
-					m.next = 'EOP_1'
+					m.d.comb += [
+						length_buffer.w_data.eq(captured_packet_length),
+						length_buffer.w_en.eq(1),
+					]
+					m.next = 'IDLE'
 
-					# Optimization: if we didn't receive any data, there's no need
-					# to create a packet. Clear our header from the FIFO and disarm.
-					with m.If(packet_size == 0):
-						m.next = 'IDLE'
-						m.d.usb += [
-							write_location.eq(header_location)
-						]
-					with m.Else():
-						m.next = 'EOP_1'
+		with m.FSM(domain = 'usb', name = 'packet_queue'):
+			# IDLE: When there are no packets ready for processing wait in this state.
+			with m.State('IDLE'):
+				with m.If(length_buffer.r_rdy):
+					m.next = 'POP_LENGTH'
 
-			# EOP: handle the end of the relevant packet.
-			with m.State('EOP_1'):
+			# POP_LENGTH: Grab the new packet length
+			with m.State('POP_LENGTH'):
+				m.d.usb += packet_length.eq(length_buffer.r_data)
+				m.d.comb += length_buffer.r_en.eq(1)
+				m.next = 'INSPECT_PACKET'
 
-				# Now that we're done, add the header to the start of our packet.
-				# This will take two cycles, currently, as we're using a 2-byte header,
-				# but we only have an 8-bit write port.
-				m.d.comb += [
-					mem_write_port.addr.eq(header_location),
-					mem_write_port.data.eq(packet_size[8:16]),
-					mem_write_port.en.eq(1),
-					fifo_new_data.eq(1)
-				]
-				m.next = 'EOP_2'
+			# INSPECT_PACKET: Check that the new packet wouldn't overflow the available output FIFO space
+			with m.State('INSPECT_PACKET'):
+				m.d.usb += packet_transferred.eq(0)
+				with m.If(data_buffer.w_level + packet_length + 2 > self.mem_size):
+					m.next = 'OVERRUN'
+				with m.Else():
+					m.next = 'TRANSFER_PACKET'
 
+			# TRANSFER_PACKET: Moves the captured packet between FIFOs, appending the length to the front
+			with m.State('TRANSFER_PACKET'):
+				# First, write the length in little endian
+				with m.If(packet_transferred == 0):
+					m.d.comb += [
+						data_buffer.w_data.eq(packet_length[8:16]),
+						data_buffer.w_en.eq(1),
+					]
+				with m.Elif(packet_transferred == 1):
+					m.d.comb += [
+						data_buffer.w_data.eq(packet_length[0:8]),
+						data_buffer.w_en.eq(1),
+					]
+				# Then write the packet data byte for byte
+				with m.Elif(packet_length != 0):
+					m.d.comb += [
+						data_buffer.w_data.eq(packet_buffer.r_data),
+						packet_buffer.r_en.eq(1),
+						data_buffer.w_en.eq(1),
+					]
+					m.d.usb += packet_length.eq(packet_length - 1)
+				# If the packet size is now 0, we're done and can go back to idle
+				with m.Else():
+					m.next = 'IDLE'
+				m.d.usb += packet_transferred.eq(packet_transferred + 1)
 
-			with m.State('EOP_2'):
-
-				# Add the second byte of our header.
-				# Note that, if this is an adjacent read, we should have
-				# just captured our packet header _during_ the stop turnaround.
-				m.d.comb += [
-					mem_write_port.addr.eq(header_location + 1),
-					mem_write_port.data.eq(packet_size[0:8]),
-					mem_write_port.en.eq(1),
-					fifo_new_data.eq(1)
-				]
-
-
-				m.next = 'IDLE'
-
-
-			# BABBLE -- handles the case in which we've received a packet beyond
-			# the allowable size in the USB spec
-			with m.State('BABBLE'):
-
-				# Trap here, for now.
-				pass
-
-
+			# OVERRUN: handles the case where the new packet would overrun the buffer
 			with m.State('OVERRUN'):
-				# TODO: we should probably set an overrun flag and then emit an EOP, here?
+				# Latch on that we've had an overrun occur
+				m.d.usb += self.overrun.eq(1)
 
-				# If capture is stopped by the host, reset back to the ready state.
-				with m.If(~self.capture_enable):
-					m.next = 'START'
+				# Check there's space in the buffer to write an invalid packet size
+				with m.If(data_buffer.w_level + 2 <= self.mem_size):
+					m.next = 'CLEAR_OVERRUN'
 
+			# CLEAR_OVERRUN: write the overrun marker into the buffer and clear packet_size bytes from the packet buffer
+			with m.State('CLEAR_OVERRUN'):
+				# Write the marker (0xffff)
+				with m.If((packet_transferred == 0) | (packet_transferred == 1)):
+					m.d.comb += [
+						data_buffer.w_en.eq(1),
+						data_buffer.w_data.eq(0xff),
+					]
+					m.d.usb += packet_transferred.eq(packet_transferred + 1)
+				# Clear the packet out from the buffer
+				with m.Elif(packet_length != 0):
+					m.d.comb += packet_buffer.r_en.eq(1)
+					m.d.usb += packet_length.eq(packet_length - 1)
+				# We're done, return to idle
+				with m.Else():
+					m.next = 'IDLE'
 
 		return m

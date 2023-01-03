@@ -61,6 +61,7 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		# Idle for several cycles.
 		yield from self.advance_cycles(5)
 		self.assertEqual((yield self.dut.capturing), 0)
+		yield from self.advance_cycles(5)
 
 		# Try to read back the capture data, byte by byte.
 		self.assertEqual((yield self.dut.stream.valid), 1)
@@ -103,6 +104,7 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		# Idle for several cycles.
 		yield from self.advance_cycles(5)
 		self.assertEqual((yield self.dut.capturing), 0)
+		yield from self.advance_cycles(5)
 
 		# Try to read back the capture data, byte by byte.
 		self.assertEqual((yield self.dut.stream.valid), 1)

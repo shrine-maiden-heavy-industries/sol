@@ -339,6 +339,10 @@ class USBAnalyzerConnection:
 			# Extract our size from our buffer.
 			size = (self._buffer.pop(0) << 8) | self._buffer.pop(0)
 
+			if size == 0xffff:
+				print(f'Overflow occured')
+				continue
+
 			# ... and read until we have a packet.
 			while len(self._buffer) < size:
 				self._fetch_data_into_buffer()
