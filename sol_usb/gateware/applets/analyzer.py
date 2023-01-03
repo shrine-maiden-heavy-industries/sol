@@ -12,8 +12,10 @@
 import errno
 import time
 import usb
+from array                                  import array
 from datetime                               import datetime
 from enum                                   import IntEnum
+from typing                                 import Optional
 
 from torii                                  import Elaboratable, Module, Signal
 from torii.hdl.dsl                          import Operator
@@ -264,8 +266,8 @@ class USBAnalyzerConnection:
 		''' Creates our connection to the USBAnalyzer. '''
 
 		self._buffer = bytearray()
-		self._device = None
-
+		self._device : Optional[usb.core.Device] = None
+		self._fetch_buffer = array('B', b'\x00' * MAX_BULK_PACKET_SIZE)
 
 
 	def build_and_configure(self, capture_speed):
@@ -288,7 +290,7 @@ class USBAnalyzerConnection:
 			if time.time() > end_time:
 				raise RuntimeError('Timeout! The analyzer device did not show up.')
 
-			self._device = usb.core.find(idVendor = USB_VENDOR_ID, idProduct = USB_PRODUCT_ID)
+			self._device : usb.core.Device = usb.core.find(idVendor = USB_VENDOR_ID, idProduct = USB_PRODUCT_ID)
 
 	def start_capture(self):
 		self._device.ctrl_transfer(
@@ -304,14 +306,13 @@ class USBAnalyzerConnection:
 		''' Attempts a single data read from the analyzer into our buffer. '''
 
 		try:
-			data = self._device.read(BULK_ENDPOINT_ADDRESS, MAX_BULK_PACKET_SIZE)
-			self._buffer.extend(data)
-		except usb.core.USBError as e:
-			if e.errno == errno.ETIMEDOUT:
-				pass
-			else:
+			# This uses a static array to read into so we don't have too much allocation slowdown/churn
+			bytes_read : int = self._device.read(BULK_ENDPOINT_ADDRESS, self._fetch_buffer)
+			self._buffer.extend(self._fetch_buffer[:bytes_read])
+		except usb.core.USBError as error:
+			if error.errno != errno.ETIMEDOUT:
 				raise
-
+			# If the error was a timeout, ignore it.
 
 
 	def read_raw_packet(self):
