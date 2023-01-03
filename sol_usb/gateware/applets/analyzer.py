@@ -200,7 +200,7 @@ class USBAnalyzerApplet(Elaboratable):
 
 			# Disable all of our terminations, as we want to participate in
 			# passive observation.
-			utmi.dm_pulldown.eq(0),
+			utmi.dp_pulldown.eq(0),
 			utmi.dm_pulldown.eq(0),
 			utmi.term_select.eq(0)
 		]
