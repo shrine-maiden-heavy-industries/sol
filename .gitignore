@@ -1,27 +1,26 @@
 
 __pycache__/
-/*.egg-info
-/.eggs
-/dist
-/.venv
-/.vs
-/.vscode
-.nox/
-.mypy_cache/
+/*.egg-info/
+/.eggs/
+/dist/
+/.venv/
+/.vs/
+/.vscode/
+/.nox/
+/.mypy_cache/
+/env/
 
-
-/.coverage
-/htmlcov
-
+/.coverage/
+/htmlcov/
 
 /tests/spec_*/
 *.vcd
 *.gtkw
 
-
 /*.il
 /*.v
-/build
+/build/
+*/build/
 
-.DS_Store
+.DS_Store/
 Thumbs.db
