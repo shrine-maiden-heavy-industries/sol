@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                     import Record, Module
+from torii                         import Record, Module
+from torii.sim                     import Settle
+from typing                        import Tuple
 
 from sol_usb.gateware.usb.analyzer import USBAnalyzer
 from sol_usb.gateware.test         import SolGatewareTestCase, usb_domain_test_case
@@ -23,11 +25,9 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		self.analyzer = USBAnalyzer(utmi_interface = self.utmi, mem_depth = 128)
 		return self.analyzer
 
-
 	def advance_stream(self, value):
 		yield self.utmi.rx_data.eq(value)
 		yield
-
 
 	@usb_domain_test_case
 	def test_single_packet(self):
@@ -81,7 +81,6 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		# We should now be out of data -- verify that there's no longer data available.
 		self.assertEqual((yield self.dut.stream.valid), 0)
 
-
 	@usb_domain_test_case
 	def test_short_packet(self):
 		# Enable capture
@@ -124,15 +123,111 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		# We should now be out of data -- verify that there's no longer data available.
 		self.assertEqual((yield self.dut.stream.valid), 0)
 
+	def queue_packet(self, packet: Tuple[int]):
+		yield self.utmi.rx_active.eq(1)
+		yield self.utmi.rx_valid.eq(1)
+		yield
+		for byte in packet:
+			yield self.utmi.rx_data.eq(byte)
+			yield
+		yield self.utmi.rx_active.eq(0)
+		yield from self.advance_cycles(4)
 
+	def read_length(self, expected_length: int):
+		self.assertEqual((yield self.dut.stream.valid), 1)
+		yield self.dut.stream.ready.eq(1)
+		# Read the high byte
+		actual_length = yield self.dut.stream.payload
+		yield
+		yield Settle()
+		actual_length <<= 8
+		# Then the low
+		actual_length |= yield self.dut.stream.payload
+		yield
+		yield Settle()
+		# And check that the reconstructed value matches expectations.
+		self.assertEqual(actual_length, expected_length)
 
+	def read_packet(self, expected_length: int):
+		# Validate the length bytes
+		yield from self.read_length(expected_length)
+		# Pop the bytes out from the FIFO, we don't actually care what their values are here.
+		for _ in range(expected_length):
+			yield
+		yield self.dut.stream.ready.eq(0)
+		yield from self.advance_cycles(4)
+
+	def read_overrun_marker(self):
+		yield from self.read_length(0xffff)
+		yield self.dut.stream.ready.eq(0)
+		yield from self.advance_cycles(4)
+
+	@usb_domain_test_case
+	def test_overrun(self):
+		# Enable capture
+		yield self.analyzer.capture_enable.eq(1)
+		yield
+
+		# Queue the the packets in, triggering overrun with the final one
+		yield from self.queue_packet((0x2d, 0x32, 0xc0))
+		yield from self.queue_packet((0xc3, 0x80, 0x06, 0x02, 0x03, 0x09, 0x04, 0xff, 0x00, 0x97, 0xdb))
+		yield from self.queue_packet((0xd2, ))
+		yield from self.queue_packet((0x69, 0x32, 0xc0))
+		yield from self.queue_packet((
+			0x4b, 0x62, 0x03, 0x42, 0x00, 0x6c, 0x00, 0x61,
+			0x00, 0x63, 0x00, 0x6b, 0x00, 0x20, 0x00, 0x4d,
+			0x00, 0x61, 0x00, 0x67, 0x00, 0x69, 0x00, 0x63,
+			0x00, 0x20, 0x00, 0x50, 0x00, 0x72, 0x00, 0x6f,
+			0x00, 0x7a, 0x9c
+		))
+		yield from self.queue_packet((0xd2, ))
+		yield from self.queue_packet((0x69, 0x32, 0xc0))
+		yield from self.queue_packet((
+			0xc3, 0x62, 0x00, 0x65, 0x00, 0x20, 0x00, 0x76,
+			0x00, 0x31, 0x00, 0x2e, 0x00, 0x39, 0x00, 0x2e,
+			0x00, 0x30, 0x00, 0x2d, 0x00, 0x72, 0x00, 0x63,
+			0x00, 0x30, 0x00, 0x2d, 0x00, 0x39, 0x00, 0x34,
+			0x00, 0xfd, 0x28
+		))
+		yield from self.queue_packet((0xd2, ))
+		yield from self.queue_packet((0x69, 0x32, 0xc0))
+		yield from self.queue_packet((
+			0x4b, 0x2d, 0x00, 0x67, 0x00, 0x64, 0x00, 0x39,
+			0x00, 0x37, 0x00, 0x65, 0x00, 0x63, 0x00, 0x38,
+			0x00, 0x30, 0x00, 0x34, 0x00, 0x32, 0x00, 0x2d,
+			0x00, 0x64, 0x00, 0x69, 0x00, 0x72, 0x00, 0x74,
+			0x00, 0x8b, 0x79
+		))
+		yield from self.queue_packet((0xd2, ))
+
+		# We have now tried to enqueue 155 bytes to the second-stage FIFO, overrunning it by 25 bytes.
+		# Spin a few cycles to let the FIFOs all catch up
+		yield from self.advance_cycles(50)
+
+		# Now we can pop the packets and check that after 10 we get an overrun
+		# marker and then a normal and happy packet
+		yield from self.read_packet(3)
+		yield from self.read_packet(11)
+		yield from self.read_packet(1)
+		yield from self.read_packet(3)
+		yield from self.read_packet(35)
+		yield from self.read_packet(1)
+		yield from self.read_packet(3)
+		yield from self.read_packet(35)
+		yield from self.read_packet(1)
+		yield from self.read_packet(3)
+		# Now we expect the overrun marker, which is a length of 65535 (invalid in normal USB traffic)
+		yield from self.read_overrun_marker()
+		# And finally we expect a good ACK packet following.
+		yield from self.read_packet(1)
+
+		yield Settle()
 
 class USBAnalyzerStackTest(SolGatewareTestCase):
 	''' Test that evaluates a full-stack USB analyzer setup. '''
 
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
-
 
 	def instantiate_dut(self):
 
@@ -158,7 +253,6 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 		m.submodules.analyzer   = self.analyzer   = USBAnalyzer(utmi_interface = self.translator, mem_depth = 128)
 		return m
 
-
 	def initialize_signals(self):
 
 		# Ensure the translator doesn't need to perform any register reads/writes
@@ -167,7 +261,6 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 		yield self.translator.dm_pulldown.eq(1)
 		yield self.translator.dp_pulldown.eq(1)
 		yield self.translator.use_external_vbus_indicator.eq(0)
-
 
 	@usb_domain_test_case
 	def test_simple_analysis(self):

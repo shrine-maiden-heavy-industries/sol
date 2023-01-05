@@ -97,7 +97,7 @@ class USBAnalyzer(Elaboratable):
 			SyncFIFOBuffered(width = 8, depth = USBAnalyzer.MAX_PACKET_SIZE_BYTES)
 		)
 		m.submodules.length_buffer = length_buffer = DomainRenamer('usb')(
-			SyncFIFOBuffered(width = 16, depth = 512)
+			SyncFIFOBuffered(width = 16, depth = 256)
 		)
 
 		# Current receive status.
