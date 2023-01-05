@@ -6,13 +6,10 @@
 
 ''' Low-level USB analyzer gateware. '''
 
-
-
-from torii          import Elaboratable, Module, Signal, DomainRenamer
+from torii          import Elaboratable, Module, Signal, Cat, DomainRenamer
 from torii.lib.fifo import SyncFIFOBuffered
 
 from ..stream       import StreamInterface
-
 
 class USBAnalyzer(Elaboratable):
 	'''
@@ -89,6 +86,13 @@ class USBAnalyzer(Elaboratable):
 	def elaborate(self, platform):
 		m = Module()
 
+		# Current receive status.
+		packet_length = Signal(range(USBAnalyzer.MAX_PACKET_SIZE_BYTES))
+		captured_packet_length = Signal.like(packet_length)
+		capture_valid = Signal()
+		primary_overrun = Signal()
+		packet_transferred = Signal(range(USBAnalyzer.MAX_PACKET_SIZE_BYTES + 2))
+
 		# Internal storage
 		m.submodules.ringbuffer = data_buffer = DomainRenamer('usb')(
 			SyncFIFOBuffered(width = 8, depth = self.mem_size)
@@ -96,14 +100,10 @@ class USBAnalyzer(Elaboratable):
 		m.submodules.packet_buffer = packet_buffer = DomainRenamer('usb')(
 			SyncFIFOBuffered(width = 8, depth = USBAnalyzer.MAX_PACKET_SIZE_BYTES)
 		)
+		# The top bit of the length buffer is an overrun flag - if set, we've had an overrun occur in the primary FIFO.
 		m.submodules.length_buffer = length_buffer = DomainRenamer('usb')(
-			SyncFIFOBuffered(width = 16, depth = 256)
+			SyncFIFOBuffered(width = packet_length.width + 1, depth = 256)
 		)
-
-		# Current receive status.
-		captured_packet_length = Signal(16)
-		packet_length = Signal(16)
-		packet_transferred = Signal(17)
 
 		# Read FIFO logic.
 		m.d.comb += [
@@ -140,7 +140,10 @@ class USBAnalyzer(Elaboratable):
 					m.next = 'START'
 				# We got a new active receive, capture it
 				with m.Elif(self.utmi.rx_active):
-					m.d.usb += captured_packet_length.eq(0)
+					m.d.usb += [
+						captured_packet_length.eq(0),
+						capture_valid.eq(packet_buffer.w_rdy),
+					]
 					m.next = 'CAPTURE'
 
 			# Capture data until the packet is complete.
@@ -156,12 +159,15 @@ class USBAnalyzer(Elaboratable):
 
 				# Add to the packet size every time we receive a byte.
 				with m.If(byte_received):
-					m.d.usb += captured_packet_length.eq(captured_packet_length + 1)
+					m.d.usb += [
+						captured_packet_length.eq(captured_packet_length + packet_buffer.w_rdy),
+						capture_valid.eq(capture_valid & packet_buffer.w_rdy),
+					]
 
 				# If we've stopped receiving, go back to idle to wait for more.
 				with m.If(~self.utmi.rx_active):
 					m.d.comb += [
-						length_buffer.w_data.eq(captured_packet_length),
+						length_buffer.w_data.eq(Cat(captured_packet_length, ~capture_valid)),
 						length_buffer.w_en.eq(1),
 					]
 					m.next = 'IDLE'
@@ -174,14 +180,17 @@ class USBAnalyzer(Elaboratable):
 
 			# POP_LENGTH: Grab the new packet length
 			with m.State('POP_LENGTH'):
-				m.d.usb += packet_length.eq(length_buffer.r_data)
+				m.d.usb += [
+					packet_length.eq(length_buffer.r_data[:-1]),
+					primary_overrun.eq(length_buffer.r_data[-1]),
+				]
 				m.d.comb += length_buffer.r_en.eq(1)
 				m.next = 'INSPECT_PACKET'
 
 			# INSPECT_PACKET: Check that the new packet wouldn't overflow the available output FIFO space
 			with m.State('INSPECT_PACKET'):
 				m.d.usb += packet_transferred.eq(0)
-				with m.If(data_buffer.w_level + packet_length + 2 > self.mem_size):
+				with m.If((data_buffer.w_level + packet_length + 2 > self.mem_size) | primary_overrun):
 					m.next = 'OVERRUN'
 				with m.Else():
 					m.next = 'TRANSFER_PACKET'
