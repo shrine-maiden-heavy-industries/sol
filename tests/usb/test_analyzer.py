@@ -2,7 +2,7 @@
 
 from torii                         import Record, Module
 from torii.sim                     import Settle
-from typing                        import Tuple
+from typing                        import Iterable
 
 from sol_usb.gateware.usb.analyzer import USBAnalyzer
 from sol_usb.gateware.test         import SolGatewareTestCase, usb_domain_test_case
@@ -123,7 +123,7 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		# We should now be out of data -- verify that there's no longer data available.
 		self.assertEqual((yield self.dut.stream.valid), 0)
 
-	def queue_packet(self, packet: Tuple[int]):
+	def queue_packet(self, packet: Iterable[int]):
 		yield self.utmi.rx_active.eq(1)
 		yield self.utmi.rx_valid.eq(1)
 		yield
@@ -199,8 +199,9 @@ class USBAnalyzerTest(SolGatewareTestCase):
 			0x00, 0x8b, 0x79
 		))
 		yield from self.queue_packet((0xd2, ))
+		yield from self.queue_packet((0x69, 0x32, 0xc0))
 
-		# We have now tried to enqueue 155 bytes to the second-stage FIFO, overrunning it by 25 bytes.
+		# We have now tried to enqueue 160 bytes to the second-stage FIFO, overrunning it by 25 bytes.
 		# Spin a few cycles to let the FIFOs all catch up
 		yield from self.advance_cycles(50)
 
@@ -220,7 +221,18 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		yield from self.read_overrun_marker()
 		# And finally we expect a good ACK packet following.
 		yield from self.read_packet(1)
+		yield from self.read_packet(3)
+		self.assertEqual((yield self.dut.stream.valid), 0)
 
+		# Having tested the second-stage FIFO, now lets overrun the first stage with a 1536 byte packet
+		# (the first-stage FIFO can only handle 1027 bytes)
+		yield from self.queue_packet(0xa5 for _ in range(1536))
+		# Spin untill the FIFOs all catch up
+		while (yield self.dut.stream.valid) == 0:
+			yield
+		yield from self.read_overrun_marker()
+		# And finally let the second-stage FIFO state machine finish up
+		yield from self.advance_cycles(1024)
 		yield Settle()
 
 class USBAnalyzerStackTest(SolGatewareTestCase):
