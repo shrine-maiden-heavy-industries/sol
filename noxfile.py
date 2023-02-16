@@ -20,8 +20,8 @@ DIST_DIR  = (BUILD_DIR / 'dist')
 # Default sessions to run
 nox.options.sessions = (
 	'test',
-	'flake8',
-	'mypy'
+	'lint',
+	'typecheck'
 )
 
 def sol_version() -> str:
@@ -59,7 +59,7 @@ def docs(session: Session) -> None:
 	session.run('sphinx-build', '-b', 'html', str(DOCS_DIR), str(out_dir))
 
 @nox.session
-def mypy(session: Session) -> None:
+def typecheck(session: Session) -> None:
 	out_dir = (BUILD_DIR / 'mypy')
 	out_dir.mkdir(parents = True, exist_ok = True)
 
@@ -74,7 +74,7 @@ def mypy(session: Session) -> None:
 	)
 
 @nox.session
-def flake8(session: Session) -> None:
+def lint(session: Session) -> None:
 	session.install('flake8')
 	session.run(
 		'flake8', '--config', str((CNTRB_DIR / '.flake8').resolve()), './sol_usb'
@@ -90,16 +90,17 @@ def flake8(session: Session) -> None:
 	)
 
 @nox.session
-def build_dists(session: Session) -> None:
+def dist(session: Session) -> None:
 	session.install('build')
-	session.run('python', '-m', 'build',
+	session.run(
+		'python', '-m', 'build',
 		'-o', str(DIST_DIR)
 	)
 
 @nox.session
-def upload_dist(session: Session) -> None:
+def upload(session: Session) -> None:
 	session.install('twine')
-	build_dists(session)
+	dist(session)
 	session.log(f'Uploading sol-{sol_version()} to PyPi')
 	session.run(
 		'python', '-m', 'twine',
