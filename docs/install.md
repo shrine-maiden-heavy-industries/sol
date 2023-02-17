@@ -204,21 +204,21 @@ The [latest release](install.md#latest-release) of SOL is recommended for any ne
 
 		.. code-block:: console
 
-			$ pip3 install --user 'git+https://github.com/shrine-maiden-heavy-industries/sol.git#egg=sol-usb'
+			$ pip3 install --user 'sol-usb @ git+https://github.com/shrine-maiden-heavy-industries/sol.git'
 
 	.. platform-choice:: macos
 		:title: macOS
 
 		.. code-block:: console
 
-			$ pip install --user 'git+https://github.com/shrine-maiden-heavy-industries/sol.git#egg=sol-usb'
+			$ pip install --user 'sol-usb @ git+https://github.com/shrine-maiden-heavy-industries/sol.git'
 
 	.. platform-choice:: windows
 		:title: Windows
 
 		.. code-block:: doscon
 
-			> pip install git+https://github.com/shrine-maiden-heavy-industries/sol.git#egg=sol-usb
+			> pip install "sol-usb @ git+https://github.com/shrine-maiden-heavy-industries/sol.git"
 
 ```
 
