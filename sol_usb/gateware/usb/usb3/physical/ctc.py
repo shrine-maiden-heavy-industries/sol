@@ -37,7 +37,7 @@ class CTCSkipRemover(Elaboratable):
 	which can be safely discarded. This allows the slower clock to catch up to the faster one.
 	[USB 3.2r1: 6.4.3].
 
-	Our PHY handles the core clock tolerance compesnation inside of its own clock domain; removing
+	Our PHY handles the core clock tolerance compensation inside of its own clock domain; removing
 	these filler sets whenever removing them helps to keep the receiver and transmitter's clocks in sync.
 	This leaves behind the sets whose removal would not directly help with CTC.
 
@@ -224,7 +224,7 @@ class CTCSkipInserter(Elaboratable):
 
 	See the ``CTCSkipRemover`` for a description of CTC and its general operation.
 
-	Our PHY handles the core clock tolerance compesnation inside of its own clock domain; adding
+	Our PHY handles the core clock tolerance compensation inside of its own clock domain; adding
 	Skip sets whenever adding them helps to keep the transmitter's elastic buffer from running low
 	on data. However, we still need to add in our own Skip ordered sets so the other side of the link
 	has enough to perform its own CTC adjustments.

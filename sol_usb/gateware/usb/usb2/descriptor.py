@@ -59,8 +59,8 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 
 	def __init__(self, descriptor_collection: DeviceDescriptorCollection, max_packet_length = 64):
 		'''
-		Parameteres
-		-----------
+		Parameters
+		----------
 		descriptor_collection
 			The DeviceDescriptorCollection containing the descriptors
 			to use for this device.

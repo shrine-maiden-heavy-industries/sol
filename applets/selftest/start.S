@@ -15,7 +15,7 @@ _start:
 	la gp, __global_pointer$
 	.option pop
 
-	/* Set up our primary interrut dispatcher. */
+	/* Set up our primary interrupt dispatcher. */
 	la t0, _interrupt_handler
 	csrw mtvec, t0
 
@@ -26,7 +26,7 @@ _start:
 	/*
 	 * NOTE: In most cases, we'd clear the BSS, here.
 	 *
-	 * In our case, our FPGA automaticaly starts with all of our RAM
+	 * In our case, our FPGA automatically starts with all of our RAM
 	 * initialized to zero; so our BSS comes pre-cleared. We'll skip the
 	 * formality of re-clearing it.
 	 */

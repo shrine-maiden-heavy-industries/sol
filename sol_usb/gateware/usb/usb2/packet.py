@@ -648,7 +648,7 @@ class USBDataPacketReceiver(Elaboratable):
 
 	It's important to note that packet payloads are mostly directly carried over from UTMI.
 	Since USB data is received -prior- to its CRC, one cannot know if a packet is valid until
-	after it has been compeltely received. As a result, this interface will generate data of
+	after it has been completely received. As a result, this interface will generate data of
 	unknown validity, followed by a strobe on either :attr:`packet_complete` or :attr:`crc_mismatch`.
 	The receiving interface must be prepared to handle :attr:`crc_mismatch` by discarding the received
 	data.
@@ -1340,7 +1340,7 @@ class USBInterpacketTimer(Elaboratable):
 	_FS_RX_TO_TX_DELAY     = {60e6: ( 10,  32), 12e6: (2, 7)}
 	_LS_RX_TO_TX_DELAY     = {60e6: ( 80, 260)}
 
-	# Per the USB 2.0 and ULPI 1.1 specifications, after transission:
+	# Per the USB 2.0 and ULPI 1.1 specifications, after transmission:
 	#   - A FS/LS can assume it won't receive a response after 16 bit times [USB2, 7.1.18.1].
 	#     This is equivalent to 80 ULPI clocks (FS), or 640 ULPI clocks (LS).
 	#   - A HS device can assume it won't receive a response after 736 bit times.
@@ -1374,7 +1374,7 @@ class USBInterpacketTimer(Elaboratable):
 			if domain_clock not in self._HS_RX_TO_TX_DELAY:
 				raise ValueError(f'Domain clock must be in {self._FS_TX_TO_RX_TIMEOUT.keys()}, not {domain_clock}.')
 
-			# Capute our HS and LS delays for the given clock speed.
+			# capture our HS and LS delays for the given clock speed.
 			self._hs_rx_to_tx_delay   = self._HS_RX_TO_TX_DELAY[domain_clock]
 			self._ls_rx_to_tx_delay   = self._LS_RX_TO_TX_DELAY[domain_clock]
 			self._hs_tx_to_rx_timeout = self._HS_TX_TO_RX_TIMEOUT[domain_clock]

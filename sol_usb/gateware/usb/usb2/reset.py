@@ -13,9 +13,9 @@ from ...interface.utmi import UTMIOperatingMode, UTMITerminationSelect, UTMITran
 from .                 import USBSpeed
 
 
-def _generate_wide_incrementer(m, platform, adder_input):
+def _generate_wide_incrementor(m, platform, adder_input):
 	'''
-	Attempts to create an optimal wide-incrementer for counters.
+	Attempts to create an optimal wide-incrementor for counters.
 
 	Yosys on certain platforms (ice40 UltraPlus) doesn't currently use hardware resources
 	effectively for wide adders. We'll manually instantiate the relevant resources
@@ -27,7 +27,7 @@ def _generate_wide_incrementer(m, platform, adder_input):
 		The platform we're working with.
 
 	adder_input
-		The input to our incrementer.
+		The input to our incrementor.
 
 	'''
 
@@ -161,8 +161,8 @@ class USBResetSequencer(Elaboratable):
 
 		# By default, always count forward in time.
 		# We'll reset the timer below when appropriate.
-		m.d.usb += timer.eq(_generate_wide_incrementer(m, platform, timer))
-		m.d.usb += line_state_time.eq(_generate_wide_incrementer(m, platform, line_state_time))
+		m.d.usb += timer.eq(_generate_wide_incrementor(m, platform, timer))
+		m.d.usb += line_state_time.eq(_generate_wide_incrementor(m, platform, line_state_time))
 
 		# Signal that indicates when the bus is idle.
 		# Our bus's IDLE condition depends on our active speed.

@@ -472,8 +472,8 @@ try:
 			''' Returns a list of statements necessary to connect this to a USB controller.
 
 			The returned values makes all of the connections necessary to provide control and fetch status
-			from the relevant USB device. These can be made either combinationally or synchronously, but
-			combinational is recommended; as these signals are typically fed from a register anyway.
+			from the relevant USB device. These can be made in either the combinatorial or synchronous domains,
+			but combinatorial is recommended; as these signals are typically fed from a register anyway.
 
 			Parameters
 			----------

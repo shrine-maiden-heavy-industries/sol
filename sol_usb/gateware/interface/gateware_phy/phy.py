@@ -12,7 +12,7 @@ from .transmitter  import TxPipeline
 
 
 class GatewarePHY(Elaboratable):
-	''' Gateware that implements a UTMI-compatible transciever using raw FPGA I/O.
+	''' Gateware that implements a UTMI-compatible transceiver using raw FPGA I/O.
 
 	Clock Domains
 	-------------
@@ -63,7 +63,7 @@ class GatewarePHY(Elaboratable):
 		contains a ``vbus_valid`` element; otherwise it is hard connected to '0'
 
 	xcvr_select: Signal(2), input
-		Selects the active USB speed. This transceiver only functions as a full speed transciever; so
+		Selects the active USB speed. This transceiver only functions as a full speed transceiver; so
 		this signal is effectively ignored. To support connection to high-speed gateware, this module
 		will prevent the USB lines from being driven when this signal is 0b00; allowing the gateware to
 		attempt a high-speed detection handshake without adverse affect.
@@ -82,7 +82,7 @@ class GatewarePHY(Elaboratable):
 	-----------
 
 	io: Record(d_p, d_n, [pullup], [pulldown], [vbus_valid])
-		A record containing the raw I/O signals to be used to drive our I/O-based USB connnection.
+		A record containing the raw I/O signals to be used to drive our I/O-based USB connection.
 		The ``d_p`` and ``d_n`` signals are mandatory; the ``pullup``, ``pulldown``,
 		and ``vbus_valid`` signals are optional.
 	'''

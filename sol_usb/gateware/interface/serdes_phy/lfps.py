@@ -10,7 +10,7 @@ Generating and recognizing LFPS square wave patterns.
 
 SerDes blocks differ in their out-of-band signaling capabilities. Some are capable of detecting
 and generating LFPS signaling on their own; others only make it possible to access the high-speed
-I/O buffers directly through fabric. This gateware can detect patterns that fit LFPS requriements
+I/O buffers directly through fabric. This gateware can detect patterns that fit LFPS requirements
 given only a bare input buffer, or vice versa.
 '''
 
@@ -47,7 +47,7 @@ class LFPSSquareWaveDetector(Elaboratable):
 	def __init__(self, pipe_clock_frequency = 250e6):
 
 		# Compute the minimum and maximum cycles we're allowed to see.
-		# Our multipliers allow for up to a 10% devication in duty cycle.
+		# Our multipliers allow for up to a 10% deviation in duty cycle.
 		self._half_cycle_min = ceil(pipe_clock_frequency * (_LFPS_PERIOD_MIN / 2) * 0.8) - 1
 		self._half_cycle_max = ceil(pipe_clock_frequency * (_LFPS_PERIOD_MAX / 2) * 1.2) + 1
 

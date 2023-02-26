@@ -380,7 +380,7 @@ class USBStreamOutEndpoint(Elaboratable):
 			),
 
 			# Our stream data always comes directly out of the FIFO; and is valid
-			# henever our FIFO actually has data for us to read.
+			# whenever our FIFO actually has data for us to read.
 			stream.valid.eq(~fifo.empty),
 			stream.payload.eq(fifo.read_data[0:8]),
 
@@ -389,7 +389,7 @@ class USBStreamOutEndpoint(Elaboratable):
 			stream.last.eq(fifo.read_data[8]),
 			stream.first.eq(fifo.read_data[9]),
 
-			# Move to the next byte in the FIFO whenever our stream is advaced.
+			# Move to the next byte in the FIFO whenever our stream is advanced.
 			fifo.read_en.eq(stream.ready),
 			fifo.read_commit.eq(1)
 		]

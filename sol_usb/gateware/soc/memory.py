@@ -56,7 +56,7 @@ class WishboneRAM(Elaboratable):
 
 		init
 			Optional. The initial value of the relevant memory. Should be an array of integers, a
-			filename, or a bytes-like object. If bytes are provided, the byteorder parametera allows
+			filename, or a bytes-like object. If bytes are provided, the byteorder parameter allows
 			control over their interpretation. If a filename is provided, this filename will not be read
 			until elaboration; this allows reading the file to be deferred until the very last minute in
 			e.g. systems that generate the relevant file during build.
@@ -136,7 +136,7 @@ class WishboneRAM(Elaboratable):
 					self.bus.cyc &    # Transaction is active.
 					self.bus.stb &    # Valid data is being provided.
 					self.bus.we  &    # This is a write.
-					self.bus.sel[i]   # The relevant setion of the datum is being targeted.
+					self.bus.sel[i]   # The relevant selection of the datum is being targeted.
 				)
 
 

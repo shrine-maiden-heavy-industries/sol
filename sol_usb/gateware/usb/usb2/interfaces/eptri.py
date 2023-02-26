@@ -7,7 +7,7 @@
 '''
 Implementation of a Triple-FIFO endpoint manager.
 
-Equivalent (but not binary-compatbile) implementation of ValentyUSB's ``eptri``.
+Equivalent (but not binary-compatible) implementation of ValentyUSB's ``eptri``.
 
 For an example, see ``examples/usb/eptri`` or TinyUSB's ``sol/dcd_eptri.c``.
 '''

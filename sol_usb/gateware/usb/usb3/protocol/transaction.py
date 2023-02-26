@@ -35,7 +35,7 @@ class HandshakeGeneratorInterface(Record):
 
 	ready: Signal(), output from handshake generator
 		Asserted when the handshake generator is ready to accept new signals.
-	done: Signal(), output from handshake geneartor.
+	done: Signal(), output from handshake generator.
 		Strobe; pulsed when a requested send is complete.
 	'''
 

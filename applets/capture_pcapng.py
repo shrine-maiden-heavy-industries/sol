@@ -331,13 +331,13 @@ def main():
 	with fileName.open('wb') as file:
 		writePcapngHeaders(file)
 
-		analyser = USBAnalyzerConnection()
-		analyser.build_and_configure(SPEEDS.get(args.capture_speed, USB_SPEED_HIGH))
-		analyser.start_capture()
+		analyzer = USBAnalyzerConnection()
+		analyzer.build_and_configure(SPEEDS.get(args.capture_speed, USB_SPEED_HIGH))
+		analyzer.start_capture()
 
 		try:
 			while True:
-				packet, timestamp, _ = analyser.read_raw_packet()
+				packet, timestamp, _ = analyzer.read_raw_packet()
 				writePcapngPacket(file, packet, timestamp)
 		except USBError:
 			pass

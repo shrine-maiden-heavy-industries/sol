@@ -14,7 +14,7 @@ from ..stream      import StreamInterface
 
 
 class UARTTransmitter(Elaboratable):
-	''' Simple UART transitter.
+	''' Simple UART transmitter.
 
 	Intended for communicating with the debug controller; currently assumes 8n1.
 

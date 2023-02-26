@@ -106,7 +106,7 @@ class USBInTransferManager(Elaboratable):
 		m = Module()
 
 		#
-		# Transciever state.
+		# Transceiver state.
 		#
 
 

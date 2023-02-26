@@ -283,7 +283,7 @@ class LFPSGenerator(Elaboratable):
 
 
 class LFPSTransceiver(Elaboratable):
-	''' Low-Frequency Periodic Signaling (LFPS) Transciever
+	''' Low-Frequency Periodic Signaling (LFPS) Transceiver
 
 	Transmits and receives the LPFS sequences required for a USB 3.0 link.
 

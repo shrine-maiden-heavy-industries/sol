@@ -93,11 +93,11 @@ class ConstantStreamGenerator(Elaboratable):
 
 	def _get_initializer_value(self):
 		'''
-		Returns this geneartor's data in a form usable as a ROM initializer.
+		Returns this generators data in a form usable as a ROM initializer.
 
 		Returns
 		-------
-		initializer_data: interable
+		initializer_data: iterable
 			An iterable suitable for use in initializing a ROM.
 		valid_bytes_last_word: int
 			The number of valid bits that should accompany the last word.
@@ -311,7 +311,7 @@ class ConstantStreamGenerator(Elaboratable):
 							with m.Elif(ending_due_to_data_length):
 								m.d.comb += self.stream.valid.eq(valid_due_to_data_length)
 
-							# Otherwise, we're endign due to our maximum length requirement. We'll apply the
+							# Otherwise, we're ending due to our maximum length requirement. We'll apply the
 							# appropriate valid mask.
 							with m.Else():
 								m.d.comb += self.stream.valid.eq(valid_due_to_max_length)

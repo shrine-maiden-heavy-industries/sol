@@ -111,12 +111,12 @@ class SolGatewareTestCase(unittest.TestCase):
 
 
 	def initialize_signals(self):
-		''' Provide an opportunity for the test apparatus to initialize siganls. '''
+		''' Provide an opportunity for the test apparatus to initialize signals. '''
 		yield Signal()
 
 
 	def traces_of_interest(self):
-		''' Returns an interable of traces to include in any generated output. '''
+		''' Returns an iterable of traces to include in any generated output. '''
 		return ()
 
 
@@ -181,7 +181,7 @@ class SolGatewareTestCase(unittest.TestCase):
 			'fast': self.FAST_CLOCK_FREQUENCY,
 			'ss': self.SS_CLOCK_FREQUENCY
 		}
-		self.assertIsNotNone(frequencies[self.domain], f'no frequency provied for `{self.domain}`-domain clock!')
+		self.assertIsNotNone(frequencies[self.domain], f'no frequency provided for `{self.domain}`-domain clock!')
 
 
 	def wait(self, time):

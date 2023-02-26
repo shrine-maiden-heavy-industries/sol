@@ -177,7 +177,7 @@ class CrcAlgorithm:
 
 		  If ``true``, the register shifts toward the
 		  least-significant bit (sometimes called the *reflected* or
-		  *reversed* algorithim).  Otherwise, the register shifts
+		  *reversed* algorithm).  Otherwise, the register shifts
 		  toward the most-significant bit.
 
 		:type lsbFirst:

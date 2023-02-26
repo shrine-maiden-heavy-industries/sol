@@ -653,7 +653,7 @@ class ULPITransmitTranslator(Elaboratable):
 					# [ULPI: 3.8.2.2]
 					m.d.comb += self.ulpi_stp.eq(1)
 
-					# If we've disabled bit stuffing, we'll want to termainate by generating a bit-stuff error.
+					# If we've disabled bit stuffing, we'll want to terminate by generating a bit-stuff error.
 					with m.If(bit_stuffing_disabled):
 
 						# Drive 0xFF as we stop, to generate a bit-stuff error. [ULPI: 3.8.2.3]

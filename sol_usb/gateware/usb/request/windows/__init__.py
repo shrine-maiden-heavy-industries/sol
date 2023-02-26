@@ -64,12 +64,12 @@ class WindowsRequestHandler(USBRequestHandler):
 		Parameters
 		----------
 		platform
-			The Torii platform for which the gateware will be synthesised.
+			The Torii platform for which the gateware will be synthesized.
 
 		Returns
 		-------
 		:py:class:`torii.hdl.dsl.Module`
-			A complete description of the gateware behaviour required.
+			A complete description of the gateware behavior required.
 		'''
 		m = Module()
 		interface = self.interface
@@ -156,7 +156,7 @@ class WindowsRequestHandler(USBRequestHandler):
 
 		Returns
 		-------
-		:py:class:`amranth.hdl.ast.Operator`
+		:py:class:`torii.hdl.ast.Operator`
 			A combinatorial operation defining the sum conditions under which this handler will operate.
 
 		Notes

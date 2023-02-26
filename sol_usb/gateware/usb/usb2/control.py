@@ -5,7 +5,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-''' Low-level USB transciever gateware -- control transfer components. '''
+''' Low-level USB transceiver gateware -- control transfer components. '''
 
 from typing                 import List
 from torii                  import Elaboratable, Module, Cat

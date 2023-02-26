@@ -45,7 +45,7 @@ class OneHotMultiplexer(Elaboratable):
 			Signals listed here are passed through iff their one-hot `valid` signal is high.
 
 		or_signals
-			An itereable of {signals names to be multiplexed, or functions that accept
+			An iterable of {signals names to be multiplexed, or functions that accept
 			an instance of the relevant interface type and return a Signal}. Signals listed
 			here are OR'd together without multiplexing; it's expected that these signals will
 			only be high when their corresponding `valid` signal is high.

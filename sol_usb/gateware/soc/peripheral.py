@@ -295,7 +295,7 @@ class PeripheralBridge(Elaboratable):
 	A bridge providing access to the registers and windows of a peripheral, and support for
 	interrupt requests from its event sources.
 
-	Event managment is performed by an :class:`InterruptSource` submodule.
+	Event management is performed by an :class:`InterruptSource` submodule.
 
 	Parameters
 	---------

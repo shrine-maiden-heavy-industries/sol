@@ -166,12 +166,12 @@ class GetDescriptorSetHandler(Elaboratable):
 		Parameters
 		----------
 		platform
-			The Torii platform for which the gateware will be synthesised.
+			The Torii platform for which the gateware will be synthesized.
 
 		Returns
 		-------
 		:py:class:`torii.hdl.dsl.Module`
-			A complete description of the gateware behaviour required.
+			A complete description of the gateware behavior required.
 		'''
 		m = Module()
 		rom, descriptorMaxLength, maxVendorCode = self.generateROM()

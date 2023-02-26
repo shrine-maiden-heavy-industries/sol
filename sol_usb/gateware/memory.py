@@ -276,7 +276,7 @@ class TransactionalizedFIFOTest(SolGatewareTestCase):
 		yield dut.write_en.eq(0)
 
 		# ... our buffer should be full, but also empty.
-		# This paradox exists as we've filled our buffer with uncomitted data.
+		# This paradox exists as we've filled our buffer with uncommitted data.
 		yield
 		self.assertEqual((yield dut.full),  1)
 		self.assertEqual((yield dut.empty), 1)

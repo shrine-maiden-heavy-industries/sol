@@ -71,7 +71,7 @@ class HyperRAMInterface(Elaboratable):
 
 		data_skews
 			If provided, adds an input delay to each line of the data input.
-			Can be provided as a single delay number, or an interable of eight
+			Can be provided as a single delay number, or an iterable of eight
 			delays to separately delay each of the input lines.
 
 		'''
@@ -335,7 +335,7 @@ class HyperRAMInterface(Elaboratable):
 						new_data_ready.eq(1)
 					]
 
-					# If our controller is done with the transcation, end it.
+					# If our controller is done with the transaction, end it.
 					with m.If(self.final_word):
 						m.next = 'RECOVERY'
 						m.d.sync += advance_clock.eq(0)

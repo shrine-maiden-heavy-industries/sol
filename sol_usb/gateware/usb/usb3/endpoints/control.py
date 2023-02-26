@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-''' Low-level USB3 transciever gateware -- control transfer components. '''
+''' Low-level USB3 transceiver gateware -- control transfer components. '''
 
 
 from torii                  import *

@@ -23,7 +23,7 @@ _start:
 	/*
 	 * NOTE: In most cases, we'd clear the BSS, here.
 	 *
-	 * In our case, our FPGA automaticaly starts with all of our RAM
+	 * In our case, our FPGA automatically starts with all of our RAM
 	 * initialized to zero; so our BSS comes pre-cleared. We'll skip the
 	 * formality of re-clearing it.
 	 */

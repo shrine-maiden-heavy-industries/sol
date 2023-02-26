@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-''' Low-level USB transciever gateware -- control request components. '''
+''' Low-level USB transceiver gateware -- control request components. '''
 
 import functools
 import operator

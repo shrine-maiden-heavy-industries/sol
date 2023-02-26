@@ -155,7 +155,7 @@ class USB3LinkLayer(Elaboratable):
 			idle.enable.eq(ltssm.perform_idle_handshake),
 			ltssm.idle_handshake_complete.eq(idle.idle_handshake_complete),
 
-			# Link maintainance.
+			# Link maintenance.
 			timers.enable.eq(ltssm.link_ready),
 
 			# Status signaling.

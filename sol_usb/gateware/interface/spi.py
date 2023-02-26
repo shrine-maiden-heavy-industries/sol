@@ -406,7 +406,7 @@ class SPIRegisterInterface(Elaboratable):
 		# Internal details.
 		#
 
-		# Instantiate an SPI command transciever submodule.
+		# Instantiate an SPI command transceiver submodule.
 		self.interface = SPICommandInterface(command_size = address_size + 1, word_size = register_size)
 
 		# Create a new, empty dictionary mapping registers to their signals.
@@ -611,7 +611,7 @@ class SPIRegisterInterface(Elaboratable):
 
 
 	def _connect_interface(self, m):
-		''' Connects up our SPI transciever interface.
+		''' Connects up our SPI transceiver interface.
 
 		Intended to be overridden, if need be.
 		'''

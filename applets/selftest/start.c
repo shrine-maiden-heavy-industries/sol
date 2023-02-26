@@ -13,7 +13,7 @@ __attribute__((naked,section(".init"))) void _start(void)
 		"la gp, __global_pointer$\n\t"
 		".option pop\n\t"
 
-		/* Set up our primary interrut dispatcher. */
+		/* Set up our primary interrupt dispatcher. */
 		"la t0, _interrupt_handler \n\t"
 		"csrw mtvec, t0\n\t"
 

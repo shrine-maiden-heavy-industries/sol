@@ -110,7 +110,7 @@ class SuperSpeedSetupDecoder(Elaboratable):
 	Attributes
 	-----------
 	sink: SuperSpeedStreamInterface(), input stream [read-only]
-		Packet interface that carres in new data packets. Results should be considered questionable
+		Packet interface that carries in new data packets. Results should be considered questionable
 		until :attr:``packet_good`` or :attr:``packet_bad`` are strobed.
 
 	rx_good: Signal(), input

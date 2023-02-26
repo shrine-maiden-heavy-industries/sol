@@ -32,7 +32,7 @@ class SimpleSoC(CPUSoC, Elaboratable):
 	a wrapper that can be updated as the Torii-based-SoC landscape changes. Hopefully,
 	this will eventually be filled by e.g. Torii-compatible-LiteX. :)
 
-	SimpleSoC devices intergrate:
+	SimpleSoC devices integrate:
 		- A simple riscv32i processor.
 		- One or more read-only or read-write memories.
 		- A number of torii-soc peripherals.

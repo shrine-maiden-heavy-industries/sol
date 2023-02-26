@@ -133,8 +133,8 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 	def _multiplex_signals(self, m, *, when, multiplex):
 		''' Helper that creates a simple priority-encoder multiplexer.
 
-		Parmeters
-		---------
+		Parameters
+		----------
 		when: str
 			The name of the interface signal that indicates that the `multiplex` signals should be
 			selected for output. If this signals should be multiplexed, it should be included in `multiplex`.

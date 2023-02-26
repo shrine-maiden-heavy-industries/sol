@@ -76,7 +76,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		buffer_depth   = self._max_packet_size // bytes_per_word
 
 		#
-		# Transciever sequencing.
+		# Transceiver sequencing.
 		#
 
 		# Keep track of the sequence number used as we're transmitting.
@@ -198,7 +198,7 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		#
 
 		# Stores whether the last packet transmitted was a ZLP. This bit of state determines how
-		# retranmission behaves.
+		# retransmission behaves.
 		last_packet_was_zlp = Signal()
 
 		# Stores whether we'll need to send an ERDY packet before we send any additional data.

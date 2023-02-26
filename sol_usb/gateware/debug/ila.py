@@ -210,9 +210,9 @@ class SyncSerialILA(Elaboratable):
 		are allowed if this number is >= 2.
 
 	clock_polarity: int, 0 or 1
-		Clock polarity for the output SPI transciever. Optional.
+		Clock polarity for the output SPI transceiver. Optional.
 	clock_phase: int, 0 or 1
-		Clock phase for the output SPI transciever. Optional.
+		Clock phase for the output SPI transceiver. Optional.
 	cs_idles_high: bool, optional
 		If True, the CS line will be assumed to be asserted when cs = 0.
 		If False or not provided, the CS line will be assumed to be asserted when cs = 1.
@@ -277,7 +277,7 @@ class SyncSerialILA(Elaboratable):
 
 		transaction_start = Rose(self.spi.cs)
 
-		# Connect up our SPI transciever to our public interface.
+		# Connect up our SPI transceiver to our public interface.
 		interface = SPIDeviceInterface(
 			word_size = self.bits_per_word,
 			clock_polarity = self.clock_polarity,
@@ -505,7 +505,7 @@ class StreamILA(Elaboratable):
 				fifo.w_en.eq(in_domain_stream.valid),
 				in_domain_stream.ready.eq(fifo.w_rdy),
 
-				# ... and output it into our outupt stream.
+				# ... and output it into our output stream.
 				out_domain_signals.eq(fifo.r_data),
 				self.stream.valid.eq(fifo.r_rdy),
 				fifo.r_en.eq(self.stream.ready)

@@ -339,7 +339,7 @@ class JTAGRegisterInterface(SPIRegisterInterface):
 		# Internal details.
 		#
 
-		# Instantiate an SPI command transciever submodule.
+		# Instantiate an SPI command transceiver submodule.
 		self.interface = JTAGCommandInterface(command_size = address_size + 1, word_size = register_size)
 
 		# Create a new, empty dictionary mapping registers to their signals.

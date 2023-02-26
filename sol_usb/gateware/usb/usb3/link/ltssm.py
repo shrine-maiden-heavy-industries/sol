@@ -22,7 +22,7 @@ class LTSSMController(Elaboratable):
 	Link Training and Status State Machine
 
 	This state machine orchestrates USB bringup, link training, and power saving.
-	It is implemented according to chaper 7.5 of the USB 3.2 specification [USB3.2r1; 7.5].
+	It is implemented according to chapter 7.5 of the USB 3.2 specification [USB3.2r1; 7.5].
 
 	Attributes
 	----------
@@ -306,7 +306,7 @@ class LTSSMController(Elaboratable):
 
 			# Rx.Detect.Active -- we're now post-reset; and we're going to attempt to detect a
 			# link partner, by checking for far-end receiver terminations. Basically, we try to
-			# detect whether we're connected to another SuperSpeed transciever via a cable, so
+			# detect whether we're connected to another SuperSpeed transceiver via a cable, so
 			# we don't waste time performing link training if our link isn't there.
 			with m.State('Rx.Detect.Active'):
 				m.d.comb += [
@@ -402,7 +402,7 @@ class LTSSMController(Elaboratable):
 
 
 			# Polling.Active -- we've now exchanged our initial training sequences, and we're ready to
-			# begin exchaning our core training sequences. We'll start sending TS1, and let the PHY handle
+			# begin exchanging our core training sequences. We'll start sending TS1, and let the PHY handle
 			# link training until it reliably the same thing from the host. [USB 3.2r1: 7.5.4.8]
 			with m.State('Polling.Active'):
 				handle_warm_resets()
