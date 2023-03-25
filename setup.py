@@ -64,7 +64,7 @@ setup(
 	install_requires = [
 		'pyserial~=3.5',
 		'pyvcd>=0.2.2,<0.4',
-		'rich~=12.6.0',
+		'rich~=13.0.0',
 
 		'usb-construct<1.0',
 		'torii<1.0',
