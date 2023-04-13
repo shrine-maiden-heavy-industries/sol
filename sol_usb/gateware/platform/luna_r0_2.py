@@ -8,7 +8,7 @@
 import os
 
 from torii.build                        import *
-from torii.platform.resources           import *
+from torii.platform.resources           import UARTResource, LEDResources, ULPIResource
 from torii.platform.vendor.lattice_ecp5 import LatticeECP5Platform
 
 from ..architecture.car                 import SolECP5DomainGenerator
