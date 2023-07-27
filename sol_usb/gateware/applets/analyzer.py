@@ -36,6 +36,7 @@ from sol_usb.usb2                           import USBDevice, USBStreamInEndpoin
 USB_SPEED_HIGH       = 0b00
 USB_SPEED_FULL       = 0b01
 USB_SPEED_LOW        = 0b10
+USB_SPEED_MASK       = 0b11
 
 USB_VENDOR_ID        = 0x1d50
 USB_PRODUCT_ID       = 0x615b
@@ -129,11 +130,6 @@ class USBAnalyzerApplet(Elaboratable):
 		- DRAM backing for analysis
 	'''
 
-
-	def __init__(self, usb_speed = USB_SPEED_FULL):
-		self.usb_speed = usb_speed
-
-
 	def create_descriptors(self):
 		''' Create the descriptors we want to use for our device. '''
 
@@ -155,7 +151,6 @@ class USBAnalyzerApplet(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -166,9 +161,7 @@ class USBAnalyzerApplet(Elaboratable):
 					e.bEndpointAddress = BULK_ENDPOINT_ADDRESS
 					e.wMaxPacketSize   = MAX_BULK_PACKET_SIZE
 
-
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -196,7 +189,7 @@ class USBAnalyzerApplet(Elaboratable):
 
 			# Set our mode to non-driving and to the desired speed.
 			utmi.op_mode.eq(0b01),
-			utmi.xcvr_select.eq(self.usb_speed),
+			utmi.xcvr_select.eq(state.current[1:3]),
 
 			# Disable all of our terminations, as we want to participate in
 			# passive observation.
@@ -252,8 +245,6 @@ class USBAnalyzerApplet(Elaboratable):
 		# Return our elaborated module.
 		return m
 
-
-
 class USBAnalyzerConnection:
 	'''
 	Class representing a connection to a SOL USB analyzer.
@@ -268,13 +259,14 @@ class USBAnalyzerConnection:
 		self._buffer = bytearray()
 		self._device : Optional[usb.core.Device] = None
 		self._fetch_buffer = array('B', b'\x00' * MAX_BULK_PACKET_SIZE)
+		self._capture_speed = USB_SPEED_FULL
 
-
-	def build_and_configure(self, capture_speed):
+	def build_and_configure(self, capture_speed: int):
 		''' Builds the SOL analyzer applet and configures the FPGA with it. '''
 
 		# Create the USBAnalyzer we want to work with.
-		analyzer = USBAnalyzerApplet(usb_speed = capture_speed)
+		analyzer = USBAnalyzerApplet()
+		self._capture_speed = capture_speed
 
 		# Build and upload the analyzer.
 		# FIXME: use a temporary build directory
@@ -295,8 +287,8 @@ class USBAnalyzerConnection:
 	def start_capture(self):
 		self._device.ctrl_transfer(
 			usb.core.util.CTRL_OUT | usb.core.util.CTRL_TYPE_VENDOR | usb.core.util.CTRL_RECIPIENT_DEVICE,
-			1,
-			1,
+			USBAnalyzerVendorRequests.SET_STATE,
+			1 | ((self._capture_speed & USB_SPEED_MASK) << 1),
 			0,
 			b'',
 			timeout = 5,
