@@ -14,7 +14,7 @@ import time
 import usb
 from array                                  import array
 from datetime                               import datetime
-from enum                                   import IntEnum
+from enum                                   import IntEnum, IntFlag
 from typing                                 import Optional
 
 from torii                                  import Elaboratable, Module, Signal
@@ -61,6 +61,13 @@ class USBAnalyzerState(Elaboratable):
 class USBAnalyzerVendorRequests(IntEnum):
 	GET_STATE = 0
 	SET_STATE = 1
+	GET_SPEEDS = 2
+
+class USBAnalyzerSupportedSpeeds(IntFlag):
+	USB_SPEED_AUTO = 0b0001
+	USB_SPEED_LOW  = 0b0010
+	USB_SPEED_FULL = 0b0100
+	USB_SPEED_HIGH = 0b1000
 
 class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 
@@ -97,6 +104,8 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 								m.next = 'GET_STATE'
 							with m.Case(USBAnalyzerVendorRequests.SET_STATE):
 								m.next = 'SET_STATE'
+							with m.Case(USBAnalyzerVendorRequests.GET_SPEEDS):
+								m.next = 'GET_SPEEDS'
 							with m.Case():
 								m.next = 'UNHANDLED'
 
@@ -107,6 +116,15 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 				# SET_STATE -- The host is trying to set our state
 				with m.State('SET_STATE'):
 					self.handle_register_write_request(m, self.state.next, self.state.write)
+
+				# GET_SPEEDS -- Fetch the device's supported USB speeds
+				with m.State('GET_SPEEDS'):
+					supported_speeds = (
+						USBAnalyzerSupportedSpeeds.USB_SPEED_LOW |
+						USBAnalyzerSupportedSpeeds.USB_SPEED_FULL |
+						USBAnalyzerSupportedSpeeds.USB_SPEED_HIGH
+					)
+					self.handle_simple_data_request(m, transmitter, supported_speeds, length = 1)
 
 				# UNHANDLED -- we've received a request we're not prepared to handle
 				with m.State('UNHANDLED'):
@@ -148,6 +166,7 @@ class USBAnalyzerApplet(Elaboratable):
 			d.iManufacturer      = 'SOL'
 			d.iProduct           = 'USB Analyzer'
 			d.iSerialNumber      = '[autodetect serial here]'
+			d.bcdDevice          = 0.02
 
 			d.bNumConfigurations = 1
 
