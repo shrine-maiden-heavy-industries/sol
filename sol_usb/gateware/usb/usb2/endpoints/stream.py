@@ -45,6 +45,9 @@ class USBStreamInEndpoint(Elaboratable):
 	flush: Signal(), input
 		Assert to cause all pending data to be transmitted as soon as possible.
 
+	discard: Signal(), input
+		Assert to cause all pending data to be discarded.
+
 	interface: EndpointInterface
 		Communications link to our USB device.
 
@@ -58,7 +61,6 @@ class USBStreamInEndpoint(Elaboratable):
 		USB endpoint descriptor.
 	'''
 
-
 	def __init__(self, *, endpoint_number, max_packet_size):
 
 		self._endpoint_number = endpoint_number
@@ -70,7 +72,7 @@ class USBStreamInEndpoint(Elaboratable):
 		self.stream    = StreamInterface()
 		self.interface = EndpointInterface()
 		self.flush     = Signal()
-
+		self.discard   = Signal()
 
 	def elaborate(self, platform):
 		m = Module()
@@ -87,9 +89,10 @@ class USBStreamInEndpoint(Elaboratable):
 			# We want to handle packets only that target our endpoint number.
 			tx_manager.active.eq(interface.tokenizer.endpoint == self._endpoint_number),
 
-			# Connect up our transfer manager to our input stream and flush control...
+			# Connect up our transfer manager to our input stream, flush and discard control...
 			tx_manager.transfer_stream.stream_eq(self.stream),
 			tx_manager.flush.eq(self.flush),
+			tx_manager.discard.eq(self.discard),
 
 			# ... and our output stream...
 			interface.tx.stream_eq(tx_manager.packet_stream),
@@ -102,8 +105,6 @@ class USBStreamInEndpoint(Elaboratable):
 		]
 
 		return m
-
-
 
 class USBMultibyteStreamInEndpoint(Elaboratable):
 	''' Endpoint interface that transmits a simple data stream to a host.
@@ -150,7 +151,6 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 		self.stream          = StreamInterface(payload_width = byte_width * 8)
 		self.interface       = EndpointInterface()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -180,7 +180,6 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 		# Always provide our inner transmitter with the least byte of our shift register.
 		m.d.comb += byte_stream.payload.eq(data_shift[0:8])
 
-
 		with m.FSM(domain = 'usb'):
 
 			# IDLE: transmitter is waiting for input
@@ -197,7 +196,6 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 						bytes_to_send.eq(self._byte_width - 1),
 					]
 					m.next = 'TRANSMIT'
-
 
 			# TRANSMIT: actively send each of the bytes of our word
 			with m.State('TRANSMIT'):
@@ -240,10 +238,7 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 						with m.Else():
 							m.next = 'IDLE'
 
-
 		return m
-
-
 
 class USBStreamOutEndpoint(Elaboratable):
 	''' Endpoint interface that receives data from the host, and produces a simple data stream.
@@ -270,7 +265,6 @@ class USBStreamOutEndpoint(Elaboratable):
 		Defaults to twice the maximum packet size.
 	'''
 
-
 	def __init__(self, *, endpoint_number, max_packet_size, buffer_size = None):
 		self._endpoint_number = endpoint_number
 		self._max_packet_size = max_packet_size
@@ -281,7 +275,6 @@ class USBStreamOutEndpoint(Elaboratable):
 		#
 		self.stream    = StreamInterface()
 		self.interface = EndpointInterface()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -328,7 +321,6 @@ class USBStreamOutEndpoint(Elaboratable):
 			width = 10, depth = self._buffer_size, name = 'rx_fifo', domain = 'usb'
 		)
 
-
 		#
 		# Create some basic conditionals that will help us make decisions.
 		#
@@ -350,7 +342,6 @@ class USBStreamOutEndpoint(Elaboratable):
 		full_packet              = rx_cnt == self._max_packet_size - 1
 
 		m.d.comb += [
-
 			# We'll always populate our FIFO directly from the receive stream; but we'll also include our
 			# 'short packet detected' signal, as this indicates that we're detecting the last byte of a transfer.
 			fifo.write_data[0:8].eq(rx.payload),
@@ -414,6 +405,5 @@ class USBStreamOutEndpoint(Elaboratable):
 		# We'll toggle our DATA PID each time we issue an ACK to the host [USB 2.0: 8.6.2].
 		with m.If(data_response_requested & data_accepted):
 			m.d.usb += expected_data_toggle.eq(~expected_data_toggle)
-
 
 		return m

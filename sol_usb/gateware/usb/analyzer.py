@@ -28,11 +28,15 @@ class USBAnalyzer(Elaboratable):
 
 	idle: Signal(), output
 		Asserted iff the analyzer is not currently receiving data.
+	stopped: Signal(), output
+		Asserted iff the analyzer is stopped and not capturing packets.
 	overrun: Signal(), output
 		Asserted iff the analyzer has received more data than it can store in its internal buffer.
 		Occurs if :attr:``stream`` is not being read quickly enough.
 	capturing: Signal(), output
 		Asserted iff the analyzer is currently capturing a packet.
+	discarding: Signal(), output
+		Asserted iff the analyzer is discarding the contents of its internal buffer.
 
 
 	Parameters
@@ -76,8 +80,10 @@ class USBAnalyzer(Elaboratable):
 
 		self.capture_enable = Signal()
 		self.idle           = Signal()
+		self.stopped        = Signal()
 		self.overrun        = Signal()
 		self.capturing      = Signal()
+		self.discarding     = Signal()
 
 		# Diagnostic I/O.
 		self.sampling       = Signal()
@@ -93,6 +99,9 @@ class USBAnalyzer(Elaboratable):
 		primary_overrun = Signal()
 		packet_transferred = Signal(range(USBAnalyzer.MAX_PACKET_SIZE_BYTES + 2))
 
+		# State tracking for when to do discard.
+		awaiting_start = Signal()
+
 		# Internal storage
 		m.submodules.ringbuffer = data_buffer = DomainRenamer('usb')(
 			SyncFIFOBuffered(width = 8, depth = self.mem_size)
@@ -107,7 +116,6 @@ class USBAnalyzer(Elaboratable):
 
 		# Read FIFO logic.
 		m.d.comb += [
-
 			# We have data ready whenever there's data in the FIFO.
 			self.stream.valid.eq(data_buffer.r_rdy),
 			# Our data_out is always the output of our read port...
@@ -116,6 +124,7 @@ class USBAnalyzer(Elaboratable):
 			data_buffer.r_en.eq(self.stream.ready),
 
 			self.sampling.eq(packet_buffer.w_en),
+			self.discarding.eq(self.stopped & self.capture_enable),
 
 			length_buffer.w_en.eq(0),
 		]
@@ -123,31 +132,34 @@ class USBAnalyzer(Elaboratable):
 		# Core analysis FSM.
 		with m.FSM(domain = 'usb', name = 'capture') as fsm:
 			m.d.comb += [
-				self.idle.eq(fsm.ongoing('IDLE')),
-				self.capturing.eq(fsm.ongoing('CAPTURE')),
+				self.idle.eq(fsm.ongoing('AWAIT_START') | fsm.ongoing('AWAIT_PACKET')),
+				awaiting_start.eq(fsm.ongoing('AWAIT_START')),
+				self.capturing.eq(fsm.ongoing('CAPTURE_PACKET')),
 			]
 
-			# START: wait for capture to be enabled, but don't start mid-packet.
-			with m.State('START'):
+			# AWAIT_START: wait for capture to be enabled, but don't start mid-packet.
+			with m.State('AWAIT_START'):
 				with m.If(~self.utmi.rx_active & self.capture_enable):
-					m.next = 'IDLE'
+					m.next = 'AWAIT_PACKET'
 
-			# IDLE: If capture is enabled, wait for an active receive.
-			with m.State('IDLE'):
+			# AWAIT_PACKET: If capture is enabled, wait for an active receive.
+			with m.State('AWAIT_PACKET'):
 
 				# If capture is disabled, stall and return to the wait state for starting a new capture
 				with m.If(~self.capture_enable):
-					m.next = 'START'
+					# Reset the overrun status when transitioning back to waiting for start
+					m.d.usb += self.overrun.eq(0)
+					m.next = 'AWAIT_START'
 				# We got a new active receive, capture it
 				with m.Elif(self.utmi.rx_active):
 					m.d.usb += [
 						captured_packet_length.eq(0),
 						capture_valid.eq(packet_buffer.w_rdy),
 					]
-					m.next = 'CAPTURE'
+					m.next = 'CAPTURE_PACKET'
 
 			# Capture data until the packet is complete.
-			with m.State('CAPTURE'):
+			with m.State('CAPTURE_PACKET'):
 
 				byte_received = self.utmi.rx_valid & self.utmi.rx_active
 
@@ -170,9 +182,13 @@ class USBAnalyzer(Elaboratable):
 						length_buffer.w_data.eq(Cat(captured_packet_length, ~capture_valid)),
 						length_buffer.w_en.eq(1),
 					]
-					m.next = 'IDLE'
+					m.next = 'AWAIT_PACKET'
 
-		with m.FSM(domain = 'usb', name = 'packet_queue'):
+		with m.FSM(domain = 'usb', name = 'packet_queue') as fsm:
+			m.d.comb += [
+				self.stopped.eq(awaiting_start | fsm.ongoing('OVERRUN') | fsm.ongoing('CLEAR_OVERRUN')),
+			]
+
 			# IDLE: When there are no packets ready for processing wait in this state.
 			with m.State('IDLE'):
 				with m.If(length_buffer.r_rdy):
