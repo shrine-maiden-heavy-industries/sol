@@ -6,11 +6,6 @@
 
 ''' Contains the gatware module necessary to interpret and generate low-level USB packets. '''
 
-
-import functools
-import operator
-
-
 from torii             import Array, Cat, Const, Elaboratable, Module, Signal
 from torii.hdl.rec     import DIR_FANIN, DIR_FANOUT, Record
 
@@ -189,7 +184,7 @@ class InterpacketTimerInterface(Record):
 
 		# Merge all of our start conditions into a single start condition, and
 		# then add that to our fragment list.
-		start_condition = functools.reduce(operator.__or__, start_conditions)
+		start_condition = Cat(start_conditions).any()
 		fragments.append(self.start.eq(start_condition))
 
 		return fragments
@@ -246,8 +241,8 @@ class USBTokenDetector(Elaboratable):
 		''' Generates a 5-bit signal equivalent to the CRC check for the provided token packet. '''
 
 		def xor_bits(*indices):
-			bits = (token[len(token) - 1 - i] for i in indices)
-			return functools.reduce(operator.__xor__, bits)
+			bits = Cat(token[len(token) - 1 - i] for i in indices)
+			return bits.xor()
 
 		# Implements the CRC polynomial from the USB specification.
 		return Cat(
@@ -582,30 +577,27 @@ class USBDataPacketCRC(Elaboratable):
 		self._interfaces.append(interface)
 
 
-	def _generate_next_crc(self, current_crc, data_in):
+	def _generate_next_crc(self, current_crc : Signal, data_in : Signal):
 		''' Generates the next round of a bytewise USB CRC16. '''
-		def xor_reduce(bits):
-			return functools.reduce(operator.__xor__, bits)
-
 		# Extracted from the USB spec's definition of the CRC16 polynomial.
 		return Cat(
-			xor_reduce(data_in)      ^ xor_reduce(current_crc[ 8:16]),
-			xor_reduce(data_in[0:7]) ^ xor_reduce(current_crc[ 9:16]),
-			xor_reduce(data_in[6:8]) ^ xor_reduce(current_crc[ 8:10]),
-			xor_reduce(data_in[5:7]) ^ xor_reduce(current_crc[ 9:11]),
-			xor_reduce(data_in[4:6]) ^ xor_reduce(current_crc[10:12]),
-			xor_reduce(data_in[3:5]) ^ xor_reduce(current_crc[11:13]),
-			xor_reduce(data_in[2:4]) ^ xor_reduce(current_crc[12:14]),
-			xor_reduce(data_in[1:3]) ^ xor_reduce(current_crc[13:15]),
+			data_in.xor()      ^ current_crc[ 8:16].xor(),
+			data_in[0:7].xor() ^ current_crc[ 9:16].xor(),
+			data_in[6:8].xor() ^ current_crc[ 8:10].xor(),
+			data_in[5:7].xor() ^ current_crc[ 9:11].xor(),
+			data_in[4:6].xor() ^ current_crc[10:12].xor(),
+			data_in[3:5].xor() ^ current_crc[11:13].xor(),
+			data_in[2:4].xor() ^ current_crc[12:14].xor(),
+			data_in[1:3].xor() ^ current_crc[13:15].xor(),
 
-			xor_reduce(data_in[0:2]) ^ xor_reduce(current_crc[14:16]) ^ current_crc[0],
+			data_in[0:2].xor() ^ current_crc[14:16].xor() ^ current_crc[0],
 			data_in[0] ^ current_crc[1] ^ current_crc[15],
 			current_crc[2],
 			current_crc[3],
 			current_crc[4],
 			current_crc[5],
 			current_crc[6],
-			xor_reduce(data_in) ^ xor_reduce(current_crc[7:16]),
+			data_in.xor() ^ current_crc[7:16].xor(),
 		)
 
 
@@ -619,8 +611,8 @@ class USBDataPacketCRC(Elaboratable):
 		output_crc = Signal.like(crc)
 
 		# We'll clear our CRC whenever any of our interfaces request it.
-		start_signals = (interface.start for interface in self._interfaces)
-		clear = functools.reduce(operator.__or__, start_signals)
+		start_signals = Cat(interface.start for interface in self._interfaces)
+		clear = start_signals.any()
 
 		# If we're clearing our CRC in progress, move our holding register back to
 		# our initial value.
@@ -1420,8 +1412,8 @@ class USBInterpacketTimer(Elaboratable):
 		counter = Signal(range(0, self._counter_max + 2))
 
 		# Reset our timer whenever any of our interfaces request a timer start.
-		reset_signals = (interface.start for interface in self._interfaces)
-		any_reset = functools.reduce(operator.__or__, reset_signals)
+		reset_signals = Cat(interface.start for interface in self._interfaces)
+		any_reset = reset_signals.any()
 
 		# When a reset is requested, start the counter from 0.
 		with m.If(any_reset):
