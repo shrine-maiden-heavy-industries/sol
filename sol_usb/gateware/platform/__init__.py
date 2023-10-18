@@ -10,7 +10,7 @@ import logging                          as log
 import os
 
 from torii                              import Record
-from torii.platform.vendor.lattice_ecp5 import LatticeECP5Platform
+from torii.platform.vendor.lattice.ecp5 import ECP5Platform
 
 # from .core                              import NullPin
 from .luna_r0_1                         import LUNAPlatformRev0D1
@@ -61,7 +61,7 @@ def _get_platform_from_string(platform):
 	return platform_class()
 
 
-def get_appropriate_platform() -> LatticeECP5Platform:
+def get_appropriate_platform() -> ECP5Platform:
 	''' Attempts to return the most appropriate platform for the local configuration. '''
 
 	# If we have a LUNA_PLATFORM variable, use it instead of autonegotiating.

@@ -10,7 +10,7 @@ import os
 from torii.build                        import (
 	Attrs, Clock, Connector, DiffPairs, Pins, PinsN, Resource, Subsignal
 )
-from torii.platform.vendor.lattice_ecp5 import LatticeECP5Platform
+from torii.platform.vendor.lattice.ecp5 import ECP5Platform
 
 from ..architecture.car                 import SolECP5DomainGenerator
 from .core                              import LUNAApolloPlatform
@@ -40,7 +40,7 @@ def ULPIResource(name, data_sites, clk_site, dir_site, nxt_site, stp_site, reset
 	)
 
 
-class LUNAPlatformRev0D1(LUNAApolloPlatform, LatticeECP5Platform):
+class LUNAPlatformRev0D1(LUNAApolloPlatform, ECP5Platform):
 	''' Board description for the pre-release r0.1 revision of LUNA. '''
 
 	name        = 'LUNA r0.1'

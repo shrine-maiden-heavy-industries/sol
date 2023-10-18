@@ -9,7 +9,7 @@ import os
 
 from torii.build                        import *
 from torii.platform.resources           import LEDResources, ULPIResource
-from torii.platform.vendor.lattice_ecp5 import LatticeECP5Platform
+from torii.platform.vendor.lattice.ecp5 import ECP5Platform
 
 from ..architecture.car                 import SolECP5DomainGenerator
 from .core                              import LUNAApolloPlatform
@@ -24,7 +24,7 @@ __all__ = (
 # This is supported by a PHY feature that allows you to swap pins 13 + 14.
 #
 
-class LUNAPlatformRev0D3(LUNAApolloPlatform, LatticeECP5Platform):
+class LUNAPlatformRev0D3(LUNAApolloPlatform, ECP5Platform):
 	''' Board description for the pre-release r0.3 revision of LUNA. '''
 
 	name        = 'LUNA r0.3'
