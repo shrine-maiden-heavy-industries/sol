@@ -312,7 +312,7 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 			m.submodules += Instance('OSCG', p_DIV = self.OSCG_DIV, o_OSC = input_clock)
 			clock_frequency = 62.0
 		else:
-			input_clock = platform.request(clock_name)
+			input_clock = platform.request(clock_name).i
 
 		pll_params_per_freq = {
 			'62000000.0' : { 'CLKFB_DIV' : 4,
