@@ -2,7 +2,6 @@
 
 SOL is a fork of [Luna](https://github.com/greatscottgadgets/luna/) that has been modified for use at [Shrine Maiden Heavy Industries](https://shrine-maiden-heavy.industries/), as such it has been ported from using [Amaranth](https://github.com/amaranth-lang) to using [Torii](https://github.com/shrine-maiden-heavy-industries/torii-hdl) as well as had significant structural changes.
 
-
 SOL itself is at the moment purely a fork of the software, however the original LUNA hardware has been preserved in the repository under the [hardware](./hardware/) subdirectory.
 
 ## Installation
