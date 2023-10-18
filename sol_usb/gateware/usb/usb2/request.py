@@ -6,8 +6,6 @@
 
 ''' Low-level USB transceiver gateware -- control request components. '''
 
-import functools
-import operator
 from abc           import abstractmethod
 
 from torii         import Cat, Elaboratable, Module, Signal
@@ -392,9 +390,9 @@ class USBRequestHandlerMultiplexer(Elaboratable):
 				m.d.comb += self.shared.tx_data_pid.eq(i.tx_data_pid)
 
 		# OR together all of our handshake-generation requests.
-		any_ack   = functools.reduce(operator.__or__, (i.handshakes_out.ack   for i in self._interfaces))
-		any_nak   = functools.reduce(operator.__or__, (i.handshakes_out.nak   for i in self._interfaces))
-		any_stall = functools.reduce(operator.__or__, (i.handshakes_out.stall for i in self._interfaces))
+		any_ack   = Cat(i.handshakes_out.ack   for i in self._interfaces).any()
+		any_nak   = Cat(i.handshakes_out.nak   for i in self._interfaces).any()
+		any_stall = Cat(i.handshakes_out.stall for i in self._interfaces).any()
 
 		m.d.comb += [
 			shared.handshakes_out.ack.eq(any_ack),

@@ -10,11 +10,7 @@
 ''' CRC computation gateware for USB3. '''
 
 
-import functools
-import operator
-
 from torii    import *
-
 
 
 def compute_usb_crc5(protected_bits):
@@ -34,8 +30,8 @@ def compute_usb_crc5(protected_bits):
 	'''
 
 	def xor_bits(*indices):
-		bits = (protected_bits[len(protected_bits) - 1 - i] for i in indices)
-		return functools.reduce(operator.__xor__, bits)
+		bits = Cat(protected_bits[len(protected_bits) - 1 - i] for i in indices)
+		return bits.xor()
 
 	# Implements the CRC polynomial from the USB specification.
 	return Cat(
@@ -88,12 +84,12 @@ class HeaderPacketCRC(Elaboratable):
 		''' Generates the next round of a wordwise USB CRC16. '''
 
 		def xor_data_bits(*indices):
-			bits = (data_in[len(data_in) - 1 - i] for i in indices)
-			return functools.reduce(operator.__xor__, bits)
+			bits = Cat(data_in[len(data_in) - 1 - i] for i in indices)
+			return bits.xor()
 
 		def xor_past_bits(*indices):
-			bits = (current_crc[i] for i in indices)
-			return functools.reduce(operator.__xor__, bits)
+			bits = Cat(current_crc[i] for i in indices)
+			return bits.xor()
 
 		# Extracted from the USB3 spec's definition of the CRC16 polynomial.
 		# This is hideous, but it's lifted directly from the specification, so it's probably safer

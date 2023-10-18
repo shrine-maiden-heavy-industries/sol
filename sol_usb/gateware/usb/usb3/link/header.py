@@ -6,8 +6,6 @@
 
 ''' Header Packet data interfacing definitions.'''
 
-import functools
-import operator
 
 from torii              import *
 
@@ -155,7 +153,7 @@ class HeaderQueueDemultiplexer(Elaboratable):
 			]
 
 		# OR together all of the ``ready`` signals to produce our multiplex'd ready.
-		sink_ready = functools.reduce(operator.__or__, (c.ready for c in self._consumers))
+		sink_ready = Cat(c.ready for c in self._consumers).any()
 		m.d.comb += self.sink.ready.eq(sink_ready)
 
 

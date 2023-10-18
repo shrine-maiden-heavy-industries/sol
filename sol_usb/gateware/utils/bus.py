@@ -6,10 +6,7 @@
 
 ''' Utilities for working with busses. '''
 
-import operator
-import functools
-
-from torii            import Elaboratable, Module
+from torii            import Elaboratable, Module, Cat
 from torii.lib.coding import Encoder
 
 
@@ -148,7 +145,7 @@ class OneHotMultiplexer(Elaboratable):
 			input_signals = (self._get_signal(i, identifier) for i in self._inputs)
 
 			# ... and OR them together.
-			or_reduced = functools.reduce(operator.__or__, input_signals, 0)
+			or_reduced = Cat(input_signals).any()
 			m.d.comb += output_signal.eq(or_reduced)
 
 

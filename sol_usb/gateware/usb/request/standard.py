@@ -7,15 +7,13 @@
 ''' Standard, full-gateware control request handlers. '''
 
 
-import functools
-import operator
 import os
 import unittest
 from typing                 import Callable, Iterable
 
 from torii                  import Module, Signal
 from torii.hdl.dsl          import Operator
-from torii.hdl.ast          import Const, Value
+from torii.hdl.ast          import Value, Cat
 
 from usb_construct.emitters import DeviceDescriptorCollection
 from usb_construct.types    import USBRequestType, USBStandardRequests
@@ -109,7 +107,7 @@ class StandardRequestHandler(ControlRequestHandler):
 					with m.If(setup.received):
 
 						# Only handle setup packet if not blacklisted
-						blacklisted = functools.reduce(operator.__or__, (f(setup) for f in self._blacklist), Const(0))
+						blacklisted = Cat(f(setup) for f in self._blacklist).any()
 						with m.If(~blacklisted):
 
 							# Select which standard packet we're going to handler.

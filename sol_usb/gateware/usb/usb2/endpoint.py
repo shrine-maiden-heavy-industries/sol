@@ -6,10 +6,8 @@
 
 ''' Gateware for working with abstract endpoints. '''
 
-import functools
-import operator
 
-from torii         import Elaboratable, Module, Signal
+from torii         import Elaboratable, Module, Signal, Cat
 from torii.hdl.ast import Past
 
 from ...utils.bus  import OneHotMultiplexer
@@ -189,8 +187,8 @@ class USBEndpointMultiplexer(Elaboratable):
 		''' Joins together a set of signals on each interface by OR'ing the signals together. '''
 
 		# Find the value of all of our pre-mux signals OR'd together...
-		all_signals = (signal_for_interface(i) for i in self._interfaces)
-		or_value = functools.reduce(operator.__or__, all_signals, 0)
+		all_signals = Cat(signal_for_interface(i) for i in self._interfaces)
+		or_value = all_signals.any()
 
 		# ... and tie it to our post-mux signal.
 		m.d.comb += signal_for_interface(self.shared).eq(or_value)

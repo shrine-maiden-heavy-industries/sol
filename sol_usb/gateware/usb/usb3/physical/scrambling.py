@@ -9,8 +9,6 @@
 
 ''' Scrambling and descrambling for USB3. '''
 
-import functools
-import operator
 
 from torii     import *
 
@@ -62,8 +60,8 @@ class ScramblerLFSR(Elaboratable):
 		current_value    = Signal(16, reset = self._initial_value)
 
 		def xor_bits(*indices):
-			bits = (current_value[i] for i in indices)
-			return functools.reduce(operator.__xor__, bits)
+			bits = Cat(current_value[i] for i in indices)
+			return bits.xor()
 
 
 		# Compute the next value in our internal LFSR state...
