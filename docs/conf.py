@@ -8,19 +8,6 @@ from sol_usb import __version__ as sol_version
 
 ROOT_DIR = (Path(__file__).parent).parent
 
-def doc_version():
-	try:
-		from setuptools_scm.git import parse as parse_git
-	except ImportError:
-		return ''
-
-	git = parse_git(str(ROOT_DIR.resolve()))
-	if not git:
-		return ''
-	elif git.exact:
-		return git.format_with('v{tag}')
-	else:
-		return 'latest'
 
 project   = 'SOL'
 version   = sol_version
@@ -28,7 +15,6 @@ release   = version.split('+')[0]
 copyright = '2020 Great Scott Gadgets'
 author    = 'Katherine J. Temkin'
 language  = 'en'
-docver    = doc_version()
 
 
 
@@ -80,8 +66,8 @@ templates_path = [
 html_context = {
 	'display_lower_left': False,
 	'current_language'  : language,
-	'current_version'   : docver,
-	'version'           : docver,
+	'current_version'   : sol_version,
+	'version'           : sol_version,
 	'display_github'    : True,
 	'github_user'       : 'shrine-maiden-heavy-industries',
 	'github_repo'       : 'sol',
