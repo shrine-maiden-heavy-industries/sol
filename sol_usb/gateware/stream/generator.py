@@ -273,7 +273,7 @@ class ConstantStreamGenerator(Elaboratable):
 
 						# If we're not enforcing a max length, always use our leftover bits-per-word.
 						if not self._max_length_width:
-							m.d.comb += self.stream.valid.eq(Repl(Const(1), valid_bits_last_word))
+							m.d.comb += self.stream.valid.eq(Const(1).replicate(valid_bits_last_word))
 
 						# Otherwise, do our complex case.
 						else:
@@ -283,7 +283,7 @@ class ConstantStreamGenerator(Elaboratable):
 							ending_due_to_max_length  = (bytes_sent + bytes_per_word >= max_length)
 
 							# ... and figure out the valid bits based us running out of data...
-							valid_due_to_data_length  = Repl(Const(1), valid_bits_last_word)
+							valid_due_to_data_length  = Const(1).replicate(valid_bits_last_word)
 
 							# ... and due to our maximum length. Finding this arithmetically creates
 							# difficult-to-optimize code, and bytes_per_word is going to be small, so
@@ -298,7 +298,7 @@ class ConstantStreamGenerator(Elaboratable):
 
 									# ... with the appropriate amount of valid bits.
 									with m.Case(i):
-										m.d.comb += valid_due_to_max_length.eq(Repl(Const(1), i))
+										m.d.comb += valid_due_to_max_length.eq(Const(1).replicate(i))
 
 
 							# Our most complex logic is when both of our end conditions are met; we'll need
@@ -320,7 +320,7 @@ class ConstantStreamGenerator(Elaboratable):
 					# If we're not on our last word, every valid bit should be set.
 					with m.Else():
 						valid_bits = len(self.stream.valid)
-						m.d.comb += self.stream.valid.eq(Repl(Const(1), valid_bits))
+						m.d.comb += self.stream.valid.eq(Const(1).replicate(valid_bits))
 
 
 				# If the current data byte is accepted, move past it.
