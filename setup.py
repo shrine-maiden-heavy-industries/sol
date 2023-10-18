@@ -67,7 +67,7 @@ setup(
 		'rich',
 
 		'usb-construct<1.0',
-		'torii~=0.5',
+		'torii>=0.5',
 	],
 
 	extras_require = {
