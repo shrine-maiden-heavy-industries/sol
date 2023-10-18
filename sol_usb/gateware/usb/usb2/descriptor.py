@@ -385,8 +385,9 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		#
 		rom_content, descriptor_max_length, max_type_index = self.generate_rom_content()
 
-		rom = Memory(width = 32, depth = len(rom_content), init = rom_content)
-		m.submodules.rom_read_port = rom_read_port = rom.read_port(transparent = False)
+		rom: Memory = Memory(width = 32, depth = len(rom_content), init = rom_content)
+		m.submodules.rom = rom
+		rom_read_port = rom.read_port(transparent = False)
 
 		# Create convenience aliases to the upper and lower half of the ROM.
 		rom_upper_half = rom_read_port.data.word_select(1, 16)
