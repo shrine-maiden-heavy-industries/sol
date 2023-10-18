@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 from torii                        import Record
+from torii.sim import Settle
 
 from sol_usb.gateware.usb.usb2.packet import (
 	USBTokenDetector, USBHandshakeDetector, USBDataPacketReceiver, USBDataPacketDeserializer,
@@ -501,9 +502,10 @@ class USBHandshakeGeneratorTest(SolGatewareTestCase):
 class USBInterpacketTimerTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
+	dut: USBInterpacketTimer
 
 	def instantiate_dut(self):
-		dut = USBInterpacketTimer()
+		dut: USBInterpacketTimer = USBInterpacketTimer()
 
 		# Create our primary timer interface.
 		self.interface = InterpacketTimerInterface()
@@ -514,9 +516,10 @@ class USBInterpacketTimerTest(SolGatewareTestCase):
 
 	def initialize_signals(self):
 		# Assume FS for our tests, unless overridden.
-		yield self.dut.speed(USBSpeed.FULL)
+		yield self.dut.speed.eq(USBSpeed.FULL)
 
 
+	@usb_domain_test_case
 	def test_resets_and_delays(self):
 		yield from self.advance_cycles(4)
 		interface = self.interface
@@ -524,6 +527,7 @@ class USBInterpacketTimerTest(SolGatewareTestCase):
 		# Trigger a cycle reset.
 		yield interface.start.eq(1)
 		yield
+		yield Settle()
 		yield interface.start.eq(0)
 
 		# We should start off with no timer outputs high.
@@ -533,24 +537,29 @@ class USBInterpacketTimerTest(SolGatewareTestCase):
 
 		# 10 cycles later, we should see our first timer output.
 		yield from self.advance_cycles(10)
+		yield Settle()
 		self.assertEqual((yield interface.tx_allowed), 1)
 		self.assertEqual((yield interface.tx_timeout), 0)
 		self.assertEqual((yield interface.rx_timeout), 0)
 
 		# 22 cycles later (32 total), we should see our second timer output.
 		yield from self.advance_cycles(22)
+		yield Settle()
 		self.assertEqual((yield interface.tx_allowed), 0)
 		self.assertEqual((yield interface.tx_timeout), 1)
 		self.assertEqual((yield interface.rx_timeout), 0)
 
-		# 58 cycles later (80 total), we should see our third timer output.
-		yield from self.advance_cycles(22)
+		# 48 cycles later (80 total), we should see our third timer output.
+		yield from self.advance_cycles(48)
+		yield Settle()
 		self.assertEqual((yield interface.tx_allowed), 0)
 		self.assertEqual((yield interface.tx_timeout), 0)
 		self.assertEqual((yield interface.rx_timeout), 1)
 
 		# Ensure that the timers don't go high again.
 		for _ in range(32):
-			self.assertEqual((yield self.rx_to_tx_min),     0)
-			self.assertEqual((yield self.rx_to_tx_max),     0)
-			self.assertEqual((yield self.tx_to_rx_timeout), 0)
+			yield
+			yield Settle()
+			self.assertEqual((yield interface.tx_allowed), 0)
+			self.assertEqual((yield interface.tx_timeout), 0)
+			self.assertEqual((yield interface.rx_timeout), 0)
