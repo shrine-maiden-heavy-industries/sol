@@ -119,8 +119,8 @@ def dist(session: Session) -> None:
 def upload(session: Session) -> None:
 	session.install('twine')
 	dist(session)
-	session.log(f'Uploading sol-{sol_version()} to PyPi')
+	session.log(f'Uploading sol_usb-{sol_version()} to PyPi')
 	session.run(
 		'python', '-m', 'twine',
-		'upload', f'{DIST_DIR}/sol-{sol_version()}*'
+		'upload', f'{DIST_DIR}/sol*usb-{sol_version()}*'
 	)
