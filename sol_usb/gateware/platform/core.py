@@ -97,7 +97,7 @@ class SOLPlatform:
 class LUNAApolloPlatform(SOLPlatform):
 	''' Base class for Apollo-based LUNA platforms; includes configuration. '''
 
-	def toolchain_program(self, products, name):
+	def toolchain_program(self, products, name, **kwargs):
 		''' Programs the relevant LUNA board via its sideband connection. '''
 
 		from apollo_fpga import ApolloDebugger
