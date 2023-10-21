@@ -88,7 +88,7 @@ def typecheck(session: Session) -> None:
 		'mypy', '--non-interactive', '--install-types', '--pretty',
 		'--cache-dir', str((out_dir / '.mypy-cache').resolve()),
 		'--config-file', str((CNTRB_DIR / '.mypy.ini').resolve()),
-		'-p', 'torii', '--html-report', str(out_dir.resolve())
+		'-p', 'sol_usb', '--html-report', str(out_dir.resolve())
 	)
 
 @nox.session
