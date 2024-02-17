@@ -48,7 +48,7 @@ setup(
 	]),
 	license          = 'BSD-3-Clause',
 	description      = 'Torii HDL framework for FPGA-based USB solutions',
-	python_requires  = '~=3.9',
+	python_requires  = '~=3.10',
 	zip_safe         = True,
 	url              = 'https://sol.shmdn.link/',
 
