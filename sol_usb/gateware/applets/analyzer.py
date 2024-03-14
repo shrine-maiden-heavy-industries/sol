@@ -18,6 +18,7 @@ from enum                                   import IntEnum, IntFlag
 from typing                                 import Optional
 
 from torii                                  import Elaboratable, Module, Signal
+from torii.build.res                        import ResourceError
 from torii.hdl.dsl                          import Operator
 
 from usb_construct.emitters                 import DeviceDescriptorCollection
@@ -198,10 +199,13 @@ class USBAnalyzerApplet(Elaboratable):
 
 		# Strap our power controls to be in VBUS passthrough by default,
 		# on the target port.
-		m.d.comb += [
-			platform.request('power_a_port').o.eq(0),
-			platform.request('pass_through_vbus').o.eq(1),
-		]
+		try:
+			m.d.comb += [
+				platform.request('power_a_port').o.eq(0),
+				platform.request('pass_through_vbus').o.eq(1),
+			]
+		except ResourceError:
+			pass
 
 		# Set up our parameters.
 		m.d.comb += [
