@@ -1,9 +1,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #
-# This file is part of LUNA.
+# This file is part of SOL.
 #
 # Copyright (c) 2020-2021 Great Scott Gadgets <info@greatscottgadgets.com>
-
 
 import os
 
@@ -68,7 +67,6 @@ class LUNAPlatformRev0D4(LUNAApolloPlatform, ECP5Platform):
 	ulpi_extra_registers = {
 		0x39: 0b000110 # USB3343: swap D+ and D- to match the LUNA boards
 	}
-
 
 	#
 	# I/O resources.
