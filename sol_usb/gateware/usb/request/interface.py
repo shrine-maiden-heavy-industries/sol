@@ -28,6 +28,20 @@ class SetupPacket(Record):
 		O: length[16]    -- Length of the relevant setup request.
 	'''
 
+	recipient: Signal
+	type: Signal
+	is_in_request: Signal
+
+	request: Signal
+
+	value: Signal
+
+	index: Signal
+
+	length: Signal
+
+	received: Signal
+
 	def __init__(self):
 		super().__init__([
 			# Byte 1
