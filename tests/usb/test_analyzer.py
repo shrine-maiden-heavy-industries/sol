@@ -849,6 +849,23 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		yield from self.advance_cycles(1024)
 		yield Settle()
 
+	@usb_domain_test_case
+	def test_fast_traffic(self):
+		# Enable capture
+		yield self.analyzer.capture_enable.eq(1)
+		yield
+
+		# Chew through the fast traffic entries
+		for entry in self.fast_traffic:
+			# Check if this is a wait point
+			if isinstance(entry, dict):
+				# Wait the indicated amount of time
+				yield from self.wait(entry['wait'])
+			else:
+				# We now have a packet of data to queue
+				yield from self.queue_packet(entry)
+		yield Settle()
+
 class USBAnalyzerStackTest(SolGatewareTestCase):
 	''' Test that evaluates a full-stack USB analyzer setup. '''
 
