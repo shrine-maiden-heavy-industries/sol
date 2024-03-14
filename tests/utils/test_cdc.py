@@ -58,10 +58,12 @@ class SynchronizedTest(TestCase):
 
 	def test_signal(self):
 		m = Module()
+		m._MustUse__silence = True
 		synchronize(m, Signal())
 
 	def test_directional_record(self):
 		m = Module()
+		m._MustUse__silence = True
 
 		record = Record([
 			('sig_in',  1, DIR_FANIN),
@@ -71,6 +73,7 @@ class SynchronizedTest(TestCase):
 
 	def test_nested_record(self):
 		m = Module()
+		m._MustUse__silence = True
 
 		record = Record([
 			('sig_in',  1, DIR_FANIN),
