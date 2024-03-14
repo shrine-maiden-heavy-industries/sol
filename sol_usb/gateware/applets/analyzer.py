@@ -180,6 +180,7 @@ class USBAnalyzerApplet(Elaboratable):
 				with i.EndpointDescriptor() as e:
 					e.bEndpointAddress = BULK_ENDPOINT_ADDRESS
 					e.wMaxPacketSize   = MAX_BULK_PACKET_SIZE
+					e.bInterval = 0
 
 		return descriptors
 
