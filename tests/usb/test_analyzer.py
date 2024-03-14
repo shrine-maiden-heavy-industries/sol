@@ -2,20 +2,22 @@
 
 from torii                           import Record, Module
 from torii.sim                       import Settle
-from typing                          import Iterable
+from typing                          import Union, Iterable, TypedDict
 
 from sol_usb.gateware.usb.analyzer   import USBAnalyzer
 from sol_usb.gateware.interface.utmi import UTMIInterface
 from sol_usb.gateware.test           import SolGatewareTestCase, usb_domain_test_case
 
+class WaitDict(TypedDict):
+	wait: float
+
 class USBAnalyzerTest(SolGatewareTestCase):
 	USB_CLOCK_FREQUENCY = 60e6
-	SYNC_CLOCK_FREQUENCY = 120e6
-	FAST_CLOCK_FREQUENCY = 240e6
+	SYNC_CLOCK_FREQUENCY = None
 
 	dut: USBAnalyzer
 
-	fast_traffic = (
+	fast_traffic: tuple[Union[tuple[int, ...], WaitDict], ...] = (
 		# SOF 1321
 		(0xa5, 0x29, 0x9d),
 
@@ -152,7 +154,7 @@ class USBAnalyzerTest(SolGatewareTestCase):
 
 		{'wait': 681.6e-6},
 		# SOF 1341
-		0xa5, 0x3b, 0x45,
+		(0xa5, 0x3b, 0x45),
 
 		{'wait': 997.5e-6},
 		# SOF 1342
