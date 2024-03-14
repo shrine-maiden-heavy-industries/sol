@@ -6,10 +6,12 @@
 
 ''' Low-level USB analyzer gateware. '''
 
-from torii          import Elaboratable, Module, Signal, Cat, DomainRenamer
-from torii.lib.fifo import SyncFIFOBuffered
+from torii            import Elaboratable, Module, Signal, Cat, DomainRenamer
+from torii.lib.fifo   import SyncFIFOBuffered
+from typing           import TYPE_CHECKING
 
-from ..stream       import StreamInterface
+from ..stream         import StreamInterface
+from ..interface.utmi import UTMIInterface
 
 class USBAnalyzer(Elaboratable):
 	'''
@@ -56,7 +58,7 @@ class USBAnalyzer(Elaboratable):
 	# Please note, this is less than the max actual size of 8192B from the USB spec(!)
 	MAX_PACKET_SIZE_BYTES = 1024 + 1 + 2
 
-	def __init__(self, *, utmi_interface, mem_depth = 65536):
+	def __init__(self, *, utmi_interface: UTMIInterface, mem_depth = 65536):
 		'''
 		Parameters
 		----------
@@ -113,6 +115,11 @@ class USBAnalyzer(Elaboratable):
 		m.submodules.length_buffer = length_buffer = DomainRenamer('usb')(
 			SyncFIFOBuffered(width = packet_length.width + 1, depth = 256)
 		)
+
+		if TYPE_CHECKING:
+			assert isinstance(data_buffer, SyncFIFOBuffered)
+			assert isinstance(packet_buffer, SyncFIFOBuffered)
+			assert isinstance(length_buffer, SyncFIFOBuffered)
 
 		# Read FIFO logic.
 		m.d.comb += [
