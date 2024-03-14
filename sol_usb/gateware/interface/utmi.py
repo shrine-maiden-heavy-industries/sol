@@ -6,6 +6,7 @@
 
 ''' UTMI interfacing. '''
 
+from torii         import Signal
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT, Record
 
 from ..utils.bus   import OneHotMultiplexer
@@ -88,6 +89,33 @@ class UTMIInterfaceMultiplexer(OneHotMultiplexer):
 
 class UTMIInterface(Record):
 	''' UTMI+-standardized interface. Intended mostly as a simulation aid.'''
+
+	rx_data: Signal
+	rx_active: Signal
+	rx_valid: Signal
+
+	tx_data: Signal
+	tx_valid: Signal
+	tx_ready: Signal
+
+	xcvr_select: Signal
+	term_select: Signal
+	op_mode: Signal
+	suspend: Signal
+	id_pullup: Signal
+	dm_pulldown: Signal
+	dp_pulldown: Signal
+	chrg_vbus: Signal
+	dischrg_vbus: Signal
+	use_external_vbus_indicator: Signal
+
+	line_state: Signal
+	vbus_valid: Signal
+	session_valid: Signal
+	session_end: Signal
+	rx_error: Signal
+	host_disconnect: Signal
+	id_digital: Signal
 
 	def __init__(self):
 		super().__init__([
