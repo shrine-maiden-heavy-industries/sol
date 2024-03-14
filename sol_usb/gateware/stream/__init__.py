@@ -6,9 +6,7 @@
 
 ''' Core stream definitions. '''
 
-
-from torii import Record
-
+from torii import Signal, Record
 
 class StreamInterface(Record):
 	'''
@@ -41,6 +39,11 @@ class StreamInterface(Record):
 		A flat (non-nested) list of tuples indicating any extra fields present.
 		Similar to a record's layout field; but cannot be nested.
 	'''
+	valid: Signal
+	ready: Signal
+	first: Signal
+	last: Signal
+	payload: Signal
 
 	def __init__(self, payload_width = 8, valid_width = 1, extra_fields = None):
 		'''
