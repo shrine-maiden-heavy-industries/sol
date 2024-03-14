@@ -1,27 +1,21 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                         import Record, Module
-from torii.sim                     import Settle
-from typing                        import Iterable
+from torii                           import Record, Module
+from torii.sim                       import Settle
+from typing                          import Iterable
 
-from sol_usb.gateware.usb.analyzer import USBAnalyzer
-from sol_usb.gateware.test         import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.usb.analyzer   import USBAnalyzer
+from sol_usb.gateware.interface.utmi import UTMIInterface
+from sol_usb.gateware.test           import SolGatewareTestCase, usb_domain_test_case
 
 class USBAnalyzerTest(SolGatewareTestCase):
-
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
 
-	def instantiate_dut(self):
-		self.utmi = Record([
-			('tx_data',     8),
-			('rx_data',    8),
+	dut: USBAnalyzer
 
-			('rx_valid',    1),
-			('rx_active',   1),
-			('rx_error',    1),
-			('rx_complete', 1),
-		])
+	def instantiate_dut(self):
+		self.utmi = UTMIInterface()
 		self.analyzer = USBAnalyzer(utmi_interface = self.utmi, mem_depth = 128)
 		return self.analyzer
 
