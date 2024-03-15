@@ -921,21 +921,9 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 	USB_CLOCK_FREQUENCY = 60e6
 
 	def instantiate_dut(self):
+		from sol_usb.gateware.interface.ulpi import ULPIInterface, UTMITranslator
 
-		from sol_usb.gateware.interface.ulpi import UTMITranslator
-
-		self.ulpi = Record([
-			('data', [
-				('i',  8),
-				('o',  8),
-				('oe', 8),
-			]),
-			('nxt', 1),
-			('stp', 1),
-			('dir', [('i', 1)]),
-			('clk', 1),
-			('rst', 1)
-		])
+		self.ulpi = ULPIInterface()
 
 		# Create a stack of our UTMITranslator and our USBAnalyzer.
 		# We'll wrap the both in a module to establish a synthetic hierarchy.
@@ -960,7 +948,7 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 		yield from self.advance_cycles(10)
 
 		# Start a new packet.
-		yield self.ulpi.dir.eq(1)
+		yield self.ulpi.dir.i.eq(1)
 		yield self.ulpi.nxt.eq(1)
 
 		# Bus turnaround packet.
@@ -973,7 +961,7 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 			yield
 
 		# Mark our packet as complete.
-		yield self.ulpi.dir.eq(0)
+		yield self.ulpi.dir.i.eq(0)
 		yield self.ulpi.nxt.eq(0)
 		yield
 
