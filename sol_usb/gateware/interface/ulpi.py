@@ -17,6 +17,14 @@ from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
 from .utmi         import UTMIInterface
 
+class UPLIDataRecord(Record):
+	i: Signal
+	o: Signal
+	oe: Signal
+
+class UPLIDirRecord(Record):
+	i: Signal
+
 class ULPIInterface(Record):
 	''' Record that represents a standard ULPI interface. '''
 
@@ -29,10 +37,15 @@ class ULPIInterface(Record):
 		('rst', 1, DIR_FANOUT)
 	]
 
+	clk: Signal
+	data: UPLIDataRecord
+	nxt: Signal
+	stp: Signal
+	dir: UPLIDirRecord
+	rst: Signal
+
 	def __init__(self):
 		super().__init__(self.LAYOUT)
-
-
 
 class ULPIRegisterWindow(Elaboratable):
 	''' Gateware interface that handles ULPI register reads and writes.
