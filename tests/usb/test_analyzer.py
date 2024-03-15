@@ -896,9 +896,11 @@ class USBAnalyzerOverflowTest(SolGatewareTestCase):
 					# We now have a packet of data to queue
 					yield from self.queue_packet(entry)
 					packet_type.future.set_result(entry[0])
-			packet_type.future.cancel()
 			yield Settle()
 			yield
+			packet_type.future.cancel()
+			# Spin a few cycles to ensure the packet buffer is flushed out
+			yield from self.advance_cycles(10)
 
 		def process_packets():
 			# While we should be chewing on packets
@@ -906,6 +908,8 @@ class USBAnalyzerOverflowTest(SolGatewareTestCase):
 				# Look for a SOF packet
 				while not packet_type.future.done():
 					yield
+				if packet_type.future.cancelled():
+					break
 				result = packet_type.future.result()
 				packet_type.reset()
 				# If the packet is not a SOF, skip it
@@ -921,10 +925,12 @@ class USBAnalyzerOverflowTest(SolGatewareTestCase):
 				yield
 
 		generators = (queue_packets(), process_packets())
-		try:
-			while True:
-				# Loop through the generators running each to its next clocking point
-				for generator in generators:
+		stopped = 0
+		while stopped != len(generators):
+			stopped = 0
+			# Loop through the generators running each to its next clocking point
+			for generator in generators:
+				try:
 					command = None
 					# Run the generator to the next `yield` statement it contains
 					while not isinstance(command, Tick):
@@ -939,10 +945,11 @@ class USBAnalyzerOverflowTest(SolGatewareTestCase):
 							command = generator.send(response)
 							if command is None:
 								command = Tick()
-				# Clock the system
-				yield
-		except StopIteration:
-			pass
+				except StopIteration:
+					stopped += 1
+					continue
+			# Clock the system
+			yield
 
 class USBAnalyzerStackTest(SolGatewareTestCase):
 	''' Test that evaluates a full-stack USB analyzer setup. '''
