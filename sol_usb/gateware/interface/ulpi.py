@@ -15,7 +15,7 @@ from torii         import (
 from torii.hdl.ast import Rose
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
-
+from .utmi         import UTMIInterface
 
 class ULPIInterface(Record):
 	''' Record that represents a standard ULPI interface. '''
@@ -667,7 +667,7 @@ class ULPITransmitTranslator(Elaboratable):
 		return m
 
 
-class UTMITranslator(Elaboratable):
+class UTMITranslator(Elaboratable, UTMIInterface):
 	'''
 	Gateware that translates a ULPI interface into a simpler UTMI one.
 
@@ -719,7 +719,6 @@ class UTMITranslator(Elaboratable):
 		('id_pullup',    1), ('dm_pulldown', 1), ('dp_pulldown', 1), ('chrg_vbus', 1),
 		('dischrg_vbus', 1), ('use_external_vbus_indicator', 1)
 	]
-
 
 	def __dir__(self):
 		''' Extend our properties list of contain all of the above fields, for proper autocomplete. '''
