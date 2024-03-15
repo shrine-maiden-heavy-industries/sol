@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                           import Record, Module
-from torii.sim                       import Settle
+from torii                           import Module
+from torii.sim                       import Settle, Tick
 from typing                          import Union, Iterable, TypedDict
 from concurrent.futures              import Future
 
@@ -900,15 +900,20 @@ class USBAnalyzerTest(SolGatewareTestCase):
 			while True:
 				# Loop through the generators running each to its next clocking point
 				for generator in generators:
-					command = Settle()
+					command = None
 					# Run the generator to the next `yield` statement it contains
-					while command is not None:
+					while not isinstance(command, Tick):
 						try:
-							response = yield command
+							if command is not None:
+								response = yield command
+							else:
+								response = None
 						except Exception as error:
 							generator.throw(error)
 						else:
 							command = generator.send(response)
+							if command is None:
+								command = Tick()
 				# Clock the system
 				yield
 		except StopIteration:
