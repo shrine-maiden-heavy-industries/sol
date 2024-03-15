@@ -3,6 +3,7 @@
 from torii                           import Record, Module
 from torii.sim                       import Settle
 from typing                          import Union, Iterable, TypedDict
+from concurrent.futures              import Future
 
 from sol_usb.gateware.usb.analyzer   import USBAnalyzer
 from sol_usb.gateware.interface.utmi import UTMIInterface
@@ -851,20 +852,67 @@ class USBAnalyzerTest(SolGatewareTestCase):
 
 	@usb_domain_test_case
 	def test_fast_traffic(self):
-		# Enable capture
-		yield self.analyzer.capture_enable.eq(1)
-		yield
+		class PacketType:
+			def __init__(self):
+				self.reset()
 
-		# Chew through the fast traffic entries
-		for entry in self.fast_traffic:
-			# Check if this is a wait point
-			if isinstance(entry, dict):
-				# Wait the indicated amount of time
-				yield from self.wait(entry['wait'])
-			else:
-				# We now have a packet of data to queue
-				yield from self.queue_packet(entry)
-		yield Settle()
+			def reset(self):
+				self.future = Future()
+		packet_type = PacketType()
+
+		def queue_packets():
+			# Enable capture
+			yield self.analyzer.capture_enable.eq(1)
+			yield
+			# Chew through the fast traffic entries
+			for entry in self.fast_traffic:
+				# Check if this is a wait point
+				if isinstance(entry, dict):
+					# Wait the indicated amount of time
+					yield from self.wait(entry['wait'])
+				else:
+					# We now have a packet of data to queue
+					yield from self.queue_packet(entry)
+					packet_type.future.set_result(entry[0])
+			packet_type.future.cancel()
+			yield Settle()
+			yield
+
+		def process_packets():
+			# While we should be chewing on packets
+			while not packet_type.future.cancelled():
+				# Look for a SOF packet
+				while not packet_type.future.done():
+					yield
+				result = packet_type.future.result()
+				packet_type.reset()
+				if result != 0xa5:
+					continue
+				# Now we found a SOF, chew through any data in the packet buffer
+				while (yield self.dut.stream.valid) == 1:
+					yield self.dut.stream.ready.eq(1)
+					yield
+				yield self.dut.stream.ready.eq(0)
+				yield
+
+		generators = (queue_packets(), process_packets())
+		try:
+			while True:
+				# Loop through the generators running each to its next clocking point
+				for generator in generators:
+					command = Settle()
+					# Run the generator to the next `yield` statement it contains
+					while command is not None:
+						try:
+							response = yield command
+						except Exception as error:
+							generator.throw(error)
+						else:
+							command = generator.send(response)
+				# Clock the system
+				yield
+		except StopIteration:
+			pass
 
 class USBAnalyzerStackTest(SolGatewareTestCase):
 	''' Test that evaluates a full-stack USB analyzer setup. '''
