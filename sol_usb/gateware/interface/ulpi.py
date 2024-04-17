@@ -22,8 +22,20 @@ class UPLIDataRecord(Record):
 	o: Signal
 	oe: Signal
 
+	def __init__(self):
+		super().__init__([
+			('i', 8, DIR_FANIN),
+			('o', 8, DIR_FANOUT),
+			('oe', 8, DIR_FANOUT),
+		])
+
 class UPLIDirRecord(Record):
 	i: Signal
+
+	def __init__(self):
+		super().__init__([
+			('i', 1, DIR_FANIN),
+		])
 
 class ULPIInterface(Record):
 	''' Record that represents a standard ULPI interface. '''
@@ -769,6 +781,8 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 		PHY using a DomainRenamer.
 
 		'''
+
+		super().__init__()
 
 		self.use_platform_registers = use_platform_registers
 		self.handle_clocking        = handle_clocking
