@@ -193,7 +193,7 @@ class USBDevice(Elaboratable):
 		m = Module()
 
 		# If we have a bus translator, include it in our submodules.
-		if self.translator:
+		if self.translator is not None:
 			m.submodules.translator = self.translator
 
 
