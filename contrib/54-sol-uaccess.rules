@@ -1,5 +1,18 @@
-ATTR{idVendor}=="16d0", ATTR{idProduct}=="05a5", SYMLINK+="sol%k", TAG+="uaccess"
-ATTR{idVendor}=="16d0", ATTR{idProduct}=="0f3b", SYMLINK+="soltarget%k", TAG+="uaccess"
+ACTION!="add|change|bind", GOTO="sol_rules_end"
 
-ATTR{idVendor}=="1d50", ATTR{idProduct}=="615c", SYMLINK+="apollo%k", TAG+="uaccess"
-ATTR{idVendor}=="1d50", ATTR{idProduct}=="615b", SYMLINK+="sol%k", TAG+="uaccess"
+ATTR{idVendor}=="16d0", ATTR{idProduct}=="05a5", SYMLINK+="luna%k", TAG+="uaccess"
+ATTR{idVendor}=="16d0", ATTR{idProduct}=="0f3b", SYMLINK+="lunatarget%k", TAG+="uaccess"
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="05a5", MODE="0660", GROUP="uucp", TAG+="uaccess"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="16d0", ATTRS{idProduct}=="0f3b", MODE="0660", GROUP="uucp", TAG+="uaccess"
+
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d50", ATTR{idProduct}=="615c", MODE="0660", GROUP="uucp", SYMLINK+="apollo%k", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d50", ATTR{idProduct}=="614b", MODE="0660", GROUP="uucp", SYMLINK+="luna%k", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="1d50", ATTR{idProduct}=="615b", MODE="0660", GROUP="uucp", SYMLINK+="luna%k", TAG+="uaccess"
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="615c", MODE="0660", GROUP="uucp", TAG+="uaccess"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="614b", MODE="0660", GROUP="uucp", TAG+="uaccess"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1d50", ATTRS{idProduct}=="615b", MODE="0660", GROUP="uucp", TAG+="uaccess"
+
+LABEL="sol_rules_end"
+
