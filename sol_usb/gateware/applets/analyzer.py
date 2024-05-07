@@ -107,7 +107,7 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 								m.next = 'SET_STATE'
 							with m.Case(USBAnalyzerVendorRequests.GET_SPEEDS):
 								m.next = 'GET_SPEEDS'
-							with m.Case():
+							with m.Default():
 								m.next = 'UNHANDLED'
 
 				# GET_STATE -- Fetch the device's state

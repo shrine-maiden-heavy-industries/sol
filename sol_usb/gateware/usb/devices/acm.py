@@ -56,7 +56,7 @@ class ACMRequestHandlers(USBRequestHandler):
 						m.d.comb += self.send_zlp()
 
 
-				with m.Case():
+				with m.Default():
 
 					#
 					# Stall unhandled requests.
