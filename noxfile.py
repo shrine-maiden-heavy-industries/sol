@@ -44,7 +44,7 @@ def test(session: Session) -> None:
 	out_dir.mkdir(parents = True, exist_ok = True)
 	coverage = '--coverage' in session.posargs
 
-	unitest_args = ('-m', 'unittest', 'discover', '-s', str(ROOT_DIR))
+	unitest_args = ('-m', 'unittest', 'discover', '-v', '-s', str(ROOT_DIR))
 
 	session.install('.')
 	if coverage:
@@ -75,6 +75,14 @@ def docs(session: Session) -> None:
 	session.install('-r', str(DOCS_DIR / 'requirements.txt'))
 	session.install('.[platform]')
 	session.run('sphinx-build', '-b', 'html', str(DOCS_DIR), str(out_dir))
+
+@nox.session
+def docs_linkcheck(session: Session) -> None:
+	out_dir = (BUILD_DIR / 'docs-linkcheck')
+	shutil.rmtree(out_dir, ignore_errors = True)
+	session.install('-r', str(DOCS_DIR / 'requirements.txt'))
+	session.install('.')
+	session.run('sphinx-build', '-b', 'linkcheck', str(DOCS_DIR), str(out_dir))
 
 @nox.session
 def typecheck(session: Session) -> None:
