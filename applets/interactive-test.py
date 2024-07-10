@@ -6,9 +6,9 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-from apollo_fpga.support.selftest  import ApolloSelfTestCase, named_test
+from luminary_fpga.support.selftest    import ApolloSelfTestCase, named_test
 
-from torii                         import (
+from torii                             import (
 	Cat, ClockSignal, Elaboratable, Module, ResetSignal, Signal
 )
 

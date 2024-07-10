@@ -68,11 +68,11 @@ def get_appropriate_platform() -> ECP5Platform:
 	if os.getenv('LUNA_PLATFORM'):
 		return _get_platform_from_string(os.getenv('LUNA_PLATFORM'))
 
-	import apollo_fpga
+	from luminary_fpga import ApolloDebugger, DebuggerNotFound
 
 	try:
 		# Figure out what hardware revision we're going to connect to...
-		debugger = apollo_fpga.ApolloDebugger()
+		debugger = ApolloDebugger()
 		version = debugger.detect_connected_version()
 
 		# ... and look up the relevant platform accordingly.
@@ -92,7 +92,7 @@ def get_appropriate_platform() -> ECP5Platform:
 
 
 	# If we don't have a connected platform, fall back to the latest platform.
-	except apollo_fpga.DebuggerNotFound:
+	except DebuggerNotFound:
 		platform = LATEST_PLATFORM()
 
 		log.warning(f'Couldn\'t auto-detect connected platform. Assuming {platform.name}.')

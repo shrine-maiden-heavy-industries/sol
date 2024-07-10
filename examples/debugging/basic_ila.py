@@ -6,9 +6,9 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-from apollo_fpga            import create_ila_frontend
+from luminary_fpga              import create_ila_frontend
 
-from torii                  import *
+from torii                      import *
 
 from sol_usb.cli                import cli
 from sol_usb.gateware.debug.ila import SyncSerialILA

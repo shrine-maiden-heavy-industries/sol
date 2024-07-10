@@ -85,5 +85,5 @@ program: $(TARGET).bin $(SOC)
 
 # Loads our "Hello world" program onto the FPGA.
 run: $(TARGET).bit
-	apollo configure $(TARGET).bit
+	luminary configure $(TARGET).bit
 	pyserial-miniterm $(PORT) 115200

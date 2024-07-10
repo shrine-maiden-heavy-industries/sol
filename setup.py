@@ -55,7 +55,7 @@ setup(
 	long_description = README_FILE.read_text(),
 	long_description_content_type = 'text/markdown',
 
-	setup_requires   = [
+	setup_requires = [
 		'wheel',
 		'setuptools',
 		'setuptools_scm',
@@ -77,13 +77,14 @@ setup(
 		'platform': [
 			'pyusb~=1.2.0',
 			'libusb1~=1.9.2',
+			'luminary-fpga~=0.0.5',
 			'prompt-toolkit~=3.0.16',
 			'ziglang~=0.8.0',
 		]
 	},
 
-	packages         = find_packages(
-		where   = '.',
+	packages = find_packages(
+		where = '.',
 		exclude = (
 			'tests',
 			'tests.*',
@@ -94,12 +95,12 @@ setup(
 			'applets.*',
 		)
 	),
-	package_data      = {
+	package_data = {
 		'sol_usb': [
 			'py.typed'
 		],
 	},
-	classifiers       = [
+	classifiers = [
 		'Development Status :: 4 - Beta',
 
 		'Intended Audience :: Developers',
@@ -126,7 +127,7 @@ setup(
 		'Typing :: Typed',
 	],
 
-	project_urls     = {
+	project_urls = {
 		'Documentation': 'https://sol.shmdn.link/',
 		'Source Code'  : 'https://github.com/shrine-maiden-heavy-industries/sol',
 		'Bug Tracker'  : 'https://github.com/shrine-maiden-heavy-industries/sol/issues',

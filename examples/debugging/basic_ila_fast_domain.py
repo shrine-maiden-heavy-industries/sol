@@ -6,9 +6,9 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-from apollo_fpga                   import create_ila_frontend
+from luminary_fpga                     import create_ila_frontend
 
-from torii                         import Cat, Elaboratable, Module, Signal
+from torii                             import Cat, Elaboratable, Module, Signal
 
 from sol_usb.cli                       import cli
 from sol_usb.gateware.architecture.car import SolECP5DomainGenerator

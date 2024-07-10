@@ -119,19 +119,19 @@ of flash. Note that currently, the bootloader lock feature of *Black
 Magic Probe* devices always locks ``8KiB`` of flash; and thus cannot be
 used for LUNA.
 
-Build/upload Apollo
+Build/upload Luminary
 -------------------
 
-The next bringup step is to upload the *Apollo* Debug Controller
+The next bringup step is to upload the *Luminary* Debug Controller
 firmware, which will provide an easy way to interface with the board's
-FPGA and any gateware running on it. The Apollo source is located
-[in its own repository](https://github.com/greatscottgadgets/apollo).
+FPGA and any gateware running on it. The Luminary source is located
+[in its own repository](https://github.com/shrine-maiden-heavy-industries/luminary).
 
 You can clone the bootloader using `git`:
 
 .. code:: sh
 
-   $ git clone https://github.com/greatscottgadgets/apollo
+   $ git clone https://github.com/shrine-maiden-heavy-industries/luminary
 
 
 
@@ -153,7 +153,7 @@ An example invocation for a ``r0.2`` board might be:
    $ make BOARD_REVISION_MAJOR=0 BOARD_REVISION_MINOR=2 dfu
 
 Once programming is complete, only LED ``E`` should be blinking;
-indicating that the Apollo firmware is idle.
+indicating that the Luminary firmware is idle.
 
 Running Self-Tests
 ------------------
@@ -167,12 +167,12 @@ development environment. See [[Setting up the development environment]]
 to get your environment set up.
 
 Next, we can check to make sure your LUNA board is recognized by the
-SOL toolchain. Running the ``apollo info`` command will list any
+SOL toolchain. Running the ``luminary info`` command will list any
 detected devices:
 
 .. code:: sh
 
-   $ apollo info
+   $ luminary info
    Detected a LUNA device!
        Hardware: LUNA r0.2
        Serial number: <snip>
@@ -197,7 +197,7 @@ submodules. You can pull down the relevant submodules using ``git``:
 
    $ git submodule update --init --recursive
 
-**Issue: the ``apollo info`` command doesn't see a connected board.**
+**Issue: the ``luminary info`` command doesn't see a connected board.**
 
 On Linux, this can be caused by a permissions issue. Check first for the
 presence of your device using ``lsusb``; if you see a device with the

@@ -7,7 +7,7 @@
 
 import logging                     as log
 
-from apollo_fpga                   import ApolloDebugger
+from luminary_fpga                 import ApolloDebugger
 
 from prompt_toolkit                import HTML
 from prompt_toolkit                import print_formatted_text as pprint

@@ -100,8 +100,8 @@ class LUNAApolloPlatform(SOLPlatform):
 	def toolchain_program(self, products, name, **kwargs):
 		''' Programs the relevant LUNA board via its sideband connection. '''
 
-		from apollo_fpga import ApolloDebugger
-		from apollo_fpga.ecp5 import ECP5_JTAGProgrammer
+		from luminary_fpga import ApolloDebugger
+		from luminary_fpga.ecp5 import ECP5_JTAGProgrammer
 
 		# Create our connection to the debug module.
 		debugger = ApolloDebugger()
@@ -116,7 +116,7 @@ class LUNAApolloPlatform(SOLPlatform):
 	def _ensure_unconfigured(self, debugger):
 		''' Ensures a given FPGA is unconfigured and thus ready for e.g. SPI flashing. '''
 
-		from apollo_fpga.ecp5 import ECP5_JTAGProgrammer
+		from luminary_fpga.ecp5 import ECP5_JTAGProgrammer
 
 		with debugger.jtag as jtag:
 			programmer = ECP5_JTAGProgrammer(jtag)
@@ -126,8 +126,8 @@ class LUNAApolloPlatform(SOLPlatform):
 	def toolchain_flash(self, products, name = 'top'):
 		''' Programs the LUNA board's flash via its sideband connection. '''
 
-		from apollo_fpga import ApolloDebugger
-		from apollo_fpga.ecp5 import ECP5_JTAGProgrammer
+		from luminary_fpga import ApolloDebugger
+		from luminary_fpga.ecp5 import ECP5_JTAGProgrammer
 
 		# Create our connection to the debug module.
 		debugger = ApolloDebugger()
@@ -145,8 +145,8 @@ class LUNAApolloPlatform(SOLPlatform):
 	def toolchain_erase(self):
 		''' Erases the LUNA board's flash. '''
 
-		from apollo_fpga import ApolloDebugger
-		from apollo_fpga.ecp5 import ECP5_JTAGProgrammer
+		from luminary_fpga import ApolloDebugger
+		from luminary_fpga.ecp5 import ECP5_JTAGProgrammer
 
 		# Create our connection to the debug module.
 		debugger = ApolloDebugger()

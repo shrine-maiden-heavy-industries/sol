@@ -9,9 +9,9 @@
 
 import time
 
-from apollo_fpga                   import ApolloDebugger
+from luminary_fpga                     import ApolloDebugger
 
-from torii                         import ClockSignal, Elaboratable, Module, Signal
+from torii                             import ClockSignal, Elaboratable, Module, Signal
 
 from sol_usb.cli                       import cli
 from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
