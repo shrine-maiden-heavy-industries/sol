@@ -19,6 +19,50 @@ Unreleased template stuff
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+
+## [0.4.0]
+
+### Added
+
+  - Added test USB data from a real capture to fully test analyzer buffering.
+  - Added fast USB traffic test.
+  - Added type annotations for `SetupPacket`
+  - Added test for emptying the packet buffer once every `SOF` (Start Of Frame) in tandem with the data input simulation.
+  - Added missing dependency `luminary-fpga` for platform functionality.
+
+### Changed
+
+ - Finished extracting tests into their own tree out of the implementation files.
+ - Updated minimum python version to match with Torii, it is now 3.10.
+ - Improved analyzer applet overrun handling on the secondary packet buffer side.
+
+### Fixed
+
+ - Fixed warnings coming from the CDC tests.
+ - Fixed missing type annotations from the UTMI interface types.
+ - Fixed missing type annotations from the stream interface type.
+ - Fixed missing type annotations for the FIFOs and UTMI interfaces in the analyzer.
+ - Fixed an exception getting thrown in the analyzer when the platform doesn't support the `power_a_port` and `pass_through_vbus` signals.
+ - Fixed missing type annotations for the DUT and UTMI interfaces in the analyzer tests.
+ - Fixed missing type annotations in the test utilities and cleaned up the implementation of `SolGatewareTestCase.wait()`
+ - Fixed USB analyzer polling interval requested by the exfiltration endpoint.
+ - Fixed missing type annotations on the UTMI translator type in the ULPI interface.
+ - Fixed missing type annotations on the ULPI interface type.
+ - Fixed missing type annotations for `USBAnalyzerStackTest`.
+ - Fixed the check to see if the bus translator was in use or not.
+ - Fixed improper use of empty Torii `Case()` elements as stricter enforcement of using `Default()` has been implemented.
+ - Fixed UDEV rules.
+
 ## [0.3.0]
 
 ### Added
@@ -90,7 +134,8 @@ Unreleased template stuff
 
 No changelog is provided for this version as it is a hold-over / demarcation of the divergence from [LUNA](https://github.com/greatscottgadgets/luna/).
 
-[Unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.3.0...main
+[Unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.0...main
+[0.4.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/hw-r0.4...v0.1.0
