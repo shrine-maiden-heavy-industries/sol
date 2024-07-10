@@ -103,9 +103,11 @@ class USBAnalyzer(Elaboratable):
 
 		# State tracking for when to do discard.
 		awaiting_start = Signal()
+		data_buffer_usage = Signal(range(self.mem_size + USBAnalyzer.MAX_PACKET_SIZE_BYTES + 2))
+		packet_too_big = Signal()
 
 		# Internal storage
-		m.submodules.ringbuffer = data_buffer = DomainRenamer('usb')(
+		m.submodules.data_buffer = data_buffer = DomainRenamer('usb')(
 			SyncFIFOBuffered(width = 8, depth = self.mem_size)
 		)
 		m.submodules.packet_buffer = packet_buffer = DomainRenamer('usb')(
@@ -134,6 +136,8 @@ class USBAnalyzer(Elaboratable):
 			self.discarding.eq(self.stopped & self.capture_enable),
 
 			length_buffer.w_en.eq(0),
+			data_buffer_usage.eq(data_buffer.w_level + packet_length + 2),
+			packet_too_big.eq(data_buffer_usage > self.mem_size),
 		]
 
 		# Core analysis FSM.
@@ -213,7 +217,7 @@ class USBAnalyzer(Elaboratable):
 			# INSPECT_PACKET: Check that the new packet wouldn't overflow the available output FIFO space
 			with m.State('INSPECT_PACKET'):
 				m.d.usb += packet_transferred.eq(0)
-				with m.If((data_buffer.w_level + packet_length + 2 > self.mem_size) | primary_overrun):
+				with m.If(packet_too_big | primary_overrun):
 					m.next = 'OVERRUN'
 				with m.Else():
 					m.next = 'TRANSFER_PACKET'
