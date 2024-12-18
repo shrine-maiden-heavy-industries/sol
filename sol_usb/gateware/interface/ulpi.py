@@ -17,7 +17,7 @@ from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
 from .utmi         import UTMIInterface
 
-class UPLIDataRecord(Record):
+class ULPIDataRecord(Record):
 	i: Signal
 	o: Signal
 	oe: Signal
@@ -29,7 +29,7 @@ class UPLIDataRecord(Record):
 			('oe', 8, DIR_FANOUT),
 		])
 
-class UPLIDirRecord(Record):
+class ULPIDirRecord(Record):
 	i: Signal
 
 	def __init__(self):
@@ -50,10 +50,10 @@ class ULPIInterface(Record):
 	]
 
 	clk: Signal
-	data: UPLIDataRecord
+	data: ULPIDataRecord
 	nxt: Signal
 	stp: Signal
-	dir: UPLIDirRecord
+	dir: ULPIDirRecord
 	rst: Signal
 
 	def __init__(self):
