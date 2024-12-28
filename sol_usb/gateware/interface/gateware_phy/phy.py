@@ -219,8 +219,8 @@ class GatewarePHY(Elaboratable):
 
 			# We'll listen for packets on D+ and D- _whenever we're not transmitting._.
 			# (If we listen while we're transmitting, we'll hear our own packets.)
-			receiver.i_usbp.eq(self._io.d_p & ~transmitter.o_oe),
-			receiver.i_usbn.eq(self._io.d_n & ~transmitter.o_oe),
+			receiver.i_usbp.eq(self._io.d_p.i & ~transmitter.o_oe),
+			receiver.i_usbn.eq(self._io.d_n.i & ~transmitter.o_oe),
 
 			self.rx_data.eq(receiver.o_data_payload),
 			self.rx_valid.eq(receiver.o_data_strobe & receiver.o_pkt_in_progress),
