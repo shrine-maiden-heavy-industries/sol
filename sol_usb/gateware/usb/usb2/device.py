@@ -360,7 +360,7 @@ class USBDevice(Elaboratable):
 			self.utmi.dp_pulldown.eq(0),
 
 			# Let our reset sequencer set our USB mode and speed.
-			reset_sequencer.low_speed_only.eq(self.low_speed_only & ~self.always_fs),
+			reset_sequencer.low_speed_only.eq(self.low_speed_only & (not self.always_fs)),
 			reset_sequencer.full_speed_only.eq(self.full_speed_only | self.always_fs),
 			self.utmi.op_mode.eq(reset_sequencer.operating_mode),
 			self.utmi.xcvr_select.eq(reset_sequencer.current_speed),
