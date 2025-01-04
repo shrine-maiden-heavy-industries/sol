@@ -8,7 +8,7 @@
 
 
 from torii         import *
-from torii.hdl.rec import DIR_FANOUT
+from torii.hdl.rec import Direction
 
 
 class SetupPacket(Record):
@@ -28,39 +28,22 @@ class SetupPacket(Record):
 		O: length[16]    -- Length of the relevant setup request.
 	'''
 
-	recipient: Signal
-	type: Signal
-	is_in_request: Signal
+	# Byte 1
+	recipient: Signal[5, Direction.FANOUT]
+	type: Signal[2, Direction.FANOUT]
+	is_in_request: Signal[1, Direction.FANOUT]
 
-	request: Signal
+	# Byte 2
+	request: Signal[8, Direction.FANOUT]
 
-	value: Signal
+	# Byte 3/4
+	value: Signal[16, Direction.FANOUT]
 
-	index: Signal
+	# Byte 5/6
+	index: Signal[16, Direction.FANOUT]
 
-	length: Signal
+	# Byte 7/8
+	length: Signal[16, Direction.FANOUT]
 
-	received: Signal
-
-	def __init__(self):
-		super().__init__([
-			# Byte 1
-			('recipient',      5, DIR_FANOUT),
-			('type',           2, DIR_FANOUT),
-			('is_in_request',  1, DIR_FANOUT),
-
-			# Byte 2
-			('request',        8, DIR_FANOUT),
-
-			# Byte 3/4
-			('value',         16, DIR_FANOUT),
-
-			# Byte 5/6
-			('index',         16, DIR_FANOUT),
-
-			# Byte 7/8
-			('length',        16, DIR_FANOUT),
-
-			# Control signaling.
-			('received',       1, DIR_FANOUT),
-		])
+	# Control signaling.
+	received: Signal[1, Direction.FANOUT]
