@@ -43,6 +43,11 @@ class HandshakeExchangeInterface(Record):
 		Otherwise, this will be considered an interface to a generator that accepts handshake requests.
 	'''
 
+	ack: Signal
+	nak: Signal
+	stall: Signal
+	nyet: Signal
+
 	def __init__(self, *, is_detector):
 		direction = DIR_FANOUT if is_detector else DIR_FANOUT
 
@@ -65,12 +70,8 @@ class DataCRCInterface(Record):
 	crc: Signal(), output from CRC generator
 		The current CRC-16 value; updated with each sent or received byte.
 	'''
-
-	def __init__(self):
-		super().__init__([
-			('start', 1,  DIR_FANIN),
-			('crc',   16, DIR_FANOUT)
-		])
+	start: Signal[1, DIR_FANIN]
+	crc: Signal[16, DIR_FANOUT]
 
 
 class TokenDetectorInterface(Record):
@@ -106,22 +107,19 @@ class TokenDetectorInterface(Record):
 		High iff the current token is a PING.
 	'''
 
-	def __init__(self):
-		super().__init__([
-			('pid',                4, DIR_FANOUT),
-			('address',            7, DIR_FANOUT),
-			('endpoint',           4, DIR_FANOUT),
-			('new_token',          1, DIR_FANOUT),
-			('ready_for_response', 1, DIR_FANOUT),
+	pid: Signal[4, DIR_FANOUT]
+	address: Signal[7, DIR_FANOUT]
+	endpoint: Signal[4, DIR_FANOUT]
+	new_token: Signal[1, DIR_FANOUT]
+	ready_for_response: Signal[1, DIR_FANOUT]
 
-			('frame',             11, DIR_FANOUT),
-			('new_frame',          1, DIR_FANOUT),
+	frame: Signal[11, DIR_FANOUT]
+	new_frame: Signal[1, DIR_FANOUT]
 
-			('is_in',              1, DIR_FANOUT),
-			('is_out',             1, DIR_FANOUT),
-			('is_setup',           1, DIR_FANOUT),
-			('is_ping',            1, DIR_FANOUT),
-		])
+	is_in: Signal[1, DIR_FANOUT]
+	is_out: Signal[1, DIR_FANOUT]
+	is_setup: Signal[1, DIR_FANOUT]
+	is_ping: Signal[1, DIR_FANOUT]
 
 
 class InterpacketTimerInterface(Record):
@@ -142,14 +140,11 @@ class InterpacketTimerInterface(Record):
 		Strobe that goes high when the receive-after-transmit window has passed.
 	'''
 
-	def __init__(self):
-		super().__init__([
-			('start',      1, DIR_FANIN),
+	start: Signal[1, DIR_FANIN]
 
-			('tx_allowed', 1, DIR_FANOUT),
-			('tx_timeout', 1, DIR_FANOUT),
-			('rx_timeout', 1, DIR_FANOUT),
-		])
+	tx_allowed: Signal[1, DIR_FANOUT]
+	tx_timeout: Signal[1, DIR_FANOUT]
+	rx_timeout: Signal[1, DIR_FANOUT]
 
 
 	def attach(self, *subordinates):
