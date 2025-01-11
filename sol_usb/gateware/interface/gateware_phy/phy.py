@@ -134,8 +134,8 @@ class GatewarePHY(Elaboratable):
 		# signal. Otherwise, we'll pretend ``vbus_valid`` is always true, for compatibility.
 		if hasattr(self._io, 'vbus_valid'):
 			m.d.comb += [
-				self.vbus_valid.eq(self._io.vbus_valid),
-				self.session_end.eq(~self._io.vbus_valid)
+				self.vbus_valid.eq(self._io.vbus_valid.i),
+				self.session_end.eq(~self._io.vbus_valid.i)
 			]
 		else:
 			m.d.comb += [
@@ -150,11 +150,11 @@ class GatewarePHY(Elaboratable):
 
 		# If we have a pullup signal, drive it based on ``term_select``.
 		if hasattr(self._io, 'pullup'):
-			m.d.comb += self._io.pullup.eq(self.term_select)
+			m.d.comb += self._io.pullup.o.eq(self.term_select)
 
 		# If we have a pulldown signal, drive it based on our pulldown controls.
 		if hasattr(self._io, 'pulldown'):
-			m.d.comb += self._io.pullup.eq(self.dm_pulldown | self.dp_pulldown)
+			m.d.comb += self._io.pullup.o.eq(self.dm_pulldown | self.dp_pulldown)
 
 
 		#
