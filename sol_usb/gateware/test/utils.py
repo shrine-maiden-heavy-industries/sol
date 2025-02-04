@@ -76,11 +76,10 @@ class SolGatewareTestCase(unittest.TestCase):
 
 	# Convenience properties: if not None, a clock with the relevant frequency
 	# will automatically be added.
-	FAST_CLOCK_FREQUENCY = None
-	SYNC_CLOCK_FREQUENCY = 120e6
-	USB_CLOCK_FREQUENCY  = None
-	SS_CLOCK_FREQUENCY   = None
-
+	FAST_CLOCK_FREQUENCY: float | None = None
+	SYNC_CLOCK_FREQUENCY: float | None = 120e6
+	USB_CLOCK_FREQUENCY: float | None  = None
+	SS_CLOCK_FREQUENCY: float | None   = None
 
 	def instantiate_dut(self):
 		''' Basic-most function to instantiate a device-under-test.
