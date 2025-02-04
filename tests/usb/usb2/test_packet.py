@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                        import Record
-from torii.sim import Settle
+from torii                            import Record, Signal
+from torii.sim                        import Settle
 
 from sol_usb.gateware.usb.usb2.packet import (
 	USBTokenDetector, USBHandshakeDetector, USBDataPacketReceiver, USBDataPacketDeserializer,
@@ -11,28 +11,29 @@ from sol_usb.gateware.usb.usb2.packet import (
 from sol_usb.gateware.usb.usb2        import USBSpeed
 from sol_usb.gateware.test            import SolGatewareTestCase, usb_domain_test_case
 
+class UTMIBus(Record):
+	rx_data: Signal[8]
+	rx_active: Signal[1]
+	rx_valid: Signal[1]
+
 class USBPacketizerTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY  = 60e6
 
 	def instantiate_dut(self, extra_arguments = None):
-		self.utmi = Record([
-			('rx_data',   8),
-			('rx_active', 1),
-			('rx_valid',  1)
-		])
+		self.utmi = UTMIBus()
 
 		# If we don't have explicit extra arguments, use the base class's.
 		if extra_arguments is None:
 			extra_arguments = self.FRAGMENT_ARGUMENTS
 
+		assert self.FRAGMENT_UNDER_TEST is not None
 		return self.FRAGMENT_UNDER_TEST(utmi = self.utmi, **extra_arguments)
 
 	def provide_byte(self, byte):
 		''' Provides a given byte on the UTMI receive data for one cycle. '''
 		yield self.utmi.rx_data.eq(byte)
 		yield
-
 
 	def start_packet(self, *, set_rx_valid = True):
 		''' Starts a UTMI packet receive. '''
@@ -43,13 +44,11 @@ class USBPacketizerTest(SolGatewareTestCase):
 
 		yield
 
-
 	def end_packet(self):
 		''' Starts a UTMI packet receive. '''
 		yield self.utmi.rx_active.eq(0)
 		yield self.utmi.rx_valid.eq(0)
 		yield
-
 
 	def provide_packet(self, *octets, cycle_after = True):
 		''' Provides an entire packet transaction at once; for convenience. '''
@@ -64,6 +63,7 @@ class USBPacketizerTest(SolGatewareTestCase):
 
 class USBTokenDetectorTest(USBPacketizerTest):
 	FRAGMENT_UNDER_TEST = USBTokenDetector
+	dut: USBTokenDetector
 
 	@usb_domain_test_case
 	def test_valid_token(self):
