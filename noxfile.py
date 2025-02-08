@@ -1,10 +1,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
 import shutil
+from os             import getenv
 from pathlib        import Path
-from setuptools_scm import (
-	get_version, ScmVersion
-)
+from setuptools_scm import get_version, ScmVersion
 
 import nox
 from nox.sessions   import Session
@@ -16,6 +15,8 @@ CNTRB_DIR = (ROOT_DIR  / 'contrib')
 DOCS_DIR  = (ROOT_DIR  / 'docs')
 DIST_DIR  = (BUILD_DIR / 'dist')
 
+IN_CI           = getenv('GITHUB_WORKSPACE') is not None
+ENABLE_COVERAGE = IN_CI or getenv('SOL_TEST_COVERAGE') is not None
 
 # Default sessions to run
 nox.options.sessions = (
@@ -42,12 +43,11 @@ def sol_version() -> str:
 def test(session: Session) -> None:
 	out_dir = (BUILD_DIR / 'tests')
 	out_dir.mkdir(parents = True, exist_ok = True)
-	coverage = '--coverage' in session.posargs
 
 	unitest_args = ('-m', 'unittest', 'discover', '-v', '-s', str(ROOT_DIR))
 
 	session.install('.')
-	if coverage:
+	if ENABLE_COVERAGE:
 		session.log('Coverage support enabled')
 		session.install('coverage')
 		coverage_args = (
@@ -59,10 +59,10 @@ def test(session: Session) -> None:
 
 	session.chdir(str(out_dir))
 	session.run(
-		'python', *coverage_args, *unitest_args
+		'python', *coverage_args, *unitest_args, *session.posargs
 	)
 
-	if coverage:
+	if ENABLE_COVERAGE:
 		session.run(
 			'python', '-m', 'coverage', 'xml',
 			f'--rcfile={CNTRB_DIR / "coveragerc"}'
