@@ -9,7 +9,7 @@ exclude =
 	deps
 
 max-line-length = 120
-indent-size = 4
+indent-size = 1
 statistics = True
 ignore =
 	E124,
@@ -27,11 +27,9 @@ ignore =
 	E262,
 	E272,
 	E302,
-	E303,
 	E305,
 	E401,
 	E402,
-	F403,
 	F405,
 	W191,
 	W504
