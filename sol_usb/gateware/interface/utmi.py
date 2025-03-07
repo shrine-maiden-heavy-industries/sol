@@ -7,7 +7,7 @@
 ''' UTMI interfacing. '''
 
 from torii.hdl     import Signal
-from torii.hdl.rec import DIR_FANIN, DIR_FANOUT, Record
+from torii.hdl.rec import Direction, Record
 
 from ..utils.bus   import OneHotMultiplexer
 
@@ -38,14 +38,14 @@ class UTMITransmitInterface(Record):
 	LAYOUT = [
 
 		# Indicates when the data on tx_data is valid.
-		('valid', 1, DIR_FANOUT),
+		('valid', 1, Direction.FANOUT),
 
 		# The data to be transmitted.
-		('data',  8, DIR_FANOUT),
+		('data',  8, Direction.FANOUT),
 
 		# Pulsed by the UTMI bus when the given data byte will be accepted
 		# at the next clock edge.
-		('ready', 1, DIR_FANIN),
+		('ready', 1, Direction.FANIN),
 	]
 
 	def __init__(self):

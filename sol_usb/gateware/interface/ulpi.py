@@ -13,7 +13,7 @@ from torii.hdl     import (
 	Cat, ClockSignal, Const, Elaboratable, Module, Record, ResetSignal, Signal
 )
 from torii.hdl.ast import Rose
-from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii.hdl.rec import Direction
 
 from .utmi         import UTMIInterface
 
@@ -24,9 +24,9 @@ class ULPIDataRecord(Record):
 
 	def __init__(self):
 		super().__init__([
-			('i', 8, DIR_FANIN),
-			('o', 8, DIR_FANOUT),
-			('oe', 8, DIR_FANOUT),
+			('i', 8, Direction.FANIN),
+			('o', 8, Direction.FANOUT),
+			('oe', 8, Direction.FANOUT),
 		])
 
 class ULPIDirRecord(Record):
@@ -34,19 +34,19 @@ class ULPIDirRecord(Record):
 
 	def __init__(self):
 		super().__init__([
-			('i', 1, DIR_FANIN),
+			('i', 1, Direction.FANIN),
 		])
 
 class ULPIInterface(Record):
 	''' Record that represents a standard ULPI interface. '''
 
 	LAYOUT = [
-		('data', [('i', 8, DIR_FANIN), ('o', 8, DIR_FANOUT), ('oe', 1, DIR_FANOUT)]),
-		('clk', 1, DIR_FANOUT),
-		('nxt', 1, DIR_FANIN),
-		('stp', 1, DIR_FANOUT),
-		('dir', [('i', 1, DIR_FANIN)]),
-		('rst', 1, DIR_FANOUT)
+		('data', [('i', 8, Direction.FANIN), ('o', 8, Direction.FANOUT), ('oe', 1, Direction.FANOUT)]),
+		('clk', 1, Direction.FANOUT),
+		('nxt', 1, Direction.FANIN),
+		('stp', 1, Direction.FANOUT),
+		('dir', [('i', 1, Direction.FANIN)]),
+		('rst', 1, Direction.FANOUT)
 	]
 
 	clk: Signal

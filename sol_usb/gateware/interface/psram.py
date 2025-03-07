@@ -8,7 +8,7 @@
 
 
 from torii.hdl     import Cat, Elaboratable, Module, Record, Signal
-from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii.hdl.rec import Direction
 
 from ..utils.io    import delay
 
@@ -18,19 +18,19 @@ class HyperBus(Record):
 
 	def __init__(self):
 		super().__init__([
-			('clk', 1, DIR_FANOUT),
+			('clk', 1, Direction.FANOUT),
 			('dq',
-				('i', 8, DIR_FANIN),
-				('o', 8, DIR_FANOUT),
-				('e', 1, DIR_FANOUT),
+				('i', 8, Direction.FANIN),
+				('o', 8, Direction.FANOUT),
+				('e', 1, Direction.FANOUT),
 			),
 			('rwds',
-				('i', 1, DIR_FANIN),
-				('o', 1, DIR_FANOUT),
-				('e', 1, DIR_FANOUT),
+				('i', 1, Direction.FANIN),
+				('o', 1, Direction.FANOUT),
+				('e', 1, Direction.FANOUT),
 			),
-			('cs',     1, DIR_FANOUT),
-			('reset',  1, DIR_FANOUT)
+			('cs',     1, Direction.FANOUT),
+			('reset',  1, Direction.FANOUT)
 		])
 
 

@@ -7,7 +7,7 @@
 ''' Contains the gatware module necessary to interpret and generate low-level USB packets. '''
 
 from torii.hdl         import Array, Cat, Const, Elaboratable, Module, Signal
-from torii.hdl.rec     import DIR_FANIN, DIR_FANOUT, Record
+from torii.hdl.rec     import Direction, Record
 
 from ...interface.utmi import UTMITransmitInterface
 from ..stream          import USBInStreamInterface, USBOutStreamInterface
@@ -49,7 +49,7 @@ class HandshakeExchangeInterface(Record):
 	nyet: Signal
 
 	def __init__(self, *, is_detector):
-		direction = DIR_FANOUT if is_detector else DIR_FANOUT
+		direction = Direction.FANOUT if is_detector else Direction.FANOUT
 
 		super().__init__([
 			('ack',   1, direction),
@@ -70,8 +70,8 @@ class DataCRCInterface(Record):
 	crc: Signal(), output from CRC generator
 		The current CRC-16 value; updated with each sent or received byte.
 	'''
-	start: Signal[1, DIR_FANIN]
-	crc: Signal[16, DIR_FANOUT]
+	start: Signal[1, Direction.FANIN]
+	crc: Signal[16, Direction.FANOUT]
 
 
 class TokenDetectorInterface(Record):
@@ -107,19 +107,19 @@ class TokenDetectorInterface(Record):
 		High iff the current token is a PING.
 	'''
 
-	pid: Signal[4, DIR_FANOUT]
-	address: Signal[7, DIR_FANOUT]
-	endpoint: Signal[4, DIR_FANOUT]
-	new_token: Signal[1, DIR_FANOUT]
-	ready_for_response: Signal[1, DIR_FANOUT]
+	pid: Signal[4, Direction.FANOUT]
+	address: Signal[7, Direction.FANOUT]
+	endpoint: Signal[4, Direction.FANOUT]
+	new_token: Signal[1, Direction.FANOUT]
+	ready_for_response: Signal[1, Direction.FANOUT]
 
-	frame: Signal[11, DIR_FANOUT]
-	new_frame: Signal[1, DIR_FANOUT]
+	frame: Signal[11, Direction.FANOUT]
+	new_frame: Signal[1, Direction.FANOUT]
 
-	is_in: Signal[1, DIR_FANOUT]
-	is_out: Signal[1, DIR_FANOUT]
-	is_setup: Signal[1, DIR_FANOUT]
-	is_ping: Signal[1, DIR_FANOUT]
+	is_in: Signal[1, Direction.FANOUT]
+	is_out: Signal[1, Direction.FANOUT]
+	is_setup: Signal[1, Direction.FANOUT]
+	is_ping: Signal[1, Direction.FANOUT]
 
 
 class InterpacketTimerInterface(Record):
@@ -140,11 +140,11 @@ class InterpacketTimerInterface(Record):
 		Strobe that goes high when the receive-after-transmit window has passed.
 	'''
 
-	start: Signal[1, DIR_FANIN]
+	start: Signal[1, Direction.FANIN]
 
-	tx_allowed: Signal[1, DIR_FANOUT]
-	tx_timeout: Signal[1, DIR_FANOUT]
-	rx_timeout: Signal[1, DIR_FANOUT]
+	tx_allowed: Signal[1, Direction.FANOUT]
+	tx_timeout: Signal[1, Direction.FANOUT]
+	rx_timeout: Signal[1, Direction.FANOUT]
 
 
 	def attach(self, *subordinates):

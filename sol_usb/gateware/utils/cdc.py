@@ -10,7 +10,7 @@
 
 
 from torii.hdl     import Module, Record, Signal
-from torii.hdl.rec import DIR_FANOUT
+from torii.hdl.rec import Direction
 from torii.lib.cdc import FFSynchronizer
 from torii.lib.io  import Pin
 
@@ -76,7 +76,7 @@ def synchronize(m, signal, *, output = None, o_domain = 'sync', stages = 2):
 
 		# Skip any output elements, as they're already
 		# in our clock domain, and we don't want to drive them.
-		if (direction == DIR_FANOUT) or (hasattr(signal[name], 'o') and ~hasattr(signal[name], 'i')):
+		if (direction == Direction.FANOUT) or (hasattr(signal[name], 'o') and ~hasattr(signal[name], 'i')):
 			m.d.comb += signal[name].eq(output[name])
 			continue
 

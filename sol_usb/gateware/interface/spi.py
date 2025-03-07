@@ -9,7 +9,7 @@
 
 from torii.hdl      import Cat, Elaboratable, Module, Record, Signal
 from torii.hdl.ast import Fell, Rose
-from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii.hdl.rec import Direction
 
 
 class SPIBus(Record):
@@ -17,10 +17,10 @@ class SPIBus(Record):
 
 	def __init__(self):
 		super().__init__([
-			('sck', 1, DIR_FANIN),
-			('sdi', 1, DIR_FANIN),
-			('sdo', 1, DIR_FANOUT),
-			('cs',  1, DIR_FANIN)
+			('sck', 1, Direction.FANIN),
+			('sdi', 1, Direction.FANIN),
+			('sdo', 1, Direction.FANOUT),
+			('cs',  1, Direction.FANIN)
 		])
 
 

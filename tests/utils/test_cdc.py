@@ -3,7 +3,7 @@
 from unittest      import TestCase
 
 from torii.hdl     import Module, Record, Signal
-from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii.hdl.rec import Direction
 
 from sol_usb.gateware.test      import SolGatewareTestCase, sync_test_case
 from sol_usb.gateware.utils.cdc import stretch_strobe_signal, synchronize
@@ -66,8 +66,8 @@ class SynchronizedTest(TestCase):
 		m._MustUse__silence = True
 
 		record = Record([
-			('sig_in',  1, DIR_FANIN),
-			('sig_out', 1, DIR_FANOUT)
+			('sig_in',  1, Direction.FANIN),
+			('sig_out', 1, Direction.FANOUT)
 		])
 		synchronize(m, record)
 
@@ -76,11 +76,11 @@ class SynchronizedTest(TestCase):
 		m._MustUse__silence = True
 
 		record = Record([
-			('sig_in',  1, DIR_FANIN),
-			('sig_out', 1, DIR_FANOUT),
+			('sig_in',  1, Direction.FANIN),
+			('sig_out', 1, Direction.FANOUT),
 			('nested', [
-				('subsig_in',  1, DIR_FANIN),
-				('subsig_out', 1, DIR_FANOUT),
+				('subsig_in',  1, Direction.FANIN),
+				('subsig_out', 1, Direction.FANOUT),
 			])
 		])
 		synchronize(m, record)

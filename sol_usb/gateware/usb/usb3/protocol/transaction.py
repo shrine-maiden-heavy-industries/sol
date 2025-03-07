@@ -7,7 +7,7 @@
 ''' Protocol-level Transaction Packet (flow control header) generation. '''
 
 from torii.hdl                      import *
-from torii.hdl.rec                  import DIR_FANIN, DIR_FANOUT
+from torii.hdl.rec                  import Direction
 
 from usb_construct.types            import USBDirection
 from usb_construct.types.superspeed import HeaderPacketType, TransactionPacketSubtype
@@ -43,19 +43,19 @@ class HandshakeGeneratorInterface(Record):
 		super().__init__([
 
 			# Parameters.
-			('endpoint_number', 7, DIR_FANIN),
-			('retry_required',  1, DIR_FANIN),
-			('next_sequence',   5, DIR_FANIN),
+			('endpoint_number', 7, Direction.FANIN),
+			('retry_required',  1, Direction.FANIN),
+			('next_sequence',   5, Direction.FANIN),
 
 			# Commands.
-			('send_ack',        1, DIR_FANIN),
-			('send_stall',      1, DIR_FANIN),
-			('send_nrdy',       1, DIR_FANIN),
-			('send_erdy',       1, DIR_FANIN),
+			('send_ack',        1, Direction.FANIN),
+			('send_stall',      1, Direction.FANIN),
+			('send_nrdy',       1, Direction.FANIN),
+			('send_erdy',       1, Direction.FANIN),
 
 			# Status.
-			('ready',           1, DIR_FANOUT),
-			('done',            1, DIR_FANOUT),
+			('ready',           1, Direction.FANOUT),
+			('done',            1, Direction.FANOUT),
 
 		])
 
@@ -85,17 +85,17 @@ class HandshakeReceiverInterface(Record):
 		super().__init__([
 
 			# Parameters.
-			('endpoint_number',   7, DIR_FANOUT),
-			('retry_required',    1, DIR_FANOUT),
-			('next_sequence',     5, DIR_FANOUT),
-			('direction',         1, DIR_FANOUT),
-			('host_error',        1, DIR_FANOUT),
-			('packets_pending',   1, DIR_FANOUT),
-			('number_of_packets', 5, DIR_FANOUT),
+			('endpoint_number',   7, Direction.FANOUT),
+			('retry_required',    1, Direction.FANOUT),
+			('next_sequence',     5, Direction.FANOUT),
+			('direction',         1, Direction.FANOUT),
+			('host_error',        1, Direction.FANOUT),
+			('packets_pending',   1, Direction.FANOUT),
+			('number_of_packets', 5, Direction.FANOUT),
 
 			# Commands.
-			('status_received',   1, DIR_FANOUT),
-			('ack_received',      1, DIR_FANOUT),
+			('status_received',   1, Direction.FANOUT),
+			('ack_received',      1, Direction.FANOUT),
 		])
 
 

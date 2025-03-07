@@ -8,7 +8,7 @@
 
 
 from torii.hdl        import Elaboratable, Module, Signal
-from torii.hdl.rec    import DIR_FANOUT, Record
+from torii.hdl.rec    import Direction, Record
 from torii.hdl.xfrm   import DomainRenamer
 
 from ..stream         import StreamInterface
@@ -70,10 +70,10 @@ class USBOutStreamInterface(Record):
 
 		'''
 		super().__init__([
-			('valid',    1,             DIR_FANOUT),
-			('next',     1,             DIR_FANOUT),
+			('valid',    1,             Direction.FANOUT),
+			('next',     1,             Direction.FANOUT),
 
-			('payload',  payload_width, DIR_FANOUT),
+			('payload',  payload_width, Direction.FANOUT),
 		])
 
 

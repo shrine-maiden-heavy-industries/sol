@@ -8,7 +8,7 @@
 
 from torii.hdl     import *
 from torii.hdl.ast import ValueCastable
-from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
+from torii.hdl.rec import Direction
 from torii.lib.cdc import FFSynchronizer
 
 from ..utils       import falling_edge_detected, rising_edge_detected
@@ -41,10 +41,10 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 
 	fields = ['sck', 'sdi', 'sdo', 'cs']
 	layout = [
-		('sck', 1, DIR_FANIN),
-		('sdi', 1, DIR_FANIN),
-		('sdo', 1, DIR_FANOUT),
-		('cs',  1, DIR_FANIN),
+		('sck', 1, Direction.FANIN),
+		('sdi', 1, Direction.FANIN),
+		('sdo', 1, Direction.FANOUT),
+		('cs',  1, Direction.FANIN),
 	]
 
 	def __init__(self):
