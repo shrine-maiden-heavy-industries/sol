@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-from torii.hdl              import *
+from torii.hdl              import Elaboratable, Module, Signal
 
 from usb_construct.emitters import SuperSpeedDeviceDescriptorCollection
 

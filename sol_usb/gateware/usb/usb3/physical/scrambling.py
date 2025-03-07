@@ -9,10 +9,10 @@
 
 ''' Scrambling and descrambling for USB3. '''
 
-from torii.hdl  import *
+from torii.hdl import Cat, Elaboratable, Module, Signal
 
-from ...stream  import USBRawSuperSpeedStream
-from .coding    import COM, stream_word_matches_symbol
+from ...stream import USBRawSuperSpeedStream
+from .coding   import COM, stream_word_matches_symbol
 
 #
 # Scrambling modules.

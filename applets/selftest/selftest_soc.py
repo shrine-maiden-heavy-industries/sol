@@ -8,7 +8,7 @@
 from lambdasoc.periph                 import Peripheral
 from lambdasoc.periph.timer           import TimerPeripheral
 
-from torii.hdl                        import *
+from torii.hdl                        import Cat, ClockSignal, Elaboratable, Module, ResetSignal
 
 from sol_usb.cli                      import cli
 from sol_usb.gateware.interface.psram import HyperRAMInterface

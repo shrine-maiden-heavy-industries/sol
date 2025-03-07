@@ -6,7 +6,7 @@
 
 ''' Isochronous Timestamp Packet (ITP)-related gateware. '''
 
-from torii.hdl                      import *
+from torii.hdl                      import Elaboratable, Module, Signal
 
 from usb_construct.types.superspeed import HeaderPacketType
 

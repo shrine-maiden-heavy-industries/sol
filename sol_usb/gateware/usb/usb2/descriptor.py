@@ -9,7 +9,7 @@
 import functools
 import struct
 
-from torii.hdl                                import *
+from torii.hdl                                import DomainRenamer, Elaboratable, Memory, Module, Signal
 
 from usb_construct.emitters.descriptors       import DeviceDescriptorCollection
 from usb_construct.types.descriptors.standard import StandardDescriptorNumbers

@@ -6,7 +6,7 @@
 
 ''' Protocol-level Transaction Packet (flow control header) generation. '''
 
-from torii.hdl                      import *
+from torii.hdl                      import Elaboratable, Module, Record, Signal
 from torii.hdl.rec                  import Direction
 
 from usb_construct.types            import USBDirection

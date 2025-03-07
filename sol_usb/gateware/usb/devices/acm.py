@@ -15,7 +15,7 @@ from usb_construct.types                import USBRequestType
 from ...stream                          import StreamInterface
 from ..usb2.device                      import USBDevice
 from ..usb2.endpoints.stream            import USBStreamInEndpoint, USBStreamOutEndpoint
-from ..usb2.request import StallOnlyRequestHandler, USBRequestHandler
+from ..usb2.request                     import StallOnlyRequestHandler, USBRequestHandler
 
 class ACMRequestHandlers(USBRequestHandler):
 	''' Minimal set of request handlers to implement ACM functionality.

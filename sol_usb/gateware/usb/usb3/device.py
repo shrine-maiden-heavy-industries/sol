@@ -9,7 +9,7 @@ Contains the organizing hardware used to add USB3 Device functionality
 to your own designs; including the core :class:`USBSuperSpeedDevice` class.
 '''
 
-from torii.hdl              import *
+from torii.hdl              import Elaboratable, Module, Signal
 
 from usb_construct.emitters import DeviceDescriptorCollection
 

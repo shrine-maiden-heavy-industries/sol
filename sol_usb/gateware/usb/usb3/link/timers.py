@@ -6,7 +6,7 @@
 
 ''' U0 link-maintenance timers. '''
 
-from torii.hdl import *
+from torii.hdl import Elaboratable, Module, Signal
 
 class LinkMaintenanceTimers(Elaboratable):
 	''' Timers which ensure link integrity is maintained in U0.

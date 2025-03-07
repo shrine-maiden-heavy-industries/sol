@@ -6,7 +6,7 @@
 
 import os
 
-from torii.build                        import *
+from torii.build                        import Attrs, Clock, Connector, DiffPairs, Pins, PinsN, Resource, Subsignal
 from torii.platform.resources           import LEDResources, ULPIResource
 from torii.platform.vendor.lattice.ecp5 import ECP5Platform
 

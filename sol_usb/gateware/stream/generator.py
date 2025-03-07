@@ -6,7 +6,7 @@
 
 ''' Stream generators. '''
 
-from torii.hdl import *
+from torii.hdl import Array, Const, DomainRenamer, Elaboratable, Memory, Module, Signal
 
 from .         import StreamInterface
 

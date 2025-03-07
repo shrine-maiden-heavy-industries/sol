@@ -6,7 +6,7 @@
 
 ''' Stream deserializers. '''
 
-from torii.hdl import *
+from torii.hdl import Array, DomainRenamer, Elaboratable, Module, Signal
 
 from .request  import USBOutStreamInterface
 

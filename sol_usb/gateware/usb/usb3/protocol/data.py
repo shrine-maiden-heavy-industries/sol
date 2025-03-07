@@ -12,7 +12,7 @@ the link layer; and the generation of our packets is handled by our endpoint.
 
 '''
 
-from torii.hdl                      import *
+from torii.hdl                      import Elaboratable, Module
 
 from usb_construct.types.superspeed import HeaderPacketType
 

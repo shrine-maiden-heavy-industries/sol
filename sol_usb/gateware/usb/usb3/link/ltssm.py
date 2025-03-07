@@ -13,7 +13,7 @@
 
 import math
 
-from torii.hdl import *
+from torii.hdl import Elaboratable, Module, Signal
 
 class LTSSMController(Elaboratable):
 	'''

@@ -6,7 +6,7 @@
 
 ''' Request components shared between USB2 and USB3. '''
 
-from torii.hdl     import *
+from torii.hdl     import Record, Signal
 from torii.hdl.rec import Direction
 
 class SetupPacket(Record):

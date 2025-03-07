@@ -6,7 +6,7 @@
 
 ''' Control-request interfacing and gateware for USB3. '''
 
-from torii.hdl              import *
+from torii.hdl              import Elaboratable, Module, Signal
 
 from ....utils              import falling_edge_detected
 from ...request             import SetupPacket

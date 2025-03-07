@@ -7,7 +7,7 @@
 
 ''' USB3 PIPE interfacing gateware. '''
 
-from torii.hdl      import *
+from torii.hdl      import Array, Cat, ClockDomain, ClockSignal, Const, DomainRenamer, Elaboratable, Module, Signal
 from torii.lib.cdc  import FFSynchronizer, ResetSynchronizer
 from torii.lib.fifo import AsyncFIFOBuffered
 

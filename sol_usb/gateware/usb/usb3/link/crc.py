@@ -9,7 +9,7 @@
 
 ''' CRC computation gateware for USB3. '''
 
-from torii.hdl import *
+from torii.hdl import Cat, Elaboratable, Module, Signal
 
 def compute_usb_crc5(protected_bits):
 	''' Generates a 5-bit signal equivalent to the CRC5 check of a given 11-bits.

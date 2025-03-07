@@ -9,7 +9,7 @@
 
 ''' Link training support gateware. '''
 
-from torii.hdl         import *
+from torii.hdl         import Elaboratable, Module, Signal
 
 from ...stream         import USBRawSuperSpeedStream
 from ..physical.coding import D

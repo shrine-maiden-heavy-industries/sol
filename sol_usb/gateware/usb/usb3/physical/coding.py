@@ -9,7 +9,7 @@
 
 ''' Code for USB3 physical-layer encoding. '''
 
-from torii.hdl import *
+from torii.hdl import Cat, Const
 
 def K(x, y):
 	''' Converts K/control codes to bytes

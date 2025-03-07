@@ -6,7 +6,7 @@
 
 ''' Packet transmission handling gateware. '''
 
-from torii.hdl                      import *
+from torii.hdl                      import Array, Cat, Elaboratable, Module, Signal
 
 from usb_construct.types.superspeed import HeaderPacketType, LinkCommand
 

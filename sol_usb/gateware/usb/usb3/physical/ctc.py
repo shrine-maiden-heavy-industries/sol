@@ -19,7 +19,7 @@ compensate for clock differences.
 It's up to us to insert and remove additional ordered sets.
 '''
 
-from torii.hdl import *
+from torii.hdl import Cat, Elaboratable, Module, Signal
 
 from ...stream import USBRawSuperSpeedStream
 from .coding   import SKP, stream_word_matches_symbol

@@ -6,7 +6,7 @@
 
 ''' USB3 physical-layer abstraction.'''
 
-from torii.hdl     import *
+from torii.hdl     import Elaboratable, Module, Signal
 from torii.hdl.ast import Rose
 
 class PHYResetController(Elaboratable):

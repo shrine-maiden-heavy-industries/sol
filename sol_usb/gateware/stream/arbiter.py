@@ -6,7 +6,7 @@
 
 ''' Stream multiplexers/arbiters. '''
 
-from torii.hdl import *
+from torii.hdl import DomainRenamer, Elaboratable, Module, Signal
 
 from .         import StreamInterface
 

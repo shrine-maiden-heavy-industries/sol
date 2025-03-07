@@ -9,7 +9,7 @@
 
 ''' Soft PIPE backend for the Xilinx 7 Series GTP transceivers. '''
 
-from torii.hdl     import *
+from torii.hdl     import ClockDomain, ClockSignal, Elaboratable, Instance, Module, Mux, Signal
 from torii.lib.cdc import FFSynchronizer
 
 from ..pipe        import PIPEInterface

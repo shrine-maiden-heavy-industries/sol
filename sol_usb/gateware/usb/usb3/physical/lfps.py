@@ -30,7 +30,7 @@ and to detect RX electrical idle.
 
 from math      import ceil
 
-from torii.hdl import *
+from torii.hdl import Elaboratable, Module, Signal
 
 from ....utils import rising_edge_detected, synchronize
 

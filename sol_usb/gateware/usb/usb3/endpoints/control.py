@@ -6,7 +6,7 @@
 
 ''' Low-level USB3 transceiver gateware -- control transfer components. '''
 
-from torii.hdl              import *
+from torii.hdl              import Elaboratable, Module
 
 from usb_construct.emitters import DeviceDescriptorCollection
 from usb_construct.types    import USBDirection, USBRequestType

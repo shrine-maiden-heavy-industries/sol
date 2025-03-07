@@ -13,7 +13,7 @@
 
 ''' Soft PIPE backend for the Lattice ECP5 SerDes. '''
 
-from torii.hdl     import *
+from torii.hdl     import Cat, ClockDomain, ClockSignal, Elaboratable, Instance, Module, Mux, ResetInserter, Signal
 from torii.lib.cdc import FFSynchronizer
 
 from ..pipe        import PIPEInterface

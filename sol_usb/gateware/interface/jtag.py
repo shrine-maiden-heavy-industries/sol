@@ -6,7 +6,7 @@
 
 ''' Hardware for communicating over various FPGAs' debug interfaces. '''
 
-from torii.hdl     import *
+from torii.hdl     import Cat, ClockDomain, ClockSignal, Elaboratable, Instance, Module, Record, Signal
 from torii.hdl.ast import ValueCastable
 from torii.hdl.rec import Direction
 from torii.lib.cdc import FFSynchronizer

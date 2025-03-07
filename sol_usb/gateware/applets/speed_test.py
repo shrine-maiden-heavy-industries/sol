@@ -1,4 +1,4 @@
-from torii.hdl              import *
+from torii.hdl              import Elaboratable, Module, Signal
 
 from usb_construct.emitters import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
 

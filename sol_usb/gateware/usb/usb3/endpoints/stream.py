@@ -11,7 +11,7 @@ The endpoint interfaces in this module provide endpoint interfaces suitable for
 connecting streams to USB endpoints.
 '''
 
-from torii.hdl           import *
+from torii.hdl           import Array, Elaboratable, Memory, Module, Signal
 
 from usb_construct.types import USBDirection
 

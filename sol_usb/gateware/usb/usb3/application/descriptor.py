@@ -6,7 +6,7 @@
 
 ''' Utilities for building USB3 descriptors into gateware. '''
 
-from torii.hdl                          import *
+from torii.hdl                          import DomainRenamer, Elaboratable, Module, Signal
 
 from usb_construct.emitters.descriptors import DeviceDescriptorCollection
 

@@ -6,7 +6,7 @@
 
 ''' Gateware that handles USB bus resets & speed detection. '''
 
-from torii.hdl         import *
+from torii.hdl         import Const, Elaboratable, Instance, Module, Signal
 
 from ...interface.utmi import UTMIOperatingMode, UTMITerminationSelect, UTMITransmitInterface
 from .                 import USBSpeed

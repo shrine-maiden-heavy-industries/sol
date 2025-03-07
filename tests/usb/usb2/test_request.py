@@ -3,8 +3,6 @@
 from sol_usb.gateware.usb.usb2.request import USBSetupDecoder
 from sol_usb.gateware.usb.usb2         import USBSpeed
 from sol_usb.gateware.test             import usb_domain_test_case
-from sol_usb.gateware.usb.usb2         import USBSpeed
-from sol_usb.gateware.usb.usb2.request import USBSetupDecoder
 
 from .test_packet                      import USBPacketizerTest
 
