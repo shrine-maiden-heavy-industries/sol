@@ -242,7 +242,7 @@ class CrcAlgorithm:
 		info = ''
 		if self.name is not None:
 			info = ' \'%s\'' % str(self.name)
-		result = '<%s.%s%s @ %#x>' % (self.__class__.__module__,
+		result = '<{}.{}{} @ {:#x}>'.format(self.__class__.__module__,
 									  self.__class__.__name__, info, id(self))
 		return result
 

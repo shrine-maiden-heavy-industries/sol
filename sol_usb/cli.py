@@ -2,12 +2,13 @@
 
 import logging         as log
 from argparse          import ArgumentParser, Namespace
+from collections.abc   import Callable
 from os                import getenv
 from pathlib           import Path
 from shutil            import rmtree
 from sys               import argv, exit
 from tempfile          import mkdtemp
-from typing            import Any, Callable, Optional, Union
+from typing            import Any
 
 from rich              import traceback
 from rich.logging      import RichHandler
@@ -20,7 +21,7 @@ __all__ = (
 	'setup_logger',
 )
 
-def setup_logger(args: Optional[Namespace] = None) -> None:
+def setup_logger(args: Namespace | None = None) -> None:
 	level = log.INFO
 	if args is not None and args.verbose:
 		level = log.DEBUG
@@ -37,10 +38,10 @@ def setup_logger(args: Optional[Namespace] = None) -> None:
 	)
 
 def cli(
-	fragment: Union[Fragment, Callable[..., Fragment]], *pos_args,
-	cli_soc: Optional[Any] = None,
+	fragment: Fragment | Callable[..., Fragment], *pos_args,
+	cli_soc: Any | None = None,
 	**kwargs
-) -> Optional[Fragment]:
+) -> Fragment | None:
 	'''
 	Runs a default CLI that assists in building and running gateware.
 

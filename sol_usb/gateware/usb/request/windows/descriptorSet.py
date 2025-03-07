@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 from struct                                       import pack as structPack
 from struct                                       import unpack as structUnpack
-from typing                                       import Tuple
 
 from torii.hdl                                    import DomainRenamer, Elaboratable, Memory, Module, Signal
 from usb_construct.emitters.descriptors.microsoft import PlatformDescriptorCollection
@@ -68,7 +67,7 @@ class GetDescriptorSetHandler(Elaboratable):
 		''' Returns a given number rounded up to the next 'aligned' element size. '''
 		return (n + (cls.elementSize - 1)) // cls.elementSize
 
-	def generateROM(self) -> Tuple[Memory, int, int]:
+	def generateROM(self) -> tuple[Memory, int, int]:
 		''' Generates a ROM used to hold descriptor sets.
 
 		Notes

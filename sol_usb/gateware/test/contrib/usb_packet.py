@@ -173,7 +173,7 @@ def nrzi(data, cycles = 4, init = 'J'):
 		elif bit in 'jk_':
 			state = bit.upper()
 		else:
-			assert False, 'Unknown bit %s in %r' % (bit, data)
+			assert False, 'Unknown bit {} in {!r}'.format(bit, data)
 
 		output += (state * cycles)
 
@@ -237,9 +237,9 @@ def token_packet(pid, addr, endp):
 	assert endp < 2**4, endp
 	assert pid in (PID.OUT, PID.IN, PID.SETUP), pid
 	token = encode_pid(pid)
-	token += '{0:07b}'.format(addr)[::-1]  # 7 bits address
-	token += '{0:04b}'.format(endp)[::-1]  # 4 bits endpoint
-	token += '{0:05b}'.format(crc5_token(addr, endp))[::-1]  # 5 bits CRC5
+	token += f'{addr:07b}'[::-1]  # 7 bits address
+	token += f'{endp:04b}'[::-1]  # 4 bits endpoint
+	token += f'{crc5_token(addr, endp):05b}'[::-1]  # 5 bits CRC5
 	assert len(token) == 24, token
 	return token
 
@@ -296,10 +296,10 @@ def sof_packet(frame):
 	'101001010111111111111101'
 	'''
 	def rev_byte(x):
-		return int('{0:08b}'.format(x)[:8][::-1], 2)
+		return int(f'{x:08b}'[:8][::-1], 2)
 
 	assert frame < 2**11, (frame, '<', 2**11)
-	frame_rev = int('{0:011b}'.format(frame)[:11][::-1], 2)
+	frame_rev = int(f'{frame:011b}'[:11][::-1], 2)
 	data = [frame_rev >> 3, (frame_rev & 0b111) << 5]
 	data[-1] = data[-1] | crc5_sof(frame)
 	data[0] = rev_byte(data[0])
@@ -419,7 +419,7 @@ def undiff(usbp, usbn):
 	JJJJ END
 	'''
 	assert len(usbp) == len(
-		usbn), 'Sequence different lengths!\n%s\n%s\n' % (usbp, usbn)
+		usbn), 'Sequence different lengths!\n{}\n{}\n'.format(usbp, usbn)
 	value = []
 	for i in range(0, len(usbp)):
 		p = usbp[i]

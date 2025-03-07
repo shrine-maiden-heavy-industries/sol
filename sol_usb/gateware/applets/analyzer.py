@@ -13,7 +13,6 @@ import time
 from array                                  import array
 from datetime                               import datetime
 from enum                                   import IntEnum, IntFlag
-from typing                                 import Optional
 
 import usb
 
@@ -284,7 +283,7 @@ class USBAnalyzerConnection:
 		''' Creates our connection to the USBAnalyzer. '''
 
 		self._buffer = bytearray()
-		self._device : Optional[usb.core.Device] = None
+		self._device : usb.core.Device | None = None
 		self._fetch_buffer = array('B', b'\x00' * MAX_BULK_PACKET_SIZE)
 		self._capture_speed = USB_SPEED_FULL
 

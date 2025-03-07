@@ -303,7 +303,7 @@ class USBResetSequencer(Elaboratable):
 				# Once 2ms have passed, we can stop our chirp, and begin waiting for the
 				# hosts's response. We'll wait for Ready to be asserted to do so, to ensure
 				# we don't change our values in the middle of a bit.
-				with m.If((timer == self._CYCLES_2_MILLISECONDS)):
+				with m.If(timer == self._CYCLES_2_MILLISECONDS):
 					m.d.usb += [
 						timer.eq(0),
 						valid_pairs.eq(0)

@@ -731,7 +731,7 @@ class PacketTransmitter(Elaboratable):
 		# the USB3 specification requires us to automatically enter recovery if a credit is
 		# outstanding for more than 5ms [USB3.2r1: 7.2.4.1.13]. We'll create a timer that can
 		# count to this timeout.
-		credit_timeout_cycles = int((self.CREDIT_TIMEOUT * self._clock_frequency + 1))
+		credit_timeout_cycles = int(self.CREDIT_TIMEOUT * self._clock_frequency + 1)
 		pending_hp_timer = Signal(range(credit_timeout_cycles + 1))
 
 		# Each time we receive a link credit and retire its packet, we'll re-start our timer.

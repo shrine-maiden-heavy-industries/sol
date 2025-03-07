@@ -6,8 +6,6 @@
 
 ''' Low-level USB transceiver gateware -- control transfer components. '''
 
-from typing import List
-
 from torii.hdl              import Cat, Elaboratable, Module
 from torii.hdl.dsl          import Operator
 
@@ -63,7 +61,7 @@ class USBControlEndpoint(Elaboratable):
 		#
 
 		# List of the modules that will handle control requests.
-		self._request_handlers: List[USBRequestHandler] = []
+		self._request_handlers: list[USBRequestHandler] = []
 
 	def add_request_handler(self, request_handler):
 		''' Adds a ControlRequestHandler module to this control endpoint.

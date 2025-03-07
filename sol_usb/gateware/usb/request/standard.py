@@ -8,7 +8,7 @@
 
 import os
 import unittest
-from typing                 import Callable, Iterable
+from collections.abc        import Callable, Iterable
 
 from torii.hdl              import Module, Signal
 from torii.hdl.ast          import Cat, Value

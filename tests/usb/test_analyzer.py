@@ -1,7 +1,8 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
+from collections.abc                 import Iterable
 from concurrent.futures              import Future
-from typing                          import Iterable, TypedDict, Union
+from typing                          import TypedDict
 
 from torii.hdl                       import Module
 from torii.sim                       import Settle, Tick
@@ -246,7 +247,7 @@ class USBAnalyzerOverflowTest(SolGatewareTestCase):
 		self.analyzer = USBAnalyzer(utmi_interface = self.utmi, mem_depth = 256)
 		return self.analyzer
 
-	fast_traffic: tuple[Union[tuple[int, ...], WaitDict], ...] = (
+	fast_traffic: tuple[tuple[int, ...] | WaitDict, ...] = (
 		# SOF 1321
 		(0xa5, 0x29, 0x9d),
 
