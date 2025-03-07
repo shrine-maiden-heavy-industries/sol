@@ -77,7 +77,7 @@ setup(
 		'platform': [
 			'pyusb~=1.2.0',
 			'libusb1~=1.9.2',
-			'luminary-fpga~=0.0.5',
+			'luminary-fpga>=0.0.6,<=0.1.0',
 			'prompt-toolkit~=3.0.16',
 			'ziglang~=0.8.0',
 		]
