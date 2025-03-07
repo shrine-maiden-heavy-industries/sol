@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: BSD-3-Clause
+
 from torii.hdl              import Elaboratable, Module, Signal
 
 from usb_construct.emitters import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
