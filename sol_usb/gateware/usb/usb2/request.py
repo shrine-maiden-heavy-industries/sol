@@ -172,8 +172,9 @@ class USBSetupDecoder(Elaboratable):
 
 		# Create a data-packet-deserializer, which we'll use to capture the
 		# contents of the setup data packets.
-		m.submodules.data_handler = data_handler = \
-			USBDataPacketDeserializer(utmi = self.utmi, max_packet_size = 8, create_crc_generator = self.standalone)
+		m.submodules.data_handler = data_handler = USBDataPacketDeserializer(
+			utmi = self.utmi, max_packet_size = 8, create_crc_generator = self.standalone
+		)
 		m.d.comb += self.data_crc.connect(data_handler.data_crc)
 
 		# Instruct our interpacket timer to begin counting when we complete receiving

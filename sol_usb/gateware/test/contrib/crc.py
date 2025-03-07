@@ -241,9 +241,8 @@ class CrcAlgorithm:
 	def __repr__(self):
 		info = ''
 		if self.name is not None:
-			info = ' \'%s\'' % str(self.name)
-		result = '<{}.{}{} @ {:#x}>'.format(self.__class__.__module__,
-									  self.__class__.__name__, info, id(self))
+			info = f' \'{str(self.name)}\''
+		result = f'<{self.__class__.__module__}.{self.__class__.__name__}{info} @ {id(self):#x}>'
 		return result
 
 	def calcString(self, s, value = None):
@@ -647,7 +646,7 @@ def _printResults(fn = _callCalcString123456789):
 		key = lambda v: (v.width, v.name))
 	for a in algorithms:
 		format = ('%%0%dX' % ((a.width + 3) // 4))
-		print('%s:' % a.name, end = ' ')
+		print(f'{a.name}:', end = ' ')
 		print(format % fn(a))
 
 def _test():

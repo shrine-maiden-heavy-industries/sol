@@ -287,10 +287,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 				max_descriptor_size = max(max_descriptor_size, len(raw_descriptor))
 
 		# Create an array to hold our initial values for our composite ROM.
-		total_size = \
-			rom_size_table_pointers + \
-			rom_size_table_entries  + \
-			rom_size_descriptors
+		total_size = rom_size_table_pointers + rom_size_table_entries  + rom_size_descriptors
 		rom = bytearray(total_size)
 
 		#
@@ -414,9 +411,7 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 		# Track when we're on the first and last packet.
 		on_first_packet = position_in_stream == self.start_position
-		on_last_packet = \
-			(position_in_stream == (descriptor_length - 1)) | \
-			(bytes_sent + 1 >= length)
+		on_last_packet = (position_in_stream == descriptor_length - 1) | (bytes_sent + 1 >= length)
 
 		#
 		# Core transmit logic.

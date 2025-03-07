@@ -79,8 +79,9 @@ class StandardRequestHandler(ControlRequestHandler):
 		]
 
 		# Handler for various small-constant-response requests (GET_CONFIGURATION, GET_STATUS).
-		m.submodules.transmitter = transmitter = \
-			StreamSerializer(data_length = 2, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 2)
+		m.submodules.transmitter = transmitter = StreamSerializer(
+			data_length = 2, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 2
+		)
 
 		#
 		# Handlers.

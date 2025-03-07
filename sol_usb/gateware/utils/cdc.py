@@ -7,7 +7,7 @@
 
 ''' Helpers for clock domain crossings. '''
 
-from torii.hdl     import Module, Record, Signal
+from torii.hdl     import Record, Signal
 from torii.hdl.rec import Direction
 from torii.lib.cdc import FFSynchronizer
 from torii.lib.io  import Pin

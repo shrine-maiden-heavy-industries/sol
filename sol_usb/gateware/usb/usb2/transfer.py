@@ -329,8 +329,7 @@ class USBInTransferManager(Elaboratable):
 					# Figure out if we'll need to follow up with a ZLP. If we have ZLP generation enabled,
 					# we'll make sure we end on a short packet. If this is max-packet-size packet _and_ our
 					# transfer ended with this packet; we'll need to inject a ZLP.
-					follow_up_with_zlp = \
-						self.generate_zlps & (read_fill_count == self._max_packet_size) & read_stream_ended
+					follow_up_with_zlp = self.generate_zlps & (read_fill_count == self._max_packet_size) & read_stream_ended
 
 					# If we're following up with a ZLP, move back to our 'wait to send' state.
 					# Since we've now cleared our fill count; this next go-around will emit a ZLP.

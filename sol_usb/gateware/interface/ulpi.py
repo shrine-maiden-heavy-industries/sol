@@ -855,11 +855,7 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 			control_translator.add_composite_register(m, address, values['value'], reset_value = values['default'])
 
 		# Keep track of when any of our components are busy
-		any_busy = \
-			register_window.busy     | \
-			transmit_translator.busy | \
-			control_translator.busy  | \
-			self.ulpi.dir
+		any_busy = register_window.busy | transmit_translator.busy | control_translator.busy | self.ulpi.dir
 
 		# If we're handling ULPI clocking, do so.
 		if self.handle_clocking:

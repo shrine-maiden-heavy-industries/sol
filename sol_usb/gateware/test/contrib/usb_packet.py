@@ -173,7 +173,7 @@ def nrzi(data, cycles = 4, init = 'J'):
 		elif bit in 'jk_':
 			state = bit.upper()
 		else:
-			assert False, 'Unknown bit {} in {!r}'.format(bit, data)
+			assert False, f'Unknown bit {bit} in {data!r}'
 
 		output += (state * cycles)
 
@@ -336,7 +336,7 @@ def diff(value):
 			usbp += '0'
 			usbn += '1'
 		else:
-			assert False, 'Unknown value: %s' % v
+			assert False, f'Unknown value: {v}'
 	return usbp, usbn
 
 def undiff(usbp, usbn):
@@ -419,7 +419,7 @@ def undiff(usbp, usbn):
 	JJJJ END
 	'''
 	assert len(usbp) == len(
-		usbn), 'Sequence different lengths!\n{}\n{}\n'.format(usbp, usbn)
+		usbn), f'Sequence different lengths!\n{usbp}\n{usbn}\n'
 	value = []
 	for i in range(0, len(usbp)):
 		p = usbp[i]

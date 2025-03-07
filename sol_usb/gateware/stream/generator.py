@@ -172,9 +172,7 @@ class ConstantStreamGenerator(Elaboratable):
 
 		# Track when we're on the first and last packet.
 		on_first_packet = position_in_stream == self.start_position
-		on_last_packet  = \
-			(position_in_stream          == (data_length - 1)) | \
-			(bytes_sent + bytes_per_word >= max_length)
+		on_last_packet  = (position_in_stream == data_length - 1) | (bytes_sent + bytes_per_word >= max_length)
 
 		#
 		# Figure out where we should start in our stream.
@@ -399,9 +397,7 @@ class StreamSerializer(Elaboratable):
 
 		# Track when we're on the first and last packet.
 		on_first_packet = position_in_stream == 0
-		on_last_packet  = \
-			(position_in_stream == (self.data_length - 1)) | \
-			(position_in_stream == (self.max_length - 1))
+		on_last_packet  = (position_in_stream == self.data_length - 1) | (position_in_stream == self.max_length - 1)
 
 		m.d.comb += [
 			# Create first and last based on our stream position.

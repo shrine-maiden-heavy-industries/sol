@@ -7,7 +7,7 @@
 import math
 
 from torii.hdl     import Elaboratable, Memory, Module
-from torii.lib.soc import memory, wishbone
+from torii.lib.soc import memory
 
 class WishboneRAM(Elaboratable):
 	''' Simple Wishbone-connected RAM. '''

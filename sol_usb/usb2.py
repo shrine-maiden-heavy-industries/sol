@@ -11,7 +11,9 @@ from .gateware.usb.usb2.device                import USBDevice
 from .gateware.usb.usb2.endpoint              import EndpointInterface
 from .gateware.usb.usb2.endpoints.isochronous import USBIsochronousInEndpoint
 from .gateware.usb.usb2.endpoints.status      import USBSignalInEndpoint
-from .gateware.usb.usb2.endpoints.stream      import USBMultibyteStreamInEndpoint, USBStreamInEndpoint, USBStreamOutEndpoint
+from .gateware.usb.usb2.endpoints.stream      import (
+	USBMultibyteStreamInEndpoint, USBStreamInEndpoint, USBStreamOutEndpoint
+)
 from .gateware.usb.usb2.request               import RequestHandlerInterface
 
 __all__ = (

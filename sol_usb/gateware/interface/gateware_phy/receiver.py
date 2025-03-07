@@ -596,8 +596,7 @@ class RxPipeline(Elaboratable):
 		#
 		# Bitstuff remover.
 		#
-		m.submodules.bitstuff = bitstuff = \
-			ResetInserter(~detect.o_pkt_active)(RxBitstuffRemover())
+		m.submodules.bitstuff = bitstuff = ResetInserter(~detect.o_pkt_active)(RxBitstuffRemover())
 		m.d.comb += [
 			bitstuff.i_valid.eq(nrzi.o_valid),
 			bitstuff.i_data.eq(nrzi.o_data),

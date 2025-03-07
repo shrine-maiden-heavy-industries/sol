@@ -84,8 +84,9 @@ class USBAnalyzerVendorRequestHandler(ControlRequestHandler):
 		handshake_generator = interface.handshakes_out
 
 		# Transmitter for small-constant-response requests
-		m.submodules.transmitter = transmitter = \
-			StreamSerializer(data_length = 1, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 1)
+		m.submodules.transmitter = transmitter = StreamSerializer(
+			data_length = 1, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 1
+		)
 
 		# Handle vendor requests
 		with m.If(setup.type == USBRequestType.VENDOR):

@@ -11,7 +11,9 @@ from torii.hdl.ast import Past
 
 from ...utils.bus  import OneHotMultiplexer
 from ..stream      import USBInStreamInterface, USBOutStreamInterface
-from .packet       import DataCRCInterface, HandshakeExchangeInterface, InterpacketTimerInterface, TokenDetectorInterface
+from .packet       import (
+	DataCRCInterface, HandshakeExchangeInterface, InterpacketTimerInterface, TokenDetectorInterface
+)
 
 class EndpointInterface:
 	''' Interface that connects a USB endpoint module to a USB device.
