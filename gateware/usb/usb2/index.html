@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>USB2 &mdash; SOL 0.1.dev1 documentation</title>
+  <title>USB2 &mdash; SOL 0.4.2.dev13 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5349f25f" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/styles.css?v=e585626c" />
       <link rel="stylesheet" type="text/css" href="../../../_static/platformpicker.css" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb2/index.html" />
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=4b1cca27"></script>
+      <script src="../../../_static/documentation_options.js?v=76d39afe"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../../_static/platformpicker.js"></script>
@@ -453,35 +453,35 @@ high-speed terminations while the device is in suspend.</p></li>
 <p id="module-sol_usb.gateware.usb.usb2">Gateware for creating USB2 devices.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.USBSpeed">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.</span></span><span class="sig-name descname"><span class="pre">USBSpeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBSpeed" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.</span></span><span class="sig-name descname"><span class="pre">USBSpeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBSpeed" title="Link to this definition"></a></dt>
 <dd><p>Enumeration representing USB speeds. Matches UTMI xcvr_select constants.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.USBPacketID">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.</span></span><span class="sig-name descname"><span class="pre">USBPacketID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.</span></span><span class="sig-name descname"><span class="pre">USBPacketID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID" title="Link to this definition"></a></dt>
 <dd><p>Enumeration specifying all of the valid USB PIDs we can handle.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.USBPacketID.from_byte">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_byte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">byte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_checks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID.from_byte" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_byte</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">byte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_checks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID.from_byte" title="Link to this definition"></a></dt>
 <dd><p>Creates a PID object from a byte.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.USBPacketID.from_int">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_checks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID.from_int" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_checks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID.from_int" title="Link to this definition"></a></dt>
 <dd><p>Create a PID object from an integer.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.USBPacketID.from_name">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID.from_name" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID.from_name" title="Link to this definition"></a></dt>
 <dd><p>Create a PID object from a string representation of its name.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.USBPacketID.parse">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID.parse" title="Link to this definition"></a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.USBPacketID.parse" title="Link to this definition"></a></dt>
 <dd><p>Attempt to create a PID object from a number, byte, or string.</p>
 </dd></dl>
 
