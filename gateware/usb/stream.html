@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stream &mdash; SOL 0.4.2.dev13 documentation</title>
+  <title>Stream &mdash; SOL 0.4.2.dev19 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5349f25f" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=e585626c" />
       <link rel="stylesheet" type="text/css" href="../../_static/platformpicker.css" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/stream.html" />
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=76d39afe"></script>
+      <script src="../../_static/documentation_options.js?v=2fd0b4d4"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/platformpicker.js"></script>
@@ -359,24 +359,16 @@ and in-phase with the :attr::<code class="docutils literal notranslate"><span cl
 :attr:<code class="docutils literal notranslate"><span class="pre">complete_out</span></code> after a :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> packet terminates.</p></li>
 <li><p><strong>invalid_in</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em><em>, </em><em>optional</em>) – Input that accepts an RxInvalid signal. If provided; a delayed version will be produced on
 :attr:<code class="docutils literal notranslate"><span class="pre">complete_out</span></code> after a :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> packet terminates.</p></li>
+<li><p><strong>complete_out</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – If :attr:<code class="docutils literal notranslate"><span class="pre">complete_in</span></code> is provided; this signal provides a delayed version of that signal
+timed so it is strobed after :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> packets complete.</p></li>
+<li><p><strong>invalid_out</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – If :attr:<code class="docutils literal notranslate"><span class="pre">invalid_out</span></code> is provided; this signal provides a delayed version of that signal
+timed so it is strobed after :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> packets complete.</p></li>
+<li><p><strong>first</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – Indicates that the byte present on :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> is the first byte of a packet.</p></li>
+<li><p><strong>last</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – Indicates that the byte present on :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> is the last byte of a packet.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>complete_out: Signal(), output</dt><dd><p>If :attr:<code class="docutils literal notranslate"><span class="pre">complete_in</span></code> is provided; this signal provides a delayed version of that signal
-timed so it is strobed after :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> packets complete.</p>
-</dd>
-<dt>invalid_out: Signal(), output</dt><dd><p>If :attr:<code class="docutils literal notranslate"><span class="pre">invalid_out</span></code> is provided; this signal provides a delayed version of that signal
-timed so it is strobed after :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> packets complete.</p>
-</dd>
-<dt>first: Signal(), output</dt><dd><p>Indicates that the byte present on :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> is the first byte of a packet.</p>
-</dd>
-<dt>last: Signal(), output</dt><dd><p>Indicates that the byte present on :attr:<code class="docutils literal notranslate"><span class="pre">processed_stream</span></code> is the last byte of a packet.</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>domain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the domain the stream belongs to; defaults to ‘usb’.</p>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>domain</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The name of the domain the stream belongs to; defaults to ‘usb’.</p>
 </dd>
 </dl>
 </dd></dl>

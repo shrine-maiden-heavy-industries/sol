@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gateware PHY &mdash; SOL 0.4.2.dev13 documentation</title>
+  <title>Gateware PHY &mdash; SOL 0.4.2.dev19 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=5349f25f" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/styles.css?v=e585626c" />
       <link rel="stylesheet" type="text/css" href="../../../_static/platformpicker.css" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://sol.shmdn.link/gateware/interface/gateware/index.html" />
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../_static/documentation_options.js?v=76d39afe"></script>
+      <script src="../../../_static/documentation_options.js?v=2fd0b4d4"></script>
       <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../../_static/platformpicker.js"></script>
@@ -379,33 +379,61 @@ clock cycle to indicate new data is ready</p>
 <dt class="field-even">vartype rx_complete<span class="colon">:</span></dt>
 <dd class="field-even"><p>Signal(), output:</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>line_state: Signal(2), output</dt><dd><p>Indicates the current state of the D+ and D- lines. Matches the UTMI specification values,
+<dt class="field-odd">ivar line_state<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Indicates the current state of the D+ and D- lines. Matches the UTMI specification values,
 where 0 = SE0, 1 = K, and 2 = J.</p>
 </dd>
-<dt>vbus_valid: Signal(), output</dt><dd><p>Indicates that a valid VBUS signal is present. This signal is valid iff the I/O parameter
+<dt class="field-even">vartype line_state<span class="colon">:</span></dt>
+<dd class="field-even"><p>Signal(2), output</p>
+</dd>
+<dt class="field-odd">ivar vbus_valid<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Indicates that a valid VBUS signal is present. This signal is valid iff the I/O parameter
 contains a <code class="docutils literal notranslate"><span class="pre">vbus_valid</span></code> element; otherwise it is hard connected to ‘1’</p>
 </dd>
-<dt>session_end: Signal(), output</dt><dd><p>Indicates that no VBUS signal is present. This signal is valid iff the I/O parameter
+<dt class="field-even">vartype vbus_valid<span class="colon">:</span></dt>
+<dd class="field-even"><p>Signal(), output</p>
+</dd>
+<dt class="field-odd">ivar session_end<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Indicates that no VBUS signal is present. This signal is valid iff the I/O parameter
 contains a <code class="docutils literal notranslate"><span class="pre">vbus_valid</span></code> element; otherwise it is hard connected to ‘0’</p>
 </dd>
-<dt>xcvr_select: Signal(2), input</dt><dd><p>Selects the active USB speed. This transceiver only functions as a full speed transceiver; so
+<dt class="field-even">vartype session_end<span class="colon">:</span></dt>
+<dd class="field-even"><p>Signal(), output</p>
+</dd>
+<dt class="field-odd">ivar xcvr_select<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selects the active USB speed. This transceiver only functions as a full speed transceiver; so
 this signal is effectively ignored. To support connection to high-speed gateware, this module
 will prevent the USB lines from being driven when this signal is 0b00; allowing the gateware to
 attempt a high-speed detection handshake without adverse affect.</p>
 </dd>
-<dt>term_select: Signal(), input</dt><dd><p>When asserted, this will connect the device’s full speed pull-up resistor.</p>
+<dt class="field-even">vartype xcvr_select<span class="colon">:</span></dt>
+<dd class="field-even"><p>Signal(2), input</p>
 </dd>
-<dt>op_mode: Signal(2), input</dt><dd><p>Selects the operating mode of the UTMI transceiver. A value of 0 causes normal operations;
+<dt class="field-odd">ivar term_select<span class="colon">:</span></dt>
+<dd class="field-odd"><p>When asserted, this will connect the device’s full speed pull-up resistor.</p>
+</dd>
+<dt class="field-even">vartype term_select<span class="colon">:</span></dt>
+<dd class="field-even"><p>Signal(), input</p>
+</dd>
+<dt class="field-odd">ivar op_mode<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Selects the operating mode of the UTMI transceiver. A value of 0 causes normal operations;
 a value of 1 prevents D+ and D- from being driven; and a value of 2 disables bit-stuffing.</p>
 </dd>
-<dt>dm_pulldown: Signal(), input</dt><dd><p>When asserted, this will indicate that the host-mode’s D- pulldown should be connected.</p>
+<dt class="field-even">vartype op_mode<span class="colon">:</span></dt>
+<dd class="field-even"><p>Signal(2), input</p>
 </dd>
-<dt>dm_pulldown: Signal(), input</dt><dd><p>When asserted, this will indicate that the host-mode’s D+ pulldown should be connected.</p>
+<dt class="field-odd">ivar dm_pulldown<span class="colon">:</span></dt>
+<dd class="field-odd"><p>When asserted, this will indicate that the host-mode’s D- pulldown should be connected.</p>
 </dd>
-</dl>
-<dl class="field-list simple">
+<dt class="field-even">vartype dm_pulldown<span class="colon">:</span></dt>
+<dd class="field-even"><p>Signal(), input</p>
+</dd>
+<dt class="field-odd">ivar dm_pulldown<span class="colon">:</span></dt>
+<dd class="field-odd"><p>When asserted, this will indicate that the host-mode’s D+ pulldown should be connected.</p>
+</dd>
+<dt class="field-even">vartype dm_pulldown<span class="colon">:</span></dt>
+<dd class="field-even"><p>Signal(), input</p>
+</dd>
 <dt class="field-odd">param io<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A record containing the raw I/O signals to be used to drive our I/O-based USB connection.
 The <code class="docutils literal notranslate"><span class="pre">d_p</span></code> and <code class="docutils literal notranslate"><span class="pre">d_n</span></code> signals are mandatory; the <code class="docutils literal notranslate"><span class="pre">pullup</span></code>, <code class="docutils literal notranslate"><span class="pre">pulldown</span></code>,

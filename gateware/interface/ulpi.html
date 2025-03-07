@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ULPI &mdash; SOL 0.4.2.dev13 documentation</title>
+  <title>ULPI &mdash; SOL 0.4.2.dev19 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5349f25f" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=e585626c" />
       <link rel="stylesheet" type="text/css" href="../../_static/platformpicker.css" />
@@ -16,7 +16,7 @@
     <link rel="canonical" href="https://sol.shmdn.link/gateware/interface/ulpi.html" />
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=76d39afe"></script>
+      <script src="../../_static/documentation_options.js?v=2fd0b4d4"></script>
       <script src="../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../../_static/platformpicker.js"></script>
@@ -388,12 +388,9 @@ I: dischrg_vbus   – when set, connects a resistor from VBUS to 3V3 to charge V
 <li><p><strong>address</strong> – The register number in the ULPI register space.</p></li>
 <li><p><strong>value</strong> – An 8-bit signal composing the bits that should be placed in
 the given register.</p></li>
+<li><p><strong>reset_value</strong> – If provided, the given value will be assumed as the reset value
+of the given register; allowing us to avoid an initial write.</p></li>
 </ul>
-</dd>
-</dl>
-<dl class="simple">
-<dt>reset_value</dt><dd><p>If provided, the given value will be assumed as the reset value
-of the given register; allowing us to avoid an initial write.</p>
 </dd>
 </dl>
 </dd></dl>
