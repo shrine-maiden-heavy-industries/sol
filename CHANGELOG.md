@@ -29,6 +29,29 @@ Unreleased template stuff
 
 ### Fixed
 
+## [0.5.0]
+
+> [!IMPORTANT]
+> This release is prior to the split into [torii-usb](https://github.com/shrine-maiden-heavy-industries/torii-usb) for the core gateware.
+
+### Changed
+
+- The `gateware.usb.request.standard` is now restricted to only handle requests targeting the device.
+- Bumped minimum [Torii](https://github.com/shrine-maiden-heavy-industries/torii-hdl) version from
+  [0.7.1](https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.7.1)
+  to [0.7.5](https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.7.5)
+- Bumped minimum [pyvcd](https://github.com/SanDisk-Open-Source/pyvcd) version from
+  [0.2.2](https://github.com/SanDisk-Open-Source/pyvcd/releases/tag/0.2.2)
+  to [0.4.0](https://github.com/SanDisk-Open-Source/pyvcd/releases/tag/0.4.0)
+- Bumped minimum [luminary](https://github.com/shrine-maiden-heavy-industries/luminary) version from
+  [0.0.5](https://github.com/shrine-maiden-heavy-industries/luminary/releases/tag/v0.0.5)
+  to [0.0.6](https://github.com/shrine-maiden-heavy-industries/luminary/releases/tag/v0.0.6)
+
+### Fixed
+
+- Handful of little typing fixes.
+- Fixed miss-using some of the IO resources, they happened to work, if only by accident.
+
 ## [0.4.1]
 
 ### Changed
@@ -154,7 +177,8 @@ Unreleased template stuff
 
 No changelog is provided for this version as it is a hold-over / demarcation of the divergence from [LUNA](https://github.com/greatscottgadgets/luna/).
 
-[Unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.1...main
+[Unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.5.0...main
+[0.5.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.2.0...v0.3.0
