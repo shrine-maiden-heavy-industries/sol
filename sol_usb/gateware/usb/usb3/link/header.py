@@ -7,7 +7,7 @@
 ''' Header Packet data interfacing definitions.'''
 
 
-from torii              import *
+from torii.hdl          import *
 
 from ....stream.arbiter import StreamArbiter
 

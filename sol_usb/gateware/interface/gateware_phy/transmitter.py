@@ -33,7 +33,7 @@
 #
 
 
-from torii          import Elaboratable, Module, Signal
+from torii.hdl      import Elaboratable, Module, Signal
 from torii.hdl.xfrm import ResetInserter
 from torii.lib.cdc  import FFSynchronizer
 

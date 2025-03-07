@@ -7,7 +7,7 @@
 ''' SPI and derived interfaces. '''
 
 
-from torii         import Cat, Elaboratable, Module, Record, Signal
+from torii.hdl      import Cat, Elaboratable, Module, Record, Signal
 from torii.hdl.ast import Fell, Rose
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 

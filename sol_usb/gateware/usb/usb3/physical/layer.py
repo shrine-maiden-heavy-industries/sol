@@ -7,7 +7,7 @@
 ''' USB3 physical-layer abstraction.'''
 
 
-from torii       import *
+from torii.hdl   import *
 
 from ...stream   import USBRawSuperSpeedStream
 from .alignment  import RxPacketAligner, RxWordAligner

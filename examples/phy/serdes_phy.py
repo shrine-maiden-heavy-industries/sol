@@ -7,7 +7,7 @@
 
 ''' Incomplete example for working the SerDes-based a PIPE PHY. '''
 
-from torii                        import *
+from torii.hdl                    import *
 
 from sol_usb.cli                      import cli
 from sol_usb.gateware.usb.devices.ila import (

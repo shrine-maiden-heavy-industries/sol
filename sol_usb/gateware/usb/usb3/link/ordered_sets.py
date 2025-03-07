@@ -10,7 +10,7 @@
 ''' Link training support gateware. '''
 
 
-from torii             import *
+from torii.hdl         import *
 
 from ...stream         import USBRawSuperSpeedStream
 from ..physical.coding import D

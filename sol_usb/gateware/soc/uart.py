@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                  import *
+from torii.hdl              import *
 from torii.lib.fifo         import SyncFIFO
 from torii.lib.stdio.serial import AsyncSerial
 

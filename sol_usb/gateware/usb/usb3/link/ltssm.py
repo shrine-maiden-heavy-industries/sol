@@ -14,7 +14,7 @@
 
 import math
 
-from torii import *
+from torii.hdl import *
 
 
 class LTSSMController(Elaboratable):

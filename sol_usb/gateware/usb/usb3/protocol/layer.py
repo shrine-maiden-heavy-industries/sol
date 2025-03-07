@@ -6,7 +6,7 @@
 
 ''' USB3 link-layer abstraction.'''
 
-from torii            import *
+from torii.hdl        import *
 
 from ..link.header    import HeaderQueueArbiter, HeaderQueueDemultiplexer
 from .data            import DataHeaderReceiver

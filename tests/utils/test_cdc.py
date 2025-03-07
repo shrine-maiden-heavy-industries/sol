@@ -2,7 +2,7 @@
 
 from unittest      import TestCase
 
-from torii         import Module, Record, Signal
+from torii.hdl     import Module, Record, Signal
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
 from sol_usb.gateware.test      import SolGatewareTestCase, sync_test_case

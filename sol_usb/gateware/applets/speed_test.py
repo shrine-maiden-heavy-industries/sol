@@ -1,4 +1,4 @@
-from torii                  import *
+from torii.hdl              import *
 from usb_construct.emitters import (
 	DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
 )

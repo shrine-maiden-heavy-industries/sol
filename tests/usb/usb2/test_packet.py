@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                            import Record, Signal
+from torii.hdl                        import Record, Signal
 from torii.sim                        import Settle
 
 from sol_usb.gateware.usb.usb2.packet import (

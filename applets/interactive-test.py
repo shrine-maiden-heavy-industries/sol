@@ -8,7 +8,7 @@
 
 from luminary_fpga.support.selftest    import ApolloSelfTestCase, named_test
 
-from torii                             import (
+from torii.hdl                         import (
 	Cat, ClockSignal, Elaboratable, Module, ResetSignal, Signal
 )
 

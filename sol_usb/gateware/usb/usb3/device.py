@@ -10,7 +10,7 @@ to your own designs; including the core :class:`USBSuperSpeedDevice` class.
 '''
 
 
-from torii                  import *
+from torii.hdl              import *
 
 from usb_construct.emitters import DeviceDescriptorCollection
 

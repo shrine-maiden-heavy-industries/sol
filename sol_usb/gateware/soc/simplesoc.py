@@ -17,7 +17,7 @@ from lambdasoc.periph.sram   import SRAMPeripheral
 from lambdasoc.periph.timer  import TimerPeripheral
 from lambdasoc.soc.cpu       import CPUSoC
 
-from torii                   import Elaboratable, Module
+from torii.hdl               import Elaboratable, Module
 from torii.build             import Resource
 from torii.lib.soc           import wishbone
 from torii.lib.soc.memory    import MemoryMap, ResourceInfo

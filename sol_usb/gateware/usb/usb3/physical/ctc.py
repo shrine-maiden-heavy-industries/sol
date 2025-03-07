@@ -20,7 +20,7 @@ It's up to us to insert and remove additional ordered sets.
 '''
 
 
-from torii          import *
+from torii.hdl      import *
 
 from ...stream      import USBRawSuperSpeedStream
 from .coding        import SKP, stream_word_matches_symbol

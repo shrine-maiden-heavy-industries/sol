@@ -8,7 +8,7 @@
 
 import os
 
-from torii                  import Cat, Elaboratable, Module
+from torii.hdl              import Cat, Elaboratable, Module
 
 from usb_construct.emitters import DeviceDescriptorCollection
 

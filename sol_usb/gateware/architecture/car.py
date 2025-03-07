@@ -9,7 +9,7 @@
 import logging   as log
 from abc         import ABCMeta, abstractmethod
 
-from torii       import (
+from torii.hdl   import (
 	ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
 )
 

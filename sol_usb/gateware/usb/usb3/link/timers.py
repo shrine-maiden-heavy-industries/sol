@@ -6,7 +6,7 @@
 
 ''' U0 link-maintenance timers. '''
 
-from torii import *
+from torii.hdl import *
 
 
 class LinkMaintenanceTimers(Elaboratable):

@@ -8,7 +8,7 @@
 
 import logging       as log
 
-from torii           import Record
+from torii.hdl       import Record
 from torii.build.res import ResourceError
 
 

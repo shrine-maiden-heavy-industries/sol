@@ -6,7 +6,7 @@
 
 ''' Contains the gatware module necessary to interpret and generate low-level USB packets. '''
 
-from torii             import Array, Cat, Const, Elaboratable, Module, Signal
+from torii.hdl         import Array, Cat, Const, Elaboratable, Module, Signal
 from torii.hdl.rec     import DIR_FANIN, DIR_FANOUT, Record
 
 from ...interface.utmi import UTMITransmitInterface

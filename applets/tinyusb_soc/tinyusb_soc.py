@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-from torii                                  import Cat, Elaboratable, Module
+from torii.hdl                              import Cat, Elaboratable, Module
 from torii.hdl.rec                          import Record
 
 from lambdasoc.periph                       import Peripheral

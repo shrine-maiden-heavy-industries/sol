@@ -9,7 +9,7 @@ from lambdasoc.periph        import Peripheral
 from lambdasoc.periph.serial import AsyncSerialPeripheral
 from lambdasoc.periph.timer  import TimerPeripheral
 
-from torii                   import Cat, Elaboratable, Module
+from torii.hdl               import Cat, Elaboratable, Module
 from torii.hdl.rec           import Record
 
 from sol_usb.cli                 import cli

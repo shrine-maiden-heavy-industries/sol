@@ -7,7 +7,7 @@
 ''' Pre-made gateware that implements CDC-ACM serial. '''
 
 
-from torii                              import Elaboratable, Module, Signal
+from torii.hdl                          import Elaboratable, Module, Signal
 
 from usb_construct.emitters             import DeviceDescriptorCollection
 from usb_construct.emitters.descriptors import cdc

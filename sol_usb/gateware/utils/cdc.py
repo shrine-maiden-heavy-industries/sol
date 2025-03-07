@@ -9,7 +9,7 @@
 
 
 
-from torii         import Module, Record, Signal
+from torii.hdl     import Module, Record, Signal
 from torii.hdl.rec import DIR_FANOUT
 from torii.lib.cdc import FFSynchronizer
 from torii.lib.io  import Pin

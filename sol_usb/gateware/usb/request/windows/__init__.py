@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                                        import Module, Signal
+from torii.hdl                                    import Module, Signal
 
 from usb_construct.emitters.descriptors.microsoft import PlatformDescriptorCollection
 from usb_construct.types                          import USBRequestRecipient, USBRequestType

@@ -6,7 +6,7 @@
 
 ''' Utilities for working with busses. '''
 
-from torii            import Elaboratable, Module, Cat
+from torii.hdl        import Elaboratable, Module, Cat
 from torii.lib.coding import Encoder
 
 

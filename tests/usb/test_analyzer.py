@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                           import Module
+from torii.hdl                       import Module
 from torii.sim                       import Settle, Tick
 from typing                          import Union, Iterable, TypedDict
 from concurrent.futures              import Future

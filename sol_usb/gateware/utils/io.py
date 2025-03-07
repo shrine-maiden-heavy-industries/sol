@@ -8,7 +8,7 @@
 ''' Helpers for I/O interfacing. '''
 
 
-from torii import Cat, Instance, Signal
+from torii.hdl import Cat, Instance, Signal
 
 
 # FIXME: move this out of here and into an ECP5-specific set of functionality

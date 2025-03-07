@@ -8,7 +8,7 @@
 ''' Stream generators. '''
 
 
-from torii import *
+from torii.hdl import *
 
 from .     import StreamInterface
 

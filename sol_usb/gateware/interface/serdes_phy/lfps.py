@@ -16,7 +16,7 @@ given only a bare input buffer, or vice versa.
 
 from math import ceil
 
-from torii         import *
+from torii.hdl     import *
 from torii.lib.cdc import FFSynchronizer
 
 __all__ = (

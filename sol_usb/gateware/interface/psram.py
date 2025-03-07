@@ -7,7 +7,7 @@
 ''' Interfaces to SOL's PSRAM chips.'''
 
 
-from torii         import Cat, Elaboratable, Module, Record, Signal
+from torii.hdl     import Cat, Elaboratable, Module, Record, Signal
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 
 from ..utils.io    import delay

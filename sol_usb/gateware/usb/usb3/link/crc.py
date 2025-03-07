@@ -10,7 +10,7 @@
 ''' CRC computation gateware for USB3. '''
 
 
-from torii    import *
+from torii.hdl import *
 
 
 def compute_usb_crc5(protected_bits):

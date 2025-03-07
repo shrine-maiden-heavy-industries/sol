@@ -9,7 +9,7 @@ import importlib.util
 import logging                          as log
 import os
 
-from torii                              import Record
+from torii.hdl                          import Record
 from torii.platform.vendor.lattice.ecp5 import ECP5Platform
 
 # from .core                              import NullPin

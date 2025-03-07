@@ -7,7 +7,7 @@
 
 ''' Incomplete example for working with a hardware PIPE PHY.'''
 
-from torii   import *
+from torii.hdl import *
 
 from sol_usb.cli import cli
 

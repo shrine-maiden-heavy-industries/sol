@@ -7,7 +7,7 @@
 ''' Data Packet Payload (DPP) management gateware. '''
 
 
-from torii                          import *
+from torii.hdl                      import *
 
 from usb_construct.types.superspeed import HeaderPacketType
 

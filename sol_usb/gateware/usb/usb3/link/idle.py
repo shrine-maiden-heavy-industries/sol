@@ -6,7 +6,7 @@
 
 ''' Logical idle detection / polling gateware. '''
 
-from torii         import *
+from torii.hdl     import *
 from torii.hdl.ast import Past
 
 from ...stream     import USBRawSuperSpeedStream

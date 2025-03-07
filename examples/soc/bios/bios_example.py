@@ -8,7 +8,7 @@
 from lambdasoc.periph import Peripheral
 
 
-from torii             import Cat, Elaboratable, Module
+from torii.hdl         import Cat, Elaboratable, Module
 from torii.hdl.rec     import Record
 
 from sol_usb.cli           import cli

@@ -6,7 +6,7 @@
 
 ''' USB3 link-layer abstraction.'''
 
-from torii             import *
+from torii.hdl         import *
 
 from ...stream         import (
 	SuperSpeedStreamArbiter, SuperSpeedStreamInterface, USBRawSuperSpeedStream

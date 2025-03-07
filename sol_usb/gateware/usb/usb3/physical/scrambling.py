@@ -10,7 +10,7 @@
 ''' Scrambling and descrambling for USB3. '''
 
 
-from torii     import *
+from torii.hdl import *
 
 from ...stream import USBRawSuperSpeedStream
 from .coding   import COM, stream_word_matches_symbol

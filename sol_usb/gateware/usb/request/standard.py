@@ -11,7 +11,7 @@ import os
 import unittest
 from typing                 import Callable, Iterable
 
-from torii                  import Module, Signal
+from torii.hdl              import Module, Signal
 from torii.hdl.dsl          import Operator
 from torii.hdl.ast          import Value, Cat
 

@@ -13,7 +13,7 @@ import time
 
 from luminary_fpga                  import ApolloDebugger, ApolloILAFrontend
 
-from torii                          import Cat, Elaboratable, Module, Signal
+from torii.hdl                      import Cat, Elaboratable, Module, Signal
 
 from sol_usb.cli                    import cli
 from sol_usb.gateware.debug.ila     import SyncSerialILA

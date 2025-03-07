@@ -6,7 +6,7 @@
 
 ''' Header Packet Rx-handling gateware. '''
 
-from torii                          import *
+from torii.hdl                      import *
 from torii.hdl.ast                  import Fell
 
 from usb_construct.types.superspeed import LinkCommand

@@ -8,7 +8,7 @@
 
 from abc           import abstractmethod
 
-from torii         import Cat, Elaboratable, Module, Signal
+from torii.hdl     import Cat, Elaboratable, Module, Signal
 from torii.hdl.dsl import Operator
 
 from ...utils.bus  import OneHotMultiplexer

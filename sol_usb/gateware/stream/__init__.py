@@ -6,7 +6,7 @@
 
 ''' Core stream definitions. '''
 
-from torii import Signal, Record
+from torii.hdl import Signal, Record
 
 class StreamInterface(Record):
 	'''

@@ -7,7 +7,7 @@
 ''' UART interface gateware.'''
 
 
-from torii         import Cat, Elaboratable, Module, Signal
+from torii.hdl     import Cat, Elaboratable, Module, Signal
 from torii.lib.soc import memory, wishbone
 
 from ..stream      import StreamInterface

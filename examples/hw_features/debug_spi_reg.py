@@ -6,7 +6,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-from torii                      import Cat, Elaboratable, Module
+from torii.hdl                  import Cat, Elaboratable, Module
 
 from sol_usb.cli                    import cli
 from sol_usb.gateware.interface.spi import SPIRegisterInterface

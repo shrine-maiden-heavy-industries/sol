@@ -17,7 +17,7 @@ from datetime                               import datetime
 from enum                                   import IntEnum, IntFlag
 from typing                                 import Optional
 
-from torii                                  import Elaboratable, Module, Signal
+from torii.hdl                              import Elaboratable, Module, Signal
 from torii.build.res                        import ResourceError
 from torii.hdl.dsl                          import Operator
 

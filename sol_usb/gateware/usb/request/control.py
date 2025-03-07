@@ -8,7 +8,7 @@
 
 import unittest
 
-from torii          import *
+from torii.hdl      import *
 
 from ..usb2.request import USBRequestHandler
 

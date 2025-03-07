@@ -5,7 +5,7 @@
 
 ''' Pure-gateware, UTMI-compatible Full Speed PHY.'''
 
-from torii         import Cat, Elaboratable, Module, Signal
+from torii.hdl     import Cat, Elaboratable, Module, Signal
 
 from .receiver     import RxPipeline
 from .transmitter  import TxPipeline

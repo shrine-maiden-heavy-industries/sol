@@ -8,7 +8,7 @@
 This module contains definitions of memory units that work well for USB applications.
 '''
 
-from torii          import Elaboratable, Memory, Module, Signal
+from torii.hdl      import Elaboratable, Memory, Module, Signal
 from torii.hdl.xfrm import DomainRenamer
 
 

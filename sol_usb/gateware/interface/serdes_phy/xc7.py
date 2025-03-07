@@ -4,7 +4,7 @@
 
 from math  import ceil
 
-from torii import *
+from torii.hdl import *
 
 from .lfps import _LFPS_PERIOD_MAX
 

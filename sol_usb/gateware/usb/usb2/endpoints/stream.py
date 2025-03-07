@@ -12,7 +12,7 @@ connecting streams to USB endpoints.
 '''
 
 
-from torii      import Elaboratable, Module, Signal
+from torii.hdl  import Elaboratable, Module, Signal
 
 from ....memory import TransactionalizedFIFO
 from ...stream  import StreamInterface, USBOutStreamBoundaryDetector

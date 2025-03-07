@@ -6,7 +6,7 @@
 
 ''' Low-level USB analyzer gateware. '''
 
-from torii            import Elaboratable, Module, Signal, Cat, DomainRenamer
+from torii.hdl        import Elaboratable, Module, Signal, Cat, DomainRenamer
 from torii.lib.fifo   import SyncFIFOBuffered
 from typing           import TYPE_CHECKING
 

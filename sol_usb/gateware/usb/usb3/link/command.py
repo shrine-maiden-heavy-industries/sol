@@ -7,7 +7,7 @@
 ''' USB Link Commands Transmitter/Receivers '''
 
 
-from torii             import *
+from torii.hdl         import *
 
 from ...stream         import USBRawSuperSpeedStream
 from ..physical.coding import EPF, SLC, get_word_for_symbols, stream_matches_symbols

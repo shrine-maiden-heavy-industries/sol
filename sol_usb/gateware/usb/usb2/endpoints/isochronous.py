@@ -11,7 +11,7 @@ These interfaces provide interfaces for connecting memories or memory-like
 interfaces to hosts via isochronous pipes.
 '''
 
-from torii      import Elaboratable, Module, Signal
+from torii.hdl  import Elaboratable, Module, Signal
 
 from ..endpoint import EndpointInterface
 

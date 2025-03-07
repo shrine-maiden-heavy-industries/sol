@@ -10,7 +10,7 @@ Its components facilitate data transfer longer than a single packet.
 '''
 
 
-from torii         import Array, Elaboratable, Module, Signal
+from torii.hdl     import Array, Elaboratable, Module, Signal
 from torii.hdl.mem import Memory
 
 from ...stream     import StreamInterface

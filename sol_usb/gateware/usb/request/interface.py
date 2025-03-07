@@ -7,7 +7,7 @@
 ''' Request components shared between USB2 and USB3. '''
 
 
-from torii         import *
+from torii.hdl     import *
 from torii.hdl.rec import Direction
 
 

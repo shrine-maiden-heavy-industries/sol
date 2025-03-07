@@ -10,7 +10,7 @@ to your own designs; including the core :class:`USBDevice` class.
 '''
 
 
-from torii                     import Const, Elaboratable, Module, Signal
+from torii.hdl                 import Const, Elaboratable, Module, Signal
 
 from usb_construct.emitters    import DeviceDescriptorCollection
 

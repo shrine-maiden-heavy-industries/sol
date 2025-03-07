@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                      import Signal
+from torii.hdl                  import Signal
 
 from sol_usb.gateware.interface.spi import SPIDeviceInterface, SPIRegisterInterface
 from sol_usb.gateware.test          import SolGatewareTestCase, sync_test_case

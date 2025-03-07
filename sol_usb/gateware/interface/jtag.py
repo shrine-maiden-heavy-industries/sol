@@ -6,7 +6,7 @@
 
 ''' Hardware for communicating over various FPGAs' debug interfaces. '''
 
-from torii         import *
+from torii.hdl     import *
 from torii.hdl.ast import ValueCastable
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT
 from torii.lib.cdc import FFSynchronizer

@@ -6,7 +6,7 @@
 
 ''' Link Management Packet (LMP) -related gateware. '''
 
-from torii                          import *
+from torii.hdl                      import *
 
 from usb_construct.types.superspeed import HeaderPacketType, LinkManagementPacketSubtype
 

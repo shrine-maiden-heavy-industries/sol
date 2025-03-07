@@ -6,7 +6,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-from torii            import Elaboratable, Module
+from torii.hdl        import Elaboratable, Module
 
 from sol_usb.cli          import cli
 from sol_usb.full_devices import USBSerialDevice

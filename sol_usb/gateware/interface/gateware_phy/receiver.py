@@ -32,7 +32,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-from torii          import Cat, Const, Elaboratable, Module, Signal
+from torii.hdl      import Cat, Const, Elaboratable, Module, Signal
 from torii.hdl.ast  import Past
 from torii.hdl.xfrm import ResetInserter
 from torii.lib.fifo import AsyncFIFOBuffered

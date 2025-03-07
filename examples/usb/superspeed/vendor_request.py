@@ -6,7 +6,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-from torii                  import *
+from torii.hdl              import *
 
 from usb_construct.emitters import SuperSpeedDeviceDescriptorCollection
 from usb_construct.types    import USBRequestType

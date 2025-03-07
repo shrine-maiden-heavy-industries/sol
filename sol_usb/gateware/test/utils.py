@@ -12,7 +12,7 @@ import unittest
 from functools import wraps
 from typing    import Any, TypeVar, Generic
 
-from torii     import Elaboratable, Fragment, Signal
+from torii.hdl import Elaboratable, Fragment, Signal
 from torii.sim import Simulator
 
 

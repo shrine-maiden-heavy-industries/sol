@@ -8,7 +8,7 @@
 
 from luminary_fpga              import create_ila_frontend
 
-from torii                      import *
+from torii.hdl                  import *
 
 from sol_usb.cli                import cli
 from sol_usb.gateware.debug.ila import SyncSerialILA

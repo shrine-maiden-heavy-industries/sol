@@ -5,7 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-from torii                        import *
+from torii.hdl                    import *
 
 from lambdasoc.periph             import Peripheral
 from lambdasoc.periph.timer       import TimerPeripheral

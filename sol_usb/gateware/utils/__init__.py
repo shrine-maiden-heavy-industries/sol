@@ -5,7 +5,7 @@
 
 ''' Simple utility constructs for SOL. '''
 
-from torii import Signal
+from torii.hdl import Signal
 
 from .cdc  import synchronize
 

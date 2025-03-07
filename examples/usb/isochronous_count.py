@@ -8,7 +8,7 @@
 
 import os
 
-from torii                  import Elaboratable, Module
+from torii.hdl              import Elaboratable, Module
 
 from usb_construct.emitters import DeviceDescriptorCollection
 from usb_construct.types    import USBTransferType

@@ -9,7 +9,7 @@
 
 
 
-from torii         import (
+from torii.hdl     import (
 	Cat, ClockSignal, Const, Elaboratable, Module, Record, ResetSignal, Signal
 )
 from torii.hdl.ast import Rose

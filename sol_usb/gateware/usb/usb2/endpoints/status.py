@@ -13,7 +13,7 @@ repeatedly poll a device for status.
 '''
 
 
-from torii         import Array, Elaboratable, Module, Signal
+from torii.hdl     import Array, Elaboratable, Module, Signal
 
 from ....utils.cdc import synchronize
 from ..endpoint    import EndpointInterface

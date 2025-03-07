@@ -6,7 +6,7 @@
 
 ''' UTMI interfacing. '''
 
-from torii         import Signal
+from torii.hdl     import Signal
 from torii.hdl.rec import DIR_FANIN, DIR_FANOUT, Record
 
 from ..utils.bus   import OneHotMultiplexer

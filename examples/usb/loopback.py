@@ -6,7 +6,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-from torii                  import Elaboratable, Module
+from torii.hdl              import Elaboratable, Module
 
 from usb_construct.emitters import DeviceDescriptorCollection
 

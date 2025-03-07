@@ -7,7 +7,7 @@
 ''' Endpoint abstractions for USB3. '''
 
 
-from torii        import *
+from torii.hdl    import *
 
 from ...stream    import SuperSpeedStreamInterface
 from ..link.data  import DataHeaderPacket

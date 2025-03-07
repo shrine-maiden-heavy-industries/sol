@@ -8,7 +8,7 @@
 
 import unittest
 
-from torii                    import *
+from torii.hdl                import *
 
 from usb_construct.emitters   import DeviceDescriptorCollection
 from usb_construct.types      import USBRequestType, USBStandardRequests

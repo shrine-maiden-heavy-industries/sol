@@ -6,7 +6,7 @@
 
 ''' Stream multiplexers/arbiters. '''
 
-from torii import *
+from torii.hdl import *
 
 from . import StreamInterface
 

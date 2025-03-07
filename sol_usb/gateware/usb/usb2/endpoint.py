@@ -7,7 +7,7 @@
 ''' Gateware for working with abstract endpoints. '''
 
 
-from torii         import Elaboratable, Module, Signal, Cat
+from torii.hdl     import Elaboratable, Module, Signal, Cat
 from torii.hdl.ast import Past
 
 from ...utils.bus  import OneHotMultiplexer

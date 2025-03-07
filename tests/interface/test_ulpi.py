@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii                       import Record
+from torii.hdl                   import Record
 
 from sol_usb.gateware.interface.ulpi import (
 	ULPIRegisterWindow, ULPIRxEventDecoder, ULPIControlTranslator, ULPITransmitTranslator

@@ -7,7 +7,7 @@
 ''' Interfaces for working with an ECP5 MSPI configuration flash. '''
 
 
-from torii import Signal, Module, Elaboratable, Instance
+from torii.hdl import Signal, Module, Elaboratable, Instance
 
 
 class ECP5ConfigurationFlashInterface(Elaboratable):

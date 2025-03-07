@@ -14,7 +14,7 @@ import sys
 import tempfile
 from abc              import ABCMeta, abstractmethod
 
-from torii            import Cat, DomainRenamer, Elaboratable, Memory, Module, Signal
+from torii.hdl        import Cat, DomainRenamer, Elaboratable, Memory, Module, Signal
 from torii.hdl.ast    import Rose
 from torii.lib.cdc    import FFSynchronizer
 from torii.lib.fifo   import AsyncFIFOBuffered

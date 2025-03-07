@@ -9,7 +9,7 @@
 
 ''' Code for USB3 physical-layer encoding. '''
 
-from torii     import *
+from torii.hdl import *
 
 from ...stream import USBRawSuperSpeedStream
 from .coding   import COM, EPF, SHP, SLC, get_word_for_symbols

@@ -6,8 +6,8 @@
 
 ''' Stream deserializers. '''
 
-from torii    import *
-from .request import USBOutStreamInterface
+from torii.hdl import *
+from .request  import USBOutStreamInterface
 
 
 class StreamDeserializer(Elaboratable):

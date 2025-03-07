@@ -13,7 +13,7 @@ For an example, see ``examples/usb/eptri`` or TinyUSB's ``sol/dcd_eptri.c``.
 '''
 
 
-from torii              import *
+from torii.hdl          import *
 from torii.hdl.xfrm     import DomainRenamer, ResetInserter
 from torii.lib.fifo     import SyncFIFOBuffered
 

@@ -8,7 +8,7 @@
 ''' Low-level USB transceiver gateware -- control transfer components. '''
 
 from typing                 import List
-from torii                  import Elaboratable, Module, Cat
+from torii.hdl              import Elaboratable, Module, Cat
 from torii.hdl.dsl          import Operator
 
 from usb_construct.emitters import DeviceDescriptorCollection

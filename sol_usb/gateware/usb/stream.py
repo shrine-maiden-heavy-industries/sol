@@ -7,7 +7,7 @@
 ''' Core stream definitions. '''
 
 
-from torii            import Elaboratable, Module, Signal
+from torii.hdl        import Elaboratable, Module, Signal
 from torii.hdl.rec    import DIR_FANOUT, Record
 from torii.hdl.xfrm   import DomainRenamer
 

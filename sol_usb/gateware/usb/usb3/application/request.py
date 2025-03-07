@@ -8,7 +8,7 @@
 
 
 
-from torii                  import *
+from torii.hdl              import *
 
 from ....utils              import falling_edge_detected
 from ...request             import SetupPacket
