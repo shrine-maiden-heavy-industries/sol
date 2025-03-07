@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: BSD-2-Clause
 
-from setuptools import setup, find_packages
 from pathlib    import Path
+
+from setuptools import find_packages, setup
 
 REPO_ROOT   = Path(__file__).parent
 README_FILE = (REPO_ROOT / 'README.md')

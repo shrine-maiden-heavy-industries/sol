@@ -5,14 +5,12 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
-from torii.hdl                  import Cat, Elaboratable, Module
+from torii.hdl                      import Cat, Elaboratable, Module
 
 from sol_usb.cli                    import cli
 from sol_usb.gateware.interface.spi import SPIRegisterInterface
 from sol_usb.gateware.platform      import NullPin
 from sol_usb.gateware.utils.cdc     import synchronize
-
 
 class DebugSPIRegisterExample(Elaboratable):
 	''' Gateware meant to demonstrate use of the Debug Controller's register interface. '''

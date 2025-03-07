@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from sol_usb.gateware.interface.uart import UARTTransmitter, UARTMultibyteTransmitter
+from sol_usb.gateware.interface.uart import UARTMultibyteTransmitter, UARTTransmitter
 from sol_usb.gateware.test           import SolGatewareTestCase, sync_test_case
 
 class UARTTransmitterTest(SolGatewareTestCase):

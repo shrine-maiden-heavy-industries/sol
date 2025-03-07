@@ -18,7 +18,6 @@ from usb_construct.types.superspeed import HeaderPacketType
 
 from ..link.header                  import HeaderQueue
 
-
 class DataHeaderReceiver(Elaboratable):
 	''' Gateware that handles received Data Header packets.
 

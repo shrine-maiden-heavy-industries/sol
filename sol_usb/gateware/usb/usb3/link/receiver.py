@@ -17,7 +17,6 @@ from .command                       import LinkCommandGenerator
 from .crc                           import HeaderPacketCRC, compute_usb_crc5
 from .header                        import HeaderPacket, HeaderQueue
 
-
 class RawHeaderPacketReceiver(Elaboratable):
 	''' Class that monitors the USB bus for Header Packet, and receives them.
 

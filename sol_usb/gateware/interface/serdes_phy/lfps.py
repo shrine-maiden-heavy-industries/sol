@@ -14,7 +14,7 @@ I/O buffers directly through fabric. This gateware can detect patterns that fit 
 given only a bare input buffer, or vice versa.
 '''
 
-from math import ceil
+from math          import ceil
 
 from torii.hdl     import *
 from torii.lib.cdc import FFSynchronizer

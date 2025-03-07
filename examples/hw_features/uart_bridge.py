@@ -12,11 +12,10 @@ Connect to the ttyACM connection at 115200 baud, 8N1,
 and you should see 'Hello World' 'typed' repeatedly.
 '''
 
-from torii.hdl                   import Signal, Elaboratable, Module, Array, Cat
+from torii.hdl                       import Array, Cat, Elaboratable, Module, Signal
 
 from sol_usb.cli                     import cli
 from sol_usb.gateware.interface.uart import UARTTransmitter
-
 
 class UARTBridgeExample(Elaboratable):
 

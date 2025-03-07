@@ -12,12 +12,10 @@ These are mainly meant for use with interrupt endpoints; and allow a host to e.g
 repeatedly poll a device for status.
 '''
 
-
 from torii.hdl     import Array, Elaboratable, Module, Signal
 
 from ....utils.cdc import synchronize
 from ..endpoint    import EndpointInterface
-
 
 class USBSignalInEndpoint(Elaboratable):
 	''' Endpoint that transmits the value of a signal to a host whenever polled.

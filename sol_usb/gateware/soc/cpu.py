@@ -5,6 +5,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 from minerva.core  import Minerva
+
 from torii.lib.soc import wishbone
 
 

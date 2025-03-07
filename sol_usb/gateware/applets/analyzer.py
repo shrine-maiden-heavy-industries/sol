@@ -11,14 +11,15 @@
 
 import errno
 import time
-import usb
 from array                                  import array
 from datetime                               import datetime
 from enum                                   import IntEnum, IntFlag
 from typing                                 import Optional
 
-from torii.hdl                              import Elaboratable, Module, Signal
+import usb
+
 from torii.build.res                        import ResourceError
+from torii.hdl                              import Elaboratable, Module, Signal
 from torii.hdl.dsl                          import Operator
 
 from usb_construct.emitters                 import DeviceDescriptorCollection
@@ -30,8 +31,8 @@ from sol_usb.gateware.platform              import get_appropriate_platform
 from sol_usb.gateware.stream.generator      import StreamSerializer
 from sol_usb.gateware.usb.analyzer          import USBAnalyzer
 from sol_usb.gateware.usb.request.control   import ControlRequestHandler
-from sol_usb.gateware.usb.stream            import USBInStreamInterface
 from sol_usb.gateware.usb.request.interface import SetupPacket
+from sol_usb.gateware.usb.stream            import USBInStreamInterface
 from sol_usb.usb2                           import USBDevice, USBStreamInEndpoint
 
 USB_SPEED_HIGH       = 0b00

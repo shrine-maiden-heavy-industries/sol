@@ -1,7 +1,9 @@
 # SPDX-License-Identifier: BSD-2-Clause
 
-import os, sys
+import os
+import sys
 from pathlib import Path
+
 sys.path.insert(0, os.path.abspath('.'))
 
 from sol_usb import __version__ as sol_version

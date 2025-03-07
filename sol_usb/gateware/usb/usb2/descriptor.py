@@ -17,7 +17,6 @@ from usb_construct.types.descriptors.standard import StandardDescriptorNumbers
 from ...stream.generator                      import ConstantStreamGenerator
 from ..stream                                 import USBInStreamInterface
 
-
 class USBDescriptorStreamGenerator(ConstantStreamGenerator):
 	''' Specialized stream generator for generating USB descriptor constants. '''
 

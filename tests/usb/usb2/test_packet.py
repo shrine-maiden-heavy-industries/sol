@@ -3,13 +3,12 @@
 from torii.hdl                        import Record, Signal
 from torii.sim                        import Settle
 
-from sol_usb.gateware.usb.usb2.packet import (
-	USBTokenDetector, USBHandshakeDetector, USBDataPacketReceiver, USBDataPacketDeserializer,
-	USBDataPacketGenerator, USBHandshakeGenerator, USBInterpacketTimer,
-	InterpacketTimerInterface
-)
-from sol_usb.gateware.usb.usb2        import USBSpeed
 from sol_usb.gateware.test            import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.usb.usb2        import USBSpeed
+from sol_usb.gateware.usb.usb2.packet import (
+	InterpacketTimerInterface, USBDataPacketDeserializer, USBDataPacketGenerator, USBDataPacketReceiver,
+	USBHandshakeDetector, USBHandshakeGenerator, USBInterpacketTimer, USBTokenDetector
+)
 
 class UTMIBus(Record):
 	rx_data: Signal[8]

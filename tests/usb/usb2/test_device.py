@@ -1,12 +1,12 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from usb_construct.types              import DescriptorTypes
+from usb_construct.types                  import DescriptorTypes
 
-from sol_usb.gateware.usb.usb2.device     import USBDevice
 from sol_usb.gateware.test                import usb_domain_test_case
 from sol_usb.gateware.test.usb2           import USBDeviceTest
 from sol_usb.gateware.usb.usb2            import USBPacketID
 from sol_usb.gateware.usb.usb2.descriptor import DeviceDescriptorCollection
+from sol_usb.gateware.usb.usb2.device     import USBDevice
 
 class FullDeviceTest(USBDeviceTest):
 	''' :meta private: '''

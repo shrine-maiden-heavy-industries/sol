@@ -1,8 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from sol_usb.gateware.usb.usb3.physical.ctc import CTCSkipRemover
 from sol_usb.gateware.test.utils            import SolSSGatewareTestCase, ss_domain_test_case
-
+from sol_usb.gateware.usb.usb3.physical.ctc import CTCSkipRemover
 
 class CTCSkipRemoverTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = CTCSkipRemover

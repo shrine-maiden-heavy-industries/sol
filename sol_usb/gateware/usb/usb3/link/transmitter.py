@@ -13,11 +13,8 @@ from usb_construct.types.superspeed import HeaderPacketType, LinkCommand
 from ...stream                      import SuperSpeedStreamInterface, USBRawSuperSpeedStream
 from ..physical.coding              import EDB, END, EPF, SDP, SHP, get_word_for_symbols
 from .command                       import LinkCommandDetector
-from .crc                           import (
-	DataPacketPayloadCRC, HeaderPacketCRC, compute_usb_crc5
-)
+from .crc                           import DataPacketPayloadCRC, HeaderPacketCRC, compute_usb_crc5
 from .header                        import HeaderPacket, HeaderQueue
-
 
 class RawPacketTransmitter(Elaboratable):
 	''' Class that generates and sends header packets; with an optional payload attached.

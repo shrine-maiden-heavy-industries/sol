@@ -12,7 +12,6 @@ from torii.hdl      import *
 
 from ..usb2.request import USBRequestHandler
 
-
 class ControlRequestHandler(USBRequestHandler):
 	''' Pure-gateware USB control request handler. '''
 

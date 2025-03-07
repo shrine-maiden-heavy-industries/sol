@@ -1,11 +1,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from usb_construct.types                       import USBRequestRecipient, USBRequestType
+from usb_construct.types                           import USBRequestRecipient, USBRequestType
 
+from sol_usb.gateware.test                         import SolSSGatewareTestCase, ss_domain_test_case
 from sol_usb.gateware.usb.usb3.application.request import SuperSpeedSetupDecoder
-from sol_usb.gateware.test                         import (
-	SolSSGatewareTestCase, ss_domain_test_case
-)
 
 class SuperSpeedSetupDecoderTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = SuperSpeedSetupDecoder

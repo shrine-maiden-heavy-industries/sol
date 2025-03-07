@@ -3,9 +3,7 @@ from struct                                       import pack as structPack
 from struct                                       import unpack as structUnpack
 from typing                                       import Tuple
 
-from torii.hdl                                    import (
-	DomainRenamer, Elaboratable, Memory, Module, Signal
-)
+from torii.hdl                                    import DomainRenamer, Elaboratable, Memory, Module, Signal
 from usb_construct.emitters.descriptors.microsoft import PlatformDescriptorCollection
 
 from ...stream                                    import USBInStreamInterface

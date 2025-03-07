@@ -11,14 +11,12 @@ The endpoint interfaces in this module provide endpoint interfaces suitable for
 connecting streams to USB endpoints.
 '''
 
-
 from torii.hdl  import Elaboratable, Module, Signal
 
 from ....memory import TransactionalizedFIFO
 from ...stream  import StreamInterface, USBOutStreamBoundaryDetector
 from ..endpoint import EndpointInterface
 from ..transfer import USBInTransferManager
-
 
 class USBStreamInEndpoint(Elaboratable):
 	''' Endpoint interface that transmits a simple data stream to a host.

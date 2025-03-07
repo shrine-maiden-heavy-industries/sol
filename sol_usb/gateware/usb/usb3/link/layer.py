@@ -8,9 +8,7 @@
 
 from torii.hdl         import *
 
-from ...stream         import (
-	SuperSpeedStreamArbiter, SuperSpeedStreamInterface, USBRawSuperSpeedStream
-)
+from ...stream         import SuperSpeedStreamArbiter, SuperSpeedStreamInterface, USBRawSuperSpeedStream
 from ..physical.coding import IDL
 from .data             import DataHeaderPacket, DataPacketReceiver, DataPacketTransmitter
 from .header           import HeaderQueue, HeaderQueueArbiter
@@ -20,7 +18,6 @@ from .ordered_sets     import TSTransceiver
 from .receiver         import HeaderPacketReceiver
 from .timers           import LinkMaintenanceTimers
 from .transmitter      import PacketTransmitter
-
 
 class USB3LinkLayer(Elaboratable):
 	''' Abstraction encapsulating the USB3 link layer hardware.

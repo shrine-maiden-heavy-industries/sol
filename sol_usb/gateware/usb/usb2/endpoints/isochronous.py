@@ -15,7 +15,6 @@ from torii.hdl  import Elaboratable, Module, Signal
 
 from ..endpoint import EndpointInterface
 
-
 class USBIsochronousInEndpoint(Elaboratable):
 	''' Isochronous endpoint that presents a memory-like interface.
 

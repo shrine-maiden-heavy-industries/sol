@@ -1,10 +1,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii.hdl                    import Record
+from torii.hdl                        import Record
 
 from sol_usb.gateware.interface.psram import HyperRAMInterface
 from sol_usb.gateware.test            import SolGatewareTestCase, sync_test_case
-
 
 class TestHyperRAMInterface(SolGatewareTestCase):
 

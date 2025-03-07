@@ -14,9 +14,7 @@ from torii.lib.cdc import FFSynchronizer
 
 from ..pipe        import PIPEInterface
 from .lfps         import LFPSSquareWaveGenerator
-from .xc7          import (
-	DRPArbiter, DRPFieldController, DRPInterface, GTOOBClockDivider, GTResetDeferrer
-)
+from .xc7          import DRPArbiter, DRPFieldController, DRPInterface, GTOOBClockDivider, GTResetDeferrer
 
 Open = Signal
 

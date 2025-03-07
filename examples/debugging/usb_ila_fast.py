@@ -5,14 +5,10 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
-from torii.hdl                    import Array, Elaboratable, Module, Signal
+from torii.hdl                        import Array, Elaboratable, Module, Signal
 
 from sol_usb.cli                      import cli
-from sol_usb.gateware.usb.devices.ila import (
-	USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
-)
-
+from sol_usb.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
 
 class ILAExample(Elaboratable):
 	''' Gateware module that demonstrates use of the internal ILA. '''

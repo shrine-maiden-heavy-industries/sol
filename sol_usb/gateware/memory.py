@@ -11,7 +11,6 @@ This module contains definitions of memory units that work well for USB applicat
 from torii.hdl      import Elaboratable, Memory, Module, Signal
 from torii.hdl.xfrm import DomainRenamer
 
-
 class TransactionalizedFIFO(Elaboratable):
 	'''
 	Transactionalized, buffer first-in-first-out queue.

@@ -5,15 +5,13 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-from lambdasoc.periph import Peripheral
+from lambdasoc.periph     import Peripheral
 
+from torii.hdl            import Cat, Elaboratable, Module
+from torii.hdl.rec        import Record
 
-from torii.hdl         import Cat, Elaboratable, Module
-from torii.hdl.rec     import Record
-
-from sol_usb.cli           import cli
-from sol_usb.gateware.soc  import SimpleSoC
-
+from sol_usb.cli          import cli
+from sol_usb.gateware.soc import SimpleSoC
 
 class LEDPeripheral(Peripheral, Elaboratable):
 	''' Example peripheral that controls the board's LEDs. '''

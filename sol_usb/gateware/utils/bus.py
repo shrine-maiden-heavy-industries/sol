@@ -6,9 +6,8 @@
 
 ''' Utilities for working with busses. '''
 
-from torii.hdl        import Elaboratable, Module, Cat
+from torii.hdl        import Cat, Elaboratable, Module
 from torii.lib.coding import Encoder
-
 
 class OneHotMultiplexer(Elaboratable):
 	'''

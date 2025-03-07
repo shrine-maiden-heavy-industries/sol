@@ -6,18 +6,14 @@
 
 ''' Data Packet Payload (DPP) management gateware. '''
 
-
 from torii.hdl                      import *
 
 from usb_construct.types.superspeed import HeaderPacketType
 
 from ...stream                      import SuperSpeedStreamInterface, USBRawSuperSpeedStream
 from ..physical.coding              import EPF, SDP, SHP, stream_matches_symbols
-from .crc                           import (
-	DataPacketPayloadCRC, HeaderPacketCRC, compute_usb_crc5
-)
+from .crc                           import DataPacketPayloadCRC, HeaderPacketCRC, compute_usb_crc5
 from .header                        import HeaderPacket, HeaderQueue
-
 
 class DataHeaderPacket(HeaderPacket):
 	DW0_LAYOUT = [

@@ -1,10 +1,9 @@
 from torii.hdl              import *
-from usb_construct.emitters import (
-	DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
-)
+
+from usb_construct.emitters import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
 
 from sol_usb.usb2           import USBDevice, USBStreamInEndpoint
-from sol_usb.usb3           import USBSuperSpeedDevice, SuperSpeedStreamInEndpoint
+from sol_usb.usb3           import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
 
 VENDOR_ID  = 0x16d0
 PRODUCT_ID = 0x0f3b

@@ -6,8 +6,6 @@
 
 ''' Control-request interfacing and gateware for USB3. '''
 
-
-
 from torii.hdl              import *
 
 from ....utils              import falling_edge_detected
@@ -15,7 +13,6 @@ from ...request             import SetupPacket
 from ...stream              import SuperSpeedStreamInterface
 from ..link.data            import DataHeaderPacket
 from ..protocol.transaction import HandshakeGeneratorInterface, HandshakeReceiverInterface
-
 
 class SuperSpeedRequestHandlerInterface:
 	''' Interface representing a connection between a control endpoint and a request handler.

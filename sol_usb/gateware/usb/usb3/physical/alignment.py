@@ -14,7 +14,6 @@ from torii.hdl import *
 from ...stream import USBRawSuperSpeedStream
 from .coding   import COM, EPF, SHP, SLC, get_word_for_symbols
 
-
 class RxWordAligner(Elaboratable):
 	''' Receiver word alignment.
 

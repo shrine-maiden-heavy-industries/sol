@@ -11,9 +11,9 @@
 
 ''' Peripheral helpers for SOL devices. '''
 
-from torii.util                 import tracer
+from lambdasoc.periph.base import PeripheralBridge
 
-from lambdasoc.periph.base      import PeripheralBridge
+from torii.util            import tracer
 
 __all__ = (
 	'Peripheral',

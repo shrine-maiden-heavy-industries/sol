@@ -7,11 +7,9 @@
 
 ''' USB3 PIPE interfacing gateware. '''
 
-
 from torii.hdl      import *
 from torii.lib.cdc  import FFSynchronizer, ResetSynchronizer
 from torii.lib.fifo import AsyncFIFOBuffered
-
 
 class PIPEInterface(Elaboratable):
 	''' Interface present on hardware that implements the PHY Interface for PCI Express and USB 3.0 (PIPE).

@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from torii.hdl import Signal, Cat
+from torii.hdl                  import Cat, Signal
 
-from sol_usb.gateware.debug.ila import IntegratedLogicAnalyzer, SyncSerialILA, StreamILA
+from sol_usb.gateware.debug.ila import IntegratedLogicAnalyzer, StreamILA, SyncSerialILA
 from sol_usb.gateware.test      import SolGatewareTestCase, sync_test_case
 
-from .interface.test_spi    import SPIGatewareTestCase
+from .interface.test_spi        import SPIGatewareTestCase
 
 class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 

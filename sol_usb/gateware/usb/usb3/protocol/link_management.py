@@ -12,7 +12,6 @@ from usb_construct.types.superspeed import HeaderPacketType, LinkManagementPacke
 
 from ..link.header                  import HeaderPacket, HeaderQueue
 
-
 class PortCapabilityHeaderPacket(HeaderPacket):
 	DW0_LAYOUT = [
 		('type',        5),

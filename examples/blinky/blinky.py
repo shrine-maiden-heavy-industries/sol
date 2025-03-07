@@ -5,8 +5,7 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
-from torii.hdl             import Signal, Module, Elaboratable, Cat
+from torii.hdl                 import Cat, Elaboratable, Module, Signal
 
 from sol_usb.cli               import cli
 from sol_usb.gateware.platform import NullPin

@@ -6,8 +6,7 @@
 
 ''' Simple gateware debug console for SOL. '''
 
-
-from torii.hdl import Signal, Module,  Elaboratable, Array
+from torii.hdl import Array, Elaboratable, Module, Signal
 
 class DebugConsole(Elaboratable):
 	''' Simple debug console gateware for SOL.

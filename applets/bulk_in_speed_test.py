@@ -13,9 +13,8 @@ import time
 
 import usb1
 
-from sol_usb.gateware.applets.speed_test import USBInSpeedTestDevice, USBInSuperSpeedTestDevice, BULK_ENDPOINT_NUMBER
-
-from sol_usb.cli import cli, setup_logger
+from sol_usb.cli                         import cli, setup_logger
+from sol_usb.gateware.applets.speed_test import BULK_ENDPOINT_NUMBER, USBInSpeedTestDevice, USBInSuperSpeedTestDevice
 
 # Set the total amount of data to be used in our speed test.
 TEST_DATA_SIZE = 1 * 1024 * 1024

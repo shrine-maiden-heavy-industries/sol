@@ -2,12 +2,11 @@
 
 ''' Common building blocks for Xilinx 7-series targets. '''
 
-from math  import ceil
+from math      import ceil
 
 from torii.hdl import *
 
-from .lfps import _LFPS_PERIOD_MAX
-
+from .lfps     import _LFPS_PERIOD_MAX
 
 class DRPInterface:
 	''' Dynamic Reconfiguration Port interface for Xilinx FPGAs. '''

@@ -13,13 +13,11 @@
 
 ''' Soft PIPE backend for the Lattice ECP5 SerDes. '''
 
-
 from torii.hdl     import *
 from torii.lib.cdc import FFSynchronizer
 
 from ..pipe        import PIPEInterface
 from .lfps         import LFPSSquareWaveDetector, LFPSSquareWaveGenerator
-
 
 class ECP5SerDesPLLConfiguration:
 	def __init__(self, refclk, refclk_freq, linerate):

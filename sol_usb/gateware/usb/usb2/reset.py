@@ -6,12 +6,10 @@
 
 ''' Gateware that handles USB bus resets & speed detection. '''
 
-
 from torii.hdl         import *
 
 from ...interface.utmi import UTMIOperatingMode, UTMITerminationSelect, UTMITransmitInterface
 from .                 import USBSpeed
-
 
 def _generate_wide_incrementor(m, platform, adder_input):
 	'''

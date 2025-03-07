@@ -9,7 +9,6 @@ Contains the organizing hardware used to add USB Device functionality
 to your own designs; including the core :class:`USBDevice` class.
 '''
 
-
 from torii.hdl                 import Const, Elaboratable, Module, Signal
 
 from usb_construct.emitters    import DeviceDescriptorCollection
@@ -20,11 +19,10 @@ from ...interface.utmi         import UTMIInterfaceMultiplexer
 from .control                  import USBControlEndpoint
 from .endpoint                 import USBEndpointMultiplexer
 from .packet                   import (
-	USBDataPacketCRC, USBDataPacketGenerator, USBDataPacketReceiver, USBHandshakeDetector,
-	USBHandshakeGenerator, USBInterpacketTimer, USBTokenDetector
+	USBDataPacketCRC, USBDataPacketGenerator, USBDataPacketReceiver, USBHandshakeDetector, USBHandshakeGenerator,
+	USBInterpacketTimer, USBTokenDetector
 )
 from .reset                    import USBResetSequencer
-
 
 class USBDevice(Elaboratable):
 	''' Core gateware common to all SOL USB2 devices.

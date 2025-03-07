@@ -33,7 +33,7 @@
 
 from .           import crc
 from ...usb.usb2 import USBPacketID as PID
-
+from .           import crc
 
 def b(s):
 	'''Byte string with LSB first into an integer.

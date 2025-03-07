@@ -32,11 +32,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-
 from torii.hdl      import Elaboratable, Module, Signal
 from torii.hdl.xfrm import ResetInserter
 from torii.lib.cdc  import FFSynchronizer
-
 
 class TxShifter(Elaboratable):
 	'''

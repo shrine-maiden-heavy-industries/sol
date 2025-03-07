@@ -8,9 +8,8 @@
 
 import logging       as log
 
-from torii.hdl       import Record
 from torii.build.res import ResourceError
-
+from torii.hdl       import Record
 
 class NullPin(Record):
 	''' Stand-in for a I/O record. '''

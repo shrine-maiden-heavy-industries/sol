@@ -12,7 +12,6 @@ from ..interface.utmi    import UTMIInterface
 from .                   import SolGatewareTestCase
 from .contrib            import usb_packet
 
-
 class USBDeviceTest(SolGatewareTestCase):
 	''' Test case strap for UTMI-connected devices. '''
 

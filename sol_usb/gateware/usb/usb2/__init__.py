@@ -8,7 +8,7 @@
 
 from enum                import IntEnum, IntFlag
 
-from usb_construct.types import USBPIDCategory, USBDirection
+from usb_construct.types import USBDirection, USBPIDCategory
 
 #
 # TODO: these should be moved into a USBPacketID library

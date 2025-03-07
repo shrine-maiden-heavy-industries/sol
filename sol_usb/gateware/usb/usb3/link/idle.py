@@ -11,7 +11,6 @@ from torii.hdl.ast import Past
 
 from ...stream     import USBRawSuperSpeedStream
 
-
 class IdleHandshakeHandler(Elaboratable):
 	''' Unit that performs the USB3 idle handshake.
 

@@ -5,14 +5,12 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 from torii.hdl              import Elaboratable, Module
 
 from usb_construct.emitters import DeviceDescriptorCollection
 
-from sol_usb.cli                import cli
-from sol_usb.usb2               import USBDevice, USBStreamInEndpoint, USBStreamOutEndpoint
-
+from sol_usb.cli            import cli
+from sol_usb.usb2           import USBDevice, USBStreamInEndpoint, USBStreamOutEndpoint
 
 class USBStreamOutDeviceExample(Elaboratable):
 	'''

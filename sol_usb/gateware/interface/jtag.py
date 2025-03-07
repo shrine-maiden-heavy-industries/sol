@@ -14,7 +14,6 @@ from torii.lib.cdc import FFSynchronizer
 from ..utils       import falling_edge_detected, rising_edge_detected
 from .spi          import SPIRegisterInterface
 
-
 class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 	''' Hardware that creates a virtual 'debug SPI' port, exposed over JTAG.
 

@@ -6,9 +6,7 @@
 ''' Import shortcuts for our most commonly used functionality. '''
 
 # Create shorthands for the most common parts of the library's usb3 gateware.
-from .gateware.usb.usb3.application.request import (
-	SuperSpeedRequestHandler, SuperSpeedRequestHandlerInterface
-)
+from .gateware.usb.usb3.application.request import SuperSpeedRequestHandler, SuperSpeedRequestHandlerInterface
 from .gateware.usb.usb3.device              import USBSuperSpeedDevice
 from .gateware.usb.usb3.endpoints.stream    import SuperSpeedStreamInEndpoint
 

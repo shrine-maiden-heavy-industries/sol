@@ -5,13 +5,11 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
-from torii.hdl                  import Elaboratable, Module
+from torii.hdl                      import Elaboratable, Module
 
 from sol_usb.cli                    import cli
 from sol_usb.gateware.interface.spi import SPIDeviceInterface
 from sol_usb.gateware.utils.cdc     import synchronize
-
 
 class DebugSPIExample(Elaboratable):
 	''' Hardware meant to demonstrate use of the Debug Controller's SPI interface. '''

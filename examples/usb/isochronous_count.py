@@ -5,7 +5,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 import os
 
 from torii.hdl              import Elaboratable, Module
@@ -13,9 +12,8 @@ from torii.hdl              import Elaboratable, Module
 from usb_construct.emitters import DeviceDescriptorCollection
 from usb_construct.types    import USBTransferType
 
-from sol_usb.cli                import cli
-from sol_usb.usb2               import USBDevice, USBIsochronousInEndpoint
-
+from sol_usb.cli            import cli
+from sol_usb.usb2           import USBDevice, USBIsochronousInEndpoint
 
 class USBIsochronousCounterDeviceExample(Elaboratable):
 	'''

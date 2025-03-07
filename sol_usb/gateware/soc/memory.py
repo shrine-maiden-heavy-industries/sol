@@ -4,12 +4,10 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 import math
 
 from torii.hdl     import Elaboratable, Memory, Module
 from torii.lib.soc import memory, wishbone
-
 
 class WishboneRAM(Elaboratable):
 	''' Simple Wishbone-connected RAM. '''

@@ -18,7 +18,6 @@ from usb_construct.types import USBDirection
 from ...stream           import SuperSpeedStreamInterface
 from ..protocol.endpoint import SuperSpeedEndpointInterface
 
-
 class SuperSpeedStreamInEndpoint(Elaboratable):
 	''' Endpoint interface that transmits a simple data stream to a host.
 

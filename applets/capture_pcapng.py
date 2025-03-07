@@ -1,23 +1,21 @@
 #!/usr/bin/env python
 # SPDX-License-Identifier: BSD-3-Clause
-from sol_usb.gateware.applets.analyzer import (
-	USBAnalyzerConnection, USB_SPEED_LOW, USB_SPEED_FULL, USB_SPEED_HIGH
+
+from argparse                          import ArgumentParser
+from datetime                          import datetime
+from pathlib                           import Path
+from typing                            import BinaryIO
+
+from arrow                             import Arrow
+from construct                         import (
+	Aligned, BitsInteger, BitStruct, Bytes, Check, Computed, Const, CString, Default, Enum, GreedyRange, Hex, HexDump,
+	If, Int8ul, Int16ul, Int32ul, Int64sl, Int64ul, PaddedString, Pass, Rebuild, RepeatUntil, Struct, Switch, len_,
+	this
 )
-from argparse import ArgumentParser
-from pathlib import Path
-from construct import (
-	this,
-	Struct, Switch, Computed, If, RepeatUntil, Rebuild,
-	BitStruct, BitsInteger,
-	Hex, Enum, Int8ul, Int16ul, Int32ul, Int64ul, Int64sl, Bytes,
-	CString, PaddedString, HexDump, Check, Default, GreedyRange,
-	Const, Aligned, Pass, len_, Probe
-)
-from arrow import Arrow
-from datetime import datetime
-from construct_typed import Context
-from typing import BinaryIO
-from usb.core import USBError
+from construct_typed                   import Context
+from usb.core                          import USBError
+
+from sol_usb.gateware.applets.analyzer import USB_SPEED_FULL, USB_SPEED_HIGH, USB_SPEED_LOW, USBAnalyzerConnection
 
 SPEEDS = {
 	'high': USB_SPEED_HIGH,

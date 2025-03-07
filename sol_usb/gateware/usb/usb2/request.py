@@ -16,9 +16,8 @@ from ..request     import SetupPacket
 from ..stream      import USBInStreamInterface, USBOutStreamInterface
 from .             import USBSpeed
 from .packet       import (
-	DataCRCInterface, HandshakeExchangeInterface, InterpacketTimerInterface,
-	TokenDetectorInterface, USBDataPacketDeserializer, USBInterpacketTimer,
-	USBTokenDetector
+	DataCRCInterface, HandshakeExchangeInterface, InterpacketTimerInterface, TokenDetectorInterface,
+	USBDataPacketDeserializer, USBInterpacketTimer, USBTokenDetector
 )
 
 class RequestHandlerInterface:

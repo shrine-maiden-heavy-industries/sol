@@ -6,25 +6,22 @@
 
 ''' Standard, full-gateware control request handlers. '''
 
-
 import os
 import unittest
 from typing                 import Callable, Iterable
 
 from torii.hdl              import Module, Signal
+from torii.hdl.ast          import Cat, Value
 from torii.hdl.dsl          import Operator
-from torii.hdl.ast          import Value, Cat
 
 from usb_construct.emitters import DeviceDescriptorCollection
-from usb_construct.types    import USBRequestType, USBStandardRequests, USBRequestRecipient
-
+from usb_construct.types    import USBRequestRecipient, USBRequestType, USBStandardRequests
 
 from ...stream.generator    import StreamSerializer
 from ..stream               import USBInStreamInterface
 from ..usb2.descriptor      import GetDescriptorHandlerBlock, GetDescriptorHandlerDistributed
 from .                      import SetupPacket
 from .control               import ControlRequestHandler
-
 
 class StandardRequestHandler(ControlRequestHandler):
 	''' Pure-gateware USB setup request handler. Implements the standard requests required for enumeration.

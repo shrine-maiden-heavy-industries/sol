@@ -7,9 +7,7 @@
 
 import os
 
-from torii.build                        import (
-	Attrs, Clock, Connector, DiffPairs, Pins, PinsN, Resource, Subsignal
-)
+from torii.build                        import Attrs, Clock, Connector, DiffPairs, Pins, PinsN, Resource, Subsignal
 from torii.platform.vendor.lattice.ecp5 import ECP5Platform
 
 from ..architecture.car                 import SolECP5DomainGenerator

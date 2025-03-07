@@ -9,12 +9,9 @@
 import logging   as log
 from abc         import ABCMeta, abstractmethod
 
-from torii.hdl   import (
-	ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
-)
+from torii.hdl   import ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
 
 from ..utils.cdc import stretch_strobe_signal
-
 
 class PHYResetController(Elaboratable):
 	'''

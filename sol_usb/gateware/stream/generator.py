@@ -7,11 +7,9 @@
 
 ''' Stream generators. '''
 
-
 from torii.hdl import *
 
-from .     import StreamInterface
-
+from .         import StreamInterface
 
 class ConstantStreamGenerator(Elaboratable):
 	'''

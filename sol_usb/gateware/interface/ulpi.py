@@ -7,11 +7,7 @@
 
 ''' ULPI interfacing hardware. '''
 
-
-
-from torii.hdl     import (
-	Cat, ClockSignal, Const, Elaboratable, Module, Record, ResetSignal, Signal
-)
+from torii.hdl     import Cat, ClockSignal, Const, Elaboratable, Module, Record, ResetSignal, Signal
 from torii.hdl.ast import Rose
 from torii.hdl.rec import Direction
 

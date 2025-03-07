@@ -13,7 +13,6 @@ from usb_construct.emitters.descriptors import DeviceDescriptorCollection
 from ....stream.generator               import ConstantStreamGenerator
 from ...stream                          import SuperSpeedStreamInterface
 
-
 class GetDescriptorHandler(Elaboratable):
 	''' Gateware that handles responding to GetDescriptor requests.
 

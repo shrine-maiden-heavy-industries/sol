@@ -3,10 +3,10 @@
 import shutil
 from os             import getenv
 from pathlib        import Path
-from setuptools_scm import get_version, ScmVersion
 
 import nox
 from nox.sessions   import Session
+from setuptools_scm import ScmVersion, get_version
 
 ROOT_DIR  = Path(__file__).parent
 

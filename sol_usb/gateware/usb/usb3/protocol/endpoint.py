@@ -6,13 +6,11 @@
 
 ''' Endpoint abstractions for USB3. '''
 
-
 from torii.hdl    import *
 
 from ...stream    import SuperSpeedStreamInterface
 from ..link.data  import DataHeaderPacket
 from .transaction import HandshakeGeneratorInterface, HandshakeReceiverInterface
-
 
 class SuperSpeedEndpointInterface:
 	''' Interface that connects a USB3 endpoint module to a USB device.

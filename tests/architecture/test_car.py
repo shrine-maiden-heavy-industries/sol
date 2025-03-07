@@ -1,8 +1,7 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from sol_usb.gateware.test             import SolGatewareTestCase, sync_test_case
-
 from sol_usb.gateware.architecture.car import PHYResetController
+from sol_usb.gateware.test             import SolGatewareTestCase, sync_test_case
 
 class PHYResetControllerTest(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = PHYResetController

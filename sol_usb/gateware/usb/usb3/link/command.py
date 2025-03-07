@@ -6,13 +6,11 @@
 
 ''' USB Link Commands Transmitter/Receivers '''
 
-
 from torii.hdl         import *
 
 from ...stream         import USBRawSuperSpeedStream
 from ..physical.coding import EPF, SLC, get_word_for_symbols, stream_matches_symbols
 from .crc              import compute_usb_crc5
-
 
 class LinkCommandDetector(Elaboratable):
 	''' USB3 Link Command Detector.

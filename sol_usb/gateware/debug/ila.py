@@ -6,7 +6,6 @@
 
 ''' Integrated logic analysis helpers. '''
 
-
 import math
 import os
 import subprocess
@@ -25,7 +24,6 @@ from vcd.gtkw         import GTKWSave
 from ..interface.spi  import SPIBus, SPIDeviceInterface
 from ..interface.uart import UARTMultibyteTransmitter
 from ..stream         import StreamInterface
-
 
 class IntegratedLogicAnalyzer(Elaboratable):
 	''' Super-simple integrated-logic-analyzer generator class for SOL.

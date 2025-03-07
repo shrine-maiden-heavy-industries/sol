@@ -19,12 +19,10 @@ compensate for clock differences.
 It's up to us to insert and remove additional ordered sets.
 '''
 
+from torii.hdl import *
 
-from torii.hdl      import *
-
-from ...stream      import USBRawSuperSpeedStream
-from .coding        import SKP, stream_word_matches_symbol
-
+from ...stream import USBRawSuperSpeedStream
+from .coding   import SKP, stream_word_matches_symbol
 
 class CTCSkipRemover(Elaboratable):
 	''' Clock Tolerance Compensation (CTC) receive buffer gateware.

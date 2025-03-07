@@ -6,18 +6,14 @@
 
 ''' Low-level USB3 transceiver gateware -- control transfer components. '''
 
-
 from torii.hdl              import *
 
 from usb_construct.emitters import DeviceDescriptorCollection
 from usb_construct.types    import USBDirection, USBRequestType
 
-from ..application.request  import (
-	StallOnlyRequestHandler, SuperSpeedRequestHandlerMultiplexer, SuperSpeedSetupDecoder
-)
+from ..application.request  import StallOnlyRequestHandler, SuperSpeedRequestHandlerMultiplexer, SuperSpeedSetupDecoder
 from ..protocol.endpoint    import SuperSpeedEndpointInterface
 from ..request.standard     import StandardRequestHandler
-
 
 class USB3ControlEndpoint(Elaboratable):
 	''' Gateware that manages control request data progression.

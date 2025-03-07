@@ -8,16 +8,13 @@
 
 from luminary_fpga.support.selftest    import ApolloSelfTestCase, named_test
 
-from torii.hdl                         import (
-	Cat, ClockSignal, Elaboratable, Module, ResetSignal, Signal
-)
+from torii.hdl                         import Cat, ClockSignal, Elaboratable, Module, ResetSignal, Signal
 
 from sol_usb.cli                       import cli
 from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
 from sol_usb.gateware.interface.jtag   import JTAGRegisterInterface
 from sol_usb.gateware.interface.psram  import HyperRAMInterface
 from sol_usb.gateware.interface.ulpi   import ULPIRegisterWindow
-
 
 CLOCK_FREQUENCIES = {
 	'fast': 60,

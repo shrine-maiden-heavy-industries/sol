@@ -6,11 +6,9 @@
 
 ''' Header Packet data interfacing definitions.'''
 
-
 from torii.hdl          import *
 
 from ....stream.arbiter import StreamArbiter
-
 
 class HeaderPacket(Record):
 	''' Container that represents a Header Packet. '''

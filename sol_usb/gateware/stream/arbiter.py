@@ -8,8 +8,7 @@
 
 from torii.hdl import *
 
-from . import StreamInterface
-
+from .         import StreamInterface
 
 class StreamMultiplexer(Elaboratable):
 	''' Gateware that merges a collection of StreamInterfaces into a single interface.

@@ -18,7 +18,6 @@ from ...stream                import SuperSpeedStreamInterface
 from ..application.descriptor import GetDescriptorHandler
 from ..application.request    import SuperSpeedRequestHandlerInterface
 
-
 class StandardRequestHandler(Elaboratable):
 	''' Pure-gateware USB3 setup request handler. Implements the standard requests required for enumeration. '''
 

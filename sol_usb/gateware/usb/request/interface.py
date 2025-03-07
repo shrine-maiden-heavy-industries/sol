@@ -6,10 +6,8 @@
 
 ''' Request components shared between USB2 and USB3. '''
 
-
 from torii.hdl     import *
 from torii.hdl.rec import Direction
-
 
 class SetupPacket(Record):
 	''' Record capturing the content of a setup packet.

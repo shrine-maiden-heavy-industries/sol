@@ -10,11 +10,10 @@ import math
 import os
 import unittest
 from functools import wraps
-from typing    import Any, TypeVar, Generic
+from typing    import Any, Generic, TypeVar
 
 from torii.hdl import Elaboratable, Fragment, Signal
 from torii.sim import Simulator
-
 
 def sync_test_case(process_function, *, domain = 'sync'):
 	''' Decorator that converts a function into a simple synchronous-process test case. '''

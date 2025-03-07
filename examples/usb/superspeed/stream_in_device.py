@@ -5,14 +5,12 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 from torii.hdl              import *
 
 from usb_construct.emitters import SuperSpeedDeviceDescriptorCollection
 
-from sol_usb.cli                import cli
-from sol_usb.usb3               import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
-
+from sol_usb.cli            import cli
+from sol_usb.usb3           import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
 
 class USBSuperSpeedExample(Elaboratable):
 	''' Simple example of a USB SuperSpeed device using the SOL framework. '''

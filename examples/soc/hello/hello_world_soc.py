@@ -12,9 +12,8 @@ from lambdasoc.periph.timer  import TimerPeripheral
 from torii.hdl               import Cat, Elaboratable, Module
 from torii.hdl.rec           import Record
 
-from sol_usb.cli                 import cli
-from sol_usb.gateware.soc        import SimpleSoC
-
+from sol_usb.cli             import cli
+from sol_usb.gateware.soc    import SimpleSoC
 
 class LEDPeripheral(Peripheral, Elaboratable):
 	''' Example peripheral that controls the board's LEDs. '''

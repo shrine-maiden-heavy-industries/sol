@@ -6,22 +6,20 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-import logging as log
+import logging                                  as log
 import os.path
 import sys
 
-from lambdasoc.periph.serial                import AsyncSerialPeripheral
-from lambdasoc.periph.timer                 import TimerPeripheral
+from lambdasoc.periph.serial                    import AsyncSerialPeripheral
+from lambdasoc.periph.timer                     import TimerPeripheral
 
-from torii.hdl                              import Elaboratable, Module
-from torii.hdl.rec                          import Record
+from torii.hdl                                  import Elaboratable, Module
+from torii.hdl.rec                              import Record
 
 from sol_usb.cli                                import cli
 from sol_usb.gateware.soc                       import SimpleSoC
 from sol_usb.gateware.usb.usb2.device           import USBDevice, USBDeviceController
-from sol_usb.gateware.usb.usb2.interfaces.eptri import (
-	InFIFOInterface, OutFIFOInterface, SetupFIFOInterface
-)
+from sol_usb.gateware.usb.usb2.interfaces.eptri import InFIFOInterface, OutFIFOInterface, SetupFIFOInterface
 
 CLOCK_FREQUENCIES_MHZ = {
 	'sync': 60

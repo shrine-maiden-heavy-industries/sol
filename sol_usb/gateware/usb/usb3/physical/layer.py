@@ -6,7 +6,6 @@
 
 ''' USB3 physical-layer abstraction.'''
 
-
 from torii.hdl   import *
 
 from ...stream   import USBRawSuperSpeedStream
@@ -15,7 +14,6 @@ from .ctc        import CTCSkipInserter, CTCSkipRemover
 from .lfps       import LFPSTransceiver
 from .power      import LinkPartnerDetector, PHYResetController
 from .scrambling import Descrambler, Scrambler
-
 
 class USB3PhysicalLayer(Elaboratable):
 	''' Abstraction encapsulating the USB3 physical layer hardware.

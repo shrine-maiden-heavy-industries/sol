@@ -5,14 +5,12 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-import logging                     as log
+import logging                         as log
 
-from luminary_fpga                 import ApolloDebugger
-
-from prompt_toolkit                import HTML
-from prompt_toolkit                import print_formatted_text as pprint
-
-from torii.hdl                     import Elaboratable, Module, Signal
+from luminary_fpga                     import ApolloDebugger
+from prompt_toolkit                    import HTML
+from prompt_toolkit                    import print_formatted_text as pprint
+from torii.hdl                         import Elaboratable, Module, Signal
 
 from sol_usb.cli                       import cli
 from sol_usb.gateware.architecture.car import SolECP5DomainGenerator

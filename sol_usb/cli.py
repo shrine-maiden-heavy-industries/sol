@@ -7,7 +7,7 @@ from pathlib           import Path
 from shutil            import rmtree
 from sys               import argv, exit
 from tempfile          import mkdtemp
-from typing            import Any, Optional, Callable, Union
+from typing            import Any, Callable, Optional, Union
 
 from rich              import traceback
 from rich.logging      import RichHandler

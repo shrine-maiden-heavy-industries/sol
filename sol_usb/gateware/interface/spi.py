@@ -6,11 +6,9 @@
 
 ''' SPI and derived interfaces. '''
 
-
-from torii.hdl      import Cat, Elaboratable, Module, Record, Signal
+from torii.hdl     import Cat, Elaboratable, Module, Record, Signal
 from torii.hdl.ast import Fell, Rose
 from torii.hdl.rec import Direction
-
 
 class SPIBus(Record):
 	''' Record representing an SPI bus. '''

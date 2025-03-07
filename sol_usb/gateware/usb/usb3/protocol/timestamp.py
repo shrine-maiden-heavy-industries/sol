@@ -12,7 +12,6 @@ from usb_construct.types.superspeed import HeaderPacketType
 
 from ..link.header                  import HeaderQueue
 
-
 class TimestampPacketReceiver(Elaboratable):
 	''' Gateware that receives Isochronous Timestamp Packets, and keeps time.
 

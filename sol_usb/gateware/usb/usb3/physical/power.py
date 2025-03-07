@@ -6,10 +6,8 @@
 
 ''' USB3 physical-layer abstraction.'''
 
-
 from torii.hdl     import *
 from torii.hdl.ast import Rose
-
 
 class PHYResetController(Elaboratable):
 	''' Gateware responsible for bringing up a PIPE PHY.

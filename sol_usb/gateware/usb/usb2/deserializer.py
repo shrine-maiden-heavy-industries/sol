@@ -7,8 +7,8 @@
 ''' Stream deserializers. '''
 
 from torii.hdl import *
-from .request  import USBOutStreamInterface
 
+from .request  import USBOutStreamInterface
 
 class StreamDeserializer(Elaboratable):
 	''' Gateware that deserializes a short Array output from a stream.

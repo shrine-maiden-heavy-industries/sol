@@ -5,17 +5,15 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-from torii.hdl                              import Cat, Elaboratable, Module
-from torii.hdl.rec                          import Record
+from lambdasoc.periph                           import Peripheral
 
-from lambdasoc.periph                       import Peripheral
+from torii.hdl                                  import Cat, Elaboratable, Module
+from torii.hdl.rec                              import Record
 
 from sol_usb.cli                                import cli
 from sol_usb.gateware.soc                       import SimpleSoC
 from sol_usb.gateware.usb.usb2.device           import USBDevice, USBDeviceController
-from sol_usb.gateware.usb.usb2.interfaces.eptri import (
-	InFIFOInterface, OutFIFOInterface, SetupFIFOInterface
-)
+from sol_usb.gateware.usb.usb2.interfaces.eptri import InFIFOInterface, OutFIFOInterface, SetupFIFOInterface
 
 CLOCK_FREQUENCIES_MHZ = {
 	'sync': 60

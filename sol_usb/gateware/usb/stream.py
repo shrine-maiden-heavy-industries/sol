@@ -6,14 +6,12 @@
 
 ''' Core stream definitions. '''
 
-
 from torii.hdl        import Elaboratable, Module, Signal
 from torii.hdl.rec    import Direction, Record
 from torii.hdl.xfrm   import DomainRenamer
 
 from ..stream         import StreamInterface
 from ..stream.arbiter import StreamArbiter
-
 
 class USBInStreamInterface(StreamInterface):
 	''' Variant of SOL's StreamInterface optimized for USB IN transmission.

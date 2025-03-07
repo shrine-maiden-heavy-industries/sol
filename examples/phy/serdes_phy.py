@@ -7,12 +7,10 @@
 
 ''' Incomplete example for working the SerDes-based a PIPE PHY. '''
 
-from torii.hdl                    import *
+from torii.hdl                        import *
 
 from sol_usb.cli                      import cli
-from sol_usb.gateware.usb.devices.ila import (
-	USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
-)
+from sol_usb.gateware.usb.devices.ila import USBIntegratedLogicAnalyzer, USBIntegratedLogicAnalyzerFrontend
 
 WITH_ILA = False
 

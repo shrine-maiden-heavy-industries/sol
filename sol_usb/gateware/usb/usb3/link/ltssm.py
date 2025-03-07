@@ -11,11 +11,9 @@
 # the SerDes PHY work in some cases. This is not a complete design.
 #
 
-
 import math
 
 from torii.hdl import *
-
 
 class LTSSMController(Elaboratable):
 	'''

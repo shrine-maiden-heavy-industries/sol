@@ -15,7 +15,6 @@ from .link_management import LinkManagementPacketHandler
 from .timestamp       import TimestampPacketReceiver
 from .transaction     import TransactionPacketGenerator, TransactionPacketReceiver
 
-
 class USB3ProtocolLayer(Elaboratable):
 	''' Abstraction encapsulating the USB3 protocol layer hardware. '''
 

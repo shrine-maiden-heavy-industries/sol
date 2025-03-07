@@ -39,7 +39,6 @@ from torii.lib.fifo import AsyncFIFOBuffered
 
 from ...utils.cdc   import synchronize
 
-
 class RxClockDataRecovery(Elaboratable):
 	'''RX Clock Data Recovery module.
 

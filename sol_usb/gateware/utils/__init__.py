@@ -7,7 +7,7 @@
 
 from torii.hdl import Signal
 
-from .cdc  import synchronize
+from .cdc      import synchronize
 
 __all__ = [
 	'rising_edge_detected', 'falling_edge_detected', 'any_edge_detected',

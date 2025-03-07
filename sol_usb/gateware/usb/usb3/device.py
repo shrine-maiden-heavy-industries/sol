@@ -9,7 +9,6 @@ Contains the organizing hardware used to add USB3 Device functionality
 to your own designs; including the core :class:`USBSuperSpeedDevice` class.
 '''
 
-
 from torii.hdl              import *
 
 from usb_construct.emitters import DeviceDescriptorCollection
@@ -22,7 +21,6 @@ from .link                  import USB3LinkLayer
 from .physical              import USB3PhysicalLayer
 from .protocol              import USB3ProtocolLayer
 from .protocol.endpoint     import SuperSpeedEndpointMultiplexer
-
 
 class USBSuperSpeedDevice(Elaboratable):
 	''' Core gateware common to all SOL USB3 devices. '''

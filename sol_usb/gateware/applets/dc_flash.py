@@ -5,7 +5,7 @@
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
 
-from torii.hdl                    import Elaboratable, Module, Signal
+from torii.hdl                        import Elaboratable, Module, Signal
 
 from sol_usb.gateware.interface.flash import ECP5ConfigurationFlashInterface
 from sol_usb.gateware.interface.spi   import SPIRegisterInterface

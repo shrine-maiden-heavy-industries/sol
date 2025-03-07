@@ -9,14 +9,12 @@ This module contains gateware designed to assist with endpoint/transfer state ma
 Its components facilitate data transfer longer than a single packet.
 '''
 
-
 from torii.hdl     import Array, Elaboratable, Module, Signal
 from torii.hdl.mem import Memory
 
 from ...stream     import StreamInterface
 from ..stream      import USBInStreamInterface
 from .packet       import HandshakeExchangeInterface, TokenDetectorInterface
-
 
 class USBInTransferManager(Elaboratable):
 	''' Sequencer that converts a long data stream (a USB *transfer*) into a burst of USB packets.

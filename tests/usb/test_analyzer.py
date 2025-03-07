@@ -1,13 +1,14 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
+from concurrent.futures              import Future
+from typing                          import Iterable, TypedDict, Union
+
 from torii.hdl                       import Module
 from torii.sim                       import Settle, Tick
-from typing                          import Union, Iterable, TypedDict
-from concurrent.futures              import Future
 
-from sol_usb.gateware.usb.analyzer   import USBAnalyzer
 from sol_usb.gateware.interface.utmi import UTMIInterface
 from sol_usb.gateware.test           import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.usb.analyzer   import USBAnalyzer
 
 class WaitDict(TypedDict):
 	wait: float

@@ -7,8 +7,9 @@
 
 ''' Low-level USB transceiver gateware -- control transfer components. '''
 
-from typing                 import List
-from torii.hdl              import Elaboratable, Module, Cat
+from typing import List
+
+from torii.hdl              import Cat, Elaboratable, Module
 from torii.hdl.dsl          import Operator
 
 from usb_construct.emitters import DeviceDescriptorCollection
@@ -18,10 +19,7 @@ from ..request.interface    import SetupPacket
 from ..request.standard     import StandardRequestHandler
 from .endpoint              import EndpointInterface
 from .packet                import USBDataPacketCRC, USBInterpacketTimer, USBTokenDetector
-from .request               import (
-	StallOnlyRequestHandler, USBRequestHandlerMultiplexer, USBSetupDecoder, USBRequestHandler
-)
-
+from .request               import StallOnlyRequestHandler, USBRequestHandler, USBRequestHandlerMultiplexer, USBSetupDecoder
 
 class USBControlEndpoint(Elaboratable):
 	''' Gateware that manages control request data progression.

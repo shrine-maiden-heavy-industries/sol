@@ -5,10 +5,10 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-from torii.hdl                    import *
+from lambdasoc.periph                 import Peripheral
+from lambdasoc.periph.timer           import TimerPeripheral
 
-from lambdasoc.periph             import Peripheral
-from lambdasoc.periph.timer       import TimerPeripheral
+from torii.hdl                        import *
 
 from sol_usb.cli                      import cli
 from sol_usb.gateware.interface.psram import HyperRAMInterface

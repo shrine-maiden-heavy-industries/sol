@@ -8,7 +8,6 @@
 
 from torii.hdl import *
 
-
 class LinkMaintenanceTimers(Elaboratable):
 	''' Timers which ensure link integrity is maintained in U0.
 
