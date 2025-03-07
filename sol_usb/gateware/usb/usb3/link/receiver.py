@@ -23,7 +23,6 @@ class RawHeaderPacketReceiver(Elaboratable):
 	This class performs the validations required at the link layer of the USB specification;
 	which include checking the CRC-5 and CRC-16 embedded within the header packet.
 
-
 	Attributes
 	----------
 	sink: USBRawSuperSpeedStream(), input (monitor only)
@@ -61,7 +60,6 @@ class RawHeaderPacketReceiver(Elaboratable):
 		self.expected_sequence = Signal(3)
 		self.bad_sequence      = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -81,7 +79,6 @@ class RawHeaderPacketReceiver(Elaboratable):
 		#
 		m.submodules.crc16 = crc16 = HeaderPacketCRC()
 		m.d.comb += crc16.data_input.eq(sink.data),
-
 
 		#
 		# Receiver Sequencing
@@ -157,9 +154,7 @@ class RawHeaderPacketReceiver(Elaboratable):
 
 				m.next = 'WAIT_FOR_HPSTART'
 
-
 		return m
-
 
 class HeaderPacketReceiver(Elaboratable):
 	''' Receiver-side Header Packet logic.
@@ -243,7 +238,6 @@ class HeaderPacketReceiver(Elaboratable):
 		self.reject_power_state      = Signal()
 		self.acknowledge_power_state = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -261,7 +255,6 @@ class HeaderPacketReceiver(Elaboratable):
 		# We'll start with the maximum number, so our first advertisement wraps us back around to zero.
 		next_header_to_ack       = Signal.like(expected_sequence_number, reset = -1)
 
-
 		#
 		# Task 'queues'.
 		#
@@ -275,7 +268,6 @@ class HeaderPacketReceiver(Elaboratable):
 			m.d.ss += acks_to_send.eq(acks_to_send + 1)
 		with m.If(dequeue_ack & ~enqueue_ack):
 			m.d.ss += acks_to_send.eq(acks_to_send - 1)
-
 
 		# Keep track of how many link credits we've yet to free.
 		# We'll start with every one of our buffers marked as 'pending free'; this ensures
@@ -314,7 +306,6 @@ class HeaderPacketReceiver(Elaboratable):
 		with m.If(self.acknowledge_power_state):
 			m.d.ss += lpma_pending.eq(1)
 
-
 		#
 		# Header Packet Buffers
 		#
@@ -335,7 +326,6 @@ class HeaderPacketReceiver(Elaboratable):
 
 		# Create buffers to receive any incoming header packets.
 		buffers = Array(HeaderPacket() for _ in range(self._buffer_count))
-
 
 		#
 		# Packet reception (physical layer -> link layer).
@@ -367,7 +357,6 @@ class HeaderPacketReceiver(Elaboratable):
 			self.bad_packet_received.eq(rx.bad_packet)
 		]
 
-
 		# If we receive a valid packet, it's time for us to buffer it!
 		with m.If(rx.new_packet & ~ignore_packets):
 			m.d.ss += [
@@ -386,11 +375,9 @@ class HeaderPacketReceiver(Elaboratable):
 				enqueue_ack.eq(1)
 			]
 
-
 		# If we receive a bad packet, we'll need to request that the other side re-send.
 		# The rules for this are summarized in [USB3.2r1: 7.2.4.1.5], and in comments below.
 		with m.If(rx.bad_packet & ~ignore_packets):
-
 
 			m.d.ss += [
 				# First, we'll need to schedule transmission of an LBAD, which notifies the other
@@ -405,12 +392,10 @@ class HeaderPacketReceiver(Elaboratable):
 				ignore_packets.eq(1)
 			]
 
-
 		# Finally, if we receive a Retry link command, this means we no longer need to ignore packets.
 		# This typically happens in response to us sending an LBAD and marking future packets as ignored.
 		with m.If(self.retry_received):
 			m.d.ss += ignore_packets.eq(0)
-
 
 		#
 		# Packet delivery (link layer -> physical layer).
@@ -422,7 +407,6 @@ class HeaderPacketReceiver(Elaboratable):
 			# Always provide the value of our oldest packet out to our consumer.
 			self.queue.header.eq(buffers[read_pointer])
 		]
-
 
 		# If the protocol layer is marking one of our packets as consumed, we no longer
 		# need to buffer it -- it's the protocol layer's problem, now!
@@ -439,7 +423,6 @@ class HeaderPacketReceiver(Elaboratable):
 				enqueue_credit_issue.eq(1)
 			]
 
-
 		#
 		# Link command generation.
 		#
@@ -448,7 +431,6 @@ class HeaderPacketReceiver(Elaboratable):
 			self.source.stream_eq(lc_generator.source),
 			self.link_command_sent.eq(lc_generator.done),
 		]
-
 
 		with m.FSM(domain = 'ss'):
 
@@ -484,8 +466,6 @@ class HeaderPacketReceiver(Elaboratable):
 					# If we need to send a keepalive, do so.
 					with m.Elif(keepalive_pending):
 						m.next = 'SEND_KEEPALIVE'
-
-
 
 				# Once we've become disabled, we'll want to prepare for our next enable.
 				# This means preparing for our advertisement, by:
@@ -523,7 +503,6 @@ class HeaderPacketReceiver(Elaboratable):
 							next_header_to_ack.eq(-1)
 						]
 
-
 			# SEND_ACKS -- a valid header packet has been received, or we're advertising
 			# our initial sequence number; send an LGOOD packet.
 			with m.State('SEND_ACKS'):
@@ -546,7 +525,6 @@ class HeaderPacketReceiver(Elaboratable):
 					with m.If(acks_to_send == 1):
 						m.next = 'DISPATCH_COMMAND'
 
-
 			# ISSUE_CREDITS -- header packet buffers have been freed; and we now need to notify the
 			# other side, so it knows we have buffers available.
 			with m.State('ISSUE_CREDITS'):
@@ -568,7 +546,6 @@ class HeaderPacketReceiver(Elaboratable):
 					with m.If(credits_to_issue == 1):
 						m.next = 'DISPATCH_COMMAND'
 
-
 			# SEND_LBAD -- we've received a bad header packet; we'll need to let the other side know.
 			with m.State('SEND_LBAD'):
 				m.d.comb += [
@@ -582,7 +559,6 @@ class HeaderPacketReceiver(Elaboratable):
 					m.d.ss += lbad_pending.eq(0)
 					m.next = 'DISPATCH_COMMAND'
 
-
 			# SEND_LRTY -- our transmitter has requested that we send an retry indication to the other side.
 			# We'll do our transmitter a favor and do so.
 			with m.State('SEND_LRTY'):
@@ -594,8 +570,6 @@ class HeaderPacketReceiver(Elaboratable):
 				with m.If(lc_generator.done):
 					m.d.ss += lrty_pending.eq(0)
 					m.next = 'DISPATCH_COMMAND'
-
-
 
 			# SEND_KEEPALIVE -- our link layer timer has requested that we send a keep-alive,
 			# indicating that we're still in U0 and the link is still good. Do so.
@@ -614,7 +588,6 @@ class HeaderPacketReceiver(Elaboratable):
 				with m.If(lc_generator.done):
 					m.d.ss += keepalive_pending.eq(0)
 					m.next = 'DISPATCH_COMMAND'
-
 
 			# SEND_LXU -- we're being instructed to reject a requested power-state transfer.
 			# We'll send an LXU packet to inform the other side of the rejection.

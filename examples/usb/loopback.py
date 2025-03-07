@@ -43,7 +43,6 @@ class USBStreamOutDeviceExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -58,9 +57,7 @@ class USBStreamOutDeviceExample(Elaboratable):
 					e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
 					e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
 
-
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -105,7 +102,6 @@ class USBStreamOutDeviceExample(Elaboratable):
 		]
 
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBStreamOutDeviceExample)

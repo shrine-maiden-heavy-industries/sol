@@ -37,7 +37,6 @@ class USBDevice(Elaboratable):
 	To configure a ``USBDevice`` from a CPU or other wishbone master, see :class:`USBDeviceController`;
 	which can easily be attached using its `attach` method.
 
-
 	Parameters
 	----------
 
@@ -49,7 +48,6 @@ class USBDevice(Elaboratable):
 		automatically based on the clk signals's I/O direction. This option may not work
 		for non-simple connections; in which case you will need to connect the clock signal
 		yourself.
-
 
 	Attributes
 	----------
@@ -139,7 +137,6 @@ class USBDevice(Elaboratable):
 		#
 		self._endpoints = []
 
-
 	def add_endpoint(self, endpoint):
 		''' Adds an endpoint interface to the device.
 
@@ -150,7 +147,6 @@ class USBDevice(Elaboratable):
 			:class:`EndpointInterface` attribute called ``interface``.
 		'''
 		self._endpoints.append(endpoint)
-
 
 	def add_control_endpoint(self):
 		''' Adds a basic control endpoint to the device.
@@ -166,7 +162,6 @@ class USBDevice(Elaboratable):
 		self.add_endpoint(control_endpoint)
 
 		return control_endpoint
-
 
 	def add_standard_control_endpoint(self, descriptors: DeviceDescriptorCollection, **kwargs):
 		''' Adds a control endpoint with standard request handlers to the device.
@@ -185,15 +180,12 @@ class USBDevice(Elaboratable):
 
 		return control_endpoint
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
 		# If we have a bus translator, include it in our submodules.
 		if self.translator is not None:
 			m.submodules.translator = self.translator
-
 
 		#
 		# Internal device state.
@@ -204,7 +196,6 @@ class USBDevice(Elaboratable):
 
 		# Stores the device's current configuration. Defaults to unconfigured.
 		configuration = Signal(8, reset = 0)
-
 
 		#
 		# Internal interconnections.
@@ -220,7 +211,6 @@ class USBDevice(Elaboratable):
 			reset_sequencer.vbus_connected.eq(~self.utmi.session_end),
 			reset_sequencer.line_state.eq(self.utmi.line_state),
 		]
-
 
 		# Create our internal packet components:
 		# - A token detector, which will identify and parse the tokens that start transactions.
@@ -303,7 +293,6 @@ class USBDevice(Elaboratable):
 		with m.If(endpoint_collection.config_changed):
 			m.d.usb += configuration.eq(endpoint_collection.new_config)
 
-
 		# Finally, add each of our endpoints to this module and our multiplexer.
 		for endpoint in self._endpoints:
 
@@ -315,7 +304,6 @@ class USBDevice(Elaboratable):
 			# ... and add it, both as a submodule and to our multiplexer.
 			endpoint_mux.add_interface(endpoint.interface)
 			m.submodules[name] = endpoint
-
 
 		#
 		# Transmitter multiplexing.
@@ -338,7 +326,6 @@ class USBDevice(Elaboratable):
 			data_crc.tx_data.eq(tx_multiplexer.output.data),
 		]
 
-
 		#
 		# Device-state management.
 		#
@@ -349,7 +336,6 @@ class USBDevice(Elaboratable):
 				address.eq(0),
 				configuration.eq(0),
 			]
-
 
 		# Device operating state controls.
 		m.d.comb += [
@@ -388,7 +374,6 @@ class USBDevice(Elaboratable):
 			with m.Else():
 				m.d.usb += self.microframe_number.eq(self.microframe_number + 1)
 
-
 		#
 		# Device-state outputs.
 		#
@@ -404,7 +389,6 @@ class USBDevice(Elaboratable):
 		]
 
 		return m
-
 
 #
 # Section that requires our CPU framework.
@@ -441,7 +425,6 @@ try:
 			self.connect   = Signal(reset = 1)
 			self.bus_reset = Signal()
 
-
 			#
 			# Registers.
 			#
@@ -465,7 +448,6 @@ try:
 			self.bus        = self._bridge.bus
 			self.irq        = self._bridge.irq
 
-
 		def attach(self, device: USBDevice):
 			''' Returns a list of statements necessary to connect this to a USB controller.
 
@@ -484,7 +466,6 @@ try:
 				self._speed.r_data.eq(device.speed)
 			]
 
-
 		def elaborate(self, platform):
 			m = Module()
 			m.submodules.bridge = self._bridge
@@ -498,7 +479,6 @@ try:
 			m.d.comb += self._reset_irq.stb.eq(self.bus_reset)
 
 			return m
-
 
 except ImportError:
 	pass

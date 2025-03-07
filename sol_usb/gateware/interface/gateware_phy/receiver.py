@@ -88,14 +88,11 @@ class RxClockDataRecovery(Elaboratable):
 		self._usbp = usbp_raw
 		self._usbn = usbn_raw
 
-
 		self.line_state_valid = Signal()
 		self.line_state_dj = Signal()
 		self.line_state_dk = Signal()
 		self.line_state_se0 = Signal()
 		self.line_state_se1 = Signal()
-
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -165,7 +162,6 @@ class RxClockDataRecovery(Elaboratable):
 				with m.If(dpair != 0b11):
 					m.next = 'DT'
 
-
 		#######################################################################
 		# Clock and Data Recovery
 		#
@@ -184,7 +180,6 @@ class RxClockDataRecovery(Elaboratable):
 		line_state_phase = Signal(2)
 		m.d.usb_io += self.line_state_valid.eq(line_state_phase == 1)
 
-
 		with m.If(line_state_in_transition):
 			m.d.usb_io += [
 				# re-align the phase with the incoming transition
@@ -198,7 +193,6 @@ class RxClockDataRecovery(Elaboratable):
 			m.d.usb_io += line_state_phase.eq(line_state_phase + 1)
 
 		return m
-
 
 class RxNRZIDecoder(Elaboratable):
 	'''RX NRZI decoder.
@@ -263,7 +257,6 @@ class RxNRZIDecoder(Elaboratable):
 		self.o_data = Signal(1)
 		self.o_se0 = Signal(1)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -277,7 +270,6 @@ class RxNRZIDecoder(Elaboratable):
 		m.d.usb_io += self.o_valid.eq(self.i_valid),
 
 		return m
-
 
 class RxPacketDetect(Elaboratable):
 	'''
@@ -342,7 +334,6 @@ class RxPacketDetect(Elaboratable):
 		self.o_pkt_active = Signal()
 		self.o_pkt_end = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -390,8 +381,6 @@ class RxPacketDetect(Elaboratable):
 		]
 
 		return m
-
-
 
 class RxBitstuffRemover(Elaboratable):
 	'''
@@ -444,7 +433,6 @@ class RxBitstuffRemover(Elaboratable):
 		self.o_error = Signal()
 		self.o_stall = Signal(reset = 1)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -453,7 +441,6 @@ class RxBitstuffRemover(Elaboratable):
 		# This is intentional to help absolutely minimize the levels of logic
 		# used.
 		drop_bit = Signal(1)
-
 
 		with m.FSM(domain = 'usb_io'):
 
@@ -480,7 +467,6 @@ class RxBitstuffRemover(Elaboratable):
 		]
 
 		return m
-
 
 class RxShifter(Elaboratable):
 	'''
@@ -533,7 +519,6 @@ class RxShifter(Elaboratable):
 		self.o_data  = Signal(width)
 		self.o_put   = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 		width = self._width
@@ -556,7 +541,6 @@ class RxShifter(Elaboratable):
 
 		return m
 
-
 class RxPipeline(Elaboratable):
 
 	def __init__(self):
@@ -577,7 +561,6 @@ class RxPipeline(Elaboratable):
 		self.o_pkt_end = Signal()
 
 		self.o_receive_error = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()

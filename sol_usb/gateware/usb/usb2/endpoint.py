@@ -99,7 +99,6 @@ class EndpointInterface:
 		self.handshakes_out        = HandshakeExchangeInterface(is_detector = False)
 		self.issue_stall           = Signal()
 
-
 class USBEndpointMultiplexer(Elaboratable):
 	''' Multiplexes access to the resources shared between multiple endpoint interfaces.
 
@@ -124,7 +123,6 @@ class USBEndpointMultiplexer(Elaboratable):
 		#
 		self._interfaces = []
 
-
 	def add_interface(self, interface: EndpointInterface):
 		''' Adds a EndpointInterface to the multiplexer.
 
@@ -132,7 +130,6 @@ class USBEndpointMultiplexer(Elaboratable):
 		driving the transmit lines at a time.
 		'''
 		self._interfaces.append(interface)
-
 
 	def _multiplex_signals(self, m, *, when, multiplex, sub_bus = None):
 		''' Helper that creates a simple priority-encoder multiplexer.
@@ -155,7 +152,6 @@ class USBEndpointMultiplexer(Elaboratable):
 			else:
 				return getattr(interface, name)
 
-
 		# We're building an if-elif tree; so we should start with an If entry.
 		conditional = m.If
 
@@ -177,7 +173,6 @@ class USBEndpointMultiplexer(Elaboratable):
 			# After the first element, all other entries should be created with Elif.
 			conditional = m.Elif
 
-
 	def or_join_interface_signals(self, m, signal_for_interface):
 		''' Joins together a set of signals on each interface by OR'ing the signals together. '''
 
@@ -187,7 +182,6 @@ class USBEndpointMultiplexer(Elaboratable):
 
 		# ... and tie it to our post-mux signal.
 		m.d.comb += signal_for_interface(self.shared).eq(or_value)
-
 
 	def elaborate(self, platform):
 		m = Module()

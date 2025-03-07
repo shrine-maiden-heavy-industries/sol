@@ -24,12 +24,9 @@ __all__ = (
 	'LFPSSquareWaveGenerator',
 )
 
-
 # From [USB3.2: Table 6-29]; the maximum and minimum
 _LFPS_PERIOD_MIN = 20e-9 # seconds
 _LFPS_PERIOD_MAX = 100e-9
-
-
 
 class LFPSSquareWaveDetector(Elaboratable):
 	''' Detector that identifies LFPS square-wave patterns.
@@ -54,13 +51,11 @@ class LFPSSquareWaveDetector(Elaboratable):
 		if self._half_cycle_min < 1:
 			raise ValueError(f'Cycle minimum too low, must be at least one, is {self._half_cycle_min}')
 
-
 		#
 		# I/O ports
 		#
 		self.rx_gpio = Signal() # i
 		self.present = Signal() # o
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -103,7 +98,6 @@ class LFPSSquareWaveDetector(Elaboratable):
 			with m.Else():
 				m.d.pipe += total_time_high.eq(timer_max)
 
-
 		# If we were still counting last cycle, we'll latch our observed time
 		# high before our timer gets cleared. This value represents our total
 		# time high, and thus the value we'll use for comparison.
@@ -112,7 +106,6 @@ class LFPSSquareWaveDetector(Elaboratable):
 				total_time_high.eq(current_time_high),
 				current_time_high.eq(0)
 			]
-
 
 		#
 		# Time-low detection.
@@ -145,7 +138,6 @@ class LFPSSquareWaveDetector(Elaboratable):
 				current_time_low.eq(0)
 			]
 
-
 		#
 		# Final detection.
 		#
@@ -156,8 +148,6 @@ class LFPSSquareWaveDetector(Elaboratable):
 		m.d.comb += self.present.eq(time_high_valid & time_low_valid)
 
 		return m
-
-
 
 class LFPSSquareWaveGenerator(Elaboratable):
 	'''Generator that outputs LFPS square-wave patterns.
@@ -173,7 +163,6 @@ class LFPSSquareWaveGenerator(Elaboratable):
 				f'the range of [{_LFPS_PERIOD_MIN}, {_LFPS_PERIOD_MAX}]'
 			)
 
-
 		#
 		# I/O ports
 		#
@@ -181,7 +170,6 @@ class LFPSSquareWaveGenerator(Elaboratable):
 
 		self.tx_gpio_en = Signal() # o
 		self.tx_gpio    = Signal() # o
-
 
 	def elaborate(self, platform):
 		m = Module()

@@ -24,7 +24,6 @@ TEST_TRANSFER_SIZE = 16 * 1024
 # have scheduled at a given time.
 TRANSFER_QUEUE_DEPTH = 16
 
-
 def run_speed_test():
 	''' Runs a simple speed test, and reports throughput. '''
 
@@ -43,7 +42,6 @@ def run_speed_test():
 	def _should_terminate():
 		''' Returns true iff our test should terminate. '''
 		return (total_data_exchanged > TEST_DATA_SIZE) or failed_out
-
 
 	def _transfer_completed(transfer: usb1.USBTransfer):
 		''' Callback executed when an async transfer completes. '''
@@ -67,8 +65,6 @@ def run_speed_test():
 		else:
 			failed_out = status
 
-
-
 	with usb1.USBContext() as context:
 
 		# Grab a reference to our device...
@@ -87,7 +83,6 @@ def run_speed_test():
 
 			# ... and store it.
 			active_transfers.append(transfer)
-
 
 		# Start our benchmark timer.
 		start_time = time.time()
@@ -114,10 +109,8 @@ def run_speed_test():
 			logging.error(f'Test failed because a transfer {_messages[failed_out]}.')
 			sys.exit(failed_out)
 
-
 		bytes_per_second = total_data_exchanged / elapsed
 		logging.info(f'Exchanged {total_data_exchanged / 1000000}MB total at {bytes_per_second / 1000000}MB/s.')
-
 
 if __name__ == '__main__':
 

@@ -51,7 +51,6 @@ def _generate_wide_incrementor(m, platform, adder_input):
 
 	return output
 
-
 class USBResetSequencer(Elaboratable):
 	''' Gateware that detects reset signaling on the USB bus.
 
@@ -114,7 +113,6 @@ class USBResetSequencer(Elaboratable):
 	_CYCLES_2P5_MILLISECONDS   = _CYCLES_2P5_MICROSECONDS * 1000
 	_CYCLES_3_MILLISECONDS     = _CYCLES_1_MILLISECONDS   * 3
 
-
 	def __init__(self):
 
 		#
@@ -135,7 +133,6 @@ class USBResetSequencer(Elaboratable):
 		self.termination_select = Signal(1, reset = 1)
 
 		self.tx                 = UTMITransmitInterface()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -177,7 +174,6 @@ class USBResetSequencer(Elaboratable):
 		with m.Else():
 			m.d.comb += bus_idle.eq(self.line_state == self._LINE_STATE_LS_J)
 
-
 		#
 		# Core reset sequences.
 		#
@@ -205,7 +201,6 @@ class USBResetSequencer(Elaboratable):
 				with m.If(self.line_state != self._LINE_STATE_SE0):
 					m.d.usb += timer.eq(0)
 
-
 				# If VBUS isn't connected, don't go through the whole reset process;
 				# but also consider ourselves permanently in reset. This ensures we
 				# don't progress through the reset FSM; but also ensures the device
@@ -224,7 +219,6 @@ class USBResetSequencer(Elaboratable):
 					with m.If(~self.low_speed_only & ~self.full_speed_only):
 						m.next = 'START_HS_DETECTION'
 
-
 				# If we're seeing a state other than IDLE, clear our suspend timer.
 				with m.If(~bus_idle):
 					m.d.usb += line_state_time.eq(0)
@@ -234,9 +228,6 @@ class USBResetSequencer(Elaboratable):
 				with m.If(line_state_time == self._CYCLES_3_MILLISECONDS):
 					m.d.usb += was_hs_pre_suspend.eq(0)
 					m.next = 'SUSPENDED'
-
-
-
 
 			# HS_NON_RESET -- we're currently operating at high speed and waiting for a reset or
 			# suspend; the device could be active or inactive.
@@ -254,7 +245,6 @@ class USBResetSequencer(Elaboratable):
 					m.d.comb += self.bus_reset.eq(1)
 					m.next = 'IS_LOW_OR_FULL_SPEED'
 
-
 				# High speed signaling presents IDLE and RESET the same way: with the host
 				# driving SE0; and us seeing SQUELCH. [USB2.0: 7.1.1.3; USB2.0: 7.1.7.6].
 				# Either way, our next step is the same: we'll drop down to full-speed. [USB2.0: 7.1.7.6]
@@ -269,12 +259,10 @@ class USBResetSequencer(Elaboratable):
 					]
 					m.next = 'DETECT_HS_SUSPEND'
 
-
 				# If we see full-speed-only or low-speed-only being driven, switch
 				# back to our LS/FS mode.
 				with m.If(self.full_speed_only | self.low_speed_only):
 					m.next = 'IS_LOW_OR_FULL_SPEED'
-
 
 			# START_HS_DETECTION -- entry state for high-speed detection
 			with m.State('START_HS_DETECTION'):
@@ -290,7 +278,6 @@ class USBResetSequencer(Elaboratable):
 				]
 				m.next = 'PREPARE_FOR_CHIRP_0'
 
-
 			# PREPARE_FOR_CHIRP_0 / PREPARE_FOR_CHIRP_1-- wait states; in which we give the PHY
 			# time to the mode we'll need to drive our high-speed chirp.
 			with m.State('PREPARE_FOR_CHIRP_0'):
@@ -300,7 +287,6 @@ class USBResetSequencer(Elaboratable):
 			with m.State('PREPARE_FOR_CHIRP_1'):
 				with m.If(~self.bus_busy):
 					m.next = 'DEVICE_CHIRP'
-
 
 			# DEVICE_CHIRP -- the device produces a 'chirp' K, which advertises to the host that
 			# we're high speed capable. We'll provide that chirp K for around ~2ms. [USB2.0: 7.1.7.5]
@@ -324,7 +310,6 @@ class USBResetSequencer(Elaboratable):
 					]
 					m.next = 'AWAIT_HOST_K'
 
-
 			# AWAIT_HOST_K -- we've now completed the device chirp; and are waiting to see if the host
 			# will respond with an alternating sequence of K's and J's.
 			with m.State('AWAIT_HOST_K'):
@@ -338,7 +323,6 @@ class USBResetSequencer(Elaboratable):
 				with m.If(self.line_state == self._LINE_STATE_FS_HS_K):
 					m.next = 'IN_HOST_K'
 					m.d.usb += line_state_time.eq(0)
-
 
 			# IN_HOST_K: we're seeing a host Chirp K as part of our handshake; we'll
 			# time it and see how long it lasts
@@ -358,7 +342,6 @@ class USBResetSequencer(Elaboratable):
 				with m.If(timer == self._CYCLES_2P5_MILLISECONDS):
 					m.next = 'IS_LOW_OR_FULL_SPEED'
 
-
 			# AWAIT_HOST_J -- we're waiting for the next Chirp J in the host chirp sequence
 			with m.State('AWAIT_HOST_J'):
 
@@ -370,7 +353,6 @@ class USBResetSequencer(Elaboratable):
 				with m.If(self.line_state == self._LINE_STATE_FS_HS_J):
 					m.next = 'IN_HOST_J'
 					m.d.usb += line_state_time.eq(0)
-
 
 			# IN_HOST_J: we're seeing a host Chirp K as part of our handshake; we'll
 			# time it and see how long it lasts
@@ -399,7 +381,6 @@ class USBResetSequencer(Elaboratable):
 				with m.If(timer == self._CYCLES_2P5_MILLISECONDS):
 					m.next = 'IS_LOW_OR_FULL_SPEED'
 
-
 			# IS_HIGH_SPEED -- we've completed a high speed handshake, and are ready to
 			# switch to high speed signaling
 			with m.State('IS_HIGH_SPEED'):
@@ -415,7 +396,6 @@ class USBResetSequencer(Elaboratable):
 				]
 
 				m.next = 'HS_NON_RESET'
-
 
 			# IS_LOW_OR_FULL_SPEED -- we've decided the device is low/full speed (typically
 			# because it didn't) complete our high-speed handshake; set it up accordingly.
@@ -441,7 +421,6 @@ class USBResetSequencer(Elaboratable):
 						line_state_time.eq(0)
 					]
 
-
 			# DETECT_HS_SUSPEND -- we were operating at high speed, and just detected an event
 			# which is either a reset or a suspend event; we'll now detect which.
 			with m.State('DETECT_HS_SUSPEND'):
@@ -462,7 +441,6 @@ class USBResetSequencer(Elaboratable):
 					with m.Else():
 						m.d.comb += self.bus_reset.eq(1)
 						m.next = 'START_HS_DETECTION'
-
 
 			# SUSPEND -- our device has entered USB suspend; we'll now wait for either a
 			# resume or a reset
@@ -487,12 +465,10 @@ class USBResetSequencer(Elaboratable):
 							line_state_time.eq(0)
 						]
 
-
 				# If this isn't an SE0, we're not receiving a reset request.
 				# Keep our reset counter at zero.
 				with m.If(self.line_state != self._LINE_STATE_SE0):
 					m.d.usb += timer.eq(0)
-
 
 				# If we see an SE0 for > 2.5uS, this is a reset request. [USB 2.0: 7.1.7.5]
 				# We'll handle it directly from suspend.

@@ -64,7 +64,6 @@ class CTCSkipRemover(Elaboratable):
 		self.skip_removed    = Signal()
 		self.bytes_in_buffer = Signal(range(len(self.sink.ctrl) + 1))
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -85,7 +84,6 @@ class CTCSkipRemover(Elaboratable):
 		# If we've found one, indicate that we're removing it.
 		skip_found = self.sink.valid & self.sink.ready & (skp_locations != 0)
 		m.d.comb += self.skip_removed.eq(skip_found)
-
 
 		#
 		# Data Extractor
@@ -122,7 +120,6 @@ class CTCSkipRemover(Elaboratable):
 							ctrl_signal_at_position = sink.ctrl[position]
 							data_fragments.append(data_signal_at_position)
 							ctrl_fragments.append(ctrl_signal_at_position)
-
 
 					# If there are any valid data signals associated with the given position,
 					# coalesce the data and control signals into a single word, which we'll handle below.
@@ -188,7 +185,6 @@ class CTCSkipRemover(Elaboratable):
 		with m.Elif(source.valid & source.ready):
 			m.d.ss += bytes_in_buffer.eq(bytes_in_buffer - bytes_in_stream)
 
-
 		#
 		# Data output
 		#
@@ -215,7 +211,6 @@ class CTCSkipRemover(Elaboratable):
 		m.d.comb += self.bytes_in_buffer.eq(bytes_in_buffer)
 
 		return m
-
 
 class CTCSkipInserter(Elaboratable):
 	''' Clock Tolerance Compensation (CTC) Skip insertion gateware.
@@ -257,7 +252,6 @@ class CTCSkipInserter(Elaboratable):
 		self.can_send_skip = Signal()
 		self.sending_skip  = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -285,7 +279,6 @@ class CTCSkipInserter(Elaboratable):
 		with m.If(skip_needed & self.sending_skip):
 			m.d.ss += skips_to_send.eq(skips_to_send - 1)
 
-
 		#
 		# SKP insertion timing.
 		#
@@ -300,7 +293,6 @@ class CTCSkipInserter(Elaboratable):
 			with m.If(data_bytes_elapsed + bytes_per_word >= self.SKIP_BYTE_LIMIT):
 				m.d.ss   += data_bytes_elapsed.eq(data_bytes_elapsed + bytes_per_word - self.SKIP_BYTE_LIMIT)
 				m.d.comb += skip_needed.eq(1)
-
 
 		#
 		# SKP insertion.

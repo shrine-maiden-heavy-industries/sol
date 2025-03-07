@@ -72,7 +72,6 @@ class StreamInterface(Record):
 			*extra_fields
 		])
 
-
 	def attach(self, interface, omit = None):
 		# Create lists of fields to be copied -to- the interface (RHS fields),
 		# and lists of fields to be copied -from- the interface (LHS fields).
@@ -83,7 +82,6 @@ class StreamInterface(Record):
 		if omit:
 			rhs_fields = [field for field in rhs_fields if field not in omit]
 			lhs_fields = [field for field in lhs_fields if field not in omit]
-
 
 		# Create each of our assignments.
 		for field in rhs_fields:
@@ -98,14 +96,12 @@ class StreamInterface(Record):
 	def connect(self, interface, omit = None):
 		return self.attach(interface, omit = omit)
 
-
 	def stream_eq(self, interface, *, omit = None):
 		''' A hopefully more clear version of.connect() that more clearly indicates data_flow direction.
 
 		This will either solve a common footgun or introduce a new one. We'll see and adapt accordingly.
 		'''
 		return interface.attach(self, omit = omit)
-
 
 	def tap(self, interface, *, tap_ready = False, **kwargs):
 		''' Simple extension to stream_eq() that captures a read-only view of the stream.
@@ -118,9 +114,6 @@ class StreamInterface(Record):
 			core.append(self.ready.eq(interface.ready))
 
 		return core
-
-
-
 
 	def __getattr__(self, name):
 

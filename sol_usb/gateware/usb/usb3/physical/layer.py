@@ -77,7 +77,6 @@ class USB3PhysicalLayer(Elaboratable):
 		self.ctc_bytes_in_buffer        = Signal(range(9))
 		self.alignment_offset           = Signal(range(4))
 
-
 	def elaborate(self, platform):
 		m = Module()
 		phy = self._phy
@@ -91,7 +90,6 @@ class USB3PhysicalLayer(Elaboratable):
 			reset_controller.phy_status.eq(phy.phy_status),
 			self.ready.eq(reset_controller.ready),
 		]
-
 
 		#
 		# PHY control signal handling.
@@ -118,7 +116,6 @@ class USB3PhysicalLayer(Elaboratable):
 			self.vbus_present.eq(phy.power_present)
 		]
 
-
 		#
 		# Link Partner Detection
 		#
@@ -136,7 +133,6 @@ class USB3PhysicalLayer(Elaboratable):
 			phy.power_down.eq(0),
 			self.link_partner_detected.eq(phy.power_present)
 		]
-
 
 		#
 		# Transmit output conditioning.
@@ -159,7 +155,6 @@ class USB3PhysicalLayer(Elaboratable):
 			scrambler.hold.eq(tx_ctc.sending_skip)
 		]
 
-
 		# Convert our Tx stream into PHY connections whenever we're not in electrical idle.
 		with m.If(~self.tx_electrical_idle):
 			m.d.comb += [
@@ -167,7 +162,6 @@ class USB3PhysicalLayer(Elaboratable):
 				phy.tx_datak.eq(tx_ctc.source.ctrl),
 				tx_ctc.source.ready.eq(1),
 			]
-
 
 		#
 		# Receive input conditioning.
@@ -195,7 +189,6 @@ class USB3PhysicalLayer(Elaboratable):
 			self.alignment_offset.eq(aligner.alignment_offset)
 		]
 
-
 		# De-scramble our data before output, if needed.
 		m.submodules.descrambler = descrambler = Descrambler()
 		m.d.comb += [
@@ -210,7 +203,6 @@ class USB3PhysicalLayer(Elaboratable):
 			realigner.sink.stream_eq(descrambler.source),
 			self.source.stream_eq(realigner.source),
 		]
-
 
 		#
 		# LFPS signaling.

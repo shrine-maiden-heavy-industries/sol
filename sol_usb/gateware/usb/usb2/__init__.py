@@ -21,8 +21,6 @@ class USBSpeed(IntEnum):
 	FULL = 0b01
 	LOW  = 0b10
 
-
-
 class USBPacketID(IntFlag):
 	''' Enumeration specifying all of the valid USB PIDs we can handle. '''
 
@@ -54,7 +52,6 @@ class USBPacketID(IntFlag):
 	PID_INVALID   = 0b10000
 	PID_CORE_MASK = 0b01111
 
-
 	@classmethod
 	def from_byte(cls, byte, skip_checks = False):
 		''' Creates a PID object from a byte. '''
@@ -62,7 +59,6 @@ class USBPacketID(IntFlag):
 		# Convert the raw PID to an integer.
 		pid_as_int = int.from_bytes(byte, byteorder = 'little')
 		return cls.from_int(pid_as_int, skip_checks = skip_checks)
-
 
 	@classmethod
 	def from_int(cls, value, skip_checks = True):
@@ -82,12 +78,10 @@ class USBPacketID(IntFlag):
 
 		return cls(pid)
 
-
 	@classmethod
 	def from_name(cls, name):
 		''' Create a PID object from a string representation of its name. '''
 		return cls[name]
-
 
 	@classmethod
 	def parse(cls, value):
@@ -104,26 +98,21 @@ class USBPacketID(IntFlag):
 
 		return cls(value)
 
-
 	def category(self):
 		''' Returns the USBPIDCategory that each given PID belongs to. '''
 		return USBPIDCategory(self & USBPIDCategory.MASK)
-
 
 	def is_data(self):
 		''' Returns true iff the given PID represents a DATA packet. '''
 		return self.category() is USBPIDCategory.DATA
 
-
 	def is_token(self):
 		''' Returns true iff the given PID represents a token packet. '''
 		return self.category() is USBPIDCategory.TOKEN
 
-
 	def is_handshake(self):
 		''' Returns true iff the given PID represents a handshake packet. '''
 		return self.category() is USBPIDCategory.HANDSHAKE
-
 
 	def is_invalid(self):
 		''' Returns true if this object is an attempt to encapsulate an invalid PID. '''
@@ -143,8 +132,6 @@ class USBPacketID(IntFlag):
 
 		raise ValueError("cannot determine the direction of a non-token PID")
 
-
-
 	def summarize(self):
 		''' Return a summary of the given packet. '''
 
@@ -156,7 +143,6 @@ class USBPacketID(IntFlag):
 			return f'{name} (check-nibble invalid)'
 		else:
 			return name
-
 
 	def byte(self):
 		''' Return the value with its upper nibble. '''

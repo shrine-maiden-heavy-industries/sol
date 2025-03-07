@@ -38,7 +38,6 @@ __all__ = (
 	'LFPSTransceiver',
 )
 
-
 #
 # LPFS timing 'constants', and collection classes that represent them.
 #
@@ -58,7 +57,6 @@ class LFPSTiming:
 
 		self.range = (t_min, t_max)
 
-
 class LFPS:
 	'''LPFS patterns with burst and repeat timings.'''
 
@@ -66,7 +64,6 @@ class LFPS:
 		self.burst  = burst
 		self.repeat = repeat
 		self.cycles = None
-
 
 # Our actual pattern constants; as specified by the USB3 specification.
 # [USB 3.2r1: Table 6-30]
@@ -77,7 +74,6 @@ _PollingLFPS       = LFPS(burst = _PollingLFPSBurst, repeat = _PollingLFPSRepeat
 
 _ResetLFPSBurst    = LFPSTiming(t_typ = 100.0e-3, t_min = 80.0e-3,  t_max = 120.0e-3)
 _ResetLFPS         = LFPS(burst = _ResetLFPSBurst)
-
 
 #
 # Gateware for generating and detecting bursts of LFPS patterns. Does not deal with
@@ -107,7 +103,6 @@ class LFPSDetector(Elaboratable):
 		#
 		self.signaling_received = Signal() # i
 		self.detect             = Signal() # o
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -207,7 +202,6 @@ class LFPSDetector(Elaboratable):
 
 		return m
 
-
 class LFPSGenerator(Elaboratable):
 	'''
 	LFPS Signaling Generator
@@ -238,7 +232,6 @@ class LFPSGenerator(Elaboratable):
 		self.completed              = Signal() # o
 		self.drive_electrical_idle  = Signal() # o
 		self.send_signaling         = Signal() # o
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -280,7 +273,6 @@ class LFPSGenerator(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
 
 class LFPSTransceiver(Elaboratable):
 	''' Low-Frequency Periodic Signaling (LFPS) Transceiver
@@ -325,7 +317,6 @@ class LFPSTransceiver(Elaboratable):
 		# LFPS burst reception
 		self.polling_detected      = Signal() # o
 		self.reset_detected        = Signal() # o
-
 
 	def elaborate(self, platform):
 		m = Module()

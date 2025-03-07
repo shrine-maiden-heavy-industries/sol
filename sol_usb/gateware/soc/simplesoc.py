@@ -39,7 +39,6 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		- One or more read-only or read-write memories.
 		- A number of torii-soc peripherals.
 
-
 	The current implementation uses a single, 32-bit wide Wishbone bus
 	as the system's backend; and uses lambdasoc as its backing technology.
 	This is subject to change.
@@ -107,7 +106,6 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 		addr
 			The address at which the ROM should reside.
-
 
 		'''
 
@@ -360,7 +358,6 @@ class SimpleSoC(CPUSoC, Elaboratable):
 
 		'''
 
-
 		# Grab the memory map for this SoC...
 		memory_map = self.bus_decoder.bus.memory_map
 
@@ -495,7 +492,6 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		emit('')
 		emit(f'#define PLATFORM_NAME \'{platform_name}\'')
 		emit('')
-
 
 		# Emit our constant data for all Minerva CPUs.
 		self._emit_minerva_basics(emit)

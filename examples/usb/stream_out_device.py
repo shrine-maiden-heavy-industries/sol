@@ -46,7 +46,6 @@ class USBStreamOutDeviceExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -57,9 +56,7 @@ class USBStreamOutDeviceExample(Elaboratable):
 					e.bEndpointAddress = self.BULK_ENDPOINT_NUMBER
 					e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
 
-
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -95,16 +92,13 @@ class USBStreamOutDeviceExample(Elaboratable):
 		# Always accept data as it comes in.
 		m.d.comb += stream_ep.stream.ready.eq(1)
 
-
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
 			usb.connect.eq(1),
 			usb.full_speed_only.eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
-
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBStreamOutDeviceExample)

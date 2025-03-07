@@ -36,8 +36,6 @@ class ECP5SerDesPLLConfiguration:
 				}
 		raise ValueError(f'No config found for {refclk_freq/1e6:3.2f} MHz refclk / {linerate/1e9:3.2f} Gbps linerate.')
 
-
-
 class ECP5SerDesConfigInterface(Elaboratable):
 	''' Module that interfaces with the ECP5's SerDes Client Interface (SCI). '''
 
@@ -65,8 +63,6 @@ class ECP5SerDesConfigInterface(Elaboratable):
 		self.sci_wdata = Signal(8)
 		self.sci_rdata = Signal(8)
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -92,14 +88,12 @@ class ECP5SerDesConfigInterface(Elaboratable):
 				m.d.comb += self.sci_wrn.eq(0)
 				m.next = 'IDLE'
 
-
 			with m.State('READ'):
 				m.d.comb += self.sci_rd.eq(1)
 				m.d.pipe += self.dat_r.eq(self.sci_rdata)
 				m.next = 'IDLE'
 
 		return m
-
 
 class ECP5SerDesRegisterTranslator(Elaboratable):
 	''' Interface that converts control signals into SerDes register reads and writes. '''
@@ -117,14 +111,12 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 		self.tx_polarity = Signal()
 		self.rx_termination = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 		sci = self._sci
 
 		first = Signal()
 		data  = Signal(8)
-
 
 		with m.FSM(domain = 'pipe'):
 
@@ -147,7 +139,6 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 						first.eq(1)
 					]
 					m.next = 'WRITE-CH_01'
-
 
 			with m.State('WRITE-CH_01'):
 				m.d.pipe += first.eq(0)
@@ -251,8 +242,6 @@ class ECP5SerDesRegisterTranslator(Elaboratable):
 
 		return m
 
-
-
 class ECP5SerDesEqualizerInterface(Elaboratable):
 	''' Interface that controls the ECP5 SerDes' equalization settings via SCI.
 
@@ -286,7 +275,6 @@ class ECP5SerDesEqualizerInterface(Elaboratable):
 		self.equalizer_pole   = Signal(4)
 		self.equalizer_level  = Signal(2)
 
-
 	def elaborate(self, platform):
 		m = Module()
 		sci = self._sci
@@ -304,9 +292,6 @@ class ECP5SerDesEqualizerInterface(Elaboratable):
 		]
 
 		return m
-
-
-
 
 class ECP5SerDesEqualizer(Elaboratable):
 	''' Interface that controls the ECP5 SerDes' equalization settings via SCI.
@@ -333,7 +318,6 @@ class ECP5SerDesEqualizer(Elaboratable):
 	# get; and we're operating in our fast, edge domain.
 	CYCLES_PER_TRIAL = 127
 
-
 	def __init__(self, sci, channel):
 		self._sci     = sci
 		self._channel = channel
@@ -343,7 +327,6 @@ class ECP5SerDesEqualizer(Elaboratable):
 		#
 		self.train_equalizer         = Signal()
 		self.encoding_error_detected = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -367,7 +350,6 @@ class ECP5SerDesEqualizer(Elaboratable):
 		with m.Elif(self.encoding_error_detected):
 			m.d.pipe += bit_errors_seen.eq(bit_errors_seen + 1)
 
-
 		#
 		# Naive equalization trainer.
 		#
@@ -389,7 +371,6 @@ class ECP5SerDesEqualizer(Elaboratable):
 
 		# Keep track of how long we've been in this trial.
 		cycles_spent_in_trial  = Signal(range(self.CYCLES_PER_TRIAL))
-
 
 		# If we're actively training the equalizer...
 		with m.If(self.train_equalizer):
@@ -415,9 +396,7 @@ class ECP5SerDesEqualizer(Elaboratable):
 		with m.Else():
 			m.d.pipe += current_settings.eq(best_equalizer_setting)
 
-
 		return m
-
 
 class ECP5SerDesResetSequencer(Elaboratable):
 	''' Reset sequencer; ensures that the PLL, CDR, and PCS all start correctly. '''
@@ -452,7 +431,6 @@ class ECP5SerDesResetSequencer(Elaboratable):
 		self.tx_pcs_ready   = Signal()
 		self.rx_pcs_ready   = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -468,7 +446,6 @@ class ECP5SerDesResetSequencer(Elaboratable):
 		# Per [FPGA-PB-02001], the Rx CDR and PCS require a cascaded reset sequence for reliable operation.
 		# On loss of signal, the Rx CDR and PCS are reset; and on loss of lock, the Rx PCS is reset.
 
-
 		# Synchronize status signals to our clock.
 		tx_pll_locked = Signal()
 		rx_has_signal = Signal()
@@ -480,7 +457,6 @@ class ECP5SerDesResetSequencer(Elaboratable):
 			FFSynchronizer(self.rx_cdr_locked, rx_cdr_locked, o_domain = 'ss'),
 			FFSynchronizer(self.rx_coding_err, rx_coding_err, o_domain = 'ss'),
 		]
-
 
 		def apply_resets(m, tx_pll, tx_pcs, rx_cdr, rx_pcs):
 			# The SerDes reset inputs are asynchronous; register our outputs so they do not have glitches.
@@ -496,7 +472,6 @@ class ECP5SerDesResetSequencer(Elaboratable):
 				self.tx_pcs_ready.eq(tx_pcs),
 				self.rx_pcs_ready.eq(rx_pcs),
 			]
-
 
 		timer = Signal(range(max(self.RESET_CYCLES, self.RX_LOS_CYCLES, self.RX_LOL_CYCLES)))
 
@@ -656,7 +631,6 @@ class ECP5SerDesResetSequencer(Elaboratable):
 
 		return ResetInserter({'ss': self.reset})(m)
 
-
 class ECP5SerDes(Elaboratable):
 	''' Abstraction layer for working with the ECP5 SerDes. '''
 
@@ -709,10 +683,8 @@ class ECP5SerDes(Elaboratable):
 		# RX status
 		self.rx_status      = Signal(3)
 
-
 	def elaborate(self, platform):
 		m = Module()
-
 
 		# Internal signals.
 		tx_clk_full = Signal()
@@ -728,7 +700,6 @@ class ECP5SerDes(Elaboratable):
 		rx_ctc_orun = Signal()
 		rx_align    = Signal()		# noqa: F841
 		rx_bus      = Signal(24)
-
 
 		#
 		# Clocking / reset control.
@@ -754,7 +725,6 @@ class ECP5SerDes(Elaboratable):
 			self.pclk.eq(tx_clk_half),
 		]
 
-
 		#
 		# SerDes parameter control.
 		#
@@ -768,7 +738,6 @@ class ECP5SerDes(Elaboratable):
 			sci_trans.rx_polarity.eq(self.rx_polarity),
 			sci_trans.rx_termination.eq(self.rx_termination),
 		]
-
 
 		#
 		# Core SerDes instantiation.
@@ -1096,9 +1065,7 @@ class ECP5SerDes(Elaboratable):
 			with m.If(Cat(rx_status[i] == rx_status_code for i in range(self._io_words)).any()):
 				m.d.comb += self.rx_status.eq(rx_status_code)
 
-
 		return m
-
 
 class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 	''' Wrapper around the core ECP5 SerDes that adapts it to the PIPE interface.
@@ -1147,7 +1114,6 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 		self._dual                    = dual
 		self._refclk_frequency        = refclk_frequency
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -1173,7 +1139,6 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 			ClockSignal('pipe')     .eq(serdes.pclk),
 		]
 
-
 		#
 		# LFPS generation & detection.
 		#
@@ -1184,7 +1149,6 @@ class ECP5SerDesPIPE(PIPEInterface, Elaboratable):
 			serdes.tx_gpio.eq(lfps_generator.tx_gpio),
 			lfps_detector.rx_gpio.eq(serdes.rx_gpio),
 		]
-
 
 		#
 		# PIPE interface signaling.

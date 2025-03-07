@@ -44,8 +44,6 @@ class PHYResetController(Elaboratable):
 
 		self.phy_status     = Signal()
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -54,7 +52,6 @@ class PHYResetController(Elaboratable):
 		# in case a PHY other than the TUSB1310A ever makes it to the market.
 		cycles_in_reset = int(5e-6 * 50e6)
 		cycles_spent_in_reset = Signal(range(cycles_in_reset + 1))
-
 
 		with m.FSM():
 
@@ -71,14 +68,12 @@ class PHYResetController(Elaboratable):
 				with m.If(cycles_spent_in_reset == cycles_in_reset):
 					m.next = 'DETECT_PHY_STARTUP'
 
-
 			# DETECT_PHY_STARTUP -- post-reset, the PHY should drive its status line high.
 			# We'll wait for this to happen, so we can track the PHY's progress.
 			with m.State('DETECT_PHY_STARTUP'):
 
 				with m.If(self.phy_status):
 					m.next = 'WAIT_FOR_STARTUP'
-
 
 			# WAIT_FOR_STARTUP -- we've now detected that the PHY is starting up.
 			# We'll wait for that startup signal to be de-asserted, indicating that the PHY is ready.
@@ -88,16 +83,12 @@ class PHYResetController(Elaboratable):
 				with m.If(~self.phy_status):
 					m.next = 'READY'
 
-
 			# READY -- our PHY is all started up and ready for use.
 			# For now, we'll remain here until we're reset.
 			with m.State('READY'):
 				m.d.comb += self.ready.eq(1)
 
-
 		return m
-
-
 
 class LinkPartnerDetector(Elaboratable):
 	''' Light abstraction over our PIPE receiver detection mechanism.
@@ -144,8 +135,6 @@ class LinkPartnerDetector(Elaboratable):
 		self.new_result        = Signal()
 		self.partner_present   = Signal()
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -162,7 +151,6 @@ class LinkPartnerDetector(Elaboratable):
 
 				with m.If(self.request_detection):
 					m.next = 'PERFORM_DETECT'
-
 
 			# PERFORM_DETECT -- we're asking our PHY to perform the core of our detection,
 			# and waiting for that detection to complete.
@@ -186,7 +174,6 @@ class LinkPartnerDetector(Elaboratable):
 						m.d.ss += self.partner_present.eq(self.rx_status == PARTNER_PRESENT_STATUS)
 						m.next = 'MOVE_TO_P0'
 
-
 			# MOVE_TO_P0 -- we've completed a detection, and now are ready to move (back) into our
 			# operational state.
 			with m.State('MOVE_TO_P0'):
@@ -200,7 +187,6 @@ class LinkPartnerDetector(Elaboratable):
 					m.d.comb += self.new_result.eq(1)
 					m.next = 'IDLE_P0'
 
-
 			# IDLE_P0 -- our normal operational state; usually reached after at least one detection
 			# has completed successfully. We'll wait until another detection is requested.
 			with m.State('IDLE_P0'):
@@ -210,7 +196,6 @@ class LinkPartnerDetector(Elaboratable):
 				# need to move back to P2.
 				with m.If(Rose(self.request_detection)):
 					m.next = 'MOVE_TO_P2'
-
 
 			# MOVE_TO_P2 -- our user has requested a detection, which we can only perform from P2.
 			# Accordingly, we'll move to P2, and -then- perform our detection.
@@ -223,6 +208,5 @@ class LinkPartnerDetector(Elaboratable):
 				# our link partner detection.
 				with m.If(self.phy_status):
 					m.next = 'PERFORM_DETECT'
-
 
 		return m

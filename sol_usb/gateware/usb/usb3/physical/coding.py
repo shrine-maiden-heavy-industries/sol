@@ -27,7 +27,6 @@ def D(x, y):
 	'''
 	return (y << 5) | x
 
-
 class NamedSymbol:
 	''' Simple encapsulation of a USB3 symbol, with simple metadata. '''
 
@@ -42,12 +41,10 @@ class NamedSymbol:
 		value = Const(self.value, 8)
 		return value.replicate(repeat)
 
-
 	def ctrl_const(self, *, repeat = 1):
 		''' Returns this symbol's ctrl value as an Torii const. '''
 		ctrl = Const(self.ctrl, 1)
 		return ctrl.replicate(repeat)
-
 
 SKP = NamedSymbol('SKP', K(28, 1), 'Skip')                              # 3c
 SDP = NamedSymbol('SDP', K(28, 2), 'Start Data Packet')                 # 5c
@@ -63,7 +60,6 @@ IDL = NamedSymbol('IDL', D(0, 0),  'Logical Idle', is_data = True)        # 00
 
 symbols = [SKP, SDP, EDB, SUB, COM, RSD, SHP, END, SLC, EPF]
 
-
 def get_word_for_symbols(*target_symbols):
 	''' Returns a pair of Torii constants containing the data and ctrl values for the given symbols. '''
 
@@ -72,7 +68,6 @@ def get_word_for_symbols(*target_symbols):
 	target_ctrl = Cat(symbol.ctrl_const() for symbol in target_symbols)
 
 	return target_data, target_ctrl
-
 
 def stream_matches_symbols(stream, *target_symbols, include_ready = False):
 	''' Returns an Torii conditional that evaluates true when a stream contains the given four symbols.
@@ -90,7 +85,6 @@ def stream_matches_symbols(stream, *target_symbols, include_ready = False):
 		(stream.data == target_data) &
 		(stream.ctrl == target_ctrl)
 	)
-
 
 def stream_word_matches_symbol(stream, word_number, *, symbol):
 	''' Returns an Torii conditional that evaluates true if the given word of a stream matches the given symbol. '''

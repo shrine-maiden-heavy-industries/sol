@@ -37,7 +37,6 @@ class TimestampPacketReceiver(Elaboratable):
 		self.bus_interval_counter = Signal()
 		self.delta                = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 

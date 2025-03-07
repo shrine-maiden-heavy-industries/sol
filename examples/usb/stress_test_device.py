@@ -5,7 +5,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 import os
 
 from torii.hdl                          import Elaboratable, Module, Signal
@@ -20,7 +19,6 @@ BULK_ENDPOINT_NUMBER = 1
 MAX_BULK_PACKET_SIZE = 64 if os.getenv('SOL_FULL_ONLY') else 256
 CONSTANT_TO_SEND     = 0x00
 
-
 class StressTestEndpoint(Elaboratable):
 	'''
 	Endpoint interface that transmits a constant to the host, without buffering.
@@ -29,7 +27,6 @@ class StressTestEndpoint(Elaboratable):
 	----------
 	interface: EndpointInterface
 		Communications link to our USB device.
-
 
 	Parameters
 	----------
@@ -42,7 +39,6 @@ class StressTestEndpoint(Elaboratable):
 		The constant byte to send.
 	'''
 
-
 	def __init__(self, *, endpoint_number: int, max_packet_size: int, constant: int):
 		self._endpoint_number = endpoint_number
 		self._max_packet_size = max_packet_size
@@ -52,7 +48,6 @@ class StressTestEndpoint(Elaboratable):
 		# I/O port
 		#
 		self.interface = EndpointInterface()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -104,9 +99,7 @@ class StressTestEndpoint(Elaboratable):
 		with m.If(interface.handshakes_in.ack & endpoint_selected):
 			m.d.usb += interface.tx_pid_toggle.eq(~interface.tx_pid_toggle)
 
-
 		return m
-
 
 class USBStressTest(Elaboratable):
 	'''
@@ -139,7 +132,6 @@ class USBStressTest(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -150,9 +142,7 @@ class USBStressTest(Elaboratable):
 					e.bEndpointAddress = 0x80 | BULK_ENDPOINT_NUMBER
 					e.wMaxPacketSize   = MAX_BULK_PACKET_SIZE
 
-
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -176,16 +166,13 @@ class USBStressTest(Elaboratable):
 		)
 		usb.add_endpoint(test_ep)
 
-
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
 			usb.connect.eq(1),
 			usb.full_speed_only.eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
-
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBStressTest)

@@ -9,7 +9,6 @@
 
 ''' Scrambling and descrambling for USB3. '''
 
-
 from torii.hdl  import *
 
 from ...stream  import USBRawSuperSpeedStream
@@ -52,7 +51,6 @@ class ScramblerLFSR(Elaboratable):
 		self.advance = Signal()
 		self.value   = Signal(32)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -62,7 +60,6 @@ class ScramblerLFSR(Elaboratable):
 		def xor_bits(*indices):
 			bits = Cat(current_value[i] for i in indices)
 			return bits.xor()
-
 
 		# Compute the next value in our internal LFSR state...
 		m.d.comb += next_value.eq(Cat(
@@ -130,7 +127,6 @@ class ScramblerLFSR(Elaboratable):
 
 		return m
 
-
 class Scrambler(Elaboratable):
 	''' USB3-compliant data scrambler.
 
@@ -168,7 +164,6 @@ class Scrambler(Elaboratable):
 		# Debug signaling.
 		self.lfsr_state = Signal.like(self.source.data)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -192,7 +187,6 @@ class Scrambler(Elaboratable):
 			sink.ready.eq(source.ready)
 		]
 
-
 		# If we have any non-control words, scramble them by overriding our data assignment above
 		# with the relevant data word XOR'd with our LFSR value. Note that control words are -never-
 		# scrambled, per [USB3.2: Appendix B]
@@ -205,15 +199,12 @@ class Scrambler(Elaboratable):
 			with m.Else():
 				m.d.comb += source.data.word_select(i, 8).eq(sink.data.word_select(i, 8))
 
-
 		# Connect up our debug outputs.
 		m.d.comb += [
 			self.lfsr_state.eq(lfsr.value)
 		]
 
-
 		return m
-
 
 class Descrambler(Scrambler):
 	''' USB3-compliant data descrambler.

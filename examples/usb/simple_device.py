@@ -18,7 +18,6 @@ from sol_usb.gateware.usb.usb2.device import USBDevice
 class USBDeviceExample(Elaboratable):
 	''' Simple example of a USB device using the SOL framework. '''
 
-
 	def create_descriptors(self):
 		''' Create the descriptors we want to use for our device. '''
 
@@ -40,7 +39,6 @@ class USBDeviceExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -56,7 +54,6 @@ class USBDeviceExample(Elaboratable):
 					e.wMaxPacketSize   = 64
 
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -86,7 +83,6 @@ class USBDeviceExample(Elaboratable):
 		]
 
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBDeviceExample)

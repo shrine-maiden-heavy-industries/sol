@@ -18,11 +18,9 @@ class DataPacketPayloadCRCTest(SolSSGatewareTestCase):
 
 		self.assertEqual((yield dut.crc), 0x34984B13)
 
-
 	@ss_domain_test_case
 	def test_unaligned_crc(self):
 		dut = self.dut
-
 
 		# Aligned section of a real USB data capture, from a USB flash drive.
 		aligned_section = [

@@ -45,7 +45,6 @@ class ConstantStreamGeneratorTest(SolUSBGatewareTestCase):
 			self.assertEqual((yield dut.stream.payload), ord(i))
 			self.assertEqual((yield dut.stream.first),   0)
 
-
 		# If we drop the 'accepted', we should still see the next byte...
 		yield dut.stream.ready.eq(0)
 		yield
@@ -63,7 +62,6 @@ class ConstantStreamGeneratorTest(SolUSBGatewareTestCase):
 		for i in ' WORLD':
 			yield
 			self.assertEqual((yield dut.stream.payload), ord(i))
-
 
 		# On the last byte of data, we should see last = 1.
 		self.assertEqual((yield dut.stream.last),   1)
@@ -110,7 +108,6 @@ class ConstantStreamGeneratorTest(SolUSBGatewareTestCase):
 			self.assertEqual((yield dut.stream.payload), ord(i))
 			self.assertEqual((yield dut.stream.first),   0)
 
-
 		# If we drop the 'accepted', we should still see the next byte...
 		yield dut.stream.ready.eq(0)
 		yield
@@ -128,7 +125,6 @@ class ConstantStreamGeneratorTest(SolUSBGatewareTestCase):
 		for i in ' WORLD':
 			yield
 			self.assertEqual((yield dut.stream.payload), ord(i))
-
 
 		# On the last byte of data, we should see last = 1.
 		self.assertEqual((yield dut.stream.last),   1)
@@ -152,15 +148,12 @@ class ConstantStreamGeneratorTest(SolUSBGatewareTestCase):
 			self.assertEqual((yield dut.stream.payload), ord(i))
 			yield
 
-
 		# On the last byte of data, we should see last = 1.
 		self.assertEqual((yield dut.stream.last),   1)
 
 		# After the last datum, we should see valid drop to '0'.
 		yield
 		self.assertEqual((yield dut.stream.valid), 0)
-
-
 
 class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 	FRAGMENT_UNDER_TEST = ConstantStreamGenerator
@@ -170,7 +163,6 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		stream_type      = SuperSpeedStreamInterface,
 		max_length_width = 16
 	)
-
 
 	@ss_domain_test_case
 	def test_basic_transmission(self):
@@ -207,12 +199,10 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'O WO', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   0)
 
-
 		yield
 		self.assertEqual((yield dut.stream.valid),   0b111)
 		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'RLD', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   0)
-
 
 		# On the last byte of data, we should see last = 1.
 		self.assertEqual((yield dut.stream.last),   1)
@@ -220,7 +210,6 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		# After the last datum, we should see valid drop to '0'.
 		yield
 		self.assertEqual((yield dut.stream.valid), 0)
-
 
 	@ss_domain_test_case
 	def test_max_length_transmission(self):
@@ -243,7 +232,6 @@ class ConstantStreamGeneratorWideTest(SolSSGatewareTestCase):
 		self.assertEqual((yield dut.stream.payload), int.from_bytes(b'O WO', byteorder = 'little'))
 		self.assertEqual((yield dut.stream.first),   0)
 		self.assertEqual((yield dut.stream.last),    1)
-
 
 	@ss_domain_test_case
 	def test_very_short_max_length(self):

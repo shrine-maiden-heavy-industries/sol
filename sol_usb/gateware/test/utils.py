@@ -40,14 +40,12 @@ def sync_test_case(process_function, *, domain = 'sync'):
 
 	return run_test
 
-
 def usb_domain_test_case(process_function):
 	'''
 	Decorator that converts a function into a simple synchronous-process
 	test case in the USB domain.
 	'''
 	return sync_test_case(process_function, domain = 'usb')
-
 
 def fast_domain_test_case(process_function):
 	'''
@@ -56,14 +54,12 @@ def fast_domain_test_case(process_function):
 	'''
 	return sync_test_case(process_function, domain = 'fast')
 
-
 def ss_domain_test_case(process_function):
 	'''
 	Decorator that converts a function into a simple synchronous-process
 	test case in the SuperSpeed domain.
 	'''
 	return sync_test_case(process_function, domain = 'ss')
-
 
 T = TypeVar('T', bound = 'Elaboratable | Fragment')
 class SolGatewareTestCase(Generic[T], unittest.TestCase):
@@ -197,7 +193,6 @@ class SolUSBGatewareTestCase(SolGatewareTestCase):
 
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY  = 60e6
-
 
 class SolSSGatewareTestCase(SolGatewareTestCase):
 	''' Specialized form of :class:``SolGatewareTestCase`` that assumes a USB domain clock, but no others. '''

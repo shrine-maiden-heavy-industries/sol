@@ -18,7 +18,6 @@ from .xc7          import DRPArbiter, DRPFieldController, DRPInterface, GTOOBClo
 
 Open = Signal
 
-
 class GTXQuadPLL(Elaboratable):
 	def __init__(self, refclk, refclk_freq, linerate):
 		self._refclk      = refclk
@@ -35,7 +34,6 @@ class GTXQuadPLL(Elaboratable):
 		self.reset   = Signal()
 		self.lock    = Signal()
 		self.drp     = DRPInterface()
-
 
 	def elaborate(self, platform):
 		qpll_fbdivs = {
@@ -125,7 +123,6 @@ class GTXQuadPLL(Elaboratable):
 			i_QPLLRSVD2         = 0b11111,
 		)
 
-
 	@staticmethod
 	def compute_config(refclk_freq, linerate):
 		for m in 1, 2, 3, 4:
@@ -180,7 +177,6 @@ class GTXQuadPLL(Elaboratable):
 				= {config['linerate']/1e9}GHz
 '''
 
-
 class GTXChannelPLL(Elaboratable):
 	def __init__(self, refclk, refclk_freq, linerate):
 		self._refclk      = refclk
@@ -195,10 +191,8 @@ class GTXChannelPLL(Elaboratable):
 		self.reset   = Signal()
 		self.lock    = Signal()
 
-
 	def elaborate(self, platform):
 		return Module()
-
 
 	@staticmethod
 	def compute_config(refclk_freq, linerate):
@@ -247,8 +241,6 @@ class GTXChannelPLL(Elaboratable):
 	LINERATE	= CLKOUT x 2 / D = {config['vco_freq']/1e9}GHz x 2 / {config['d']}
 				= {config['linerate']/1e9}GHz
 '''
-
-
 
 class GTXChannel(Elaboratable):
 	def __init__(self, pll, tx_pads, rx_pads, ss_clock_frequency):
@@ -299,7 +291,6 @@ class GTXChannel(Elaboratable):
 		self.rx_status      = Signal(3)
 		self.rx_elec_idle   = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -315,7 +306,6 @@ class GTXChannel(Elaboratable):
 		# Ensure we have a valid PLL/CDR configuration.
 		if pll.config['linerate'] >= 6.6e9:
 			raise ValueError(f'PLL linerate of {pll.config["linerate"]} must be less than 6.6e9')
-
 
 		# We support both QPLL and CPLL clock sources.
 		use_cpll = isinstance(pll, GTXChannelPLL)
@@ -349,7 +339,6 @@ class GTXChannel(Elaboratable):
 		# from the properties of the sequences.
 		m.submodules.oob_clkdiv = oob_clkdiv = GTOOBClockDivider(self._ss_clock_frequency)
 
-
 		#
 		# Initialization.
 		#
@@ -367,7 +356,6 @@ class GTXChannel(Elaboratable):
 			self.tx_ready.eq(defer_rst.done & tx_rst_done),
 			self.rx_ready.eq(defer_rst.done & rx_rst_done),
 		]
-
 
 		#
 		# Dynamic reconfiguration.
@@ -388,7 +376,6 @@ class GTXChannel(Elaboratable):
 		m.submodules.drp_arbiter = drp_arbiter = DRPArbiter()
 		drp_arbiter.add_interface(rx_term.drp)
 		drp_arbiter.add_interface(self.drp)
-
 
 		#
 		# Core SerDes instantiation.
@@ -972,10 +959,7 @@ class GTXChannel(Elaboratable):
 			i_TXDETECTRX            = 0,
 		)
 
-
 		return m
-
-
 
 class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
 	''' Wrapper around the core GTX SerDes that adapts it to the PIPE interface.
@@ -1021,7 +1005,6 @@ class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
 		self._refclk_frequency   = refclk_frequency
 		self._ss_clock_frequency = ss_clock_frequency
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -1047,7 +1030,6 @@ class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
 			ClockSignal('pipe')     .eq(serdes.pclk),
 		]
 
-
 		#
 		# LFPS generation.
 		#
@@ -1056,7 +1038,6 @@ class XC7GTXSerDesPIPE(PIPEInterface, Elaboratable):
 			serdes.tx_gpio_en.eq(lfps_generator.tx_gpio_en),
 			serdes.tx_gpio.eq(lfps_generator.tx_gpio),
 		]
-
 
 		#
 		# PIPE interface signaling.

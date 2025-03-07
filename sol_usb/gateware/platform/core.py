@@ -21,7 +21,6 @@ class NullPin(Record):
 			('oe', 1),
 		])
 
-
 class SOLPlatform:
 	''' Mixin that extends Torii platforms with extra functionality.'''
 
@@ -36,7 +35,6 @@ class SOLPlatform:
 
 		# Create our PHY, allowing it access to our object.
 		return self.default_usb3_phy(self)
-
 
 	def get_led(self, m, index = 0):
 		''' Attempts to get an LED for the given platform, where possible.
@@ -63,10 +61,8 @@ class SOLPlatform:
 		except ResourceError:
 			pass
 
-
 		# Finally, if we've failed to get an LED entirely, return a NullPin stand-in.
 		return NullPin()
-
 
 	def request_optional(self, name, number = 0, *args, default, expected = False, **kwargs):
 		''' Specialized version of .request() for 'optional' I/O.
@@ -92,7 +88,6 @@ class SOLPlatform:
 			logm(f'Skipping resource {name}/{number}, as it is not present on this platform.')
 			return default
 
-
 class LUNAApolloPlatform(SOLPlatform):
 	''' Base class for Apollo-based LUNA platforms; includes configuration. '''
 
@@ -111,7 +106,6 @@ class LUNAApolloPlatform(SOLPlatform):
 			programmer = ECP5_JTAGProgrammer(jtag)
 			programmer.configure(bitstream)
 
-
 	def _ensure_unconfigured(self, debugger):
 		''' Ensures a given FPGA is unconfigured and thus ready for e.g. SPI flashing. '''
 
@@ -120,7 +114,6 @@ class LUNAApolloPlatform(SOLPlatform):
 		with debugger.jtag as jtag:
 			programmer = ECP5_JTAGProgrammer(jtag)
 			programmer.unconfigure()
-
 
 	def toolchain_flash(self, products, name = 'top'):
 		''' Programs the LUNA board's flash via its sideband connection. '''
@@ -139,7 +132,6 @@ class LUNAApolloPlatform(SOLPlatform):
 			programmer.flash(bitstream)
 
 		debugger.soft_reset()
-
 
 	def toolchain_erase(self):
 		''' Erases the LUNA board's flash. '''

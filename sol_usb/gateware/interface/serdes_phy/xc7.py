@@ -20,7 +20,6 @@ class DRPInterface:
 		self.en   = Signal(1,   name = 'drp_en')
 		self.rdy  = Signal(1,   name = 'drp_rdy')
 
-
 class _DRPInterfaceBuffer(Elaboratable):
 	''' Gateware that latches DRP transaction inputs, for an arbiter to complete it later. '''
 	def __init__(self, interface):
@@ -30,7 +29,6 @@ class _DRPInterfaceBuffer(Elaboratable):
 		self.di_latch = Signal.like(interface.di)
 		self.we_latch = Signal.like(interface.we)
 		self.en_latch = Signal.like(interface.en)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -50,7 +48,6 @@ class _DRPInterfaceBuffer(Elaboratable):
 
 		return m
 
-
 class DRPArbiter(Elaboratable):
 	''' Gateware that merges a collection of DRPInterfaces into a single interface.
 
@@ -65,7 +62,6 @@ class DRPArbiter(Elaboratable):
 
 	def add_interface(self, interface: DRPInterface):
 		self.interfaces.append(interface)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -110,7 +106,6 @@ class DRPArbiter(Elaboratable):
 
 		return m
 
-
 class DRPFieldController(Elaboratable):
 	''' Gateware that atomically updates part of a word via DRP. '''
 
@@ -121,7 +116,6 @@ class DRPFieldController(Elaboratable):
 		self.drp = DRPInterface()
 
 		self.value = Signal(bits.stop - bits.start, reset = reset)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -167,7 +161,6 @@ class DRPFieldController(Elaboratable):
 
 		return m
 
-
 class GTResetDeferrer(Elaboratable):
 	''' Gateware that ensures the mandatory post-configuration period before reset, per Xilinx AR43482. '''
 
@@ -184,7 +177,6 @@ class GTResetDeferrer(Elaboratable):
 
 		# Status output.
 		self.done = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -211,7 +203,6 @@ class GTResetDeferrer(Elaboratable):
 
 		return m
 
-
 class GTPRXPMAResetWorkaround(Elaboratable):
 	''' Gateware that ensures the required conditions for GTP receiver are met, per UG482. '''
 
@@ -223,7 +214,6 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 
 		self.rxpmaresetdone = Signal()
 		self.drp = DRPInterface()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -311,7 +301,6 @@ class GTPRXPMAResetWorkaround(Elaboratable):
 
 		return m
 
-
 # Unlike e.g. Lattice ECP5 series, Xilinx's SerDes do not have a direct path from
 # the high-speed pads to the fabric; which makes detecting out-of-band signaling
 # challenging. As an (undocumented) alternative to the method described below, on
@@ -345,7 +334,6 @@ class GTOOBClockDivider(Elaboratable):
 		self._ratio = ceil((ss_clock_frequency * 3) * (max_pulse_period / 2))
 
 		self.o = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()

@@ -21,7 +21,6 @@ from .luna_r0_4                         import LUNAPlatformRev0D4
 # Stores the latest platform; for reference / automagic.
 LATEST_PLATFORM = LUNAPlatformRev0D4
 
-
 # Table mapping LUNA revision numbers to their platform objects.
 PLATFORM_FOR_REVISION = {
 	(0,   1): LUNAPlatformRev0D1,
@@ -38,7 +37,6 @@ def _get_platform_from_string(platform):
 	if (not module) or (not name):
 		raise TypeError('LUNA_PLATFORM must be in <module path>:<class name> format.')
 
-
 	# If we have a filename, load the module from our file.
 	module_path = os.path.expanduser(module)
 	if os.path.isfile(module_path):
@@ -51,7 +49,6 @@ def _get_platform_from_string(platform):
 		# ... and pull in its code .
 		spec.loader.exec_module(platform_module)
 
-
 	# Otherwise, try to parse it as a module path.
 	else:
 		platform_module = importlib.import_module(module)
@@ -59,7 +56,6 @@ def _get_platform_from_string(platform):
 	# Once we have the relevant module, extract our class from it.
 	platform_class = getattr(platform_module, name)
 	return platform_class()
-
 
 def get_appropriate_platform() -> ECP5Platform:
 	''' Attempts to return the most appropriate platform for the local configuration. '''
@@ -90,14 +86,12 @@ def get_appropriate_platform() -> ECP5Platform:
 
 		return platform
 
-
 	# If we don't have a connected platform, fall back to the latest platform.
 	except DebuggerNotFound:
 		platform = LATEST_PLATFORM()
 
 		log.warning(f'Couldn\'t auto-detect connected platform. Assuming {platform.name}.')
 		return platform
-
 
 class NullPin(Record):
 	''' Stand-in for a I/O record. '''

@@ -59,13 +59,11 @@ class UARTBridgeExample(Elaboratable):
 		if hasattr(uart.tx, 'oe'):
 			m.d.comb += uart.tx.oe.eq(transmitter.driving),
 
-
 		# Turn on a single LED, just to show something's running.
 		led = Cat(platform.request('led', i).o for i in range(6))
 		m.d.comb += led.eq(~transmitter.tx)
 
 		return m
-
 
 if __name__ == '__main__':
 	cli(UARTBridgeExample)

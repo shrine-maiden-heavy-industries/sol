@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 import os
 
 from torii.build                        import Attrs, Clock, Connector, DiffPairs, Pins, PinsN, Resource, Subsignal
@@ -36,7 +35,6 @@ def ULPIResource(name, data_sites, clk_site, dir_site, nxt_site, stp_site, reset
 		Subsignal('rst',   PinsN(reset_site, dir = 'o' )),
 		Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')
 	)
-
 
 class LUNAPlatformRev0D1(LUNAApolloPlatform, ECP5Platform):
 	''' Board description for the pre-release r0.1 revision of LUNA. '''
@@ -87,8 +85,6 @@ class LUNAPlatformRev0D1(LUNAApolloPlatform, ECP5Platform):
 		0x39: 0b000110 # USB3343: swap D+ and D- to match the LUNA boards
 	}
 
-
-
 	#
 	# I/O resources.
 	#
@@ -130,7 +126,6 @@ class LUNAPlatformRev0D1(LUNAApolloPlatform, ECP5Platform):
 			Subsignal('tx',   Pins('T14', dir = 'o')),
 			Attrs(IO_TYPE = 'LVCMOS33')
 		),
-
 
 		# SPI bus connected to the debug controller, for simple register exchanges.
 		# Note that the Debug Controller is the master on this bus.

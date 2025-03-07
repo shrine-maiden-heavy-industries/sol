@@ -18,7 +18,6 @@ class RawHeaderPacketReceiverTest(SolSSGatewareTestCase):
 			yield self.dut.sink.ctrl.eq(ctrl)
 			yield
 
-
 	@ss_domain_test_case
 	def test_good_packet_receive(self):
 		dut  = self.dut
@@ -38,7 +37,6 @@ class RawHeaderPacketReceiverTest(SolSSGatewareTestCase):
 		self.assertEqual((yield dut.new_packet),   1)
 		self.assertEqual((yield dut.bad_packet),   0)
 		self.assertEqual((yield dut.bad_sequence), 0)
-
 
 	@ss_domain_test_case
 	def test_bad_sequence_receive(self):
@@ -63,8 +61,6 @@ class RawHeaderPacketReceiverTest(SolSSGatewareTestCase):
 		self.assertEqual((yield dut.bad_packet),   0)
 		self.assertEqual((yield dut.bad_sequence), 1)
 
-
-
 	@ss_domain_test_case
 	def test_bad_packet_receive(self):
 		dut  = self.dut
@@ -85,7 +81,6 @@ class RawHeaderPacketReceiverTest(SolSSGatewareTestCase):
 		self.assertEqual((yield dut.new_packet),   0)
 		self.assertEqual((yield dut.bad_packet),   1)
 		self.assertEqual((yield dut.bad_sequence), 0)
-
 
 	@ss_domain_test_case
 	def test_bad_crc_and_sequence_receive(self):

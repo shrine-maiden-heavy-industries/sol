@@ -34,7 +34,6 @@ class DataHeaderReceiver(Elaboratable):
 		#
 		self.header_sink   = HeaderQueue()
 
-
 	def elaborate(self, platform):
 		m = Module()
 

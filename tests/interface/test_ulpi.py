@@ -19,12 +19,10 @@ class TestULPIRegisters(SolGatewareTestCase):
 		yield self.dut.read_request.eq(0)
 		yield self.dut.write_request.eq(0)
 
-
 	@usb_domain_test_case
 	def test_idle_behavior(self):
 		''' Ensure we apply a NOP whenever we're not actively performing a command. '''
 		self.assertEqual((yield self.dut.ulpi_data_out), 0)
-
 
 	@usb_domain_test_case
 	def test_register_read(self):
@@ -65,7 +63,6 @@ class TestULPIRegisters(SolGatewareTestCase):
 
 		# Finally, we should return to idle.
 		self.assertEqual((yield self.dut.busy), 0)
-
 
 	@usb_domain_test_case
 	def test_interrupted_read(self):
@@ -114,7 +111,6 @@ class TestULPIRegisters(SolGatewareTestCase):
 		# Finally, we should return to idle.
 		self.assertEqual((yield self.dut.busy), 0)
 
-
 	@usb_domain_test_case
 	def test_register_write(self):
 
@@ -160,8 +156,6 @@ class TestULPIRegisters(SolGatewareTestCase):
 		self.assertEqual((yield self.dut.ulpi_stop), 0)
 		self.assertEqual((yield self.dut.busy), 0)
 
-
-
 class ULPIRxEventDecoderTest(SolGatewareTestCase):
 
 	USB_CLOCK_FREQUENCY = 60e6
@@ -179,13 +173,11 @@ class ULPIRxEventDecoderTest(SolGatewareTestCase):
 
 		return ULPIRxEventDecoder(ulpi_bus = self.ulpi)
 
-
 	def initialize_signals(self):
 		yield self.ulpi.dir.eq(0)
 		yield self.ulpi.nxt.eq(0)
 		yield self.ulpi.data.i.eq(0)
 		yield self.dut.register_operation_in_progress.eq(0)
-
 
 	@usb_domain_test_case
 	def test_decode(self):
@@ -207,7 +199,6 @@ class ULPIRxEventDecoderTest(SolGatewareTestCase):
 		yield
 		self.assertEqual((yield self.dut.last_rx_command), 0x00)
 
-
 		# Setting DIR but not NXT should trigger an RxEvent; but not
 		# until one cycle of 'bus turnaround' has passed.
 		yield self.ulpi.dir.eq(1)
@@ -228,9 +219,6 @@ class ULPIRxEventDecoderTest(SolGatewareTestCase):
 		self.assertEqual((yield self.dut.rx_error),          0)
 		self.assertEqual((yield self.dut.host_disconnect),   0)
 
-
-
-
 class ControlTranslatorTest(SolGatewareTestCase):
 
 	USB_CLOCK_FREQUENCY = 60e6
@@ -239,7 +227,6 @@ class ControlTranslatorTest(SolGatewareTestCase):
 	def instantiate_dut(self):
 		self.reg_window = ULPIRegisterWindow()
 		return ULPIControlTranslator(register_window = self.reg_window, own_register_window = True)
-
 
 	def initialize_signals(self):
 		dut = self.dut
@@ -250,7 +237,6 @@ class ControlTranslatorTest(SolGatewareTestCase):
 		yield dut.dp_pulldown.eq(1)
 		yield dut.use_external_vbus_indicator.eq(0)
 		yield dut.bus_idle.eq(1)
-
 
 	@usb_domain_test_case
 	def test_multiwrite_behavior(self):
@@ -292,7 +278,6 @@ class ControlTranslatorTest(SolGatewareTestCase):
 		self.assertEqual((yield self.reg_window.address),       0)
 		self.assertEqual((yield self.reg_window.write_data),    0)
 		self.assertEqual((yield self.reg_window.write_request), 0)
-
 
 class ULPITransmitTranslatorTest(SolGatewareTestCase):
 	USB_CLOCK_FREQUENCY = 60e6
@@ -350,7 +335,6 @@ class ULPITransmitTranslatorTest(SolGatewareTestCase):
 		# ... followed by idle.
 		yield
 		self.assertEqual((yield dut.ulpi_stp),      0)
-
 
 	@usb_domain_test_case
 	def test_handshake(self):

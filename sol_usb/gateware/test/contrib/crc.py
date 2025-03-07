@@ -123,7 +123,6 @@ __docformat__ = 'restructuredtext en'
 
 __version__ = '20070611'
 
-
 class CrcAlgorithm:
 	''' Represents the parameters of a CRC algorithm. '''
 
@@ -300,7 +299,6 @@ class CrcAlgorithm:
 		self.lsbFirstData = other.lsbFirstData
 		self.xorMask = other.xorMask
 
-
 class CrcRegister:
 	'''
 	Holds the intermediate state of the CRC algorithm.
@@ -432,14 +430,11 @@ class CrcRegister:
 		p = self.crcAlgorithm
 		return self.value ^ p.xorMask
 
-
 def reflect(value, width):
 	return sum(((value >> x) & 1) << (width - 1 - x) for x in range(width))
 
-
 def formatBinaryString(value, width):
 	return ''.join('01' [(value >> i) & 1] for i in range(width - 1, -1, -1))
-
 
 # Some standard algorithms are defined here.  I believe I was able to
 # verify the correctness of each of these in some way (against an
@@ -641,10 +636,8 @@ CRC256 = CrcAlgorithm(
 #    lsbFirst     = ?,
 #    xorMask      = ?)
 
-
 def _callCalcString123456789(v):
 	return v.calcString('123456789')
-
 
 def _printResults(fn = _callCalcString123456789):
 	import sys
@@ -657,12 +650,10 @@ def _printResults(fn = _callCalcString123456789):
 		print('%s:' % a.name, end = ' ')
 		print(format % fn(a))
 
-
 def _test():
 	import doctest
 	import sys
 	return doctest.testmod(sys.modules[__name__])
-
 
 if __name__ == '__main__':
 	_test()

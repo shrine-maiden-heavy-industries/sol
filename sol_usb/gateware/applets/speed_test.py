@@ -96,7 +96,6 @@ class USBInSpeedTestDevice(Elaboratable):
 
 		return m
 
-
 class USBInSuperSpeedTestDevice(Elaboratable):
 	''' Simple example of a USB SuperSpeed device using the LUNA framework. '''
 

@@ -55,7 +55,6 @@ class UARTTransmitter(Elaboratable):
 
 		self.idle            = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -70,7 +69,6 @@ class UARTTransmitter(Elaboratable):
 		# Create an internal signal equal to our input data framed with a start/stop bit.
 		framed_data_in = Cat(self.START_BIT, self.stream.payload, self.STOP_BIT)
 
-
 		with m.FSM() as f:
 			m.d.comb += self.idle.eq(f.ongoing('IDLE'))
 
@@ -81,7 +79,6 @@ class UARTTransmitter(Elaboratable):
 					self.stream.ready.eq(1)
 				]
 
-
 				# Once we get a send request, fill in our shift register, and start shifting.
 				with m.If(self.stream.valid):
 					m.d.sync += [
@@ -91,7 +88,6 @@ class UARTTransmitter(Elaboratable):
 					]
 
 					m.next = 'TRANSMIT'
-
 
 			# TRANSMIT: actively shift out start/data/stop
 			with m.State('TRANSMIT'):
@@ -127,7 +123,6 @@ class UARTTransmitter(Elaboratable):
 						with m.Else():
 							m.next = 'IDLE'
 
-
 		return m
 
 class UARTTransmitterPeripheral(Elaboratable):
@@ -158,7 +153,6 @@ class UARTTransmitterPeripheral(Elaboratable):
 		self.bus = wishbone.Interface(addr_width = 0, data_width = 8)
 		self.bus.memory_map = memory.MemoryMap(addr_width = 1, data_width = 8)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -173,7 +167,6 @@ class UARTTransmitterPeripheral(Elaboratable):
 			self.tx.eq(tx.tx)
 		]
 		return m
-
 
 class UARTMultibyteTransmitter(Elaboratable):
 	''' UART transmitter capable of sending wide words.
@@ -216,7 +209,6 @@ class UARTMultibyteTransmitter(Elaboratable):
 
 		self.idle            = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -239,8 +231,6 @@ class UARTMultibyteTransmitter(Elaboratable):
 			uart.stream.payload.eq(data_shift[0:8])
 		]
 
-
-
 		with m.FSM() as f:
 			m.d.comb += self.idle.eq(f.ongoing('IDLE'))
 
@@ -255,7 +245,6 @@ class UARTMultibyteTransmitter(Elaboratable):
 						bytes_to_send.eq(self.byte_width - 1),
 					]
 					m.next = 'TRANSMIT'
-
 
 			# TRANSMIT: actively send each of the bytes of our word
 			with m.State('TRANSMIT'):
@@ -285,6 +274,5 @@ class UARTMultibyteTransmitter(Elaboratable):
 						# ... otherwise, move to our idle state.
 						with m.Else():
 							m.next = 'IDLE'
-
 
 		return m

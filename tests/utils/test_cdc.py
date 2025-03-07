@@ -11,7 +11,6 @@ from sol_usb.gateware.utils.cdc import stretch_strobe_signal, synchronize
 class StrobeStretcherTest(SolGatewareTestCase):
 	''' Test case for our strobe stretcher function. '''
 
-
 	def instantiate_dut(self):
 		m = Module()
 
@@ -21,10 +20,8 @@ class StrobeStretcherTest(SolGatewareTestCase):
 
 		return m
 
-
 	def initialize_signals(self):
 		yield self.dut.strobe_in.eq(0)
-
 
 	@sync_test_case
 	def test_stretch(self):
@@ -51,8 +48,6 @@ class StrobeStretcherTest(SolGatewareTestCase):
 
 		yield
 		self.assertEqual((yield self.dut.stretched_strobe), 0)
-
-
 
 class SynchronizedTest(TestCase):
 

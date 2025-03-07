@@ -11,12 +11,10 @@ class CTCSkipRemoverTest(SolSSGatewareTestCase):
 		yield self.dut.sink.valid.eq(1)
 		yield self.dut.source.ready.eq(1)
 
-
 	def provide_input(self, data, ctrl):
 		yield self.dut.sink.data.eq(data)
 		yield self.dut.sink.ctrl.eq(ctrl)
 		yield
-
 
 	@ss_domain_test_case
 	def test_dual_skip_removal(self):
@@ -47,7 +45,6 @@ class CTCSkipRemoverTest(SolSSGatewareTestCase):
 		self.assertEqual((yield source.data), 0x33441122)
 		self.assertEqual((yield source.ctrl), 0b11)
 
-
 	@ss_domain_test_case
 	def test_shifted_dual_skip_removal(self):
 		source = self.dut.source
@@ -77,7 +74,6 @@ class CTCSkipRemoverTest(SolSSGatewareTestCase):
 		self.assertEqual((yield source.data), 0x55667788)
 		self.assertEqual((yield source.ctrl), 0)
 
-
 	@ss_domain_test_case
 	def test_single_skip_removal(self):
 		source = self.dut.source
@@ -106,7 +102,6 @@ class CTCSkipRemoverTest(SolSSGatewareTestCase):
 		yield
 		self.assertEqual((yield source.data), 0x44112233)
 		self.assertEqual((yield source.ctrl), 0b110)
-
 
 	@ss_domain_test_case
 	def test_cycle_spread_skip_removal(self):

@@ -17,7 +17,6 @@ from .                 import USBPacketID, USBSpeed
 # Interfaces.
 #
 
-
 class HandshakeExchangeInterface(Record):
 	''' Record that carries handshakes detected -or- generated between modules.
 
@@ -58,8 +57,6 @@ class HandshakeExchangeInterface(Record):
 			('nyet',  1, direction),
 		])
 
-
-
 class DataCRCInterface(Record):
 	''' Record providing an interface to a USB CRC-16 generator.
 
@@ -72,7 +69,6 @@ class DataCRCInterface(Record):
 	'''
 	start: Signal[1, Direction.FANIN]
 	crc: Signal[16, Direction.FANOUT]
-
 
 class TokenDetectorInterface(Record):
 	''' Record providing an interface to a USB token detector.
@@ -121,7 +117,6 @@ class TokenDetectorInterface(Record):
 	is_setup: Signal[1, Direction.FANOUT]
 	is_ping: Signal[1, Direction.FANOUT]
 
-
 class InterpacketTimerInterface(Record):
 	''' Record providing an interface to our interpacket timer.
 
@@ -145,7 +140,6 @@ class InterpacketTimerInterface(Record):
 	tx_allowed: Signal[1, Direction.FANOUT]
 	tx_timeout: Signal[1, Direction.FANOUT]
 	rx_timeout: Signal[1, Direction.FANOUT]
-
 
 	def attach(self, *subordinates):
 		''' Attaches subordinate interfaces to the given timer interface.
@@ -184,11 +178,9 @@ class InterpacketTimerInterface(Record):
 
 		return fragments
 
-
 #
 # Gateware.
 #
-
 
 class USBTokenDetector(Elaboratable):
 	''' Gateware that parses token packets and generates relevant events.
@@ -204,7 +196,6 @@ class USBTokenDetector(Elaboratable):
 		it only reports tokens directed at a given address.
 		If ``filter_by_address`` is false, this is an output that contains the address of the most
 		recent token.
-
 
 	Parameters
 	----------
@@ -230,7 +221,6 @@ class USBTokenDetector(Elaboratable):
 		self.speed     = Signal(2)
 		self.address   = Signal(7)
 
-
 	@staticmethod
 	def _generate_crc_for_token(token):
 		''' Generates a 5-bit signal equivalent to the CRC check for the provided token packet. '''
@@ -247,7 +237,6 @@ class USBTokenDetector(Elaboratable):
 			xor_bits(10, 7, 6, 4, 1),
 			xor_bits(10, 9, 6, 5, 3, 0)
 		)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -291,7 +280,6 @@ class USBTokenDetector(Elaboratable):
 				with m.If(self.utmi.rx_active):
 					m.next = 'READ_PID'
 
-
 			# READ_PID -- read the packet's ID, and determine if it's a token.
 			with m.State('READ_PID'):
 
@@ -314,7 +302,6 @@ class USBTokenDetector(Elaboratable):
 					with m.Else():
 						m.next = 'IRRELEVANT'
 
-
 			with m.State('READ_TOKEN_0'):
 
 				# If our transaction stops, discard the current read state.
@@ -327,7 +314,6 @@ class USBTokenDetector(Elaboratable):
 				with m.Elif(self.utmi.rx_valid):
 					m.d.usb += token_data.eq(self.utmi.rx_data)
 					m.next = 'READ_TOKEN_1'
-
 
 			with m.State('READ_TOKEN_1'):
 
@@ -390,12 +376,10 @@ class USBTokenDetector(Elaboratable):
 						with m.Else():
 							m.d.usb += self.interface.pid.eq(0)
 
-
 				# Otherwise, if we get more data, we've received a malformed
 				# token -- which we'll ignore.
 				with m.Elif(self.utmi.rx_valid):
 					m.next = 'IRRELEVANT'
-
 
 			# NON_TOKEN -- we've encountered a non-token packet; wait for it to end
 			with m.State('IRRELEVANT'):
@@ -404,7 +388,6 @@ class USBTokenDetector(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
 
 class USBHandshakeDetector(Elaboratable):
 	''' Gateware that detects handshake packets.
@@ -433,7 +416,6 @@ class USBHandshakeDetector(Elaboratable):
 		#
 		self.detected = HandshakeExchangeInterface(is_detector = True)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -447,14 +429,12 @@ class USBHandshakeDetector(Elaboratable):
 			self.detected.nyet.eq(0),
 		]
 
-
 		with m.FSM(domain = 'usb'):
 
 			# IDLE -- waiting for a packet to be presented
 			with m.State('IDLE'):
 				with m.If(self.utmi.rx_active):
 					m.next = 'READ_PID'
-
 
 			# READ_PID -- read the packet's ID.
 			with m.State('READ_PID'):
@@ -473,7 +453,6 @@ class USBHandshakeDetector(Elaboratable):
 					# Otherwise, ignore this packet as a non-token.
 					with m.Else():
 						m.next = 'IRRELEVANT'
-
 
 			# TOKEN_COMPLETE: we've received a full token; and now need to wait
 			# for the packet to be complete.
@@ -495,7 +474,6 @@ class USBHandshakeDetector(Elaboratable):
 				with m.Elif(self.utmi.rx_valid):
 					m.next = 'IRRELEVANT'
 
-
 			# IRRELEVANT -- we've encountered a malformed or non-handshake packet
 			with m.State('IRRELEVANT'):
 
@@ -503,9 +481,6 @@ class USBHandshakeDetector(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
-
-
 
 class USBDataPacketCRC(Elaboratable):
 	''' Gateware that computes a running CRC-16.
@@ -554,7 +529,6 @@ class USBDataPacketCRC(Elaboratable):
 
 		self.crc   = Signal(16, reset = initial_value)
 
-
 	def add_interface(self, interface : DataCRCInterface):
 		''' Adds an interface to the CRC generator module.
 
@@ -570,7 +544,6 @@ class USBDataPacketCRC(Elaboratable):
 			multiplpe CRCs.
 		'''
 		self._interfaces.append(interface)
-
 
 	def _generate_next_crc(self, current_crc : Signal, data_in : Signal):
 		''' Generates the next round of a bytewise USB CRC16. '''
@@ -594,7 +567,6 @@ class USBDataPacketCRC(Elaboratable):
 			current_crc[6],
 			data_in.xor() ^ current_crc[7:16].xor(),
 		)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -629,7 +601,6 @@ class USBDataPacketCRC(Elaboratable):
 
 		return m
 
-
 class USBDataPacketReceiver(Elaboratable):
 	''' Gateware that converts received USB data packets into a data-stream packets.
 
@@ -639,7 +610,6 @@ class USBDataPacketReceiver(Elaboratable):
 	unknown validity, followed by a strobe on either :attr:`packet_complete` or :attr:`crc_mismatch`.
 	The receiving interface must be prepared to handle :attr:`crc_mismatch` by discarding the received
 	data.
-
 
 	Attributes
 	----------
@@ -700,7 +670,6 @@ class USBDataPacketReceiver(Elaboratable):
 		self.crc_mismatch       = Signal()
 		self.packet_id          = Signal(4)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -726,7 +695,6 @@ class USBDataPacketReceiver(Elaboratable):
 				timer.speed.eq(self.speed)
 			]
 
-
 		# CRC-16 tracking signals.
 		last_byte_crc = Signal(16)
 		last_word_crc = Signal(16)
@@ -743,7 +711,6 @@ class USBDataPacketReceiver(Elaboratable):
 			self.stream.next.eq(0),
 			self.data_crc.start.eq(0),
 		]
-
 
 		with m.FSM(domain = 'usb'):
 
@@ -775,7 +742,6 @@ class USBDataPacketReceiver(Elaboratable):
 					with m.Else():
 						m.next = 'IRRELEVANT'
 
-
 			# RECEIVE_FIRST_BYTE -- capture the first byte into our pipeline.
 			# We'll always pipeline two bytes before we start emitting; as we won't want to
 			# pass through the last two bytes (the CRC).
@@ -792,7 +758,6 @@ class USBDataPacketReceiver(Elaboratable):
 				# There's nothing to clean up, as we've never touched the stream.
 				with m.If(~self.utmi.rx_active):
 					m.next = 'IDLE'
-
 
 			# RECEIVE_SECOND_BYTE-- capture the second byte into our pipeline.
 			with m.State('RECEIVE_SECOND_BYTE'):
@@ -811,7 +776,6 @@ class USBDataPacketReceiver(Elaboratable):
 				# There's nothing to clean up, as we've never touched the stream.
 				with m.Elif(~self.utmi.rx_active):
 					m.next = 'IDLE'
-
 
 			# RECEIVE_AND_EMIT -- receive bytes into our pipeline, and emit them.
 			# Now that we have more than two bytes captured, we can start emitting bytes.
@@ -838,7 +802,6 @@ class USBDataPacketReceiver(Elaboratable):
 						last_word_crc.eq(last_byte_crc),
 					]
 
-
 				# Once we stop receiving data, check our CRC and finish.
 				with m.If(~self.utmi.rx_active):
 
@@ -859,7 +822,6 @@ class USBDataPacketReceiver(Elaboratable):
 						# ... and wait for it to complete.
 						m.next = 'INTERPACKET_DELAY'
 
-
 					# Otherwise, flag this as a CRC mismatch.
 					with m.Else():
 						m.d.usb += [
@@ -869,7 +831,6 @@ class USBDataPacketReceiver(Elaboratable):
 						# ... and return to IDLE.
 						m.next = 'IDLE'
 
-
 			# INTERPACKET_DELAY -- we've received a valid packet; wait for an
 			# interpacket delay before moving back to IDLE.
 			with m.State('INTERPACKET_DELAY'):
@@ -878,7 +839,6 @@ class USBDataPacketReceiver(Elaboratable):
 					m.d.comb += self.ready_for_response.eq(1)
 					m.next = 'IDLE'
 
-
 			# IRRELEVANT -- we've encountered a malformed or non-DATA packet.
 			with m.State('IRRELEVANT'):
 
@@ -886,7 +846,6 @@ class USBDataPacketReceiver(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
 
 class USBDataPacketDeserializer(Elaboratable):
 	''' Gateware that captures USB data packet contents and parallelizes them.
@@ -934,7 +893,6 @@ class USBDataPacketDeserializer(Elaboratable):
 		self.packet_id   = Signal(4)
 		self.packet      = Array(Signal(8, name = f'packet_{i}') for i in range(max_packet_size))
 		self.length      = Signal(range(0, max_packet_size + 1))
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -1003,7 +961,6 @@ class USBDataPacketDeserializer(Elaboratable):
 					with m.Else():
 						m.next = 'IRRELEVANT'
 
-
 			with m.State('CAPTURE_DATA'):
 
 				# If we have a new byte of data, capture it.
@@ -1024,7 +981,6 @@ class USBDataPacketDeserializer(Elaboratable):
 							last_word_crc.eq(last_byte_crc),
 							last_byte_crc.eq(self.data_crc.crc),
 						]
-
 
 				# If this is the end of our packet, validate our CRC and finish.
 				with m.If(~self.utmi.rx_active):
@@ -1048,8 +1004,6 @@ class USBDataPacketDeserializer(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
-
 
 class USBDataPacketGenerator(Elaboratable):
 	''' Module that converts a FIFO-style stream into a USB data packet.
@@ -1092,7 +1046,6 @@ class USBDataPacketGenerator(Elaboratable):
 		self.crc          = DataCRCInterface()
 		self.stream       = USBInStreamInterface()
 		self.tx           = UTMITransmitInterface()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -1152,7 +1105,6 @@ class USBDataPacketGenerator(Elaboratable):
 					m.d.usb += is_zlp.eq(1)
 					m.next = 'SEND_PID'
 
-
 			# SEND_PID -- prepare for the transaction by sending the data packet ID.
 			with m.State('SEND_PID'):
 
@@ -1180,7 +1132,6 @@ class USBDataPacketGenerator(Elaboratable):
 					with m.Else():
 						m.next = 'SEND_PAYLOAD'
 
-
 			# SEND_PAYLOAD -- send the data payload for our stream
 			with m.State('SEND_PAYLOAD'):
 
@@ -1191,7 +1142,6 @@ class USBDataPacketGenerator(Elaboratable):
 				# We'll stop sending once the packet ends, and move on to our CRC.
 				with m.If(self.tx.ready & (self.stream.last | ~self.stream.valid)):
 					m.next = 'SEND_CRC_FIRST'
-
 
 			# SEND_CRC_FIRST -- send the first byte of the packet's CRC
 			with m.State('SEND_CRC_FIRST'):
@@ -1209,7 +1159,6 @@ class USBDataPacketGenerator(Elaboratable):
 				with m.If(self.tx.ready):
 					m.next = 'SEND_CRC_SECOND'
 
-
 			# SEND_CRC_LAST -- send the last byte of the packet's CRC
 			with m.State('SEND_CRC_SECOND'):
 
@@ -1224,9 +1173,6 @@ class USBDataPacketGenerator(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
-
-
 
 class USBHandshakeGenerator(Elaboratable):
 	''' Module that generates handshake packets, on request.
@@ -1261,7 +1207,6 @@ class USBHandshakeGenerator(Elaboratable):
 
 		self.tx           = UTMITransmitInterface()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -1287,7 +1232,6 @@ class USBHandshakeGenerator(Elaboratable):
 					m.d.usb += self.tx.data.eq(self._PACKET_STALL),
 					m.next = 'TRANSMIT'
 
-
 			# TRANSMIT -- send the handshake.
 			with m.State('TRANSMIT'):
 				m.d.comb += self.tx.valid.eq(1)
@@ -1298,9 +1242,6 @@ class USBHandshakeGenerator(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
-
-
 
 class USBInterpacketTimer(Elaboratable):
 	''' Module that tracks inter-packet timings, enforcing spec-mandated packet gaps.
@@ -1336,7 +1277,6 @@ class USBInterpacketTimer(Elaboratable):
 	_FS_TX_TO_RX_TIMEOUT = {60e6:  80, 12e6: 16}
 	_LS_TX_TO_RX_TIMEOUT = {60e6: 640}
 
-
 	def __init__(self, domain_clock = 60e6, fs_only = False):
 		self._fs_only = fs_only
 
@@ -1368,8 +1308,6 @@ class USBInterpacketTimer(Elaboratable):
 			self._ls_tx_to_rx_timeout = self._LS_TX_TO_RX_TIMEOUT[domain_clock]
 			self._counter_max         = self._LS_TX_TO_RX_TIMEOUT[domain_clock]
 
-
-
 		# List of interfaces to users of this module.
 		self._interfaces               = []
 
@@ -1377,7 +1315,6 @@ class USBInterpacketTimer(Elaboratable):
 		# I/O port
 		#
 		self.speed = Signal(2)
-
 
 	def add_interface(self, interface: InterpacketTimerInterface):
 		''' Adds a connection to a user of this module.
@@ -1390,7 +1327,6 @@ class USBInterpacketTimer(Elaboratable):
 			The InterPacketTimer interface to add to our module.
 		'''
 		self._interfaces.append(interface)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -1449,6 +1385,5 @@ class USBInterpacketTimer(Elaboratable):
 				interface.tx_timeout.eq(rx_to_tx_at_max),
 				interface.rx_timeout.eq(tx_to_rx_timeout)
 			]
-
 
 		return m

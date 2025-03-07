@@ -15,7 +15,6 @@ from sol_usb.usb3           import USBSuperSpeedDevice
 class USBSuperSpeedExample(Elaboratable):
 	''' Simple example of a USB SuperSpeed device using the SOL framework. '''
 
-
 	def create_descriptors(self):
 		''' Create the descriptors we want to use for our device. '''
 
@@ -43,7 +42,6 @@ class USBSuperSpeedExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 			c.bMaxPower        = 50
@@ -60,7 +58,6 @@ class USBSuperSpeedExample(Elaboratable):
 					e.wMaxPacketSize   = 512
 
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -79,10 +76,8 @@ class USBSuperSpeedExample(Elaboratable):
 		descriptors = self.create_descriptors()
 		usb.add_standard_control_endpoint(descriptors)
 
-
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBSuperSpeedExample)

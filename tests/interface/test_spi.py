@@ -38,7 +38,6 @@ class SPIGatewareTestCase(SolGatewareTestCase):
 
 		return return_value
 
-
 	def spi_exchange_byte(self, datum, *, msb_first = True):
 		''' Sends a by over the virtual SPI bus. '''
 
@@ -58,7 +57,6 @@ class SPIGatewareTestCase(SolGatewareTestCase):
 
 		return int(data_received, 2)
 
-
 	def spi_exchange_data(self, data, msb_first = True):
 		''' Sends a string of bytes over our virtual SPI bus. '''
 
@@ -76,15 +74,12 @@ class SPIGatewareTestCase(SolGatewareTestCase):
 
 		return response
 
-
-
 class SPIDeviceInterfaceTest(SPIGatewareTestCase):
 	FRAGMENT_UNDER_TEST = SPIDeviceInterface
 	FRAGMENT_ARGUMENTS = dict(word_size = 16, clock_polarity = 1)
 
 	def initialize_signals(self):
 		yield self.dut.spi.cs.eq(0)
-
 
 	@sync_test_case
 	def test_spi_interface(self):
@@ -106,7 +101,6 @@ class SPIDeviceInterfaceTest(SPIGatewareTestCase):
 		self.assertEqual(response, b'\xAB\xCD')
 		self.assertEqual((yield self.dut.word_in), 0xCAFE)
 
-
 	@sync_test_case
 	def test_spi_transmit_second_word(self):
 
@@ -121,8 +115,6 @@ class SPIDeviceInterfaceTest(SPIGatewareTestCase):
 		response = yield from self.spi_exchange_data(b'\x00\x00')
 		self.assertEqual(response, b'\x0F\x00')
 
-
-
 class SPIRegisterInterfaceTest(SPIGatewareTestCase):
 	''' Tests for the SPI command interface. '''
 
@@ -136,18 +128,15 @@ class SPIRegisterInterfaceTest(SPIGatewareTestCase):
 
 		return dut
 
-
 	def initialize_signals(self):
 		# Start off with our clock low and the transaction idle.
 		yield self.dut.spi.sck.eq(0)
 		yield self.dut.spi.cs.eq(0)
 
-
 	@sync_test_case
 	def test_undefined_read_behavior(self):
 		data = yield from self.spi_exchange_data([0, 1, 0, 0, 0, 0])
 		self.assertEqual(bytes(data), b'\x00\x00\xde\xad\xbe\xef')
-
 
 	@sync_test_case
 	def test_write_behavior(self):
@@ -159,7 +148,6 @@ class SPIRegisterInterfaceTest(SPIGatewareTestCase):
 		# ... and then read the relevant data back.
 		data = yield from self.spi_exchange_data(b'\x00\x02\x12\x34\x56\x78')
 		self.assertEqual(bytes(data), b'\x00\x00\x12\x34\x56\x78')
-
 
 	@sync_test_case
 	def test_aborted_write_behavior(self):

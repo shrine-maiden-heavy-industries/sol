@@ -58,7 +58,6 @@ class SuperSpeedRequestHandlerInterface:
 	new_address: Signal(7), output from handler
 		The new address to be applied to the device when :attr:``address_changed`` is strobed.
 
-
 	config_changed: Signal(), output from handler
 		Strobe; should be pulsed when the device's configuration is to be changed. Should be accompanied by
 		a new address on :attr:``new_config``.
@@ -100,7 +99,6 @@ class SuperSpeedRequestHandlerInterface:
 		self.config_changed        = Signal()
 		self.new_config            = Signal(8)
 
-
 class SuperSpeedSetupDecoder(Elaboratable):
 	''' Gateware that decodes any received Setup packets.
 
@@ -135,7 +133,6 @@ class SuperSpeedSetupDecoder(Elaboratable):
 		self.header_in  = DataHeaderPacket()
 
 		self.packet     = SetupPacket()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -204,7 +201,6 @@ class SuperSpeedSetupDecoder(Elaboratable):
 
 		return m
 
-
 class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 	''' Multiplexes multiple RequestHandlers down to a single interface.
 
@@ -228,7 +224,6 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 		#
 		self._interfaces = []
 
-
 	def add_interface(self, interface: SuperSpeedRequestHandlerInterface):
 		''' Adds a RequestHandlerInterface to the multiplexer.
 
@@ -236,7 +231,6 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 		driving requests at a time.
 		'''
 		self._interfaces.append(interface)
-
 
 	def _multiplex_signals(self, m, *, when, multiplex, sub_bus = None):
 		'''
@@ -263,7 +257,6 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 			else:
 				return getattr(interface, name)
 
-
 		# We're building an if-elif tree; so we should start with an If entry.
 		conditional = m.If
 
@@ -284,8 +277,6 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 
 			# After the first element, all other entries should be created with Elif.
 			conditional = m.Elif
-
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -340,7 +331,6 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 					shared.tx_length.eq(interface.tx_length)
 				]
 
-
 		#
 		# Multiplex each of our handshake-out interfaces.
 		#
@@ -355,10 +345,7 @@ class SuperSpeedRequestHandlerMultiplexer(Elaboratable):
 			with m.If(any_generate_signal_asserted):
 				m.d.comb += shared.handshakes_out.connect(interface.handshakes_out)
 
-
 		return m
-
-
 
 class StallOnlyRequestHandler(Elaboratable):
 	''' Simple gateware request handler that only conditionally stalls requests.
@@ -385,7 +372,6 @@ class StallOnlyRequestHandler(Elaboratable):
 		#
 		self.interface = SuperSpeedRequestHandlerInterface()
 
-
 	def elaborate(self, platform):
 		m = Module()
 		interface = self.interface
@@ -401,8 +387,6 @@ class StallOnlyRequestHandler(Elaboratable):
 				m.d.comb += self.interface.handshakes_out.send_stall.eq(1)
 
 		return m
-
-
 
 class SuperSpeedRequestHandler(Elaboratable):
 	''' Simple base class for request handlers. '''

@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 ''' Low-level USB transceiver gateware -- control transfer components. '''
 
 from typing import List
@@ -66,7 +65,6 @@ class USBControlEndpoint(Elaboratable):
 		# List of the modules that will handle control requests.
 		self._request_handlers: List[USBRequestHandler] = []
 
-
 	def add_request_handler(self, request_handler):
 		''' Adds a ControlRequestHandler module to this control endpoint.
 
@@ -74,7 +72,6 @@ class USBControlEndpoint(Elaboratable):
 		that request handlers not overlap in the requests they handle.
 		'''
 		self._request_handlers.append(request_handler)
-
 
 	def add_standard_request_handlers(self, descriptors: DeviceDescriptorCollection, **kwargs):
 		''' Adds a handlers for the standard USB requests.
@@ -87,7 +84,6 @@ class USBControlEndpoint(Elaboratable):
 		handler = StandardRequestHandler(descriptors, max_packet_size = self._max_packet_size, **kwargs)
 		self._request_handlers.append(handler)
 
-
 	def _handle_setup_reset(self, m):
 		''' Adds a FSM condition that moves back to the SETUP phase if we ever receive a setup token.
 
@@ -98,7 +94,6 @@ class USBControlEndpoint(Elaboratable):
 		# If we receive a SETUP token, always move back to the SETUP stage.
 		with m.If(tokenizer.new_token & tokenizer.is_setup):
 			m.next = 'SETUP'
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -157,7 +152,6 @@ class USBControlEndpoint(Elaboratable):
 
 		]
 
-
 		#
 		# Request handler logic.
 		#
@@ -177,7 +171,6 @@ class USBControlEndpoint(Elaboratable):
 			# ... and add it.
 			m.submodules[name] = handler
 			request_mux.add_interface(handler.interface)
-
 
 		# ... and hook it up.
 		m.d.comb += [
@@ -201,7 +194,6 @@ class USBControlEndpoint(Elaboratable):
 			# Per [USB2.0: 8.5.3], the first packet of the DATA or STATUS phase always carries a DATA1 PID.
 			interface.tx_pid_toggle.eq(request_handler.tx_data_pid)
 		]
-
 
 		#
 		# Core control request handler.
@@ -233,7 +225,6 @@ class USBControlEndpoint(Elaboratable):
 						# If we don't have a data phase, our status phase is always an IN [USB2.0: 8.5.3]
 						m.next = 'STATUS_IN'
 
-
 			with m.State('DATA_IN'):
 				self._handle_setup_reset(m)
 
@@ -250,7 +241,6 @@ class USBControlEndpoint(Elaboratable):
 					(interface.tokenizer.is_out | interface.tokenizer.is_ping)
 				):
 					m.next = 'STATUS_OUT'
-
 
 			with m.State('DATA_OUT'):
 				self._handle_setup_reset(m)
@@ -274,7 +264,6 @@ class USBControlEndpoint(Elaboratable):
 				with m.If(endpoint_targeted & interface.tokenizer.ready_for_response & interface.tokenizer.is_ping):
 					m.d.comb += interface.handshakes_out.ack.eq(1)
 
-
 			# STATUS_IN -- We're currently in the status stage, and we're expecting an IN token.
 			# We'll wait for that token.
 			with m.State('STATUS_IN'):
@@ -287,7 +276,6 @@ class USBControlEndpoint(Elaboratable):
 				allowed_to_respond = interface.tokenizer.ready_for_response & endpoint_targeted
 				with m.If(allowed_to_respond & interface.tokenizer.is_in):
 					m.d.comb += request_handler.status_requested.eq(1)
-
 
 			# STATUS_OUT -- We're currently in the status stage, and we're expecting the DATA packet for
 			# an OUT request.

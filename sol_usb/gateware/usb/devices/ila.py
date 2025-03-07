@@ -53,8 +53,6 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 		self.sampling = self.ila.sampling
 		self.complete = self.ila.complete
 
-
-
 	def create_descriptors(self):
 		''' Create the descriptors we want to use for our device. '''
 
@@ -76,7 +74,6 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -87,9 +84,7 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 					e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
 					e.wMaxPacketSize   = self._max_packet_size
 
-
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -135,8 +130,6 @@ class USBIntegratedLogicAnalyzer(Elaboratable):
 
 		return m
 
-
-
 class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 	''' Frontend for USB-attached integrated logic analyzers.
 
@@ -160,9 +153,7 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 		# Create our USB connection the device
 		self._device = usb.core.find(idVendor = 0x16d0, idProduct = 0x5a5)
 
-
 		super().__init__(ila)
-
 
 	def _split_samples(self, all_samples):
 		''' Returns an iterator that iterates over each sample in the raw binary of samples. '''
@@ -176,7 +167,6 @@ class USBIntegratedLogicAnalyzerFrontend(ILAFrontend):
 			sample_length = len(Cat(self.ila.signals))
 
 			yield bits.from_bytes(raw_sample, length = sample_length, byteorder = 'little')
-
 
 	def _read_samples(self):
 		''' Reads a set of ILA samples, and returns them. '''

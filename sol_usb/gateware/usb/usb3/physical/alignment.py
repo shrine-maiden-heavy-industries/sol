@@ -34,7 +34,6 @@ class RxWordAligner(Elaboratable):
 		# Debug signals
 		self.alignment_offset = Signal(range(4))
 
-
 	@staticmethod
 	def word_meets_alignment_criteria(data, ctrl):
 		''' Returns true iff the given data and control appear to be correctly aligned. '''
@@ -43,8 +42,6 @@ class RxWordAligner(Elaboratable):
 		# starts with a burst of four consecutive commas.
 		four_comma_data, four_comma_ctrl = get_word_for_symbols(COM, COM, COM, COM)
 		return (data == four_comma_data) & (ctrl == four_comma_ctrl)
-
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -77,7 +74,6 @@ class RxWordAligner(Elaboratable):
 		shifted_data_slices = Array(data[8*i:] for i in range(4))
 		shifted_ctrl_slices = Array(ctrl[i:]   for i in range(4))
 
-
 		#
 		# Alignment detection.
 		#
@@ -99,7 +95,6 @@ class RxWordAligner(Elaboratable):
 						changing_shift.eq(shift_to_apply != i),
 						new_shift.eq(i)
 					]
-
 
 		#
 		# Alignment application.
@@ -126,8 +121,6 @@ class RxWordAligner(Elaboratable):
 
 		return m
 
-
-
 class RxPacketAligner(RxWordAligner):
 	''' Receiver word re-alignment.
 
@@ -137,7 +130,6 @@ class RxPacketAligner(RxWordAligner):
 
 	This unit corrects alignment if the link does not maintain this property.
 	'''
-
 
 	@staticmethod
 	def word_meets_alignment_criteria(data, ctrl):

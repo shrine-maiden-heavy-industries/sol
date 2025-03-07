@@ -39,7 +39,6 @@ class TransactionalizedFIFO(Elaboratable):
 		Asserted when no data is available in the FIFO. This signal refers to whether data is available to
 		read. :attr:``read_commit`` will not change this value; but :attr:``read_discard`` will.
 
-
 	write_data: Signal(width), input
 		Holds the byte to be added to the FIFO when :attr:``write_en`` is asserted.
 	write_en: Signal(), input
@@ -60,7 +59,6 @@ class TransactionalizedFIFO(Elaboratable):
 	space_available: Signal(range(0, depth + 1)), output
 		Indicates the amount of space available in the FIFO. Useful for knowing whether we can add e.g. an
 		entire packet to the FIFO.
-
 
 	Attributes
 	----------
@@ -98,7 +96,6 @@ class TransactionalizedFIFO(Elaboratable):
 
 		self.space_available  = Signal(range(0, depth + 1))
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -130,7 +127,6 @@ class TransactionalizedFIFO(Elaboratable):
 		current_write_pointer   = Signal(address_range)
 		m.d.comb += write_port.addr.eq(current_write_pointer)
 
-
 		# Compute the location for the next write, accounting for wraparound. We'll not assume a binary-sized
 		# buffer; so we'll compute the wraparound manually.
 		next_write_pointer      = Signal.like(current_write_pointer)
@@ -138,7 +134,6 @@ class TransactionalizedFIFO(Elaboratable):
 			m.d.comb += next_write_pointer.eq(0)
 		with m.Else():
 			m.d.comb += next_write_pointer.eq(current_write_pointer + 1)
-
 
 		# If we're writing to the fifo, update our current write position.
 		with m.If(self.write_en & ~self.full):
@@ -152,7 +147,6 @@ class TransactionalizedFIFO(Elaboratable):
 		with m.If(self.write_discard):
 			m.d.sync += current_write_pointer.eq(committed_write_pointer)
 
-
 		#
 		# Read port.
 		#
@@ -162,7 +156,6 @@ class TransactionalizedFIFO(Elaboratable):
 		committed_read_pointer = Signal(address_range)
 		current_read_pointer   = Signal(address_range)
 
-
 		# Compute the location for the next read, accounting for wraparound. We'll not assume a binary-sized
 		# buffer; so we'll compute the wraparound manually.
 		next_read_pointer      = Signal.like(current_read_pointer)
@@ -171,7 +164,6 @@ class TransactionalizedFIFO(Elaboratable):
 		with m.Else():
 			m.d.comb += next_read_pointer.eq(current_read_pointer + 1)
 
-
 		# Our memory always takes a single cycle to provide its read output; so we'll update its address
 		# 'one cycle in advance'. Accordingly, if we're about to advance the FIFO, we'll use the next read
 		# address as our input. If we're not, we'll use the current one.
@@ -179,7 +171,6 @@ class TransactionalizedFIFO(Elaboratable):
 			m.d.comb += read_port.addr.eq(next_read_pointer)
 		with m.Else():
 			m.d.comb += read_port.addr.eq(current_read_pointer)
-
 
 		# If we're reading from our the fifo, update our current read position.
 		with m.If(self.read_en & ~self.empty):
@@ -192,7 +183,6 @@ class TransactionalizedFIFO(Elaboratable):
 		# If we're discarding our current write, reset our current position,
 		with m.If(self.read_discard):
 			m.d.sync += current_read_pointer.eq(committed_read_pointer)
-
 
 		#
 		# FIFO status.
@@ -214,7 +204,6 @@ class TransactionalizedFIFO(Elaboratable):
 
 		# Our FIFO is full if we don't have any space available.
 		m.d.comb += self.full.eq(next_write_pointer == committed_read_pointer)
-
 
 		# If we're not supposed to be in the sync domain, rename our sync domain to the target.
 		if self.domain != 'sync':

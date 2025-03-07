@@ -21,7 +21,6 @@ class SPIBus(Record):
 			('cs',  1, Direction.FANIN)
 		])
 
-
 class SPIDeviceInterface(Elaboratable):
 	'''
 	Simple word-oriented SPI interface.
@@ -74,7 +73,6 @@ class SPIDeviceInterface(Elaboratable):
 		self.word_accepted  = Signal()
 		self.word_complete  = Signal()
 
-
 	def spi_edge_detectors(self, m):
 		'''
 		Generates edge detectors for the sample and output clocks, based on the current SPI mode.
@@ -105,7 +103,6 @@ class SPIDeviceInterface(Elaboratable):
 		output_edge = leading_edge if self.clock_phase else trailing_edge
 
 		return sample_edge, output_edge
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -161,7 +158,6 @@ class SPIDeviceInterface(Elaboratable):
 						current_tx.eq(self.word_out)
 					]
 
-
 			# Shift out data on each output edge.
 			with m.If(output_edge):
 				if self.msb_first:
@@ -177,7 +173,6 @@ class SPIDeviceInterface(Elaboratable):
 			]
 
 		return m
-
 
 class SPICommandInterface(Elaboratable):
 	'''
@@ -225,7 +220,6 @@ class SPICommandInterface(Elaboratable):
 		self.idle    = Signal()
 		self.stalled = Signal()
 
-
 	def elaborate(self, platform):
 
 		m = Module()
@@ -247,7 +241,6 @@ class SPICommandInterface(Elaboratable):
 			self.word_complete.eq(0)
 		]
 
-
 		with m.FSM() as fsm:
 			m.d.comb += [
 				self.idle.eq(fsm.ongoing('IDLE')),
@@ -262,7 +255,6 @@ class SPICommandInterface(Elaboratable):
 				with m.If(~spi.cs):
 					m.next = 'IDLE'
 
-
 			# We ignore all data until chip select is asserted, as that data Isn't For Us (TM).
 			# We'll spin and do nothing until the bus-master addresses us.
 			with m.State('IDLE'):
@@ -270,7 +262,6 @@ class SPICommandInterface(Elaboratable):
 
 				with m.If(spi.cs):
 					m.next = 'RECEIVE_COMMAND'
-
 
 			# Once CS is low, we'll shift in our command.
 			with m.State('RECEIVE_COMMAND'):
@@ -296,17 +287,14 @@ class SPICommandInterface(Elaboratable):
 					]
 					m.next = 'PROCESSING'
 
-
 			# Give our controller a wait state to prepare any response they might want to...
 			with m.State('PROCESSING'):
 				m.next = 'LATCH_OUTPUT'
-
 
 			# ... and then latch in the response to transmit.
 			with m.State('LATCH_OUTPUT'):
 				m.d.sync += current_word.eq(self.word_to_send)
 				m.next = 'SHIFT_DATA'
-
 
 			# Finally, exchange data.
 			with m.State('SHIFT_DATA'):
@@ -337,7 +325,6 @@ class SPICommandInterface(Elaboratable):
 					m.next = 'STALL'
 
 		return m
-
 
 class SPIRegisterInterface(Elaboratable):
 	'''
@@ -417,13 +404,11 @@ class SPIRegisterInterface(Elaboratable):
 		if support_size_autonegotiation:
 			self.support_size_autonegotiation()
 
-
 	def _ensure_register_is_unused(self, address):
 		''' Checks to make sure a register address isn't in use before issuing it. '''
 
 		if address in self.registers:
 			raise ValueError(f'can\'t add more than one register with address 0x{address:x}!')
-
 
 	def support_size_autonegotiation(self):
 		'''
@@ -439,7 +424,6 @@ class SPIRegisterInterface(Elaboratable):
 		In practice, this is functionally identical to setting register zero to a constant of all 1's.
 		'''
 		self.add_read_only_register(0, read = -1)
-
 
 	def add_sfr(self, address, *, read = None, write_signal = None, write_strobe = None, read_strobe = None):
 		'''
@@ -480,7 +464,6 @@ class SPIRegisterInterface(Elaboratable):
 			'elaborate': None,
 		}
 
-
 	def add_read_only_register(self, address, *, read, read_strobe = None):
 		'''
 		Adds a read-only register.
@@ -501,8 +484,6 @@ class SPIRegisterInterface(Elaboratable):
 
 		'''
 		self.add_sfr(address, read = read, read_strobe = read_strobe)
-
-
 
 	def add_register(self, address, *, value_signal = None, size = None, name = None, read_strobe = None,
 		write_strobe = None, reset = 0):
@@ -571,7 +552,6 @@ class SPIRegisterInterface(Elaboratable):
 
 		return value_signal
 
-
 	def _elaborate_register(self, m, register_address, connections):
 		''' Generates the hardware connections that handle a given register. '''
 
@@ -607,7 +587,6 @@ class SPIRegisterInterface(Elaboratable):
 		if connections['elaborate']:
 			connections['elaborate'](m)
 
-
 	def _connect_interface(self, m):
 		''' Connects up our SPI transceiver interface.
 
@@ -620,7 +599,6 @@ class SPIRegisterInterface(Elaboratable):
 			self.idle.eq(self.interface.idle),
 			self.stalled.eq(self.interface.stalled)
 		]
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -638,7 +616,6 @@ class SPIRegisterInterface(Elaboratable):
 		# Create the control/write logic for each of our registers.
 		for address, connections in self.registers.items():
 			self._elaborate_register(m, address, connections)
-
 
 		# Build the logic to select the 'to_send' value, which is selected
 		# from all of our registers according to the selected register address.
@@ -683,7 +660,6 @@ class SPIMultiplexer(Elaboratable):
 		#
 		self.shared_lines = SPIBus()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -697,13 +673,11 @@ class SPIMultiplexer(Elaboratable):
 			with conditional(bus.cs):
 				m.d.comb += self.shared_lines.sdo.eq(bus.sdo)
 
-
 		# Connect each of our shared inputs.
 		for bus in self.multiplexed_busses:
 			m.d.comb += [
 				bus.sck.eq(self.shared_lines.sck),
 				bus.sdi.eq(self.shared_lines.sdi)
 			]
-
 
 		return m

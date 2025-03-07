@@ -55,7 +55,6 @@ class PHYResetController(Elaboratable):
 		self.phy_reset = Signal()
 		self.phy_stop  = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -95,7 +94,6 @@ class PHYResetController(Elaboratable):
 				with m.If(cycles_in_reset + 1 == self.stop_length_cycles):
 					m.d.sync += cycles_in_reset.eq(0)
 					m.next = 'IDLE'
-
 
 		return m
 
@@ -138,26 +136,21 @@ class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
 
 		self.usb_holdoff  = Signal()
 
-
 	@abstractmethod
 	def generate_fast_clock(self, m, platform):
 		''' Method that returns our platform's fast clock; used for e.g. RAM interfacing. '''
-
 
 	@abstractmethod
 	def generate_sync_clock(self, m, platform):
 		''' Method that returns our platform's primary synchronous clock. '''
 
-
 	@abstractmethod
 	def generate_usb_clock(self, m, platform):
 		''' Method that generates a 60MHz clock used for ULPI interfacing. '''
 
-
 	def create_submodules(self, m, platform):
 		''' Method hook for creating any necessary submodules before generating clock. '''
 		pass
-
 
 	def create_usb_reset(self, m, platform):
 		'''
@@ -170,7 +163,6 @@ class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
 			ResetSignal('usb')  .eq(controller.phy_reset),
 			self.usb_holdoff.eq(controller.phy_stop)
 		]
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -198,7 +190,6 @@ class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
 		self.create_usb_reset(m, platform)
 
 		return m
-
 
 class SolECP5DomainGenerator(SolDomainGenerator):
 	''' ECP5 clock domain generator for SOL. Assumes a 60MHz input clock. '''
@@ -231,11 +222,9 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		super().__init__(clock_signal_name = clock_signal_name)
 		self.clock_frequencies = clock_frequencies
 
-
 	def create_submodules(self, m, platform):
 
 		self._pll_lock   = Signal()
-
 
 		# Figure out our platform's clock frequencies -- grab the platform's
 		# defaults, and then override any with our local, caller-provided copies.
@@ -243,7 +232,6 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 		if self.clock_frequencies:
 			new_clock_frequencies.update(self.clock_frequencies)
 		self.clock_frequencies = new_clock_frequencies
-
 
 		# Use the provided clock name and frequency for our input; or the default clock
 		# if no name was provided.
@@ -368,7 +356,6 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 				a_LPF_RESISTOR = '8'
 		)
 
-
 		# Set up our global resets so the system is kept fully in reset until
 		# our core PLL is fully stable. This prevents us from internally clock
 		# glitching ourselves before our PLL is locked. :)
@@ -376,7 +363,6 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 			ResetSignal('sync').eq(~self._pll_lock),
 			ResetSignal('fast').eq(~self._pll_lock),
 		]
-
 
 	def generate_usb_clock(self, m, platform):
 		return self._clock_options[self.clock_frequencies['usb']]
@@ -386,7 +372,6 @@ class SolECP5DomainGenerator(SolDomainGenerator):
 
 	def generate_fast_clock(self, m, platform):
 		return self._clock_options[self.clock_frequencies['fast']]
-
 
 	def stretch_sync_strobe_to_usb(self, m, strobe, output = None, allow_delay = False):
 		'''

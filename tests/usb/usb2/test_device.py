@@ -34,7 +34,6 @@ class FullDeviceTest(USBDeviceTest):
 		# so we can move forward quickly.
 		yield self.utmi.tx_ready.eq(1)
 
-
 	def provision_dut(self, dut):
 		self.descriptors = descriptors = DeviceDescriptorCollection()
 
@@ -64,7 +63,6 @@ class FullDeviceTest(USBDeviceTest):
 
 		dut.add_standard_control_endpoint(descriptors)
 
-
 	@usb_domain_test_case
 	def test_enumeration(self):
 
@@ -80,7 +78,6 @@ class FullDeviceTest(USBDeviceTest):
 		# - Read string descriptors from device descriptor (wIndex = language id).
 		# - Set configuration.
 		# - Read back configuration number and validate.
-
 
 		# Read 8 bytes of our device descriptor.
 		handshake, data = yield from self.get_descriptor(DescriptorTypes.DEVICE, length = 8)
@@ -135,7 +132,6 @@ class FullDeviceTest(USBDeviceTest):
 		self.assertEqual(handshake, USBPacketID.ACK)
 		self.assertEqual(configuration, [1], 'device did not accept configuration!')
 
-
 class LongDescriptorTest(USBDeviceTest):
 	''' :meta private: '''
 
@@ -153,7 +149,6 @@ class LongDescriptorTest(USBDeviceTest):
 		# Pretend our PHY is always ready to accept data,
 		# so we can move forward quickly.
 		yield self.utmi.tx_ready.eq(1)
-
 
 	def provision_dut(self, dut):
 		self.descriptors = descriptors = DeviceDescriptorCollection()

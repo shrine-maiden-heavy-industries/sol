@@ -46,7 +46,6 @@ class USBInterruptExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -62,9 +61,7 @@ class USBInterruptExample(Elaboratable):
 					# Request that we be polled once ber microseconds (2 ^ 3 microframes).
 					e.bInterval        = 4
 
-
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -90,7 +87,6 @@ class USBInterruptExample(Elaboratable):
 		usb.add_endpoint(status_ep)
 		m.d.comb += status_ep.signal.eq(counter)
 
-
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
 			usb.connect.eq(1),
@@ -98,7 +94,6 @@ class USBInterruptExample(Elaboratable):
 		]
 
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBInterruptExample)

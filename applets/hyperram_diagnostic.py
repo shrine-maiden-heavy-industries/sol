@@ -20,10 +20,8 @@ from sol_usb.gateware.interface.psram  import HyperRAMInterface
 REGISTER_RAM_REG_ADDR   = 2
 REGISTER_RAM_VALUE      = 3
 
-
 class HyperRAMDiagnostic(Elaboratable):
 	''' Temporary gateware that evaluates HyperRAM skews. '''
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -62,7 +60,6 @@ class HyperRAMDiagnostic(Elaboratable):
 		# Return our elaborated module.
 		return m
 
-
 if __name__ == '__main__':
 	test = cli(HyperRAMDiagnostic)
 
@@ -88,7 +85,6 @@ if __name__ == '__main__':
 		dut.registers.register_write(REGISTER_RAM_REG_ADDR, 0x800)
 		return dut.registers.register_read(REGISTER_RAM_VALUE) in (0x8f1f, 0x8f2f)
 
-
 	# Run each of our tests.
 	for test in (test_id_read, test_config_read):
 		for i in range(iterations):
@@ -108,6 +104,5 @@ if __name__ == '__main__':
 
 	pprint(HTML(f'    ID READ:     {fail_text if test_id_read in failed_tests else pass_text}'))
 	pprint(HTML(f'    CONFIG READ: {fail_text if test_config_read in failed_tests else pass_text}'))
-
 
 	print(f'\nDiagnostics completed with {passes} passes and {failures} failures.\n')

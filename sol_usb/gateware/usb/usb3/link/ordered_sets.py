@@ -9,7 +9,6 @@
 
 ''' Link training support gateware. '''
 
-
 from torii.hdl         import *
 
 from ...stream         import USBRawSuperSpeedStream
@@ -53,7 +52,6 @@ TS2_SET_DATA = [
 	0x45454545, # 23 - 20
 ]
 
-
 class TSBurstDetector(Elaboratable):
 	''' Simple Training Set detector; capable of detecting basic training sets.
 
@@ -82,7 +80,6 @@ class TSBurstDetector(Elaboratable):
 			self.loopback_requested   = Signal()
 			self.scrambling_disabled  = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 		m.d.ss += self.detected.eq(0)
@@ -97,7 +94,6 @@ class TSBurstDetector(Elaboratable):
 		data  = self.sink.data
 		ctrl  = self.sink.ctrl
 
-
 		def advance_on_match(count, target_ctrl = 0b0000, fail_state = 'NONE_DETECTED'):
 			data_matches = (data == self._set_data[count])
 			ctrl_matches = (ctrl == target_ctrl)
@@ -110,7 +106,6 @@ class TSBurstDetector(Elaboratable):
 					m.next = f'{count + 1}_DETECTED'
 				with m.Else():
 					m.next = fail_state
-
 
 		last_state_number = len(self._set_data)
 		with m.FSM(domain = 'ss'):
@@ -157,11 +152,9 @@ class TSBurstDetector(Elaboratable):
 					with m.Else():
 						m.next = 'NONE_DETECTED'
 
-
 			for i in range(2, last_state_number):
 				with m.State(f'{i}_DETECTED'):
 					advance_on_match(i)
-
 
 			with m.State(f'{last_state_number}_DETECTED'):
 
@@ -182,10 +175,7 @@ class TSBurstDetector(Elaboratable):
 				with m.Else():
 					m.next = 'WAIT_FOR_FIRST'
 
-
 		return m
-
-
 
 class TSEmitter(Elaboratable):
 	'''
@@ -216,8 +206,6 @@ class TSEmitter(Elaboratable):
 			self.request_hot_reset      = Signal()
 			self.request_loopback       = Signal()
 			self.request_no_scrambling  = Signal()
-
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -256,7 +244,6 @@ class TSEmitter(Elaboratable):
 						with m.If(self.request_no_scrambling):
 							m.d.comb += self.source.data.word_select(1, 8)[3].eq(1)
 
-
 					with m.If(self.source.ready):
 						# If we're generating the state for the last word,
 						# we also have to handle our count.
@@ -283,7 +270,6 @@ class TSEmitter(Elaboratable):
 							m.next = f'WORD_{i+1}'
 
 		return m
-
 
 class TSTransceiver(Elaboratable):
 	'''
@@ -320,7 +306,6 @@ class TSTransceiver(Elaboratable):
 		self.request_hot_reset     = Signal()
 		self.request_loopback      = Signal()
 		self.request_no_scrambling = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -377,7 +362,6 @@ class TSTransceiver(Elaboratable):
 			self.loopback_requested.eq(ts2_detector.loopback_requested),
 			self.no_scrambling_requested.eq(ts2_detector.scrambling_disabled),
 		]
-
 
 		#
 		# Ordered set generators

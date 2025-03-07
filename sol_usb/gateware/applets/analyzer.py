@@ -8,7 +8,6 @@
 
 ''' Generic USB analyzer backend generator for SOL. '''
 
-
 import errno
 import time
 from array                                  import array
@@ -334,7 +333,6 @@ class USBAnalyzerConnection:
 				raise
 			# If the error was a timeout, ignore it.
 
-
 	def read_raw_packet(self):
 		'''
 		Reads a raw packet from our USB Analyzer. Blocks until a packet is complete.
@@ -370,7 +368,6 @@ class USBAnalyzerConnection:
 			# Extract our raw packet...
 			packet = self._buffer[0:size]
 			del self._buffer[0:size]
-
 
 		# ... and return it.
 		# TODO: extract and provide status flags

@@ -6,7 +6,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 import time
 
 from luminary_fpga                     import ApolloDebugger
@@ -23,10 +22,8 @@ from sol_usb.gateware.utils.cdc        import synchronize
 DATA_AVAILABLE  = 1
 ANALYZER_RESULT = 2
 
-
 class ULPIDiagnostic(Elaboratable):
 	''' Gateware that evalutes ULPI PHY functionality. '''
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -46,14 +43,12 @@ class ULPIDiagnostic(Elaboratable):
 		ulpi = platform.request(platform.default_usb_connection)
 		m.submodules.utmi = utmi = UTMITranslator(ulpi = ulpi)
 
-
 		# Strap our power controls to be in VBUS passthrough by default,
 		# on the target port.
 		m.d.comb += [
 			platform.request('power_a_port').o.eq(0),
 			platform.request('pass_through_vbus').o.eq(1),
 		]
-
 
 		# Hook up our LEDs to status signals.
 		m.d.comb += [
@@ -92,7 +87,6 @@ class ULPIDiagnostic(Elaboratable):
 			analyzer.next.eq(read_strobe)
 		]
 
-
 		# Debug output.
 		m.d.comb += [
 			platform.request('user_io', 0, dir = 'o').o .eq(ClockSignal('usb')),
@@ -101,10 +95,8 @@ class ULPIDiagnostic(Elaboratable):
 			platform.request('user_io', 3, dir = 'o').o .eq(analyzer.sampling),
 		]
 
-
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	analyzer = cli(ULPIDiagnostic)

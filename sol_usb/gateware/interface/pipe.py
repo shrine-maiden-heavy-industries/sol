@@ -177,8 +177,6 @@ class PIPEInterface(Elaboratable):
 		self.rx_elec_idle   = Signal()
 		self.power_present  = Signal()
 
-
-
 class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 	'''
 	Gateware that transfers PIPE interface signals between clock domains.
@@ -214,7 +212,6 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 		self.phy            = phy
 		self._domain        = domain
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -235,7 +232,6 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 			phy.reset.eq(self.reset),
 		]
 
-
 		#
 		# Common gearbox signals.
 		#
@@ -247,7 +243,6 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 			gear_advance = Signal()
 			m.d.phy  += gear_index.eq(gear_index + 1)
 			m.d.comb += gear_advance.eq(gear_index == ratio - 1)
-
 
 		#
 		# Transmit data bus and related control signals.
@@ -293,7 +288,6 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 			phy_tx_bus_signals.eq(tx_fifo.r_data),
 			tx_fifo.r_en.eq(gear_advance)
 		]
-
 
 		#
 		# Receive data bus and related control signals.
@@ -367,7 +361,6 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 			rx_fifo.r_en.eq(1)
 		]
 
-
 		#
 		# Control and status signals not related to the data bus.
 		#
@@ -391,11 +384,8 @@ class AsyncPIPEInterface(PIPEInterface, Elaboratable):
 			FFSynchronizer(phy.power_present,   self.power_present, o_domain = 'sync'),
 		]
 
-
 		# Rename the default domain to the MAC domain that was requested.
 		return DomainRenamer({'sync': self._domain})(m)
-
-
 
 class GearedPIPEInterface(Elaboratable):
 	''' Module that presents a post-gearing PIPE interface, performing gearing in I/O hardware.
@@ -417,7 +407,6 @@ class GearedPIPEInterface(Elaboratable):
 	This module optionally can connect the PIPE I/O clock (``pclk``) to the design's clocking
 	network. This configuration is recommended.
 
-
 	Parameters
 	----------
 	pipe: PIPE I/O resource
@@ -434,7 +423,6 @@ class GearedPIPEInterface(Elaboratable):
 		'rx_data': 2, 'rx_datak': 2, 'rx_valid': 2,
 		'phy_status': 2, 'rx_status': 2
 	}
-
 
 	def __init__(self, *, pipe, invert_rx_polarity_signal = False):
 		self._io = pipe
@@ -483,10 +471,8 @@ class GearedPIPEInterface(Elaboratable):
 			else:
 				raise ValueError(f'Unexpected signal {name} with subordinates {io} in PIPE PHY!')
 
-
 	def elaborate(self, platform):
 		m = Module()
-
 
 		m.d.comb += [
 			# Drive our I/O boundary clock with our PHY clock directly,
@@ -544,15 +530,12 @@ class GearedPIPEInterface(Elaboratable):
 			self.rx_status[0].eq(self._io.rx_status.i0),
 			self.rx_status[1].eq(self._io.rx_status.i1),
 
-
 			# RX_VALID indicates that we have symbol lock; and thus should remain
 			# high throughout our whole stream. Accordingly, we can squish both values
 			# down into a single value without losing anything, as it should remain high
 			# once our signal has been trained.
 			self.rx_valid.eq(self._io.rx_valid.i0 & self._io.rx_valid.i1),
 		]
-
-
 
 		# Allow us to invert the polarity of our ``rx_polarity`` signal, to account for
 		# boards that have their Rx+/- lines swapped.

@@ -8,7 +8,6 @@ from minerva.core  import Minerva
 
 from torii.lib.soc import wishbone
 
-
 class Processor(Minerva):
 	''' Compatibility subclass around the Minerva RISC-V (riscv32i) processor. '''
 

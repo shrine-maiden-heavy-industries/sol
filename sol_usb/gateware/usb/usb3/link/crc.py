@@ -40,7 +40,6 @@ def compute_usb_crc5(protected_bits):
 		xor_bits(10, 9, 6, 5, 3, 0)
 	)
 
-
 class HeaderPacketCRC(Elaboratable):
 	''' Gateware that computes a running CRC-16 for the first three words of a header packet.
 
@@ -56,7 +55,6 @@ class HeaderPacketCRC(Elaboratable):
 
 	crc: Signal(16), output
 		The current CRC value.
-
 
 	Parameters
 	----------
@@ -76,7 +74,6 @@ class HeaderPacketCRC(Elaboratable):
 		self.advance_crc = Signal()
 
 		self.crc   = Signal(16, reset = initial_value)
-
 
 	def _generate_next_crc(self, current_crc, data_in):
 		''' Generates the next round of a wordwise USB CRC16. '''
@@ -127,7 +124,6 @@ class HeaderPacketCRC(Elaboratable):
 			xor_data_bits(3, 7, 11, 12, 14, 19, 20, 22, 25, 27, 28, 30, 31),
 		)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -147,7 +143,6 @@ class HeaderPacketCRC(Elaboratable):
 		m.d.comb += self.crc.eq(~crc[::-1])
 
 		return m
-
 
 class DataPacketPayloadCRC(Elaboratable):
 	''' Gateware that computes a running CRC-32 for a data packet payload.
@@ -183,7 +178,6 @@ class DataPacketPayloadCRC(Elaboratable):
 	next_crc_1B: Signal(32), output
 		The CRC value for the next cycle, assuming we advance 1B.
 
-
 	Parameters
 	----------
 	initial_value: int, Const
@@ -208,7 +202,6 @@ class DataPacketPayloadCRC(Elaboratable):
 		self.next_crc_3B = Signal(32)
 		self.next_crc_2B = Signal(32)
 		self.next_crc_1B = Signal(32)
-
 
 	def _generate_next_full_crc(self, current_crc, data_in):
 		''' Generates the next round of our CRC; given a full input word . '''
@@ -256,7 +249,6 @@ class DataPacketPayloadCRC(Elaboratable):
 			q(5) ^ q(8) ^ q(9) ^ q(11) ^ q(15) ^ q(23) ^ q(24) ^ q(25) ^ q(27) ^ q(28) ^ q(29) ^ q(30) ^ q(31) ^ d(5) ^ d(8) ^ d(9) ^ d(11) ^ d(15) ^ d(23) ^ d(24) ^ d(25) ^ d(27) ^ d(28) ^ d(29) ^ d(30) ^ d(31),
 		)
 
-
 	def _generate_next_3B_crc(self, current_crc, data_in):
 		''' Generates the next round of our CRC; given a 3B trailing input word . '''
 
@@ -266,7 +258,6 @@ class DataPacketPayloadCRC(Elaboratable):
 
 		def q(i):
 			return current_crc[i]
-
 
 		# These lines are extremely long, but there doesn't seem any advantage in clarity to splitting them.
 		return Cat(
@@ -304,7 +295,6 @@ class DataPacketPayloadCRC(Elaboratable):
 			q(7) ^ q(13) ^ q(16) ^ q(17) ^ q(19) ^ q(23) ^ q(31) ^ d(5) ^ d(8) ^ d(9) ^ d(11) ^ d(15) ^ d(23),
 		)
 
-
 	def _generate_next_2B_crc(self, current_crc, data_in):
 		''' Generates the next round of our CRC; given a 2B trailing input word . '''
 
@@ -314,7 +304,6 @@ class DataPacketPayloadCRC(Elaboratable):
 
 		def q(i):
 			return current_crc[i]
-
 
 		# These lines are extremely long, but there doesn't seem any advantage in clarity to splitting them.
 		return Cat(
@@ -351,7 +340,6 @@ class DataPacketPayloadCRC(Elaboratable):
 			q(14) ^ q(20) ^ q(23) ^ q(24) ^ q(26) ^ q(30) ^ d(4) ^ d(7) ^ d(8) ^ d(10) ^ d(14),
 			q(15) ^ q(21) ^ q(24) ^ q(25) ^ q(27) ^ q(31) ^ d(5) ^ d(8) ^ d(9) ^ d(11) ^ d(15),
 		)
-
 
 	def _generate_next_1B_crc(self, current_crc, data_in):
 		''' Generates the next round of our CRC; given a 2B trailing input word . '''
@@ -398,7 +386,6 @@ class DataPacketPayloadCRC(Elaboratable):
 			q(23) ^ q(29) ^ d(5),
 		)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -431,7 +418,6 @@ class DataPacketPayloadCRC(Elaboratable):
 			m.d.ss   += crc.eq(next_crc_2B)
 		with m.Elif(self.advance_1B):
 			m.d.ss   += crc.eq(next_crc_1B)
-
 
 		# Convert from our intermediary 'running CRC' format into the correct CRC32 outputs.
 		m.d.comb += [

@@ -73,7 +73,6 @@ class GetDescriptorHandler(Elaboratable):
 		self.tx_length = Signal(16)
 		self.stall     = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -92,7 +91,6 @@ class GetDescriptorHandler(Elaboratable):
 
 			# ... and attach it to this module.
 			m.submodules += generator
-
 
 		#
 		# Connect up each of our generators.

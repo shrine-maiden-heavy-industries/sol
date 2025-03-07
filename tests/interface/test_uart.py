@@ -9,13 +9,11 @@ class UARTTransmitterTest(SolGatewareTestCase):
 	FRAGMENT_UNDER_TEST = UARTTransmitter
 	FRAGMENT_ARGUMENTS = dict(divisor = DIVISOR)
 
-
 	def advance_half_bit(self):
 		yield from self.advance_cycles(self.DIVISOR // 2)
 
 	def advance_bit(self):
 		yield from self.advance_cycles(self.DIVISOR)
-
 
 	def assert_data_sent(self, byte_expected):
 		dut = self.dut
@@ -33,7 +31,6 @@ class UARTTransmitterTest(SolGatewareTestCase):
 		# Finally, we should see a stop bit.
 		yield from self.advance_bit()
 		self.assertEqual((yield dut.tx), 1)
-
 
 	@sync_test_case
 	def test_burst_transmit(self):
@@ -75,20 +72,17 @@ class UARTTransmitterTest(SolGatewareTestCase):
 		yield from self.advance_bit()
 		self.assertEqual((yield dut.idle), 1)
 
-
 class UARTMultibyteTransmitterTest(SolGatewareTestCase):
 	DIVISOR = 10
 
 	FRAGMENT_UNDER_TEST = UARTMultibyteTransmitter
 	FRAGMENT_ARGUMENTS = dict(divisor = DIVISOR, byte_width = 4)
 
-
 	def advance_half_bit(self):
 		yield from self.advance_cycles(self.DIVISOR // 2)
 
 	def advance_bit(self):
 		yield from self.advance_cycles(self.DIVISOR)
-
 
 	def assert_data_sent(self, byte_expected):
 		dut = self.dut
@@ -108,7 +102,6 @@ class UARTMultibyteTransmitterTest(SolGatewareTestCase):
 		self.assertEqual((yield dut.tx), 1)
 
 		yield from self.advance_cycles(2)
-
 
 	@sync_test_case
 	def test_burst_transmit(self):

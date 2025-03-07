@@ -7,9 +7,7 @@
 
 ''' Helpers for I/O interfacing. '''
 
-
 from torii.hdl import Cat, Instance, Signal
-
 
 # FIXME: move this out of here and into an ECP5-specific set of functionality
 def delay(m, signal, interval, *, out = None):

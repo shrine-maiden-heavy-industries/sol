@@ -68,7 +68,6 @@ class LEDRequestHandler(SuperSpeedRequestHandler):
 							interface.handshakes_out.send_ack.eq(1)
 						]
 
-
 				with m.Default():
 
 					#
@@ -86,10 +85,8 @@ class LEDRequestHandler(SuperSpeedRequestHandler):
 
 				return m
 
-
 class SuperSpeedVendorDeviceExample(Elaboratable):
 	''' Simple example of a USB SuperSpeed device using the SOL framework. '''
-
 
 	def create_descriptors(self):
 		''' Create the descriptors we want to use for our device. '''
@@ -118,7 +115,6 @@ class SuperSpeedVendorDeviceExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 			c.bMaxPower        = 50
@@ -127,7 +123,6 @@ class SuperSpeedVendorDeviceExample(Elaboratable):
 				i.bInterfaceNumber = 0
 
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -151,7 +146,6 @@ class SuperSpeedVendorDeviceExample(Elaboratable):
 
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	cli(SuperSpeedVendorDeviceExample)

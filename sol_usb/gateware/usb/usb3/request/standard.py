@@ -29,8 +29,6 @@ class StandardRequestHandler(Elaboratable):
 		#
 		self.interface = SuperSpeedRequestHandlerInterface()
 
-
-
 	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition = 0):
 		''' Fills in the current state with a request handler meant to set a register.
 
@@ -60,7 +58,6 @@ class StandardRequestHandler(Elaboratable):
 
 			# ... and then return to idle.
 			m.next = 'IDLE'
-
 
 	def handle_simple_data_request(self, m, data, *, length = 1):
 		''' Fills in a given current state with a request that returns a given short piece of data.
@@ -106,8 +103,6 @@ class StandardRequestHandler(Elaboratable):
 			m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
 			m.next = 'IDLE'
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 		interface = self.interface
@@ -119,7 +114,6 @@ class StandardRequestHandler(Elaboratable):
 		# For all of our handshakes, set our next-sequence-number to one; as we never receive
 		# packets, and ACKs should be seq = 1.
 		m.d.comb += handshake_generator.next_sequence.eq(1)
-
 
 		#
 		# Submodules
@@ -134,7 +128,6 @@ class StandardRequestHandler(Elaboratable):
 			get_descriptor_handler.value.eq(setup.value),
 			get_descriptor_handler.length.eq(setup.length),
 		]
-
 
 		#
 		# Handlers.
@@ -168,7 +161,6 @@ class StandardRequestHandler(Elaboratable):
 							with m.Default():
 								m.next = 'UNHANDLED'
 
-
 				# GET_STATUS -- Fetch the device's status.
 				# For now, we'll always return '0'.
 				with m.State('GET_STATUS'):
@@ -176,17 +168,14 @@ class StandardRequestHandler(Elaboratable):
 					# TODO: copy the remote wakeup and bus-powered attributes from bmAttributes of the relevant descriptor?
 					self.handle_simple_data_request(m, 0, length = 2)
 
-
 				# SET_ADDRESS -- The host is trying to assign us an address.
 				with m.State('SET_ADDRESS'):
 					self.handle_register_write_request(m, interface.new_address, interface.address_changed)
-
 
 				# SET_CONFIGURATION -- The host is trying to select an active configuration.
 				with m.State('SET_CONFIGURATION'):
 					# TODO: stall if we don't have a relevant configuration
 					self.handle_register_write_request(m, interface.new_config, interface.config_changed)
-
 
 				# GET_DESCRIPTOR -- The host is asking for a USB descriptor -- for us to 'self describe'.
 				with m.State('GET_DESCRIPTOR'):
@@ -206,11 +195,9 @@ class StandardRequestHandler(Elaboratable):
 						m.d.comb += handshake_generator.send_ack.eq(1)
 						m.next = 'IDLE'
 
-
 				# GET_CONFIGURATION -- The host is asking for the active configuration number.
 				with m.State('GET_CONFIGURATION'):
 					self.handle_simple_data_request(m, interface.active_config)
-
 
 				# SET_ISOCH_DELAY -- The host is trying to inform us of our isochronous delay.
 				with m.State('SET_ISOCH_DELAY'):
@@ -222,7 +209,6 @@ class StandardRequestHandler(Elaboratable):
 						m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
 						m.next = 'IDLE'
 
-
 				# SET_SEL -- set our System Exit Latencies
 				with m.State('SET_SEL'):
 					# TODO: use the actual latencies once we support USB3 power states
@@ -232,12 +218,10 @@ class StandardRequestHandler(Elaboratable):
 					with m.If(data_received):
 						m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
 
-
 					# ACK our status stage, when appropriate.
 					with m.If(self.interface.status_requested):
 						m.d.comb += self.interface.handshakes_out.send_ack.eq(1)
 						m.next = 'IDLE'
-
 
 				# UNHANDLED -- we've received a request we're not prepared to handle
 				with m.State('UNHANDLED'):
@@ -249,7 +233,6 @@ class StandardRequestHandler(Elaboratable):
 						m.next = 'IDLE'
 
 		return m
-
 
 if __name__ == '__main__':
 	unittest.main(warnings = 'ignore')

@@ -92,8 +92,6 @@ class SuperSpeedEndpointInterface:
 		self.config_changed        = Signal()
 		self.new_config            = Signal(8)
 
-
-
 class SuperSpeedEndpointMultiplexer(Elaboratable):
 	''' Multiplexes access to the resources shared between multiple endpoint interfaces.
 
@@ -118,7 +116,6 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 		#
 		self._interfaces = []
 
-
 	def add_interface(self, interface: SuperSpeedEndpointInterface):
 		''' Adds a EndpointInterface to the multiplexer.
 
@@ -126,7 +123,6 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 		driving the transmit lines at a time.
 		'''
 		self._interfaces.append(interface)
-
 
 	def _multiplex_signals(self, m, *, when, multiplex):
 		''' Helper that creates a simple priority-encoder multiplexer.
@@ -160,8 +156,6 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 
 			# After the first element, all other entries should be created with Elif.
 			conditional = m.Elif
-
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -206,7 +200,6 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 					shared.tx_length.eq(interface.tx_length)
 				]
 
-
 		#
 		# Multiplex each of our handshake-out interfaces.
 		#
@@ -221,7 +214,6 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 			with m.If(any_generate_signal_asserted):
 				m.d.comb += shared.handshakes_out.connect(interface.handshakes_out)
 
-
 		#
 		# Multiplex the signals being routed -from- our pre-mux interface.
 		#
@@ -233,6 +225,5 @@ class SuperSpeedEndpointMultiplexer(Elaboratable):
 			when = 'config_changed',
 			multiplex = ['config_changed', 'new_config']
 		)
-
 
 		return m

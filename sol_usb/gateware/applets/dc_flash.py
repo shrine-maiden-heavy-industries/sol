@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 from torii.hdl                        import Elaboratable, Module, Signal
 
 from sol_usb.gateware.interface.flash import ECP5ConfigurationFlashInterface
@@ -26,7 +25,6 @@ class DebugControllerFlashBridge(Elaboratable):
 
 		# Identify ourselves as the SPI flash bridge.
 		spi_registers.add_read_only_register(REGISTER_ID, read = 0x53504946)
-
 
 		#
 		# SPI flash passthrough connections.

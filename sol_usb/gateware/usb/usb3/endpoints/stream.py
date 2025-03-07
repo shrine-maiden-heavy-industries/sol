@@ -30,14 +30,12 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 	This implementation is double buffered; and can store a single packet's worth of data while transmitting
 	a second packet. Bursting is currently not supported.
 
-
 	Attributes
 	----------
 	stream: SuperSpeedStreamInterface, input stream
 		Full-featured stream interface that carries the data we'll transmit to the host.
 	interface: SuperSpeedEndpointInterface
 		Communications link to our USB device.
-
 
 	Parameters
 	----------
@@ -50,7 +48,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 	SEQUENCE_NUMBER_BITS = 5
 
-
 	def __init__(self, *, endpoint_number, max_packet_size = 1024):
 		self._endpoint_number = endpoint_number
 		self._max_packet_size = max_packet_size
@@ -60,7 +57,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		#
 		self.stream    = SuperSpeedStreamInterface()
 		self.interface = SuperSpeedEndpointInterface()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -91,7 +87,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 			m.d.ss += sequence_number.eq(0)
 		with m.Elif(advance_sequence):
 			m.d.ss += sequence_number.eq(next_sequence_number)
-
 
 		#
 		# Transmit buffer.
@@ -176,7 +171,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 		with m.If(in_stream.last & buffer_write.en):
 			m.d.ss += write_stream_ended.eq(1)
 
-
 		# Use our memory's two ports to capture data from our transfer stream; and two to emit packets
 		# into our packet stream. Since we'll never receive to anywhere else, or transmit to anywhere else,
 		# we can just unconditionally connect these.
@@ -190,7 +184,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 			# ... and we'll only ever -send- data from the Read buffer; in the SEND_PACKET state.
 			buffer_read.addr.eq(send_position),
 		]
-
 
 		#
 		# Transmit controller.
@@ -253,7 +246,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 						with m.Else():
 							m.next = 'WAIT_TO_SEND'
 
-
 			# REQUEST_IN_TOKEN -- we now have at least a buffer full of data to send; but
 			# we've sent a NRDY token to the host; and thus the host is no longer polling for data.
 			# We'll send an ERDY token to the host, in order to request it poll us again.
@@ -265,7 +257,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 				# ... and once that send is complete, move on to waiting for an IN token.
 				with m.If(handshakes_out.done):
 					m.next = 'WAIT_TO_SEND'
-
 
 			# WAIT_TO_SEND -- we now have at least a buffer full of data to send; we'll
 			# need to wait for an IN token to send it.
@@ -294,7 +285,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 
 						# We've now completed a packet send; so wait for it to be acknowledged.
 						m.next = 'WAIT_FOR_ACK'
-
 
 			# SEND_PACKET -- we now have enough data to send _and_ have received an IN token.
 			# We can now send our data over to the host.
@@ -348,7 +338,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 							with m.Case(3):
 								m.d.ss += out_stream.valid.eq(0b0111)
 
-
 					# For every word that's not the last one, we know that all bytes are valid.
 					with m.Else():
 						m.d.ss += out_stream.valid.eq(0b1111)
@@ -357,7 +346,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 					# from our host.
 					with m.If(last_word):
 						m.next = 'WAIT_FOR_ACK'
-
 
 			# WAIT_FOR_ACK -- We've just sent a packet; but don't know if the host has
 			# received it correctly. We'll wait to see if the host ACKs.
@@ -392,7 +380,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 						# ... or by moving right back into sending a data packet.
 						with m.Else():
 							m.next = 'SEND_PACKET'
-
 
 					# Otherwise, if our ACK contains the next sequence number, then this is an acknowledgement
 					# of the previous packet [USB3.2r1: 8.12.1.2].
@@ -430,7 +417,6 @@ class SuperSpeedStreamInEndpoint(Elaboratable):
 							# Otherwise, we'll wait for an attempt to send data before we generate a ZLP.
 							with m.Else():
 								m.next = 'WAIT_TO_SEND'
-
 
 						# Otherwise, there's a possibility we already have a packet-worth of data waiting
 						# for us in our 'write buffer', which we've been filling in the background.

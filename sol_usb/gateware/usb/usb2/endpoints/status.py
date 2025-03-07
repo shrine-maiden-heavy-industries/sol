@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 '''
 Endpoint interfaces for providing status updates to the host.
 
@@ -63,8 +62,6 @@ class USBSignalInEndpoint(Elaboratable):
 
 		self.status_read_complete = Signal()
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -72,13 +69,11 @@ class USBSignalInEndpoint(Elaboratable):
 		tx = self.interface.tx
 		tokenizer = self.interface.tokenizer
 
-
 		# Grab a copy of the relevant signal that's in our USB domain; synchronizing if we need to.
 		if self._signal_domain == 'usb':
 			target_signal = self.signal
 		else:
 			target_signal = synchronize(m, self.signal, o_domain = 'usb')	# noqa: F841
-
 
 		# Store a latched version of our signal, captured before we start a transmission.
 		latched_signal = Signal.like(self.signal)
@@ -113,7 +108,6 @@ class USBSignalInEndpoint(Elaboratable):
 		targeting_endpoint       = endpoint_number_matches & tokenizer.is_in
 		packet_requested         = targeting_endpoint & tokenizer.ready_for_response
 
-
 		with m.FSM(domain = 'usb'):
 
 			# IDLE -- we've not yet gotten an token requesting data. Wait for one.
@@ -132,7 +126,6 @@ class USBSignalInEndpoint(Elaboratable):
 
 					# ...  and start transmitting it.
 					m.next = 'TRANSMIT_RESPONSE'
-
 
 			# TRANSMIT_RESPONSE -- we're now ready to send our latched response to the host.
 			with m.State('TRANSMIT_RESPONSE'):
@@ -153,7 +146,6 @@ class USBSignalInEndpoint(Elaboratable):
 					with m.If(is_last_byte):
 						m.next = 'WAIT_FOR_ACK'
 
-
 			# WAIT_FOR_ACK -- we've now transmitted our full packet; we need to wait for the host to ACK it
 			with m.State('WAIT_FOR_ACK'):
 
@@ -163,12 +155,10 @@ class USBSignalInEndpoint(Elaboratable):
 					m.d.usb += self.interface.tx_pid_toggle[0].eq(~self.interface.tx_pid_toggle[0])
 					m.next = 'IDLE'
 
-
 				# If the host starts a new packet without ACK'ing, we'll need to retransmit.
 				# Wait for a new IN token.
 				with m.If(self.interface.tokenizer.new_token):
 					m.next = 'RETRANSMIT'
-
 
 			# RETRANSMIT -- the host failed to ACK the data we've most recently sent.
 			# Wait here for the host to request the data again.

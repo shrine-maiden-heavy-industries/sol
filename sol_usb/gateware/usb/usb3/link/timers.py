@@ -22,7 +22,6 @@ class LinkMaintenanceTimers(Elaboratable):
 		  been sending keepalives to prevent this long of an idle. We'll have
 		  to perform link recovery.
 
-
 	Attributes
 	----------
 	link_command_received: Signal(), input
@@ -46,7 +45,6 @@ class LinkMaintenanceTimers(Elaboratable):
 	KEEPALIVE_TIMEOUT = 10e-6
 	RECOVERY_TIMEOUT  = 1e-3
 
-
 	def __init__(self, *, ss_clock_frequency = 125e6):
 		self._clock_frequency = ss_clock_frequency
 
@@ -63,7 +61,6 @@ class LinkMaintenanceTimers(Elaboratable):
 		self.schedule_keepalive       = Signal()
 		self.transition_to_recovery   = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -71,7 +68,6 @@ class LinkMaintenanceTimers(Elaboratable):
 		# both cases. For our keepalive, we'll immediately send a link command, which should
 		# clear our timer. For our recovery timer, we'll enter recovery and reset this whole
 		# thing anyway. :)
-
 
 		#
 		# Keepalive Timer
@@ -89,7 +85,6 @@ class LinkMaintenanceTimers(Elaboratable):
 		with m.Else():
 			m.d.ss += keepalive_timer.eq(0)
 
-
 		#
 		# Recovery Timer
 		#
@@ -105,6 +100,5 @@ class LinkMaintenanceTimers(Elaboratable):
 			m.d.ss += recovery_timer.eq(recovery_timer + 1)
 		with m.Else():
 			m.d.ss += recovery_timer.eq(0)
-
 
 		return m

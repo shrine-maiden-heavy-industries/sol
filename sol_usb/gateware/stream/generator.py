@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 ''' Stream generators. '''
 
 from torii.hdl import *
@@ -53,7 +52,6 @@ class ConstantStreamGenerator(Elaboratable):
 		If bytes are provided, and our data width is greater
 	'''
 
-
 	def __init__(self, constant_data, domain = 'sync', stream_type = StreamInterface,
 			max_length_width = None, data_width = None, data_endianness = 'little'):
 
@@ -86,8 +84,6 @@ class ConstantStreamGenerator(Elaboratable):
 			self.output_length     = Signal.like(self.max_length)
 		else:
 			self.max_length = self._data_length
-
-
 
 	def _get_initializer_value(self):
 		'''
@@ -143,10 +139,8 @@ class ConstantStreamGenerator(Elaboratable):
 
 		return out_data, last_word_bytes
 
-
 	def elaborate(self, platform):
 		m = Module()
-
 
 		#
 		# Core ROM.
@@ -176,13 +170,11 @@ class ConstantStreamGenerator(Elaboratable):
 			bytes_sent     = 0
 			bytes_per_word = 0
 
-
 		# Track when we're on the first and last packet.
 		on_first_packet = position_in_stream == self.start_position
 		on_last_packet  = \
 			(position_in_stream          == (data_length - 1)) | \
 			(bytes_sent + bytes_per_word >= max_length)
-
 
 		#
 		# Figure out where we should start in our stream.
@@ -197,7 +189,6 @@ class ConstantStreamGenerator(Elaboratable):
 		with m.Else():
 			m.d.comb += start_position.eq(self.start_position)
 
-
 		#
 		# Output length field.
 		#
@@ -208,9 +199,6 @@ class ConstantStreamGenerator(Elaboratable):
 				m.d.comb += self.output_length.eq(max_length)
 			with m.Else():
 				m.d.comb += self.output_length.eq(self._data_length)
-
-
-
 
 		#
 		# Controller.
@@ -239,7 +227,6 @@ class ConstantStreamGenerator(Elaboratable):
 				with m.If(self.start & (self.max_length > 0)):
 					m.next = 'STREAMING'
 
-
 			# STREAMING -- we're actively transmitting data
 			with m.State('STREAMING'):
 				m.d.comb += [
@@ -256,7 +243,6 @@ class ConstantStreamGenerator(Elaboratable):
 				# wider than one bit for streams with multi-byte words; and it could be set
 				# by either our max_length limiter or by our data length. This logic is complex,
 				# but hopefully actually generates relatively simple hardware.
-
 
 				# Explicit optimization: if we have a valid length of one, don't bother
 				# with all of this logic. This ensures we never degrade speed for trivial cases.
@@ -298,7 +284,6 @@ class ConstantStreamGenerator(Elaboratable):
 									with m.Case(i):
 										m.d.comb += valid_due_to_max_length.eq(Const(1).replicate(i))
 
-
 							# Our most complex logic is when both of our end conditions are met; we'll need
 							# to take the lesser of the two validities. AND'ing these will work to accept the
 							# lesser of the two validities.
@@ -314,12 +299,10 @@ class ConstantStreamGenerator(Elaboratable):
 							with m.Else():
 								m.d.comb += self.stream.valid.eq(valid_due_to_max_length)
 
-
 					# If we're not on our last word, every valid bit should be set.
 					with m.Else():
 						valid_bits = len(self.stream.valid)
 						m.d.comb += self.stream.valid.eq(Const(1).replicate(valid_bits))
-
 
 				# If the current data byte is accepted, move past it.
 				with m.If(self.stream.ready):
@@ -341,13 +324,11 @@ class ConstantStreamGenerator(Elaboratable):
 				m.d.comb += self.done.eq(1)
 				m.next = 'IDLE'
 
-
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self._domain != 'sync':
 			m = DomainRenamer({'sync': self._domain})(m)
 
 		return m
-
 
 class StreamSerializer(Elaboratable):
 	'''
@@ -403,15 +384,12 @@ class StreamSerializer(Elaboratable):
 		self.data        = Array(Signal(data_width, name = f'datum_{i}') for i in range(data_length))
 		self.stream      = stream_type(payload_width = data_width)
 
-
 		# If we have a maximum length width, include it in our I/O port.
 		# Otherwise, use a constant.
 		if max_length_width:
 			self.max_length = Signal(max_length_width)
 		else:
 			self.max_length = self.data_length
-
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -431,7 +409,6 @@ class StreamSerializer(Elaboratable):
 			self.stream.last.eq(on_last_packet  & self.stream.valid)
 		]
 
-
 		#
 		# Controller.
 		#
@@ -447,7 +424,6 @@ class StreamSerializer(Elaboratable):
 				# Once the user requests that we start, move to our stream being valid.
 				with m.If(self.start & (self.max_length > 0)):
 					m.next = 'STREAMING'
-
 
 			# STREAMING -- we're actively transmitting data
 			with m.State('STREAMING'):
@@ -472,7 +448,6 @@ class StreamSerializer(Elaboratable):
 			with m.State('DONE'):
 				m.d.comb += self.done.eq(1)
 				m.next = 'IDLE'
-
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self.domain != 'sync':

@@ -9,7 +9,6 @@
 
 ''' SerDes-based USB3 PIPE PHY. '''
 
-
 from .ecp5    import ECP5SerDesPIPE
 from .xc7_gtp import XC7GTPSerDesPIPE
 from .xc7_gtx import XC7GTXSerDesPIPE

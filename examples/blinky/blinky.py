@@ -13,7 +13,6 @@ from sol_usb.gateware.platform import NullPin
 class Blinky(Elaboratable):
 	''' Hardware module that validates basic SOL functionality. '''
 
-
 	def elaborate(self, platform):
 		''' Generate the Blinky tester. '''
 
@@ -33,7 +32,6 @@ class Blinky(Elaboratable):
 
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	cli(Blinky)

@@ -12,7 +12,6 @@ from torii.lib.soc import memory, wishbone
 class WishboneRAM(Elaboratable):
 	''' Simple Wishbone-connected RAM. '''
 
-
 	@staticmethod
 	def _initialization_value(value, data_width, granularity, byteorder):
 		'''
@@ -34,8 +33,6 @@ class WishboneRAM(Elaboratable):
 
 		words = (value[pos:pos + bytes_per_chunk] for pos in range(0, len(value), bytes_per_chunk))
 		return [int.from_bytes(word, byteorder = byteorder) for word in words]
-
-
 
 	def __init__(self, *, addr_width, data_width = 32, granularity = 8, init = None,
 			read_only = False, byteorder = 'little', name = 'ram'):
@@ -99,7 +96,6 @@ class WishboneRAM(Elaboratable):
 		memory_map.add_resource(self, size=2 ** addr_width, name=self.name)
 		self.bus.memory_map = memory_map
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -137,7 +133,6 @@ class WishboneRAM(Elaboratable):
 					self.bus.sel[i]   # The relevant selection of the datum is being targeted.
 				)
 
-
 		# We can handle any transaction request in a single cycle, when our RAM handles
 		# the read or write. Accordingly, we'll ACK the cycle after any request.
 		m.d.sync += self.bus.ack.eq(
@@ -147,7 +142,6 @@ class WishboneRAM(Elaboratable):
 		)
 
 		return m
-
 
 class WishboneROM(WishboneRAM):
 	''' Wishbone-attached ROM. '''

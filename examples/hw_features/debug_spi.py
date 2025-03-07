@@ -14,12 +14,10 @@ from sol_usb.gateware.utils.cdc     import synchronize
 class DebugSPIExample(Elaboratable):
 	''' Hardware meant to demonstrate use of the Debug Controller's SPI interface. '''
 
-
 	def __init__(self):
 
 		# Base ourselves around an SPI command interface.
 		self.interface = SPIDeviceInterface(clock_phase = 1)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -42,7 +40,6 @@ class DebugSPIExample(Elaboratable):
 		m.d.comb += self.interface.word_out.eq(self.interface.word_in)
 
 		return m
-
 
 if __name__ == '__main__':
 	cli(DebugSPIExample)

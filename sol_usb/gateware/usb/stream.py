@@ -40,7 +40,6 @@ class USBInStreamInterface(StreamInterface):
 			self.ready.eq(utmi_tx.ready)
 		]
 
-
 class USBOutStreamInterface(Record):
 	''' Variant of SOL's StreamInterface optimized for USB OUT receipt.
 
@@ -74,7 +73,6 @@ class USBOutStreamInterface(Record):
 			('payload',  payload_width, Direction.FANOUT),
 		])
 
-
 	def bridge_to(self, utmi_rx):
 		''' Generates a list of connections that connect this stream to the provided UTMIReceiveInterface. '''
 
@@ -84,11 +82,9 @@ class USBOutStreamInterface(Record):
 			self.data.eq(utmi_rx.payload)
 		]
 
-
 	def stream_eq(self, other):
 		''' Generates a list of connections that connect this stream to the provided UTMIReceiveInterface. '''
 		return self.connect(other)
-
 
 class USBOutStreamBoundaryDetector(Elaboratable):
 	''' Gateware that detects USBOutStream packet boundaries, and generates First and Last signals.
@@ -110,7 +106,6 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 	invalid_in: Signal(), input, optional
 		Input that accepts an RxInvalid signal. If provided; a delayed version will be produced on
 		:attr:``complete_out`` after a :attr:``processed_stream`` packet terminates.
-
 
 	complete_out: Signal(), output
 		If :attr:``complete_in`` is provided; this signal provides a delayed version of that signal
@@ -148,7 +143,6 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 
 		self.first              = Signal()
 		self.last               = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -250,12 +244,10 @@ class USBOutStreamBoundaryDetector(Elaboratable):
 				]
 				m.next = 'WAIT_FOR_FIRST_BYTE'
 
-
 		if self._domain != 'usb':
 			m = DomainRenamer({'usb': self._domain})(m)
 
 		return m
-
 
 class USBRawSuperSpeedStream(StreamInterface):
 	''' Variant of SOL's StreamInterface optimized for carrying raw USB3 data.
@@ -274,7 +266,6 @@ class USBRawSuperSpeedStream(StreamInterface):
 
 	def __init__(self, payload_words = 4):
 		super().__init__(payload_width = 8 * payload_words, extra_fields = [('ctrl', payload_words)])
-
 
 	def stream_eq(self, interface, *, endian_swap = False, omit = None, **kwargs):
 		''' Extend the global ``stream_eq`` operator to swap endianness. '''
@@ -313,16 +304,13 @@ class USBRawSuperSpeedStream(StreamInterface):
 			# ... and add it to our overall list of operations.
 			operations.extend(endian_swap_operations)
 
-
 		return operations
-
 
 class SuperSpeedStreamArbiter(StreamArbiter):
 	''' Convenience variant of our StreamArbiter that operates SuperSpeed streams in the ``ss`` domain. '''
 
 	def __init__(self):
 		super().__init__(stream_type = USBRawSuperSpeedStream, domain = 'ss')
-
 
 class SuperSpeedStreamInterface(StreamInterface):
 	''' Convenience variant of our StreamInterface sized to work with SuperSpeed streams. '''

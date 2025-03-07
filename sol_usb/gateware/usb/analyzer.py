@@ -41,7 +41,6 @@ class USBAnalyzer(Elaboratable):
 	discarding: Signal(), output
 		Asserted iff the analyzer is discarding the contents of its internal buffer.
 
-
 	Parameters
 	----------
 	utmi_interface: UTMIInterface()
@@ -90,7 +89,6 @@ class USBAnalyzer(Elaboratable):
 
 		# Diagnostic I/O.
 		self.sampling       = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()

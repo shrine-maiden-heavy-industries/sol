@@ -27,6 +27,5 @@ class PIPEPhyExample(Elaboratable):
 		# Return our elaborated module.
 		return m
 
-
 if __name__ == '__main__':
 	cli(PIPEPhyExample)

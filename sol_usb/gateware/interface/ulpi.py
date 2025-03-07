@@ -104,7 +104,6 @@ class ULPIRegisterWindow(Elaboratable):
 		self.write_request = Signal()
 		self.write_data    = Signal(8)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -164,7 +163,6 @@ class ULPIRegisterWindow(Elaboratable):
 						self.ulpi_out_req.eq(1)
 					]
 
-
 			# SEND_READ_ADDRESS: Request sending the read address, which we
 			# start sending on the next clock cycle. Note that we don't want
 			# to come into this state writing, as we need to lead with a
@@ -188,13 +186,11 @@ class ULPIRegisterWindow(Elaboratable):
 					]
 					m.next = 'READ_TURNAROUND'
 
-
 			# READ_TURNAROUND: wait for the PHY to take control of the ULPI bus.
 			with m.State('READ_TURNAROUND'):
 
 				# After one cycle, we should have a data byte ready.
 				m.next = 'READ_COMPLETE'
-
 
 			# READ_COMPLETE: the ULPI read exchange is complete, and the read data is ready.
 			with m.State('READ_COMPLETE'):
@@ -240,7 +236,6 @@ class ULPIRegisterWindow(Elaboratable):
 					m.d.usb += self.ulpi_data_out.eq(self.write_data)
 					m.next = 'HOLD_WRITE'
 
-
 			# Hold the write data on the bus until the device acknowledges it.
 			with m.State('HOLD_WRITE'):
 				m.d.usb += self.ulpi_out_req.eq(1)
@@ -276,7 +271,6 @@ class ULPIRegisterWindow(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
 
 class ULPIRxEventDecoder(Elaboratable):
 	''' Simple piece of gateware that tracks receive events.
@@ -328,7 +322,6 @@ class ULPIRxEventDecoder(Elaboratable):
 		self.rx_start        = Signal()
 		self.rx_stop         = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -362,7 +355,6 @@ class ULPIRxEventDecoder(Elaboratable):
 			with m.If(self.rx_active & ~rx_active):
 				m.d.usb += self.rx_stop.eq(1)
 
-
 		# Break the most recent RxCmd into its UTMI-equivalent signals.
 		# From table 3.8.1.2 in the ULPI spec; rev 1.1/Oct-20-2004.
 		m.d.comb += [
@@ -377,7 +369,6 @@ class ULPIRxEventDecoder(Elaboratable):
 		]
 
 		return m
-
 
 class ULPIControlTranslator(Elaboratable):
 	'''
@@ -449,7 +440,6 @@ class ULPIControlTranslator(Elaboratable):
 		#
 		self._register_signals = {}
 
-
 	def add_composite_register(self, m, address, value, *, reset_value = 0):
 		'''
 		Adds a ULPI register that's composed of multiple control signals.
@@ -462,7 +452,6 @@ class ULPIControlTranslator(Elaboratable):
 		value
 			An 8-bit signal composing the bits that should be placed in
 			the given register.
-
 
 		reset_value
 			If provided, the given value will be assumed as the reset value
@@ -493,7 +482,6 @@ class ULPIControlTranslator(Elaboratable):
 		with m.If(current_register_value != value):
 			m.d.usb += write_value.eq(value)
 
-
 	def populate_ulpi_registers(self, m):
 		''' Creates translator objects that map our control signals to ULPI registers. '''
 
@@ -507,7 +495,6 @@ class ULPIControlTranslator(Elaboratable):
 			self.chrg_vbus, Const(0), Const(0), self.use_external_vbus_indicator
 		)
 		self.add_composite_register(m, 0x0A, otg_control, reset_value = 0b00000110)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -561,7 +548,6 @@ class ULPIControlTranslator(Elaboratable):
 
 		return m
 
-
 class ULPITransmitTranslator(Elaboratable):
 	'''
 	Accepts UTMI transmit signals, and converts them into ULPI equivalents.
@@ -585,13 +571,11 @@ class ULPITransmitTranslator(Elaboratable):
 
 	''' # noqa: E101
 
-
 	# Prefix for ULPI transmit commands.
 	TRANSMIT_COMMAND = 0b01000000
 
 	# UTMI operating mode for 'bit stuffing disabled'.
 	OP_MODE_NO_BIT_STUFFING = 0b10
-
 
 	def __init__(self):
 
@@ -612,7 +596,6 @@ class ULPITransmitTranslator(Elaboratable):
 		self.ulpi_stp        = Signal()
 
 		self.busy            = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -650,11 +633,9 @@ class ULPITransmitTranslator(Elaboratable):
 							self.tx_ready.eq(self.ulpi_nxt)
 						]
 
-
 					# Once the PHY has accepted the command byte, we're ready to move into our main transmit state.
 					with m.If(self.ulpi_nxt):
 						m.next = 'TRANSMIT'
-
 
 			# TRANSMIT: we're in the body of a transmit; the UTMI and ULPI interface signals
 			# are roughly equivalent; we'll just pass them through.
@@ -684,9 +665,7 @@ class ULPITransmitTranslator(Elaboratable):
 					with m.Else():
 						m.d.comb += self.ulpi_data_out.eq(0)
 
-
 		return m
-
 
 class UTMITranslator(Elaboratable, UTMIInterface):
 	'''
@@ -750,7 +729,6 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 		properties.extend(name for name, _ in self.CONTROL_SIGNALS)
 
 		return properties
-
 
 	def __init__(self, *, ulpi, use_platform_registers = True, handle_clocking = True):
 		'''
@@ -818,7 +796,6 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 		#  Create a list of extra registers to be set.
 		self._extra_registers = {}
 
-
 	def add_extra_register(self, write_address, write_value, *, default_value = None):
 		'''
 		Adds logic to configure an extra ULPI register. Useful for configuring vendor registers.
@@ -851,7 +828,6 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 
 		self._extra_registers[write_address] = {'value': write_value, 'default': default_value}
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -874,7 +850,6 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 		else:
 			raw_clock_domain = 'usb'
 
-
 		# Add any extra registers provided by the user to our control translator.
 		for address, values in self._extra_registers.items():
 			control_translator.add_composite_register(m, address, values['value'], reset_value = values['default'])
@@ -885,7 +860,6 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 			transmit_translator.busy | \
 			control_translator.busy  | \
 			self.ulpi.dir
-
 
 		# If we're handling ULPI clocking, do so.
 		if self.handle_clocking:
@@ -908,11 +882,9 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 					' You may need to handle clocking manually.'
 				)
 
-
 		# Hook up our reset signal iff our ULPI bus has one.
 		if hasattr(self.ulpi, 'rst'):
 			m.d.comb += self.ulpi.rst.eq(ResetSignal(raw_clock_domain)),
-
 
 		# Connect our ULPI control signals to each of our subcomponents.
 		m.d.comb += [
@@ -960,7 +932,6 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 				self.ulpi.stp.eq(register_window.ulpi_stop)
 			]
 
-
 		# Connect our RxEvent status signals from our RxEvent decoder.
 		for signal_name, _ in self.RXEVENT_STATUS_SIGNALS:
 			signal = getattr(rxevent_decoder, signal_name)
@@ -971,7 +942,6 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 			signal = getattr(control_translator, signal_name)
 			m.d.comb += signal.eq(self.__dict__[signal_name])
 
-
 		# RxActive handler:
 		# A transmission starts when DIR goes high with NXT, or when an RxEvent indicates
 		# a switch from RxActive = 0 to RxActive = 1. A transmission stops when DIR drops low,
@@ -979,13 +949,11 @@ class UTMITranslator(Elaboratable, UTMIInterface):
 		dir_rising_edge = Rose(self.ulpi.dir.i, domain = 'usb')
 		dir_based_start = dir_rising_edge & self.ulpi.nxt
 
-
 		with m.If(~self.ulpi.dir | rxevent_decoder.rx_stop):
 			# TODO: this should probably also trigger if RxError
 			m.d.usb += self.rx_active.eq(0)
 		with m.Elif(dir_based_start | rxevent_decoder.rx_start):
 			m.d.usb += self.rx_active.eq(1)
-
 
 		# Data-out: we'll connect this almost direct through from our ULPI
 		# interface, as it's essentially the same as in the UTMI spec. We'll

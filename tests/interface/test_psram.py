@@ -21,7 +21,6 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 		# Create our HyperRAM interface...
 		return HyperRAMInterface(bus = self.ram_signals)
 
-
 	def assert_clock_pulses(self, times = 1):
 		''' Function that asserts we get a specified number of clock pulses. '''
 
@@ -30,7 +29,6 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 			self.assertEqual((yield self.ram_signals.clk), 1)
 			yield
 			self.assertEqual((yield self.ram_signals.clk), 0)
-
 
 	@sync_test_case
 	def test_register_write(self):
@@ -109,8 +107,6 @@ class TestHyperRAMInterface(SolGatewareTestCase):
 		yield
 		self.assertEqual((yield self.ram_signals.clk),      0)
 		self.assertEqual((yield self.ram_signals.dq.o),  0xEF)
-
-
 
 	@sync_test_case
 	def test_register_read(self):

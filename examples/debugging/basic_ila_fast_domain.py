@@ -5,7 +5,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 from luminary_fpga                     import create_ila_frontend
 
 from torii.hdl                         import Cat, Elaboratable, Module, Signal
@@ -32,11 +31,9 @@ class ILAExample(Elaboratable):
 		self.counter = Signal(28)
 		self.ila  = SyncSerialILA(signals = [self.counter], sample_depth = 32, domain = 'fast')
 
-
 	def interactive_display(self):
 		frontend = create_ila_frontend(self.ila)
 		frontend.interactive_display()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -65,7 +62,6 @@ class ILAExample(Elaboratable):
 
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	example = cli(ILAExample)

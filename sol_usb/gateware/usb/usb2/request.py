@@ -151,7 +151,6 @@ class USBSetupDecoder(Elaboratable):
 		self.timer         = InterpacketTimerInterface()
 		self.speed         = Signal(2)
 
-
 		self.packet        = SetupPacket()
 		self.ack           = Signal()
 
@@ -245,7 +244,6 @@ class USBSetupDecoder(Elaboratable):
 						# For other cases, handle the interpacket delay by waiting.
 						with m.Else():
 							m.next = 'INTERPACKET_DELAY'
-
 
 					# Otherwise, this isn't; and we should ignore it. [USB2, 8.5.3]
 					with m.Else():

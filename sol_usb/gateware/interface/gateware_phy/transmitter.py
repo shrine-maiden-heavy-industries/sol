@@ -88,13 +88,11 @@ class TxShifter(Elaboratable):
 
 		self.o_data   = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
 		shifter = Signal(self._width)
 		pos = Signal(self._width, reset = 0b1)
-
 
 		with m.If(self.i_enable):
 			empty = Signal()
@@ -110,13 +108,11 @@ class TxShifter(Elaboratable):
 					pos.eq(1 << (self._width-1)),
 				]
 
-
 		with m.If(self.i_clear):
 			m.d.usb += [
 				shifter.eq(0),
 				pos.eq(1)
 			]
-
 
 		m.d.comb += [
 			empty.eq(pos[0]),
@@ -125,8 +121,6 @@ class TxShifter(Elaboratable):
 		]
 
 		return m
-
-
 
 class TxNRZIEncoder(Elaboratable):
 	'''
@@ -181,7 +175,6 @@ class TxNRZIEncoder(Elaboratable):
 		self.o_usbn = Signal()
 		self.o_oe = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -203,7 +196,6 @@ class TxNRZIEncoder(Elaboratable):
 					# in J so the first output bit is K.
 					m.next = 'DK'
 
-
 			# the output line is in state J
 			with m.State('DJ'):
 				m.d.comb += [
@@ -220,7 +212,6 @@ class TxNRZIEncoder(Elaboratable):
 					with m.Else():
 						m.next = 'DK'
 
-
 			# the output line is in state K
 			with m.State('DK'):
 				m.d.comb += [
@@ -236,7 +227,6 @@ class TxNRZIEncoder(Elaboratable):
 						m.next = 'DK'
 					with m.Else():
 						m.next = 'DJ'
-
 
 			# first bit of the SE0 state
 			with m.State('SE0A'):
@@ -260,7 +250,6 @@ class TxNRZIEncoder(Elaboratable):
 				with m.If(self.i_valid):
 					m.next = 'EOPJ'
 
-
 			# drive the bus back to J before relinquishing control
 			with m.State('EOPJ'):
 				m.d.comb += [
@@ -272,7 +261,6 @@ class TxNRZIEncoder(Elaboratable):
 				with m.If(self.i_valid):
 					m.next = 'IDLE'
 
-
 		m.d.usb_io += [
 			self.o_oe.eq(oe),
 			self.o_usbp.eq(usbp),
@@ -280,7 +268,6 @@ class TxNRZIEncoder(Elaboratable):
 		]
 
 		return m
-
 
 class TxBitstuffer(Elaboratable):
 	'''
@@ -321,7 +308,6 @@ class TxBitstuffer(Elaboratable):
 		self.o_will_stall = Signal()
 		self.o_data = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 		stuff_bit = Signal()
@@ -339,7 +325,6 @@ class TxBitstuffer(Elaboratable):
 					with m.Else():
 						m.next = 'D0'
 
-
 			with m.State('D5'):
 				with m.If(self.i_data):
 
@@ -350,11 +335,9 @@ class TxBitstuffer(Elaboratable):
 				with m.Else():
 					m.next = 'D0'
 
-
 			with m.State('D6'):
 				m.d.comb += stuff_bit.eq(1)
 				m.next = 'D0'
-
 
 		m.d.comb += [
 			self.o_stall.eq(stuff_bit)
@@ -367,7 +350,6 @@ class TxBitstuffer(Elaboratable):
 			m.d.usb += self.o_data.eq(self.i_data)
 
 		return m
-
 
 class TxPipeline(Elaboratable):
 	def __init__(self):
@@ -386,7 +368,6 @@ class TxPipeline(Elaboratable):
 
 		self.fit_dat = Signal()
 		self.fit_oe  = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -411,7 +392,6 @@ class TxPipeline(Elaboratable):
 		state_data = Signal()
 		state_sync = Signal()
 
-
 		#
 		# Transmit gearing.
 		#
@@ -430,7 +410,6 @@ class TxPipeline(Elaboratable):
 		m.submodules.bitstuff = bitstuff
 
 		m.submodules.nrzi = nrzi = TxNRZIEncoder()
-
 
 		#
 		# Transmit controller.
@@ -473,7 +452,6 @@ class TxPipeline(Elaboratable):
 			bitstuff_valid_data.eq(~stall & shifter.o_get & self.i_oe),
 		]
 
-
 		with m.FSM(domain = 'usb'):
 
 			with m.State('IDLE'):
@@ -486,7 +464,6 @@ class TxPipeline(Elaboratable):
 				with m.Else():
 					m.d.usb += state_gray.eq(0b00)
 
-
 			with m.State('SEND_SYNC'):
 				m.d.usb += sync_pulse.eq(sync_pulse >> 1)
 
@@ -495,7 +472,6 @@ class TxPipeline(Elaboratable):
 					m.next = 'SEND_DATA'
 				with m.Else():
 					m.d.usb += state_gray.eq(0b01)
-
 
 			with m.State('SEND_DATA'):
 				with m.If(~self.i_oe & shifter.o_empty & ~bitstuff.o_stall):
@@ -511,7 +487,6 @@ class TxPipeline(Elaboratable):
 			with m.State('STUFF_LAST_BIT'):
 				m.d.usb += state_gray.eq(0b10)
 				m.next = 'IDLE'
-
 
 		# 48MHz domain
 		# NRZI encoding

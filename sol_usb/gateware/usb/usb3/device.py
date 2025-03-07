@@ -47,7 +47,6 @@ class USBSuperSpeedDevice(Elaboratable):
 		self.ep_tx_stream        = SuperSpeedStreamInterface()
 		self.ep_tx_length        = Signal(range(1024 + 1))
 
-
 	def add_endpoint(self, endpoint):
 		''' Adds an endpoint interface to the device.
 
@@ -58,7 +57,6 @@ class USBSuperSpeedDevice(Elaboratable):
 			:class:`EndpointInterface` attribute called ``interface``.
 		'''
 		self._endpoints.append(endpoint)
-
 
 	def add_standard_control_endpoint(self, descriptors: DeviceDescriptorCollection):
 		''' Adds a control endpoint with standard request handlers to the device.
@@ -81,8 +79,6 @@ class USBSuperSpeedDevice(Elaboratable):
 
 		return control_endpoint
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -101,7 +97,6 @@ class USBSuperSpeedDevice(Elaboratable):
 
 		# Stores the device's current configuration. Defaults to unconfigured.
 		configuration = Signal(8, reset = 0)
-
 
 		#
 		# Physical layer.
@@ -131,7 +126,6 @@ class USBSuperSpeedDevice(Elaboratable):
 			protocol.current_configuration.eq(configuration)
 		]
 
-
 		#
 		# Application layer.
 		#
@@ -160,13 +154,11 @@ class USBSuperSpeedDevice(Elaboratable):
 			protocol.endpoint_interface.handshakes_in.connect(endpoint_collection.handshakes_in)
 		]
 
-
 		# If an endpoint wants to update our address or configuration, accept the update.
 		with m.If(endpoint_collection.address_changed):
 			m.d.ss += address.eq(endpoint_collection.new_address)
 		with m.If(endpoint_collection.config_changed):
 			m.d.ss += configuration.eq(endpoint_collection.new_config)
-
 
 		# Finally, add each of our endpoints to this module and our multiplexer.
 		for endpoint in self._endpoints:
@@ -180,7 +172,6 @@ class USBSuperSpeedDevice(Elaboratable):
 			endpoint_mux.add_interface(endpoint.interface)
 			m.submodules[name] = endpoint
 
-
 		#
 		# Reset handling.
 		#
@@ -191,7 +182,6 @@ class USBSuperSpeedDevice(Elaboratable):
 				address.eq(0),
 				configuration.eq(0)
 			]
-
 
 		#
 		# Debug helpers.
@@ -205,6 +195,5 @@ class USBSuperSpeedDevice(Elaboratable):
 			self.ep_tx_stream.tap(protocol.endpoint_interface.tx, tap_ready = True),
 			self.ep_tx_length.eq(protocol.endpoint_interface.tx_length)
 		]
-
 
 		return m

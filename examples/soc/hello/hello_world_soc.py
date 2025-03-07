@@ -33,7 +33,6 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 
-
 	def elaborate(self, platform):
 		m = Module()
 		m.submodules.bridge = self._bridge
@@ -50,8 +49,6 @@ class LEDPeripheral(Peripheral, Elaboratable):
 
 		return m
 
-
-
 class SolCPUExample(Elaboratable):
 	''' Simple example of building a simple SoC around SOL. '''
 
@@ -63,7 +60,6 @@ class SolCPUExample(Elaboratable):
 
 		soc.add_rom('hello_world.bin', size = 0x1000)
 		soc.add_ram(0x1000)
-
 
 		# ...  add our UART peripheral...
 		self.uart_pins = Record([
@@ -81,7 +77,6 @@ class SolCPUExample(Elaboratable):
 		leds = LEDPeripheral()
 		soc.add_peripheral(leds)
 
-
 	def elaborate(self, platform):
 		m = Module()
 		m.submodules.soc = self.soc
@@ -94,7 +89,6 @@ class SolCPUExample(Elaboratable):
 		]
 
 		return m
-
 
 if __name__ == '__main__':
 	design = SolCPUExample()

@@ -47,7 +47,6 @@ def b(s):
 	'''
 	return int(s[::-1], 2)
 
-
 def encode_data(data):
 	'''
 	Converts array of 8-bit ints into string of 0s and 1s.
@@ -59,13 +58,11 @@ def encode_data(data):
 
 	return output
 
-
 def encode_pid(value):
 	if not isinstance(value, PID):
 		value = PID(value)
 	assert isinstance(value, PID), repr(value)
 	return encode_data([value.byte()])
-
 
 # width = 5 poly = 0x05 init = 0x1f refin = true refout = true xorout = 0x1f check = 0x19
 # residue = 0x06 name = 'CRC-5/USB'
@@ -80,7 +77,6 @@ def crc5(nibbles):
 	for n in nibbles:
 		reg.takeWord(n, 4)
 	return reg.getFinalValue() & 0x1f
-
 
 def crc5_token(addr, ep):
 	'''
@@ -98,7 +94,6 @@ def crc5_token(addr, ep):
 	reg.takeWord(ep, 4)
 	return reg.getFinalValue()
 
-
 def crc5_sof(v):
 	'''
 	>>> hex(crc5_sof(1429))
@@ -110,7 +105,6 @@ def crc5_sof(v):
 	reg.takeWord(v, 11)
 	return eval('0b' + bin(reg.getFinalValue() | 0x10000000)[::-1][:5])
 
-
 def crc16(input_data):
 	# width = 16 poly = 0x8005 init = 0xffff refin = true refout = true xorout = 0xffff
 	# check = 0xb4c8 residue = 0xb001 name = 'CRC-16/USB'
@@ -121,7 +115,6 @@ def crc16(input_data):
 		reg.takeWord(d, 8)
 	crc16 = reg.getFinalValue()
 	return [crc16 & 0xff, (crc16 >> 8) & 0xff]
-
 
 def nrzi(data, cycles = 4, init = 'J'):
 	'''Converts string of 0s and 1s into NRZI encoded string.
@@ -186,14 +179,11 @@ def nrzi(data, cycles = 4, init = 'J'):
 
 	return output
 
-
 def sync():
 	return 'kjkjkjkk'
 
-
 def eop():
 	return '__j'
-
 
 def wrap_packet(data, cycles = 4):
 	'''Add the sync + eop sections and do nrzi encoding.
@@ -209,7 +199,6 @@ def wrap_packet(data, cycles = 4):
 
 	'''
 	return nrzi(sync() + data + eop(), cycles)
-
 
 def token_packet(pid, addr, endp):
 	'''Create a token packet for testing.
@@ -254,7 +243,6 @@ def token_packet(pid, addr, endp):
 	assert len(token) == 24, token
 	return token
 
-
 def data_packet(pid, payload):
 	'''Create a data packet for testing.
 
@@ -273,7 +261,6 @@ def data_packet(pid, payload):
 	payload = list(payload)
 	return encode_pid(pid) + encode_data(payload + crc16(payload))
 
-
 def handshake_packet(pid):
 	''' Create a handshake packet for testing.
 
@@ -287,7 +274,6 @@ def handshake_packet(pid):
 	'''
 	assert pid in (PID.ACK, PID.NAK, PID.STALL), pid
 	return encode_pid(pid)
-
 
 def sof_packet(frame):
 	'''Create a SOF packet for testing.
@@ -319,7 +305,6 @@ def sof_packet(frame):
 	data[0] = rev_byte(data[0])
 	data[1] = rev_byte(data[1])
 	return encode_pid(PID.SOF) + encode_data(data)
-
 
 def diff(value):
 	'''Convert J/K encoding into bits for P/N diff pair.
@@ -353,7 +338,6 @@ def diff(value):
 		else:
 			assert False, 'Unknown value: %s' % v
 	return usbp, usbn
-
 
 def undiff(usbp, usbn):
 	'''Convert P/N diff pair bits into J/K encoding.
@@ -448,7 +432,6 @@ def undiff(usbp, usbn):
 			'01': 'K',
 		}[p + n])
 	return ''.join(value)
-
 
 if __name__ == '__main__':
 	import doctest

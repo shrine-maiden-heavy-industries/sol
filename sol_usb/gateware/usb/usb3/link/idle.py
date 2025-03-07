@@ -50,7 +50,6 @@ class IdleHandshakeHandler(Elaboratable):
 		self.idle_detected           = Signal()
 		self.idle_handshake_complete = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -90,7 +89,6 @@ class IdleHandshakeHandler(Elaboratable):
 			# and we've seen at least eight byte
 			send_condition_met = enable_counter == self.RX_CYCLES_REQUIRED
 			m.d.comb += self.idle_handshake_complete.eq(seen_idle & send_condition_met)
-
 
 		# When we're not idle, clear all of our state.
 		with m.Else():

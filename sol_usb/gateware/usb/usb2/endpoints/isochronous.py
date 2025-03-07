@@ -77,7 +77,6 @@ class USBIsochronousInEndpoint(Elaboratable):
 		self.next_address   = Signal.like(self.address)
 		self.value          = Signal(8)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -119,7 +118,6 @@ class USBIsochronousInEndpoint(Elaboratable):
 			with m.Else():
 				m.d.usb += next_data_pid.eq(0)
 
-
 		m.d.comb += [
 			# Always pass our ``value`` directly through to our transmitter.
 			# We'll provide ``address``/``next_address`` to our user code to help
@@ -156,7 +154,6 @@ class USBIsochronousInEndpoint(Elaboratable):
 					# Otherwise, we'll send a ZLP.
 					with m.Else():
 						m.next = 'SEND_ZLP'
-
 
 			# SEND_DATA -- our primary data-transmission state; handles packet transmission
 			with m.State('SEND_DATA'):
@@ -205,7 +202,6 @@ class USBIsochronousInEndpoint(Elaboratable):
 							bytes_left_in_packet.eq(self._max_packet_size)
 						]
 						m.next = 'IDLE'
-
 
 			# SEND_ZLP -- sends a zero-length packet, and then return to idle.
 			with m.State('SEND_ZLP'):

@@ -40,7 +40,6 @@ class ECP5ConfigurationFlashInterface(Elaboratable):
 		self.sdo = Signal()
 		self.cs  = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 

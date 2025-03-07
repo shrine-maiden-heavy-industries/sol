@@ -50,7 +50,6 @@ class GatewarePHY(Elaboratable):
 	rx_complete: Signal(), output:
 		strobe that goes high for one cycle when a packet rx is complete
 
-
 	line_state: Signal(2), output
 		Indicates the current state of the D+ and D- lines. Matches the UTMI specification values,
 		where 0 = SE0, 1 = K, and 2 = J.
@@ -117,10 +116,8 @@ class GatewarePHY(Elaboratable):
 		self.dp_pulldown = Signal()
 		self.dm_pulldown = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
-
 
 		#
 		# General state signals.
@@ -142,7 +139,6 @@ class GatewarePHY(Elaboratable):
 				self.session_end.eq(0)
 			]
 
-
 		#
 		# General control signals.
 		#
@@ -155,7 +151,6 @@ class GatewarePHY(Elaboratable):
 		if hasattr(self._io, 'pulldown'):
 			m.d.comb += self._io.pullup.o.eq(self.dm_pulldown | self.dp_pulldown)
 
-
 		#
 		# Transmitter
 		#
@@ -163,7 +158,6 @@ class GatewarePHY(Elaboratable):
 		in_non_encoding_mode = (self.op_mode == self.OP_MODE_NO_ENCODING)
 
 		m.submodules.transmitter = transmitter = TxPipeline()
-
 
 		# When we're in normal mode, we'll drive the USB bus with our standard USB transmitter data.
 		with m.If(in_normal_mode):
@@ -182,7 +176,6 @@ class GatewarePHY(Elaboratable):
 				self._io.d_p.oe.eq(transmitter.o_oe),
 				self._io.d_n.oe.eq(transmitter.o_oe),
 			]
-
 
 		# When we're in non-encoding mode ("disable bitstuff and NRZI"),
 		# we'll output to D+ and D- directly when tx_valid is true.
@@ -227,6 +220,5 @@ class GatewarePHY(Elaboratable):
 			self.rx_error.eq(receiver.o_receive_error)
 		]
 		m.d.usb += self.rx_complete.eq(receiver.o_pkt_end)
-
 
 		return m

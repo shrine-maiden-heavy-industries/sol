@@ -58,7 +58,6 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 		self.have = regs.csr(1, 'r', desc = '`1` iff data is available in the FIFO.')
 		self.pend = regs.csr(1, 'r', desc = '`1` iff an interrupt is pending')
 
-
 		# TODO: figure out where this should actually go to match ValentyUSB as much as possible
 		self._address = regs.csr(8, 'rw', desc = '''
 			Controls the current device's USB address. Should be written after a SET_ADDRESS request is
@@ -85,7 +84,6 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 		self.irq        = self._bridge.irq
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -143,7 +141,6 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 				interface.new_address.eq(self._address.w_data),
 			]
 
-
 		#
 		# Status and interrupts.
 		#
@@ -155,15 +152,12 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 
 		return DomainRenamer({'sync': 'usb'})(m)
 
-
-
 class InFIFOInterface(Peripheral, Elaboratable):
 	''' IN component of our `eptri`-equivalent interface.
 
 	Implements the FIFO that handles `eptri` IN requests. This FIFO collects USB data, and
 	transmits it in response to an IN token. Like all `eptri` interfaces; it can handle only one
 	pending packet at a time.
-
 
 	Attributes
 	-----
@@ -172,7 +166,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 		Our primary interface to the core USB device hardware.
 
 	'''
-
 
 	def __init__(self, max_packet_size = 512):
 		'''
@@ -245,8 +238,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 		self.bus        = self._bridge.bus
 		self.irq        = self._bridge.irq
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 		m.submodules.bridge = self._bridge
@@ -259,7 +250,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 		#
 		# Core FIFO.
 		#
-
 
 		# Create our FIFO; and set it to be cleared whenever the user requests.
 		m.submodules.fifo = fifo = ResetInserter(self.reset.w_stb)(
@@ -288,7 +278,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 		with m.Elif(decrement & ~increment):
 			m.d.usb += bytes_in_fifo.eq(bytes_in_fifo - 1)
 
-
 		#
 		# Register updates.
 		#
@@ -311,7 +300,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 					endpoint_data_pid[i].eq(0),
 				]
 
-
 		# Set the value of our endpoint `stall` based on our `stall` register...
 		with m.If(self.stall.w_stb):
 			m.d.usb += endpoint_stalled[self.epno.r_data].eq(self.stall.w_data)
@@ -324,7 +312,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 				endpoint_stalled[token.endpoint].eq(0),
 				endpoint_data_pid[token.endpoint].eq(1)
 			]
-
 
 		#
 		# Status registers.
@@ -350,7 +337,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 		# Otherwise, toggle our expected DATA PID once we receive a complete packet.
 		with m.Elif(packet_complete):
 			m.d.usb += endpoint_data_pid[token.endpoint].eq(~endpoint_data_pid[token.endpoint])
-
 
 		#
 		# Control logic.
@@ -379,7 +365,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 					# Otherwise, NAK.
 					with m.Else():
 						m.d.comb += handshakes_out.nak.eq(1)
-
 
 				# If the user request that we send data, 'prime' the endpoint.
 				# This means we have data to send, but are just waiting for an IN token.
@@ -462,8 +447,6 @@ class InFIFOInterface(Peripheral, Elaboratable):
 
 		return DomainRenamer({'sync': 'usb'})(m)
 
-
-
 class OutFIFOInterface(Peripheral, Elaboratable):
 	''' OUT component of our `eptri`
 
@@ -530,7 +513,6 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 			setting their `stall` bits.
 		''')
 
-
 		self.have = regs.csr(1, 'r', desc = '`1` iff data is available in the FIFO.')
 		self.pend = regs.csr(1, 'r', desc = '`1` iff an interrupt is pending')
 
@@ -552,7 +534,6 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 			additional packets.
 		''')
 
-
 		#
 		# I/O port
 		#
@@ -566,7 +547,6 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 		self.irq        = self._bridge.irq
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -697,7 +677,6 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		# (unless the user happens to be overriding it by writing to the PID register).
 		with m.If(ack_receive & ~is_redundant_packet & ~self.pid.w_stb):
 			m.d.usb += endpoint_data_pid[token.endpoint].eq(~endpoint_data_pid[token.endpoint])
-
 
 		#
 		# Interrupt/status

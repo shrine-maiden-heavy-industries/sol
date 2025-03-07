@@ -23,14 +23,12 @@ class UTMIOperatingMode:
 
 	NO_SYNC_OR_EOP            = 3
 
-
 class UTMITerminationSelect:
 	''' Enumeration that specifies meanings of the UTMI TermSelect bit. '''
 
 	HS_NORMAL    = 0
 	HS_CHIRP     = 1
 	LS_FS_NORMAL = 1
-
 
 class UTMITransmitInterface(Record):
 	''' Interface present on hardware that transmits onto a UTMI bus. '''
@@ -51,7 +49,6 @@ class UTMITransmitInterface(Record):
 	def __init__(self):
 		super().__init__(self.LAYOUT)
 
-
 	def attach(self, utmi_bus):
 		''' Returns a list of connection fragments connecting this interface to the provided bus.
 
@@ -65,7 +62,6 @@ class UTMITransmitInterface(Record):
 
 			self.ready.eq(utmi_bus.tx_ready),
 		]
-
 
 class UTMIInterfaceMultiplexer(OneHotMultiplexer):
 	''' Gateware that merges a collection of UTMITransmitInterfaces into a single interface.
@@ -83,9 +79,6 @@ class UTMIInterfaceMultiplexer(OneHotMultiplexer):
 			or_signals= ('valid',),
 			pass_signals = ('ready',)
 		)
-
-
-
 
 class UTMIInterface(Record):
 	''' UTMI+-standardized interface. Intended mostly as a simulation aid.'''

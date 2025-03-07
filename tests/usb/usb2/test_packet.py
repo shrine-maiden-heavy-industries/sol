@@ -59,7 +59,6 @@ class USBPacketizerTest(SolGatewareTestCase):
 		if cycle_after:
 			yield
 
-
 class USBTokenDetectorTest(USBPacketizerTest):
 	FRAGMENT_UNDER_TEST = USBTokenDetector
 	dut: USBTokenDetector
@@ -95,7 +94,6 @@ class USBTokenDetectorTest(USBPacketizerTest):
 		yield
 		self.assertEqual((yield dut.interface.new_token), 0)
 
-
 	@usb_domain_test_case
 	def test_valid_start_of_frame(self):
 		dut = self.dut
@@ -107,7 +105,6 @@ class USBTokenDetectorTest(USBPacketizerTest):
 
 		# Validate that we got the expected address / endpoint.
 		self.assertEqual((yield dut.interface.frame), 0x53a)
-
 
 	@usb_domain_test_case
 	def test_token_to_other_device(self):
@@ -123,7 +120,6 @@ class USBTokenDetectorTest(USBPacketizerTest):
 		# Validate that we did not count this as a token received,
 		# as it wasn't for us.
 		self.assertEqual((yield dut.interface.new_token), 0)
-
 
 class USBHandshakeDetectorTest(USBPacketizerTest):
 	FRAGMENT_UNDER_TEST = USBHandshakeDetector
@@ -148,7 +144,6 @@ class USBHandshakeDetectorTest(USBPacketizerTest):
 		yield from self.provide_packet(0b10010110)
 		self.assertEqual((yield self.dut.detected.nyet), 1)
 
-
 class USBDataPacketReceiverTest(USBPacketizerTest):
 	FRAGMENT_UNDER_TEST = USBDataPacketReceiver
 	FRAGMENT_ARGUMENTS  = {'standalone': True}
@@ -157,7 +152,6 @@ class USBDataPacketReceiverTest(USBPacketizerTest):
 	def test_data_receive(self):
 		dut = self.dut	# noqa: F841
 		stream = self.dut.stream
-
 
 		#    0xC3,                                           # PID: Data
 		#    0x00, 0x05, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, # DATA
@@ -207,7 +201,6 @@ class USBDataPacketReceiverTest(USBPacketizerTest):
 		self.assertEqual((yield stream.next),       1)
 		self.assertEqual((yield stream.payload), 0x00)
 
-
 		# When we stop our packet, we should see our stream stop as well.
 		# The last two bytes, our CRC, shouldn't be included.
 		yield from self.end_packet()
@@ -220,7 +213,6 @@ class USBDataPacketReceiverTest(USBPacketizerTest):
 		# After an inter-packet delay, we should see that we're ready to respond.
 		yield from self.advance_cycles(9)
 		self.assertEqual((yield self.dut.ready_for_response), 0)
-
 
 	@usb_domain_test_case
 	def test_zlp(self):
@@ -244,13 +236,11 @@ class USBDataPacketReceiverTest(USBPacketizerTest):
 
 		self.assertEqual((yield self.dut.packet_complete),  1)
 
-
 class USBDataPacketDeserializerTest(USBPacketizerTest):
 	FRAGMENT_UNDER_TEST = USBDataPacketDeserializer
 
 	def instantiate_dut(self):
 		return super().instantiate_dut(extra_arguments = {'create_crc_generator': True})
-
 
 	@usb_domain_test_case
 	def test_packet_rx(self):
@@ -267,7 +257,6 @@ class USBDataPacketDeserializerTest(USBPacketizerTest):
 		self.assertEqual((yield self.dut.packet[1]),  0b01000101)
 		self.assertEqual((yield self.dut.packet[2]),  0b01100111)
 		self.assertEqual((yield self.dut.packet[3]),  0b10001001)
-
 
 	@usb_domain_test_case
 	def test_captured_usb_sample(self):
@@ -291,7 +280,6 @@ class USBDataPacketDeserializerTest(USBPacketizerTest):
 		# Ensure we've gotten a new packet.
 		self.assertEqual((yield self.dut.new_packet), 0, 'accepted invalid CRC!')
 
-
 class USBDataPacketGeneratorTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
@@ -302,7 +290,6 @@ class USBDataPacketGeneratorTest(SolGatewareTestCase):
 	def initialize_signals(self):
 		# Model our PHY is always accepting data, by default.
 		yield self.dut.tx.ready.eq(1)
-
 
 	@usb_domain_test_case
 	def test_simple_data_generation(self):
@@ -378,7 +365,6 @@ class USBDataPacketGeneratorTest(SolGatewareTestCase):
 		yield
 		self.assertEqual((yield tx.valid), 0)
 
-
 	@usb_domain_test_case
 	def test_single_byte(self):
 		stream = self.dut.stream
@@ -396,7 +382,6 @@ class USBDataPacketGeneratorTest(SolGatewareTestCase):
 		yield stream.valid.eq(0)
 
 		yield from self.advance_cycles(10)
-
 
 	@usb_domain_test_case
 	def test_zlp_generation(self):
@@ -434,13 +419,11 @@ class USBDataPacketGeneratorTest(SolGatewareTestCase):
 		self.assertEqual((yield tx.valid), 1)
 		self.assertEqual((yield tx.data),  0x0)
 
-
 class USBHandshakeGeneratorTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
 
 	FRAGMENT_UNDER_TEST  = USBHandshakeGenerator
-
 
 	@usb_domain_test_case
 	def test_ack_generation(self):
@@ -473,7 +456,6 @@ class USBHandshakeGeneratorTest(SolGatewareTestCase):
 		yield
 		self.assertEqual((yield dut.tx.valid), 0)
 
-
 	@usb_domain_test_case
 	def test_already_ready(self):
 		dut = self.dut
@@ -497,7 +479,6 @@ class USBHandshakeGeneratorTest(SolGatewareTestCase):
 		yield
 		self.assertEqual((yield dut.tx.valid), 0)
 
-
 class USBInterpacketTimerTest(SolGatewareTestCase):
 	SYNC_CLOCK_FREQUENCY = None
 	USB_CLOCK_FREQUENCY = 60e6
@@ -512,11 +493,9 @@ class USBInterpacketTimerTest(SolGatewareTestCase):
 
 		return dut
 
-
 	def initialize_signals(self):
 		# Assume FS for our tests, unless overridden.
 		yield self.dut.speed.eq(USBSpeed.FULL)
-
 
 	@usb_domain_test_case
 	def test_resets_and_delays(self):

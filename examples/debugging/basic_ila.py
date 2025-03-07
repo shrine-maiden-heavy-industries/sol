@@ -25,7 +25,6 @@ class ILAExample(Elaboratable):
 		frontend = create_ila_frontend(self.ila)
 		frontend.emit_vcd(filename)
 
-
 	def elaborate(self, platform):
 		m = Module()
 		m.submodules += self.ila
@@ -49,7 +48,6 @@ class ILAExample(Elaboratable):
 
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	example = cli(ILAExample)

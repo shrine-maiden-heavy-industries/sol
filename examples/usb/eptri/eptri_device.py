@@ -5,7 +5,6 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 import logging                                  as log
 import os.path
 import sys
@@ -24,7 +23,6 @@ from sol_usb.gateware.usb.usb2.interfaces.eptri import InFIFOInterface, OutFIFOI
 CLOCK_FREQUENCIES_MHZ = {
 	'sync': 60
 }
-
 
 class EptriDeviceExample(Elaboratable):
 	''' Example of an Eptri-equivalent USB device built with SOL. '''
@@ -52,7 +50,6 @@ class EptriDeviceExample(Elaboratable):
 		self.timer = timer = TimerPeripheral(24)
 		soc.add_peripheral(timer)
 
-
 		# ... a core USB controller ...
 		self.controller = USBDeviceController()
 		soc.add_peripheral(self.controller)
@@ -66,8 +63,6 @@ class EptriDeviceExample(Elaboratable):
 
 		self.out_ep = OutFIFOInterface()
 		soc.add_peripheral(self.out_ep, as_submodule = False)
-
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -100,7 +95,6 @@ class EptriDeviceExample(Elaboratable):
 		usb.add_endpoint(self.in_ep)
 		usb.add_endpoint(self.out_ep)
 		return m
-
 
 if __name__ == '__main__':
 

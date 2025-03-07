@@ -56,7 +56,6 @@ class LEDRequestHandler(USBRequestHandler):
 					with m.If(interface.status_requested):
 						m.d.comb += self.send_zlp()
 
-
 				with m.Case():
 
 					#
@@ -66,8 +65,6 @@ class LEDRequestHandler(USBRequestHandler):
 						m.d.comb += interface.handshakes_out.stall.eq(1)
 
 				return m
-
-
 
 class USBVendorDeviceExample(Elaboratable):
 	'''
@@ -97,7 +94,6 @@ class USBVendorDeviceExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -109,7 +105,6 @@ class USBVendorDeviceExample(Elaboratable):
 					e.wMaxPacketSize   = 64
 
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -131,9 +126,7 @@ class USBVendorDeviceExample(Elaboratable):
 		# Connect our device by default.
 		m.d.comb += usb.connect.eq(1)
 
-
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBVendorDeviceExample)

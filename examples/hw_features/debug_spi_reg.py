@@ -15,7 +15,6 @@ from sol_usb.gateware.utils.cdc     import synchronize
 class DebugSPIRegisterExample(Elaboratable):
 	''' Gateware meant to demonstrate use of the Debug Controller's register interface. '''
 
-
 	def elaborate(self, platform):
 		m = Module()
 		board_spi = platform.request('debug_spi')
@@ -38,9 +37,7 @@ class DebugSPIRegisterExample(Elaboratable):
 		spi = synchronize(m, board_spi)
 		m.d.comb += spi_registers.spi.connect(spi)
 
-
 		return m
-
 
 if __name__ == '__main__':
 	cli(DebugSPIRegisterExample)

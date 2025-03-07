@@ -9,7 +9,6 @@
 
 ''' Soft PIPE backend for the Xilinx 7 Series GTP transceivers. '''
 
-
 from torii.hdl     import *
 from torii.lib.cdc import FFSynchronizer
 
@@ -20,7 +19,6 @@ from .xc7          import (
 )
 
 Open = Signal
-
 
 class GTPQuadPLL(Elaboratable):
 	def __init__(self, refclk, refclk_freq, linerate, channel = 0):
@@ -44,7 +42,6 @@ class GTPQuadPLL(Elaboratable):
 		self.reset   = Signal()
 		self.lock    = Signal()
 		self.drp     = DRPInterface()
-
 
 	def elaborate(self, platform):
 		gtpe2_params = dict(
@@ -103,7 +100,6 @@ class GTPQuadPLL(Elaboratable):
 			for name, value in gtpe2_params.items()
 		})
 
-
 	@staticmethod
 	def compute_config(refclk_freq, linerate):
 		for n1 in 4, 5:
@@ -150,8 +146,6 @@ class GTPQuadPLL(Elaboratable):
 	LINERATE	= CLKOUT x 2 / D = {config['vco_freq']/1e9}GHz x 2 / {config['d']}
 				= {config['linerate']/1e9}GHz
 '''
-
-
 
 class GTPChannel(Elaboratable):
 	def __init__(self, qpll, tx_pads, rx_pads, ss_clock_frequency):
@@ -202,7 +196,6 @@ class GTPChannel(Elaboratable):
 		self.rx_status      = Signal(3)
 		self.rx_elec_idle   = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -247,7 +240,6 @@ class GTPChannel(Elaboratable):
 		# from the properties of the sequences.
 		m.submodules.oob_clkdiv = oob_clkdiv = GTOOBClockDivider(self._ss_clock_frequency)
 
-
 		#
 		# Initialization.
 		#
@@ -272,7 +264,6 @@ class GTPChannel(Elaboratable):
 			self.rx_ready.eq(defer_rst.done & rx_rst_done),
 		]
 
-
 		#
 		# Dynamic reconfiguration.
 		#
@@ -293,7 +284,6 @@ class GTPChannel(Elaboratable):
 		drp_arbiter.add_interface(rx_pma_rst.drp)
 		drp_arbiter.add_interface(rx_term.drp)
 		drp_arbiter.add_interface(self.drp)
-
 
 		#
 		# Core SerDes instantiation.
@@ -927,8 +917,6 @@ class GTPChannel(Elaboratable):
 
 		return m
 
-
-
 class XC7GTPSerDesPIPE(PIPEInterface, Elaboratable):
 	''' Wrapper around the core GTP SerDes that adapts it to the PIPE interface.
 
@@ -972,7 +960,6 @@ class XC7GTPSerDesPIPE(PIPEInterface, Elaboratable):
 		self._refclk_frequency   = refclk_frequency
 		self._ss_clock_frequency = ss_clock_frequency
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -998,7 +985,6 @@ class XC7GTPSerDesPIPE(PIPEInterface, Elaboratable):
 			ClockSignal('pipe')     .eq(serdes.pclk),
 		]
 
-
 		#
 		# LFPS generation.
 		#
@@ -1007,7 +993,6 @@ class XC7GTPSerDesPIPE(PIPEInterface, Elaboratable):
 			serdes.tx_gpio_en.eq(lfps_generator.tx_gpio_en),
 			serdes.tx_gpio.eq(lfps_generator.tx_gpio),
 		]
-
 
 		#
 		# PIPE interface signaling.

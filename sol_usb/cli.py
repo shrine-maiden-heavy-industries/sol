@@ -141,7 +141,6 @@ def cli(
 			help    = 'Print the address firmware should be loaded at to stdout then exit.'
 		)
 
-
 	# Disable UnusedElaboarable warnings until we decide to build things.
 	# This is sort of cursed, but it keeps us categorically from getting UnusedElaborable warnings
 	# if we're not actually buliding.
@@ -165,7 +164,6 @@ def cli(
 	if args.flash:
 		args.erase = False
 		args.upload = False
-
 
 	# If we've been asked to generate a C header, generate -only- that.
 	if cli_soc and args.generate_c_header:
@@ -208,7 +206,6 @@ def cli(
 		# This allows it to e.g. build a BIOS or equivalent firmware.
 		if cli_soc and hasattr(cli_soc, 'build'):
 			cli_soc.build(build_dir = build_dir)
-
 
 		# Now that we're actually building, re-enable Unused warnings.
 		MustUse._MustUse__silence = False

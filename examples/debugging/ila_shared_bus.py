@@ -34,7 +34,6 @@ class ILASharedBusExample(Elaboratable):
 		self.toggle  = Signal()
 		self.ila  = SyncSerialILA(signals = [self.counter, self.toggle], sample_depth = 32)
 
-
 	def elaborate(self, platform):
 		m = Module()
 		m.submodules += self.ila
@@ -91,7 +90,6 @@ class ILASharedBusExample(Elaboratable):
 
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	example = cli(ILASharedBusExample)

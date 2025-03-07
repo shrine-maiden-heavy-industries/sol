@@ -18,7 +18,6 @@ class DataPacketReceiverTest(SolSSGatewareTestCase):
 			yield self.dut.sink.ctrl.eq(ctrl)
 			yield
 
-
 	@ss_domain_test_case
 	def test_unaligned_1B_packet_receive(self):
 
@@ -41,7 +40,6 @@ class DataPacketReceiverTest(SolSSGatewareTestCase):
 
 		self.assertEqual((yield self.dut.packet_good), 1)
 
-
 	@ss_domain_test_case
 	def test_unaligned_2B_packet_receive(self):
 
@@ -63,7 +61,6 @@ class DataPacketReceiverTest(SolSSGatewareTestCase):
 		)
 
 		self.assertEqual((yield self.dut.packet_good), 1)
-
 
 	@ss_domain_test_case
 	def test_aligned_packet_receive(self):

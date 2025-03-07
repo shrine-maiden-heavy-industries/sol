@@ -15,7 +15,6 @@ from ..usb2.request import USBRequestHandler
 class ControlRequestHandler(USBRequestHandler):
 	''' Pure-gateware USB control request handler. '''
 
-
 	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition = 0):
 		'''
 		Fills in the current state with a request handler meant to set a register.
@@ -53,7 +52,6 @@ class ControlRequestHandler(USBRequestHandler):
 			# ... and then return to idle.
 			m.next = 'IDLE'
 
-
 	def handle_simple_data_request(self, m, transmitter, data, length = 1):
 		'''
 		Fills in a given current state with a request that returns a given piece of data.
@@ -85,7 +83,6 @@ class ControlRequestHandler(USBRequestHandler):
 		with m.If(self.interface.status_requested):
 			m.d.comb += self.interface.handshakes_out.ack.eq(1)
 			m.next = 'IDLE'
-
 
 if __name__ == '__main__':
 	unittest.main(warnings = 'ignore')

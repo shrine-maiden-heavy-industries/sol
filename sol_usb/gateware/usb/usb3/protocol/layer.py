@@ -35,7 +35,6 @@ class USB3ProtocolLayer(Elaboratable):
 		# Current timestamp.
 		self.bus_interval          = Signal(14)
 
-
 	def elaborate(self, platform):
 		m = Module()
 		link = self._link
@@ -51,7 +50,6 @@ class USB3ProtocolLayer(Elaboratable):
 		# Many-to-one Header multiplexer.
 		m.submodules.hp_mux = hp_mux = HeaderQueueArbiter()
 		m.d.comb += link.header_sink.header_eq(hp_mux.source)
-
 
 		#
 		# Link Management Packet Handler
@@ -76,13 +74,11 @@ class USB3ProtocolLayer(Elaboratable):
 			self.bus_interval.eq(itp_handler.bus_interval_counter)
 		]
 
-
 		#
 		# Data Packet Handlers
 		#
 		m.submodules.data_header_receiver = data_header_receiver = DataHeaderReceiver()
 		hp_demux.add_consumer(data_header_receiver.header_sink)
-
 
 		#
 		# Transaction Packet handlers.
@@ -98,8 +94,6 @@ class USB3ProtocolLayer(Elaboratable):
 		# Receiver
 		m.submodules.tp_receiver = tp_receiver = TransactionPacketReceiver()
 		hp_demux.add_consumer(tp_receiver.header_sink)
-
-
 
 		#
 		# Endpoint Interfacing
@@ -124,6 +118,5 @@ class USB3ProtocolLayer(Elaboratable):
 			tp_generator.interface.connect(endpoint_interface.handshakes_out),
 			tp_receiver.interface.connect(endpoint_interface.handshakes_in)
 		]
-
 
 		return m

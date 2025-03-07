@@ -33,7 +33,6 @@ class HeaderPacket(Record):
 		''' Returns the selection of bits in DW0 that encode the packet type. '''
 		return self.dw0[0:5]
 
-
 	@classmethod
 	def get_layout(cls):
 		''' Computes the layout for the HeaderPacket (sub)class. '''
@@ -44,11 +43,8 @@ class HeaderPacket(Record):
 			*cls.LINK_LAYER_FIELDS
 		]
 
-
 	def __init__(self):
 		super().__init__(self.get_layout(), name = self.__class__.__name__)
-
-
 
 class HeaderQueue(Record):
 	''' Record representing a header, and stream-link control signals.
@@ -70,11 +66,9 @@ class HeaderQueue(Record):
 			('ready', 1),
 		], name = 'HeaderQueue')
 
-
 	def get_type(self):
 		''' Returns the selection of bits in the current header's that encode the packet type. '''
 		return self.header.dw0[0:5]
-
 
 	def header_eq(self, other):
 		''' Connects a producer (self) up to a consumer. '''
@@ -84,12 +78,9 @@ class HeaderQueue(Record):
 			other.ready.eq(self.ready)
 		]
 
-
 	def stream_eq(self, other):
 		''' Alias for ``header_eq`` that ensures we share a stream interface. '''
 		return self.header_eq(other)
-
-
 
 class HeaderQueueArbiter(StreamArbiter):
 	''' Gateware that accepts a collection of header queues, and merges them into a single queue.
@@ -105,12 +96,9 @@ class HeaderQueueArbiter(StreamArbiter):
 	def __init__(self):
 		super().__init__(stream_type = HeaderQueue, domain = 'ss')
 
-
 	def add_producer(self, interface: HeaderQueue):
 		''' Adds a HeaderQueue interface that will add packets into this mux. '''
 		self.add_stream(interface)
-
-
 
 class HeaderQueueDemultiplexer(Elaboratable):
 	''' Gateware that accepts a single Header Queue, and routes it to multiple modules.
@@ -134,11 +122,9 @@ class HeaderQueueDemultiplexer(Elaboratable):
 		#
 		self.sink = HeaderQueue()
 
-
 	def add_consumer(self, interface: HeaderQueue):
 		''' Adds a HeaderQueue interface that will consume packets from this mux. '''
 		self._consumers.append(interface)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -153,6 +139,5 @@ class HeaderQueueDemultiplexer(Elaboratable):
 		# OR together all of the ``ready`` signals to produce our multiplex'd ready.
 		sink_ready = Cat(c.ready for c in self._consumers).any()
 		m.d.comb += self.sink.ready.eq(sink_ready)
-
 
 		return m

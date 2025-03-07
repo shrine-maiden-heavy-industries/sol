@@ -19,17 +19,14 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 			sample_depth = 32
 		)
 
-
 	def initialize_signals(self):
 		yield self.input_a.eq(0)
 		yield self.input_b.eq(0)
 		yield self.input_c.eq(0)
 
-
 	def provide_all_signals(self, value):
 		all_signals = Cat(self.input_a, self.input_b, self.input_c)
 		yield all_signals.eq(value)
-
 
 	def assert_sample_value(self, address, value):
 		''' Helper that asserts a ILA sample has a given value. '''
@@ -47,7 +44,6 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 		# Generate an appropriate exception.
 		actual_value = (yield self.dut.captured_sample)
 		raise AssertionError(f'assertion failed: at address 0x{address:08x}: {actual_value:08x} != {value:08x} (expected)')
-
 
 	@sync_test_case
 	def test_sampling(self):
@@ -102,7 +98,6 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 		# All of those reads shouldn't change our completeness.
 		self.assertEqual((yield self.dut.sampling), 0)
 		self.assertEqual((yield self.dut.complete), 1)
-
 
 class SyncSerialReadoutILATest(SPIGatewareTestCase):
 

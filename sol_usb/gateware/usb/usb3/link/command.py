@@ -54,7 +54,6 @@ class LinkCommandDetector(Elaboratable):
 		# Status strobes.
 		self.new_command   = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -77,7 +76,6 @@ class LinkCommandDetector(Elaboratable):
 				is_lcstart = stream_matches_symbols(self.sink, SLC, SLC, SLC, EPF)
 				with m.If(is_lcstart):
 					m.next = 'PARSE_COMMAND'
-
 
 			# PARSE_COMMAND -- our previous data word contained LCSTART; so this word contains our
 			# link command. We'll parse / validate it.
@@ -116,10 +114,7 @@ class LinkCommandDetector(Elaboratable):
 					# as we can't do anything about invalid commands.
 					m.next = 'WAIT_FOR_LCSTART'
 
-
 		return m
-
-
 
 class LinkCommandGenerator(Elaboratable):
 	''' USB3 Link Command Generator.
@@ -143,7 +138,6 @@ class LinkCommandGenerator(Elaboratable):
 		be ready to send another link command next cycle.
 	'''
 
-
 	def __init__(self):
 
 		#
@@ -159,14 +153,12 @@ class LinkCommandGenerator(Elaboratable):
 		self.generate   = Signal()
 		self.done       = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
 		# Latched versions of our signals guaranteed not to change mid-transmission.
 		latched_command = Signal.like(self.command)
 		latched_subtype = Signal.like(self.subtype)
-
 
 		with m.FSM(domain = 'ss'):
 
@@ -198,7 +190,6 @@ class LinkCommandGenerator(Elaboratable):
 				with m.If(self.source.ready):
 					m.next = 'TRANSMIT_COMMAND'
 
-
 			# TRANSMIT_COMMAND -- we're now ready to send the core of our command.
 			with m.State('TRANSMIT_COMMAND'):
 				link_command = Signal(16)
@@ -222,6 +213,5 @@ class LinkCommandGenerator(Elaboratable):
 				with m.If(self.source.ready):
 					m.d.comb += self.done.eq(1)
 					m.next = 'IDLE'
-
 
 		return m

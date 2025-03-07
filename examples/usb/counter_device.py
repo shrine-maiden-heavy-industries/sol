@@ -49,7 +49,6 @@ class USBCounterDeviceExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -60,9 +59,7 @@ class USBCounterDeviceExample(Elaboratable):
 					e.bEndpointAddress = 0x80 | self.BULK_ENDPOINT_NUMBER
 					e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
 
-
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -96,16 +93,13 @@ class USBCounterDeviceExample(Elaboratable):
 			stream_ep.stream.payload.eq(counter)
 		]
 
-
 		# Connect our device as a high speed device by default.
 		m.d.comb += [
 			usb.connect.eq(1),
 			usb.full_speed_only.eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
-
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBCounterDeviceExample)

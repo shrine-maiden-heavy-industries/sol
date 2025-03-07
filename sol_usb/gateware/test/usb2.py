@@ -42,7 +42,6 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		return dut
 
-
 	def provision_dut(self, dut):
 		'''
 		Hook that allows us to add any desired properties to the DUT before simulation.
@@ -52,12 +51,10 @@ class USBDeviceTest(SolGatewareTestCase):
 		'''
 		pass
 
-
 	def provide_byte(self, byte):
 		''' Provides a given byte on the UTMI receive data for one cycle. '''
 		yield self.utmi.rx_data.eq(byte)
 		yield
-
 
 	def start_packet(self, *, set_rx_valid = True):
 		''' Starts a UTMI packet receive. '''
@@ -68,13 +65,11 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		yield
 
-
 	def end_packet(self):
 		''' Starts a UTMI packet receive. '''
 		yield self.utmi.rx_active.eq(0)
 		yield self.utmi.rx_valid.eq(0)
 		yield
-
 
 	def provide_packet(self, *octets, cycle_after = True):
 		''' Provides an entire packet transaction at once. '''
@@ -88,7 +83,6 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		if cycle_after:
 			yield
-
 
 	@staticmethod
 	def bits_to_octets(bits):
@@ -115,14 +109,11 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		return octets
 
-
 	def provide_bits(self, bits, cycle_after = True):
 		''' Provides an entire packet transaction at once; accepts bits. '''
 
 		octets = self.bits_to_octets(bits)
 		yield from self.provide_packet(*octets, cycle_after = cycle_after)
-
-
 
 	def send_token(self, pid, *, endpoint = 0, address = None):
 		'''
@@ -149,8 +140,6 @@ class USBDeviceTest(SolGatewareTestCase):
 		# ... and issue them ourselves.
 		yield from self.provide_bits(bits)
 
-
-
 	def send_data(self, pid, *octets):
 		'''
 		Sends a data packet to the simulated USB device.
@@ -168,9 +157,6 @@ class USBDeviceTest(SolGatewareTestCase):
 		bits = usb_packet.data_packet(pid, octets)
 		yield from self.provide_bits(bits)
 
-
-
-
 	def send_handshake(self, pid):
 		'''
 		Issues a handshake packet to the simulated USB device.
@@ -185,9 +171,6 @@ class USBDeviceTest(SolGatewareTestCase):
 		# Ensure we have an USBPacketID-wrapped PID.
 		pid = USBPacketID(pid)
 		yield from self.provide_packet(pid.byte())
-
-
-
 
 	def receive_packet(self, as_bytes = True, timeout = 1000):
 		''' Receives a collection of data from the USB bus. '''
@@ -211,11 +194,9 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		return bytes(data) if as_bytes else data
 
-
 	#
 	# More complex transaction helpers.
 	#
-
 
 	def interpacket_delay(self):
 		''' Waits for a period appropriate between each packet. '''
@@ -224,7 +205,6 @@ class USBDeviceTest(SolGatewareTestCase):
 		# to speed up simulation. This can be tuned longer if necessary.
 		# A spec-valued length would be 10 for a FS device, or 1 for a HS.
 		yield from self.advance_cycles(1)
-
 
 	def out_transaction(self, *octets, endpoint = 0, token_pid = USBPacketID.OUT,
 		data_pid = USBPacketID.DATA0, expect_handshake = None):
@@ -270,8 +250,6 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		yield from self.interpacket_delay()
 		return USBPacketID.from_byte(data)
-
-
 
 	def out_transfer(self, *octets, endpoint = 0, data_pid = USBPacketID.DATA0, max_packet_size = 64):
 		'''
@@ -325,7 +303,6 @@ class USBDeviceTest(SolGatewareTestCase):
 			# ... and toggle DATA PIDs.
 			data_pid = USBPacketID.DATA1 if (data_pid == USBPacketID.DATA0) else USBPacketID.DATA0
 
-
 		# If we're going to send a ZLP, send it.
 		if send_zlp:
 			handshake = USBPacketID.NAK
@@ -333,8 +310,6 @@ class USBDeviceTest(SolGatewareTestCase):
 				handshake = yield from self.out_transaction(endpoint = endpoint, data_pid = data_pid)
 
 		return handshake
-
-
 
 	def in_transaction(self, endpoint = 0, data_pid = None, handshake = USBPacketID.ACK):
 		'''
@@ -388,7 +363,6 @@ class USBDeviceTest(SolGatewareTestCase):
 		yield from self.interpacket_delay()
 		return USBPacketID.from_int(pid), data
 
-
 	def in_transfer(self, endpoint = 0, data_pid = None, handshake = USBPacketID.ACK):
 		'''
 		Performs an IN transfer.
@@ -403,7 +377,6 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		handshake
 			The response we should give after receiving data.
-
 
 		Returns
 		-------
@@ -445,7 +418,6 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		return pid, data
 
-
 	def setup_transaction(self, request_type, request, value = 0, index = 0, length = 0):
 		'''
 		Sends a SETUP transaction. All arguments match their SETUP packet definitions.
@@ -468,14 +440,12 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		return response
 
-
 	def control_interphase_delay(self):
 		''' Waits for a period appropriate between each delays. '''
 
 		# This is shorter than would be normal, in order to speed up simulation.
 		# If necessary, this can be extended arbitrarily.
 		yield from self.advance_cycles(1)
-
 
 	def control_request_in(self, request_type, request, value = 0, index = 0, length = 0):
 		'''
@@ -527,10 +497,8 @@ class USBDeviceTest(SolGatewareTestCase):
 
 			handshake = yield from self.out_transaction(data_pid = USBPacketID.DATA1)
 
-
 		# Finally, return our handshake and our data.
 		return handshake, packet
-
 
 	def control_request_out(self, request_type, request, value = 0, index = 0, data = ()):
 		''' Performs an OUT control request, and returns the results.
@@ -546,7 +514,6 @@ class USBDeviceTest(SolGatewareTestCase):
 		yield from self.setup_transaction(request_type, request, value, index, len(data))
 		yield from self.control_interphase_delay()
 
-
 		#
 		# Issue the Data phase, if we have one.
 		#
@@ -554,7 +521,6 @@ class USBDeviceTest(SolGatewareTestCase):
 			pid = yield from self.out_transfer(data_pid = USBPacketID.DATA1, *data)
 			if pid == USBPacketID.STALL:
 				return pid
-
 
 		#
 		# Issue the Status phase.
@@ -575,7 +541,6 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		# Finally, return our handshake.
 		return pid
-
 
 	def get_descriptor(self, descriptor_type, index = 0, length = 64):
 		'''
@@ -601,7 +566,6 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		return descriptor
 
-
 	def set_address(self, new_address, update_address = True):
 		'''
 		Performs a SET_ADDRESS request; setting the device address.
@@ -621,7 +585,6 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		return response_pid
 
-
 	def set_configuration(self, number):
 		'''
 		Performs a SET_CONFIGURATION request; configuring the device.
@@ -636,7 +599,6 @@ class USBDeviceTest(SolGatewareTestCase):
 		response_pid = yield from self.control_request_out(0,
 			USBStandardRequests.SET_CONFIGURATION, value = number)
 		return response_pid
-
 
 	def get_configuration(self):
 		''' Performs a GET_CONFIGURATION request; reading the device's configuration. '''

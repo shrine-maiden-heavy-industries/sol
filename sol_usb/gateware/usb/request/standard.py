@@ -54,7 +54,6 @@ class StandardRequestHandler(ControlRequestHandler):
 
 		super().__init__()
 
-
 	def elaborate(self, platform):
 		m = Module()
 		interface = self.interface

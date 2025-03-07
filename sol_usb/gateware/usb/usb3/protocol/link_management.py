@@ -29,7 +29,6 @@ class PortCapabilityHeaderPacket(HeaderPacket):
 		('reserved_2',          8),
 	]
 
-
 class PortConfigurationHeaderPacket(HeaderPacket):
 	DW0_LAYOUT = [
 		('type',        5),
@@ -38,7 +37,6 @@ class PortConfigurationHeaderPacket(HeaderPacket):
 		('reserved',   16)
 	]
 
-
 class PortConfigurationResponseHeaderPacket(HeaderPacket):
 	DW0_LAYOUT = [
 		('type',           5),
@@ -46,9 +44,6 @@ class PortConfigurationResponseHeaderPacket(HeaderPacket):
 		('response_code',  7),
 		('reserved',      16)
 	]
-
-
-
 
 class LinkManagementPacketHandler(Elaboratable):
 	''' Gateware that handles Link Management Packets.
@@ -83,24 +78,20 @@ class LinkManagementPacketHandler(Elaboratable):
 		self.usb_reset     = Signal()
 		self.link_ready    = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
 		header_sink   = self.header_sink
 		header_source = self.header_source
 
-
 		#
 		# Pending 'tasks' for our transmitter.
 		#
 		pending_configuration_result = Signal(2)
 
-
 		#
 		# LMP transmitter.
 		#
-
 
 		def send_packet_response(response_type, **fields):
 			''' Helper that allows us to easily define a packet-send state.'''
@@ -118,12 +109,10 @@ class LinkManagementPacketHandler(Elaboratable):
 			for field, value in fields.items():
 				m.d.comb += response[field].eq(value)
 
-
 		def handle_resets():
 			''' Helper that brings down the link on USB reset. '''
 			with m.If(self.usb_reset):
 				m.next = 'LINK_DOWN'
-
 
 		with m.FSM(domain = 'ss'):
 
@@ -136,7 +125,6 @@ class LinkManagementPacketHandler(Elaboratable):
 					m.next = 'SEND_CAPABILITIES'
 				with m.Else():
 					m.d.ss += pending_configuration_result.eq(0)
-
 
 			# SEND_CAPABILITIES -- our link has come up; and we're now ready to advertise our link
 			# capabilities to the other side of our link [USB3.2r1: 8.4.5].
@@ -158,7 +146,6 @@ class LinkManagementPacketHandler(Elaboratable):
 				with m.If(header_source.ready):
 					m.next = 'DISPATCH_COMMANDS'
 
-
 			# DISPATCH_COMMANDS -- we'll wait for a command to be queued, and then send it.
 			with m.State('DISPATCH_COMMANDS'):
 				handle_resets()
@@ -166,7 +153,6 @@ class LinkManagementPacketHandler(Elaboratable):
 				# If we have a pending configuration result, send it!
 				with m.If(pending_configuration_result):
 					m.next = 'SEND_PORT_CONFIGURATION_RESPONSE'
-
 
 			# SEND_CONFIGURATION_RESPONSE -- we're sending a Port Configuration Response,
 			# typically as a result of receiving a Port Configuration Request packet.
@@ -182,7 +168,6 @@ class LinkManagementPacketHandler(Elaboratable):
 				with m.If(header_source.ready):
 					m.d.ss += pending_configuration_result.eq(0)
 					m.next = 'DISPATCH_COMMANDS'
-
 
 		#
 		# LMP receiver.
@@ -219,7 +204,6 @@ class LinkManagementPacketHandler(Elaboratable):
 						m.d.ss += pending_configuration_result.eq(self.CONFIGURATION_ACCEPTED)
 					with m.Else():
 						m.d.ss += pending_configuration_result.eq(self.CONFIGURATION_REJECTED)
-
 
 				# TODO: handle any invalid packet types?
 				with m.Default():

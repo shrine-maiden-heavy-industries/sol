@@ -31,8 +31,6 @@ class HyperBus(Record):
 			('reset',  1, Direction.FANOUT)
 		])
 
-
-
 class HyperRAMInterface(Elaboratable):
 	'''
 	Gateware interface to HyperRAM series self-refreshing DRAM chips.
@@ -100,7 +98,6 @@ class HyperRAMInterface(Elaboratable):
 		self.read_data        = Signal(16)
 		self.write_data       = Signal(16)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -120,7 +117,6 @@ class HyperRAMInterface(Elaboratable):
 		else:
 			data_out = self.bus.dq.o
 
-
 		#
 		# Transaction clock generator.
 		#
@@ -137,7 +133,6 @@ class HyperRAMInterface(Elaboratable):
 			m.d.sync += out_clock.eq(0)
 		with m.Elif(advance_clock):
 			m.d.sync += out_clock.eq(~out_clock)
-
 
 		#
 		# Latched control/addressing signals.
@@ -205,7 +200,6 @@ class HyperRAMInterface(Elaboratable):
 				with m.Else():
 					m.d.sync += self.bus.cs.eq(0)
 
-
 			# LATCH_RWDS -- latch in the value of the RWDS signal, which determines
 			# our read/write latency. Note that we advance the clock in this state,
 			# as our out-of-phase clock signal will output the relevant data before
@@ -213,7 +207,6 @@ class HyperRAMInterface(Elaboratable):
 			with m.State('LATCH_RWDS'):
 				m.d.sync += extra_latency.eq(self.bus.rwds.i),
 				m.next = 'SHIFT_COMMAND0'
-
 
 			# Commands, in order of bytes sent:
 			#   - WRBAAAAA
@@ -249,7 +242,6 @@ class HyperRAMInterface(Elaboratable):
 			# Note: it's felt that this is more readable with each of these
 			# states defined explicitly. If you strongly disagree, feel free
 			# to PR a for-loop, here.~
-
 
 			with m.State('SHIFT_COMMAND1'):
 				m.d.sync += [
@@ -301,7 +293,6 @@ class HyperRAMInterface(Elaboratable):
 					with m.Else():
 						m.d.sync += latency_edges_remaining.eq(self.LOW_LATENCY_EDGES)
 
-
 			# HANDLE_LATENCY -- applies clock edges until our latency period is over.
 			with m.State('HANDLE_LATENCY'):
 				m.d.sync += latency_edges_remaining.eq(latency_edges_remaining - 1)
@@ -312,7 +303,6 @@ class HyperRAMInterface(Elaboratable):
 					with m.Else():
 						m.next = 'WRITE_DATA_MSB'
 
-
 			# STREAM_DATA_MSB -- scans in or out the first byte of data
 			with m.State('READ_DATA_MSB'):
 
@@ -320,7 +310,6 @@ class HyperRAMInterface(Elaboratable):
 				with m.If(self.bus.rwds.i != last_rwds):
 					m.d.sync += self.read_data[8:16].eq(data_in)
 					m.next = 'READ_DATA_LSB'
-
 
 			# STREAM_DATA_LSB -- scans in or out the second byte of data
 			with m.State('READ_DATA_LSB'):
@@ -342,7 +331,6 @@ class HyperRAMInterface(Elaboratable):
 						# m.next = 'READ_DATA_MSB'
 						m.next = 'RECOVERY'
 
-
 			# WRITE_DATA_MSB -- write the first of our two bytes of data to the to the PSRAM
 			with m.State('WRITE_DATA_MSB'):
 				m.d.sync += [
@@ -350,7 +338,6 @@ class HyperRAMInterface(Elaboratable):
 					data_oe.eq(1),
 				]
 				m.next = 'WRITE_DATA_LSB'
-
 
 			# WRITE_DATA_LSB -- write the first of our two bytes of data to the to the PSRAM
 			with m.State('WRITE_DATA_LSB'):
@@ -373,7 +360,6 @@ class HyperRAMInterface(Elaboratable):
 					# m.next = 'READ_DATA_MSB'
 					m.next = 'RECOVERY'
 
-
 			# RECOVERY state: wait for the required period of time before a new transaction
 			with m.State('RECOVERY'):
 				m.d.sync += [
@@ -383,7 +369,5 @@ class HyperRAMInterface(Elaboratable):
 
 				# TODO: implement recovery
 				m.next = 'IDLE'
-
-
 
 		return m

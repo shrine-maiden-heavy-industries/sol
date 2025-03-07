@@ -37,7 +37,6 @@ class USBDescriptorStreamGenerator(ConstantStreamGenerator):
 		# handlers.
 		super().__init__(data, domain = 'usb', stream_type = USBInStreamInterface, max_length_width = 16)
 
-
 class GetDescriptorHandlerDistributed(Elaboratable):
 	'''
 	Gateware that handles responding to GetDescriptor requests.
@@ -81,7 +80,6 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 		self.tx             = USBInStreamInterface()
 		self.stall          = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -104,7 +102,6 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 		with m.Else():
 			m.d.comb += length.eq(self._max_packet_length)
 
-
 		#
 		# Create our constant-stream generators for each of our descriptors.
 		#
@@ -121,7 +118,6 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 			# ... and attach it to this module.
 			type_ref = type_number.name if isinstance(type_number, StandardDescriptorNumbers) else type_number
 			setattr(m.submodules, f'USBDescriptorStreamGenerator({type_ref},{index})', generator)
-
 
 		#
 		# Connect up each of our generators.
@@ -143,9 +139,7 @@ class GetDescriptorHandlerDistributed(Elaboratable):
 			with m.Default():
 				m.d.comb += self.stall.eq(self.start)
 
-
 		return m
-
 
 class GetDescriptorHandlerBlock(Elaboratable):
 	'''
@@ -201,7 +195,6 @@ class GetDescriptorHandlerBlock(Elaboratable):
 
 		self.tx             = USBInStreamInterface()
 		self.stall          = Signal()
-
 
 	@classmethod
 	def _align_to_element_size(cls, n):
@@ -268,7 +261,6 @@ class GetDescriptorHandlerBlock(Elaboratable):
 			if max(indexes.keys()) != len(indexes) - 1:
 				raise ValueError('descriptors have non-contiguous indices!')
 
-
 		#
 		# Compute the ROM size that we'll need.
 		#
@@ -323,7 +315,6 @@ class GetDescriptorHandlerBlock(Elaboratable):
 			# ... and move to the next entry.
 			next_free_address += len(indexes) * self.ELEMENT_SIZE
 
-
 		# Next, create the tables themselves, which are filled with data pointers,
 		# and add our descriptors to our memory.
 		for type_number, descriptor_set in sorted(descriptors.items()):
@@ -351,7 +342,6 @@ class GetDescriptorHandlerBlock(Elaboratable):
 				f' {total_size} != {len(rom)}'
 			)
 
-
 		#
 		# Finally, convert our ROM into an initialization vector.
 		#
@@ -365,7 +355,6 @@ class GetDescriptorHandlerBlock(Elaboratable):
 		initializer = [struct.unpack('>I', rom_entry)[0] for rom_entry in rom_entries]
 
 		return initializer, max_descriptor_size, max_type_number
-
 
 	def elaborate(self, platform) -> Module:
 		m = Module()
@@ -489,7 +478,6 @@ class GetDescriptorHandlerBlock(Elaboratable):
 					with m.Else():
 						m.next = 'LOOKUP_DESCRIPTOR'
 
-
 			# LOOKUP_DESCRIPTOR -- we've now fetched from ROM the location of the descriptor in memory.
 			# We'll decode it, and then prepare to start sending the descriptor.
 			# descriptor from memory. First, we'll need to find the location of the table that contains each
@@ -507,7 +495,6 @@ class GetDescriptorHandlerBlock(Elaboratable):
 				]
 
 				m.next = 'SEND_DESCRIPTOR'
-
 
 			# SEND_DESCRIPTOR -- we finally are actively streaming our descriptor; which we'll complete until
 			# our descriptor is fully sent.
@@ -558,7 +545,6 @@ class GetDescriptorHandlerBlock(Elaboratable):
 					self.tx.last.eq(1),
 				]
 				m.next = 'IDLE'
-
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self._domain != 'sync':

@@ -46,7 +46,6 @@ class PIPEPhyExample(Elaboratable):
 		if WITH_ILA:
 			m.submodules.ila = self.ila
 
-
 		# Generate our domain clocks/resets.
 		m.submodules.car = platform.clock_domain_generator()
 
@@ -70,7 +69,6 @@ class PIPEPhyExample(Elaboratable):
 
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	ex = cli(PIPEPhyExample)

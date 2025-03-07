@@ -47,8 +47,6 @@ class USB3ControlEndpoint(Elaboratable):
 		#
 		self.interface = SuperSpeedEndpointInterface()
 
-
-
 	def add_request_handler(self, request_handler):
 		''' Adds a ControlRequestHandler module to this control endpoint.
 
@@ -56,7 +54,6 @@ class USB3ControlEndpoint(Elaboratable):
 		that request handlers not overlap in the requests they handle.
 		'''
 		self._request_handlers.append(request_handler)
-
 
 	def add_standard_request_handlers(self, descriptors: DeviceDescriptorCollection):
 		''' Adds a handlers for the standard USB requests.
@@ -73,7 +70,6 @@ class USB3ControlEndpoint(Elaboratable):
 		handler = StandardRequestHandler(descriptors)
 		self._request_handlers.append(handler)
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -81,7 +77,6 @@ class USB3ControlEndpoint(Elaboratable):
 		interface      = self.interface
 		handshakes_out = self.interface.handshakes_out
 		handshakes_in  = self.interface.handshakes_in
-
 
 		#
 		# Convenience feature:
@@ -98,9 +93,6 @@ class USB3ControlEndpoint(Elaboratable):
 
 			self.add_request_handler(StallOnlyRequestHandler(stall_condition))
 
-
-
-
 		#
 		# Setup packet decoder.
 		#
@@ -112,7 +104,6 @@ class USB3ControlEndpoint(Elaboratable):
 			setup_decoder.rx_good.eq(interface.rx_complete),
 			setup_decoder.rx_bad.eq(interface.rx_invalid),
 		]
-
 
 		#
 		# Request handler interfacing.
@@ -133,7 +124,6 @@ class USB3ControlEndpoint(Elaboratable):
 			# ... and add it.
 			m.submodules[name] = handler
 			request_mux.add_interface(handler.interface)
-
 
 		# To simplify the request-handler interface, we'll only pass through our Rx stream
 		# when the most recently header packet targets our endpoint number.
@@ -189,7 +179,6 @@ class USB3ControlEndpoint(Elaboratable):
 				handshakes_out.send_ack.eq(1),
 			]
 
-
 		# Always set the endpoint number in our handshakes.
 		m.d.comb += handshakes_out.endpoint_number.eq(self._endpoint_number),
 
@@ -202,7 +191,6 @@ class USB3ControlEndpoint(Elaboratable):
 		# Pass through any IN tokens as data requests to our request handlers.
 		with m.If(handshakes_in.ack_received & is_to_us & is_in_token):
 			m.d.comb += request_interface.data_requested.eq(1)
-
 
 		#
 		# STATUS stage handling.

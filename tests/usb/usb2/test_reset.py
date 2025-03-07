@@ -21,12 +21,10 @@ class USBResetSequencerTest(SolGatewareTestCase):
 
 		return dut
 
-
 	def initialize_signals(self):
 
 		# Start with a non-reset line-state.
 		yield self.dut.line_state.eq(0b01)
-
 
 # 	@usb_domain_test_case
 # 	def test_full_speed_reset(self):
@@ -68,7 +66,6 @@ class USBResetSequencerTest(SolGatewareTestCase):
 # 		self.assertEqual((yield dut.current_speed),      USBSpeed.FULL)
 # 		self.assertEqual((yield dut.operating_mode),     UTMIOperatingMode.NORMAL)
 # 		self.assertEqual((yield dut.termination_select), UTMITerminationSelect.LS_FS_NORMAL)
-
 
 	#
 	# It would be lovely to have tests that run through each of our reset/suspend

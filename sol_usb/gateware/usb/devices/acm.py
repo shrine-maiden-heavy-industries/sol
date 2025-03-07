@@ -53,7 +53,6 @@ class ACMRequestHandlers(USBRequestHandler):
 					with m.If(interface.status_requested):
 						m.d.comb += self.send_zlp()
 
-
 				with m.Default():
 
 					#
@@ -63,7 +62,6 @@ class ACMRequestHandlers(USBRequestHandler):
 						m.d.comb += interface.handshakes_out.stall.eq(1)
 
 				return m
-
 
 class USBSerialDevice(Elaboratable):
 	''' Device that acts as a CDC-ACM 'serial converter'.
@@ -124,7 +122,6 @@ class USBSerialDevice(Elaboratable):
 		self.rx      = StreamInterface()
 		self.tx      = StreamInterface()
 
-
 	def create_descriptors(self):
 		''' Creates the descriptors that describe our serial topology. '''
 
@@ -140,7 +137,6 @@ class USBSerialDevice(Elaboratable):
 			d.iSerialNumber      = self._serial_number
 
 			d.bNumConfigurations = 1
-
 
 		# ... and then describe our CDC-ACM setup.
 		with descriptors.ConfigurationDescriptor() as c:
@@ -195,7 +191,6 @@ class USBSerialDevice(Elaboratable):
 					e.wMaxPacketSize   = self._max_packet_size
 
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()

@@ -6,7 +6,6 @@
 
 ''' USB3 endpoint-type implementations. '''
 
-
 from .control import USB3ControlEndpoint
 
 __all__ = (

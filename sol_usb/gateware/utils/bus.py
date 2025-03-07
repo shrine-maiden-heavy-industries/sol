@@ -65,22 +65,18 @@ class OneHotMultiplexer(Elaboratable):
 		#
 		self.output = interface_type()
 
-
 	def add_interface(self, input_interface):
 		''' Adds an interface to the multiplexer. '''
 		self._inputs.append(input_interface)
-
 
 	def add_interfaces(self, interfaces):
 		''' Adds a collection/iterable of interfaces to the multiplexer. '''
 		for interface in interfaces:
 			self.add_interface(interface)
 
-
 	def add_input(self, input_interface):
 		''' Alias for add_interface. Adds an interface to the multiplexer. '''
 		self.add_interface(input_interface)
-
 
 	@staticmethod
 	def _get_signal(interface, name_or_function):
@@ -102,8 +98,6 @@ class OneHotMultiplexer(Elaboratable):
 		else:
 			return getattr(interface, name_or_function)
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -121,7 +115,6 @@ class OneHotMultiplexer(Elaboratable):
 			valid_signal = getattr(interface, self._valid_field)
 			m.d.comb += encoder.i[index].eq(valid_signal)
 
-
 		# Create our multiplexer, and drive each of our output signals from it.
 		with m.Switch(encoder.o):
 			for index, interface in enumerate(self._inputs):
@@ -135,7 +128,6 @@ class OneHotMultiplexer(Elaboratable):
 						input_signal  = self._get_signal(interface,   identifier)
 						m.d.comb += output_signal.eq(input_signal)
 
-
 		# Create the OR'ing logic for each of or or_signals.
 		for identifier in self._or_signals:
 
@@ -147,7 +139,6 @@ class OneHotMultiplexer(Elaboratable):
 			or_reduced = Cat(input_signals).any()
 			m.d.comb += output_signal.eq(or_reduced)
 
-
 		# Finally, pass each of our pass-back signals from the output interface
 		# back to each of our input interfaces.
 		for identifier in self._pass_signals:
@@ -156,6 +147,5 @@ class OneHotMultiplexer(Elaboratable):
 			for interface in self._inputs:
 				input_signal = self._get_signal(interface, identifier)
 				m.d.comb += input_signal.eq(output_signal)
-
 
 		return m

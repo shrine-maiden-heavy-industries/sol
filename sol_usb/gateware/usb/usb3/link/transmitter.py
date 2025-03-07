@@ -23,7 +23,6 @@ class RawPacketTransmitter(Elaboratable):
 	which include checking the CRC-5 and CRC-16 embedded within the header packet, and
 	the CRC-32 embedded within any associated payloads.
 
-
 	Attributes
 	----------
 	source: USBRawSuperSpeedStream(), output stream
@@ -59,7 +58,6 @@ class RawPacketTransmitter(Elaboratable):
 		self.generate  = Signal()
 		self.done      = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -91,7 +89,6 @@ class RawPacketTransmitter(Elaboratable):
 			crc32.advance_1B.eq((data_sink.valid == 0b0001) & data_sink.ready),
 		]
 
-
 		#
 		# Packet transmitter.
 		#
@@ -121,7 +118,6 @@ class RawPacketTransmitter(Elaboratable):
 					m.d.ss += header.eq(self.header)
 					m.next = 'SEND_HPSTART'
 
-
 			# SEND_HPSTART -- send our 'start-of-header-packet' marker.
 			with m.State('SEND_HPSTART'):
 
@@ -136,7 +132,6 @@ class RawPacketTransmitter(Elaboratable):
 				# ... and keep driving it until it's accepted.
 				with m.If(source.ready):
 					m.next = 'SEND_DW0'
-
 
 			# SEND_DWn -- send along the three first data words unalatered, as we don't
 			# need to fill in any CRC details, here.
@@ -155,7 +150,6 @@ class RawPacketTransmitter(Elaboratable):
 					with m.If(source.ready):
 						m.d.comb += crc16.advance_crc.eq(1)
 						m.next = f'SEND_DW{n + 1}'
-
 
 			# Compose our final data word from our individual fields, filling
 			with m.State('SEND_DW3'):
@@ -187,7 +181,6 @@ class RawPacketTransmitter(Elaboratable):
 					with m.Else():
 						m.d.comb += self.done.eq(1)
 						m.next = 'IDLE'
-
 
 			# START_DPP -- we'll start our data packet payload with our framing;
 			# and prepare to send our actual payload.
@@ -238,7 +231,6 @@ class RawPacketTransmitter(Elaboratable):
 						with m.Else():
 							m.next = 'SEND_LAST_WORD'
 
-
 			# SEND_PAYLOAD -- send the core part of our data stream.
 			with m.State('SEND_PAYLOAD'):
 
@@ -263,7 +255,6 @@ class RawPacketTransmitter(Elaboratable):
 					# send part of our CRC if the last word isn't fully aligned.
 					with m.If(data_sink.last):
 						m.next = 'SEND_LAST_WORD'
-
 
 			# SEND_LAST_WORD -- flush our pipeline; and send our final word.
 			# Our final word is a special case; as it may not be a full word; in which
@@ -293,11 +284,9 @@ class RawPacketTransmitter(Elaboratable):
 					with m.Case(0b0001):
 						m.d.comb += source.data[8:32].eq(crc32.crc[0:24])
 
-
 				# Once our last data word is accepted, move to sending the (remainder) of the CRC.
 				with m.If(source.ready):
 					m.next = 'SEND_CRC'
-
 
 			# SEND_CRC -- send the CRC (or what remains of it)
 			with m.State('SEND_CRC'):
@@ -337,11 +326,9 @@ class RawPacketTransmitter(Elaboratable):
 							source.ctrl.eq(0b1110),
 						]
 
-
 				# Once our CRC is accepted, finish our payload.
 				with m.If(source.ready):
 					m.next = 'FINISH_DPP'
-
 
 			# FINISH_DPP -- send our end-of-payload framing.
 			with m.State('FINISH_DPP'):
@@ -384,12 +371,10 @@ class RawPacketTransmitter(Elaboratable):
 							source.ctrl.eq(framing_ctrl[ 3:]),
 						]
 
-
 				# Once our CRC is accepted, finish our payload.
 				with m.If(source.ready):
 					m.d.comb += self.done.eq(1)
 					m.next = 'IDLE'
-
 
 			# ABORT_DPP -- send our abort-of-payload framing.
 			with m.State('ABORT_DPP'):
@@ -408,8 +393,6 @@ class RawPacketTransmitter(Elaboratable):
 					m.next = 'IDLE'
 
 		return m
-
-
 
 class PacketTransmitter(Elaboratable):
 	''' Transmitter-side Header Packet logic.
@@ -482,7 +465,6 @@ class PacketTransmitter(Elaboratable):
 		self.credits_available     = Signal(range(self._buffer_count + 1))
 		self.packets_to_send       = Signal(range(self._buffer_count + 1))
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -499,7 +481,6 @@ class PacketTransmitter(Elaboratable):
 			m.d.ss += credits_available.eq(credits_available + 1)
 		with m.Elif(credit_consumed & ~credit_received):
 			m.d.ss += credits_available.eq(credits_available - 1)
-
 
 		#
 		# Task 'queues'.
@@ -531,7 +512,6 @@ class PacketTransmitter(Elaboratable):
 		with m.Elif(retire_packet & ~enqueue_send & (packets_awaiting_ack != 0)):
 			m.d.ss += packets_awaiting_ack.eq(packets_awaiting_ack - 1)
 
-
 		#
 		# Header Packet Buffers
 		#
@@ -557,7 +537,6 @@ class PacketTransmitter(Elaboratable):
 		# Last ACK'd buffer / packet retirement tracker.
 		with m.If(retire_packet):
 			m.d.ss += ack_pointer.eq(ack_pointer + 1)
-
 
 		#
 		# Packet acceptance (protocol layer -> link layer).
@@ -588,7 +567,6 @@ class PacketTransmitter(Elaboratable):
 				transmit_sequence_number.eq(transmit_sequence_number + 1)
 			]
 
-
 		#
 		# Packet delivery (link layer -> physical layer)
 		#
@@ -599,12 +577,10 @@ class PacketTransmitter(Elaboratable):
 			self.source.stream_eq(packet_tx.source)
 		]
 
-
 		# Keep track of whether a retry has been requested.
 		retry_pending = Signal()
 		with m.If(self.retry_required):
 			m.d.ss += retry_pending.eq(1)
-
 
 		with m.FSM(domain = 'ss'):
 
@@ -623,7 +599,6 @@ class PacketTransmitter(Elaboratable):
 						# Wait until all of the non-acknowledged packets are retransmitted.
 						m.next = 'WAIT_FOR_RETRY'
 
-
 			# WAIT_FOR_SEND -- we've now dispatched our packet; and we're ready to wait for it to be sent.
 			with m.State('WAIT_FOR_SEND'):
 				m.d.comb += packet_tx.generate.eq(1)
@@ -639,7 +614,6 @@ class PacketTransmitter(Elaboratable):
 					# Handle the next packet, or wait for one.
 					m.next = 'DISPATCH_PACKET'
 
-
 			# WAIT_FOR_RETRY -- we're retransmitting all of the non-acknowledged packets, with the DL bit set;
 			# but only after the receiver transmits LRTY.
 			with m.State('WAIT_FOR_RETRY'):
@@ -654,7 +628,6 @@ class PacketTransmitter(Elaboratable):
 					with m.If(packets_to_send == 1):
 						m.d.ss += retry_pending.eq(0)
 						m.next = 'DISPATCH_PACKET'
-
 
 		#
 		# Link Command Handling
@@ -730,7 +703,6 @@ class PacketTransmitter(Elaboratable):
 					# our internal logic to execute a retry.
 					m.d.comb += self.retry_required.eq(1)
 
-
 				#
 				# Link Partner Retrying Send
 				#
@@ -739,7 +711,6 @@ class PacketTransmitter(Elaboratable):
 					# If we see an LRTY, it's an indication that our link partner is performing a
 					# retried send. This information is handled by the Receiver, so we'll forward it along.
 					m.d.comb += self.retry_received.eq(1)
-
 
 				#
 				# Link Power State transition request.
@@ -751,7 +722,6 @@ class PacketTransmitter(Elaboratable):
 						self.lgo_received.eq(1),
 						self.lgo_target.eq(lc_detector.subtype)
 					]
-
 
 		#
 		# Header Packet Timer
@@ -776,11 +746,9 @@ class PacketTransmitter(Elaboratable):
 		with m.Else():
 			m.d.ss += pending_hp_timer.eq(pending_hp_timer + 1)
 
-
 		# If we ever reach our timeout, we'll need to trigger recovery.
 		with m.If(pending_hp_timer == credit_timeout_cycles):
 			m.d.comb += self.recovery_required.eq(1)
-
 
 		#
 		# Reset Handling
@@ -800,7 +768,6 @@ class PacketTransmitter(Elaboratable):
 				retry_pending.eq(0),
 			]
 
-
 		#
 		# Debug outputs.
 		#
@@ -808,7 +775,5 @@ class PacketTransmitter(Elaboratable):
 			self.credits_available.eq(credits_available),
 			self.packets_to_send.eq(packets_to_send)
 		]
-
-
 
 		return m

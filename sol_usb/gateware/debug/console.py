@@ -21,7 +21,6 @@ class DebugConsole(Elaboratable):
 		self.line_in     = Array(Signal(8) for _ in range(max_line_length))
 		self.line_length = Signal(range(0, max_line_length + 1))
 
-
 	def elaborate(self, platform):
 		m = Module()
 

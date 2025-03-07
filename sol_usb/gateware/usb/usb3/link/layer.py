@@ -63,7 +63,6 @@ class USB3LinkLayer(Elaboratable):
 		# Test and debug signals.
 		self.disable_scrambling        = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 		physical_layer = self._physical_layer
@@ -85,20 +84,16 @@ class USB3LinkLayer(Elaboratable):
 			training_set_source.stream_eq(ts.source)
 		]
 
-
-
 		#
 		# Idle handshake / logical idle detection.
 		#
 		m.submodules.idle = idle = IdleHandshakeHandler()
 		m.d.comb += idle.sink.tap(physical_layer.source)
 
-
 		#
 		# U0 Maintenance Timers
 		#
 		m.submodules.timers = timers = LinkMaintenanceTimers(ss_clock_frequency = self._clock_frequency)
-
 
 		#
 		# Link Training and Status State Machine (LTSSM)
@@ -163,7 +158,6 @@ class USB3LinkLayer(Elaboratable):
 			ltssm.disable_scrambling.eq(self.disable_scrambling),
 		]
 
-
 		#
 		# Packet transmission path.
 		# Accepts packets from the protocol and link layers, and transmits them.
@@ -186,8 +180,6 @@ class USB3LinkLayer(Elaboratable):
 			timers.link_command_received.eq(transmitter.link_command_received),
 			self.ready.eq(transmitter.bringup_complete),
 		]
-
-
 
 		#
 		# Header Packet Rx Path.
@@ -216,7 +208,6 @@ class USB3LinkLayer(Elaboratable):
 			# whenever we receive an LGO (Link Go-to) request.
 			header_rx.reject_power_state.eq(transmitter.lgo_received),
 		]
-
 
 		#
 		# Link Recovery Control
@@ -262,7 +253,6 @@ class USB3LinkLayer(Elaboratable):
 			data_tx.direction.eq(self.data_sink_direction)
 		]
 
-
 		#
 		# Transmit stream arbiter.
 		#
@@ -289,7 +279,5 @@ class USB3LinkLayer(Elaboratable):
 		# Otherwise, output our stream data.
 		with m.Else():
 			m.d.comb += physical_layer.sink.stream_eq(arbiter.source)
-
-
 
 		return m

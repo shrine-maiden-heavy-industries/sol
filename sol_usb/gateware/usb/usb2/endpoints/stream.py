@@ -34,7 +34,6 @@ class USBStreamInEndpoint(Elaboratable):
 	This implementation is double buffered; and can store a single packets worth of data while transmitting
 	a second packet.
 
-
 	Attributes
 	----------
 	stream: StreamInterface, input stream
@@ -48,7 +47,6 @@ class USBStreamInEndpoint(Elaboratable):
 
 	interface: EndpointInterface
 		Communications link to our USB device.
-
 
 	Parameters
 	----------
@@ -119,14 +117,12 @@ class USBMultibyteStreamInEndpoint(Elaboratable):
 	This implementation is double buffered; and can store a single packets worth of data while transmitting
 	a second packet.
 
-
 	Attributes
 	----------
 	stream: StreamInterface, input stream
 		Full-featured stream interface that carries the data we'll transmit to the host.
 	interface: EndpointInterface
 		Communications link to our USB device.
-
 
 	Parameters
 	----------
@@ -242,7 +238,6 @@ class USBStreamOutEndpoint(Elaboratable):
 	''' Endpoint interface that receives data from the host, and produces a simple data stream.
 
 	This interface is suitable for a single bulk or interrupt endpoint.
-
 
 	Attributes
 	----------

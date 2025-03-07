@@ -48,7 +48,6 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 
@@ -61,9 +60,7 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 					e.wMaxPacketSize   = self.TRANSFERS_PER_MICROFRAME | self.MAX_ISO_PACKET_SIZE
 					e.bInterval        = 1
 
-
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -99,9 +96,7 @@ class USBIsochronousCounterDeviceExample(Elaboratable):
 			usb.full_speed_only.eq(1 if os.getenv('SOL_FULL_ONLY') else 0),
 		]
 
-
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBIsochronousCounterDeviceExample)

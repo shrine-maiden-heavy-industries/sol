@@ -19,7 +19,6 @@ CLOCK_FREQUENCIES_MHZ = {
 	'sync': 60
 }
 
-
 class LEDPeripheral(Peripheral, Elaboratable):
 	''' Example peripheral that controls the board's LEDs. '''
 
@@ -38,7 +37,6 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
 
-
 	def elaborate(self, platform):
 		m = Module()
 		m.submodules.bridge = self._bridge
@@ -51,8 +49,6 @@ class LEDPeripheral(Peripheral, Elaboratable):
 			m.d.sync += leds.eq(self._output.w_data)
 
 		return m
-
-
 
 class TinyUSBSoC(Elaboratable):
 	''' Simple SoC for hosting TinyUSB. '''
@@ -99,7 +95,6 @@ class TinyUSBSoC(Elaboratable):
 		leds = LEDPeripheral()
 		soc.add_peripheral(leds, addr = self.LEDS_ADDRESS)
 
-
 	def elaborate(self, platform):
 		m = Module()
 		m.submodules.soc = self.soc
@@ -129,7 +124,6 @@ class TinyUSBSoC(Elaboratable):
 		usb.add_endpoint(self.usb_in_ep)
 		usb.add_endpoint(self.usb_out_ep)
 		return m
-
 
 if __name__ == '__main__':
 	design = TinyUSBSoC()

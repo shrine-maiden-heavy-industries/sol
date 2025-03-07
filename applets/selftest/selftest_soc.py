@@ -23,7 +23,6 @@ CLOCK_FREQUENCIES_MHZ = {
 	'usb':   60
 }
 
-
 class LEDPeripheral(Peripheral, Elaboratable):
 	''' Simple peripheral that controls the board's LEDs. '''
 
@@ -37,7 +36,6 @@ class LEDPeripheral(Peripheral, Elaboratable):
 		# ... and convert our register into a Wishbone peripheral.
 		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -55,8 +53,6 @@ class LEDPeripheral(Peripheral, Elaboratable):
 
 		return m
 
-
-
 class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 	''' Peripheral that provides access to a ULPI PHY, and its registers. '''
 
@@ -73,7 +69,6 @@ class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 		# ... and convert our register into a Wishbone peripheral.
 		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -112,7 +107,6 @@ class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 		with m.If(self._address.w_stb):
 			m.d.sync += ulpi_reg_window.address.eq(self._address.w_data)
 
-
 		#
 		# Value register logic.
 		#
@@ -125,14 +119,12 @@ class ULPIRegisterPeripheral(Peripheral, Elaboratable):
 		with m.If(self._address.w_stb):
 			m.d.sync += ulpi_reg_window.write_data.eq(self._value.w_data)
 
-
 		#
 		# Busy register logic.
 		#
 		m.d.comb += self._busy.r_data.eq(ulpi_reg_window.busy)
 
 		return m
-
 
 class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 	''' Peripheral that provides access to a ULPI PHY, and its registers. '''
@@ -149,7 +141,6 @@ class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 		# ... and convert our register into a Wishbone peripheral.
 		self._bridge    = self.bridge(data_width = 32, granularity = 8, alignment = 2)
 		self.bus        = self._bridge.bus
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -181,7 +172,6 @@ class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 		with m.If(self._address.w_stb):
 			m.d.sync += psram.address.eq(self._address.w_data)
 
-
 		#
 		# Value register logic.
 		#
@@ -190,15 +180,12 @@ class PSRAMRegisterPeripheral(Peripheral, Elaboratable):
 		with m.If(psram.new_data_ready):
 			m.d.sync += self._value.r_data.eq(psram.read_data)
 
-
 		#
 		# Busy register logic.
 		#
 		m.d.comb += self._busy.r_data.eq(~psram.idle)
 
 		return m
-
-
 
 class SelftestCore(Elaboratable):
 	''' Simple soft-core that executes the SOL factory tests. '''
@@ -235,8 +222,6 @@ class SelftestCore(Elaboratable):
 		for peripheral in peripherals:
 			soc.add_peripheral(peripheral)
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -256,7 +241,6 @@ class SelftestCore(Elaboratable):
 			m.d.comb += uart_io.tx.oe.eq(self.uart.driving & self.uart.enabled),
 
 		return m
-
 
 if __name__ == '__main__':
 	design = SelftestCore()

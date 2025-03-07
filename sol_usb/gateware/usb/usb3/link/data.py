@@ -38,7 +38,6 @@ class DataHeaderPacket(HeaderPacket):
 		('reserved_3',          4),
 	]
 
-
 class DataPacketReceiver(Elaboratable):
 	''' Class that monitors the USB bus for data packets, and receives them.
 
@@ -53,7 +52,6 @@ class DataPacketReceiver(Elaboratable):
 
 	Header sequence number is not checked, here, as a sequence error will force recovery in the
 	Header Packet Receiver.
-
 
 	Attributes
 	----------
@@ -93,8 +91,6 @@ class DataPacketReceiver(Elaboratable):
 		self.packet_good       = Signal()
 		self.packet_bad        = Signal()
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -117,7 +113,6 @@ class DataPacketReceiver(Elaboratable):
 		# last data word.
 		previous_word  = Signal.like(self.sink.data)
 		previous_valid = Signal.like(self.sink.ctrl)
-
 
 		#
 		# CRC Generators
@@ -162,7 +157,6 @@ class DataPacketReceiver(Elaboratable):
 						if n == 0:
 							with m.If(sink.data[0:5] != HeaderPacketType.DATA):
 								m.next = 'WAIT_FOR_HPSTART'
-
 
 			# RECEIVE_DW3 -- we'll receive and parse our final data word, which contains the fields
 			# relevant to the link layer.
@@ -266,7 +260,6 @@ class DataPacketReceiver(Elaboratable):
 					with m.Else():
 						m.next = 'CHECK_CRC32'
 
-
 			# CHECK_CRC32 -- we've received the end of our packet; and we're ready to decide if the
 			# packet is good or not. We'll check its CRC, and strobe either packet_good or packet_bad.
 			with m.State('CHECK_CRC32'):
@@ -305,9 +298,7 @@ class DataPacketReceiver(Elaboratable):
 				# Finally, wait for our next packet.
 					m.next = 'WAIT_FOR_HPSTART'
 
-
 		return m
-
 
 class DataPacketTransmitter(Elaboratable):
 	''' Gateware that generates a Data Packet Header, and orchestrates sending it and a payload.
@@ -359,7 +350,6 @@ class DataPacketTransmitter(Elaboratable):
 		self.header_source   = HeaderQueue()
 		self.data_source     = SuperSpeedStreamInterface()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -374,7 +364,6 @@ class DataPacketTransmitter(Elaboratable):
 		data_length     = Signal.like(self.data_length)
 		direction       = Signal.like(self.direction)
 
-
 		# For now, we'll pass our data stream through unmodified; only buffered to improve
 		# timing.
 		#
@@ -383,7 +372,6 @@ class DataPacketTransmitter(Elaboratable):
 		with m.If(~data_source.valid.any() | data_source.ready):
 			m.d.ss   += data_source.stream_eq(data_sink, omit = {'ready'})
 			m.d.comb += data_sink.ready.eq(1)
-
 
 		with m.FSM(domain = 'ss'):
 
@@ -404,7 +392,6 @@ class DataPacketTransmitter(Elaboratable):
 
 				with m.Elif(self.send_zlp):
 					m.next = 'SEND_ZLP'
-
 
 			# SEND_HEADER -- we're sending the header associated with our data packet.
 			with m.State('SEND_HEADER'):
@@ -428,7 +415,6 @@ class DataPacketTransmitter(Elaboratable):
 				with m.If(header_source.ready):
 					m.next = 'SEND_PAYLOAD'
 
-
 			# SEND_PAYLOAD -- we're now passing our payload data to our transmitter; which will
 			# drive ready when it's time to accept data.
 			with m.State('SEND_PAYLOAD'):
@@ -436,7 +422,6 @@ class DataPacketTransmitter(Elaboratable):
 				# Once our packet is complete, we'll go back to idle.
 				with m.If(~data_sink.valid.any()):
 					m.next = 'WAIT_FOR_DATA'
-
 
 			# SEND_ZLP -- we're sending a ZLP; which in our case means we'll be sending a header
 			# without driving our data stream.
@@ -461,7 +446,5 @@ class DataPacketTransmitter(Elaboratable):
 				# Our transmitter will handle generating the zero-length DPP.
 				with m.If(header_source.ready):
 					m.next = 'WAIT_FOR_DATA'
-
-
 
 		return m

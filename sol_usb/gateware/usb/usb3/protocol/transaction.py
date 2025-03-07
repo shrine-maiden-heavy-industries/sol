@@ -59,7 +59,6 @@ class HandshakeGeneratorInterface(Record):
 
 		])
 
-
 class HandshakeReceiverInterface(Record):
 	''' Interface used by an endpoint to generate transaction packets.
 
@@ -98,7 +97,6 @@ class HandshakeReceiverInterface(Record):
 			('ack_received',      1, Direction.FANOUT),
 		])
 
-
 #
 # Transaction header packets.
 #
@@ -109,7 +107,6 @@ class TransactionHeaderPacket(HeaderPacket):
 		('route_string',       20),
 		('device_address',      7),
 	]
-
 
 class ACKHeaderPacket(TransactionHeaderPacket):
 	DW1_LAYOUT = [
@@ -132,7 +129,6 @@ class ACKHeaderPacket(TransactionHeaderPacket):
 		('reserved_3',          4),
 	]
 
-
 class NRDYHeaderPacket(TransactionHeaderPacket):
 	DW1_LAYOUT = [
 		('subtype',             4),
@@ -141,7 +137,6 @@ class NRDYHeaderPacket(TransactionHeaderPacket):
 		('endpoint_number',     4),
 		('reserved_1',         20),
 	]
-
 
 class ERDYHeaderPacket(TransactionHeaderPacket):
 	DW1_LAYOUT = [
@@ -153,7 +148,6 @@ class ERDYHeaderPacket(TransactionHeaderPacket):
 		('number_of_packets',   5),
 		('reserved_2',         11),
 	]
-
 
 class STALLHeaderPacket(TransactionHeaderPacket):
 	DW1_LAYOUT = [
@@ -169,9 +163,6 @@ class STALLHeaderPacket(TransactionHeaderPacket):
 		('reserved_3',          4),
 	]
 
-
-
-
 class StatusHeaderPacket(TransactionHeaderPacket):
 	DW1_LAYOUT = [
 		('subtype',             4),
@@ -180,8 +171,6 @@ class StatusHeaderPacket(TransactionHeaderPacket):
 		('endpoint_number',     4),
 		('reserved_1',         20),
 	]
-
-
 
 class TransactionPacketGenerator(Elaboratable):
 	''' Module responsible for generating Token Packets, for flow control.
@@ -207,8 +196,6 @@ class TransactionPacketGenerator(Elaboratable):
 
 		self.address         = Signal(7)
 
-
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -220,7 +207,6 @@ class TransactionPacketGenerator(Elaboratable):
 		data_error      = Signal.like(interface.retry_required)
 		next_sequence   = Signal.like(interface.next_sequence)
 		device_address  = Signal.like(self.address)
-
 
 		def send_packet(response_type, **fields):
 			''' Helper that allows us to easily define a packet-send state.'''
@@ -243,8 +229,6 @@ class TransactionPacketGenerator(Elaboratable):
 			with m.If(header_source.ready):
 				m.d.comb += interface.done.eq(1)
 				m.next = 'DISPATCH_REQUESTS'
-
-
 
 		with m.FSM(domain = 'ss'):
 
@@ -270,7 +254,6 @@ class TransactionPacketGenerator(Elaboratable):
 				with m.If(interface.send_erdy):
 					m.next = 'SEND_NRDY'
 
-
 			# SEND_ACK -- actively send an ACK packet to our link partner; and wait for that to complete.
 			with m.State('SEND_ACK'):
 				send_packet(ACKHeaderPacket,
@@ -283,14 +266,12 @@ class TransactionPacketGenerator(Elaboratable):
 					number_of_packets = 1,
 				)
 
-
 			# SEND_NRDY -- actively send an NRDY packet to our link partner; and wait for that to complete.
 			with m.State('SEND_NRDY'):
 				send_packet(NRDYHeaderPacket,
 					subtype           = TransactionPacketSubtype.NRDY,
 					direction         = USBDirection.IN,
 				)
-
 
 			# SEND_NRDY -- actively send an NRDY packet to our link partner; and wait for that to complete.
 			with m.State('SEND_ERDY'):
@@ -302,7 +283,6 @@ class TransactionPacketGenerator(Elaboratable):
 					number_of_packets = 1,
 				)
 
-
 			# SEND_STALL -- actively send a STALL packet to our link partner; and wait for that to complete.
 			with m.State('SEND_STALL'):
 				send_packet(ACKHeaderPacket,
@@ -311,10 +291,7 @@ class TransactionPacketGenerator(Elaboratable):
 					number_of_packets = 1,
 				)
 
-
 		return m
-
-
 
 class TransactionPacketReceiver(Elaboratable):
 	''' Module responsible for receiving Transaction Packets from the host.
@@ -336,7 +313,6 @@ class TransactionPacketReceiver(Elaboratable):
 		self.interface       = HandshakeReceiverInterface()
 
 		self.address         = Signal(7)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -374,7 +350,6 @@ class TransactionPacketReceiver(Elaboratable):
 						# ... and report the event.
 						interface.status_received.eq(1)
 					]
-
 
 				#
 				# ACK packets -- packets that convey transaction status; they both serve as IN

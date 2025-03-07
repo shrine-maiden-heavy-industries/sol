@@ -39,12 +39,10 @@ class StreamMultiplexer(Elaboratable):
 		#
 		self.output = stream_type()
 
-
 	def add_input(self, input_interface):
 
 		''' Adds a transmit interface to the multiplexer. '''
 		self._inputs.append(input_interface)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -65,10 +63,7 @@ class StreamMultiplexer(Elaboratable):
 			# After our first iteration, use Elif instead of If.
 			conditional = m.Elif
 
-
 		return m
-
-
 
 class StreamArbiter(Elaboratable):
 	'''
@@ -77,7 +72,6 @@ class StreamArbiter(Elaboratable):
 	This variant uses a simple priority scheduler; and will use a standard valid/ready handshake
 	to schedule a single stream to communicate at a time. Bursts of ``valid`` will never be interrupted,
 	so streams will only be switched once the current transmitter drops ``valid`` low.
-
 
 	Attributes
 	----------
@@ -108,7 +102,6 @@ class StreamArbiter(Elaboratable):
 		self.source = stream_type()
 		self.idle   = Signal()
 
-
 	def add_stream(self, stream):
 		'''
 		Adds a stream to our arbiter.
@@ -119,7 +112,6 @@ class StreamArbiter(Elaboratable):
 			The stream to be added. Streams added first will have higher priority.
 		'''
 		self._sinks.append(stream)
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -141,7 +133,6 @@ class StreamArbiter(Elaboratable):
 					# ... and connect up the stream while in that case.
 					m.d.comb += active_stream.stream_eq(stream)
 
-
 		#
 		# Active stream selection.
 		#
@@ -160,7 +151,6 @@ class StreamArbiter(Elaboratable):
 				with m.If(self._sinks[stream_index].valid):
 					m.d.comb += self.idle.eq(0)
 					m.d.sync += active_stream_index.eq(stream_index)
-
 
 		# If we're operating in a domain other than sync, replace 'sync' with it.
 		if self._domain != '	sync'	:

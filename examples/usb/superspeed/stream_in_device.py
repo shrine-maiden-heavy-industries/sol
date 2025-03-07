@@ -45,7 +45,6 @@ class USBSuperSpeedExample(Elaboratable):
 
 			d.bNumConfigurations = 1
 
-
 		# ... and a description of the USB configuration we'll provide.
 		with descriptors.ConfigurationDescriptor() as c:
 			c.bMaxPower        = 50
@@ -58,7 +57,6 @@ class USBSuperSpeedExample(Elaboratable):
 					e.wMaxPacketSize   = self.MAX_BULK_PACKET_SIZE
 
 		return descriptors
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -100,10 +98,8 @@ class USBSuperSpeedExample(Elaboratable):
 		with m.If(stream_in.ready):
 			m.d.ss += counter.eq(counter + 1)
 
-
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	cli(USBSuperSpeedExample)

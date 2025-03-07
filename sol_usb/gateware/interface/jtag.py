@@ -59,7 +59,6 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		self.sdo_alt = Signal()
 		self.cs_alt  = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
@@ -67,7 +66,6 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		jce1   = Signal()
 		jce2   = Signal()
 		jshift = Signal()
-
 
 		# Instantiate our core JTAG interface, and hook it up to our signals.
 		# This essentially grabs a connection to the ECP5's JTAG data chain when the ER1 or ER2
@@ -109,12 +107,10 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 
 		return m
 
-
 	#
 	# Helpers that let us treat this object like a record, so it can be used
 	# interchangeably with requested I/O objects.
 	#
-
 
 	@ValueCastable.lowermethod
 	def as_value(self):
@@ -145,8 +141,6 @@ class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 		# ... and connect our output directly through.
 		m.d.comb += self.sdo.eq(output.sdo)
 
-
-
 class JTAGCommandInterface(Elaboratable):
 	''' Interface that allow us to receive simple register-style commands over ECP5 JTAGG.
 
@@ -154,7 +148,6 @@ class JTAGCommandInterface(Elaboratable):
 	in the SHIFT-DR state. To shift an instruction, place the Lattice ER1 instruction into the
 	JTAG IR, and then shift the instruction in as data. To shift data, place the Lattice ER2
 	instruction into the JTAG IR, and then shift data normally.
-
 
 	Attributes
 	----------
@@ -192,7 +185,6 @@ class JTAGCommandInterface(Elaboratable):
 		# Status
 		self.idle    = Signal()
 		self.stalled = Signal()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -262,7 +254,6 @@ class JTAGCommandInterface(Elaboratable):
 			with m.Elif(shifting_instruction):
 				m.d.sync += instruction_register.eq(Cat(instruction_register[1:], jtag_tdi))
 
-
 			# Once we're actively shifting data over JTAG, capture it.
 			shifting_data = Signal()
 			m.d.sync += shifting_data.eq(jtag_ce_data & jtag_in_shift_dr)
@@ -272,7 +263,6 @@ class JTAGCommandInterface(Elaboratable):
 				m.d.sync += data_register.eq(Cat(data_register[1:], jtag_tdi))
 			with m.Elif(jtag_rti_instruction):
 				m.d.sync += data_register.eq(self.word_to_send)
-
 
 		# Create our event strobes.
 		command_ready = Signal()
@@ -299,11 +289,8 @@ class JTAGCommandInterface(Elaboratable):
 
 		return m
 
-
-
 class JTAGRegisterInterface(SPIRegisterInterface):
 	''' JTAG-carried version of our SPI register interface. '''
-
 
 	def __init__(self, address_size = 15, register_size = 32, default_read_value = 0, support_size_autonegotiation = True):
 		'''
@@ -352,7 +339,6 @@ class JTAGRegisterInterface(SPIRegisterInterface):
 
 		if support_size_autonegotiation:
 			self.support_size_autonegotiation()
-
 
 	def _connect_interface(self, m):
 		pass

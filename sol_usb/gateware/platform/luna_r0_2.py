@@ -4,7 +4,6 @@
 #
 # Copyright (c) 2020-2021 Great Scott Gadgets <info@greatscottgadgets.com>
 
-
 import os
 
 from torii.build                        import *
@@ -66,7 +65,6 @@ class LUNAPlatformRev0D2(LUNAApolloPlatform, ECP5Platform):
 	ulpi_extra_registers = {
 		0x39: 0b000110 # USB3343: swap D+ and D- to match the LUNA boards
 	}
-
 
 	#
 	# I/O resources.

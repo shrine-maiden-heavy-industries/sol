@@ -25,11 +25,9 @@ class ILAExample(Elaboratable):
 			sample_depth = 32,
 		)
 
-
 	def interactive_display(self):
 		frontend = USBIntegratedLogicAnalyzerFrontend(ila = self.ila)
 		frontend.interactive_display()
-
 
 	def elaborate(self, platform):
 		m = Module()
@@ -56,7 +54,6 @@ class ILAExample(Elaboratable):
 
 		# Return our elaborated module.
 		return m
-
 
 if __name__ == '__main__':
 	example = cli(ILAExample)

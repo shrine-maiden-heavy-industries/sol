@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-
 from sol_usb.gateware.usb.usb2.request import USBSetupDecoder
 from sol_usb.gateware.usb.usb2         import USBSpeed
 from sol_usb.gateware.test             import usb_domain_test_case
@@ -13,12 +12,10 @@ class USBSetupDecoderTest(USBPacketizerTest):
 	FRAGMENT_UNDER_TEST = USBSetupDecoder
 	FRAGMENT_ARGUMENTS = {'standalone': True}
 
-
 	def initialize_signals(self):
 
 		# Assume high speed.
 		yield self.dut.speed.eq(USBSpeed.HIGH)
-
 
 	def provide_reference_setup_transaction(self):
 		''' Provide a reference SETUP transaction. '''
@@ -39,7 +36,6 @@ class USBSetupDecoderTest(USBPacketizerTest):
 			0x78, 0x56,   # length 0x5678
 			0x3b, 0xa2,   # CRC
 		)
-
 
 	@usb_domain_test_case
 	def test_valid_sequence_receive(self):
@@ -67,7 +63,6 @@ class USBSetupDecoderTest(USBPacketizerTest):
 		self.assertEqual((yield dut.packet.index),         0x0123  )
 		self.assertEqual((yield dut.packet.length),        0x5678  )
 
-
 	@usb_domain_test_case
 	def test_fs_interpacket_delay(self):
 		dut = self.dut
@@ -88,8 +83,6 @@ class USBSetupDecoderTest(USBPacketizerTest):
 		# After our minimum interpacket delay, we should see an ACK.
 		yield from self.advance_cycles(10)
 		self.assertEqual((yield dut.ack), 1)
-
-
 
 	@usb_domain_test_case
 	def test_short_setup_packet(self):

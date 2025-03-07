@@ -78,7 +78,6 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		#
 		self.mem = Memory(width = self.sample_width, depth = sample_depth, name = 'ila_buffer')
 
-
 		#
 		# I/O port
 		#
@@ -88,7 +87,6 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 		self.captured_sample_number = Signal(range(0, self.sample_depth))
 		self.captured_sample        = Signal(self.sample_width)
-
 
 	def elaborate(self, platform):
 		m  = Module()
@@ -161,13 +159,11 @@ class IntegratedLogicAnalyzer(Elaboratable):
 						write_port.en.eq(0)
 					]
 
-
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self.domain != 'sync':
 			m = DomainRenamer(self.domain)(m)
 
 		return m
-
 
 class SyncSerialILA(Elaboratable):
 	''' Super-simple ILA that reads samples out over a simple unidirectional SPI.
@@ -268,7 +264,6 @@ class SyncSerialILA(Elaboratable):
 		self.sampling = self.ila.sampling
 		self.complete = self.ila.complete
 
-
 	def elaborate(self, platform):
 		m  = Module()
 		m.submodules.ila = self.ila
@@ -312,7 +307,6 @@ class SyncSerialILA(Elaboratable):
 		with m.Else():
 			m.d.sync += current_sample_number.eq(0)
 
-
 		# Ensure our ILA module outputs the right sample.
 		m.d.sync += [
 			self.ila.captured_sample_number.eq(current_sample_number)
@@ -323,8 +317,6 @@ class SyncSerialILA(Elaboratable):
 			m = DomainRenamer(self.domain)(m)
 
 		return m
-
-
 
 class StreamILA(Elaboratable):
 	''' Super-simple ILA that outputs its samples over a Stream.
@@ -395,11 +387,9 @@ class StreamILA(Elaboratable):
 		self.stream  = StreamInterface(payload_width = self.bits_per_sample)
 		self.trigger = Signal()
 
-
 		# Expose our ILA's trigger and status ports directly.
 		self.sampling = self.ila.sampling
 		self.complete = self.ila.complete
-
 
 	def elaborate(self, platform):
 		m  = Module()
@@ -432,7 +422,6 @@ class StreamILA(Elaboratable):
 				with m.If(self.trigger):
 					m.next = 'SAMPLING'
 
-
 			# SAMPLING -- the internal ILA is sampling; we're now waiting for it to
 			# complete. This state is similar to IDLE; except we block triggers in order
 			# to cleanly avoid a race condition.
@@ -445,7 +434,6 @@ class StreamILA(Elaboratable):
 						in_domain_stream.first.eq(1)
 					]
 					m.next = 'SENDING'
-
 
 			# SENDING -- we now have a valid buffer of samples to send up to the host;
 			# we'll transmit them over our stream interface.
@@ -473,7 +461,6 @@ class StreamILA(Elaboratable):
 							m.next = 'IDLE'
 					with m.Else():
 						m.d.sync += data_valid.eq(1)
-
 
 		# If we're not streaming out of the same domain we're capturing from,
 		# we'll add some clock-domain crossing hardware.
@@ -586,7 +573,6 @@ class AsyncSerialILA(Elaboratable):
 		self.sampling = self.ila.sampling
 		self.complete = self.ila.complete
 
-
 	def elaborate(self, platform):
 		m  = Module()
 		m.submodules.ila = ila = self.ila
@@ -601,14 +587,11 @@ class AsyncSerialILA(Elaboratable):
 			self.tx.eq(uart.tx)
 		]
 
-
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self.domain != 'sync':
 			m = DomainRenamer({'sync': self.domain})(m)
 
 		return m
-
-
 
 class ILAFrontend(metaclass = ABCMeta):
 	''' Class that communicates with an ILA module and emits useful output. '''
@@ -624,11 +607,9 @@ class ILAFrontend(metaclass = ABCMeta):
 		self.ila = ila
 		self.samples = None
 
-
 	@abstractmethod
 	def _read_samples(self):
 		''' Read samples from the target ILA. Should return an iterable of samples. '''
-
 
 	def _parse_sample(self, raw_sample):
 		''' Converts a single binary sample to a dictionary of names -> sample values. '''
@@ -646,16 +627,13 @@ class ILAFrontend(metaclass = ABCMeta):
 
 		return sample
 
-
 	def _parse_samples(self, raw_samples):
 		''' Converts raw, binary samples to dictionaries of name -> sample. '''
 		return [self._parse_sample(sample) for sample in raw_samples]
 
-
 	def refresh(self):
 		''' Fetches the latest set of samples from the target ILA. '''
 		self.samples = self._parse_samples(self._read_samples())
-
 
 	def enumerate_samples(self):
 		''' Returns an iterator that returns pairs of (timestamp, sample). '''
@@ -673,15 +651,12 @@ class ILAFrontend(metaclass = ABCMeta):
 			# ... and advance the timestamp by the relevant interval.
 			timestamp += self.ila.sample_period
 
-
 	def print_samples(self):
 		''' Simple method that prints each of our samples; for simple CLI debugging.'''
 
 		for timestamp, sample in self.enumerate_samples():
 			timestamp_scaled = 1000000 * timestamp
 			print(f'{timestamp_scaled:08f}us: {sample}')
-
-
 
 	def emit_vcd(self, filename, *, gtkw_filename = None, add_clock = True):
 		'''
@@ -744,14 +719,12 @@ class ILAFrontend(metaclass = ABCMeta):
 					# Register the signal change.
 					writer.change(signals[signal_name], timestamp / 1e-9, signal_value.to_int())
 
-
 		# If we're generating a GTKW, delegate that to our helper function.
 		if gtkw_filename:
 			if filename == '-':
 				raise ValueError('Unable to emit GTKWave save to stdout')
 
 			self._emit_gtkw(gtkw_filename, filename, add_clock = add_clock)
-
 
 	def _emit_gtkw(self, filename, dump_filename, *, add_clock = True):
 		'''
@@ -767,7 +740,6 @@ class ILAFrontend(metaclass = ABCMeta):
 
 		add_clock
 			True iff a clock signal should be added to the GTKW save.
-
 
 		'''
 
@@ -787,7 +759,6 @@ class ILAFrontend(metaclass = ABCMeta):
 			for signal in self.ila.signals:
 				gtkw.trace(f'ila.{signal.name}')
 
-
 	def interactive_display(self, *, add_clock = True):
 		''' Attempts to spawn a GTKWave instance to display the ILA results interactively. '''
 
@@ -801,7 +772,6 @@ class ILAFrontend(metaclass = ABCMeta):
 		finally:
 			os.remove(vcd_filename)
 			os.remove(gtkw_filename)
-
 
 class AsyncSerialILAFrontend(ILAFrontend):
 	''' UART-based ILA transport.
@@ -822,7 +792,6 @@ class AsyncSerialILAFrontend(ILAFrontend):
 
 		super().__init__(ila)
 
-
 	def _split_samples(self, all_samples):
 		''' Returns an iterator that iterates over each sample in the raw binary of samples. '''
 		from luminary_fpga.support.bits import bits
@@ -835,7 +804,6 @@ class AsyncSerialILAFrontend(ILAFrontend):
 			sample_length = len(Cat(self.ila.signals))
 
 			yield bits.from_bytes(raw_sample, length = sample_length, byteorder = 'big')
-
 
 	def _read_samples(self):
 		''' Reads a set of ILA samples, and returns them. '''

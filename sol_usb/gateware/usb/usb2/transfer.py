@@ -104,14 +104,12 @@ class USBInTransferManager(Elaboratable):
 		self.start_with_data1 = Signal()
 		self.reset_sequence   = Signal()
 
-
 	def elaborate(self, platform):
 		m = Module()
 
 		#
 		# Transceiver state.
 		#
-
 
 		# Handle our PID-sequence reset.
 		# Note that we store the _inverse_ of our data PID, as we'll toggle our DATA PID
@@ -254,7 +252,6 @@ class USBInTransferManager(Elaboratable):
 						read_stream_ended.eq(0)
 					]
 
-
 			# WAIT_TO_SEND -- we now have at least a buffer full of data to send; we'll
 			# need to wait for an IN token to send it.
 			with m.State('WAIT_TO_SEND'):
@@ -284,7 +281,6 @@ class USBInTransferManager(Elaboratable):
 						# ... and clear the need to follow up with one, since we've just sent a short packet.
 						m.d.usb += read_stream_ended.eq(0)
 						m.next = 'WAIT_FOR_ACK'
-
 
 			with m.State('SEND_PACKET'):
 				last_packet = (send_position + 1 == read_fill_count)
@@ -316,7 +312,6 @@ class USBInTransferManager(Elaboratable):
 					# response from our host.
 					with m.If(last_packet):
 						m.next = 'WAIT_FOR_ACK'
-
 
 			# WAIT_FOR_ACK -- We've just sent a packet; but don't know if the host has
 			# received it correctly. We'll wait to see if the host ACKs.
@@ -359,7 +354,6 @@ class USBInTransferManager(Elaboratable):
 					# We'll wait for enough data to transmit.
 					with m.Else():
 						m.next = 'WAIT_FOR_DATA'
-
 
 				# If the host starts a new packet without ACK'ing, we'll need to retransmit (unless dicarding).
 				# We'll move back to our 'wait for token' state without clearing our buffer.
