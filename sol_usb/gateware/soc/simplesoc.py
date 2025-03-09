@@ -23,7 +23,8 @@ from torii.lib.soc           import wishbone
 from torii.lib.soc.memory    import MemoryMap, ResourceInfo
 from torii.lib.stdio.serial  import AsyncSerial
 
-from ..utils.cdc             import synchronize
+from torii_usb.utils         import synchronize
+
 from .memory                 import WishboneRAM, WishboneROM
 
 class SimpleSoC(CPUSoC, Elaboratable):

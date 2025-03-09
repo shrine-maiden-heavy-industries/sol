@@ -9,10 +9,11 @@ import os
 
 from torii.hdl              import Elaboratable, Module, Signal
 
+from torii_usb.usb2         import USBDevice, USBStreamInEndpoint
+
 from usb_construct.emitters import DeviceDescriptorCollection
 
 from sol_usb.cli            import cli
-from sol_usb.usb2           import USBDevice, USBStreamInEndpoint
 
 class USBCounterDeviceExample(Elaboratable):
 	'''
