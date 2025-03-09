@@ -5,15 +5,16 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-from torii.hdl                         import Cat, Elaboratable, Module
+from torii.hdl                  import Cat, Elaboratable, Module
 
-from usb_construct.emitters            import DeviceDescriptorCollection
-from usb_construct.types               import USBRequestType
+from torii_usb.usb.usb2.device  import USBDevice
+from torii_usb.usb.usb2.request import USBRequestHandler
 
-from sol_usb.cli                       import cli
-from sol_usb.gateware.platform         import NullPin
-from sol_usb.gateware.usb.usb2.device  import USBDevice
-from sol_usb.gateware.usb.usb2.request import USBRequestHandler
+from usb_construct.emitters     import DeviceDescriptorCollection
+from usb_construct.types        import USBRequestType
+
+from sol_usb.cli                import cli
+from sol_usb.gateware.platform  import NullPin
 
 class LEDRequestHandler(USBRequestHandler):
 	''' Simple, example request handler that can control the board's LEDs. '''
@@ -46,7 +47,7 @@ class LEDRequestHandler(USBRequestHandler):
 					# cause an update. This is fun; we can PWM the LEDs with
 					# USB packets. :)
 					with m.If(interface.rx.valid & interface.rx.next):
-						m.d.usb += leds.eq(interface.rx.payload)
+						m.d.usb += leds.eq(interface.rx.data)
 
 					# Once the receive is complete, respond with an ACK.
 					with m.If(interface.rx_ready_for_response):

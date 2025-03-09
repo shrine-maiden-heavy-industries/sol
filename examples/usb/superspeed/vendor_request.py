@@ -7,12 +7,13 @@
 
 from torii.hdl                 import Cat, Elaboratable, Module
 
+from torii_usb.usb3            import SuperSpeedRequestHandler, USBSuperSpeedDevice
+
 from usb_construct.emitters    import SuperSpeedDeviceDescriptorCollection
 from usb_construct.types       import USBRequestType
 
 from sol_usb.cli               import cli
 from sol_usb.gateware.platform import NullPin
-from sol_usb.usb3              import SuperSpeedRequestHandler, USBSuperSpeedDevice
 
 class LEDRequestHandler(SuperSpeedRequestHandler):
 	''' Simple, example request handler that can control the board's LEDs. '''
@@ -48,7 +49,7 @@ class LEDRequestHandler(SuperSpeedRequestHandler):
 					for word in range(4):
 						with m.If(interface.rx.valid[word]):
 							led_byte = leds.word_select(word, 8)
-							m.d.ss += led_byte.eq(interface.rx.payload.word_select(word, 8))
+							m.d.ss += led_byte.eq(interface.rx.data.word_select(word, 8))
 
 					# Generate an ACK response once we receive the packet.
 					#

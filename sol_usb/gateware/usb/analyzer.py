@@ -6,13 +6,13 @@
 
 ''' Low-level USB analyzer gateware. '''
 
-from typing           import TYPE_CHECKING
+from typing                   import TYPE_CHECKING
 
-from torii.hdl        import Cat, DomainRenamer, Elaboratable, Module, Signal
-from torii.lib.fifo   import SyncFIFOBuffered
+from torii.hdl                import Cat, DomainRenamer, Elaboratable, Module, Signal
+from torii.lib.fifo           import SyncFIFOBuffered
+from torii.lib.stream.simple  import StreamInterface
 
-from ..interface.utmi import UTMIInterface
-from ..stream         import StreamInterface
+from torii_usb.interface.utmi import UTMIInterface
 
 class USBAnalyzer(Elaboratable):
 	'''
@@ -106,14 +106,14 @@ class USBAnalyzer(Elaboratable):
 		packet_too_big = Signal()
 
 		# Internal storage
-		m.submodules.data_buffer = data_buffer = DomainRenamer('usb')(
+		m.submodules.data_buffer = data_buffer = DomainRenamer(sync = 'usb')(
 			SyncFIFOBuffered(width = 8, depth = self.mem_size)
 		)
-		m.submodules.packet_buffer = packet_buffer = DomainRenamer('usb')(
+		m.submodules.packet_buffer = packet_buffer = DomainRenamer(sync = 'usb')(
 			SyncFIFOBuffered(width = 8, depth = USBAnalyzer.MAX_PACKET_SIZE_BYTES)
 		)
 		# The top bit of the length buffer is an overrun flag - if set, we've had an overrun occur in the primary FIFO.
-		m.submodules.length_buffer = length_buffer = DomainRenamer('usb')(
+		m.submodules.length_buffer = length_buffer = DomainRenamer(sync = 'usb')(
 			SyncFIFOBuffered(width = packet_length.width + 1, depth = 256)
 		)
 
@@ -127,7 +127,7 @@ class USBAnalyzer(Elaboratable):
 			# We have data ready whenever there's data in the FIFO.
 			self.stream.valid.eq(data_buffer.r_rdy),
 			# Our data_out is always the output of our read port...
-			self.stream.payload.eq(data_buffer.r_data),
+			self.stream.data.eq(data_buffer.r_data),
 			# Read more data out for as long as the ready signal is asserted
 			data_buffer.r_en.eq(self.stream.ready),
 
