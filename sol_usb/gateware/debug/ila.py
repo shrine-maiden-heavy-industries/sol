@@ -161,7 +161,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self.domain != 'sync':
-			m = DomainRenamer(self.domain)(m)
+			m = DomainRenamer(sync = self.domain)(m)
 
 		return m
 
@@ -314,7 +314,7 @@ class SyncSerialILA(Elaboratable):
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self.domain != 'sync':
-			m = DomainRenamer(self.domain)(m)
+			m = DomainRenamer(sync = self.domain)(m)
 
 		return m
 
@@ -498,7 +498,7 @@ class StreamILA(Elaboratable):
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self.domain != 'sync':
-			m = DomainRenamer(self.domain)(m)
+			m = DomainRenamer(sync = self.domain)(m)
 
 		return m
 
@@ -589,7 +589,7 @@ class AsyncSerialILA(Elaboratable):
 
 		# Convert our sync domain to the domain requested by the user, if necessary.
 		if self.domain != 'sync':
-			m = DomainRenamer({'sync': self.domain})(m)
+			m = DomainRenamer(sync = self.domain)(m)
 
 		return m
 
