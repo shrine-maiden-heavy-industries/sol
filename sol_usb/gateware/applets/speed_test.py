@@ -2,10 +2,10 @@
 
 from torii.hdl              import Elaboratable, Module, Signal
 
-from usb_construct.emitters import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
+from torii_usb.usb2         import USBDevice, USBStreamInEndpoint
+from torii_usb.usb3         import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
 
-from sol_usb.usb2           import USBDevice, USBStreamInEndpoint
-from sol_usb.usb3           import SuperSpeedStreamInEndpoint, USBSuperSpeedDevice
+from usb_construct.emitters import DeviceDescriptorCollection, SuperSpeedDeviceDescriptorCollection
 
 VENDOR_ID  = 0x16d0
 PRODUCT_ID = 0x0f3b

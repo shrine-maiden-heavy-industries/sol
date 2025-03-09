@@ -1,15 +1,16 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from collections.abc                 import Iterable
-from concurrent.futures              import Future
-from typing                          import TypedDict
+from collections.abc               import Iterable
+from concurrent.futures            import Future
+from typing                        import TypedDict
 
-from torii.hdl                       import Module
-from torii.sim                       import Settle, Tick
+from torii.hdl                     import Module
+from torii.sim                     import Settle, Tick
 
-from sol_usb.gateware.interface.utmi import UTMIInterface
-from sol_usb.gateware.test           import SolGatewareTestCase, usb_domain_test_case
-from sol_usb.gateware.usb.analyzer   import USBAnalyzer
+from torii_usb.interface.utmi      import UTMIInterface
+
+from sol_usb.gateware.test         import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.usb.analyzer import USBAnalyzer
 
 class WaitDict(TypedDict):
 	wait: float
@@ -960,7 +961,7 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 	USB_CLOCK_FREQUENCY = 60e6
 
 	def instantiate_dut(self):
-		from sol_usb.gateware.interface.ulpi import ULPIInterface, UTMITranslator
+		from torii_usb.interface.ulpi import ULPIInterface, UTMITranslator
 
 		self.ulpi = ULPIInterface()
 

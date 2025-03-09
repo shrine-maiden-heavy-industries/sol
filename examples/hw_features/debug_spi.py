@@ -7,9 +7,10 @@
 
 from torii.hdl                      import Elaboratable, Module
 
+from torii_usb.utils.cdc            import synchronize
+
 from sol_usb.cli                    import cli
 from sol_usb.gateware.interface.spi import SPIDeviceInterface
-from sol_usb.gateware.utils.cdc     import synchronize
 
 class DebugSPIExample(Elaboratable):
 	''' Hardware meant to demonstrate use of the Debug Controller's SPI interface. '''
