@@ -87,7 +87,7 @@ class USBInSpeedTestDevice(Elaboratable):
 		# Send entirely zeroes, as fast as we can.
 		m.d.comb += [
 			stream_ep.stream.valid.eq(1),
-			stream_ep.stream.payload.eq(0)
+			stream_ep.stream.data.eq(0)
 		]
 
 		# Connect our device as a high speed device by default.

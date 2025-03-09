@@ -6,13 +6,13 @@
 
 ''' Low-level USB analyzer gateware. '''
 
-from typing           import TYPE_CHECKING
+from typing                  import TYPE_CHECKING
 
-from torii.hdl        import Cat, DomainRenamer, Elaboratable, Module, Signal
-from torii.lib.fifo   import SyncFIFOBuffered
+from torii.hdl               import Cat, DomainRenamer, Elaboratable, Module, Signal
+from torii.lib.fifo          import SyncFIFOBuffered
+from torii.lib.stream.simple import StreamInterface
 
-from ..interface.utmi import UTMIInterface
-from ..stream         import StreamInterface
+from ..interface.utmi        import UTMIInterface
 
 class USBAnalyzer(Elaboratable):
 	'''
@@ -127,7 +127,7 @@ class USBAnalyzer(Elaboratable):
 			# We have data ready whenever there's data in the FIFO.
 			self.stream.valid.eq(data_buffer.r_rdy),
 			# Our data_out is always the output of our read port...
-			self.stream.payload.eq(data_buffer.r_data),
+			self.stream.data.eq(data_buffer.r_data),
 			# Read more data out for as long as the ready signal is asserted
 			data_buffer.r_en.eq(self.stream.ready),
 

@@ -46,7 +46,7 @@ class LEDRequestHandler(USBRequestHandler):
 					# cause an update. This is fun; we can PWM the LEDs with
 					# USB packets. :)
 					with m.If(interface.rx.valid & interface.rx.next):
-						m.d.usb += leds.eq(interface.rx.payload)
+						m.d.usb += leds.eq(interface.rx.data)
 
 					# Once the receive is complete, respond with an ACK.
 					with m.If(interface.rx_ready_for_response):
