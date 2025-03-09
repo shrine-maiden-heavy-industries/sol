@@ -106,14 +106,14 @@ class USBAnalyzer(Elaboratable):
 		packet_too_big = Signal()
 
 		# Internal storage
-		m.submodules.data_buffer = data_buffer = DomainRenamer('usb')(
+		m.submodules.data_buffer = data_buffer = DomainRenamer(sync = 'usb')(
 			SyncFIFOBuffered(width = 8, depth = self.mem_size)
 		)
-		m.submodules.packet_buffer = packet_buffer = DomainRenamer('usb')(
+		m.submodules.packet_buffer = packet_buffer = DomainRenamer(sync = 'usb')(
 			SyncFIFOBuffered(width = 8, depth = USBAnalyzer.MAX_PACKET_SIZE_BYTES)
 		)
 		# The top bit of the length buffer is an overrun flag - if set, we've had an overrun occur in the primary FIFO.
-		m.submodules.length_buffer = length_buffer = DomainRenamer('usb')(
+		m.submodules.length_buffer = length_buffer = DomainRenamer(sync = 'usb')(
 			SyncFIFOBuffered(width = packet_length.width + 1, depth = 256)
 		)
 
