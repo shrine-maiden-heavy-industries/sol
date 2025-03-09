@@ -46,7 +46,7 @@ class UARTTransmitterTest(SolGatewareTestCase):
 		self.assertEqual((yield dut.tx), 1)
 
 		# First, transmit 0x55 (maximum transition rate).
-		yield stream.payload.eq(0x55)
+		yield stream.data.eq(0x55)
 		yield stream.valid.eq(1)
 
 		# We should see our data become accepted; and we
@@ -59,7 +59,7 @@ class UARTTransmitterTest(SolGatewareTestCase):
 		# Provide our next byte of data once the current
 		# one has been accepted. Changing this before the tests
 		# below ensures that we validate that data is latched properly.
-		yield stream.payload.eq(0x66)
+		yield stream.data.eq(0x66)
 
 		# Ensure we get our data correctly.
 		yield from self.assert_data_sent(0x55)
@@ -114,7 +114,7 @@ class UARTMultibyteTransmitterTest(SolGatewareTestCase):
 		self.assertEqual((yield dut.stream.ready), 1)
 
 		# Transmit a four-byte word.
-		yield stream.payload.eq(0x11223355)
+		yield stream.data.eq(0x11223355)
 		yield stream.valid.eq(1)
 
 		# We should see our data become accepted; and we

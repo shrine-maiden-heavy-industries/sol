@@ -83,7 +83,7 @@ class StressTestEndpoint(Elaboratable):
 
 		m.d.comb += [
 			# Always send our constant value.
-			tx.payload.eq(self._constant),
+			tx.data.eq(self._constant),
 
 			# Send bytes, whenever we have them.
 			tx.valid.eq(bytes_to_send != 0),

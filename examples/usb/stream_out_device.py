@@ -85,8 +85,8 @@ class USBStreamOutDeviceExample(Elaboratable):
 		# Always stream our USB data directly onto our User I/O and LEDS.
 		with m.If(stream_ep.stream.valid):
 			m.d.usb += [
-				leds.eq(stream_ep.stream.payload),
-				user_io.eq(stream_ep.stream.payload),
+				leds.eq(stream_ep.stream.data),
+				user_io.eq(stream_ep.stream.data),
 			]
 
 		# Always accept data as it comes in.

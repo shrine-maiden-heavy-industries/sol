@@ -11,19 +11,19 @@ import os
 import subprocess
 import sys
 import tempfile
-from abc              import ABCMeta, abstractmethod
+from abc                     import ABCMeta, abstractmethod
 
-from torii.hdl        import Cat, DomainRenamer, Elaboratable, Memory, Module, Signal
-from torii.hdl.ast    import Rose
-from torii.lib.cdc    import FFSynchronizer
-from torii.lib.fifo   import AsyncFIFOBuffered
+from torii.hdl               import Cat, DomainRenamer, Elaboratable, Memory, Module, Signal
+from torii.hdl.ast           import Rose
+from torii.lib.cdc           import FFSynchronizer
+from torii.lib.fifo          import AsyncFIFOBuffered
+from torii.lib.stream.simple import StreamInterface
 
-from vcd              import VCDWriter
-from vcd.gtkw         import GTKWSave
+from vcd                     import VCDWriter
+from vcd.gtkw                import GTKWSave
 
-from ..interface.spi  import SPIBus, SPIDeviceInterface
-from ..interface.uart import UARTMultibyteTransmitter
-from ..stream         import StreamInterface
+from ..interface.spi         import SPIBus, SPIDeviceInterface
+from ..interface.uart        import UARTMultibyteTransmitter
 
 class IntegratedLogicAnalyzer(Elaboratable):
 	''' Super-simple integrated-logic-analyzer generator class for SOL.
@@ -384,7 +384,7 @@ class StreamILA(Elaboratable):
 		#
 		# I/O port
 		#
-		self.stream  = StreamInterface(payload_width = self.bits_per_sample)
+		self.stream  = StreamInterface(data_width = self.bits_per_sample)
 		self.trigger = Signal()
 
 		# Expose our ILA's trigger and status ports directly.
@@ -398,7 +398,7 @@ class StreamILA(Elaboratable):
 		if self._o_domain == self.domain:
 			in_domain_stream = self.stream
 		else:
-			in_domain_stream = StreamInterface(payload_width = self.bits_per_sample)
+			in_domain_stream = StreamInterface(data_width = self.bits_per_sample)
 
 		# Count where we are in the current transmission.
 		current_sample_number = Signal(range(0, ila.sample_depth))
@@ -407,7 +407,7 @@ class StreamILA(Elaboratable):
 		# sample value to the UART.
 		m.d.comb += [
 			ila.captured_sample_number.eq(current_sample_number),
-			in_domain_stream.payload.eq(ila.captured_sample)
+			in_domain_stream.data.eq(ila.captured_sample)
 		]
 
 		with m.FSM():
@@ -467,12 +467,12 @@ class StreamILA(Elaboratable):
 		if self._o_domain != self.domain:
 			in_domain_signals  = Cat(
 				in_domain_stream.first,
-				in_domain_stream.payload,
+				in_domain_stream.data,
 				in_domain_stream.last
 			)
 			out_domain_signals = Cat(
 				self.stream.first,
-				self.stream.payload,
+				self.stream.data,
 				self.stream.last
 			)
 

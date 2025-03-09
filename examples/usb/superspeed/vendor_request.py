@@ -48,7 +48,7 @@ class LEDRequestHandler(SuperSpeedRequestHandler):
 					for word in range(4):
 						with m.If(interface.rx.valid[word]):
 							led_byte = leds.word_select(word, 8)
-							m.d.ss += led_byte.eq(interface.rx.payload.word_select(word, 8))
+							m.d.ss += led_byte.eq(interface.rx.data.word_select(word, 8))
 
 					# Generate an ACK response once we receive the packet.
 					#

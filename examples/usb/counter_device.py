@@ -90,7 +90,7 @@ class USBCounterDeviceExample(Elaboratable):
 
 		m.d.comb += [
 			stream_ep.stream.valid.eq(1),
-			stream_ep.stream.payload.eq(counter)
+			stream_ep.stream.data.eq(counter)
 		]
 
 		# Connect our device as a high speed device by default.
