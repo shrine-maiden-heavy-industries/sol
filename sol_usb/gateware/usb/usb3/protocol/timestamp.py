@@ -6,54 +6,26 @@
 
 ''' Isochronous Timestamp Packet (ITP)-related gateware. '''
 
-from torii.hdl                      import Elaboratable, Module, Signal
+from warnings  import warn
+from importlib import import_module
 
-from usb_construct.types.superspeed import HeaderPacketType
+__all__ = (
+	'TimestampPacketReceiver',
+)
 
-from ..link.header                  import HeaderQueue
+def __dir__() -> list[str]:
+	return list({*globals(), *__all__})
 
-class TimestampPacketReceiver(Elaboratable):
-	''' Gateware that receives Isochronous Timestamp Packets, and keeps time.
-
-	Attributes
-	----------
-	header_sink: HeaderQueue(), input stream
-		Input stream carrying header packets from the link layer.
-
-	bus_interval_counter: Signal(14), output
-		The currently timestamp, expressed in a number of 125uS bus intervals.
-	delta: Signal(13)
-		The delta from the aligned bus interval and ITP transmission.
-	'''
-
-	def __init__(self):
-
-		#
-		# I/O port
-		#
-		self.header_sink          = HeaderQueue()
-
-		self.update_received      = Signal()
-		self.bus_interval_counter = Signal()
-		self.delta                = Signal()
-
-	def elaborate(self, platform):
-		m = Module()
-
-		# Accept any Isochronous Timestamp Packet...
-		new_packet = self.header_sink.valid
-		is_for_us  = self.header_sink.get_type() == HeaderPacketType.ISOCHRONOUS_TIMESTAMP
-		with m.If(new_packet & is_for_us):
-			m.d.comb += self.header_sink.ready.eq(1)
-
-			# ... and extract its fields.
-			packet = self.header_sink.header
-			m.d.ss += [
-				self.update_received.eq(1),
-				self.bus_interval_counter.eq(packet.dw0[ 5:19]),
-				self.delta.eq(packet.dw0[19:32])
-			]
-		with m.Else():
-			m.d.ss += self.update_received.eq(0)
-
-		return m
+def __getattr__(name: str):
+	if name in __all__:
+		torii_usb_mod = __name__.replace('sol_usb', 'torii_usb').replace('.gateware', '')
+		warn(
+			'Core USB functionality has been migrated to torii_usb, see the migration guide: '
+			'https://torii-usb.shmdn.link/migrating.html \n'
+			f'(hint: replace \'{__name__}.{name}\' with \'{torii_usb_mod}.{name}\')',
+			DeprecationWarning,
+			stacklevel = 2
+		)
+		return import_module(torii_usb_mod).__dict__[name]
+	if name not in __dir__():
+		raise AttributeError(f'Module {__name__!r} has no attribute {name!r}')
