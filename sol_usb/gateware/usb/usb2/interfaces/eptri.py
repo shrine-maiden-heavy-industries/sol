@@ -150,7 +150,7 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 
 		# TODO: generate interrupts
 
-		return DomainRenamer({'sync': 'usb'})(m)
+		return DomainRenamer(sync = 'usb'})(m)
 
 class InFIFOInterface(Peripheral, Elaboratable):
 	''' IN component of our `eptri`-equivalent interface.
@@ -445,7 +445,7 @@ class InFIFOInterface(Peripheral, Elaboratable):
 				with m.If(self.reset.w_stb):
 					m.next = 'IDLE'
 
-		return DomainRenamer({'sync': 'usb'})(m)
+		return DomainRenamer(sync = 'usb')(m)
 
 class OutFIFOInterface(Peripheral, Elaboratable):
 	''' OUT component of our `eptri`
@@ -682,4 +682,4 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		# Interrupt/status
 		#
 
-		return DomainRenamer({'sync': 'usb'})(m)
+		return DomainRenamer(sync = 'usb')(m)
