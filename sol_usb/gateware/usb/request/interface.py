@@ -6,42 +6,26 @@
 
 ''' Request components shared between USB2 and USB3. '''
 
-from torii.hdl     import Record, Signal
-from torii.hdl.rec import Direction
+from warnings  import warn
+from importlib import import_module
 
-class SetupPacket(Record):
-	''' Record capturing the content of a setup packet.
+__all__ = (
+	'SetupPacket',
+)
 
-	Components (O = output from setup parser; read-only input to others):
-		O: received      -- Strobe; indicates that a new setup packet has been received,
-							and thus this data has been updated.
+def __dir__() -> list[str]:
+	return list({*globals(), *__all__})
 
-		O: is_in_request -- High if the current request is an 'in' request.
-		O: type[2]       -- Request type for the current request.
-		O: recipient[5]  -- Recipient of the relevant request.
-
-		O: request[8]    -- Request number.
-		O: value[16]     -- Value argument for the setup request.
-		O: index[16]     -- Index argument for the setup request.
-		O: length[16]    -- Length of the relevant setup request.
-	'''
-
-	# Byte 1
-	recipient: Signal[5, Direction.FANOUT]
-	type: Signal[2, Direction.FANOUT]
-	is_in_request: Signal[1, Direction.FANOUT]
-
-	# Byte 2
-	request: Signal[8, Direction.FANOUT]
-
-	# Byte 3/4
-	value: Signal[16, Direction.FANOUT]
-
-	# Byte 5/6
-	index: Signal[16, Direction.FANOUT]
-
-	# Byte 7/8
-	length: Signal[16, Direction.FANOUT]
-
-	# Control signaling.
-	received: Signal[1, Direction.FANOUT]
+def __getattr__(name: str):
+	if name in __all__:
+		torii_usb_mod = __name__.replace('sol_usb', 'torii_usb').replace('.gateware', '')
+		warn(
+			'Core USB functionality has been migrated to torii_usb, see the migration guide: '
+			'https://torii-usb.shmdn.link/migrating.html \n'
+			f'(hint: replace \'{__name__}.{name}\' with \'{torii_usb_mod}.{name}\')',
+			DeprecationWarning,
+			stacklevel = 2
+		)
+		return import_module(torii_usb_mod).__dict__[name]
+	if name not in __dir__():
+		raise AttributeError(f'Module {__name__!r} has no attribute {name!r}')

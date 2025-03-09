@@ -5,52 +5,30 @@
 
 ''' Simple utility constructs for SOL. '''
 
-from torii.hdl import Signal
+from warnings  import warn
+from importlib import import_module
 
-from .cdc      import synchronize
+__all__ = (
+	'synchronize',
+	'past_value_of',
+	'rising_edge_detected',
+	'falling_edge_detected',
+	'any_edge_detected',
+)
 
-__all__ = [
-	'rising_edge_detected', 'falling_edge_detected', 'any_edge_detected',
-	'past_value_of', 'synchronize'
-]
+def __dir__() -> list[str]:
+	return list({*globals(), *__all__})
 
-def _single_edge_detector(m, signal, *, domain, edge = 'rising'):
-	''' Generates and returns a signal that goes high for a cycle upon a given edge of a given signal. '''
-
-	# Create a one-cycle delayed version of our input signal.
-	delayed = Signal()
-	m.d[domain] += delayed.eq(signal)
-
-	# And create a signal that detects edges on the relevant signal.
-	edge_detected = Signal()
-	if edge == 'falling':
-		m.d.comb += edge_detected.eq(delayed & ~signal)
-	elif edge == 'rising':
-		m.d.comb += edge_detected.eq(~delayed & signal)
-	elif edge == 'any':
-		m.d.comb += edge_detected.eq(delayed != signal)
-	else:
-		raise ValueError('edge must be one of {rising,falling,any}')
-
-	return edge_detected
-
-def past_value_of(m, signal, *, domain):
-	''' Generates and returns a signal that represents the value of another signal a cycle ago. '''
-
-	# Create a one-cycle delayed version of our input signal.
-	delayed = Signal()
-	m.d[domain] += delayed.eq(signal)
-
-	return delayed
-
-def rising_edge_detected(m, signal, *, domain = 'sync'):
-	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
-	return _single_edge_detector(m, signal, edge = 'rising', domain = domain)
-
-def falling_edge_detected(m, signal, *, domain = 'sync'):
-	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
-	return _single_edge_detector(m, signal, edge = 'falling', domain = domain)
-
-def any_edge_detected(m, signal, *, domain = 'sync'):
-	''' Generates and returns a signal that goes high for a cycle each rising edge of a given signal. '''
-	return _single_edge_detector(m, signal, edge = 'any', domain = domain)
+def __getattr__(name: str):
+	if name in __all__:
+		torii_usb_mod = __name__.replace('sol_usb', 'torii_usb').replace('.gateware', '')
+		warn(
+			'Core USB functionality has been migrated to torii_usb, see the migration guide: '
+			'https://torii-usb.shmdn.link/migrating.html \n'
+			f'(hint: replace \'{__name__}.{name}\' with \'{torii_usb_mod}.{name}\')',
+			DeprecationWarning,
+			stacklevel = 2
+		)
+		return import_module(torii_usb_mod).__dict__[name]
+	if name not in __dir__():
+		raise AttributeError(f'Module {__name__!r} has no attribute {name!r}')
