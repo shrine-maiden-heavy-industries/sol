@@ -10,28 +10,29 @@
 
 import errno
 import time
-from array                                  import array
-from datetime                               import datetime
-from enum                                   import IntEnum, IntFlag
+from array                             import array
+from datetime                          import datetime
+from enum                              import IntEnum, IntFlag
 
 import usb
 
-from torii.build.res                        import ResourceError
-from torii.hdl                              import Elaboratable, Module, Signal
-from torii.hdl.dsl                          import Operator
+from torii.build.res                   import ResourceError
+from torii.hdl                         import Elaboratable, Module, Signal
+from torii.hdl.dsl                     import Operator
 
-from usb_construct.emitters                 import DeviceDescriptorCollection
-from usb_construct.types                    import USBRequestType
+from torii_usb.interface.ulpi          import UTMITranslator
+from torii_usb.stream.generator        import StreamSerializer
+from torii_usb.usb.request.control     import ControlRequestHandler
+from torii_usb.usb.request.interface   import SetupPacket
+from torii_usb.usb.stream              import USBInStreamInterface
+from torii_usb.usb2                    import USBDevice, USBStreamInEndpoint
 
-from sol_usb.gateware.architecture.car      import SolECP5DomainGenerator
-from sol_usb.gateware.interface.ulpi        import UTMITranslator
-from sol_usb.gateware.platform              import get_appropriate_platform
-from sol_usb.gateware.stream.generator      import StreamSerializer
-from sol_usb.gateware.usb.analyzer          import USBAnalyzer
-from sol_usb.gateware.usb.request.control   import ControlRequestHandler
-from sol_usb.gateware.usb.request.interface import SetupPacket
-from sol_usb.gateware.usb.stream            import USBInStreamInterface
-from sol_usb.usb2                           import USBDevice, USBStreamInEndpoint
+from usb_construct.emitters            import DeviceDescriptorCollection
+from usb_construct.types               import USBRequestType
+
+from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
+from sol_usb.gateware.platform         import get_appropriate_platform
+from sol_usb.gateware.usb.analyzer     import USBAnalyzer
 
 USB_SPEED_HIGH       = 0b00
 USB_SPEED_FULL       = 0b01

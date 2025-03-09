@@ -6,13 +6,14 @@
 
 ''' Pre-made gateware that implements an ILA connection serial. '''
 
-from torii.hdl               import Cat, Elaboratable, Module, Signal
+from torii.hdl                           import Cat, Elaboratable, Module, Signal
 
-from usb_construct.emitters  import DeviceDescriptorCollection
+from torii_usb.usb.usb2.device           import USBDevice
+from torii_usb.usb.usb2.endpoints.stream import USBMultibyteStreamInEndpoint
 
-from ...debug.ila            import ILAFrontend, StreamILA
-from ..usb2.device           import USBDevice
-from ..usb2.endpoints.stream import USBMultibyteStreamInEndpoint
+from usb_construct.emitters              import DeviceDescriptorCollection
+
+from ...debug.ila                        import ILAFrontend, StreamILA
 
 class USBIntegratedLogicAnalyzer(Elaboratable):
 	''' Pre-made gateware that presents a USB-connected ILA.

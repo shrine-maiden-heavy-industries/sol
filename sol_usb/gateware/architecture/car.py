@@ -6,15 +6,15 @@
 
 ''' Clock and reset (CAR) controllers for SOL. '''
 
-import logging   as log
-from abc         import ABCMeta, abstractmethod
+import logging           as log
+from abc                 import ABCMeta, abstractmethod
 
-from torii.hdl   import ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
+from torii.hdl           import ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
 
-from ..utils.cdc import stretch_strobe_signal
+from torii_usb.utils.cdc import stretch_strobe_signal
 
-from warnings    import warn
-from importlib   import import_module
+from warnings            import warn
+from importlib           import import_module
 
 __all__ = (
 	'PHYResetController',

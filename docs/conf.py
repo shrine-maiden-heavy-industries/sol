@@ -48,6 +48,7 @@ todo_include_todos     = True
 intersphinx_mapping = {
 	'python': ('https://docs.python.org/3', None),
 	'torii': ('https://torii.shmdn.link/', None),
+	'torii_usb': ('https://torii-usb.shmdn.link/', None),
 	'usb_construct': ('https://usb-construct.shmdn.link/', None)
 }
 

@@ -7,13 +7,14 @@
 
 import os
 
-from torii.hdl                        import Elaboratable, Module
+from torii.hdl                 import Elaboratable, Module
 
-from usb_construct.emitters           import DeviceDescriptorCollection
+from torii_usb.usb.usb2.device import USBDevice
 
-from sol_usb.cli                      import cli
-from sol_usb.gateware.platform        import NullPin
-from sol_usb.gateware.usb.usb2.device import USBDevice
+from usb_construct.emitters    import DeviceDescriptorCollection
+
+from sol_usb.cli               import cli
+from sol_usb.gateware.platform import NullPin
 
 class USBDeviceExample(Elaboratable):
 	''' Simple example of a USB device using the SOL framework. '''

@@ -6,13 +6,13 @@
 
 ''' Low-level USB analyzer gateware. '''
 
-from typing                  import TYPE_CHECKING
+from typing                   import TYPE_CHECKING
 
-from torii.hdl               import Cat, DomainRenamer, Elaboratable, Module, Signal
-from torii.lib.fifo          import SyncFIFOBuffered
-from torii.lib.stream.simple import StreamInterface
+from torii.hdl                import Cat, DomainRenamer, Elaboratable, Module, Signal
+from torii.lib.fifo           import SyncFIFOBuffered
+from torii.lib.stream.simple  import StreamInterface
 
-from ..interface.utmi        import UTMIInterface
+from torii_usb.interface.utmi import UTMIInterface
 
 class USBAnalyzer(Elaboratable):
 	'''

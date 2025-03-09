@@ -7,12 +7,13 @@
 
 from torii.hdl                 import Cat, Elaboratable, Module
 
+from torii_usb.usb3            import SuperSpeedRequestHandler, USBSuperSpeedDevice
+
 from usb_construct.emitters    import SuperSpeedDeviceDescriptorCollection
 from usb_construct.types       import USBRequestType
 
 from sol_usb.cli               import cli
 from sol_usb.gateware.platform import NullPin
-from sol_usb.usb3              import SuperSpeedRequestHandler, USBSuperSpeedDevice
 
 class LEDRequestHandler(SuperSpeedRequestHandler):
 	''' Simple, example request handler that can control the board's LEDs. '''

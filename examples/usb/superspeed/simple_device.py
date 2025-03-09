@@ -7,10 +7,11 @@
 
 from torii.hdl              import Elaboratable, Module
 
+from torii_usb.usb3         import USBSuperSpeedDevice
+
 from usb_construct.emitters import SuperSpeedDeviceDescriptorCollection
 
 from sol_usb.cli            import cli
-from sol_usb.usb3           import USBSuperSpeedDevice
 
 class USBSuperSpeedExample(Elaboratable):
 	''' Simple example of a USB SuperSpeed device using the SOL framework. '''

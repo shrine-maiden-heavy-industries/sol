@@ -11,11 +11,11 @@ import time
 from luminary_fpga                     import ApolloDebugger
 
 from torii.hdl                         import ClockSignal, Elaboratable, Module, Signal
+from torii_usb.interface.ulpi          import UTMITranslator
 
 from sol_usb.cli                       import cli
 from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
 from sol_usb.gateware.interface.spi    import SPIRegisterInterface
-from sol_usb.gateware.interface.ulpi   import UTMITranslator
 from sol_usb.gateware.usb.analyzer     import USBAnalyzer
 from sol_usb.gateware.utils.cdc        import synchronize
 

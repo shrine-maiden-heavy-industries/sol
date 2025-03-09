@@ -6,11 +6,12 @@
 
 ''' Full-device test harnesses for USB2. '''
 
-from usb_construct.types import USBPacketID, USBStandardRequests
+from torii_usb.interface.utmi import UTMIInterface
 
-from ..interface.utmi    import UTMIInterface
-from .                   import SolGatewareTestCase
-from .contrib            import usb_packet
+from usb_construct.types      import USBPacketID, USBStandardRequests
+
+from .                        import SolGatewareTestCase
+from .contrib                 import usb_packet
 
 class USBDeviceTest(SolGatewareTestCase):
 	''' Test case strap for UTMI-connected devices. '''

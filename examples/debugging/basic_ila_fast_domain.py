@@ -9,10 +9,11 @@ from luminary_fpga                     import create_ila_frontend
 
 from torii.hdl                         import Cat, Elaboratable, Module, Signal
 
+from torii_usb.utils.cdc               import synchronize
+
 from sol_usb.cli                       import cli
 from sol_usb.gateware.architecture.car import SolECP5DomainGenerator
 from sol_usb.gateware.debug.ila        import SyncSerialILA
-from sol_usb.gateware.utils.cdc        import synchronize
 
 #
 # Clock frequencies for each of the domains.

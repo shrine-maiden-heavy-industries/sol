@@ -6,10 +6,10 @@
 
 ''' Interfaces to SOL's PSRAM chips.'''
 
-from torii.hdl     import Cat, Elaboratable, Module, Record, Signal
-from torii.hdl.rec import Direction
+from torii.hdl          import Cat, Elaboratable, Module, Record, Signal
+from torii.hdl.rec      import Direction
 
-from ..utils.io    import delay
+from torii_usb.utils.io import delay
 
 class HyperBus(Record):
 	''' Record representing an HyperBus (DDR-ish connection for HyperRAM). '''

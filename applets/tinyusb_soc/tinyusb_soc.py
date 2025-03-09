@@ -10,9 +10,10 @@ from lambdasoc.periph                           import Peripheral
 from torii.hdl                                  import Cat, Elaboratable, Module
 from torii.hdl.rec                              import Record
 
+from torii_usb.usb.usb2.device                  import USBDevice, USBDeviceController
+
 from sol_usb.cli                                import cli
 from sol_usb.gateware.soc                       import SimpleSoC
-from sol_usb.gateware.usb.usb2.device           import USBDevice, USBDeviceController
 from sol_usb.gateware.usb.usb2.interfaces.eptri import InFIFOInterface, OutFIFOInterface, SetupFIFOInterface
 
 CLOCK_FREQUENCIES_MHZ = {

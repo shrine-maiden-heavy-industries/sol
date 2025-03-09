@@ -9,10 +9,12 @@ from luminary_fpga              import create_ila_frontend
 
 from torii.hdl                  import Cat, Elaboratable, Module, Signal
 
+from torii_usb.utils.cdc        import synchronize
+
 from sol_usb.cli                import cli
 from sol_usb.gateware.debug.ila import SyncSerialILA
 from sol_usb.gateware.platform  import NullPin
-from sol_usb.gateware.utils.cdc import synchronize
+
 
 class ILAExample(Elaboratable):
 	''' Gateware module that demonstrates use of the internal ILA. '''
