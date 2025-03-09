@@ -12,39 +12,26 @@ the link layer; and the generation of our packets is handled by our endpoint.
 
 '''
 
-from torii.hdl                      import Elaboratable, Module
+from warnings  import warn
+from importlib import import_module
 
-from usb_construct.types.superspeed import HeaderPacketType
+__all__ = (
+	'DataHeaderReceiver',
+)
 
-from ..link.header                  import HeaderQueue
+def __dir__() -> list[str]:
+	return list({*globals(), *__all__})
 
-class DataHeaderReceiver(Elaboratable):
-	''' Gateware that handles received Data Header packets.
-
-	Attributes
-	-----------
-	header_sink: HeaderQueue(), input stream
-		Stream that brings up header packets for handling.
-	'''
-
-	def __init__(self):
-
-		#
-		# I/O port
-		#
-		self.header_sink   = HeaderQueue()
-
-	def elaborate(self, platform):
-		m = Module()
-
-		# We handle Data Packets specially, passing their header data in conjunction with
-		# the packets themselves; but the header packets are still handled like other header
-		# packets, and must be explicitly consumed by the protocol layer.
-		#
-		# We'll consume all of them here, since we don't have any direct use for their data.
-		new_packet = self.header_sink.valid
-		is_for_us  = self.header_sink.get_type() == HeaderPacketType.DATA
-		with m.If(new_packet & is_for_us):
-			m.d.comb += self.header_sink.ready.eq(1)
-
-		return m
+def __getattr__(name: str):
+	if name in __all__:
+		torii_usb_mod = __name__.replace('sol_usb', 'torii_usb').replace('.gateware', '')
+		warn(
+			'Core USB functionality has been migrated to torii_usb, see the migration guide: '
+			'https://torii-usb.shmdn.link/migrating.html \n'
+			f'(hint: replace \'{__name__}.{name}\' with \'{torii_usb_mod}.{name}\')',
+			DeprecationWarning,
+			stacklevel = 2
+		)
+		return import_module(torii_usb_mod).__dict__[name]
+	if name not in __dir__():
+		raise AttributeError(f'Module {__name__!r} has no attribute {name!r}')
