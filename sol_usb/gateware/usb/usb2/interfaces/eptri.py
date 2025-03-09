@@ -110,7 +110,7 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 			# We'll write to the active FIFO whenever the last received token is a SETUP
 			# token, and we have incoming data; and we'll always write the data received
 			fifo.w_en.eq(token.is_setup & rx.valid & rx.next),
-			fifo.w_data.eq(rx.payload),
+			fifo.w_data.eq(rx.data),
 
 			# We'll advance the FIFO whenever our CPU reads from the data CSR;
 			# and we'll always read our data from the FIFO.
@@ -425,7 +425,7 @@ class InFIFOInterface(Peripheral, Elaboratable):
 					tx.last.eq(last_byte),
 
 					# Drive our transmit data directly from our FIFO...
-					tx.payload.eq(fifo.r_data),
+					tx.data.eq(fifo.r_data),
 
 					# ... and advance our FIFO each time a data byte is transmitted.
 					fifo.r_en.eq(tx.ready)
@@ -642,7 +642,7 @@ class OutFIFOInterface(Peripheral, Elaboratable):
 		m.d.comb += [
 			# We'll write to the endpoint iff we've valid data, and we're allowed receive.
 			fifo.w_en.eq(allow_receive & rx.valid & rx.next & ~is_redundant_packet),
-			fifo.w_data.eq(rx.payload),
+			fifo.w_data.eq(rx.data),
 
 			# We'll advance the FIFO whenever our CPU reads from the data CSR;
 			# and we'll always read our data from the FIFO.

@@ -48,7 +48,7 @@ class UARTBridgeExample(Elaboratable):
 
 		# Hook everything up.
 		m.d.comb += [
-			stream.payload.eq(letters[current_letter]),
+			stream.data.eq(letters[current_letter]),
 			stream.valid.eq(counter == 0),
 
 			uart.tx.o.eq(transmitter.tx),

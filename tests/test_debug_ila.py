@@ -191,7 +191,7 @@ class StreamILATest(SolGatewareTestCase):
 		data = []
 		while not (yield stream.last):
 			if (yield stream.valid):
-				data.append((yield stream.payload))
+				data.append((yield stream.data))
 			yield
 
 		# Match read data to what should have been sampled
