@@ -1,5 +1,9 @@
 # Endpoint
 
+```{important}
+This module has been deprecated and moved to [torii-usb](https://github.com/shrine-maiden-heavy-industries/torii-usb), please see the [migration guide](https://torii-usb.shmdn.link/migration.html).
+```
+
 # Gateware Endpoint Interfaces
 
 The SOL architecture separates gateware into two distinct groups: the *core device*, responsible for the
