@@ -5,10 +5,11 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-from torii.hdl            import Elaboratable, Module
+from torii.hdl              import Elaboratable, Module
 
-from sol_usb.cli          import cli
-from sol_usb.full_devices import USBSerialDevice
+from torii_usb.full_devices import USBSerialDevice
+
+from sol_usb.cli            import cli
 
 class USBSerialDeviceExample(Elaboratable):
 	''' Device that acts as a 'USB-to-serial' loopback using our premade gateware. '''
@@ -27,7 +28,7 @@ class USBSerialDeviceExample(Elaboratable):
 
 		m.d.comb += [
 			# Place the streams into a loopback configuration...
-			usb_serial.tx.payload.eq(usb_serial.rx.payload),
+			usb_serial.tx.data.eq(usb_serial.rx.data),
 			usb_serial.tx.valid.eq(usb_serial.rx.valid),
 			usb_serial.tx.first.eq(usb_serial.rx.first),
 			usb_serial.tx.last.eq(usb_serial.rx.last),

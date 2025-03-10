@@ -6,83 +6,26 @@
 
 ''' Full-gateware control request handlers. '''
 
-import unittest
+from warnings  import warn
+from importlib import import_module
 
-from torii.hdl      import Cat
+__all__ = (
+	'ControlRequestHandler',
+)
 
-from ..usb2.request import USBRequestHandler
+def __dir__() -> list[str]:
+	return list({*globals(), *__all__})
 
-class ControlRequestHandler(USBRequestHandler):
-	''' Pure-gateware USB control request handler. '''
-
-	def handle_register_write_request(self, m, new_value_signal, write_strobe, stall_condition = 0):
-		'''
-		Fills in the current state with a request handler meant to set a register.
-
-		Parameters
-		----------
-		new_value_signal
-			The signal to receive the new value to be applied to the relevant register.
-
-		write_strobe
-			The signal which will be pulsed when new_value_signal contains a update.
-
-		stall_condition
-			If provided, if this condition is true, the request will be STALL'd instead
-			of acknowledged.
-
-		'''
-
-		# Provide an response to the STATUS stage.
-		with m.If(self.interface.status_requested):
-
-			# If our stall condition is met, stall; otherwise, send a ZLP [USB 8.5.3].
-			with m.If(stall_condition):
-				m.d.comb += self.interface.handshakes_out.stall.eq(1)
-			with m.Else():
-				m.d.comb += self.send_zlp()
-
-		# Accept the relevant value after the packet is ACK'd...
-		with m.If(self.interface.handshakes_in.ack):
-			m.d.comb += [
-				write_strobe.eq(1),
-				new_value_signal.eq(self.interface.setup.value[0:7])
-			]
-
-			# ... and then return to idle.
-			m.next = 'IDLE'
-
-	def handle_simple_data_request(self, m, transmitter, data, length = 1):
-		'''
-		Fills in a given current state with a request that returns a given piece of data.
-
-		For e.g. GET_CONFIGURATION and GET_STATUS requests.
-
-		Parameters
-		----------
-		transmitter
-			The transmitter module we're working with.
-
-		data
-			The data to be returned.
-
-		'''
-
-		# Connect our transmitter up to the output stream...
-		m.d.comb += [
-			transmitter.stream.attach(self.interface.tx),
-			Cat(transmitter.data[0:length]).eq(data),
-			transmitter.max_length.eq(length)
-		]
-
-		# ... trigger it to respond when data's requested...
-		with m.If(self.interface.data_requested):
-			m.d.comb += transmitter.start.eq(1)
-
-		# ... and ACK our status stage.
-		with m.If(self.interface.status_requested):
-			m.d.comb += self.interface.handshakes_out.ack.eq(1)
-			m.next = 'IDLE'
-
-if __name__ == '__main__':
-	unittest.main(warnings = 'ignore')
+def __getattr__(name: str):
+	if name in __all__:
+		torii_usb_mod = __name__.replace('sol_usb', 'torii_usb').replace('.gateware', '')
+		warn(
+			'Core USB functionality has been migrated to torii_usb, see the migration guide: '
+			'https://torii-usb.shmdn.link/migrating.html \n'
+			f'(hint: replace \'{__name__}.{name}\' with \'{torii_usb_mod}.{name}\')',
+			DeprecationWarning,
+			stacklevel = 2
+		)
+		return import_module(torii_usb_mod).__dict__[name]
+	if name not in __dir__():
+		raise AttributeError(f'Module {__name__!r} has no attribute {name!r}')

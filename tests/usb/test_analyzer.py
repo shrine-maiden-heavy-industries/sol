@@ -1,15 +1,16 @@
 # SPDX-License-Identifier: BSD-3-Clause
 
-from collections.abc                 import Iterable
-from concurrent.futures              import Future
-from typing                          import TypedDict
+from collections.abc               import Iterable
+from concurrent.futures            import Future
+from typing                        import TypedDict
 
-from torii.hdl                       import Module
-from torii.sim                       import Settle, Tick
+from torii.hdl                     import Module
+from torii.sim                     import Settle, Tick
 
-from sol_usb.gateware.interface.utmi import UTMIInterface
-from sol_usb.gateware.test           import SolGatewareTestCase, usb_domain_test_case
-from sol_usb.gateware.usb.analyzer   import USBAnalyzer
+from torii_usb.interface.utmi      import UTMIInterface
+
+from sol_usb.gateware.test         import SolGatewareTestCase, usb_domain_test_case
+from sol_usb.gateware.usb.analyzer import USBAnalyzer
 
 class WaitDict(TypedDict):
 	wait: float
@@ -68,14 +69,14 @@ class USBAnalyzerTest(SolGatewareTestCase):
 
 		# First, we should get a header with the total data length.
 		# This should be 0x00, 0x0B; as we captured 11 bytes.
-		self.assertEqual((yield self.dut.stream.payload), 0)
+		self.assertEqual((yield self.dut.stream.data), 0)
 		yield self.dut.stream.ready.eq(1)
 		yield
 
 		# Validate that we get all of the bytes of the packet we expected.
 		expected_data = [0x00, 0x0a] + list(range(0, 10))
 		for datum in expected_data:
-			self.assertEqual((yield self.dut.stream.payload), datum)
+			self.assertEqual((yield self.dut.stream.data), datum)
 			yield
 
 		# We should now be out of data -- verify that there's no longer data available.
@@ -110,14 +111,14 @@ class USBAnalyzerTest(SolGatewareTestCase):
 
 		# First, we should get a header with the total data length.
 		# This should be 0x00, 0x01; as we captured 1 byte.
-		self.assertEqual((yield self.dut.stream.payload), 0)
+		self.assertEqual((yield self.dut.stream.data), 0)
 		yield self.dut.stream.ready.eq(1)
 		yield
 
 		# Validate that we get all of the bytes of the packet we expected.
 		expected_data = [0x00, 0x01, 0xab]
 		for datum in expected_data:
-			self.assertEqual((yield self.dut.stream.payload), datum)
+			self.assertEqual((yield self.dut.stream.data), datum)
 			yield
 
 		# We should now be out of data -- verify that there's no longer data available.
@@ -137,12 +138,12 @@ class USBAnalyzerTest(SolGatewareTestCase):
 		self.assertEqual((yield self.dut.stream.valid), 1)
 		yield self.dut.stream.ready.eq(1)
 		# Read the high byte
-		actual_length = yield self.dut.stream.payload
+		actual_length = yield self.dut.stream.data
 		yield
 		yield Settle()
 		actual_length <<= 8
 		# Then the low
-		actual_length |= yield self.dut.stream.payload
+		actual_length |= yield self.dut.stream.data
 		yield
 		yield Settle()
 		# And check that the reconstructed value matches expectations.
@@ -960,7 +961,7 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 	USB_CLOCK_FREQUENCY = 60e6
 
 	def instantiate_dut(self):
-		from sol_usb.gateware.interface.ulpi import ULPIInterface, UTMITranslator
+		from torii_usb.interface.ulpi import ULPIInterface, UTMITranslator
 
 		self.ulpi = ULPIInterface()
 
@@ -1012,5 +1013,5 @@ class USBAnalyzerStackTest(SolGatewareTestCase):
 
 		# Validate that we got the correct packet out; plus headers.
 		for i in [0x00, 0x03, 0x2d, 0x00, 0x10]:
-			self.assertEqual((yield self.analyzer.stream.payload), i)
+			self.assertEqual((yield self.analyzer.stream.data), i)
 			yield
