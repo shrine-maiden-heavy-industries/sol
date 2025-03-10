@@ -4,12 +4,12 @@
 #
 # Copyright (c) 2020 Great Scott Gadgets <info@greatscottgadgets.com>
 
-''' Core stream definitions. '''
+''' Stream multiplexers/arbiters. '''
 
 from warnings  import warn
 
 __all__ = (
-	'StreamInterface',
+	'StreamArbiter',
 )
 
 def __dir__() -> list[str]:
@@ -17,13 +17,13 @@ def __dir__() -> list[str]:
 
 def __getattr__(name: str):
 	if name in __all__:
-		from torii.lib.stream.simple import StreamInterface
+		from torii.lib.stream.simple import StreamArbiter
 		warn(
-			'The sol StreamInterface has been replaced with the Torii standard library one\n'
-			'sol_usb.gateware.stream.StreamInterface -> torii.lib.stream.simple.StreamInterface',
+			'The sol StreamArbiter has been replaced with the Torii standard library one\n'
+			'sol_usb.gateware.stream.arbiter.StreamArbiter -> torii.lib.stream.simple.StreamArbiter',
 			DeprecationWarning,
 			stacklevel = 2
 		)
-		return StreamInterface
+		return StreamArbiter
 	if name not in __dir__():
 		raise AttributeError(f'Module {__name__!r} has no attribute {name!r}')
