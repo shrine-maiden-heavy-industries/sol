@@ -1,10 +1,5 @@
 # Contribution Guidelines
 
-> [!IMPORTANT] Contributions that were generated in whole or in-part from any
-> language model or AI, such as GitHub Copilot, ChatGPT, BARD, or any other such tool
-> are explicitly forbidden and will result in your permanent ban from contributing
-> to this project.
-
 ## Contributing
 
 Contributions to SOL are released under the following licenses depending on the component:
@@ -36,6 +31,18 @@ Bye default these are configured to run one right after another when invoking `n
 ```shell
 $ nox -s lint
 ```
+
+## Use of Generative AI
+
+This project explicitly does not allow any contributions that were generated in whole or in-part by large language models (LLMs), chatbots, or image generation systems. This ban includes tools, including but not limited to Copilot, ChatGPT, Claude, DeepSeek, Stable Diffusion, DALL-E, Midjourney, or Devin AI.
+
+This policy covers all parts of the project, including, but not limited to code, documentation, issues, artworks, comments, discussions, pull requests, and any other contributions to SOL, without exception.
+
+> [!NOTE]
+> It is also recommended to avoid any and all AI tools when asking questions about SOL,
+> prefer the documentation when available, as well as things such as the discussion forum, or IRC channel.
+> These tools often fabricate plausible sounding information that is entirely incorrect, or often subtly
+> incorrect and pass it off with confidence, thus misleading.
 
 [CERN-OHL-P]: ./LICENSE.hardware
 [CC-BY-4.0]: ./LICENSE.docs
