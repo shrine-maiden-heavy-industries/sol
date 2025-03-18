@@ -6,14 +6,14 @@
 
 ''' Hardware for communicating over various FPGAs' debug interfaces. '''
 
-from torii.hdl       import Cat, ClockDomain, ClockSignal, Elaboratable, Instance, Module, Record, Signal
-from torii.hdl.ast   import ValueCastable
-from torii.hdl.rec   import Direction
-from torii.lib.cdc   import FFSynchronizer
+from torii.hdl     import (
+	Cat, ClockDomain, ClockSignal, Elaboratable, Fell, Instance, Module, Record, Rose, Signal
+)
+from torii.hdl.ast import ValueCastable
+from torii.hdl.rec import Direction
+from torii.lib.cdc import FFSynchronizer
 
-from torii_usb.utils import falling_edge_detected, rising_edge_detected
-
-from .spi            import SPIRegisterInterface
+from .spi          import SPIRegisterInterface
 
 class ECP5DebugSPIBridge(Elaboratable, ValueCastable):
 	''' Hardware that creates a virtual 'debug SPI' port, exposed over JTAG.
@@ -238,7 +238,7 @@ class JTAGCommandInterface(Elaboratable):
 		m.d.sync += jtag_clk_delayed.eq(jtag_clk)
 
 		# Detect a rising edge in jtag_clk.
-		jtag_strobe = rising_edge_detected(m, jtag_clk_delayed)
+		jtag_strobe = Rose(jtag_clk_delayed)
 
 		# Always output the end of our scan chains.
 		m.d.comb += [
@@ -271,8 +271,8 @@ class JTAGCommandInterface(Elaboratable):
 
 		# Connect up our 'data/command ready' signals.
 		m.d.comb += [
-			command_ready.eq(falling_edge_detected(m, shifting_instruction)),
-			data_ready.eq(falling_edge_detected(m, shifting_data)),
+			command_ready.eq(Fell(shifting_instruction)),
+			data_ready.eq(Fell(shifting_data)),
 		]
 
 		# Latch our output data when new data is ready.
