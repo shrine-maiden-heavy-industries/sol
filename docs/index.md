@@ -8,11 +8,16 @@ getting_started
 tutorials/index
 gateware/index
 hardware/index
+```
 
-
-changelog
+```{toctree}
+:caption: Development
+:hidden:
 
 Source Code <https://github.com/shrine-maiden-heavy-industries/sol/>
+Contributing <https://github.com/shrine-maiden-heavy-industries/sol/blob/main/CONTRIBUTING.md>
+changelog
+license
 ```
 
 # SOL: USB Gateware Library

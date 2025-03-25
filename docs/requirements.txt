@@ -1,7 +1,5 @@
-setuptools_scm
 sphinx
-sphinx-rtd-theme
-sphinxcontrib-platformpicker
-wavedrom
-sphinxcontrib-wavedrom
+furo
+sphinx-inline-tabs
 myst-parser
+sphinx-copybutton
