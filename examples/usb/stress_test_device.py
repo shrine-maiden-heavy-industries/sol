@@ -7,13 +7,14 @@
 
 import os
 
-from torii.hdl                          import Elaboratable, Module, Signal
+from torii.hdl                   import Elaboratable, Module, Signal
 
-from usb_construct.emitters             import DeviceDescriptorCollection
+from torii_usb.usb.usb2.device   import USBDevice
+from torii_usb.usb.usb2.endpoint import EndpointInterface
 
-from sol_usb.cli                        import cli
-from sol_usb.gateware.usb.usb2.device   import USBDevice
-from sol_usb.gateware.usb.usb2.endpoint import EndpointInterface
+from usb_construct.emitters      import DeviceDescriptorCollection
+
+from sol_usb.cli                 import cli
 
 BULK_ENDPOINT_NUMBER = 1
 MAX_BULK_PACKET_SIZE = 64 if os.getenv('SOL_FULL_ONLY') else 256
@@ -83,7 +84,7 @@ class StressTestEndpoint(Elaboratable):
 
 		m.d.comb += [
 			# Always send our constant value.
-			tx.payload.eq(self._constant),
+			tx.data.eq(self._constant),
 
 			# Send bytes, whenever we have them.
 			tx.valid.eq(bytes_to_send != 0),

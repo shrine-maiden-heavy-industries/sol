@@ -48,7 +48,7 @@ setup(
 		'git@dragonmux.network',
 	]),
 	license          = 'BSD-3-Clause',
-	description      = 'Torii HDL framework for FPGA-based USB solutions',
+	description      = 'FPGA-based USB Analysis and SoC toolkit',
 	python_requires  = '~=3.10',
 	zip_safe         = True,
 	url              = 'https://sol.shmdn.link/',
@@ -63,12 +63,13 @@ setup(
 	],
 
 	install_requires = [
+		'torii>=0.7.7,<1.0',
+		'torii-usb>=0.7.1,<1.0',
+		'usb-construct>=0.2.1,<1.0',
+
 		'pyserial~=3.5',
 		'pyvcd>=0.4.0,<0.5',
 		'rich',
-
-		'usb-construct>=0.2.1,<1.0',
-		'torii>=0.7.5,<1.0',
 	],
 
 	extras_require = {

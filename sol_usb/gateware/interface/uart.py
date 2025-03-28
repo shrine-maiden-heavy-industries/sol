@@ -6,10 +6,9 @@
 
 ''' UART interface gateware.'''
 
-from torii.hdl     import Cat, Elaboratable, Module, Signal
-from torii.lib.soc import memory, wishbone
-
-from ..stream      import StreamInterface
+from torii.hdl               import Cat, Elaboratable, Module, Signal
+from torii.lib.soc           import memory, wishbone
+from torii.lib.stream.simple import StreamInterface
 
 class UARTTransmitter(Elaboratable):
 	''' Simple UART transmitter.
@@ -62,12 +61,12 @@ class UARTTransmitter(Elaboratable):
 		baud_counter = Signal(range(0, self.divisor))
 
 		# Tx shift register; holds our data, a start, and a stop bit.
-		bits_per_frame = len(self.stream.payload) + 2
+		bits_per_frame = len(self.stream.data) + 2
 		data_shift     = Signal(bits_per_frame)
 		bits_to_send   = Signal(range(0, len(data_shift)))
 
 		# Create an internal signal equal to our input data framed with a start/stop bit.
-		framed_data_in = Cat(self.START_BIT, self.stream.payload, self.STOP_BIT)
+		framed_data_in = Cat(self.START_BIT, self.stream.data, self.STOP_BIT)
 
 		with m.FSM() as f:
 			m.d.comb += self.idle.eq(f.ongoing('IDLE'))
@@ -161,7 +160,7 @@ class UARTTransmitterPeripheral(Elaboratable):
 		m.submodules.tx = tx = UARTTransmitter(divisor = self.divisor)
 		m.d.comb += [
 			tx.stream.valid.eq(self.bus.cyc & self.bus.stb & self.bus.we),
-			tx.stream.payload.eq(self.bus.dat_w),
+			tx.stream.data.eq(self.bus.dat_w),
 
 			self.bus.ack.eq(tx.stream.ready),
 			self.tx.eq(tx.tx)
@@ -205,7 +204,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 		# I/O port
 		#
 		self.tx              = Signal(reset = 1)
-		self.stream          = StreamInterface(payload_width = byte_width * 8)
+		self.stream          = StreamInterface(data_width = byte_width * 8)
 
 		self.idle            = Signal()
 
@@ -217,7 +216,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 
 		# We'll put each word to be sent through an shift register
 		# that shifts out words a byte at a time.
-		data_shift = Signal.like(self.stream.payload)
+		data_shift = Signal.like(self.stream.data)
 
 		# Count how many bytes we have left to send.
 		bytes_to_send = Signal(range(0, self.byte_width + 1))
@@ -228,7 +227,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 			self.tx.eq(uart.tx),
 
 			# Always provide our UART with the least byte of our shift register.
-			uart.stream.payload.eq(data_shift[0:8])
+			uart.stream.data.eq(data_shift[0:8])
 		]
 
 		with m.FSM() as f:
@@ -241,7 +240,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 				# Once we get a send request, fill in our shift register, and start shifting.
 				with m.If(self.stream.valid):
 					m.d.sync += [
-						data_shift.eq(self.stream.payload),
+						data_shift.eq(self.stream.data),
 						bytes_to_send.eq(self.byte_width - 1),
 					]
 					m.next = 'TRANSMIT'
@@ -268,7 +267,7 @@ class UARTMultibyteTransmitter(Elaboratable):
 						with m.If(self.stream.valid):
 							m.d.sync += [
 								bytes_to_send.eq(self.byte_width - 1),
-								data_shift.eq(self.stream.payload),
+								data_shift.eq(self.stream.data),
 							]
 
 						# ... otherwise, move to our idle state.
