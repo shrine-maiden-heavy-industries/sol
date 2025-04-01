@@ -111,7 +111,6 @@ Unreleased template stuff
   - `sol_usb.gateware.utils`
     - `sol_usb.gateware.utils.bus`
     - `sol_usb.gateware.utils.cdc`
-    - `sol_usb.gateware.utils.io`
   - `sol_usb.gateware.memory`
   - `sol_usb.usb3`
   - `sol_usb.usb2`
