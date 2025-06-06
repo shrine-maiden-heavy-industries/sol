@@ -83,3 +83,7 @@ html_static_path = [
 html_css_files = [
 	'css/styles.css'
 ]
+
+linkcheck_retries = 2
+linkcheck_workers = 1 # At the cost of speed try to prevent rate-limiting
+linkcheck_ignore  = []
