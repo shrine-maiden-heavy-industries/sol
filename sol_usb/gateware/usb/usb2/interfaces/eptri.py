@@ -150,12 +150,12 @@ class SetupFIFOInterface(Peripheral, Elaboratable):
 
 		# TODO: generate interrupts
 
-		return DomainRenamer(sync = 'usb'})(m)
+		return DomainRenamer(sync = 'usb')(m)
 
 class InFIFOInterface(Peripheral, Elaboratable):
 	''' IN component of our `eptri`-equivalent interface.
 
-	Implements the FIFO that handles `eptri` IN requests. This FIFO collects USB data, and
+		Implements the FIFO that handles `eptri` IN requests. This FIFO collects USB data, and
 	transmits it in response to an IN token. Like all `eptri` interfaces; it can handle only one
 	pending packet at a time.
 
