@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD024 -->
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -211,7 +212,6 @@ Unreleased template stuff
 - Added ability to discard invalid/unknown data in the analyzer and restart the capture
 - Added an `rx_invalid` signal for `RequestHandlerInterface` to indicate invalid reception
 
-
 ### Changed
 
 - Updated from rich `12.6.0` to `13.0.0`
@@ -219,10 +219,6 @@ Unreleased template stuff
 - Updated `SimpleSoC` to bring it up to date with `torii.soc` and `lambdasoc`
 - Updated torii minimum version to >=0.5.0
 - Moved the speed test device gateware into the applet gateware library
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 
