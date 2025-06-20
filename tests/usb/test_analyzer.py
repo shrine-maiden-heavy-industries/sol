@@ -2,6 +2,8 @@
 
 from collections.abc               import Iterable
 from concurrent.futures            import Future
+from os                            import getenv
+from sys                           import version_info
 from typing                        import TypedDict
 
 from torii.hdl                     import Module
@@ -11,6 +13,8 @@ from torii_usb.interface.utmi      import UTMIInterface
 
 from sol_usb.gateware.test         import SolGatewareTestCase, usb_domain_test_case
 from sol_usb.gateware.usb.analyzer import USBAnalyzer
+
+IN_CI = getenv('GITHUB_WORKSPACE') is not None
 
 class WaitDict(TypedDict):
 	wait: float
@@ -877,6 +881,13 @@ class USBAnalyzerOverflowTest(SolGatewareTestCase):
 
 	@usb_domain_test_case
 	def test_fast_traffic(self):
+		# BUG(aki):
+		# The `test_fast_traffic` takes over 6h in python 3.12 in CI, this is due to also doing branch coverage
+		# and also partially because the Torii simulator is so slow at the moment.
+		# So, we need to detect if we are in CI and skip this test, but only on Python 3.12
+		if version_info.minor == 12 and IN_CI:
+			self.skipTest('Under Python 3.12 this test takes upwards of 6h in CI')
+
 		class PacketType:
 			def __init__(self):
 				self.reset()
