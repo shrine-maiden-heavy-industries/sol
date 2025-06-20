@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb3/protocol.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Protocol - SOL 0.5.1.dev3 documentation</title>
+        <title>Protocol - SOL 0.5.1.dev23 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev23 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.5.1.dev3 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.5.1.dev23 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -315,9 +315,13 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="module-sol_usb.gateware.usb.usb3.protocol">
-<span id="protocol"></span><h1>Protocol<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.protocol" title="Link to this heading">¶</a></h1>
-<p>USB3 Protocol-Layer modules</p>
+          <section id="protocol">
+<h1>Protocol<a class="headerlink" href="#protocol" title="Link to this heading">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
+</div>
+<p id="module-sol_usb.gateware.usb.usb3.protocol">USB3 Protocol-Layer modules</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.protocol.USB3ProtocolLayer">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.protocol.</span></span><span class="sig-name descname"><span class="pre">USB3ProtocolLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.protocol.USB3ProtocolLayer" title="Link to this definition">¶</a></dt>
@@ -374,26 +378,6 @@ an entire packet; and it must respect the transmitter’s <code class="docutils 
 </ul>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointMultiplexer">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.protocol.endpoint.</span></span><span class="sig-name descname"><span class="pre">SuperSpeedEndpointMultiplexer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointMultiplexer" title="Link to this definition">¶</a></dt>
-<dd><p>Multiplexes access to the resources shared between multiple endpoint interfaces.</p>
-<p>Interfaces are added using <a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointMultiplexer.add_interface" title="sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointMultiplexer.add_interface"><code class="xref py py-attr docutils literal notranslate"><span class="pre">add_interface</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>shared</strong> (<em>SuperSpeedEndpointInterface</em>) – The post-multiplexer endpoint interface.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointMultiplexer.add_interface">
-<span class="sig-name descname"><span class="pre">add_interface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointInterface" title="sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointInterface"><span class="pre">SuperSpeedEndpointInterface</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointMultiplexer.add_interface" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a EndpointInterface to the multiplexer.</p>
-<p>Arbitration is not performed; it’s expected only one endpoint will be
-driving the transmit lines at a time.</p>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -463,24 +447,6 @@ driving the transmit lines at a time.</p>
 <section id="module-sol_usb.gateware.usb.usb3.protocol.transaction">
 <span id="transaction"></span><h2>Transaction<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.protocol.transaction" title="Link to this heading">¶</a></h2>
 <p>Protocol-level Transaction Packet (flow control header) generation.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.protocol.transaction.HandshakeGeneratorInterface">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.protocol.transaction.</span></span><span class="sig-name descname"><span class="pre">HandshakeGeneratorInterface</span></span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.protocol.transaction.HandshakeGeneratorInterface" title="Link to this definition">¶</a></dt>
-<dd><p>Interface used by an endpoint to generate transaction packets.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>endpoint_number</strong> (<em>Signal(7), input to handshake generator</em>) – The endpoint number associated with the transaction packet to be generated.</p></li>
-<li><p><strong>retry_required</strong> (<em>Signal(), input to handshake generator</em>) – If set, an ACK will be interpreted as a request to re-send the relevant packet.</p></li>
-<li><p><strong>next_sequence</strong> (<em>Signal(5), input to handshake generator</em>) – Reports the next expected data packet sequence number to the host.</p></li>
-<li><p><strong>send_ack</strong> (<em>Signal(), input to handshake generator</em>) – Strobe; requests generation of an ACK packet.</p></li>
-<li><p><strong>ready</strong> (<em>Signal(), output from handshake generator</em>) – Asserted when the handshake generator is ready to accept new signals.</p></li>
-<li><p><strong>done</strong> (<em>Signal(), output from handshake generator.</em>) – Strobe; pulsed when a requested send is complete.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.protocol.transaction.HandshakeReceiverInterface">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.protocol.transaction.</span></span><span class="sig-name descname"><span class="pre">HandshakeReceiverInterface</span></span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.protocol.transaction.HandshakeReceiverInterface" title="Link to this definition">¶</a></dt>
@@ -624,10 +590,6 @@ driving the transmit lines at a time.</p>
 </li>
 <li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.protocol.endpoint">Endpoint</a><ul>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointInterface"><code class="docutils literal notranslate"><span class="pre">SuperSpeedEndpointInterface</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointMultiplexer"><code class="docutils literal notranslate"><span class="pre">SuperSpeedEndpointMultiplexer</span></code></a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.endpoint.SuperSpeedEndpointMultiplexer.add_interface"><code class="docutils literal notranslate"><span class="pre">SuperSpeedEndpointMultiplexer.add_interface()</span></code></a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.protocol.layer">Layer</a><ul>
@@ -646,7 +608,6 @@ driving the transmit lines at a time.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.protocol.transaction">Transaction</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.transaction.HandshakeGeneratorInterface"><code class="docutils literal notranslate"><span class="pre">HandshakeGeneratorInterface</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.transaction.HandshakeReceiverInterface"><code class="docutils literal notranslate"><span class="pre">HandshakeReceiverInterface</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.transaction.TransactionHeaderPacket"><code class="docutils literal notranslate"><span class="pre">TransactionHeaderPacket</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.protocol.transaction.ACKHeaderPacket"><code class="docutils literal notranslate"><span class="pre">ACKHeaderPacket</span></code></a></li>
@@ -669,7 +630,7 @@ driving the transmit lines at a time.</p>
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=3c67b2b1"></script>
+</div><script src="../../../_static/documentation_options.js?v=ebe1093a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

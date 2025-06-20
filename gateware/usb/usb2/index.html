@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb2/index.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>USB2 - SOL 0.5.1.dev3 documentation</title>
+        <title>USB2 - SOL 0.5.1.dev23 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev23 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.5.1.dev3 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.5.1.dev23 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -317,6 +317,10 @@
         <article role="main" id="furo-main-content">
           <section id="usb2">
 <h1>USB2<a class="headerlink" href="#usb2" title="Link to this heading">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Most of this module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
+</div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="control.html">Control</a><ul>
@@ -385,100 +389,6 @@
 </li>
 </ul>
 </div>
-<p>The <em>SOL</em> gateware library provides a flexible base <em>USB Device</em> model, which is designed to provide the basis
-for creating both application-specific and general-purpose USB hardware.</p>
-<p>USB devices are created using two core components:</p>
-<ul class="simple">
-<li><p>A :class:<code class="docutils literal notranslate"><span class="pre">USBDevice</span></code> instance, which provides hardware that handles low-level USB communications, and which is
-designed to be applicable to all devices; and</p></li>
-<li><p>One or more <em>endpoint interfaces</em>, which handle high-level USB communications – and provide the logic
-the tailors the device to its intended application.</p></li>
-</ul>
-<p>The <code class="docutils literal notranslate"><span class="pre">USBDevice</span></code> communicates with low-level transciever hardware via the FPGA-friendly <em>USB Transceiver</em>
-<em>Macrocell Interface</em> (UTMI). Translators can be used to transparently adapt the FPGA interface to other
-common bus formats; including the common ULPI low-pin-count variant of UTMI.</p>
-<figure class="align-default" id="id1">
-<img alt="USB 2.0 architecture diagram" src="../../../_images/USBDevice.svg" />
-<figcaption>
-<p><span class="caption-text">The overall architecture of a SOL USB 2.0 device, highlighting the <code class="docutils literal notranslate"><span class="pre">USBDevice</span></code> components, their
-connections to the <em>endpoint interfaces</em>, and optional <em>bus translator</em>.</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
-</figcaption>
-</figure>
-<section id="conceptual-components">
-<h2>Conceptual Components<a class="headerlink" href="#conceptual-components" title="Link to this heading">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">USBDevice</span></code> class contains the low-level communications hardware necessary to implement a USB device;
-including hardware for maintaining device state, detecting events, reading data from the host, and generating
-responses.</p>
-</section>
-<section id="token-detector">
-<h2>Token Detector<a class="headerlink" href="#token-detector" title="Link to this heading">¶</a></h2>
-<p>The <em>Token Detector</em> detects <em>token packets</em> from the host; and is responsible for:</p>
-<ul class="simple">
-<li><p>Detecting <em>start of frame</em> packets, which are used to maintain consistent timing across USB devices.</p></li>
-<li><p>Detecting the start of USB <em>transactions</em>.</p></li>
-<li><p>Identifying the <em>device</em> and <em>endpoint</em> to which each transaction is addressed.</p></li>
-</ul>
-<p>As each USB transaction starts with a token packet; it is implicitly the Token Detector’s responsiblity
-to notify endpoint interfaces of imminent incoming data (<code class="docutils literal notranslate"><span class="pre">OUT</span></code> transactions) and requests for data (<code class="docutils literal notranslate"><span class="pre">IN</span></code>
-transactions).</p>
-</section>
-<section id="handshake-detector">
-<h2>Handshake Detector<a class="headerlink" href="#handshake-detector" title="Link to this heading">¶</a></h2>
-<p>The <em>Handshake Detector</em> detects <em>handshake packets</em> from the host; and is responsible for
-identifying the host’s response to packets from the device – indicating whether the host
-successfully received a packet sent from the device.</p>
-</section>
-<section id="data-packet-receiver">
-<h2>Data Packet Receiver<a class="headerlink" href="#data-packet-receiver" title="Link to this heading">¶</a></h2>
-<p>The <em>Data Packet Receiver</em> is responsible for receiving data packets from the device – including
-the payloads of both <code class="docutils literal notranslate"><span class="pre">OUT</span></code> and <code class="docutils literal notranslate"><span class="pre">SETUP</span></code> transactions – and translating them to a simple data stream.</p>
-<p>The Data Receiver handles error detection; and thus validates the checksums of each packet using the
-Data CRC Unit.</p>
-</section>
-<section id="device-state-manager">
-<h2>Device State Manager<a class="headerlink" href="#device-state-manager" title="Link to this heading">¶</a></h2>
-<p>The <em>Device State Manager</em> is responsible for storing global device state – primarily, the
-device’s current <em>address</em> and <em>configuration</em>. The device state manager accepts changes to
-the device’s address/configuration from each endpoint interface; and automatically resets the
-relevant parameters when a USB reset is received.</p>
-</section>
-<section id="handshake-generator">
-<h2>Handshake Generator<a class="headerlink" href="#handshake-generator" title="Link to this heading">¶</a></h2>
-<p>The <em>Handshake Generator</em> provides a simple, strobe-based interface that allows endpoints to
-easily emit handshake packets – allowing the device to acknowledge packets (ACK), issue stalls
-(STALL) , and to rate limit communications (NAK/NYET).</p>
-</section>
-<section id="data-packet-transmitter">
-<h2>Data Packet Transmitter<a class="headerlink" href="#data-packet-transmitter" title="Link to this heading">¶</a></h2>
-<p>The <em>Data Packet Generator</em> is responsible for generating outgoing USB packets from simple data
-streams; including emitting data packet IDs, sending data, and appending data CRCs. This class
-automatically appends the required data CRC-16s.</p>
-</section>
-<section id="data-crc-unit">
-<h2>Data CRC Unit<a class="headerlink" href="#data-crc-unit" title="Link to this heading">¶</a></h2>
-<p>The <em>Data CRC Unit</em> is shared among the packet receiver and packet generator; and handles computing
-the CRC-16 for USB data streams.</p>
-</section>
-<section id="interpacket-timer">
-<h2>Interpacket Timer<a class="headerlink" href="#interpacket-timer" title="Link to this heading">¶</a></h2>
-<p>The <em>Interpacket Timer</em> is responsible for maintaining maximum and minimum interpacket delays; ensuring
-that the device can correctly provide bus turnover times; and knows the window in which handshake packets
-are expected to arrive.</p>
-</section>
-<section id="reset-suspend-sequencer">
-<h2>Reset/Suspend Sequencer<a class="headerlink" href="#reset-suspend-sequencer" title="Link to this heading">¶</a></h2>
-<p>The <em>Reset/Suspend Sequencer</em> is responsible for detecing USB reset and suspend events; and where applicable,
-participating in the USB reset protocol’s high-speed detection handshake.</p>
-<p>The sequencer:</p>
-<ul class="simple">
-<li><p>Detects USB resets; and communicates to the Device State Manager that it should return the device to an
-un-addressed, un-configured state.</p></li>
-<li><p>Performs the <em>high speed detection handshake</em>, which allows the device to switch to High Speed operation;
-and thus is necessary for the device to operate at high speed.</p></li>
-<li><p>Manages the high-speed terminations; as part of the reset-handshake and suspend protocols.</p></li>
-<li><p>Detects the periods of inactivity that indicate the device is being suspended; and automatically disengages
-high-speed terminations while the device is in suspend.</p></li>
-</ul>
 <p id="module-sol_usb.gateware.usb.usb2">Gateware for creating USB2 devices.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.USBSpeed">
@@ -565,7 +475,6 @@ high-speed terminations while the device is in suspend.</p></li>
 </dd></dl>
 
 </section>
-</section>
 
         </article>
       </div>
@@ -623,16 +532,6 @@ high-speed terminations while the device is in suspend.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">USB2</a><ul>
-<li><a class="reference internal" href="#conceptual-components">Conceptual Components</a></li>
-<li><a class="reference internal" href="#token-detector">Token Detector</a></li>
-<li><a class="reference internal" href="#handshake-detector">Handshake Detector</a></li>
-<li><a class="reference internal" href="#data-packet-receiver">Data Packet Receiver</a></li>
-<li><a class="reference internal" href="#device-state-manager">Device State Manager</a></li>
-<li><a class="reference internal" href="#handshake-generator">Handshake Generator</a></li>
-<li><a class="reference internal" href="#data-packet-transmitter">Data Packet Transmitter</a></li>
-<li><a class="reference internal" href="#data-crc-unit">Data CRC Unit</a></li>
-<li><a class="reference internal" href="#interpacket-timer">Interpacket Timer</a></li>
-<li><a class="reference internal" href="#reset-suspend-sequencer">Reset/Suspend Sequencer</a><ul>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.USBSpeed"><code class="docutils literal notranslate"><span class="pre">USBSpeed</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.USBPacketID"><code class="docutils literal notranslate"><span class="pre">USBPacketID</span></code></a><ul>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.USBPacketID.from_byte"><code class="docutils literal notranslate"><span class="pre">USBPacketID.from_byte()</span></code></a></li>
@@ -652,8 +551,6 @@ high-speed terminations while the device is in suspend.</p></li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 
           </div>
         </div>
@@ -662,7 +559,7 @@ high-speed terminations while the device is in suspend.</p></li>
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=3c67b2b1"></script>
+</div><script src="../../../_static/documentation_options.js?v=ebe1093a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

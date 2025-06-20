@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb3/physical.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Physical - SOL 0.5.1.dev3 documentation</title>
+        <title>Physical - SOL 0.5.1.dev23 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev23 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.5.1.dev3 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.5.1.dev23 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -315,9 +315,13 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="module-sol_usb.gateware.usb.usb3.physical">
-<span id="physical"></span><h1>Physical<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.physical" title="Link to this heading">¶</a></h1>
-<p>USB3 Physical-Layer modules</p>
+          <section id="physical">
+<h1>Physical<a class="headerlink" href="#physical" title="Link to this heading">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
+</div>
+<p id="module-sol_usb.gateware.usb.usb3.physical">USB3 Physical-Layer modules</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.USB3PhysicalLayer">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.physical.</span></span><span class="sig-name descname"><span class="pre">USB3PhysicalLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.USB3PhysicalLayer" title="Link to this definition">¶</a></dt>
@@ -392,15 +396,15 @@ See the USB3 / PCIe specifications for more information.</p>
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.physical.coding.</span></span><span class="sig-name descname"><span class="pre">NamedSymbol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol" title="Link to this definition">¶</a></dt>
 <dd><p>Simple encapsulation of a USB3 symbol, with simple metadata.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.value_const">
-<span class="sig-name descname"><span class="pre">value_const</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.value_const" title="Link to this definition">¶</a></dt>
-<dd><p>Returns this symbol’s data value as an Torii const.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.ctrl_const">
 <span class="sig-name descname"><span class="pre">ctrl_const</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.ctrl_const" title="Link to this definition">¶</a></dt>
 <dd><p>Returns this symbol’s ctrl value as an Torii const.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.value_const">
+<span class="sig-name descname"><span class="pre">value_const</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.value_const" title="Link to this definition">¶</a></dt>
+<dd><p>Returns this symbol’s data value as an Torii const.</p>
 </dd></dl>
 
 </dd></dl>
@@ -526,6 +530,50 @@ P/N pairs while in nominal mode P/N pairs always have an opposite level):</p>
 <p>A LFPS pattern is identified by a burst duration and repeat period.</p>
 <p>To be able generate and receive LFPS, a transceiver needs to be able put its TX in electrical idle
 and to detect RX electrical idle.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.lfps.LFPSTiming">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.physical.lfps.</span></span><span class="sig-name descname"><span class="pre">LFPSTiming</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_typ</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPSTiming" title="Link to this definition">¶</a></dt>
+<dd><p>LPFS timings with typical, minimum and maximum timing values.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.lfps.LFPS">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.physical.lfps.</span></span><span class="sig-name descname"><span class="pre">LFPS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">burst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cycles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPS" title="Link to this definition">¶</a></dt>
+<dd><p>LPFS patterns with burst and repeat timings.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.lfps.LFPSDetector">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.physical.lfps.</span></span><span class="sig-name descname"><span class="pre">LFPSDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPSDetector" title="Link to this definition">¶</a></dt>
+<dd><p>LFPS Signaling Detector</p>
+<p>Compares received (and demodulated) LFPS signaling with a specified pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signaling_received</strong> (<em>Signal(), input</em>) – Held high when our PHY is detecting LFPS square waves.</p></li>
+<li><p><strong>detect</strong> (<em>Signal(), output</em>) – Strobes high when a valid LFPS burst is detected.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.lfps.LFPSGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.physical.lfps.</span></span><span class="sig-name descname"><span class="pre">LFPSGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPSGenerator" title="Link to this definition">¶</a></dt>
+<dd><p>LFPS Signaling Generator</p>
+<p>Transmits (to be modulated) LFPS signaling that follows a specified pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>generate</strong> (<em>Signal(), input</em>) – When asserted, continuously generates LFPS patterns.</p></li>
+<li><p><strong>done</strong> (<em>Signal(), output</em>) – Strobes high every time a cycle is completed.</p></li>
+<li><p><strong>drive_electrical_idle</strong> (<em>Signal(), output</em>) – Held high while cycles are being generated; during both burst and repeat intervals.</p></li>
+<li><p><strong>send_signaling</strong> (<em>Signal(), output</em>) – Held high during a burst.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.physical.lfps.LFPSTransceiver">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.physical.lfps.</span></span><span class="sig-name descname"><span class="pre">LFPSTransceiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPSTransceiver" title="Link to this definition">¶</a></dt>
@@ -733,8 +781,8 @@ This module automatically resets itself whenever a COM alignment character is se
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.coding.K"><code class="docutils literal notranslate"><span class="pre">K()</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.coding.D"><code class="docutils literal notranslate"><span class="pre">D()</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol"><code class="docutils literal notranslate"><span class="pre">NamedSymbol</span></code></a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.value_const"><code class="docutils literal notranslate"><span class="pre">NamedSymbol.value_const()</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.ctrl_const"><code class="docutils literal notranslate"><span class="pre">NamedSymbol.ctrl_const()</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.coding.NamedSymbol.value_const"><code class="docutils literal notranslate"><span class="pre">NamedSymbol.value_const()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.coding.get_word_for_symbols"><code class="docutils literal notranslate"><span class="pre">get_word_for_symbols()</span></code></a></li>
@@ -752,6 +800,10 @@ This module automatically resets itself whenever a COM alignment character is se
 </ul>
 </li>
 <li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.physical.lfps">LFPS</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPSTiming"><code class="docutils literal notranslate"><span class="pre">LFPSTiming</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPS"><code class="docutils literal notranslate"><span class="pre">LFPS</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPSDetector"><code class="docutils literal notranslate"><span class="pre">LFPSDetector</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPSGenerator"><code class="docutils literal notranslate"><span class="pre">LFPSGenerator</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.physical.lfps.LFPSTransceiver"><code class="docutils literal notranslate"><span class="pre">LFPSTransceiver</span></code></a></li>
 </ul>
 </li>
@@ -777,7 +829,7 @@ This module automatically resets itself whenever a COM alignment character is se
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=3c67b2b1"></script>
+</div><script src="../../../_static/documentation_options.js?v=ebe1093a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

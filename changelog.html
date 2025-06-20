@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/changelog.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Changelog - SOL 0.5.1.dev3 documentation</title>
+        <title>Changelog - SOL 0.5.1.dev23 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">SOL 0.5.1.dev3 documentation</div></a>
+      <a href="index.html"><div class="brand">SOL 0.5.1.dev23 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.5.1.dev3 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.5.1.dev23 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -315,7 +315,8 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="changelog">
+          <!-- markdownlint-disable MD024 -->
+<section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The format is based on <a class="reference external" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
@@ -333,6 +334,11 @@ Unreleased template stuff
 -->
 <section id="unreleased">
 <h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.5.0...main">Unreleased</a><a class="headerlink" href="#unreleased" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>[!IMPORTANT]
+This release is post to the split into <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a> for the core gateware.
+For information on migrating please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a></p>
+</div></blockquote>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">¶</a></h3>
 </section>
@@ -341,6 +347,149 @@ Unreleased template stuff
 </section>
 <section id="deprecated">
 <h3>Deprecated<a class="headerlink" href="#deprecated" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>All of the core USB gateware has been deprecated in favor of <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>. The following modules have been deprecated.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.architecture.car.PHYResetController</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.pipe</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.ulpi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.utmi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.phy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.transmitter</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.ecp5</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.lfps</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7_gtp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7_gtx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream.generator</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.devices</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.devices.acm</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.windows</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.windows.descriptorSet</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.interface</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.standard</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.isochronous</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.deserializer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.packet</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.request</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.reset</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.transfer</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application.descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application.request</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.command</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.crc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.header</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.idle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.ltssm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.ordered_sets</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.receiver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.timers</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.transmitter</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.alignment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.coding</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.ctc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.lpfs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.power</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.scrambling</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.endpoint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.link_management</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.timestamp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.transaction</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.request</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.request.standard</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.device</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils.bus</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils.cdc</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.memory</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.usb3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.usb2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.full_devices</span></code></p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream</span></code> module has been absorbed into Torii’s <code class="docutils literal notranslate"><span class="pre">torii.lib.streams.simple</span></code> module for <code class="docutils literal notranslate"><span class="pre">StreamInterface</span></code> and <code class="docutils literal notranslate"><span class="pre">StreamArbiter</span></code>.</p></li>
+</ul>
 </section>
 <section id="removed">
 <h3>Removed<a class="headerlink" href="#removed" title="Link to this heading">¶</a></h3>
@@ -350,7 +499,7 @@ Unreleased template stuff
 </section>
 </section>
 <section id="id1">
-<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.1...v0.5.0">0.5.0</a><a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.1...v0.5.0">0.5.0</a> - 2025-03-07<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
 <blockquote>
 <div><p>[!IMPORTANT]
 This release is prior to the split into <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a> for the core gateware.</p>
@@ -379,7 +528,7 @@ to <a class="reference external" href="https://github.com/shrine-maiden-heavy-in
 </section>
 </section>
 <section id="id4">
-<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.0...v0.4.1">0.4.1</a><a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.0...v0.4.1">0.4.1</a> - 2025-01-06<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
 <section id="id5">
 <h3>Changed<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -404,7 +553,7 @@ subsignal.</p></li>
 </section>
 </section>
 <section id="id7">
-<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.3.0...v0.4.0">0.4.0</a><a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.3.0...v0.4.0">0.4.0</a> - 2024-07-10<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
 <section id="id8">
 <h3>Added<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -444,7 +593,7 @@ subsignal.</p></li>
 </section>
 </section>
 <section id="id11">
-<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.2.0...v0.3.0">0.3.0</a><a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.2.0...v0.3.0">0.3.0</a> - 2023-10-19<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h2>
 <section id="id12">
 <h3>Added<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -469,13 +618,7 @@ subsignal.</p></li>
 </ul>
 </section>
 <section id="id14">
-<h3>Deprecated<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
-</section>
-<section id="id15">
-<h3>Removed<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
-</section>
-<section id="id16">
-<h3>Fixed<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<h3>Fixed<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Various code formatting cleanups.</p></li>
 <li><p>Fixed Analyzer capture engine overflow problem</p></li>
@@ -490,17 +633,17 @@ subsignal.</p></li>
 </ul>
 </section>
 </section>
-<section id="id17">
-<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.1.0...v0.2.0">0.2.0</a><a class="headerlink" href="#id17" title="Link to this heading">¶</a></h2>
-<section id="id18">
-<h3>Added<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<section id="id15">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.1.0...v0.2.0">0.2.0</a> - 2022-12-18<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h2>
+<section id="id16">
+<h3>Added<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Added preliminary type annotations.</p></li>
 <li><p>Added the <code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code>.</p></li>
 </ul>
 </section>
-<section id="id19">
-<h3>Changed<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<section id="id17">
+<h3>Changed<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Changed the needed dependencies.</p>
 <ul>
@@ -516,23 +659,23 @@ subsignal.</p></li>
 <li><p>Replaced old python-usb-protocol with usb-construct.</p></li>
 </ul>
 </section>
-<section id="id20">
-<h3>Removed<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<section id="id18">
+<h3>Removed<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Removed all of the 3rd party platform definitions except for the <code class="docutils literal notranslate"><span class="pre">LUNA</span></code> platforms.</p></li>
 <li><p>Removed the old <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code></p></li>
 </ul>
 </section>
-<section id="id21">
-<h3>Fixed<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<section id="id19">
+<h3>Fixed<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Fixed a large chunk of code style and formatting.</p></li>
 <li><p>Fixed the documentation, it should now be more useful.</p></li>
 </ul>
 </section>
 </section>
-<section id="id22">
-<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/hw-r0.4...v0.1.0">0.1.0</a><a class="headerlink" href="#id22" title="Link to this heading">¶</a></h2>
+<section id="id20">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/hw-r0.4...v0.1.0">0.1.0</a><a class="headerlink" href="#id20" title="Link to this heading">¶</a></h2>
 <p>No changelog is provided for this version as it is a hold-over / demarcation of the divergence from <a class="reference external" href="https://github.com/greatscottgadgets/luna/">LUNA</a>.</p>
 </section>
 </section>
@@ -601,38 +744,36 @@ subsignal.</p></li>
 <li><a class="reference internal" href="#fixed">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id1">0.5.0</a><ul>
+<li><a class="reference internal" href="#id1">0.5.0 - 2025-03-07</a><ul>
 <li><a class="reference internal" href="#id2">Changed</a></li>
 <li><a class="reference internal" href="#id3">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id4">0.4.1</a><ul>
+<li><a class="reference internal" href="#id4">0.4.1 - 2025-01-06</a><ul>
 <li><a class="reference internal" href="#id5">Changed</a></li>
 <li><a class="reference internal" href="#id6">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id7">0.4.0</a><ul>
+<li><a class="reference internal" href="#id7">0.4.0 - 2024-07-10</a><ul>
 <li><a class="reference internal" href="#id8">Added</a></li>
 <li><a class="reference internal" href="#id9">Changed</a></li>
 <li><a class="reference internal" href="#id10">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id11">0.3.0</a><ul>
+<li><a class="reference internal" href="#id11">0.3.0 - 2023-10-19</a><ul>
 <li><a class="reference internal" href="#id12">Added</a></li>
 <li><a class="reference internal" href="#id13">Changed</a></li>
-<li><a class="reference internal" href="#id14">Deprecated</a></li>
-<li><a class="reference internal" href="#id15">Removed</a></li>
-<li><a class="reference internal" href="#id16">Fixed</a></li>
+<li><a class="reference internal" href="#id14">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id17">0.2.0</a><ul>
-<li><a class="reference internal" href="#id18">Added</a></li>
-<li><a class="reference internal" href="#id19">Changed</a></li>
-<li><a class="reference internal" href="#id20">Removed</a></li>
-<li><a class="reference internal" href="#id21">Fixed</a></li>
+<li><a class="reference internal" href="#id15">0.2.0 - 2022-12-18</a><ul>
+<li><a class="reference internal" href="#id16">Added</a></li>
+<li><a class="reference internal" href="#id17">Changed</a></li>
+<li><a class="reference internal" href="#id18">Removed</a></li>
+<li><a class="reference internal" href="#id19">Fixed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id22">0.1.0</a></li>
+<li><a class="reference internal" href="#id20">0.1.0</a></li>
 </ul>
 </li>
 </ul>
@@ -644,7 +785,7 @@ subsignal.</p></li>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=3c67b2b1"></script>
+</div><script src="_static/documentation_options.js?v=ebe1093a"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

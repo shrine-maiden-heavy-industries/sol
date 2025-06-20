@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb3/link.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Link - SOL 0.5.1.dev3 documentation</title>
+        <title>Link - SOL 0.5.1.dev23 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev23 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.5.1.dev3 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.5.1.dev23 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -315,9 +315,13 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="module-sol_usb.gateware.usb.usb3.link">
-<span id="link"></span><h1>Link<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link" title="Link to this heading">¶</a></h1>
-<p>USB3 Link-Layer modules</p>
+          <section id="link">
+<h1>Link<a class="headerlink" href="#link" title="Link to this heading">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
+</div>
+<p id="module-sol_usb.gateware.usb.usb3.link">USB3 Link-Layer modules</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.USB3LinkLayer">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.</span></span><span class="sig-name descname"><span class="pre">USB3LinkLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.USB3LinkLayer" title="Link to this definition">¶</a></dt>
@@ -506,22 +510,22 @@ when data is sent to the host as part of a control transfer.</p></li>
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.header.</span></span><span class="sig-name descname"><span class="pre">HeaderPacket</span></span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket" title="Link to this definition">¶</a></dt>
 <dd><p>Container that represents a Header Packet.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type">
-<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the selection of bits in DW0 that encode the packet type.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_layout">
 <em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_layout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_layout" title="Link to this definition">¶</a></dt>
 <dd><p>Computes the layout for the HeaderPacket (sub)class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the selection of bits in DW0 that encode the packet type.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueue">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.header.</span></span><span class="sig-name descname"><span class="pre">HeaderQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_type=&lt;class</span> <span class="pre">'sol_usb.gateware.usb.usb3.link.header.HeaderPacket'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.header.</span></span><span class="sig-name descname"><span class="pre">HeaderQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_type=&lt;class</span> <span class="pre">'torii_usb.usb.usb3.link.header.HeaderPacket'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="Link to this definition">¶</a></dt>
 <dd><p>Record representing a header, and stream-link control signals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes<span class="colon">:</span></dt>
@@ -564,7 +568,7 @@ when data is sent to the host as part of a control transfer.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter.add_producer">
-<span class="sig-name descname"><span class="pre">add_producer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="sol_usb.gateware.usb.usb3.link.header.HeaderQueue"><span class="pre">HeaderQueue</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter.add_producer" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_producer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="torii_usb.usb.usb3.link.header.HeaderQueue"><span class="pre">HeaderQueue</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter.add_producer" title="Link to this definition">¶</a></dt>
 <dd><p>Adds a HeaderQueue interface that will add packets into this mux.</p>
 </dd></dl>
 
@@ -584,7 +588,7 @@ will assert :attr:<code class="docutils literal notranslate"><span class="pre">r
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer.add_consumer">
-<span class="sig-name descname"><span class="pre">add_consumer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="sol_usb.gateware.usb.usb3.link.header.HeaderQueue"><span class="pre">HeaderQueue</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer.add_consumer" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">add_consumer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="torii_usb.usb.usb3.link.header.HeaderQueue"><span class="pre">HeaderQueue</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer.add_consumer" title="Link to this definition">¶</a></dt>
 <dd><p>Adds a HeaderQueue interface that will consume packets from this mux.</p>
 </dd></dl>
 
@@ -926,8 +930,8 @@ is asserted.</p></li>
 </li>
 <li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.header">Header</a><ul>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket"><code class="docutils literal notranslate"><span class="pre">HeaderPacket</span></code></a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type"><code class="docutils literal notranslate"><span class="pre">HeaderPacket.get_type()</span></code></a></li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_layout"><code class="docutils literal notranslate"><span class="pre">HeaderPacket.get_layout()</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type"><code class="docutils literal notranslate"><span class="pre">HeaderPacket.get_type()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue"><code class="docutils literal notranslate"><span class="pre">HeaderQueue</span></code></a><ul>
@@ -989,7 +993,7 @@ is asserted.</p></li>
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=3c67b2b1"></script>
+</div><script src="../../../_static/documentation_options.js?v=ebe1093a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

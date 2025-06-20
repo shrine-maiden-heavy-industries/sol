@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/interface/gateware/receiver.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Gateware PHY - Receiver - SOL 0.5.1.dev3 documentation</title>
+        <title>Gateware PHY - Receiver - SOL 0.5.1.dev23 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev3 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.5.1.dev23 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.5.1.dev3 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.5.1.dev23 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -309,258 +309,19 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="module-sol_usb.gateware.interface.gateware_phy.receiver">
-<span id="gateware-phy-receiver"></span><h1>Gateware PHY - Receiver<a class="headerlink" href="#module-sol_usb.gateware.interface.gateware_phy.receiver" title="Link to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.interface.gateware_phy.receiver.RxClockDataRecovery">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver.</span></span><span class="sig-name descname"><span class="pre">RxClockDataRecovery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxClockDataRecovery" title="Link to this definition">¶</a></dt>
-<dd><p>RX Clock Data Recovery module.</p>
-<p>RxClockDataRecovery synchronizes the USB differential pair with the FPGAs
-clocks, de-glitches the differential pair, and recovers the incoming clock
-and data.</p>
-<section id="clock-domain">
-<h2>Clock Domain<a class="headerlink" href="#clock-domain" title="Link to this heading">¶</a></h2>
-<p>usb_48 : 48MHz</p>
-</section>
-<section id="input-ports">
-<h2>Input Ports<a class="headerlink" href="#input-ports" title="Link to this heading">¶</a></h2>
-<p>Input ports are passed in via the constructor.</p>
-<dl class="simple">
-<dt>usbp_raw<span class="classifier">Signal(1)</span></dt><dd><p>Raw USB+ input from the FPGA IOs, no need to synchronize.</p>
-</dd>
-<dt>usbn_raw<span class="classifier">Signal(1)</span></dt><dd><p>Raw USB- input from the FPGA IOs, no need to synchronize.</p>
-</dd>
-</dl>
-</section>
-<section id="output-ports">
-<h2>Output Ports<a class="headerlink" href="#output-ports" title="Link to this heading">¶</a></h2>
-<p>Output ports are data members of the module. All output ports are flopped.
-The line_state_dj/dk/se0/se1 outputs are 1-hot encoded.</p>
-<dl class="simple">
-<dt>line_state_valid<span class="classifier">Signal(1)</span></dt><dd><p>Asserted for one clock when the output line state is ready to be sampled.</p>
-</dd>
-<dt>line_state_dj<span class="classifier">Signal(1)</span></dt><dd><p>Represents Full Speed J-state on the incoming USB data pair.
-Qualify with line_state_valid.</p>
-</dd>
-<dt>line_state_dk<span class="classifier">Signal(1)</span></dt><dd><p>Represents Full Speed K-state on the incoming USB data pair.
-Qualify with line_state_valid.</p>
-</dd>
-<dt>line_state_se0<span class="classifier">Signal(1)</span></dt><dd><p>Represents SE0 on the incoming USB data pair.
-Qualify with line_state_valid.</p>
-</dd>
-<dt>line_state_se1<span class="classifier">Signal(1)</span></dt><dd><p>Represents SE1 on the incoming USB data pair.
-Qualify with line_state_valid.</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.interface.gateware_phy.receiver.RxNRZIDecoder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver.</span></span><span class="sig-name descname"><span class="pre">RxNRZIDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxNRZIDecoder" title="Link to this definition">¶</a></dt>
-<dd><p>RX NRZI decoder.</p>
-<p>In order to ensure there are enough bit transitions for a receiver to recover
-the clock usb uses NRZI encoding.  This module processes the incoming
-dj, dk, se0, and valid signals and decodes them to data values.  It
-also pipelines the se0 signal and passes it through unmodified.</p>
-<p><a class="reference external" href="https://www.pjrc.com/teensy/beta/usb20.pdf">https://www.pjrc.com/teensy/beta/usb20.pdf</a>, USB2 Spec, 7.1.8
-<a class="reference external" href="https://en.wikipedia.org/wiki/Non-return-to-zero">https://en.wikipedia.org/wiki/Non-return-to-zero</a></p>
-<section id="id1">
-<h2>Clock Domain<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
-<p>usb_48 : 48MHz</p>
-</section>
-<section id="id2">
-<h2>Input Ports<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
-<p>Input ports are passed in via the constructor.</p>
-<dl class="simple">
-<dt>i_valid<span class="classifier">Signal(1)</span></dt><dd><p>Qualifier for all of the input signals.  Indicates one bit of valid
-data is present on the inputs.</p>
-</dd>
-<dt>i_dj<span class="classifier">Signal(1)</span></dt><dd><p>Indicates the bus is currently in a Full-Speed J-state.
-Qualified by valid.</p>
-</dd>
-<dt>i_dk<span class="classifier">Signal(1)</span></dt><dd><p>Indicates the bus is currently in a Full-Speed K-state.
-Qualified by valid.</p>
-</dd>
-<dt>i_se0<span class="classifier">Signal(1)</span></dt><dd><p>Indicates the bus is currently in a SE0 state.
-Qualified by valid.</p>
-</dd>
-</dl>
-</section>
-<section id="id3">
-<h2>Output Ports<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
-<p>Output ports are data members of the module. All output ports are flopped.</p>
-<dl class="simple">
-<dt>o_valid<span class="classifier">Signal(1)</span></dt><dd><p>Qualifier for all of the output signals. Indicates one bit of valid
-data is present on the outputs.</p>
-</dd>
-<dt>o_data<span class="classifier">Signal(1)</span></dt><dd><p>Decoded data bit from USB bus.
-Qualified by valid.</p>
-</dd>
-<dt>o_se0<span class="classifier">Signal(1)</span></dt><dd><p>Indicates the bus is currently in a SE0 state.
-Qualified by valid.</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.interface.gateware_phy.receiver.RxPacketDetect">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver.</span></span><span class="sig-name descname"><span class="pre">RxPacketDetect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxPacketDetect" title="Link to this definition">¶</a></dt>
-<dd><p>Packet Detection</p>
-<p>Full Speed packets begin with the following sequence:</p>
-<blockquote>
-<div><p>KJKJKJKK</p>
-</div></blockquote>
-<p>This raw sequence corresponds to the following data:</p>
-<blockquote>
-<div><p>00000001</p>
-</div></blockquote>
-<p>The bus idle condition is signaled with the J state:</p>
-<blockquote>
-<div><p>JJJJJJJJ</p>
-</div></blockquote>
-<p>This translates to a series of ‘1’s since there are no transitions.  Given
-this information, it is easy to detect the beginning of a packet by looking
-for 00000001.</p>
-<p>The end of a packet is even easier to detect.  The end of a packet is
-signaled with two SE0 and one J.  We can just look for the first SE0 to
-detect the end of the packet.</p>
-<p>Packet detection can occur in parallel with bitstuff removal.</p>
-<p><a class="reference external" href="https://www.pjrc.com/teensy/beta/usb20.pdf">https://www.pjrc.com/teensy/beta/usb20.pdf</a>, USB2 Spec, 7.1.10</p>
-<section id="id4">
-<h2>Input Ports<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>i_valid<span class="classifier">Signal(1)</span></dt><dd><p>Qualifier for all of the input signals.  Indicates one bit of valid
-data is present on the inputs.</p>
-</dd>
-<dt>i_data<span class="classifier">Signal(1)</span></dt><dd><p>Decoded data bit from USB bus.
-Qualified by valid.</p>
-</dd>
-<dt>i_se0<span class="classifier">Signal(1)</span></dt><dd><p>Indicator for SE0 from USB bus.
-Qualified by valid.</p>
-</dd>
-</dl>
-</section>
-<section id="id5">
-<h2>Output Ports<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>o_pkt_start<span class="classifier">Signal(1)</span></dt><dd><p>Asserted for one clock on the last bit of the sync.</p>
-</dd>
-<dt>o_pkt_active<span class="classifier">Signal(1)</span></dt><dd><p>Asserted while in the middle of a packet.</p>
-</dd>
-<dt>o_pkt_end<span class="classifier">Signal(1)</span></dt><dd><p>Asserted for one clock after the last data bit of a packet was received.</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.interface.gateware_phy.receiver.RxBitstuffRemover">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver.</span></span><span class="sig-name descname"><span class="pre">RxBitstuffRemover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxBitstuffRemover" title="Link to this definition">¶</a></dt>
-<dd><p>RX Bitstuff Removal</p>
-<p>Long sequences of 1’s would cause the receiver to lose it’s lock on the
-transmitter’s clock.  USB solves this with bitstuffing.  A ‘0’ is stuffed
-after every 6 consecutive 1’s.  This extra bit is required to recover the
-clock, but it should not be passed on to higher layers in the device.</p>
-<p><a class="reference external" href="https://www.pjrc.com/teensy/beta/usb20.pdf">https://www.pjrc.com/teensy/beta/usb20.pdf</a>, USB2 Spec, 7.1.9
-<a class="reference external" href="https://en.wikipedia.org/wiki/Bit_stuffing">https://en.wikipedia.org/wiki/Bit_stuffing</a></p>
-<section id="id6">
-<h2>Clock Domain<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h2>
-<p>usb_48 : 48MHz</p>
-</section>
-<section id="id7">
-<h2>Input Ports<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>i_valid<span class="classifier">Signal(1)</span></dt><dd><p>Qualifier for all of the input signals.  Indicates one bit of valid
-data is present on the inputs.</p>
-</dd>
-<dt>i_data<span class="classifier">Signal(1)</span></dt><dd><p>Decoded data bit from USB bus.
-Qualified by valid.</p>
-</dd>
-</dl>
-</section>
-<section id="id8">
-<h2>Output Ports<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h2>
-<dl class="simple">
-<dt>o_data<span class="classifier">Signal(1)</span></dt><dd><p>Decoded data bit from USB bus.</p>
-</dd>
-<dt>o_stall<span class="classifier">Signal(1)</span></dt><dd><p>Indicates the bit stuffer just removed an extra bit, so no data available.</p>
-</dd>
-<dt>o_error<span class="classifier">Signal(1)</span></dt><dd><p>Indicates there has been a bitstuff error. A bitstuff error occurs
-when there should be a stuffed ‘0’ after 6 consecutive 1’s; but instead
-of a ‘0’, there is an additional ‘1’.  This is normal during IDLE, but
-should never happen within a packet.
-Qualified by valid.</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.interface.gateware_phy.receiver.RxShifter">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver.</span></span><span class="sig-name descname"><span class="pre">RxShifter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxShifter" title="Link to this definition">¶</a></dt>
-<dd><p>RX Shifter</p>
-<p>A shifter is responsible for shifting in serial bits and presenting them
-as parallel data.  The shifter knows how many bits to shift and has
-controls for resetting the shifter.</p>
-<section id="id9">
-<h2>Clock Domain<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h2>
-<p>usb    : 12MHz</p>
-<dl class="field-list simple">
-<dt class="field-odd">param Parameters are passed in via the constructor.<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-<dt class="field-even">param width<span class="colon">:</span></dt>
-<dd class="field-even"><p>Number of bits to shift in.</p>
-</dd>
-<dt class="field-odd">type width<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-<dt class="field-even">param Input Ports<span class="colon">:</span></dt>
-<dd class="field-even"><p></p></dd>
-<dt class="field-odd">param ———–<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-<dt class="field-even">param i_valid<span class="colon">:</span></dt>
-<dd class="field-even"><p>Qualifier for all of the input signals.  Indicates one bit of valid
-data is present on the inputs.</p>
-</dd>
-<dt class="field-odd">type i_valid<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Signal(1)</p>
-</dd>
-<dt class="field-even">param i_data<span class="colon">:</span></dt>
-<dd class="field-even"><p>Serial input data.
-Qualified by valid.</p>
-</dd>
-<dt class="field-odd">type i_data<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Signal(1)</p>
-</dd>
-<dt class="field-even">param Output Ports<span class="colon">:</span></dt>
-<dd class="field-even"><p></p></dd>
-<dt class="field-odd">param ————<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
-<dt class="field-even">param o_data<span class="colon">:</span></dt>
-<dd class="field-even"><p>Shifted in data.</p>
-</dd>
-<dt class="field-odd">type o_data<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Signal(width)</p>
-</dd>
-<dt class="field-even">param o_put<span class="colon">:</span></dt>
-<dd class="field-even"><p>Asserted for one clock once the register is full.</p>
-</dd>
-<dt class="field-odd">type o_put<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Signal(1)</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
-
-</section>
+          <section id="gateware-phy-receiver">
+<h1>Gateware PHY - Receiver<a class="headerlink" href="#gateware-phy-receiver" title="Link to this heading">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
+</div>
+<span class="target" id="module-sol_usb.gateware.interface.gateware_phy.receiver"></span></section>
 
         </article>
       </div>
@@ -605,36 +366,13 @@ Qualified by valid.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Gateware PHY - Receiver</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxClockDataRecovery"><code class="docutils literal notranslate"><span class="pre">RxClockDataRecovery</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxNRZIDecoder"><code class="docutils literal notranslate"><span class="pre">RxNRZIDecoder</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxPacketDetect"><code class="docutils literal notranslate"><span class="pre">RxPacketDetect</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxBitstuffRemover"><code class="docutils literal notranslate"><span class="pre">RxBitstuffRemover</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.interface.gateware_phy.receiver.RxShifter"><code class="docutils literal notranslate"><span class="pre">RxShifter</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=3c67b2b1"></script>
+</div><script src="../../../_static/documentation_options.js?v=ebe1093a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
