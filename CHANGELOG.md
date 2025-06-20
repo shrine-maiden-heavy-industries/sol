@@ -123,7 +123,7 @@ Unreleased template stuff
 
 ### Fixed
 
-## [0.5.0]
+## [0.5.0] - 2025-03-07
 
 > [!IMPORTANT]
 > This release is prior to the split into [torii-usb](https://github.com/shrine-maiden-heavy-industries/torii-usb) for the core gateware.
@@ -146,7 +146,7 @@ Unreleased template stuff
 - Handful of little typing fixes.
 - Fixed miss-using some of the IO resources, they happened to work, if only by accident.
 
-## [0.4.1]
+## [0.4.1] - 2025-01-06
 
 ### Changed
 
@@ -166,7 +166,7 @@ Unreleased template stuff
 - Fixed a bug in the `GatewarePHY` where we used the Record value itself rather than the appropriate
   subsignal.
 
-## [0.4.0]
+## [0.4.0] - 2024-07-10
 
 ### Added
 
@@ -199,7 +199,7 @@ Unreleased template stuff
 - Fixed improper use of empty Torii `Case()` elements as stricter enforcement of using `Default()` has been implemented.
 - Fixed UDEV rules.
 
-## [0.3.0]
+## [0.3.0] - 2023-10-19
 
 ### Added
 
@@ -233,7 +233,7 @@ Unreleased template stuff
 - Fixed using `Pin` objects as if they were raw `Signals`
 - Fixed missing `**kwargs` in the `toolchain_prepare` method of `LUNAApolloPlatform`
 
-## [0.2.0]
+## [0.2.0] - 2022-12-18
 
 ### Added
 
