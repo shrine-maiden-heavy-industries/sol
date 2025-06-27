@@ -28,6 +28,9 @@ Unreleased template stuff
 
 ### Changed
 
+- Bumped [Torii] minimum version from `0.7.7` to `0.8.0`
+- Bumped [torii-usb] minimum version from `0.7.1` to `0.8.0`
+
 ### Deprecated
 
 - All of the core USB gateware has been deprecated in favor of [torii-usb]. The following modules have been deprecated.
