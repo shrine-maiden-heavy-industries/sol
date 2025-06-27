@@ -20,11 +20,24 @@ Unreleased template stuff
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## [0.8.0] - 2025-06-26
+
 > [!IMPORTANT]
 > This release is post to the split into [torii-usb] for the core gateware.
 > For information on migrating please see the [migration guide](https://torii-usb.shmdn.link/migration.html)
 
-### Added
+This is a maintenance release, syncs the minimum [Torii] and [torii-usb] versions to `0.8.0` in preparation for
+the Torii `1.0.0` release in the future.
 
 ### Changed
 
@@ -121,10 +134,6 @@ Unreleased template stuff
   - `sol_usb.full_devices`
 
 - The `sol_usb.gateware.stream` module has been absorbed into Torii's `torii.lib.streams.simple` module for `StreamInterface` and `StreamArbiter`.
-
-### Removed
-
-### Fixed
 
 ## [0.5.0] - 2025-03-07
 
@@ -269,7 +278,8 @@ Unreleased template stuff
 
 No changelog is provided for this version as it is a hold-over / demarcation of the divergence from [LUNA](https://github.com/greatscottgadgets/luna/).
 
-[Unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.5.0...main
+[Unreleased]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.8.0...main
+[0.8.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.5.0...v0.8.0
 [0.5.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.3.0...v0.4.0
