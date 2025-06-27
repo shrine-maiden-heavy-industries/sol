@@ -21,7 +21,7 @@ Unreleased template stuff
 ## [Unreleased]
 
 > [!IMPORTANT]
-> This release is post to the split into [torii-usb](https://github.com/shrine-maiden-heavy-industries/torii-usb) for the core gateware.
+> This release is post to the split into [torii-usb] for the core gateware.
 > For information on migrating please see the [migration guide](https://torii-usb.shmdn.link/migration.html)
 
 ### Added
@@ -30,7 +30,7 @@ Unreleased template stuff
 
 ### Deprecated
 
-- All of the core USB gateware has been deprecated in favor of [torii-usb](https://github.com/shrine-maiden-heavy-industries/torii-usb). The following modules have been deprecated.
+- All of the core USB gateware has been deprecated in favor of [torii-usb]. The following modules have been deprecated.
   - `sol_usb.gateware.architecture.car.PHYResetController`
   - `sol_usb.gateware.interface.pipe`
   - `sol_usb.gateware.interface.ulpi`
@@ -126,18 +126,18 @@ Unreleased template stuff
 ## [0.5.0] - 2025-03-07
 
 > [!IMPORTANT]
-> This release is prior to the split into [torii-usb](https://github.com/shrine-maiden-heavy-industries/torii-usb) for the core gateware.
+> This release is prior to the split into [torii-usb] for the core gateware.
 
 ### Changed
 
 - The `gateware.usb.request.standard` is now restricted to only handle requests targeting the device.
-- Bumped minimum [Torii](https://github.com/shrine-maiden-heavy-industries/torii-hdl) version from
+- Bumped minimum [Torii] version from
   [0.7.1](https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.7.1)
   to [0.7.5](https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.7.5)
-- Bumped minimum [pyvcd](https://github.com/SanDisk-Open-Source/pyvcd) version from
+- Bumped minimum [pyvcd] version from
   [0.2.2](https://github.com/SanDisk-Open-Source/pyvcd/releases/tag/0.2.2)
   to [0.4.0](https://github.com/SanDisk-Open-Source/pyvcd/releases/tag/0.4.0)
-- Bumped minimum [luminary](https://github.com/shrine-maiden-heavy-industries/luminary) version from
+- Bumped minimum [luminary] version from
   [0.0.5](https://github.com/shrine-maiden-heavy-industries/luminary/releases/tag/v0.0.5)
   to [0.0.6](https://github.com/shrine-maiden-heavy-industries/luminary/releases/tag/v0.0.6)
 
@@ -150,10 +150,10 @@ Unreleased template stuff
 
 ### Changed
 
-- Bumped minimum [usb-construct](https://github.com/shrine-maiden-heavy-industries/usb-construct)
+- Bumped minimum [usb-construct]
   version from [0.2.0](https://github.com/shrine-maiden-heavy-industries/usb-construct/releases/tag/v0.2.0)
   to [0.2.1](https://github.com/shrine-maiden-heavy-industries/usb-construct/releases/tag/v0.2.1)
-- Bumped minimum [Torii](https://github.com/shrine-maiden-heavy-industries/torii-hdl) version from
+- Bumped minimum [Torii] version from
   [0.6.0](https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.6.0)
   to [0.7.1](https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.7.1)
 - Converted a handful of Records to use the new "Structured Record" format in Torii.
@@ -273,3 +273,8 @@ No changelog is provided for this version as it is a hold-over / demarcation of 
 [0.3.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/shrine-maiden-heavy-industries/sol/compare/hw-r0.4...v0.1.0
+[Torii]: https://github.com/shrine-maiden-heavy-industries/torii-hdl
+[torii-usb]: https://github.com/shrine-maiden-heavy-industries/torii-usb
+[usb-construct]: https://github.com/shrine-maiden-heavy-industries/usb-construct
+[luminary]: https://github.com/shrine-maiden-heavy-industries/luminary
+[pyvcd]: https://github.com/SanDisk-Open-Source/pyvcd
