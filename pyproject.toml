@@ -1,0 +1,181 @@
+# SPDX-License-Identifier: BSD-3-Clause
+[project]
+name = 'sol-usb'
+description = 'FPGA-Based USB Analysis and SoC toolkit'
+authors = [
+	{ name = 'Aki Van Ness', email = 'aki@lethalbit.net' },
+	{ name = 'Rachel Mant', email = 'git@dragonmux.network' },
+	{ name = 'Katherine Temkin', email = 'k@ktemkin.com' },
+	{ name = 'SOL Contributors' },
+]
+dynamic = ['version']
+license = 'BSD-3-Clause'
+license-files = ['LICENSE', 'LICENSE.docs']
+readme = 'README.md'
+requires-python = '>=3.11'
+dependencies = [
+	'torii>=0.8.0,<1.0',
+	'torii-usb>=0.8.0,<1.0',
+	'usb-construct>=0.2.1,<1.0',
+	'pyserial~=3.5',
+	'pyvcd>=0.4.0,<0.5',
+	'rich',
+]
+keywords = [
+	'Torii',
+	'HDL',
+	'USB',
+	'FPGA',
+	'SoC',
+]
+classifiers = [
+	'Development Status :: 4 - Beta',
+
+	'Intended Audience :: Developers',
+	'Intended Audience :: Education',
+	'Intended Audience :: Information Technology',
+	'Intended Audience :: Science/Research',
+
+	'Operating System :: MacOS :: MacOS X',
+	'Operating System :: Microsoft :: Windows',
+	'Operating System :: POSIX :: Linux',
+
+	'Programming Language :: Python :: 3.11',
+	'Programming Language :: Python :: 3.12',
+	'Programming Language :: Python :: 3.13',
+	'Programming Language :: Python :: 3.14',
+
+	'Programming Language :: Python :: Implementation :: CPython',
+	'Programming Language :: Python :: Implementation :: PyPy',
+
+	'Topic :: Scientific/Engineering',
+	'Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)',
+	'Topic :: Software Development',
+	'Topic :: Software Development :: Embedded Systems',
+	'Topic :: Software Development :: Libraries',
+
+	'Topic :: System :: Hardware :: Universal Serial Bus (USB)',
+
+	'Typing :: Typed',
+]
+
+[project.optional-dependencies]
+dev = ['nox']
+examples = [
+	'torii-boards>=0.8.0,<1.0',
+	'libusb1',
+	'pyusb',
+]
+platform = [
+	'pyusb~=1.2.0',
+	'libusb1~=1.9.2',
+	'luminary-fpga>=0.0.6,<=0.1.0',
+	'prompt-toolkit~=3.0.16',
+	'ziglang~=0.8.0',
+]
+
+[project.urls]
+source = 'https://github.com/shrine-maiden-heavy-industries/sol'
+issues = 'https://github.com/shrine-maiden-heavy-industries/sol/issues'
+documentation = 'https://sol.shmdn.link/latest'
+changelog = 'https://sol.shmdn.link/latest/changelog.html'
+
+[build-system]
+requires = ['setuptools>=66', 'setuptools-scm>=8']
+build-backend = 'setuptools.build_meta'
+
+[tool.setuptools.packages.find]
+where = ['.']
+exclude = [
+	'contrib',
+	'contrib.*',
+	'docs',
+	'docs.*',
+	'examples',
+	'examples.*',
+	'tests',
+	'tests.*',
+]
+namespaces = false
+
+[tool.setuptools.package-data]
+sol_usb = ['py.typed']
+
+[tool.setuptools_scm]
+version_scheme = 'guess-next-dev'
+local_scheme = 'node-and-date'
+
+# Testing Coverage
+[tool.coverage.run]
+branch = true
+omit = [
+	'*/noxfile.py',
+	'*/__main__.py',
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+	':nocov:',
+	# Allow defensive code
+	'^\s*raise AssertionError\b',
+	'^\s*raise NotImplementedError\b',
+	'^\s*raise NotImplemented\b',
+	'^\s*raise$',
+	# Typing-Related
+	'^\s*if (False|TYPE_CHECKING):',
+	': \.\.\.(\s*#.*)?$',
+	'^ +\.\.\.$',
+	'''-> ['"]?NoReturn['"]?:''',
+	# Skipped/Failed tests
+	'^\s*self\.skipTest\b',
+	'^\s*self\.fail\b',
+]
+partial_branches = [
+	':nobr:'
+]
+
+# Typechecking
+[tool.pyright]
+include = [
+	'applets', 'examples', 'tests', 'sol_usb'
+]
+exclude = [
+	'**/__pycache__', '.nox', 'build', '.github', '.eggs', '*.egg-info'
+]
+
+[tool.mypy]
+warn_return_any = true
+warn_unused_configs = true
+allow_redefinition = true
+check_untyped_defs = true
+
+# Code Formatting
+[tool.ruff]
+cache-dir = 'build/.ruff_cache'
+src = [
+	'applets', 'examples', 'tests', 'sol_usb'
+]
+indent-width = 4
+line-length = 120
+respect-gitignore = true
+target-version = 'py311'
+
+# NOTE(aki):
+# We can't use the Ruff formatter as is, and they refuse to add support for single quotes
+# on docstring, among some other things, so this is just mostly here for reference.
+[tool.ruff.format]
+docstring-code-format = true
+indent-style = 'tab'
+line-ending = 'lf'
+# Due to Ruff being stupid and not letting us use `'''` we have to use this
+quote-style = 'preserve'
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = 'single'
+inline-quotes  = 'single'
+multiline-quotes = 'single'
+
+[tool.ruff.lint.isort]
+lines-after-imports = 1
