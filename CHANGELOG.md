@@ -20,9 +20,14 @@ Unreleased template stuff
 
 ## [Unreleased]
 
+> [!IMPORTANT]
+> The minimum Python version for Torii and Torii USB is now 3.11
+
 ### Added
 
 ### Changed
+
+- Switched from using the old setuptools `setup.py` over to setuptools via `pyproject.toml`
 
 ### Deprecated
 
