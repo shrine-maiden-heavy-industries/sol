@@ -12,12 +12,14 @@ Equivalent (but not binary-compatible) implementation of ValentyUSB's ``eptri``.
 For an example, see ``examples/usb/eptri`` or TinyUSB's ``sol/dcd_eptri.c``.
 '''
 
-from torii.hdl          import Array, Elaboratable, Module, Signal
-from torii.hdl.xfrm     import DomainRenamer, ResetInserter
-from torii.lib.fifo     import SyncFIFOBuffered
+from torii.hdl                   import Array, Elaboratable, Module, Signal
+from torii.hdl.xfrm              import DomainRenamer, ResetInserter
+from torii.lib.fifo              import SyncFIFOBuffered
 
-from ....soc.peripheral import Peripheral
-from ..endpoint         import EndpointInterface
+from torii_usb.usb.usb2.endpoint import EndpointInterface
+
+from ....soc.peripheral          import Peripheral
+
 
 class SetupFIFOInterface(Peripheral, Elaboratable):
 	''' Setup component of our `eptri`-equivalent interface.

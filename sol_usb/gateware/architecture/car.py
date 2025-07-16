@@ -6,36 +6,17 @@
 
 ''' Clock and reset (CAR) controllers for SOL. '''
 
-import logging           as log
-from abc                 import ABCMeta, abstractmethod
+import logging                  as log
+from abc                        import ABCMeta, abstractmethod
 
-from torii.hdl           import ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
+from torii.hdl                  import ClockDomain, ClockSignal, Elaboratable, Instance, Module, ResetSignal, Signal
 
-from torii_usb.utils.cdc import stretch_strobe_signal
-
-from warnings            import warn
-from importlib           import import_module
+from torii_usb.utils.cdc        import stretch_strobe_signal
+from torii_usb.architecture.car import PHYResetController
 
 __all__ = (
-	'PHYResetController',
+	'SolDomainGenerator',
 )
-
-def __dir__() -> list[str]:
-	return list({*globals(), *__all__})
-
-def __getattr__(name: str):
-	if name in __all__:
-		torii_usb_mod = __name__.replace('sol_usb', 'torii_usb').replace('.gateware', '')
-		warn(
-			'Core USB functionality has been migrated to torii_usb, see the migration guide: '
-			'https://torii-usb.shmdn.link/migrating.html \n'
-			f'(hint: replace \'{__name__}.{name}\' with \'{torii_usb_mod}.{name}\')',
-			DeprecationWarning,
-			stacklevel = 2
-		)
-		return import_module(torii_usb_mod).__dict__[name]
-	if name not in __dir__():
-		raise AttributeError(f'Module {__name__!r} has no attribute {name!r}')
 
 class SolDomainGenerator(Elaboratable, metaclass = ABCMeta):
 	'''

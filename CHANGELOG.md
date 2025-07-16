@@ -33,6 +33,94 @@ Unreleased template stuff
 
 ### Removed
 
+- Removed the following modules as they have been moved to [torii-usb] and were deprecated in `v0.8.0`.
+  - `sol_usb.gateware.architecture.car.PHYResetController`
+  - `sol_usb.gateware.interface.pipe`
+  - `sol_usb.gateware.interface.ulpi`
+  - `sol_usb.gateware.interface.utmi`
+  - `sol_usb.gateware.interface.gateware_phy`
+    - `sol_usb.gateware.interface.gateware_phy.phy`
+    - `sol_usb.gateware.interface.gateware_phy.receiver`
+    - `sol_usb.gateware.interface.gateware_phy.transmitter`
+  - `sol_usb.gateware.interface.serdes_phy`
+    - `sol_usb.gateware.interface.serdes_phy.ecp5`
+    - `sol_usb.gateware.interface.serdes_phy.lfps`
+    - `sol_usb.gateware.interface.serdes_phy.xc7_gtp`
+    - `sol_usb.gateware.interface.serdes_phy.xc7_gtx`
+    - `sol_usb.gateware.interface.serdes_phy.xc7`
+  - `sol_usb.gateware.stream`
+    - `sol_usb.gateware.stream.generator`
+  - `sol_usb.gateware.usb`
+    - `sol_usb.gateware.usb.devices`
+      - `sol_usb.gateware.usb.devices.acm`
+    - `sol_usb.gateware.usb.request`
+      - `sol_usb.gateware.usb.request.windows`
+        - `sol_usb.gateware.usb.request.windows.descriptorSet`
+      - `sol_usb.gateware.usb.request.control`
+      - `sol_usb.gateware.usb.request.interface`
+      - `sol_usb.gateware.usb.request.standard`
+    - `sol_usb.gateware.usb.usb2`
+      - `sol_usb.gateware.usb.usb2.endpoints`
+        - `sol_usb.gateware.usb.usb2.endpoints.isochronous`
+        - `sol_usb.gateware.usb.usb2.endpoints.status`
+        - `sol_usb.gateware.usb.usb2.endpoints.stream`
+      - `sol_usb.gateware.usb.usb2.control`
+      - `sol_usb.gateware.usb.usb2.descriptor`
+      - `sol_usb.gateware.usb.usb2.deserializer`
+      - `sol_usb.gateware.usb.usb2.device`
+      - `sol_usb.gateware.usb.usb2.endpoint`
+      - `sol_usb.gateware.usb.usb2.packet`
+      - `sol_usb.gateware.usb.usb2.request`
+      - `sol_usb.gateware.usb.usb2.reset`
+      - `sol_usb.gateware.usb.usb2.transfer`
+    - `sol_usb.gateware.usb.usb3`
+      - `sol_usb.gateware.usb.usb3.application`
+        - `sol_usb.gateware.usb.usb3.application.descriptor`
+        - `sol_usb.gateware.usb.usb3.application.request`
+      - `sol_usb.gateware.usb.usb3.endpoints`
+        - `sol_usb.gateware.usb.usb3.endpoints.control`
+        - `sol_usb.gateware.usb.usb3.endpoints.stream`
+      - `sol_usb.gateware.usb.usb3.link`
+        - `sol_usb.gateware.usb.usb3.link.command`
+        - `sol_usb.gateware.usb.usb3.link.crc`
+        - `sol_usb.gateware.usb.usb3.link.data`
+        - `sol_usb.gateware.usb.usb3.link.header`
+        - `sol_usb.gateware.usb.usb3.link.idle`
+        - `sol_usb.gateware.usb.usb3.link.layer`
+        - `sol_usb.gateware.usb.usb3.link.ltssm`
+        - `sol_usb.gateware.usb.usb3.link.ordered_sets`
+        - `sol_usb.gateware.usb.usb3.link.receiver`
+        - `sol_usb.gateware.usb.usb3.link.timers`
+        - `sol_usb.gateware.usb.usb3.link.transmitter`
+      - `sol_usb.gateware.usb.usb3.physical`
+        - `sol_usb.gateware.usb.usb3.physical.alignment`
+        - `sol_usb.gateware.usb.usb3.physical.coding`
+        - `sol_usb.gateware.usb.usb3.physical.ctc`
+        - `sol_usb.gateware.usb.usb3.physical.layer`
+        - `sol_usb.gateware.usb.usb3.physical.lpfs`
+        - `sol_usb.gateware.usb.usb3.physical.power`
+        - `sol_usb.gateware.usb.usb3.physical.scrambling`
+      - `sol_usb.gateware.usb.usb3.protocol`
+        - `sol_usb.gateware.usb.usb3.protocol.data`
+        - `sol_usb.gateware.usb.usb3.protocol.endpoint`
+        - `sol_usb.gateware.usb.usb3.protocol.layer`
+        - `sol_usb.gateware.usb.usb3.protocol.link_management`
+        - `sol_usb.gateware.usb.usb3.protocol.timestamp`
+        - `sol_usb.gateware.usb.usb3.protocol.transaction`
+      - `sol_usb.gateware.usb.usb3.request`
+        - `sol_usb.gateware.usb.usb3.request.standard`
+      - `sol_usb.gateware.usb.usb3.device`
+    - `sol_usb.gateware.usb.device`
+    - `sol_usb.gateware.usb.stream`
+  - `sol_usb.gateware.utils`
+    - `sol_usb.gateware.utils.bus`
+    - `sol_usb.gateware.utils.cdc`
+  - `sol_usb.gateware.memory`
+  - `sol_usb.usb3`
+  - `sol_usb.usb2`
+  - `sol_usb.full_devices`
+- Removed the `sol_usb.gateware.stream` module as it has been moved into `torii.lib.streams.simple`.
+
 ### Fixed
 
 ## [0.8.0] - 2025-06-26
