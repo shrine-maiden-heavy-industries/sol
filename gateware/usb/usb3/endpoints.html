@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb3/endpoints.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Endpoints - SOL 0.8.1.dev4 documentation</title>
+        <title>Endpoints - SOL 0.8.1.dev5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev4 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.8.1.dev4 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.8.1.dev5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -321,123 +321,11 @@
 <p class="admonition-title">Important</p>
 <p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
 </div>
-<p id="module-sol_usb.gateware.usb.usb3.endpoints">USB3 endpoint-type implementations.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.</span></span><span class="sig-name descname"><span class="pre">USB3ControlEndpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Gateware that manages control request data progression.</p>
-<p>This class is used by creating one or more <em>request handler</em> modules; which define how requests
-are handled. These handlers can be bound using <a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_request_handler" title="sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_request_handler"><code class="xref py py-attr docutils literal notranslate"><span class="pre">add_request_handler</span></code></a>.</p>
-<p>For convenience, this module can also automatically be populated with a <code class="docutils literal notranslate"><span class="pre">StandardRequestHandler</span></code>
-via the <a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_standard_request_handlers" title="sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_standard_request_handlers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">add_standard_request_handlers</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>interface</strong> (<em>SuperSpeedEndpointInterface</em>) – The interface from this endpoint to the core device hardware.</p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>endpoint_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The endpoint number for this control interface; defaults to (and almost always should
-be) zero.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_request_handler">
-<span class="sig-name descname"><span class="pre">add_request_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_request_handler" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a ControlRequestHandler module to this control endpoint.</p>
-<p>No arbitration is performed between request handlers; so it’s important
-that request handlers not overlap in the requests they handle.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_standard_request_handlers">
-<span class="sig-name descname"><span class="pre">add_standard_request_handlers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceDescriptorCollection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_standard_request_handlers" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a handlers for the standard USB requests.</p>
-<p>This will handle all Standard-type requests; so any additional request handlers
-must not handle Standard requests.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>descriptors</strong> – The descriptor collection to add.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<section id="module-sol_usb.gateware.usb.usb3.endpoints.control">
-<span id="control"></span><h2>Control<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.endpoints.control" title="Link to this heading">¶</a></h2>
-<p>Low-level USB3 transceiver gateware – control transfer components.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.control.</span></span><span class="sig-name descname"><span class="pre">USB3ControlEndpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Gateware that manages control request data progression.</p>
-<p>This class is used by creating one or more <em>request handler</em> modules; which define how requests
-are handled. These handlers can be bound using <a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_request_handler" title="sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_request_handler"><code class="xref py py-attr docutils literal notranslate"><span class="pre">add_request_handler</span></code></a>.</p>
-<p>For convenience, this module can also automatically be populated with a <code class="docutils literal notranslate"><span class="pre">StandardRequestHandler</span></code>
-via the <a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_standard_request_handlers" title="sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_standard_request_handlers"><code class="xref py py-attr docutils literal notranslate"><span class="pre">add_standard_request_handlers</span></code></a>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>interface</strong> (<em>SuperSpeedEndpointInterface</em>) – The interface from this endpoint to the core device hardware.</p>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>endpoint_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – The endpoint number for this control interface; defaults to (and almost always should
-be) zero.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_request_handler">
-<span class="sig-name descname"><span class="pre">add_request_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_request_handler" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a ControlRequestHandler module to this control endpoint.</p>
-<p>No arbitration is performed between request handlers; so it’s important
-that request handlers not overlap in the requests they handle.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_standard_request_handlers">
-<span class="sig-name descname"><span class="pre">add_standard_request_handlers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceDescriptorCollection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_standard_request_handlers" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a handlers for the standard USB requests.</p>
-<p>This will handle all Standard-type requests; so any additional request handlers
-must not handle Standard requests.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>descriptors</strong> – The descriptor collection to add.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="control">
+<h2>Control<a class="headerlink" href="#control" title="Link to this heading">¶</a></h2>
 </section>
-<section id="module-sol_usb.gateware.usb.usb3.endpoints.stream">
-<span id="stream"></span><h2>Stream<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.endpoints.stream" title="Link to this heading">¶</a></h2>
-<p>Endpoint interfaces for working with streams.</p>
-<p>The endpoint interfaces in this module provide endpoint interfaces suitable for
-connecting streams to USB endpoints.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.endpoints.stream.SuperSpeedStreamInEndpoint">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.stream.</span></span><span class="sig-name descname"><span class="pre">SuperSpeedStreamInEndpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.endpoints.stream.SuperSpeedStreamInEndpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Endpoint interface that transmits a simple data stream to a host.</p>
-<p>This interface is suitable for a single bulk or interrupt endpoint.</p>
-<p>This endpoint interface will automatically generate ZLPs when a stream packet would end without
-a short data packet. If the stream’s <code class="docutils literal notranslate"><span class="pre">last</span></code> signal is tied to zero, then a continuous stream of
-maximum-length-packets will be sent with no inserted ZLPs.</p>
-<p>This implementation is double buffered; and can store a single packet’s worth of data while transmitting
-a second packet. Bursting is currently not supported.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>stream</strong> (<em>SuperSpeedStreamInterface, input stream</em>) – Full-featured stream interface that carries the data we’ll transmit to the host.</p></li>
-<li><p><strong>interface</strong> (<em>SuperSpeedEndpointInterface</em>) – Communications link to our USB device.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>endpoint_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The endpoint number (not address) this endpoint should respond to.</p></li>
-<li><p><strong>max_packet_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – The maximum packet size for this endpoint. Should match the wMaxPacketSize provided in the
-USB endpoint descriptor.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<section id="stream">
+<h2>Stream<a class="headerlink" href="#stream" title="Link to this heading">¶</a></h2>
 </section>
 </section>
 
@@ -497,23 +385,8 @@ USB endpoint descriptor.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Endpoints</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint"><code class="docutils literal notranslate"><span class="pre">USB3ControlEndpoint</span></code></a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_request_handler"><code class="docutils literal notranslate"><span class="pre">USB3ControlEndpoint.add_request_handler()</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.USB3ControlEndpoint.add_standard_request_handlers"><code class="docutils literal notranslate"><span class="pre">USB3ControlEndpoint.add_standard_request_handlers()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.endpoints.control">Control</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint"><code class="docutils literal notranslate"><span class="pre">USB3ControlEndpoint</span></code></a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_request_handler"><code class="docutils literal notranslate"><span class="pre">USB3ControlEndpoint.add_request_handler()</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.control.USB3ControlEndpoint.add_standard_request_handlers"><code class="docutils literal notranslate"><span class="pre">USB3ControlEndpoint.add_standard_request_handlers()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.endpoints.stream">Stream</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.endpoints.stream.SuperSpeedStreamInEndpoint"><code class="docutils literal notranslate"><span class="pre">SuperSpeedStreamInEndpoint</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#control">Control</a></li>
+<li><a class="reference internal" href="#stream">Stream</a></li>
 </ul>
 </li>
 </ul>
@@ -525,7 +398,7 @@ USB endpoint descriptor.</p></li>
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=d7a60540"></script>
+</div><script src="../../../_static/documentation_options.js?v=b369d504"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

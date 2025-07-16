@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb3/request.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Request - SOL 0.8.1.dev4 documentation</title>
+        <title>Request - SOL 0.8.1.dev5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev4 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.8.1.dev4 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.8.1.dev5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -321,47 +321,8 @@
 <p class="admonition-title">Important</p>
 <p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
 </div>
-<p id="module-sol_usb.gateware.usb.usb3.request">USB3 control request handler gateware.</p>
-<section id="module-sol_usb.gateware.usb.usb3.request.standard">
-<span id="standard"></span><h2>Standard<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.request.standard" title="Link to this heading">¶</a></h2>
-<p>Standard, full-gateware control request handlers.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.request.standard.</span></span><span class="sig-name descname"><span class="pre">StandardRequestHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler" title="Link to this definition">¶</a></dt>
-<dd><p>Pure-gateware USB3 setup request handler. Implements the standard requests required for enumeration.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler.handle_register_write_request">
-<span class="sig-name descname"><span class="pre">handle_register_write_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_value_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_strobe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stall_condition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler.handle_register_write_request" title="Link to this definition">¶</a></dt>
-<dd><p>Fills in the current state with a request handler meant to set a register.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>new_value_signal</strong> (<em>Signal</em><em> of </em><em>any size</em>) – The signal to receive the new value to be applied to the relevant register.</p></li>
-<li><p><strong>write_strobe</strong> (<em>Signal</em><em>(</em><em>)</em>) – The signal which will be pulsed when new_value_signal contains a update.</p></li>
-<li><p><strong>stall_condition</strong> – If provided, if this condition is true, the request will be STALL’d instead of acknowledged.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler.handle_simple_data_request">
-<span class="sig-name descname"><span class="pre">handle_simple_data_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler.handle_simple_data_request" title="Link to this definition">¶</a></dt>
-<dd><p>Fills in a given current state with a request that returns a given short piece of data.</p>
-<p>For e.g. GET_CONFIGURATION and GET_STATUS requests. The relevant data must fit within a word.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>tx_stream</strong> (<a class="reference internal" href="../../stream/index.html#sol_usb.gateware.stream.StreamInterface" title="sol_usb.gateware.stream.StreamInterface"><em>StreamInterface</em></a>) – The transmit stream to drive.</p></li>
-<li><p><strong>data</strong> (<em>Torii value</em><em>, or </em><em>equivalent</em><em>, </em><em>up to 32b</em>) – The data to be transmitted.</p></li>
-<li><p><strong>valid_mask</strong> (<em>Torii value</em><em>, or </em><em>equivalent</em><em>, </em><em>up to 4b</em>) – The valid mask for the data to be transmitted. Should be 0b0001, 0b0011, 0b0111, or 0b1111.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<section id="standard">
+<h2>Standard<a class="headerlink" href="#standard" title="Link to this heading">¶</a></h2>
 </section>
 </section>
 
@@ -421,14 +382,7 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Request</a><ul>
-<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.request.standard">Standard</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler"><code class="docutils literal notranslate"><span class="pre">StandardRequestHandler</span></code></a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler.handle_register_write_request"><code class="docutils literal notranslate"><span class="pre">StandardRequestHandler.handle_register_write_request()</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.request.standard.StandardRequestHandler.handle_simple_data_request"><code class="docutils literal notranslate"><span class="pre">StandardRequestHandler.handle_simple_data_request()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a class="reference internal" href="#standard">Standard</a></li>
 </ul>
 </li>
 </ul>
@@ -440,7 +394,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=d7a60540"></script>
+</div><script src="../../../_static/documentation_options.js?v=b369d504"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb2/descriptor.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Descriptor - SOL 0.8.1.dev4 documentation</title>
+        <title>Descriptor - SOL 0.8.1.dev5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev4 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.8.1.dev4 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.8.1.dev5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -309,7 +309,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -321,92 +321,6 @@
 <p class="admonition-title">Important</p>
 <p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
 </div>
-<p id="module-sol_usb.gateware.usb.usb2.descriptor">Utilities for building USB descriptors into gateware.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.descriptor.USBDescriptorStreamGenerator">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.descriptor.</span></span><span class="sig-name descname"><span class="pre">USBDescriptorStreamGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.descriptor.USBDescriptorStreamGenerator" title="Link to this definition">¶</a></dt>
-<dd><p>Specialized stream generator for generating USB descriptor constants.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerDistributed">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.descriptor.</span></span><span class="sig-name descname"><span class="pre">GetDescriptorHandlerDistributed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerDistributed" title="Link to this definition">¶</a></dt>
-<dd><p>Gateware that handles responding to GetDescriptor requests.</p>
-<p>Currently does not support descriptors in multiple languages.</p>
-<dl>
-<dt>I/O port:</dt><dd><dl class="simple">
-<dt>I: value[16]  - The value field associated with the Get Descriptor request.</dt><dd><p>Contains the descriptor type and index.</p>
-</dd>
-<dt>I: length[16] - The length field associated with the Get Descriptor request.</dt><dd><p>Determines the maximum amount allowed in a response.</p>
-</dd>
-</dl>
-<p>I: start      - Strobe that indicates when a descriptor should be transmitted.</p>
-<p><a href="#id1"><span class="problematic" id="id2">*</span></a>: tx         - The USBInStreamInterface that streams our descriptor data.
-O: stall      - Pulsed if a STALL handshake should be generated, instead of a response.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerBlock">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.descriptor.</span></span><span class="sig-name descname"><span class="pre">GetDescriptorHandlerBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerBlock" title="Link to this definition">¶</a></dt>
-<dd><p>Gateware that handles responding to GetDescriptor requests.</p>
-<p>Currently does not support descriptors in multiple languages.</p>
-<dl>
-<dt>I/O port:</dt><dd><dl class="simple">
-<dt>I: value[16]      - The value field associated with the Get Descriptor request.</dt><dd><p>Contains the descriptor type and index.</p>
-</dd>
-<dt>I: length[16]     - The length field associated with the Get Descriptor request.</dt><dd><p>Determines the maximum amount allowed in a response.</p>
-</dd>
-</dl>
-<p>I: start          - Strobe that indicates when a descriptor should be transmitted.
-I: start_position - Specifies the starting position of the descriptor data to be transmitted.</p>
-<p><a href="#id3"><span class="problematic" id="id4">*</span></a>: tx             - The USBInStreamInterface that streams our descriptor data.
-O: stall          - Pulsed if a STALL handshake should be generated, instead of a response.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerBlock.generate_rom_content">
-<span class="sig-name descname"><span class="pre">generate_rom_content</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerBlock.generate_rom_content" title="Link to this definition">¶</a></dt>
-<dd><p>Generates the contents of the ROM used to hold descriptors.</p>
-<section id="memory-layout">
-<h2>Memory layout<a class="headerlink" href="#memory-layout" title="Link to this heading">¶</a></h2>
-<p>All data is aligned on 4 bytes</p>
-</section>
-<section id="type-offsets-and-number-of-entries">
-<h2>Type offsets and number of entries<a class="headerlink" href="#type-offsets-and-number-of-entries" title="Link to this heading">¶</a></h2>
-<p>Each descriptor type starting from 0 until maximum used type number has
-an entry consisting of number of indexes for this type number (2 bytes)
-and address of first index (2 bytes).</p>
-<p>Invalid entries have a value of 0x0000xxxx (0 entries).</p>
-<p>Example:
-0000  0xFFFF
-0002  0xFFFF
-0004  Number of device indexes
-0006  Address of first device index
-0008  Number of configuration indexes
-000A  Address of first configuration index
-000C  Number of string indexes
-000E  Address of first string index
-…</p>
-</section>
-<section id="index-offsets-and-length-of-descriptor">
-<h2>Index offsets and length of descriptor<a class="headerlink" href="#index-offsets-and-length-of-descriptor" title="Link to this heading">¶</a></h2>
-<p>Each index of a descriptor type has an entry consistent of the length
-of the descriptor (2 bytes) and the address of first data byte (2 bytes).</p>
-<p>0010  Length of first device descriptor
-0012  Address of first device descriptor
-…</p>
-</section>
-<section id="data">
-<h2>Data<a class="headerlink" href="#data" title="Link to this heading">¶</a></h2>
-<p>Descriptor data for each descriptor. Padded by 0 to next 4-byte address.</p>
-<p>…   Descriptor data</p>
-</section>
-</dd></dl>
-
-</dd></dl>
-
 </section>
 
         </article>
@@ -452,37 +366,13 @@ of the descriptor (2 bytes) and the address of first data byte (2 bytes).</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Descriptor</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.descriptor.USBDescriptorStreamGenerator"><code class="docutils literal notranslate"><span class="pre">USBDescriptorStreamGenerator</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerDistributed"><code class="docutils literal notranslate"><span class="pre">GetDescriptorHandlerDistributed</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerBlock"><code class="docutils literal notranslate"><span class="pre">GetDescriptorHandlerBlock</span></code></a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.descriptor.GetDescriptorHandlerBlock.generate_rom_content"><code class="docutils literal notranslate"><span class="pre">GetDescriptorHandlerBlock.generate_rom_content()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=d7a60540"></script>
+</div><script src="../../../_static/documentation_options.js?v=b369d504"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb2/device.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Device - SOL 0.8.1.dev4 documentation</title>
+        <title>Device - SOL 0.8.1.dev5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev4 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.8.1.dev4 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.8.1.dev5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -309,7 +309,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -322,82 +322,7 @@
 <p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
 </div>
 <p id="module-sol_usb.gateware.usb.usb2.device">Contains the organizing hardware used to add USB Device functionality
-to your own designs; including the core <a class="reference internal" href="#sol_usb.gateware.usb.usb2.device.USBDevice" title="sol_usb.gateware.usb.usb2.device.USBDevice"><code class="xref py py-class docutils literal notranslate"><span class="pre">USBDevice</span></code></a> class.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.device.USBDevice">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.device.</span></span><span class="sig-name descname"><span class="pre">USBDevice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.device.USBDevice" title="Link to this definition">¶</a></dt>
-<dd><p>Core gateware common to all Torii-USB USB2 devices.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">USBDevice</span></code> module contains the low-level communications hardware necessary to implement a USB device;
-including hardware for maintaining device state, detecting events, reading data from the host, and generating
-responses.</p>
-<p>This class can be instantiated directly, and used to build a USB device,
-or can be subclassed to create custom device types.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>bus</strong> (<em>[</em><em>UTMI interface</em><em>, </em><em>ULPI Interface</em><em>]</em>) – The UTMI or ULPI PHY connection to be used for communications.</p></li>
-<li><p><strong>handle_clocking</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>Optional</em>) – True iff we should attempt to connect up the <cite>usb</cite> clock domain to the PHY
-automatically based on the clk signals’s I/O direction. This option may not work
-for non-simple connections; in which case you will need to connect the clock signal
-yourself.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Attributes<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>connect</strong> (<em>Signal(), input</em>) – Held high to keep the current USB device connected; or held low to disconnect.</p></li>
-<li><p><strong>low_speed_only</strong> (<em>Signal(), input</em>) – If high, the device will operate at low speed.</p></li>
-<li><p><strong>full_speed_only</strong> (<em>Signal(), input</em>) – If high, the device will be prohibited from operating at high speed.</p></li>
-<li><p><strong>frame_number</strong> (<em>Signal(11), output</em>) – The current USB frame number.</p></li>
-<li><p><strong>microframe_number</strong> (<em>Signal(3), output</em>) – The current USB microframe number. Always 0 on non-HS connections.</p></li>
-<li><p><strong>sof_detected</strong> (<em>Signal(), output</em>) – Pulses for one cycle each time a SOF is detected; and thus our frame number has changed.</p></li>
-<li><p><strong>new_frame</strong> (<em>Signal(), output</em>) – Strobe that indicates a new frame (not microframe) is detected.</p></li>
-<li><p><strong>reset_detected</strong> (<em>Signal(), output</em>) – Asserted when the USB device receives a bus reset.</p></li>
-<li><p><strong># State signals.</strong></p></li>
-<li><p><strong>suspended</strong> (<em>Signal(), output</em>) – High when the device is in USB suspend. This can be (and by the spec must be) used to trigger
-the device to enter lower-power states.</p></li>
-<li><p><strong>tx_activity_led</strong> (<em>Signal(), output</em>) – Signal that can be used to drive an activity LED for TX.</p></li>
-<li><p><strong>rx_activity_led</strong> (<em>Signal(), output</em>) – Signal that can be used to drive an activity LED for RX.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.device.USBDevice.add_control_endpoint">
-<span class="sig-name descname"><span class="pre">add_control_endpoint</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.device.USBDevice.add_control_endpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a basic control endpoint to the device.</p>
-<p>Does not add any request handlers. If you want standard request handlers;
-<a class="reference internal" href="#sol_usb.gateware.usb.usb2.device.USBDevice.add_standard_control_endpoint" title="sol_usb.gateware.usb.usb2.device.USBDevice.add_standard_control_endpoint"><code class="xref py py-attr docutils literal notranslate"><span class="pre">add_standard_control_endpoint</span></code></a> automatically adds standard request handlers.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Returns the endpoint object for the control endpoint.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.device.USBDevice.add_endpoint">
-<span class="sig-name descname"><span class="pre">add_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.device.USBDevice.add_endpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Adds an endpoint interface to the device.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>endpoint</strong> (<em>Elaborateable</em>) – The endpoint interface to be added. Can be any piece of gateware with a
-<code class="xref py py-class docutils literal notranslate"><span class="pre">EndpointInterface</span></code> attribute called <code class="docutils literal notranslate"><span class="pre">interface</span></code>.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.device.USBDevice.add_standard_control_endpoint">
-<span class="sig-name descname"><span class="pre">add_standard_control_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DeviceDescriptorCollection</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.device.USBDevice.add_standard_control_endpoint" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a control endpoint with standard request handlers to the device.</p>
-<p>Parameters will be passed on to StandardRequestHandler.</p>
-<section id="return-value">
-<h2>Return value<a class="headerlink" href="#return-value" title="Link to this heading">¶</a></h2>
-<p>The endpoint object created.</p>
-</section>
-</dd></dl>
-
-</dd></dl>
-
+to your own designs; including the core <code class="xref py py-class docutils literal notranslate"><span class="pre">USBDevice</span></code> class.</p>
 </section>
 
         </article>
@@ -443,37 +368,13 @@ the device to enter lower-power states.</p></li>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Device</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.device.USBDevice"><code class="docutils literal notranslate"><span class="pre">USBDevice</span></code></a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.device.USBDevice.add_control_endpoint"><code class="docutils literal notranslate"><span class="pre">USBDevice.add_control_endpoint()</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.device.USBDevice.add_endpoint"><code class="docutils literal notranslate"><span class="pre">USBDevice.add_endpoint()</span></code></a></li>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.device.USBDevice.add_standard_control_endpoint"><code class="docutils literal notranslate"><span class="pre">USBDevice.add_standard_control_endpoint()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=d7a60540"></script>
+</div><script src="../../../_static/documentation_options.js?v=b369d504"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>

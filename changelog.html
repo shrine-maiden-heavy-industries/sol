@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/changelog.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Changelog - SOL 0.8.1.dev4 documentation</title>
+        <title>Changelog - SOL 0.8.1.dev5 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">SOL 0.8.1.dev4 documentation</div></a>
+      <a href="index.html"><div class="brand">SOL 0.8.1.dev5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.8.1.dev4 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.8.1.dev5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -352,6 +352,149 @@ The minimum Python version for Torii and Torii USB is now 3.11</p>
 </section>
 <section id="removed">
 <h3>Removed<a class="headerlink" href="#removed" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Removed the following modules as they have been moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a> and were deprecated in <code class="docutils literal notranslate"><span class="pre">v0.8.0</span></code>.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.architecture.car.PHYResetController</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.pipe</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.ulpi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.utmi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.phy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.transmitter</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.ecp5</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.lfps</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7_gtp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7_gtx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream.generator</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.devices</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.devices.acm</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.windows</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.windows.descriptorSet</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.interface</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.standard</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.isochronous</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.deserializer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.packet</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.request</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.reset</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.transfer</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application.descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application.request</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.command</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.crc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.header</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.idle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.ltssm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.ordered_sets</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.receiver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.timers</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.transmitter</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.alignment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.coding</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.ctc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.lpfs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.power</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.scrambling</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.endpoint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.link_management</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.timestamp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.transaction</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.request</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.request.standard</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.device</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils.bus</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils.cdc</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.memory</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.usb3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.usb2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.full_devices</span></code></p></li>
+</ul>
+</li>
+<li><p>Removed the <code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream</span></code> module as it has been moved into <code class="docutils literal notranslate"><span class="pre">torii.lib.streams.simple</span></code>.</p></li>
+</ul>
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">¶</a></h3>
@@ -812,7 +955,7 @@ subsignal.</p></li>
       
     </aside>
   </div>
-</div><script src="_static/documentation_options.js?v=d7a60540"></script>
+</div><script src="_static/documentation_options.js?v=b369d504"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/furo.js?v=5fa4622c"></script>

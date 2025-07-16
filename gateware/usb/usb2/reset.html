@@ -7,7 +7,7 @@
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb2/reset.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Reset - SOL 0.8.1.dev4 documentation</title>
+        <title>Reset - SOL 0.8.1.dev5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
@@ -170,7 +170,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev4 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev5 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -182,7 +182,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -194,7 +194,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
   
-  <span class="sidebar-brand-text">SOL 0.8.1.dev4 documentation</span>
+  <span class="sidebar-brand-text">SOL 0.8.1.dev5 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -309,7 +309,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -321,39 +321,6 @@
 <p class="admonition-title">Important</p>
 <p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
 </div>
-<p id="module-sol_usb.gateware.usb.usb2.reset">Gateware that handles USB bus resets &amp; speed detection.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb2.reset.USBResetSequencer">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb2.reset.</span></span><span class="sig-name descname"><span class="pre">USBResetSequencer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb2.reset.USBResetSequencer" title="Link to this definition">¶</a></dt>
-<dd><p>Gateware that detects reset signaling on the USB bus.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Attributes<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>low_speed_only</strong> (<em>Signal(), input</em>) – If set, the device will be forced to operate as a low-speed device.</p></li>
-<li><p><strong>prevent_high_speed</strong> (<em>Signal(), input</em>) – If set, the device will be prohibited from entering high-speed states; and will thus
-act like it’s a full speed device (low_speed_only = 0).</p></li>
-<li><p><strong>bus_busy</strong> (<em>Signal(), input</em>) – Hold-off signal that indicates that driving the bus should be delayed.</p></li>
-<li><p><strong>vbus_connected</strong> (<em>Signal(), input</em>) – Indicates that the device is connected to VBUS. When this is de-asserted, the device will
-be held in perpetual bus reset, and reset handshaking will be disabled.</p></li>
-<li><p><strong>line_state</strong> (<em>Signal(2), input</em>) – The UTMI linestate signals; used to read the current state of the USB D+ and D- lines.</p></li>
-<li><p><strong>bus_reset</strong> (<em>Signal(), output</em>) – Strobe; pulses high for one cycle when a bus reset is detected. This signal indicates that the
-device should return to unaddressed, unconfigured, and should not longer be in High Speed mode.</p></li>
-<li><p><strong>suspended</strong> (<em>Signal(), output</em>) – Held high while the USB device should be in suspend. This technically indicates that the device should
-drop down to consuming suspend current (&lt;= 2.5mA), but very few devices are compliant with this requirement.
-Either way, a polite device might reduce its power consumption while in suspend.</p></li>
-<li><p><strong>current_speed</strong> (<em>Signal(2), output</em>) – A USBSpeed value that indicates the current operating speed. Used both to drive our device’s
-knowledge of operating speed and to drive our PHY’s speed selection.</p></li>
-<li><p><strong>operating_mode</strong> (<em>Signal(2), output</em>) – The current UTMI operating mode. Used to select whether we’re driving the USB bus directly;
-or whether we’re letting the PHY handle NRZI/bit-stuffing.</p></li>
-<li><p><strong>termination_select</strong> (<em>Signal(), output, default = 1</em>) – Determines the bus termination mode. In LS/FS, this determines the presence of our presence-detect
-pull-up. In HS mode, this determines whether the USB high-speed termination is present (0), or
-whether we’re in chirp mode (1).</p></li>
-<li><p><strong>tx</strong> (<em>UTMITransmitInterface, output stream</em>) – Our UTMI transmit interface; used to drive chirp signaling onto the bus.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
         </article>
@@ -399,32 +366,13 @@ whether we’re in chirp mode (1).</p></li>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Reset</a><ul>
-<li><a class="reference internal" href="#sol_usb.gateware.usb.usb2.reset.USBResetSequencer"><code class="docutils literal notranslate"><span class="pre">USBResetSequencer</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=d7a60540"></script>
+</div><script src="../../../_static/documentation_options.js?v=b369d504"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=5fa4622c"></script>
