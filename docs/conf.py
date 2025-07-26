@@ -1,21 +1,16 @@
 # SPDX-License-Identifier: BSD-2-Clause
+from datetime import date
+from pathlib  import Path
 
-import os
-import sys
-from pathlib import Path
-
-sys.path.insert(0, os.path.abspath('.'))
-
-from torii   import __version__ as torii_version
-from sol_usb import __version__ as sol_version
+from torii    import __version__ as torii_version
+from sol_usb  import __version__ as sol_version
 
 ROOT_DIR = (Path(__file__).parent).parent
 
 project   = 'SOL'
 version   = sol_version
 release   = version.split('+')[0]
-copyright = '2020 Great Scott Gadgets'
-author    = 'Katherine J. Temkin'
+copyright = f'{date.today().year}, Shrine Maiden Heavy Industries'
 language  = 'en'
 
 extensions = [
