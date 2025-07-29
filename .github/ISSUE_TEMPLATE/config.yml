@@ -1,5 +1,8 @@
-
+blank_issues_enabled: false
 contact_links:
-  - name: Documentation
+  - name: 'View The Documentation'
     url: https://sol.shmdn.link/
-    about: "SOL docs"
+    about: 'Read the SOL documentation.'
+  - name: 'Start A Discussion'
+    url: 'https://github.com/shrine-maiden-heavy-industries/usb-construct/discussions'
+    about: 'Have a question? Got something cool to share? Do it here!'
