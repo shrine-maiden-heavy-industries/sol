@@ -1,27 +1,53 @@
+# SPDX-License-Identifier: BSD-3-Clause
 
+/build
+applets/build/
+
+# Python
 __pycache__/
-/*.egg-info/
-/.eggs/
-/dist/
-/.venv/
-/.vs/
-/.vscode/
-/.nox/
-/.mypy_cache/
-/env/
+*.py[codz]
+*.egg-info/
+*.eggs/
+.venv/
+.env/
+.nox/
+.mypy_cache/
+.ruff_cache/
 
-/.coverage/
-/htmlcov/
+# Coverage Artifacts
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
 
-/tests/spec_*/
+# Test Artifacts
+tests/**/spec_*/
 *.vcd
+*.fst
+*.ghw
+*.ftr
 *.gtkw
+*.surf.ron
 
-/*.il
-/*.v
-/build/
-*/build/
-
-.DS_Store/
-Thumbs.db
+# Miscellaneous Artifacts
+*.il
+*.v
+*.sv
+*.vhd
+*.vhdl
+*.pcap
 *.pcapng
+
+# Docs Inversions
+# NOTE(aki): We want to include some files we exclude here in the docs
+!docs/_code/**/*.il
+!docs/_code/**/*.v
+!docs/_code/**/*.sv
+!docs/_code/**/*.vhd
+!docs/_code/**/*.vhdl
+!docs/_code/**/*.vcd
+!docs/_code/**/*.gtkw
+!docs/_code/**/*.surf.ron
+
+# Code Editors/IDEs
+.vscode/*
