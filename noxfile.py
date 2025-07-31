@@ -31,7 +31,7 @@ def test(session: Session) -> None:
 	OUTPUT_DIR = BUILD_DIR / 'tests'
 	OUTPUT_DIR.mkdir(parents = True, exist_ok = True)
 
-	unitest_args = ('-m', 'unittest', 'discover', '-v', '-s', str(ROOT_DIR))
+	unittest_args = ('-m', 'unittest', 'discover', '-v', '-s', str(ROOT_DIR))
 
 	session.install('-e', '.')
 	if ENABLE_COVERAGE:
@@ -44,7 +44,7 @@ def test(session: Session) -> None:
 
 	with session.chdir(OUTPUT_DIR):
 		session.log('Running core test suite...')
-		session.run('python', *coverage_args, *unitest_args, *session.posargs)
+		session.run('python', *coverage_args, *unittest_args, *session.posargs)
 
 		if ENABLE_COVERAGE:
 			session.log('Combining Coverage data..')
