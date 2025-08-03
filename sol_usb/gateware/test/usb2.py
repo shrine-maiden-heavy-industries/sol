@@ -207,8 +207,9 @@ class USBDeviceTest(SolGatewareTestCase):
 		# A spec-valued length would be 10 for a FS device, or 1 for a HS.
 		yield from self.advance_cycles(1)
 
-	def out_transaction(self, *octets, endpoint = 0, token_pid = USBPacketID.OUT,
-		data_pid = USBPacketID.DATA0, expect_handshake = None):
+	def out_transaction(
+		self, *octets, endpoint = 0, token_pid = USBPacketID.OUT, data_pid = USBPacketID.DATA0, expect_handshake = None
+	):
 		'''
 		Performs an OUT transaction.
 
@@ -468,8 +469,9 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		# If we don't have a data phase, treat this identically to an OUT control request.
 		if length == 0:
-			response = yield from self.control_request_out(request_type, request,
-				value = value, index = index)
+			response = yield from self.control_request_out(
+				request_type, request, value = value, index = index
+			)
 			return response
 
 		#
@@ -562,8 +564,9 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		# The type is stored in the MSB of the value; and the index in the LSB.
 		value = descriptor_type << 8 | index
-		descriptor = yield from self.control_request_in(0x80,
-				USBStandardRequests.GET_DESCRIPTOR, value = value, length = length)
+		descriptor = yield from self.control_request_in(
+			0x80, USBStandardRequests.GET_DESCRIPTOR, value = value, length = length
+		)
 
 		return descriptor
 
@@ -578,8 +581,9 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		'''
 
-		response_pid = yield from self.control_request_out(0,
-			USBStandardRequests.SET_ADDRESS, value = new_address)
+		response_pid = yield from self.control_request_out(
+			0, USBStandardRequests.SET_ADDRESS, value = new_address
+		)
 
 		if update_address and (response_pid == USBPacketID.DATA1):
 			self.address = new_address
@@ -597,12 +601,14 @@ class USBDeviceTest(SolGatewareTestCase):
 
 		'''
 
-		response_pid = yield from self.control_request_out(0,
-			USBStandardRequests.SET_CONFIGURATION, value = number)
+		response_pid = yield from self.control_request_out(
+			0, USBStandardRequests.SET_CONFIGURATION, value = number
+		)
 		return response_pid
 
 	def get_configuration(self):
 		''' Performs a GET_CONFIGURATION request; reading the device's configuration. '''
-		response = yield from self.control_request_in(0x80,
-			USBStandardRequests.GET_CONFIGURATION, length = 1)
+		response = yield from self.control_request_in(
+			0x80, USBStandardRequests.GET_CONFIGURATION, length = 1
+		)
 		return response
