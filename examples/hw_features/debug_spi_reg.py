@@ -21,7 +21,7 @@ class DebugSPIRegisterExample(Elaboratable):
 		board_spi = platform.request('debug_spi')
 
 		# Create a set of registers, and expose them over SPI.
-		spi_registers = SPIRegisterInterface(default_read_value = 0x4C554E41) #default read = u'LUNA'
+		spi_registers = SPIRegisterInterface(default_read_value = 0x4C554E41) # default read = u'LUNA'
 		m.submodules.spi_registers = spi_registers
 
 		# Fill in some example registers.
