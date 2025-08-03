@@ -99,8 +99,7 @@ class IntegratedLogicAnalyzer(Elaboratable):
 		# If necessary, create synchronized versions of the relevant signals.
 		if self.samples_pretrigger >= 2:
 			delayed_inputs = Signal.like(self.inputs)
-			m.submodules += FFSynchronizer(self.inputs,  delayed_inputs,
-				stages = self.samples_pretrigger)
+			m.submodules += FFSynchronizer(self.inputs, delayed_inputs, stages = self.samples_pretrigger)
 		elif self.samples_pretrigger == 1:
 			delayed_inputs = Signal.like(self.inputs)
 			m.d.sync += delayed_inputs.eq(self.inputs)
@@ -620,7 +619,7 @@ class ILAFrontend(metaclass = ABCMeta):
 		# Split our raw, bits(0) signal into smaller slices, and associate them with their names.
 		for signal in self.ila.signals:
 			signal_width = len(signal)
-			signal_bits  = raw_sample[position : position + signal_width]
+			signal_bits  = raw_sample[position:position + signal_width]
 			position += signal_width
 
 			sample[signal.name] = signal_bits
