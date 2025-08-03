@@ -43,7 +43,9 @@ class IntegratedLogicAnalyzerTest(SolGatewareTestCase):
 
 		# Generate an appropriate exception.
 		actual_value = (yield self.dut.captured_sample)
-		raise AssertionError(f'assertion failed: at address 0x{address:08x}: {actual_value:08x} != {value:08x} (expected)')
+		raise AssertionError(
+			f'assertion failed: at address 0x{address:08x}: {actual_value:08x} != {value:08x} (expected)'
+		)
 
 	@sync_test_case
 	def test_sampling(self):
