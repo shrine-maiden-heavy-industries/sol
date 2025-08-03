@@ -218,7 +218,8 @@ class JTAGCommandInterface(Elaboratable):
 		# Instantiate our core JTAG interface, and hook it up to our signals.
 		# This essentially grabs a connection to the ECP5's JTAG data chain when the ER1 or ER2
 		# instructions are loaded into its instruction register.
-		m.submodules.jtag = Instance('JTAGG',
+		m.submodules.jtag = Instance(
+			'JTAGG',
 			o_JTCK    = jtag_clk,
 			o_JTDI    = jtag_tdi,
 			i_JTDO1   = jtag_tdo_instruction,
@@ -293,7 +294,9 @@ class JTAGCommandInterface(Elaboratable):
 class JTAGRegisterInterface(SPIRegisterInterface):
 	''' JTAG-carried version of our SPI register interface. '''
 
-	def __init__(self, address_size = 15, register_size = 32, default_read_value = 0, support_size_autonegotiation = True):
+	def __init__(
+		self, address_size = 15, register_size = 32, default_read_value = 0, support_size_autonegotiation = True
+	):
 		'''
 		Parameters
 		----------

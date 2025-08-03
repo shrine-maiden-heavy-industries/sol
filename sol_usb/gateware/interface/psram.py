@@ -17,12 +17,14 @@ class HyperBus(Record):
 	def __init__(self):
 		super().__init__([
 			('clk', 1, Direction.FANOUT),
-			('dq',
+			(
+				'dq',
 				('i', 8, Direction.FANIN),
 				('o', 8, Direction.FANOUT),
 				('e', 1, Direction.FANOUT),
 			),
-			('rwds',
+			(
+				'rwds',
 				('i', 1, Direction.FANIN),
 				('o', 1, Direction.FANOUT),
 				('e', 1, Direction.FANOUT),

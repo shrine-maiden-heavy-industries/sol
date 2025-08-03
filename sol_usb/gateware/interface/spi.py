@@ -353,7 +353,9 @@ class SPIRegisterInterface(Elaboratable):
 	Other I/O ports are added dynamically with add_register().
 	'''
 
-	def __init__(self, address_size = 15, register_size = 32, default_read_value = 0, support_size_autonegotiation = True):
+	def __init__(
+		self, address_size = 15, register_size = 32, default_read_value = 0, support_size_autonegotiation = True
+	):
 		'''
 		Parameters
 		----------
@@ -485,8 +487,10 @@ class SPIRegisterInterface(Elaboratable):
 		'''
 		self.add_sfr(address, read = read, read_strobe = read_strobe)
 
-	def add_register(self, address, *, value_signal = None, size = None, name = None, read_strobe = None,
-		write_strobe = None, reset = 0):
+	def add_register(
+		self, address, *, value_signal = None, size = None, name = None, read_strobe = None, write_strobe = None,
+		reset = 0
+	):
 		'''
 		Adds a standard, memory-backed register.
 
