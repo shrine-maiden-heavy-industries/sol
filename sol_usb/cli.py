@@ -112,13 +112,15 @@ def cli(
 		'--fpga',
 		metavar = 'part_number',
 		type    = str,
-		help    = 'Overrides build configuration to build for a given FPGA. Useful if no FPGA is connected during build.'
+		help    = 'Overrides build configuration to build for a given FPGA. Useful if no FPGA is connected '
+		'during build.'
 	)
 	parser.add_argument(
 		'--console',
 		metavar = 'port',
 		type    = Path,
-		help    = 'Attempts to open a convenience 115200 8N1 UART console on the specified port immediately after uploading.'
+		help    = 'Attempts to open a convenience 115200 8N1 UART console on the specified port immediately '
+		'after uploading.'
 	)
 
 	# If we have SoC options, print them to the command line.
