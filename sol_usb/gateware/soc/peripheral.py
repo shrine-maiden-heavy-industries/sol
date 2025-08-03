@@ -81,8 +81,7 @@ class Peripheral:
 		return event
 
 class CSRBank:
-	def csr(self, width, access, *, addr = None, alignment = None, name = None,
-			src_loc_at = 0, desc = None):
+	def csr(self, width, access, *, addr = None, alignment = None, name = None, src_loc_at = 0, desc = None):
 		'''Request a CSR register.
 
 		Parameters
@@ -109,7 +108,8 @@ class CSRBank:
 		if name is None:
 			name = tracer.get_var_name(depth = 2 + src_loc_at).lstrip('_')
 
-		elem = super().csr(width, access, addr = addr, alignment = alignment, name = name,
-			src_loc_at = src_loc_at)
+		elem = super().csr(
+			width, access, addr = addr, alignment = alignment, name = name, src_loc_at = src_loc_at
+		)
 		elem.desc = desc
 		return elem

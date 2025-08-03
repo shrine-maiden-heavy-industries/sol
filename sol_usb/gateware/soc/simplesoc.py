@@ -84,7 +84,9 @@ class SimpleSoC(CPUSoC, Elaboratable):
 		self.intc = GenericInterruptController(width = 32)
 
 		# Create our bus decoder
-		self.bus_decoder = wishbone.Decoder(addr_width = 30, data_width = 32, granularity = 8, features = {'cti', 'bte'})
+		self.bus_decoder = wishbone.Decoder(
+			addr_width = 30, data_width = 32, granularity = 8, features = {'cti', 'bte'}
+		)
 		# Things we don't have but lambdasoc's jinja2 templates expect
 		self.sdram = None
 		self.ethmac = None
@@ -622,9 +624,13 @@ class SimpleSoC(CPUSoC, Elaboratable):
 			memory_location = self.main_ram_address()
 
 			log.info(f'Main memory at 0x{memory_location:08x}; upload using:')
-			log.info(f'    flterm --kernel <your_firmware> --kernel-addr 0x{memory_location:08x} --speed {self._uart_baud}')
+			log.info(
+				f'    flterm --kernel <your_firmware> --kernel-addr 0x{memory_location:08x} --speed {self._uart_baud}'
+			)
 			log.info('or')
-			log.info(f'    lxterm --kernel <your_firmware> --kernel-adr 0x{memory_location:08x} --speed {self._uart_baud}')
+			log.info(
+				f'    lxterm --kernel <your_firmware> --kernel-adr 0x{memory_location:08x} --speed {self._uart_baud}'
+			)
 
 		log.info('')
 

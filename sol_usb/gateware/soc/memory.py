@@ -34,8 +34,10 @@ class WishboneRAM(Elaboratable):
 		words = (value[pos:pos + bytes_per_chunk] for pos in range(0, len(value), bytes_per_chunk))
 		return [int.from_bytes(word, byteorder = byteorder) for word in words]
 
-	def __init__(self, *, addr_width, data_width = 32, granularity = 8, init = None,
-			read_only = False, byteorder = 'little', name = 'ram'):
+	def __init__(
+		self, *, addr_width, data_width = 32, granularity = 8, init = None, read_only = False,
+		byteorder = 'little', name = 'ram'
+	):
 		'''
 		Parameters
 		----------
@@ -100,7 +102,9 @@ class WishboneRAM(Elaboratable):
 		m = Module()
 
 		# Create our memory initializer from our initial value.
-		initial_value = self._initialization_value(self.initial_value, self.data_width, self.granularity, self.byteorder)
+		initial_value = self._initialization_value(
+			self.initial_value, self.data_width, self.granularity, self.byteorder
+		)
 
 		# Create the the memory used to store our data.
 		memory_depth = 2 ** self.local_addr_width
