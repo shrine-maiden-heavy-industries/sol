@@ -9,7 +9,9 @@ Contains the organizing hardware used to add USB Device functionality
 to your own designs; including the core :class:`USBDevice` class.
 '''
 
-from torii.hdl import Elaboratable, Module, Signal
+from torii.hdl                  import Elaboratable, Module, Signal
+
+from torii_usb.usb.usb2.device  import USBDevice
 
 __all__ = (
 	'USBDeviceController',
