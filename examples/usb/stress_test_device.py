@@ -61,14 +61,10 @@ class StressTestEndpoint(Elaboratable):
 		bytes_to_send = Signal(range(0, self._max_packet_size + 1), reset = 0)
 
 		# True iff we're the active endpoint.
-		endpoint_selected = \
-			tokenizer.is_in & \
-			(tokenizer.endpoint == self._endpoint_number) \
+		endpoint_selected = tokenizer.is_in & (tokenizer.endpoint == self._endpoint_number)
 
 		# Pulses when the host is requesting a packet from us.
-		packet_requested = \
-			endpoint_selected \
-			& tokenizer.ready_for_response
+		packet_requested = endpoint_selected & tokenizer.ready_for_response
 
 		#
 		# Transmit logic
