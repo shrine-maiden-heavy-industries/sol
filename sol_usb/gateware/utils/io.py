@@ -60,7 +60,8 @@ def delay(m, signal, interval, *, out = None):
 	#
 	# Base case: create a delayed version of the relevant signal.
 	#
-	m.submodules += Instance('DELAYG',
+	m.submodules += Instance(
+		'DELAYG',
 		i_A = signal,
 		o_Z = out,
 		p_DEL_VALUE = interval
