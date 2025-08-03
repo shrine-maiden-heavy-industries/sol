@@ -80,10 +80,7 @@ class ILASharedBusExample(Elaboratable):
 
 		# Create a simple SFR that will trigger an ILA capture when written,
 		# and which will display our sample status read.
-		spi_registers.add_sfr(REGISTER_ILA,
-			read = self.ila.complete,
-			write_strobe = self.ila.trigger
-		)
+		spi_registers.add_sfr(REGISTER_ILA, read = self.ila.complete, write_strobe = self.ila.trigger)
 
 		# Attach the LEDs and User I/O to the MSBs of our counter.
 		leds    = [platform.request('led', i, dir = 'o').o for i in range(0, 6)]
