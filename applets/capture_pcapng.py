@@ -23,19 +23,22 @@ SPEEDS = {
 	'low':  USB_SPEED_LOW
 }
 
-blockType = 'Block Type' / Enum(Int32ul,
+blockType = 'Block Type' / Enum(
+	Int32ul,
 	sectionHeader = 0x0A0D0D0A,
 	interface = 0x00000001,
 	interfaceStats = 0x00000005,
 	enhancedPacket = 0x00000006,
 )
 
-optionType = 'Option Type' / Enum(Int16ul,
+optionType = 'Option Type' / Enum(
+	Int16ul,
 	end = 0x0000,
 	comment = 0x0001,
 )
 
-linkType = 'Link Type' / Enum(Int16ul,
+linkType = 'Link Type' / Enum(
+	Int16ul,
 	usbFreeBSD = 186,
 	usbLinux = 189,
 	usbLinuxMemMapped = 220,
@@ -75,8 +78,7 @@ optionValue = Aligned(4, Switch(
 		optionType.end: Pass,
 		optionType.comment: PaddedString(this.Length, 'utf8'),
 
-		0x0002: Switch(this._.Type,
-			{
+		0x0002: Switch(this._.Type, {
 				blockType.sectionHeader: PaddedString(this.Length, 'utf8'), # shb_hardware
 				blockType.interface: PaddedString(this.Length, 'utf8'), # if_name
 				blockType.enhancedPacket: BitStruct( # epb_flags
@@ -90,8 +92,7 @@ optionValue = Aligned(4, Switch(
 			},
 			HexDump(Bytes(this.Length))
 		),
-		0x0003: Switch(this._.Type,
-			{
+		0x0003: Switch(this._.Type, {
 				blockType.sectionHeader: PaddedString(this.Length, 'utf8'), # shb_os
 				blockType.interface: PaddedString(this.Length, 'utf8'), # if_description
 				blockType.enhancedPacket: Bytes(this.Length), # epb_hash
@@ -99,8 +100,7 @@ optionValue = Aligned(4, Switch(
 			},
 			HexDump(Bytes(this.Length))
 		),
-		0x0004: Switch(this._.Type,
-			{
+		0x0004: Switch(this._.Type, {
 				blockType.sectionHeader: PaddedString(this.Length, 'utf8'), # shb_userappl
 				blockType.interface: Struct( # if_IPv4addr
 					'address' / Hex(Bytes(4)),
@@ -111,14 +111,12 @@ optionValue = Aligned(4, Switch(
 			},
 			HexDump(Bytes(this.Length))
 		),
-		0x0009: Switch(this._.Type,
-			{
+		0x0009: Switch(this._.Type, {
 				blockType.interface: Int8ul, # if_tsresol
 			},
 			HexDump(Bytes(this.Length))
 		),
-		0x000c: Switch(this._.Type,
-			{
+		0x000c: Switch(this._.Type, {
 				blockType.interface: PaddedString(this.Length, 'utf8'), # if_os
 			},
 			HexDump(Bytes(this.Length))
@@ -235,8 +233,7 @@ def writePcapngHeaders(file: BinaryIO):
 
 	# Build the section header that defines the start of the pcapng file
 	file.write(
-		pcapngBlock.build(
-		{
+		pcapngBlock.build({
 			'Type': blockType.sectionHeader,
 			'Data': {},
 			'Options':
@@ -262,8 +259,7 @@ def writePcapngHeaders(file: BinaryIO):
 
 	# Now build the interface header
 	file.write(
-		pcapngBlock.build(
-		{
+		pcapngBlock.build({
 			'Type': blockType.interface,
 			'Data':
 			{
@@ -299,8 +295,7 @@ def writePcapngHeaders(file: BinaryIO):
 
 def writePcapngPacket(file: BinaryIO, packet: bytearray, timestamp: datetime):
 	file.write(
-		pcapngBlock.build(
-		{
+		pcapngBlock.build({
 			'Type': blockType.enhancedPacket,
 			'Data':
 			{

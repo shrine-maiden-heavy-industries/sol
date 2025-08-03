@@ -107,7 +107,8 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		power_test_reg          = Signal(3)
 		power_test_write_strobe = Signal()
 		power_test_write_value  = Signal(2)
-		registers.add_sfr(REGISTER_TARGET_POWER,
+		registers.add_sfr(
+			REGISTER_TARGET_POWER,
 			read = power_test_reg,
 			write_strobe = power_test_write_strobe,
 			write_signal = power_test_write_value
@@ -162,15 +163,18 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 		#
 		# ULPI PHY windows
 		#
-		self.add_ulpi_registers(m, platform,
+		self.add_ulpi_registers(
+			m, platform,
 			ulpi_bus = 'target_phy',
 			register_base = REGISTER_TARGET_ADDR
 		)
-		self.add_ulpi_registers(m, platform,
+		self.add_ulpi_registers(
+			m, platform,
 			ulpi_bus = 'host_phy',
 			register_base = REGISTER_HOST_ADDR
 		)
-		self.add_ulpi_registers(m, platform,
+		self.add_ulpi_registers(
+			m, platform,
 			ulpi_bus = 'sideband_phy',
 			register_base = REGISTER_SIDEBAND_ADDR
 		)
@@ -225,23 +229,27 @@ class InteractiveSelftest(Elaboratable, ApolloSelfTestCase):
 
 		# ULPI register address.
 		registers = m.submodules.registers
-		registers.add_register(register_base + 0,
+		registers.add_register(
+			register_base + 0,
 			write_strobe = register_address_change,
 			value_signal = ulpi_reg_window.address,
 			size = 6
 		)
-		m.submodules.clocking.stretch_sync_strobe_to_usb(m,
+		m.submodules.clocking.stretch_sync_strobe_to_usb(
+			m,
 			strobe = register_address_change,
 			output = ulpi_reg_window.read_request,
 		)
 
 		# ULPI register value.
-		registers.add_sfr(register_base + 1,
+		registers.add_sfr(
+			register_base + 1,
 			read = ulpi_reg_window.read_data,
 			write_signal = ulpi_reg_window.write_data,
 			write_strobe = register_value_change
 		)
-		m.submodules.clocking.stretch_sync_strobe_to_usb(m,
+		m.submodules.clocking.stretch_sync_strobe_to_usb(
+			m,
 			strobe = register_value_change,
 			output = ulpi_reg_window.write_request
 		)
