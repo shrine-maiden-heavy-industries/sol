@@ -72,12 +72,15 @@ class LUNAPlatformRev0D2(LUNAApolloPlatform, ECP5Platform):
 	resources   = [
 
 		# Primary, discrete 60MHz oscillator.
-		Resource('clk_60MHz', 0, Pins('A7', dir = 'i'),
-			Clock(60e6), Attrs(IO_TYPE = 'LVCMOS33')),
+		Resource(
+			'clk_60MHz', 0, Pins('A7', dir = 'i'), Clock(60e6), Attrs(IO_TYPE = 'LVCMOS33')
+		),
 
+		# TODO(aki): Replace with SPIFlashResource
 		# Connection to our SPI flash; can be used to work with the flash
 		# from e.g. a bootloader.
-		Resource('spi_flash', 0,
+		Resource(
+			'spi_flash', 0,
 
 			# SCK is on pin 9; but doesn't have a traditional I/O buffer.
 			# Instead, we'll need to drive a clock into a USRMCLK instance.
@@ -97,7 +100,8 @@ class LUNAPlatformRev0D2(LUNAApolloPlatform, ECP5Platform):
 
 		# SPI bus connected to the debug controller, for simple register exchanges.
 		# Note that the Debug Controller is the controller on this bus.
-		Resource('debug_spi', 0,
+		Resource(
+			'debug_spi', 0,
 			Subsignal('sck',  Pins( 'R13', dir = 'i')),
 			Subsignal('sdi',  Pins( 'P13', dir = 'i')),
 			Subsignal('sdo',  Pins( 'P11', dir = 'o')),
@@ -109,26 +113,34 @@ class LUNAPlatformRev0D2(LUNAApolloPlatform, ECP5Platform):
 		*LEDResources(pins = 'L16 L15 M16 M15 N16 P15', attrs = Attrs(IO_TYPE = 'LVCMOS33'), invert = True),
 
 		# USB PHYs
-		ULPIResource('sideband_phy', 0,
+		ULPIResource(
+			'sideband_phy', 0,
 			data = 'R2 R1 P2 P1 N1 M2 M1 L2', clk = 'R4', clk_dir = 'o',
 			dir = 'T3', nxt = 'T2', stp = 'T4', rst = 'R3', rst_invert = True,
-			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')),
-		ULPIResource('host_phy', 0,
+			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')
+		),
+		ULPIResource(
+			'host_phy', 0,
 			data = 'G2 G1 F2 F1 E1 D1 C1 B1', clk = 'K2', clk_dir = 'o',
 			dir = 'J1', nxt = 'H2', stp = 'J2', rst = 'K1', rst_invert = True,
-			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')),
-		ULPIResource('target_phy', 0,
+			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')
+		),
+		ULPIResource(
+			'target_phy', 0,
 			data = 'D16 E15 E16 F15 F16 G15 J16 K16', clk = 'B15', clk_dir = 'o',
 			dir = 'C15', nxt = 'C16', stp = 'B16', rst = 'G16', rst_invert = True,
-			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')),
+			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')
+		),
 
 		# Target port power switching.
 		Resource('power_a_port',       0, Pins('C14', dir = 'o'), Attrs(IO_TYPE = 'LVCMOS33')),
 		Resource('pass_through_vbus',  0, Pins('D14', dir = 'o'), Attrs(IO_TYPE = 'LVCMOS33')),
 		Resource('target_vbus_fault',  0, Pins('K15', dir = 'i'), Attrs(IO_TYPE = 'LVCMOS33')),
 
+		# TODO(aki): Replace with HyperBUSResource
 		# HyperRAM (1V8 domain).
-		Resource('ram', 0,
+		Resource(
+			'ram', 0,
 			# Note: our clock uses the pseudo-differential I/O present on the top tiles.
 			# This requires a recent version of trellis+nextpnr. If your build complains
 			# that LVCMOS18D is an invalid I/O type, you'll need to upgrade.

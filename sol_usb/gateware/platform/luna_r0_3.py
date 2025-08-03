@@ -72,13 +72,15 @@ class LUNAPlatformRev0D3(LUNAApolloPlatform, ECP5Platform):
 	resources   = [
 
 		# Primary, discrete 60MHz oscillator.
-		Resource('clk_60MHz', 0, Pins('A8', dir = 'i'),
-			Clock(60e6), Attrs(IO_TYPE = 'LVCMOS33')),
+		Resource(
+			'clk_60MHz', 0, Pins('A8', dir = 'i'), Clock(60e6), Attrs(IO_TYPE = 'LVCMOS33')
+		),
 
+		# TODO(aki): Replace with SPIFlashResource
 		# Connection to our SPI flash; can be used to work with the flash
 		# from e.g. a bootloader.
-		Resource('spi_flash', 0,
-
+		Resource(
+			'spi_flash', 0,
 			# SCK is on pin 9; but doesn't have a traditional I/O buffer.
 			# Instead, we'll need to drive a clock into a USRMCLK instance.
 			# See interfaces/flash.py for more information.
@@ -92,8 +94,10 @@ class LUNAPlatformRev0D3(LUNAApolloPlatform, ECP5Platform):
 		# and T11 (TMS) respectively, so the microcontroller can use either
 		# function but not both simultaneously.
 
+		# TODO(aki): Replace with UARTResource
 		# UART connected to the debug controller; can be routed to a host via CDC-ACM.
-		Resource('uart', 0,
+		Resource(
+			'uart', 0,
 			Subsignal('rx',  Pins('R14',  dir = 'i')),
 			Subsignal('tx',  Pins('T14',  dir = 'oe'), Attrs(PULLMODE = 'UP')),
 			Attrs(IO_TYPE = 'LVCMOS33')
@@ -101,7 +105,8 @@ class LUNAPlatformRev0D3(LUNAApolloPlatform, ECP5Platform):
 
 		# SPI bus connected to test points for simple register exchanges.
 		# The FPGA acts as peripheral, not controller.
-		Resource('debug_spi', 0,
+		Resource(
+			'debug_spi', 0,
 			Subsignal('sck',  Pins( 'R13', dir = 'i')),
 			Subsignal('sdi',  Pins( 'P13', dir = 'i')),
 			Subsignal('sdo',  Pins( 'P11', dir = 'o')),
@@ -113,18 +118,24 @@ class LUNAPlatformRev0D3(LUNAApolloPlatform, ECP5Platform):
 		*LEDResources(pins = 'P14 P16 P15 R16 R15 T15', attrs = Attrs(IO_TYPE = 'LVCMOS33'), invert = True),
 
 		# USB PHYs
-		ULPIResource('sideband_phy', 0,
+		ULPIResource(
+			'sideband_phy', 0,
 			data = 'R1 P3 P1 P2 N1 M2 M1 L2', clk = 'P4', clk_dir = 'o',
 			dir = 'T2', nxt = 'R2', stp = 'R3', rst = 'T3', rst_invert = True,
-			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')),
-		ULPIResource('host_phy', 0,
+			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')
+		),
+		ULPIResource(
+			'host_phy', 0,
 			data = 'F1 F2 E1 E2 D1 E3 C1 C2', clk = 'J1', clk_dir = 'o',
 			dir = 'G1', nxt = 'G2', stp = 'H2', rst = 'J2', rst_invert = True,
-			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')),
-		ULPIResource('target_phy', 0,
+			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')
+		),
+		ULPIResource(
+			'target_phy', 0,
 			data = 'E16 F14 F16 F15 G16 G15 H15 J16', clk = 'C15', clk_dir = 'o',
 			dir = 'D16', nxt = 'E15', stp = 'D14', rst = 'C16', rst_invert = True,
-			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')),
+			attrs = Attrs(IO_TYPE = 'LVCMOS33', SLEWRATE = 'FAST')
+		),
 
 		# Target port power switching.
 		#
@@ -139,8 +150,10 @@ class LUNAPlatformRev0D3(LUNAApolloPlatform, ECP5Platform):
 		Resource('target_a_to_c_fault',  0, Pins('E14', dir = 'i'), Attrs(IO_TYPE = 'LVCMOS33')),
 		Resource('target_5v_to_a_fault', 0, Pins('B15', dir = 'i'), Attrs(IO_TYPE = 'LVCMOS33')),
 
+		# TODO(aki): Replace with HyperBUS resource
 		# HyperRAM (3V3 domain).
-		Resource('ram', 0,
+		Resource(
+			'ram', 0,
 			# Note: our clock uses the pseudo-differential I/O present on the top tiles.
 			# This requires a recent version of trellis+nextpnr. If your build complains
 			# that LVCMOS33D is an invalid I/O type, you'll need to upgrade.
