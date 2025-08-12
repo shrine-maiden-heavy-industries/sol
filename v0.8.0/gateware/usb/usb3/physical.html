@@ -4,6 +4,17 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Physical" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sol.shmdn.link/gateware/usb/usb3/physical.html" />
+<meta property="og:site_name" content="SOL" />
+<meta property="og:description" content="USB3 Physical-Layer modules Alignment: Code for USB3 physical-layer encoding. Coding: Code for USB3 physical-layer encoding. CTC: Code for handling SKP ordered sets on the transmit and receive path..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://sol.shmdn.link/_images/social_previews/summary_gateware_usb_usb3_physical_59241a2d.png" />
+<meta property="og:image:alt" content="USB3 Physical-Layer modules Alignment: Code for USB3 physical-layer encoding. Coding: Code for USB3 physical-layer encoding. CTC: Code for handling SKP ordered sets on the transmit and receive path..." />
+<meta name="description" content="USB3 Physical-Layer modules Alignment: Code for USB3 physical-layer encoding. Coding: Code for USB3 physical-layer encoding. CTC: Code for handling SKP ordered sets on the transmit and receive path..." />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Protocol" href="protocol.html" /><link rel="prev" title="Link" href="link.html" />
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb3/physical.html" />
 
@@ -13,8 +24,9 @@
 
 <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=25af2a20" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/styles.css?v=960f663f" />
     
@@ -190,7 +202,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev44 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev45 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -696,7 +708,7 @@ Polynomial: X^16 + X^5 + X^4 + X^3 + 1</p>
 </ul>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>initial_value</strong> (<em>32-bit int</em><em>, </em><em>optional</em>) – The initial value for the LFSR. Optional; defaults to all 1’s, per the USB3 spec.</p>
+<dd class="field-even"><p><strong>initial_value</strong> (<em>32-bit int</em><em>, </em><em>optional</em>) – The initial value for the LFSR. Optional; defaults to all 1’s, per the USB3 spec. (default: <code class="docutils literal notranslate"><span class="pre">65535</span></code>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -716,7 +728,7 @@ Polynomial: X^16 + X^5 + X^4 + X^3 + 1</p>
 </ul>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>initial_value</strong> (<em>32-bit int</em><em>, </em><em>optional</em>) – The initial value for the LFSR. Optional.</p>
+<dd class="field-even"><p><strong>initial_value</strong> (<em>32-bit int</em><em>, </em><em>optional</em>) – The initial value for the LFSR. Optional. (default: <code class="docutils literal notranslate"><span class="pre">32189</span></code>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -736,7 +748,7 @@ This module automatically resets itself whenever a COM alignment character is se
 </ul>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>initial_value</strong> (<em>32-bit int</em><em>, </em><em>optional</em>) – The initial value for the LFSR. Optional.</p>
+<dd class="field-even"><p><strong>initial_value</strong> (<em>32-bit int</em><em>, </em><em>optional</em>) – The initial value for the LFSR. Optional. (default: <code class="docutils literal notranslate"><span class="pre">65535</span></code>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -864,12 +876,12 @@ This module automatically resets itself whenever a COM alignment character is se
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=b57b77c3"></script>
+</div><script src="../../../_static/documentation_options.js?v=d1b4a787"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="../../../_static/tabs.js?v=3ee01567"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3ee01567"></script>
     </body>
 </html>

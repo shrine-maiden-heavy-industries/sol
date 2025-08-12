@@ -4,6 +4,17 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Gateware PHY" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sol.shmdn.link/gateware/interface/gateware/index.html" />
+<meta property="og:site_name" content="SOL" />
+<meta property="og:description" content="Gateware PHY, Gateware PHY - Receiver, Gateware PHY - Transmitter. Pure-gateware, UTMI-compatible Full Speed PHY." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://sol.shmdn.link/_images/social_previews/summary_gateware_interface_gateware_index_c7102f8d.png" />
+<meta property="og:image:alt" content="Gateware PHY, Gateware PHY - Receiver, Gateware PHY - Transmitter. Pure-gateware, UTMI-compatible Full Speed PHY." />
+<meta name="description" content="Gateware PHY, Gateware PHY - Receiver, Gateware PHY - Transmitter. Pure-gateware, UTMI-compatible Full Speed PHY." />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Gateware PHY" href="phy.html" /><link rel="prev" title="UTMI" href="../utmi.html" />
         <link rel="canonical" href="https://sol.shmdn.link/gateware/interface/gateware/index.html" />
 
@@ -13,8 +24,9 @@
 
 <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=25af2a20" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/styles.css?v=960f663f" />
     
@@ -190,7 +202,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev44 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev45 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -411,13 +423,15 @@ a value of 1 prevents D+ and D- from being driven; and a value of 2 disables bit
 <li><p><strong>dm_pulldown</strong> (<em>Signal(), input</em>) – When asserted, this will indicate that the host-mode’s D+ pulldown should be connected.</p></li>
 </ul>
 </dd>
-<dt class="field-even">param io<span class="colon">:</span></dt>
-<dd class="field-even"><p>A record containing the raw I/O signals to be used to drive our I/O-based USB connection.
+<dt class="field-even">type io<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">param io<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A record containing the raw I/O signals to be used to drive our I/O-based USB connection.
 The <code class="docutils literal notranslate"><span class="pre">d_p</span></code> and <code class="docutils literal notranslate"><span class="pre">d_n</span></code> signals are mandatory; the <code class="docutils literal notranslate"><span class="pre">pullup</span></code>, <code class="docutils literal notranslate"><span class="pre">pulldown</span></code>,
 and <code class="docutils literal notranslate"><span class="pre">vbus_valid</span></code> signals are optional.</p>
 </dd>
-<dt class="field-odd">type io<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Record(d_p, d_n, [pullup], [pulldown], [vbus_valid])</p>
+<dt class="field-even">type io<span class="colon">:</span></dt>
+<dd class="field-even"><p>Record(d_p, d_n, [pullup], [pulldown], [vbus_valid])</p>
 </dd>
 </dl>
 </section>
@@ -493,12 +507,12 @@ and <code class="docutils literal notranslate"><span class="pre">vbus_valid</spa
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=b57b77c3"></script>
+</div><script src="../../../_static/documentation_options.js?v=d1b4a787"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="../../../_static/tabs.js?v=3ee01567"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3ee01567"></script>
     </body>
 </html>

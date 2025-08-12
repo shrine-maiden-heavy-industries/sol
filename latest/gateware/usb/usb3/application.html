@@ -4,6 +4,17 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Application" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sol.shmdn.link/gateware/usb/usb3/application.html" />
+<meta property="og:site_name" content="SOL" />
+<meta property="og:description" content="USB3 application-layer gateware. Descriptor: Utilities for building USB3 descriptors into gateware. Request: Control-request interfacing and gateware for USB3." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://sol.shmdn.link/_images/social_previews/summary_gateware_usb_usb3_application_60e72973.png" />
+<meta property="og:image:alt" content="USB3 application-layer gateware. Descriptor: Utilities for building USB3 descriptors into gateware. Request: Control-request interfacing and gateware for USB3." />
+<meta name="description" content="USB3 application-layer gateware. Descriptor: Utilities for building USB3 descriptors into gateware. Request: Control-request interfacing and gateware for USB3." />
+<meta name="twitter:card" content="summary_large_image" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Device" href="device.html" /><link rel="prev" title="USB3" href="index.html" />
         <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb3/application.html" />
 
@@ -13,8 +24,9 @@
 
 <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=25af2a20" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-codeautolink.css?v=b2176991" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/styles.css?v=960f663f" />
     
@@ -190,7 +202,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev44 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev45 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -362,7 +374,7 @@
 <p>Utilities for building USB3 descriptors into gateware.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.application.descriptor.GetDescriptorHandler">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.application.descriptor.</span></span><span class="sig-name descname"><span class="pre">GetDescriptorHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.application.descriptor.GetDescriptorHandler" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.application.descriptor.</span></span><span class="sig-name descname"><span class="pre">GetDescriptorHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">descriptor_collection:</span> <span class="pre">~usb_construct.emitters.descriptors.standard.DeviceDescriptorCollection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usb_domain='ss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_type=&lt;class</span> <span class="pre">'torii_usb.usb.stream.SuperSpeedStreamInterface'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.application.descriptor.GetDescriptorHandler" title="Link to this definition">¶</a></dt>
 <dd><p>Gateware that handles responding to GetDescriptor requests.</p>
 <p>Currently does not support descriptors in multiple languages.</p>
 <dl class="field-list simple">
@@ -380,7 +392,7 @@ Determines the maximum amount allowed in a response.</p></li>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>domain</strong> (<em>string</em>) – The clock domain this generator should belong to. Defaults to ‘’.</p></li>
-<li><p><strong>stream_type</strong> (<a class="reference internal" href="../../stream/index.html#sol_usb.gateware.stream.StreamInterface" title="sol_usb.gateware.stream.StreamInterface"><em>StreamInterface</em></a><em>, or </em><em>subclass</em>) – The type of stream we’ll be multiplexing.</p></li>
+<li><p><strong>stream_type</strong> (<a class="reference internal" href="../../stream/index.html#sol_usb.gateware.stream.StreamInterface" title="sol_usb.gateware.stream.StreamInterface"><em>StreamInterface</em></a><em>, or </em><em>subclass</em>) – The type of stream we’ll be multiplexing. (default: <code class="docutils literal notranslate"><span class="pre">&lt;class</span> <span class="pre">'torii_usb.usb.stream.SuperSpeedStreamInterface'&gt;</span></code>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -569,12 +581,12 @@ driving requests at a time.</p>
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=b57b77c3"></script>
+</div><script src="../../../_static/documentation_options.js?v=d1b4a787"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
-    <script src="../../../_static/tabs.js?v=3ee01567"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3ee01567"></script>
     </body>
 </html>
