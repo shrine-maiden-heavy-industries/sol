@@ -29,7 +29,7 @@ language: text
 ```
 
 [BSD-3-Clause]: https://spdx.org/licenses/BSD-3-Clause.html
-[`LICENSE.software`]: https://github.com/shrine-maiden-heavy-industries/sol/blob/main/LICENSE
+[`LICENSE.software`]: https://github.com/shrine-maiden-heavy-industries/sol/blob/main/LICENSE.software
 [CC-BY-SA 4.0]: https://creativecommons.org/licenses/by-sa/4.0/
 [`LICENSE.docs`]: https://github.com/shrine-maiden-heavy-industries/sol/blob/main/LICENSE.docs
 [CERN-OHL-P v2]: https://ohwr.org/cern_ohl_p_v2.txt
