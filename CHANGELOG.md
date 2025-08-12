@@ -127,7 +127,7 @@ Unreleased template stuff
 
 > [!IMPORTANT]
 > This release is post to the split into [torii-usb] for the core gateware.
-> For information on migrating please see the [migration guide](https://torii-usb.shmdn.link/migration.html)
+> For information on migrating please see the [migration guide](https://torii-usb.shmdn.link/latest/migration.html)
 
 This is a maintenance release, syncs the minimum [Torii] and [torii-usb] versions to `0.8.0` in preparation for
 the Torii `1.0.0` release in the future.
