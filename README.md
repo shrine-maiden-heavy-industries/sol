@@ -20,7 +20,7 @@ The SOL hardware is released under the [CERN-OHL-P], the full text of which can 
 
 The SOL documentation is released under the [CC-BY-4.0], the full text of which can be found in the [`LICENSE.docs`] file.
 
-[migration guide]: https://torii-usb.shmdn.link/migration.html
+[migration guide]: https://torii-usb.shmdn.link/latest/migration.html
 [Luna]: https://github.com/greatscottgadgets/luna/
 [Amaranth]: https://github.com/amaranth-lang
 [Torii]: https://github.com/shrine-maiden-heavy-industries/torii-hdl

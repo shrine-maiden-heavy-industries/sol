@@ -10,7 +10,7 @@ much of its feature-set is still being built. Consider SOL an 'unstable' library
 ```
 
 ```{important}
-The core USB gateware within SOL has deprecated and moved to [torii-usb](https://github.com/shrine-maiden-heavy-industries/torii-usb), please see the [migration guide](https://torii-usb.shmdn.link/migration.html).
+The core USB gateware within SOL has deprecated and moved to [torii-usb](https://github.com/shrine-maiden-heavy-industries/torii-usb), please see the [migration guide](https://torii-usb.shmdn.link/latest/migration.html).
 ```
 
 Welcome to the SOL project! SOL is a full toolkit for working with USB using FPGAs, it provides a gateware library to implement USB in your own Torii based designs.
