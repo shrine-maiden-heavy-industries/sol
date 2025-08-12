@@ -23,10 +23,13 @@ extensions = [
 	'sphinx.ext.intersphinx',
 	'sphinx.ext.napoleon',
 	'sphinx.ext.todo',
-	'sphinx_inline_tabs',
 	'myst_parser',
+	'sphinx_autodoc_typehints',
+	'sphinx_codeautolink',
 	'sphinx_copybutton',
+	'sphinx_inline_tabs',
 	'sphinx_multiversion',
+	'sphinxext.opengraph',
 ]
 
 source_suffix = {
@@ -39,10 +42,11 @@ extlinks = {
 	'pypi':  ('https://pypi.org/project/%s/', '%s'),
 }
 
-pygments_style         = 'default'
-pygments_dark_style    = 'monokai'
-autodoc_member_order   = 'bysource'
-todo_include_todos     = True
+pygments_style              = 'default'
+pygments_dark_style         = 'monokai'
+autodoc_member_order        = 'bysource'
+autodoc_docstring_signature = False
+todo_include_todos          = True
 
 intersphinx_mapping = {
 	'python': ('https://docs.python.org/3', None),
@@ -62,6 +66,11 @@ napoleon_custom_sections  = [
 ]
 
 myst_heading_anchors = 3
+
+always_use_bars_union = True
+typehints_defaults = 'braces-after'
+typehints_use_signature = True
+typehints_use_signature_return = True
 
 templates_path = [
 	'_templates',
@@ -109,9 +118,20 @@ html_css_files = [
 	'css/styles.css'
 ]
 
+# TODO(aki): OpenGraph metadata stuff
+ogp_site_url = html_baseurl
+ogp_social_cards = {}
+ogp_image = None
+ogp_image_alt = None
+ogp_custom_meta_tags = list[str]()
+ogp_enable_meta_description = True
+
 linkcheck_retries = 2
 linkcheck_workers = 1 # At the cost of speed try to prevent rate-limiting
-linkcheck_ignore  = []
+linkcheck_ignore  = [
+	# SSL Timeout from GitHub actions
+	'https://aur.archlinux.org',
+]
 linkcheck_anchors_ignore_for_url = [
 	r'^https://web\.libera\.chat/',
 ]
