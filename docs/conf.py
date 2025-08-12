@@ -2,8 +2,10 @@
 from datetime import date
 from pathlib  import Path
 
-from torii    import __version__ as torii_version
-from sol_usb  import __version__ as sol_version
+from torii         import __version__ as torii_version
+from torii_usb     import __version__ as torii_usb_version
+from usb_construct import __version__ as usb_construct_version
+from sol_usb       import __version__ as sol_version
 
 ROOT_DIR = (Path(__file__).parent).parent
 
@@ -24,6 +26,7 @@ extensions = [
 	'sphinx_inline_tabs',
 	'myst_parser',
 	'sphinx_copybutton',
+	'sphinx_multiversion',
 ]
 
 source_suffix = {
@@ -44,8 +47,8 @@ todo_include_todos     = True
 intersphinx_mapping = {
 	'python': ('https://docs.python.org/3', None),
 	'torii': (f'https://torii.shmdn.link/v{torii_version}', None),
-	'torii_usb': ('https://torii-usb.shmdn.link/', None),
-	'usb_construct': ('https://usb-construct.shmdn.link/', None)
+	'torii_usb': (f'https://torii-usb.shmdn.link/v{torii_usb_version}', None),
+	'usb_construct': (f'https://usb-construct.shmdn.link/v{usb_construct_version}', None)
 }
 
 napoleon_google_docstring              = False
@@ -69,12 +72,38 @@ html_theme       = 'furo'
 html_copy_source = False
 
 html_theme_options = {
-
+	'announcement': 'This documentation is a work in progress, and you can help us <a href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/CONTRIBUTING.md">improve it!</a>', # noqa: E501
+	'light_css_variables': {
+		'color-brand-primary': '#2672a8',
+		'color-brand-content': '#2672a8',
+		'color-announcement-background': '#ffab87',
+		'color-announcement-text': '#494453',
+	},
+	'dark_css_variables': {
+		'color-brand-primary': '#85C2FE',
+		'color-brand-content': '#85C2FE',
+		'color-announcement-background': '#ffab87',
+		'color-announcement-text': '#494453',
+	},
+	'source_repository': 'https://github.com/shrine-maiden-heavy-industries/sol/',
+	'source_branch': 'main',
+	'source_directory': 'docs/',
 }
 
 html_static_path = [
 	'_static'
 ]
+
+html_sidebars = {
+	"**": [
+		"sidebar/brand.html",
+		"sidebar/search.html",
+		"sidebar/scroll-start.html",
+		"sidebar/navigation.html",
+		"sidebar/version_selector.html",
+		"sidebar/scroll-end.html",
+	]
+}
 
 html_css_files = [
 	'css/styles.css'
@@ -83,3 +112,14 @@ html_css_files = [
 linkcheck_retries = 2
 linkcheck_workers = 1 # At the cost of speed try to prevent rate-limiting
 linkcheck_ignore  = []
+linkcheck_anchors_ignore_for_url = [
+	r'^https://web\.libera\.chat/',
+]
+
+# Sphinx-Multiversion stuff
+# TODO(aki): Revert to `^v(?!0)\d+\.\d+\.\d+$` when `v1.0.0` drops, we need to gen the v0.8.0 stable for now
+smv_tag_whitelist    = r'^v\d+\.(?![1-7])\d+\.\d+$' # Ignore all `v0.[1-7].x` versions
+smv_branch_whitelist = r'^main$'                    # Only look at `main`
+smv_remote_whitelist = r'^origin$'
+smv_released_pattern = r'^refs/tags/v.+$'           # Only consider tags to be full releases
+smv_outputdir_format = '{ref.name}'

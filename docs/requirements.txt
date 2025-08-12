@@ -3,3 +3,4 @@ furo
 sphinx-inline-tabs
 myst-parser
 sphinx-copybutton
+sphinx-multiversion
