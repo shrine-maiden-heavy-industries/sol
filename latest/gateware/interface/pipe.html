@@ -1,0 +1,597 @@
+
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="PIPE" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sol.shmdn.link/gateware/interface/pipe.html" />
+<meta property="og:site_name" content="SOL" />
+<meta property="og:description" content="USB3 PIPE interfacing gateware." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://sol.shmdn.link/_images/social_previews/summary_gateware_interface_pipe_8cdebfcb.png" />
+<meta property="og:image:alt" content="USB3 PIPE interfacing gateware." />
+<meta name="description" content="USB3 PIPE interfacing gateware." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="ULPI" href="ulpi.html"><link rel="prev" title="Interface" href="index.html">
+        <link rel="canonical" href="https://sol.shmdn.link/gateware/interface/pipe.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+
+<title>PIPE - SOL v0.8.0 Documentation</title>
+
+<link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-codeautolink.css?v=b2176991" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/styles.css?v=960f663f" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  --color-brand-primary: #2672a8;
+  --color-brand-content: #2672a8;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #85C2FE;
+  --color-brand-content: #85C2FE;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #85C2FE;
+  --color-brand-content: #85C2FE;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+<div class="announcement">
+  <aside class="announcement-content">
+     This documentation is a work in progress, and you can help us <a href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/CONTRIBUTING.md">improve it!</a> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">SOL 0.8.1.dev52 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky">
+<a class="sidebar-brand" href="../../index.html">
+	<span class="sidebar-brand-text">SOL v0.8.0 Documentation</span>
+	
+  </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../features.html">Status &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Gateware Library</a><input aria-label="Toggle navigation of Gateware Library" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">Interface</a><input aria-label="Toggle navigation of Interface" checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">PIPE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ulpi.html">ULPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utmi.html">UTMI</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="gateware/index.html">Gateware PHY</a><input aria-label="Toggle navigation of Gateware PHY" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="gateware/phy.html">Gateware PHY</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/receiver.html">Gateware PHY - Receiver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/transmitter.html">Gateware PHY - Transmitter</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="serdes/index.html">SerDes PHY</a><input aria-label="Toggle navigation of SerDes PHY" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="serdes/ecp5.html">SerDes PHY - ECP5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="serdes/lfps.html">SerDes PHY - LFPS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="serdes/xc7.html">SerDes PHY - XC7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../soc/index.html">SoC</a><input aria-label="Toggle navigation of SoC" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../soc/cpu.html">CPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../soc/event.html">Event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../soc/memory.html">Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../soc/peripheral.html">Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../soc/simplesoc.html">SimpleSoC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../soc/uart.html">UART</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../stream/index.html">Stream</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../usb/index.html">USB</a><input aria-label="Toggle navigation of USB" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../usb/analyzer.html">Analyzer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../usb/request.html">Request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../usb/stream.html">Stream</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../usb/usb2/index.html">USB2</a><input aria-label="Toggle navigation of USB2" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/control.html">Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/descriptor.html">Descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/deserializer.html">Deserializer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/endpoint.html">Endpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/endpoint.html#gateware-endpoint-interfaces">Gateware Endpoint Interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/packet.html">Packet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/request.html">Request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/reset.html">Reset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/transfer.html">Transfer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/endpoints.html">Endpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb2/interfaces.html">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../usb/usb3/index.html">USB3</a><input aria-label="Toggle navigation of USB3" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb3/application.html">Application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb3/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb3/endpoints.html">Endpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb3/link.html">Link</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb3/physical.html">Physical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb3/protocol.html">Protocol</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb/usb3/request.html">Request</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../hardware/custom.html">SOL On Your Own Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hardware/index.html">Hardware</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">Licenses</a></li>
+</ul>
+
+</div>
+<div class="sidebar-tree">
+	<p class="caption" role="heading">
+		<span class="caption-text">Versions</span>
+	</p>
+	<a class="reference" href="../../../main/gateware/interface/pipe.html">Development</a>
+	<ul>
+		<li class="toctree-l1"><a class="reference" href="pipe.html">v0.8.0</a></li>
+	</ul>
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/docs/gateware/interface/pipe.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/shrine-maiden-heavy-industries/sol/edit/main/docs/gateware/interface/pipe.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="pipe">
+<h1>PIPE<a class="headerlink" href="#pipe" title="Link to this heading">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
+</div>
+<p id="module-sol_usb.gateware.interface.pipe">USB3 PIPE interfacing gateware.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.interface.pipe.PIPEInterface">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.interface.pipe.</span></span><span class="sig-name descname"><span class="pre">PIPEInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.interface.pipe.PIPEInterface" title="Link to this definition">¶</a></dt>
+<dd><p>Interface present on hardware that implements the PHY Interface for PCI Express and USB 3.0 (PIPE).</p>
+<p>This interface is compliant with the PHY Interface For the PCI Express and USB 3.0
+Architectures, Version 3.0 specification. Unless otherwise noted, the descriptions of
+the signals as stated in this specification take precedence over the ones provided here.</p>
+<p>The directions of the signals are given from the PHY perspective, i.e. a signal described as
+an ‘output’ is driven by the PHY and received by the MAC.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>width</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Interface width, in symbols.</p></li>
+<li><p><strong>Ports</strong></p></li>
+<li><p><strong>-----</strong></p></li>
+<li><p><strong>reset</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>) – Active-high, asynchronous reset for the PHY receiver and transmitter.</p></li>
+<li><p><strong>clk</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>) – Reference clock for the PHY receiver and transmitter. The specifications for this clock
+(frequency, jitter, phase relationship to other clocks) are PHY implementation dependent
+and must be specified by the implementation.</p></li>
+<li><p><strong>pclk</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – Clock for the PHY interface. Unless otherwise specified, all other signals are synchronous
+to the rising edge of this clock. This clock is derived from the reference clock; if
+the reference clock is spread spectrum modulated, so will be the interface clock.
+The frequency of this clock depends on the <code class="docutils literal notranslate"><span class="pre">phy_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">rate</span></code> inputs. Note that
+the supported combinations of <code class="docutils literal notranslate"><span class="pre">phy_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">rate</span></code> are PHY implementation dependent.</p></li>
+<li><p><strong>tx_data</strong> (<em>Signal</em><em>(</em><em>width * 8</em><em>)</em><em>, </em><em>input</em>)</p></li>
+<li><p><strong>tx_datak</strong> (<em>Signal</em><em>(</em><em>width</em><em>)</em><em>, </em><em>input</em>) – Transmit data bus. Bits [7:0] are the first symbol to be transmitted, bits [15:8] (if any)
+are the second symbol, and so on.</p></li>
+<li><p><strong>rx_data</strong> (<em>Signal</em><em>(</em><em>width * 8</em><em>)</em><em>, </em><em>output</em>)</p></li>
+<li><p><strong>rx_datak</strong> (<em>Signal</em><em>(</em><em>width</em><em>)</em><em>, </em><em>output</em>) – Receive data bus. Bits [7:0] are the first symbol that has been received, bits [15:8]
+(if any) are the second symbol, and so on.</p></li>
+<li><p><strong>phy_mode</strong> (<em>Signal</em><em>(</em><em>2</em><em>)</em><em>, </em><em>input</em>) – PHY operating mode; 0 for PCI Express, 1 for SuperSpeed USB. The allowed values for this
+input are PHY implementation dependent. The PHY must be reset after changing this input.</p></li>
+<li><p><strong>elas_buf_mode</strong> (<em>Signal</em><em>(</em><em>1</em><em>)</em><em>, </em><em>input</em>) – Elastic buffer operating mode; 0 for Nominal Half-full, 1 for Nominal Empty. The allowed
+values for this input are PHY implementation dependent. The PHY must be reset after
+changing this input.</p></li>
+<li><p><strong>rate</strong> (<em>Signal</em><em>(</em><em>1</em><em>)</em><em>, </em><em>input</em>) – Link signaling rate; 0 for 2.5 GT/s, 1 for 5 GT/s. The allowed values for this input are
+PHY implementation dependent. Whether changing this signal affects the <code class="docutils literal notranslate"><span class="pre">pclk</span></code> frequency
+or the effective data bus width is PHY implementation dependent. The change of this input
+is acknowledged by a single-cycle assertion of <code class="docutils literal notranslate"><span class="pre">phy_status</span></code>.</p></li>
+<li><p><strong>power_down</strong> (<em>Signal</em><em>(</em><em>2</em><em>)</em><em>, </em><em>input</em>) – Protocol-specific power management mode, as per the PIPE specification. This signal is
+synchronous to <code class="docutils literal notranslate"><span class="pre">pclk</span></code> if the clock is running, and asynchronous otherwise. The change
+of this input is acknowledged by a single-cycle assertion of <code class="docutils literal notranslate"><span class="pre">phy_status</span></code> if <code class="docutils literal notranslate"><span class="pre">pclk</span></code>
+is running, or by deassertion of <code class="docutils literal notranslate"><span class="pre">phy_status</span></code> otherwise.</p></li>
+<li><p><strong>tx_deemph</strong> (<em>Signal</em><em>(</em><em>2</em><em>)</em><em>, </em><em>input</em>) – Transmitter de-emphasis level; 0 for -6 dB, 1 for -3.5 dB, 2 for 0 dB. The allowed values
+for this input are PHY implementation dependent.</p></li>
+<li><p><strong>tx_margin</strong> (<em>Signal</em><em>(</em><em>3</em><em>)</em><em>, </em><em>input</em>) – Transmitter voltage levels, as per the PIPE specification. The allowed values for this
+input and their meanings are PHY implementation dependent.</p></li>
+<li><p><strong>tx_swing</strong> (<em>Signal</em><em>(</em><em>1</em><em>)</em>) – Transmitter voltage swing level. The allowed values for this input and their meanings
+are PHY implementation dependent.</p></li>
+<li><p><strong>tx_detrx_lpbk</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>)</p></li>
+<li><p><strong>tx_elec_idle</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>) – Protocol-specific transmit control signals, as per the PIPE specification. Depending on
+the state of <code class="docutils literal notranslate"><span class="pre">phy_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">power_down</span></code> inputs, these inputs direct the PHY
+transmitter to transmit data from the transmit data bus, loop back received data, go into
+Electrical Idle, transmit beacon or LFPS signaling, or perform a receiver detection
+operation. These signals are synchronous to <code class="docutils literal notranslate"><span class="pre">pclk</span></code> if the clock is running, and
+asynchronous otherwise. The completion of a receiver detection operation is acknowledged
+by a single-cycle assertion of <code class="docutils literal notranslate"><span class="pre">phy_status</span></code> if <code class="docutils literal notranslate"><span class="pre">pclk</span></code> is running, or by asserting
+<code class="docutils literal notranslate"><span class="pre">phy_status</span></code> until the MAC deasserts <code class="docutils literal notranslate"><span class="pre">tx_detrx_lpbk</span></code> otherwise.</p></li>
+<li><p><strong>tx_compliance</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>) – If asserted, sets the running disparity to negative for the first symbol on the transmit
+data bus. This signal is implemented only for PHYs that can operate in the PCI Express mode.</p></li>
+<li><p><strong>tx_ones_zeroes</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>) – If asserted, the PHY transmits an alternating sequence of 50-250 ones and 50-250 zeroes
+instead of the data on the transmit data bus. This signal is implemented only for PHYs
+that can operate in the SuperSpeed USB mode.</p></li>
+<li><p><strong>rx_polarity</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>) – If asserted, the PHY receiver inverts the received serial data.</p></li>
+<li><p><strong>rx_eq_training</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>) – If asserted, the PHY receiver bypasses normal operation to perform equalization training.
+Whether this signal is implemented is PHY implementation dependent.</p></li>
+<li><p><strong>rx_termination</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>input</em>) – If asserted, the PHY receiver presents receiver terminations. Whether this signal is
+implemented is PHY implementation dependent.</p></li>
+<li><p><strong>phy_status</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – PHY operation completion status, as per the PIPE specification. This signal is synchronous
+to <code class="docutils literal notranslate"><span class="pre">pclk</span></code> if the clock is running, and asynchronous otherwise.</p></li>
+<li><p><strong>rx_valid</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – If asserted, the PHY receiver has symbol lock and there is valid data on the data bus.</p></li>
+<li><p><strong>rx_status</strong> (<em>Signal</em><em>(</em><em>3</em><em>)</em><em>, </em><em>output</em>) – Indicates one of the four possible receiver errors (8b10b decode error, disparity error,
+elastic buffer overflow or underflow), the addition or removal of symbols as a part of
+elastic buffer management, or the completion of a receiver detection operation. This signal
+is synchronous to <code class="docutils literal notranslate"><span class="pre">pclk</span></code> if the clock is running, and asynchronous otherwise.</p></li>
+<li><p><strong>rx_elec_idle</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – If asserted, depending on the state of <code class="docutils literal notranslate"><span class="pre">phy_mode</span></code> and <code class="docutils literal notranslate"><span class="pre">power_down</span></code> inputs, indicates
+detection of Electrical Idle, beacon signaling, or LFPS signaling. This signal is
+asynchronous.</p></li>
+<li><p><strong>power_present</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – If asserted, voltage is present on Vbus. Whether this signal is implemented is PHY
+implementation dependent.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.interface.pipe.AsyncPIPEInterface">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.interface.pipe.</span></span><span class="sig-name descname"><span class="pre">AsyncPIPEInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.interface.pipe.AsyncPIPEInterface" title="Link to this definition">¶</a></dt>
+<dd><p>Gateware that transfers PIPE interface signals between clock domains.</p>
+<p>The PIPE specification defines the PHY interface signals to be synchronous to a PHY-generated
+clock <code class="docutils literal notranslate"><span class="pre">pclk</span></code>, and asynchronous if <code class="docutils literal notranslate"><span class="pre">pclk</span></code> is not running. The MAC will typically not be
+clocked by <code class="docutils literal notranslate"><span class="pre">pclk</span></code> for the following non-exhaustive list of reasons:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The MAC implements P2 (for PCI Express) or P3 (for SuperSpeed USB) power states where
+the PHY-generated clock is not running;</p></li>
+<li><p>The PHY-generated clock is faster than the maximum frequency at which the MAC can run;</p></li>
+<li><p>The MAC implements rate switching (for PCI Express), and needs to support PHYs that
+change the PHY-generated clock frequency depending on the rate;</p></li>
+<li><p>The PHY is required to use a spread spectrum clock in the SuperSpeed USB mode, and
+this would interfere with the MAC operation;</p></li>
+<li><p>etc.</p></li>
+</ul>
+</div></blockquote>
+<p>This gateware transfers the PIPE interface signals between the PHY and MAC clock domains,
+optionally performing gearing to adapt the PHY data bus width and interface clock rate to
+the MAC capabilities. With the exception of <code class="docutils literal notranslate"><span class="pre">reset</span></code>, <code class="docutils literal notranslate"><span class="pre">clk</span></code> and <code class="docutils literal notranslate"><span class="pre">pclk</span></code>, all of the signals
+in this gateware are synchronous to the specified Torii clock domain, <code class="docutils literal notranslate"><span class="pre">ss</span></code> by default.
+The <code class="docutils literal notranslate"><span class="pre">pclk</span></code> signal is driven by the clock of this domain.</p>
+<p>This gateware does not currently support asynchronous signaling in the deepest PHY power state.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.interface.pipe.GearedPIPEInterface">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.interface.pipe.</span></span><span class="sig-name descname"><span class="pre">GearedPIPEInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.interface.pipe.GearedPIPEInterface" title="Link to this definition">¶</a></dt>
+<dd><p>Module that presents a post-gearing PIPE interface, performing gearing in I/O hardware.</p>
+<p>This module presents a public interface that’s identical to a standard PIPE PHY,
+with the following exceptions:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tx_data</span></code>    is 32 bits wide, rather than 16</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tx_datak</span></code>   is 4  bits wide, rather than  2</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rx_data</span></code>    is 32 bits wide, rather than 16</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rx_datak</span></code>   is 4  bits wide, rather than  2</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">phy_status</span></code> is 2 bits wide, rather than 1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rx_status</span></code>  is now an array of two 3-bit signals</p></li>
+</ul>
+</div></blockquote>
+<p>This module <em>requires</em> that a half-rate / 125MHz clock that’s in phase with the <code class="docutils literal notranslate"><span class="pre">pipe_io</span></code>
+clock be provided to the <code class="docutils literal notranslate"><span class="pre">pipe</span></code> domain. This currently must be handled per-device, so it
+is the responsibility of the platform’s clock domain generator.</p>
+<p>This module optionally can connect the PIPE I/O clock (<code class="docutils literal notranslate"><span class="pre">pclk</span></code>) to the design’s clocking
+network. This configuration is recommended.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pipe</strong> (<em>PIPE I/O resource</em>) – The raw PIPE interface to be worked with.</p></li>
+<li><p><strong>handle_clocking</strong> (<em>boolean</em><em>, </em><em>optional</em>) – If true or not provided, this module will attempt to handle some clock connections
+for you. This means that ClockSignal(‘pipe_io’) will be automatically driven by the
+PHY’s clock (<code class="docutils literal notranslate"><span class="pre">pclk</span></code>), and <code class="docutils literal notranslate"><span class="pre">tx_clk</span></code> will automatically be tied to ClockSignal(‘pipe’).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="ulpi.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">ULPI</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Interface</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Shrine Maiden Heavy Industries
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">PIPE</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.interface.pipe.PIPEInterface"><code class="docutils literal notranslate"><span class="pre">PIPEInterface</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.interface.pipe.AsyncPIPEInterface"><code class="docutils literal notranslate"><span class="pre">AsyncPIPEInterface</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.interface.pipe.GearedPIPEInterface"><code class="docutils literal notranslate"><span class="pre">GearedPIPEInterface</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=457fda43"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/tabs.js?v=3ee01567"></script>
+    </body>
+</html>

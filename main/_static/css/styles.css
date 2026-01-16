@@ -1,0 +1,37 @@
+div.highlight {
+    border-radius: 5px;
+}
+
+div.admonition {
+    border-radius: 0px 0px 5px 5px;
+}
+
+p.admonition-title {
+    border-radius: 5px 5px 0px 0px;
+}
+
+code.literal {
+    border-radius: 5px;
+}
+
+div.sidebar-container {
+    width: 20em;
+}
+
+div.toc-drawer {
+    width: 20em;
+}
+
+div.multiver {
+	background-color: var(--color-brand-primary);
+	color: var(--color-background-secondary);
+}
+
+aside.multiver-content a {
+	color: var(--color-background-secondary);
+	text-decoration-color: var(--color-background-secondary);
+}
+
+aside.multiver-content a:hover {
+	color: var(--color-background-secondary);
+}

@@ -1,0 +1,986 @@
+
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Changelog" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sol.shmdn.link/changelog.html" />
+<meta property="og:site_name" content="SOL" />
+<meta property="og:description" content="All notable changes to this project will be documented in this file. The format is based on Keep a Changelog, and this project adheres to Semantic Versioning. Unreleased:[!IMPORTANT] The minimum Py..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://sol.shmdn.link/_images/social_previews/summary_changelog_86ad7ad9.png" />
+<meta property="og:image:alt" content="All notable changes to this project will be documented in this file. The format is based on Keep a Changelog, and this project adheres to Semantic Versioning. Unreleased:[!IMPORTANT] The minimum Py..." />
+<meta name="description" content="All notable changes to this project will be documented in this file. The format is based on Keep a Changelog, and this project adheres to Semantic Versioning. Unreleased:[!IMPORTANT] The minimum Py..." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="Licenses" href="license.html"><link rel="prev" title="SOL On Your Own Hardware" href="hardware/custom.html">
+        <link rel="canonical" href="https://sol.shmdn.link/changelog.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+
+<title>Changelog - SOL 0.8.1.dev52 Documentation</title>
+
+<link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/styles.css?v=960f663f" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  --color-brand-primary: #2672a8;
+  --color-brand-content: #2672a8;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #85C2FE;
+  --color-brand-content: #85C2FE;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #85C2FE;
+  --color-brand-content: #85C2FE;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+<div class="announcement multiver">
+  <aside class="announcement-content multiver-content">
+    <strong>
+    
+    This is the bleeding-edge development documentation, for the stable <code>v0.8.0</code> docs <a href="../v0.8.0/changelog.html">Click Here</a>.
+    
+    </strong>
+  </aside>
+</div>
+<div class="announcement">
+  <aside class="announcement-content">
+     This documentation is a work in progress, and you can help us <a href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/CONTRIBUTING.md">improve it!</a> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">SOL 0.8.1.dev52 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky">
+<a class="sidebar-brand" href="index.html">
+	<span class="sidebar-brand-text">SOL 0.8.1.dev52 Documentation</span>
+	
+  </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">Status &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="gateware/index.html">Gateware Library</a><input aria-label="Toggle navigation of Gateware Library" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gateware/interface/index.html">Interface</a><input aria-label="Toggle navigation of Interface" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gateware/interface/pipe.html">PIPE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/interface/ulpi.html">ULPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/interface/utmi.html">UTMI</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="gateware/interface/gateware/index.html">Gateware PHY</a><input aria-label="Toggle navigation of Gateware PHY" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="gateware/interface/gateware/phy.html">Gateware PHY</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/interface/gateware/receiver.html">Gateware PHY - Receiver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/interface/gateware/transmitter.html">Gateware PHY - Transmitter</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="gateware/interface/serdes/index.html">SerDes PHY</a><input aria-label="Toggle navigation of SerDes PHY" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="gateware/interface/serdes/ecp5.html">SerDes PHY - ECP5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/interface/serdes/lfps.html">SerDes PHY - LFPS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/interface/serdes/xc7.html">SerDes PHY - XC7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gateware/soc/index.html">SoC</a><input aria-label="Toggle navigation of SoC" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gateware/soc/cpu.html">CPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/soc/event.html">Event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/soc/memory.html">Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/soc/peripheral.html">Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/soc/simplesoc.html">SimpleSoC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/soc/uart.html">UART</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gateware/stream/index.html">Stream</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="gateware/usb/index.html">USB</a><input aria-label="Toggle navigation of USB" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="gateware/usb/analyzer.html">Analyzer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/usb/request.html">Request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gateware/usb/stream.html">Stream</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="gateware/usb/usb2/index.html">USB2</a><input aria-label="Toggle navigation of USB2" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/control.html">Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/descriptor.html">Descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/deserializer.html">Deserializer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/endpoint.html">Endpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/endpoint.html#gateware-endpoint-interfaces">Gateware Endpoint Interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/packet.html">Packet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/request.html">Request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/reset.html">Reset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/transfer.html">Transfer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/endpoints.html">Endpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb2/interfaces.html">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="gateware/usb/usb3/index.html">USB3</a><input aria-label="Toggle navigation of USB3" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb3/application.html">Application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb3/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb3/endpoints.html">Endpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb3/link.html">Link</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb3/physical.html">Physical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb3/protocol.html">Protocol</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gateware/usb/usb3/request.html">Request</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/custom.html">SOL On Your Own Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hardware/index.html">Hardware</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Licenses</a></li>
+</ul>
+
+</div>
+<div class="sidebar-tree">
+	<p class="caption" role="heading">
+		<span class="caption-text">Versions</span>
+	</p>
+	<ul>
+		<li class="toctree-l1"><a class="reference" href="../v0.8.0/changelog.html">v0.8.0</a></li>
+	</ul>
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/docs/changelog.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/shrine-maiden-heavy-industries/sol/edit/main/docs/changelog.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <!-- markdownlint-disable MD041 -->
+<!-- markdownlint-disable MD024 -->
+<section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
+<p>All notable changes to this project will be documented in this file.</p>
+<p>The format is based on <a class="reference external" href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
+and this project adheres to <a class="reference external" href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
+<!--
+Unreleased template stuff
+
+## [Unreleased]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+-->
+<section id="unreleased">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.8.0...main">Unreleased</a><a class="headerlink" href="#unreleased" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>[!IMPORTANT]
+The minimum Python version for Torii and Torii USB is now 3.11</p>
+</div></blockquote>
+<section id="added">
+<h3>Added<a class="headerlink" href="#added" title="Link to this heading">¶</a></h3>
+</section>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Switched from using the old setuptools <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> over to setuptools via <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code></p></li>
+</ul>
+</section>
+<section id="deprecated">
+<h3>Deprecated<a class="headerlink" href="#deprecated" title="Link to this heading">¶</a></h3>
+</section>
+<section id="removed">
+<h3>Removed<a class="headerlink" href="#removed" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Removed the following modules as they have been moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a> and were deprecated in <code class="docutils literal notranslate"><span class="pre">v0.8.0</span></code>.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.architecture.car.PHYResetController</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.pipe</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.ulpi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.utmi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.phy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.transmitter</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.ecp5</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.lfps</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7_gtp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7_gtx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream.generator</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.devices</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.devices.acm</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.windows</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.windows.descriptorSet</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.interface</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.standard</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.isochronous</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.deserializer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.packet</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.request</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.reset</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.transfer</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application.descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application.request</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.command</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.crc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.header</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.idle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.ltssm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.ordered_sets</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.receiver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.timers</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.transmitter</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.alignment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.coding</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.ctc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.lpfs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.power</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.scrambling</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.endpoint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.link_management</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.timestamp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.transaction</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.request</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.request.standard</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.device</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils.bus</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils.cdc</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.memory</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.usb3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.usb2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.full_devices</span></code></p></li>
+</ul>
+</li>
+<li><p>Removed the <code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream</span></code> module as it has been moved into <code class="docutils literal notranslate"><span class="pre">torii.lib.streams.simple</span></code>.</p></li>
+</ul>
+</section>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">¶</a></h3>
+</section>
+</section>
+<section id="id1">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.5.0...v0.8.0">0.8.0</a> - 2025-06-26<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>[!IMPORTANT]
+This release is post to the split into <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a> for the core gateware.
+For information on migrating please see the <a class="reference external" href="https://torii-usb.shmdn.link/latest/migration.html">migration guide</a></p>
+</div></blockquote>
+<p>This is a maintenance release, syncs the minimum <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-hdl">Torii</a> and <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a> versions to <code class="docutils literal notranslate"><span class="pre">0.8.0</span></code> in preparation for
+the Torii <code class="docutils literal notranslate"><span class="pre">1.0.0</span></code> release in the future.</p>
+<section id="id2">
+<h3>Changed<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Bumped <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-hdl">Torii</a> minimum version from <code class="docutils literal notranslate"><span class="pre">0.7.7</span></code> to <code class="docutils literal notranslate"><span class="pre">0.8.0</span></code></p></li>
+<li><p>Bumped <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a> minimum version from <code class="docutils literal notranslate"><span class="pre">0.7.1</span></code> to <code class="docutils literal notranslate"><span class="pre">0.8.0</span></code></p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>Deprecated<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>All of the core USB gateware has been deprecated in favor of <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>. The following modules have been deprecated.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.architecture.car.PHYResetController</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.pipe</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.ulpi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.utmi</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.phy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.receiver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.gateware_phy.transmitter</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.ecp5</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.lfps</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7_gtp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7_gtx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.interface.serdes_phy.xc7</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream.generator</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.devices</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.devices.acm</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.windows</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.windows.descriptorSet</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.interface</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.request.standard</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.isochronous</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.status</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoints.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.deserializer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.endpoint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.packet</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.request</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.reset</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb2.transfer</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application.descriptor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.application.request</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.control</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.endpoints.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.command</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.crc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.header</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.idle</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.ltssm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.ordered_sets</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.receiver</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.timers</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.link.transmitter</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.alignment</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.coding</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.ctc</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.lpfs</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.power</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.physical.scrambling</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.data</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.endpoint</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.layer</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.link_management</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.timestamp</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.protocol.transaction</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.request</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.request.standard</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.usb3.device</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.device</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.usb.stream</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils</span></code></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils.bus</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.utils.cdc</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.memory</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.usb3</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.usb2</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sol_usb.full_devices</span></code></p></li>
+</ul>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">sol_usb.gateware.stream</span></code> module has been absorbed into Torii’s <code class="docutils literal notranslate"><span class="pre">torii.lib.streams.simple</span></code> module for <code class="docutils literal notranslate"><span class="pre">StreamInterface</span></code> and <code class="docutils literal notranslate"><span class="pre">StreamArbiter</span></code>.</p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.1...v0.5.0">0.5.0</a> - 2025-03-07<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
+<blockquote>
+<div><p>[!IMPORTANT]
+This release is prior to the split into <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a> for the core gateware.</p>
+</div></blockquote>
+<section id="id5">
+<h3>Changed<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">gateware.usb.request.standard</span></code> is now restricted to only handle requests targeting the device.</p></li>
+<li><p>Bumped minimum <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-hdl">Torii</a> version from
+<a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.7.1">0.7.1</a>
+to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.7.5">0.7.5</a></p></li>
+<li><p>Bumped minimum <a class="reference external" href="https://github.com/SanDisk-Open-Source/pyvcd">pyvcd</a> version from
+<a class="reference external" href="https://github.com/SanDisk-Open-Source/pyvcd/releases/tag/0.2.2">0.2.2</a>
+to <a class="reference external" href="https://github.com/SanDisk-Open-Source/pyvcd/releases/tag/0.4.0">0.4.0</a></p></li>
+<li><p>Bumped minimum <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/luminary">luminary</a> version from
+<a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/luminary/releases/tag/v0.0.5">0.0.5</a>
+to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/luminary/releases/tag/v0.0.6">0.0.6</a></p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>Fixed<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Handful of little typing fixes.</p></li>
+<li><p>Fixed miss-using some of the IO resources, they happened to work, if only by accident.</p></li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.4.0...v0.4.1">0.4.1</a> - 2025-01-06<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h2>
+<section id="id8">
+<h3>Changed<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Bumped minimum <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/usb-construct">usb-construct</a>
+version from <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/usb-construct/releases/tag/v0.2.0">0.2.0</a>
+to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/usb-construct/releases/tag/v0.2.1">0.2.1</a></p></li>
+<li><p>Bumped minimum <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-hdl">Torii</a> version from
+<a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.6.0">0.6.0</a>
+to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-hdl/releases/tag/v0.7.1">0.7.1</a></p></li>
+<li><p>Converted a handful of Records to use the new “Structured Record” format in Torii.</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Fixed<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed a deprecation warning from Python where we used a <code class="docutils literal notranslate"><span class="pre">~</span></code> on a boolean value.</p></li>
+<li><p>Fixed a typo in the <code class="docutils literal notranslate"><span class="pre">gateware.interface.ulpi</span></code> module (<code class="docutils literal notranslate"><span class="pre">s/UPLI/ULPI/g</span></code>)</p></li>
+<li><p>Fixed the <code class="docutils literal notranslate"><span class="pre">USBStandardRequestHandler</span></code> handling requests directed to things other than the device.</p></li>
+<li><p>Fixed a bug in the <code class="docutils literal notranslate"><span class="pre">GatewarePHY</span></code> where we used the Record value itself rather than the appropriate
+subsignal.</p></li>
+</ul>
+</section>
+</section>
+<section id="id10">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.3.0...v0.4.0">0.4.0</a> - 2024-07-10<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h2>
+<section id="id11">
+<h3>Added<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added test USB data from a real capture to fully test analyzer buffering.</p></li>
+<li><p>Added fast USB traffic test.</p></li>
+<li><p>Added type annotations for <code class="docutils literal notranslate"><span class="pre">SetupPacket</span></code></p></li>
+<li><p>Added test for emptying the packet buffer once every <code class="docutils literal notranslate"><span class="pre">SOF</span></code> (Start Of Frame) in tandem with the data input simulation.</p></li>
+<li><p>Added missing dependency <code class="docutils literal notranslate"><span class="pre">luminary-fpga</span></code> for platform functionality.</p></li>
+</ul>
+</section>
+<section id="id12">
+<h3>Changed<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Finished extracting tests into their own tree out of the implementation files.</p></li>
+<li><p>Updated minimum python version to match with Torii, it is now 3.10.</p></li>
+<li><p>Improved analyzer applet overrun handling on the secondary packet buffer side.</p></li>
+</ul>
+</section>
+<section id="id13">
+<h3>Fixed<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed warnings coming from the CDC tests.</p></li>
+<li><p>Fixed missing type annotations from the UTMI interface types.</p></li>
+<li><p>Fixed missing type annotations from the stream interface type.</p></li>
+<li><p>Fixed missing type annotations for the FIFOs and UTMI interfaces in the analyzer.</p></li>
+<li><p>Fixed an exception getting thrown in the analyzer when the platform doesn’t support the <code class="docutils literal notranslate"><span class="pre">power_a_port</span></code> and <code class="docutils literal notranslate"><span class="pre">pass_through_vbus</span></code> signals.</p></li>
+<li><p>Fixed missing type annotations for the DUT and UTMI interfaces in the analyzer tests.</p></li>
+<li><p>Fixed missing type annotations in the test utilities and cleaned up the implementation of <code class="docutils literal notranslate"><span class="pre">SolGatewareTestCase.wait()</span></code></p></li>
+<li><p>Fixed USB analyzer polling interval requested by the exfiltration endpoint.</p></li>
+<li><p>Fixed missing type annotations on the UTMI translator type in the ULPI interface.</p></li>
+<li><p>Fixed missing type annotations on the ULPI interface type.</p></li>
+<li><p>Fixed missing type annotations for <code class="docutils literal notranslate"><span class="pre">USBAnalyzerStackTest</span></code>.</p></li>
+<li><p>Fixed the check to see if the bus translator was in use or not.</p></li>
+<li><p>Fixed improper use of empty Torii <code class="docutils literal notranslate"><span class="pre">Case()</span></code> elements as stricter enforcement of using <code class="docutils literal notranslate"><span class="pre">Default()</span></code> has been implemented.</p></li>
+<li><p>Fixed UDEV rules.</p></li>
+</ul>
+</section>
+</section>
+<section id="id14">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.2.0...v0.3.0">0.3.0</a> - 2023-10-19<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h2>
+<section id="id15">
+<h3>Added<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">handler_condition</span></code> to USB Requests</p></li>
+<li><p>Added automatic construction of <code class="docutils literal notranslate"><span class="pre">StallOnlyRequestHandler</span></code></p></li>
+<li><p>Added pcapng support for capture applet</p></li>
+<li><p>Added a <code class="docutils literal notranslate"><span class="pre">CONTRIBUTING.md</span></code> file</p></li>
+<li><p>Added support for dynamic capture speed selection in analyzer</p></li>
+<li><p>Added ability to request supported speeds from analyzer</p></li>
+<li><p>Added ability to discard invalid/unknown data in the analyzer and restart the capture</p></li>
+<li><p>Added an <code class="docutils literal notranslate"><span class="pre">rx_invalid</span></code> signal for <code class="docutils literal notranslate"><span class="pre">RequestHandlerInterface</span></code> to indicate invalid reception</p></li>
+</ul>
+</section>
+<section id="id16">
+<h3>Changed<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Updated from rich <code class="docutils literal notranslate"><span class="pre">12.6.0</span></code> to <code class="docutils literal notranslate"><span class="pre">13.0.0</span></code></p></li>
+<li><p>Improved Analyzer speed</p></li>
+<li><p>Updated <code class="docutils literal notranslate"><span class="pre">SimpleSoC</span></code> to bring it up to date with <code class="docutils literal notranslate"><span class="pre">torii.soc</span></code> and <code class="docutils literal notranslate"><span class="pre">lambdasoc</span></code></p></li>
+<li><p>Updated torii minimum version to &gt;=0.5.0</p></li>
+<li><p>Moved the speed test device gateware into the applet gateware library</p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>Fixed<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Various code formatting cleanups.</p></li>
+<li><p>Fixed Analyzer capture engine overflow problem</p></li>
+<li><p>Fixed UTMI/ULPI typo</p></li>
+<li><p>Fixed Analyzer overflow handling</p></li>
+<li><p>Fixed overflow handling on the primary analyzer FIFO</p></li>
+<li><p>Fixed an issue with the return type of USBPacketID.byte()</p></li>
+<li><p>Fixed signed/unsigned conversion error in USB2 descriptor handling</p></li>
+<li><p>Implemented missing <code class="docutils literal notranslate"><span class="pre">.shape()</span></code> method for <code class="docutils literal notranslate"><span class="pre">ECP5DebugSPIBridge</span></code></p></li>
+<li><p>Fixed using <code class="docutils literal notranslate"><span class="pre">Pin</span></code> objects as if they were raw <code class="docutils literal notranslate"><span class="pre">Signals</span></code></p></li>
+<li><p>Fixed missing <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code> in the <code class="docutils literal notranslate"><span class="pre">toolchain_prepare</span></code> method of <code class="docutils literal notranslate"><span class="pre">LUNAApolloPlatform</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="id18">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/v0.1.0...v0.2.0">0.2.0</a> - 2022-12-18<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h2>
+<section id="id19">
+<h3>Added<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Added preliminary type annotations.</p></li>
+<li><p>Added the <code class="docutils literal notranslate"><span class="pre">CHANGELOG.md</span></code>.</p></li>
+</ul>
+</section>
+<section id="id20">
+<h3>Changed<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Changed the needed dependencies.</p>
+<ul>
+<li><p>Removed all of the pure git url dependencies to allow us to be packaged for pypi.</p></li>
+</ul>
+</li>
+<li><p>Altered the way the <code class="docutils literal notranslate"><span class="pre">lambdasoc</span></code> dependency was used for the <code class="docutils literal notranslate"><span class="pre">SimpleSoC</span></code> module.</p></li>
+<li><p>Changed the package name from <code class="docutils literal notranslate"><span class="pre">sol</span></code> to <code class="docutils literal notranslate"><span class="pre">sol_usb</span></code> to prevent pypi conflict.</p></li>
+<li><p>Changed the name of some documents to fall more in line with expected names.</p></li>
+<li><p>Changed from a poetry based build to purely using setup.py.</p></li>
+<li><p>Swapped out tox for nox.</p></li>
+<li><p>Replaced old Amaranth HDL deps with Torii.</p></li>
+<li><p>Replaced old python-usb-protocol with usb-construct.</p></li>
+</ul>
+</section>
+<section id="id21">
+<h3>Removed<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Removed all of the 3rd party platform definitions except for the <code class="docutils literal notranslate"><span class="pre">LUNA</span></code> platforms.</p></li>
+<li><p>Removed the old <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code></p></li>
+</ul>
+</section>
+<section id="id22">
+<h3>Fixed<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Fixed a large chunk of code style and formatting.</p></li>
+<li><p>Fixed the documentation, it should now be more useful.</p></li>
+</ul>
+</section>
+</section>
+<section id="id23">
+<h2><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/compare/hw-r0.4...v0.1.0">0.1.0</a><a class="headerlink" href="#id23" title="Link to this heading">¶</a></h2>
+<p>No changelog is provided for this version as it is a hold-over / demarcation of the divergence from <a class="reference external" href="https://github.com/greatscottgadgets/luna/">LUNA</a>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="license.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Licenses</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="hardware/custom.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">SOL On Your Own Hardware</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Shrine Maiden Heavy Industries
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#unreleased">Unreleased</a></li>
+<li><a class="reference internal" href="#id1">0.8.0 - 2025-06-26</a></li>
+<li><a class="reference internal" href="#id4">0.5.0 - 2025-03-07</a></li>
+<li><a class="reference internal" href="#id7">0.4.1 - 2025-01-06</a></li>
+<li><a class="reference internal" href="#id10">0.4.0 - 2024-07-10</a></li>
+<li><a class="reference internal" href="#id14">0.3.0 - 2023-10-19</a></li>
+<li><a class="reference internal" href="#id18">0.2.0 - 2022-12-18</a></li>
+<li><a class="reference internal" href="#id23">0.1.0</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=457fda43"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/tabs.js?v=3ee01567"></script>
+    </body>
+</html>

@@ -1,0 +1,1051 @@
+
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Link" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sol.shmdn.link/gateware/usb/usb3/link.html" />
+<meta property="og:site_name" content="SOL" />
+<meta property="og:description" content="USB3 Link-Layer modules Command: USB Link Commands Transmitter/Receivers CRC: CRC computation gateware for USB3. Data: Data Packet Payload (DPP) management gateware. Header: Header Packet data inte..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://sol.shmdn.link/_images/social_previews/summary_gateware_usb_usb3_link_8d2afe99.png" />
+<meta property="og:image:alt" content="USB3 Link-Layer modules Command: USB Link Commands Transmitter/Receivers CRC: CRC computation gateware for USB3. Data: Data Packet Payload (DPP) management gateware. Header: Header Packet data inte..." />
+<meta name="description" content="USB3 Link-Layer modules Command: USB Link Commands Transmitter/Receivers CRC: CRC computation gateware for USB3. Data: Data Packet Payload (DPP) management gateware. Header: Header Packet data inte..." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Physical" href="physical.html"><link rel="prev" title="Endpoints" href="endpoints.html">
+        <link rel="canonical" href="https://sol.shmdn.link/gateware/usb/usb3/link.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
+
+<title>Link - SOL v0.8.0 Documentation</title>
+
+<link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-codeautolink.css?v=b2176991" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/styles.css?v=960f663f" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  --color-brand-primary: #2672a8;
+  --color-brand-content: #2672a8;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #85C2FE;
+  --color-brand-content: #85C2FE;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  --color-brand-primary: #85C2FE;
+  --color-brand-content: #85C2FE;
+  --color-announcement-background: #ffab87;
+  --color-announcement-text: #494453;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+<div class="announcement">
+  <aside class="announcement-content">
+     This documentation is a work in progress, and you can help us <a href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/CONTRIBUTING.md">improve it!</a> 
+  </aside>
+</div>
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">SOL 0.8.1.dev52 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky">
+<a class="sidebar-brand" href="../../../index.html">
+	<span class="sidebar-brand-text">SOL v0.8.0 Documentation</span>
+	
+  </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../features.html">Status &amp; Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../index.html">Gateware Library</a><input aria-label="Toggle navigation of Gateware Library" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../interface/index.html">Interface</a><input aria-label="Toggle navigation of Interface" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../interface/pipe.html">PIPE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../interface/ulpi.html">ULPI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../interface/utmi.html">UTMI</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../interface/gateware/index.html">Gateware PHY</a><input aria-label="Toggle navigation of Gateware PHY" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../interface/gateware/phy.html">Gateware PHY</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../interface/gateware/receiver.html">Gateware PHY - Receiver</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../interface/gateware/transmitter.html">Gateware PHY - Transmitter</a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../interface/serdes/index.html">SerDes PHY</a><input aria-label="Toggle navigation of SerDes PHY" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../interface/serdes/ecp5.html">SerDes PHY - ECP5</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../interface/serdes/lfps.html">SerDes PHY - LFPS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../interface/serdes/xc7.html">SerDes PHY - XC7</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../soc/index.html">SoC</a><input aria-label="Toggle navigation of SoC" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../soc/cpu.html">CPU</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../soc/event.html">Event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../soc/memory.html">Memory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../soc/peripheral.html">Peripheral</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../soc/simplesoc.html">SimpleSoC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../soc/uart.html">UART</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../stream/index.html">Stream</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../index.html">USB</a><input aria-label="Toggle navigation of USB" checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../analyzer.html">Analyzer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../request.html">Request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../stream.html">Stream</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../usb2/index.html">USB2</a><input aria-label="Toggle navigation of USB2" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/control.html">Control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/descriptor.html">Descriptor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/deserializer.html">Deserializer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/endpoint.html">Endpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/endpoint.html#gateware-endpoint-interfaces">Gateware Endpoint Interfaces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/packet.html">Packet</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/request.html">Request</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/reset.html">Reset</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/transfer.html">Transfer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/endpoints.html">Endpoints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../usb2/interfaces.html">Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="index.html">USB3</a><input aria-label="Toggle navigation of USB3" checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="application.html">Application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="device.html">Device</a></li>
+<li class="toctree-l4"><a class="reference internal" href="endpoints.html">Endpoints</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">Link</a></li>
+<li class="toctree-l4"><a class="reference internal" href="physical.html">Physical</a></li>
+<li class="toctree-l4"><a class="reference internal" href="protocol.html">Protocol</a></li>
+<li class="toctree-l4"><a class="reference internal" href="request.html">Request</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hardware/custom.html">SOL On Your Own Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hardware/index.html">Hardware</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/">Source Code</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/CONTRIBUTING.md">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">Licenses</a></li>
+</ul>
+
+</div>
+<div class="sidebar-tree">
+	<p class="caption" role="heading">
+		<span class="caption-text">Versions</span>
+	</p>
+	<a class="reference" href="../../../../main/gateware/usb/usb3/link.html">Development</a>
+	<ul>
+		<li class="toctree-l1"><a class="reference" href="link.html">v0.8.0</a></li>
+	</ul>
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="https://github.com/shrine-maiden-heavy-industries/sol/blob/main/docs/gateware/usb/usb3/link.md?plain=true" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div><div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/shrine-maiden-heavy-industries/sol/edit/main/docs/gateware/usb/usb3/link.md" rel="edit" title="Edit this page">
+    <svg><use href="#svg-pencil"></use></svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="link">
+<h1>Link<a class="headerlink" href="#link" title="Link to this heading">¶</a></h1>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This module has been deprecated and moved to <a class="reference external" href="https://github.com/shrine-maiden-heavy-industries/torii-usb">torii-usb</a>, please see the <a class="reference external" href="https://torii-usb.shmdn.link/migration.html">migration guide</a>.</p>
+</div>
+<p id="module-sol_usb.gateware.usb.usb3.link">USB3 Link-Layer modules</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.USB3LinkLayer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.</span></span><span class="sig-name descname"><span class="pre">USB3LinkLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.USB3LinkLayer" title="Link to this definition">¶</a></dt>
+<dd><p>Abstraction encapsulating the USB3 link layer hardware.</p>
+<p>Performs the lower-level data manipulations associated with transporting USB3 packets
+from place to place.</p>
+</dd></dl>
+
+<section id="module-sol_usb.gateware.usb.usb3.link.command">
+<span id="command"></span><h2>Command<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.command" title="Link to this heading">¶</a></h2>
+<p>USB Link Commands Transmitter/Receivers</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.command.LinkCommandDetector">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.command.</span></span><span class="sig-name descname"><span class="pre">LinkCommandDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.command.LinkCommandDetector" title="Link to this definition">¶</a></dt>
+<dd><p>USB3 Link Command Detector.</p>
+<p>This module detects USB3 link commands as they’re received on the bus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sink</strong> (<em>USBRawSuperSpeedStream, input stream</em>) – The (aligned and descrambled) data stream captured from the physical layer.</p></li>
+<li><p><strong>command</strong> (<em>Signal(4), output</em>) – The link command; including its two-bit class and two-bit type.</p></li>
+<li><p><strong>command_class</strong> (<em>Signal(2), output</em>) – The link command’s class; equivalent to the first two bits of :attr:<code class="docutils literal notranslate"><span class="pre">command</span></code>.</p></li>
+<li><p><strong>command_type</strong> (<em>Signal(2), output</em>) – The link command’s type; equivalent to the second two bits of :attr:<code class="docutils literal notranslate"><span class="pre">command</span></code>.</p></li>
+<li><p><strong>subtype</strong> (<em>Signal(4), output</em>) – The link command’s subtype.</p></li>
+<li><p><strong>new_command</strong> (<em>signal(), output</em>) – Strobe; indicates that a new link command has been received, and the details of this command
+are ready to be read.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.command.LinkCommandGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.command.</span></span><span class="sig-name descname"><span class="pre">LinkCommandGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.command.LinkCommandGenerator" title="Link to this definition">¶</a></dt>
+<dd><p>USB3 Link Command Generator.</p>
+<p>This module generates link commands on the USB3 bus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>USBRawSuperSpeedStream(), output stream</em>) – The data generated in sending our link commands.</p></li>
+<li><p><strong>command</strong> (<em>Signal(4), output</em>) – The link command; including its two-bit class and two-bit type.</p></li>
+<li><p><strong>subtype</strong> (<em>Signal(4), output</em>) – The link command’s subtype.</p></li>
+<li><p><strong>generate</strong> (<em>Signal(), input</em>) – Strobe; indicates that a link command should be generated.</p></li>
+<li><p><strong>done</strong> (<em>Signal(), output</em>) – Indicates that the link command will be complete this cycle; and thus this unit will
+be ready to send another link command next cycle.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.crc">
+<span id="crc"></span><h2>CRC<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.crc" title="Link to this heading">¶</a></h2>
+<p>CRC computation gateware for USB3.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.crc.compute_usb_crc5">
+<span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.crc.</span></span><span class="sig-name descname"><span class="pre">compute_usb_crc5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">protected_bits</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.crc.compute_usb_crc5" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a 5-bit signal equivalent to the CRC5 check of a given 11-bits.</p>
+<p>Intended for link command words / link control words.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>protected_bits</strong> (<em>11-bit Signal</em><em>(</em><em>)</em>) – The 11-bit signal to generate a CRC5 for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A five-bit signal equivalent to the CRC5 of the protected bits.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Signal(5)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.crc.HeaderPacketCRC">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.crc.</span></span><span class="sig-name descname"><span class="pre">HeaderPacketCRC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.crc.HeaderPacketCRC" title="Link to this definition">¶</a></dt>
+<dd><p>Gateware that computes a running CRC-16 for the first three words of a header packet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clear</strong> (<em>Signal(), input</em>) – Strobe; clears the CRC, restoring it to its Initial Value.</p></li>
+<li><p><strong>data_input</strong> (<em>Signal(32), input</em>) – Data word to add to our running CRC.</p></li>
+<li><p><strong>advance_crc</strong> (<em>Signal(), input</em>) – When asserted, the current data input will be added to the CRC.</p></li>
+<li><p><strong>crc</strong> (<em>Signal(16), output</em>) – The current CRC value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>initial_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>Const</em>) – The initial value of the CRC shift register; the USB default is used if not provided. (default: <code class="docutils literal notranslate"><span class="pre">65535</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.crc.DataPacketPayloadCRC">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.crc.</span></span><span class="sig-name descname"><span class="pre">DataPacketPayloadCRC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.crc.DataPacketPayloadCRC" title="Link to this definition">¶</a></dt>
+<dd><p>Gateware that computes a running CRC-32 for a data packet payload.</p>
+<p>This CRC is more complicated than others, as Data Packet Payloads are not
+required to end on a word boundary. Accordingly, we’ll need to handle cases
+where we have an incomplete word of 1, 2, or 3 bytes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clear</strong> (<em>Signal(), input</em>) – Strobe; clears the CRC, restoring it to its Initial Value.</p></li>
+<li><p><strong>data_input</strong> (<em>Signal(32), input</em>) – Data word to add to our running CRC.</p></li>
+<li><p><strong>advance_word</strong> (<em>Signal(), input</em>) – When asserted, the current data word will be added to our CRC.</p></li>
+<li><p><strong>advance_3B</strong> (<em>Signal(), input</em>) – When asserted, the last three bytes of the current data word will be added to our CRC.</p></li>
+<li><p><strong>advance_2B</strong> (<em>Signal(), input</em>) – When asserted, the last two bytes of the current data word will be added to our CRC.</p></li>
+<li><p><strong>advance_1B</strong> (<em>Signal(), input</em>) – When asserted, the last byte of the current data word will be added to our CRC.</p></li>
+<li><p><strong>crc</strong> (<em>Signal(32), output</em>) – The current CRC value.</p></li>
+<li><p><strong>next_crc_3B</strong> (<em>Signal(32), output</em>) – The CRC value for the next cycle, assuming we advance 3B.</p></li>
+<li><p><strong>next_crc_2B</strong> (<em>Signal(32), output</em>) – The CRC value for the next cycle, assuming we advance 2B.</p></li>
+<li><p><strong>next_crc_1B</strong> (<em>Signal(32), output</em>) – The CRC value for the next cycle, assuming we advance 1B.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>initial_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em>, </em><em>Const</em>) – The initial value of the CRC shift register; the USB default is used if not provided. (default: <code class="docutils literal notranslate"><span class="pre">4294967295</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.data">
+<span id="data"></span><h2>Data<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.data" title="Link to this heading">¶</a></h2>
+<p>Data Packet Payload (DPP) management gateware.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.data.DataHeaderPacket">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.data.</span></span><span class="sig-name descname"><span class="pre">DataHeaderPacket</span></span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.data.DataHeaderPacket" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.data.DataPacketReceiver">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.data.</span></span><span class="sig-name descname"><span class="pre">DataPacketReceiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.data.DataPacketReceiver" title="Link to this definition">¶</a></dt>
+<dd><p>Class that monitors the USB bus for data packets, and receives them.</p>
+<p>This class has logic redundant with our Header Packet Receiver, to simplify data packet
+reception. Accordingly, the header section of the data packet will be parsed here as well
+as in the Header Packet receiver. This simplifies our structure at the expense of an additional
+CRC-5 and CRC-16 unit.</p>
+<p>This class performs the validations required at the link layer of the USB specification;
+which include checking the CRC-5 and CRC-16 embedded within the header, and CRC-32 of the
+data packet payload.</p>
+<p>Header sequence number is not checked, here, as a sequence error will force recovery in the
+Header Packet Receiver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sink</strong> (<em>USBRawSuperSpeedStream(), input (monitor only)</em>) – Stream that the USB data to be monitored.</p></li>
+<li><p><strong>header</strong> (<em>HeaderPacket(), output</em>) – The header packet accompanying the current data packet. Valid once a packet begins
+to be received.</p></li>
+<li><p><strong>new_header</strong> (<em>Signal(), output</em>) – Strobe; indicates that :attr:<code class="docutils literal notranslate"><span class="pre">header</span></code> has been updated.</p></li>
+<li><p><strong>source</strong> (<em>StreamInterface(), output stream</em>) – A stream carrying the data received. Note that the data is not fully validated until
+the packet has been fully received; so this cannot be assumed</p></li>
+<li><p><strong>packet_good</strong> (<em>Signal(), output</em>) – Strobe; indicates that the packet received passed validations and can be considered good.</p></li>
+<li><p><strong>packet_bad</strong> (<em>Signal(), output</em>) – Strobe; indicates that the packet failed CRC checks, or did not end properly.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.data.DataPacketTransmitter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.data.</span></span><span class="sig-name descname"><span class="pre">DataPacketTransmitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.data.DataPacketTransmitter" title="Link to this definition">¶</a></dt>
+<dd><p>Gateware that generates a Data Packet Header, and orchestrates sending it and a payload.</p>
+<p>The actual sending is handled by our transmitter gateware.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_sink</strong> (<em>SuperSpeedStreamInterface(), input stream</em>) – The data stream to be send as a data packet. The length of this stream should match thee
+length parameter.</p></li>
+<li><p><strong>send_zlp</strong> (<em>Signal(), input</em>) – Strobe; triggers sending of a zero-length packet.</p></li>
+<li><p><strong>sequence_number</strong> (<em>Signal(5), input</em>) – The sequence number associated with the relevant data packet. Latched in once :attr:<code class="docutils literal notranslate"><span class="pre">data_sink</span></code> goes valid.</p></li>
+<li><p><strong>endpoint_number</strong> (<em>Signal(4), input</em>) – The endpoint number associated with the relevant data stream. Latched in once :attr:<code class="docutils literal notranslate"><span class="pre">data_sink</span></code> goes valid.</p></li>
+<li><p><strong>data_length</strong> (<em>Signal(range(1024 + 1))</em>) – The length of the data packet to be sent; in bytes. Latched in once :attr:<code class="docutils literal notranslate"><span class="pre">data_sink</span></code> goes valid.</p></li>
+<li><p><strong>direction</strong> (<em>Signal(), input</em>) – The direction to indicate in the data header packet. Typically Direction.IN; but will be Direction.OUT
+when data is sent to the host as part of a control transfer.</p></li>
+<li><p><strong>address</strong> (<em>Signal(7), input</em>) – The current address of the USB device.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.header">
+<span id="header"></span><h2>Header<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.header" title="Link to this heading">¶</a></h2>
+<p>Header Packet data interfacing definitions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderPacket">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.header.</span></span><span class="sig-name descname"><span class="pre">HeaderPacket</span></span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket" title="Link to this definition">¶</a></dt>
+<dd><p>Container that represents a Header Packet.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_layout">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_layout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_layout" title="Link to this definition">¶</a></dt>
+<dd><p>Computes the layout for the HeaderPacket (sub)class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the selection of bits in DW0 that encode the packet type.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueue">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.header.</span></span><span class="sig-name descname"><span class="pre">HeaderQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_type=&lt;class</span> <span class="pre">'torii_usb.usb.usb3.link.header.HeaderPacket'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="Link to this definition">¶</a></dt>
+<dd><p>Record representing a header, and stream-link control signals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>valid</strong> (<em>Signal(), producer to consumer</em>) – Indicates that the data in :attr:<code class="docutils literal notranslate"><span class="pre">header</span></code> is valid and ready to be consumed.</p></li>
+<li><p><strong>header</strong> (<em>HeaderPacket(), producer to consumer</em>) – Contains a full set of header packet data.</p></li>
+<li><p><strong>ready</strong> (<em>Signal(), consumer to producer</em>) – Strobed by the consumer to indicate that it has accepted the given header.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueue.get_type">
+<span class="sig-name descname"><span class="pre">get_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue.get_type" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the selection of bits in the current header’s that encode the packet type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueue.header_eq">
+<span class="sig-name descname"><span class="pre">header_eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue.header_eq" title="Link to this definition">¶</a></dt>
+<dd><p>Connects a producer (self) up to a consumer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueue.stream_eq">
+<span class="sig-name descname"><span class="pre">stream_eq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue.stream_eq" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for <code class="docutils literal notranslate"><span class="pre">header_eq</span></code> that ensures we share a stream interface.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.header.</span></span><span class="sig-name descname"><span class="pre">HeaderQueueArbiter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter" title="Link to this definition">¶</a></dt>
+<dd><p>Gateware that accepts a collection of header queues, and merges them into a single queue.</p>
+<p>Add produces using <code class="docutils literal notranslate"><span class="pre">add_producer</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>source</strong> (<em>HeaderQueue(), output queue</em>) – A single header queue that carries data from all producer queues.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter.add_producer">
+<span class="sig-name descname"><span class="pre">add_producer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="torii_usb.usb.usb3.link.header.HeaderQueue"><span class="pre">HeaderQueue</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter.add_producer" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a HeaderQueue interface that will add packets into this mux.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.header.</span></span><span class="sig-name descname"><span class="pre">HeaderQueueDemultiplexer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer" title="Link to this definition">¶</a></dt>
+<dd><p>Gateware that accepts a single Header Queue, and routes it to multiple modules.</p>
+<p>Assumes that each type of header is handled by a separate module, and thus no two inputs
+will assert :attr:<code class="docutils literal notranslate"><span class="pre">ready</span></code> at the same time.</p>
+<p>Add consumers using <code class="docutils literal notranslate"><span class="pre">add_consumer</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sink</strong> (<em>HeaderQueue(), input queue</em>) – The single header queue to be distributed to all of our consumers.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer.add_consumer">
+<span class="sig-name descname"><span class="pre">add_consumer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue" title="torii_usb.usb.usb3.link.header.HeaderQueue"><span class="pre">HeaderQueue</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer.add_consumer" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a HeaderQueue interface that will consume packets from this mux.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.idle">
+<span id="idle"></span><h2>Idle<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.idle" title="Link to this heading">¶</a></h2>
+<p>Logical idle detection / polling gateware.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.idle.IdleHandshakeHandler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.idle.</span></span><span class="sig-name descname"><span class="pre">IdleHandshakeHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.idle.IdleHandshakeHandler" title="Link to this definition">¶</a></dt>
+<dd><p>Unit that performs the USB3 idle handshake.</p>
+<p>The Idle Handshake occurs after link training; and is the first step of
+post-training link initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>enable</strong> (<em>Signal(), input</em>) – Indicates that the idle handshake has started; which is used to create the
+:attr:<code class="docutils literal notranslate"><span class="pre">idle_handshake_complete</span></code> signal. It should be asserted once we enter
+Polling.Idle.</p></li>
+<li><p><strong>sink</strong> (<em>USBRawSuperSpeedStream(), input stream</em>) – Raw post-descrambling stream from the physical layer.</p></li>
+<li><p><strong>idle_detected</strong> (<em>Signal(), output</em>) – Asserted when the last eight word-aligned symbols detected have been logical
+idle; identifying a completed idle handshake.</p></li>
+<li><p><strong>idle_handshake_complete</strong> (<em>Signal(), output</em>) – Asserted when we’ve seen IDLE at least once, and we’ve been enabled for at least
+16 cycles, as required by the USB3 Idle Handshake [USB3.2r1: 7.5.4.10].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.layer">
+<span id="layer"></span><h2>Layer<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.layer" title="Link to this heading">¶</a></h2>
+<p>USB3 link-layer abstraction.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.layer.USB3LinkLayer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.layer.</span></span><span class="sig-name descname"><span class="pre">USB3LinkLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.layer.USB3LinkLayer" title="Link to this definition">¶</a></dt>
+<dd><p>Abstraction encapsulating the USB3 link layer hardware.</p>
+<p>Performs the lower-level data manipulations associated with transporting USB3 packets
+from place to place.</p>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.ltssm">
+<span id="ltssm"></span><h2>LTSSM<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.ltssm" title="Link to this heading">¶</a></h2>
+<p>Link Training and Status State Machine (LTSSM) gateware.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.ltssm.LTSSMController">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.ltssm.</span></span><span class="sig-name descname"><span class="pre">LTSSMController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.ltssm.LTSSMController" title="Link to this definition">¶</a></dt>
+<dd><p>Link Training and Status State Machine</p>
+<p>This state machine orchestrates USB bringup, link training, and power saving.
+It is implemented according to chapter 7.5 of the USB 3.2 specification [USB3.2r1; 7.5].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>link_ready</strong> (<em>Signal(), output</em>) – Asserted when the link is ready to perform normal USB operations starting
+at the link layer. When de-asserted, data should not flow above the link layer.</p></li>
+<li><p><strong>in_usb_reset</strong> (<em>Signal(), input</em>) – Should be asserted whenever a USB reset is detected; including a power-on reset (e.g.
+the PHY has yet to start up), or LFPS warm reset signaling.</p></li>
+<li><p><strong>engage_terminations</strong> (<em>Signal(), output</em>) – When asserted, the physical layer should be applying link terminations.</p></li>
+<li><p><strong>invert_rx_polarity</strong> (<em>Signal(). output</em>) – When asserted, indicates that the physical layer should invert all received data at the I/O
+boundary to counter a swapped Rx differential pair.</p></li>
+<li><p><strong>perform_rx_detection</strong> (<em>Signal(), output</em>) – Asserted to request that the physical layer perform receiver detection, in which the link</p></li>
+<li><p><strong>enable_scrambling</strong> (<em>Signal(), output</em>) – Asserted when the physical layer should be performing scrambling.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ss_clock_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The frequency of the SS clock domain; used for computing timeouts. (default: <code class="docutils literal notranslate"><span class="pre">125000000.0</span></code>)</p></li>
+<li><p><strong>loosen_requirements</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – If True, the requirements will be relaxed from the USB3 specification, in order
+to make things work a little more easily on a variety of PHYs and setups. (default: <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.ordered_sets">
+<span id="ordered-sets"></span><h2>Ordered Sets<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.ordered_sets" title="Link to this heading">¶</a></h2>
+<p>Link training support gateware.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.ordered_sets.TSBurstDetector">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.ordered_sets.</span></span><span class="sig-name descname"><span class="pre">TSBurstDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.ordered_sets.TSBurstDetector" title="Link to this definition">¶</a></dt>
+<dd><p>Simple Training Set detector; capable of detecting basic training sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sink</strong> (<a class="reference internal" href="../stream.html#sol_usb.gateware.usb.stream.USBRawSuperSpeedStream" title="sol_usb.gateware.usb.stream.USBRawSuperSpeedStream"><em>USBRawSuperSpeedStream</em></a><em>(</em><em>)</em><em>, </em><em>input stream</em>) – The sink to monitor for ordered sets; should be fed pre-descrambler data.</p></li>
+<li><p><strong>detected</strong> (<em>Signal</em><em>(</em><em>)</em><em>, </em><em>output</em>) – Strobe; pulses high when a burst of ordered sets has been received.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.ordered_sets.TSEmitter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.ordered_sets.</span></span><span class="sig-name descname"><span class="pre">TSEmitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.ordered_sets.TSEmitter" title="Link to this definition">¶</a></dt>
+<dd><p>Training Set Emitter</p>
+<p>Generic Training Sequence Ordered Set generator.</p>
+<p>This module generates a specific Training Sequence Ordered Set to the TX stream. For each start,
+N consecutive Ordered Sets are generated (N configured by n_ordered_sets). Done signal is assert
+on the last cycle of the generation. Training config can also be transmitted for TS1/TS2 Ordered
+Sets.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.ordered_sets.TSTransceiver">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.ordered_sets.</span></span><span class="sig-name descname"><span class="pre">TSTransceiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.ordered_sets.TSTransceiver" title="Link to this definition">¶</a></dt>
+<dd><p>Training Sequence Unit</p>
+<p>Detect/generate the Training Sequence Ordered Sets required for a USB3.0 link with simple
+control/status signals.</p>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.receiver">
+<span id="receiver"></span><h2>Receiver<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.receiver" title="Link to this heading">¶</a></h2>
+<p>Header Packet Rx-handling gateware.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.receiver.RawHeaderPacketReceiver">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.receiver.</span></span><span class="sig-name descname"><span class="pre">RawHeaderPacketReceiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.receiver.RawHeaderPacketReceiver" title="Link to this definition">¶</a></dt>
+<dd><p>Class that monitors the USB bus for Header Packet, and receives them.</p>
+<p>This class performs the validations required at the link layer of the USB specification;
+which include checking the CRC-5 and CRC-16 embedded within the header packet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sink</strong> (<em>USBRawSuperSpeedStream(), input (monitor only)</em>) – Stream that the USB data to be monitored.</p></li>
+<li><p><strong>packet</strong> (<em>HeaderPacket(), output</em>) – The de-serialized form of our header packet.</p></li>
+<li><p><strong>new_packet</strong> (<em>Signal(), output</em>) – Strobe; indicates that a new, valid header packet has been received. The new
+packet is now available on :attr:<code class="docutils literal notranslate"><span class="pre">packet</span></code>.</p></li>
+<li><p><strong>bad_packet</strong> (<em>Signal(), output</em>) – Strobe; indicates that a corrupted, invalid header packet has been received.
+:attr:<code class="docutils literal notranslate"><span class="pre">packet</span></code> has not been updated.</p></li>
+<li><p><strong>expected_sequence</strong> (<em>Signal(3), input</em>) – Indicates the next expected sequence number; used to validate the received packet.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.receiver.HeaderPacketReceiver">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.receiver.</span></span><span class="sig-name descname"><span class="pre">HeaderPacketReceiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.receiver.HeaderPacketReceiver" title="Link to this definition">¶</a></dt>
+<dd><p>Receiver-side Header Packet logic.</p>
+<p>This module handles all header-packet-reception related logic for the link layer; including
+header packet reception, buffering, flow control (credit management), and link command transmission.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sink</strong> (<em>USBRawSuperSpeedStream(), input stream [monitor only]</em>) – Stream that carries data from the physical layer, to be monitored.</p></li>
+<li><p><strong>source</strong> (<em>USBRawSuperSpeedStream(), output stream</em>) – Stream that carries link commands from this unit down down to the physical layer.</p></li>
+<li><p><strong>enable</strong> (<em>Signal(), input</em>) – When asserted, this unit will be enabled; and will be allowed to start
+transmitting link commands. Asserting this signal after a reset will perform
+a header sequence and link credit advertisement.</p></li>
+<li><p><strong>usb_reset</strong> (<em>Signal(), input</em>) – Strobe; can be asserted to indicate that a USB reset has occurred, and sequencing
+should be restarted.</p></li>
+<li><p><strong>queue</strong> (<em>HeaderQueue(), output stream</em>) – Stream carrying any header packets to be transmitted.</p></li>
+<li><p><strong>retry_received</strong> (<em>Signal(), input</em>) – Strobe; should be asserted when the transmitter has seen a RETRY handshake.</p></li>
+<li><p><strong>retry_required</strong> (<em>Signal(), output</em>) – Strobe; pulsed to indicate that we should send a RETRY handshake.</p></li>
+<li><p><strong>link_command_sent</strong> (<em>Signal(), output</em>) – Strobe; pulses each time a link command is completed.</p></li>
+<li><p><strong>keepalive_required</strong> (<em>Signal(), input</em>) – Strobe; when asserted; a keepalive packet will be generated.</p></li>
+<li><p><strong>packet_received</strong> (<em>Signal(), output</em>) – Strobe; pulsed when an event occurs that should reset the USB3 ‘packet received’ timers.
+This does <em>not</em> indicate valid data is present on the output :attr:<code class="docutils literal notranslate"><span class="pre">queue</span></code>; this has its
+own valid signal.</p></li>
+<li><p><strong>bad_packet_received</strong> (<em>Signal(), output</em>) – Strobe; pulsed when a receive error occurs. For error counting at the link level.</p></li>
+<li><p><strong>accept_power_state</strong> (<em>Signal(), input</em>) – Strobe; when pulsed, a LAU (Link-state acceptance) will be generated.</p></li>
+<li><p><strong>reject_power_state</strong> (<em>Signal(), input</em>) – Strobe; when pulsed, a LXU (Link-state rejection) will be generated.</p></li>
+<li><p><strong>acknowledge_power_state</strong> (<em>Signal(), input</em>) – Strobe; when pulsed, a LPMA (Link-state acknowledgement) will be generated.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.timers">
+<span id="timers"></span><h2>Timers<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.timers" title="Link to this heading">¶</a></h2>
+<p>U0 link-maintenance timers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.timers.LinkMaintenanceTimers">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.timers.</span></span><span class="sig-name descname"><span class="pre">LinkMaintenanceTimers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.timers.LinkMaintenanceTimers" title="Link to this definition">¶</a></dt>
+<dd><p>Timers which ensure link integrity is maintained in U0.</p>
+<p>These timers ensure that we provide enough traffic to maintain link state,
+and move to link recovery if we ever fail to see constant traffic.</p>
+<dl class="simple">
+<dt>Our two main rules [USB3.2r1: 7.5.6.1]:</dt><dd><ul class="simple">
+<li><p>If we don’t send a link command for 10uS, we’ll need to issue a
+keepalive packet in order to keep our link stably in U0.</p></li>
+<li><p>If we don’t receive a link command for 1mS, we know that the link
+is no longer in good condition, since the other side should have
+been sending keepalives to prevent this long of an idle. We’ll have
+to perform link recovery.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>link_command_received</strong> (<em>Signal(), input</em>) – Strobe that should be asserted when a link command is received.</p></li>
+<li><p><strong>link_command_transmitted</strong> (<em>Signal(), input</em>) – Strobe that should be asserted when a link command is transmitted.</p></li>
+<li><p><strong>schedule_keepalive</strong> (<em>Signal(), output</em>) – Strobe that indicates that we’ll need to send a keepalive packet.</p></li>
+<li><p><strong>transition_to_recovery</strong> (<em>Signal(), output</em>) – Strobe that indicates that our link is no longer stable; and we’ll
+need to perform link recovery.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ss_clock_frequency</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><em>float</em></a>) – The frequency of our <code class="docutils literal notranslate"><span class="pre">ss</span></code> domain clock, in Hz. (default: <code class="docutils literal notranslate"><span class="pre">125000000.0</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sol_usb.gateware.usb.usb3.link.transmitter">
+<span id="transmitter"></span><h2>Transmitter<a class="headerlink" href="#module-sol_usb.gateware.usb.usb3.link.transmitter" title="Link to this heading">¶</a></h2>
+<p>Packet transmission handling gateware.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.transmitter.RawPacketTransmitter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.transmitter.</span></span><span class="sig-name descname"><span class="pre">RawPacketTransmitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.transmitter.RawPacketTransmitter" title="Link to this definition">¶</a></dt>
+<dd><p>Class that generates and sends header packets; with an optional payload attached.</p>
+<p>This class generates the checks required at the link layer of the USB specification;
+which include checking the CRC-5 and CRC-16 embedded within the header packet, and
+the CRC-32 embedded within any associated payloads.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>USBRawSuperSpeedStream(), output stream</em>) – Stream that carries the generated packets.</p></li>
+<li><p><strong>header</strong> (<em>HeaderPacket(), input</em>) – The header packet to be sent. The CRC fields do not need to be valid, and will
+be ignored and replaced with a computed CRC. If the header packet is of type data,
+:attr:<code class="docutils literal notranslate"><span class="pre">data_sink</span></code> will be allowed to provide a follow-up Data Packet Payload.</p></li>
+<li><p><strong>data_sink</strong> (<em>SuperSpeedStreamInterface(), input stream</em>) – If the provided :attr:<code class="docutils literal notranslate"><span class="pre">header</span></code> is a Data Header, and :attr:<code class="docutils literal notranslate"><span class="pre">data_sink</span></code> is valid
+when the packet’s transmission is sent, this data stream will be used to provide a
+follow-up Data Packet Payload.</p></li>
+<li><p><strong>generate</strong> (<em>Signal(), input</em>) – Strobe; indicates that a packet should be generated.</p></li>
+<li><p><strong>done</strong> (<em>Signal(), output</em>) – Indicates that the packet will be complete this cycle; and thus this unit will
+be ready to send another packet next cycle.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sol_usb.gateware.usb.usb3.link.transmitter.PacketTransmitter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sol_usb.gateware.usb.usb3.link.transmitter.</span></span><span class="sig-name descname"><span class="pre">PacketTransmitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">src_loc_at</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#sol_usb.gateware.usb.usb3.link.transmitter.PacketTransmitter" title="Link to this definition">¶</a></dt>
+<dd><p>Transmitter-side Header Packet logic.</p>
+<p>This module handles all header-packet-transmission related logic for the link layer; including
+header packet generation, partner buffer tracking / flow control, and link command reception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sink</strong> (<em>USBRawSuperSpeedStream(), input stream [monitor only]</em>) – Stream that monitors the data received on the physical layer for link commands.</p></li>
+<li><p><strong>source</strong> (<em>USBRawSuperSpeedStream(), output stream</em>) – Stream that carries our transmissions down to the physical layer.</p></li>
+<li><p><strong>enable</strong> (<em>Signal(), input</em>) – When asserted, this unit will be enabled; and will be allowed to start transmitting.</p></li>
+<li><p><strong>queue</strong> (<em>HeaderQueue(), input stream</em>) – Stream of header packets received received from the protocol layer to be transmitted.</p></li>
+<li><p><strong>retry_received</strong> (<em>Signal(), output</em>) – Strobe; pulsed high when we receive a link retry request.</p></li>
+<li><p><strong>retry_required</strong> (<em>Signal(), output</em>) – Strobe; pulsed high when we need to send a retry request.</p></li>
+<li><p><strong>lgo_received</strong> (<em>Signal(), output</em>) – Strobe; indicates that we’ve received a request to move to a new power state.</p></li>
+<li><p><strong>lgo_target; Signal(2), output</strong> – Indicates the power-state associated with a given LGO event; valid when :attr:<code class="docutils literal notranslate"><span class="pre">lgo_received</span></code>
+is asserted.</p></li>
+<li><p><strong>recovery_required</strong> (<em>Signal(), output</em>) – Strobe; pulsed when a condition that requires link recovery occurs.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="physical.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Physical</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="endpoints.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Endpoints</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Shrine Maiden Heavy Industries
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Link</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.USB3LinkLayer"><code class="docutils literal notranslate"><span class="pre">USB3LinkLayer</span></code></a></li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.command">Command</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.command.LinkCommandDetector"><code class="docutils literal notranslate"><span class="pre">LinkCommandDetector</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.command.LinkCommandGenerator"><code class="docutils literal notranslate"><span class="pre">LinkCommandGenerator</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.crc">CRC</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.crc.compute_usb_crc5"><code class="docutils literal notranslate"><span class="pre">compute_usb_crc5()</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.crc.HeaderPacketCRC"><code class="docutils literal notranslate"><span class="pre">HeaderPacketCRC</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.crc.DataPacketPayloadCRC"><code class="docutils literal notranslate"><span class="pre">DataPacketPayloadCRC</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.data">Data</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.data.DataHeaderPacket"><code class="docutils literal notranslate"><span class="pre">DataHeaderPacket</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.data.DataPacketReceiver"><code class="docutils literal notranslate"><span class="pre">DataPacketReceiver</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.data.DataPacketTransmitter"><code class="docutils literal notranslate"><span class="pre">DataPacketTransmitter</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.header">Header</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket"><code class="docutils literal notranslate"><span class="pre">HeaderPacket</span></code></a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_layout"><code class="docutils literal notranslate"><span class="pre">HeaderPacket.get_layout()</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderPacket.get_type"><code class="docutils literal notranslate"><span class="pre">HeaderPacket.get_type()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue"><code class="docutils literal notranslate"><span class="pre">HeaderQueue</span></code></a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue.get_type"><code class="docutils literal notranslate"><span class="pre">HeaderQueue.get_type()</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue.header_eq"><code class="docutils literal notranslate"><span class="pre">HeaderQueue.header_eq()</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueue.stream_eq"><code class="docutils literal notranslate"><span class="pre">HeaderQueue.stream_eq()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter"><code class="docutils literal notranslate"><span class="pre">HeaderQueueArbiter</span></code></a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueArbiter.add_producer"><code class="docutils literal notranslate"><span class="pre">HeaderQueueArbiter.add_producer()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer"><code class="docutils literal notranslate"><span class="pre">HeaderQueueDemultiplexer</span></code></a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.header.HeaderQueueDemultiplexer.add_consumer"><code class="docutils literal notranslate"><span class="pre">HeaderQueueDemultiplexer.add_consumer()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.idle">Idle</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.idle.IdleHandshakeHandler"><code class="docutils literal notranslate"><span class="pre">IdleHandshakeHandler</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.layer">Layer</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.layer.USB3LinkLayer"><code class="docutils literal notranslate"><span class="pre">USB3LinkLayer</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.ltssm">LTSSM</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.ltssm.LTSSMController"><code class="docutils literal notranslate"><span class="pre">LTSSMController</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.ordered_sets">Ordered Sets</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.ordered_sets.TSBurstDetector"><code class="docutils literal notranslate"><span class="pre">TSBurstDetector</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.ordered_sets.TSEmitter"><code class="docutils literal notranslate"><span class="pre">TSEmitter</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.ordered_sets.TSTransceiver"><code class="docutils literal notranslate"><span class="pre">TSTransceiver</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.receiver">Receiver</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.receiver.RawHeaderPacketReceiver"><code class="docutils literal notranslate"><span class="pre">RawHeaderPacketReceiver</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.receiver.HeaderPacketReceiver"><code class="docutils literal notranslate"><span class="pre">HeaderPacketReceiver</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.timers">Timers</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.timers.LinkMaintenanceTimers"><code class="docutils literal notranslate"><span class="pre">LinkMaintenanceTimers</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sol_usb.gateware.usb.usb3.link.transmitter">Transmitter</a><ul>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.transmitter.RawPacketTransmitter"><code class="docutils literal notranslate"><span class="pre">RawPacketTransmitter</span></code></a></li>
+<li><a class="reference internal" href="#sol_usb.gateware.usb.usb3.link.transmitter.PacketTransmitter"><code class="docutils literal notranslate"><span class="pre">PacketTransmitter</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=457fda43"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/tabs.js?v=3ee01567"></script>
+    </body>
+</html>
