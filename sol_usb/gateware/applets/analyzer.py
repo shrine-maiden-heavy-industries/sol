@@ -13,6 +13,8 @@ import time
 from array                             import array
 from datetime                          import datetime
 from enum                              import IntEnum, IntFlag
+from pathlib                           import Path
+from tempfile                          import gettempdir
 
 import usb
 
@@ -289,7 +291,7 @@ class USBAnalyzerConnection:
 		self._fetch_buffer = array('B', b'\x00' * MAX_BULK_PACKET_SIZE)
 		self._capture_speed = USB_SPEED_FULL
 
-	def build_and_configure(self, capture_speed: int):
+	def build_and_configure(self, capture_speed: int, build_dir: Path | None = None):
 		''' Builds the SOL analyzer applet and configures the FPGA with it. '''
 
 		# Create the USBAnalyzer we want to work with.
@@ -297,9 +299,12 @@ class USBAnalyzerConnection:
 		self._capture_speed = capture_speed
 
 		# Build and upload the analyzer.
-		# FIXME: use a temporary build directory
+
+		if build_dir is None:
+			build_dir = Path(gettempdir()) / 'sol-analyzer-build'
+
 		platform = get_appropriate_platform()
-		platform.build(analyzer, do_program = True)
+		platform.build(analyzer, do_program = True, build_dir = str(build_dir.resolve()))
 
 		time.sleep(3)
 
