@@ -1,0 +1,341 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: BSD-3-Clause
+# Adapted from: https://codeberg.org/Squishy/squishy/src/branch/main/contrib/scsidump
+# solcap: Wireshark extcap interface for SOL-based USB capture
+# see: https://www.wireshark.org/docs/wsdg_html_chunked/ChCaptureExtcap.html
+#
+# To enable in Wireshark, drop/symlink this file to `~/.local/lib/wireshark/extcap`
+
+import sys
+import platform
+import logging as log
+
+from argparse        import ArgumentParser, ArgumentDefaultsHelpFormatter, Namespace
+from collections.abc import Iterable
+from pathlib         import Path
+from typing          import TypedDict, TypeVar, Generic, Literal, TypeAlias
+
+from platformdirs    import user_cache_path
+from usb.core        import USBError
+
+from luminary_fpga   import ApolloDebugger, DebuggerNotFound
+
+try:
+	from sol_usb  import __version__
+except ImportError:
+	# This is kinda jank, but /should/ work
+	solcap_path = Path(__file__).resolve().parent.parent
+	if (solcap_path / 'sol_usb').is_dir():
+		sys.path.insert(0, str(solcap_path))
+
+	from sol_usb import __version__
+
+from sol_usb._pcapng                   import PcapngStream, LinkType
+from sol_usb.gateware.applets.analyzer import USB_SPEED_FULL, USB_SPEED_HIGH, USB_SPEED_LOW, USBAnalyzerConnection
+
+BUILD_CACHE_DIR = user_cache_path('SOL', False)
+
+EXTCAP_OPTION_TYPE: TypeAlias = Literal[
+	'integer', 'unsigned', 'long', 'double', 'string', 'password', 'boolean', 'boolflag',
+	'fileselect', 'selector', 'editselector', 'radio', 'multicheck'
+]
+
+T = TypeVar('T')
+
+class ExtcapOptionT(Generic[T], TypedDict):
+	type: type[T]
+	required: bool
+	default: T
+	# Only if extcap_type is `integer | unsigned | long | double`
+	range: tuple[T, T] | None
+	# Only if extcap_type is `string`
+	validator: str | None
+	# Only if extcap_type is `fileselect`
+	must_exist: bool | None
+	# Only if extcap_type is `selector | editselector | radio | multiccheck`
+	values: Iterable[tuple[T, str]] | None
+	help: str
+	extcap_type: EXTCAP_OPTION_TYPE
+	extcap_name: str
+	group: str | None
+
+_EXTCAP_APPLET_OPTIONS_COMMON: dict[str, ExtcapOptionT] = {
+	'speed': ExtcapOptionT[int](
+		type = int,
+		required = True,
+		default = USB_SPEED_FULL,
+		range = None,
+		validator = None,
+		must_exist = None,
+		values = [
+			(USB_SPEED_LOW, 'Low'),
+			(USB_SPEED_HIGH, 'High'),
+			(USB_SPEED_FULL, 'Full'),
+		],
+		help = 'The USB Bus speed for the capture',
+		extcap_type = 'radio',
+		extcap_name = 'USB Bus Speed',
+		group = None,
+	)
+}
+
+EXTCAP_OPTIONS = {
+	'usbcap': {
+		**_EXTCAP_APPLET_OPTIONS_COMMON,
+	},
+}
+
+def _setup_extcap_parser(parser: ArgumentParser):
+	parser.add_argument(
+		'--extcap-interfaces',
+		action = 'store_true',
+		help = 'List extcap interfaces'
+	)
+
+	parser.add_argument(
+		'--extcap-version',
+		type = str,
+	)
+
+	parser.add_argument(
+		'--extcap-dlts',
+		action = 'store_true',
+		help = 'List DLTs',
+	)
+
+	parser.add_argument(
+		'--extcap-interface',
+		type = str,
+		help = 'Specify extcap interface'
+	)
+
+	parser.add_argument(
+		'--extcap-config',
+		action = 'store_true',
+		help = 'list additional configuration for interface'
+	)
+
+	parser.add_argument(
+		'--capture',
+		action = 'store_true',
+		help = 'Run the capture'
+	)
+
+	parser.add_argument(
+		'--extcap-capture-filter',
+		type = str,
+		help = 'Set the capture filter'
+	)
+
+	parser.add_argument(
+		'--extcap-control-in',
+		type = Path,
+		help = 'Used to receive control messages'
+	)
+
+	parser.add_argument(
+		'--extcap-control-out',
+		type = Path,
+		help = 'Used to send control messages'
+	)
+
+	parser.add_argument(
+		'--fifo',
+		type = Path,
+		help = 'Capture dump file/fifo'
+	)
+
+def _setup_parser(parser: ArgumentParser):
+	extcap = parser.add_argument_group('extcap interface')
+	_setup_extcap_parser(extcap)
+
+	for (extcap_name, extcap_opts) in EXTCAP_OPTIONS.items():
+		extcap_group = parser.add_argument_group(f'SOL: {extcap_name}')
+
+		for opt_name, opt_val in extcap_opts.items():
+			extcap_group.add_argument(
+				f'--{opt_name}',
+				type = opt_val['type'],
+				help = opt_val['help'],
+			)
+
+def _setup_logging() -> None:
+	operating_system = platform.system()
+
+	if operating_system == 'Windows':
+		from logging.handlers import NTEventLogHandler
+		log_handler = NTEventLogHandler('solcap')
+	elif operating_system == 'Linux':
+		try:
+			from systemd.journal import JournalHandler
+			log_handler = JournalHandler()
+		except ImportError:
+			from logging.handlers import SysLogHandler
+			log_handler = SysLogHandler()
+	elif operating_system == 'Darwin':
+		from logging.handlers import SysLogHandler
+		log_handler = SysLogHandler()
+	else:
+		from logging import NullHandler
+		log_handler = NullHandler()
+
+	log.basicConfig(
+		force    = True,
+		format   = '%(message)s',
+		datefmt  = '[%X]',
+		level    = log.INFO,
+		handlers = [ log_handler, ]
+	)
+
+def extcap_list_interfaces() -> int:
+	log.info('Enumerating extcap interfaces')
+
+	print(f'extcap {{version={__version__}}}{{help=TODO}}')
+
+	# XXX(aki):
+	# Due to luminary being silly, we can only ever see one board, so we just check to see if there is a
+	# board attached, and if so populate it as the interface.
+	#
+	# This should be addressed in whatever replaces luminary.
+	try:
+		debugger = ApolloDebugger()
+		(major, minor) = debugger.detect_connected_version()
+
+		print(f'interface {{value=usbcap,{debugger.serial_number}}}{{display=Luna {major}.{minor}: USB Bus capture}}')
+	except DebuggerNotFound:
+		log.error('No SOL compatible devices found')
+		return 1
+	return 0
+
+def extcap_list_dlts(interface: str) -> int:
+	log.info(f'Enumerating extcap DLTs for interface: {interface}')
+	print(f'dlt {{number={LinkType.USB2_0}}}{{name=USB_2_0}}{{display=USB 2.0}}')
+	return 0
+
+def extcap_list_config(interface: str) -> int:
+	# Get the extcap options
+	applet_target = interface.split(',')[0]
+	if applet_target in EXTCAP_OPTIONS.keys():
+		extcap_opts = EXTCAP_OPTIONS[applet_target]
+	else:
+		return 1
+
+	log.info(f'Enumerating extcap options for target: {applet_target}')
+
+	for idx, (opt_name, opt_val) in enumerate(extcap_opts.items()):
+		extcap_arg_entry = f'arg {{number={idx}}}{{call=--{opt_name}}}{{tooltip={opt_val["help"]}}}{{display={opt_val["extcap_name"]}}}'
+		extcap_arg_entry += f'{{type={opt_val["extcap_type"]}}}'
+		if 'required' in opt_val:
+			extcap_arg_entry += f'{{required={opt_val["required"]}}}'
+
+		if 'group' in opt_val:
+			extcap_arg_entry += f'{{group={opt_val["group"]}}}'
+
+		match opt_val['extcap_type']:
+			case 'integer' | 'unsigned' | 'double' | 'long':
+				if 'default' in opt_val:
+					extcap_arg_entry += f'{{default={opt_val["default"]}}}'
+				if 'range' in opt_val:
+					low, high = opt_val['range']
+					extcap_arg_entry += f'{{range={low},{high}}}'
+				log.info(extcap_arg_entry)
+				print(extcap_arg_entry)
+			case 'string':
+				if 'validator' in opt_val:
+					extcap_arg_entry += f'{{validator={opt_val["validator"]}}}'
+				log.info(extcap_arg_entry)
+				print(extcap_arg_entry)
+			case 'password':
+				log.info(extcap_arg_entry)
+				print(extcap_arg_entry)
+			case 'boolean' | 'boolflag':
+				log.info(extcap_arg_entry)
+				print(extcap_arg_entry)
+			case 'fileselect':
+				if 'must_exist' in opt_val:
+					extcap_arg_entry += f'{{mustexist={opt_val["must_exist"]}}}'
+				log.info(extcap_arg_entry)
+				print(extcap_arg_entry)
+			case 'selector' | 'editselector' | 'radio' | 'multicheck':
+				log.info(extcap_arg_entry)
+				print(extcap_arg_entry)
+				for (val, display) in opt_val['values']:
+					extcap_arg_value = f'value {{arg={idx}}}{{value={val}}}{{display={display}}}'
+					if val == opt_val['default']:
+						extcap_arg_value += '{default=true}'
+					log.info(extcap_arg_value)
+					print(extcap_arg_value)
+
+	return 0
+
+def run_capture(fifo: Path, interface: str, args: Namespace) -> int:
+	BUILD_CACHE_DIR.mkdir(parents = True, exist_ok = True)
+
+	try:
+		# Create and build the analyzer
+		analyzer = USBAnalyzerConnection()
+		analyzer.build_and_configure(args.speed, build_dir = BUILD_CACHE_DIR)
+	except Exception as e:
+		print(e)
+		return 1
+
+	with PcapngStream(fifo) as stream:
+		# Emit the header
+		stream.emit_header(hardware = 'SOL', writer = 'solcap')
+		# Set up the interface
+		iface = stream.emit_interface(LinkType.USB2_0, 'solcap', snap_len = 8195)
+
+		# Start the capture
+		analyzer.start_capture()
+
+		try:
+			while True:
+				pkt, ts, _ = analyzer.read_raw_packet()
+				iface.emit_packet(pkt, ts)
+		except USBError:
+			pass
+
+		stream.flush()
+
+	return 0
+
+def main() -> int:
+	_setup_logging()
+
+	parser = ArgumentParser(
+		formatter_class = ArgumentDefaultsHelpFormatter,
+		description     = 'SOL extcap interface for Wireshark',
+		prog            = 'solcap'
+	)
+
+	_setup_parser(parser)
+
+	args = parser.parse_args()
+
+	if args.extcap_interfaces:
+		return extcap_list_interfaces()
+
+	interface = args.extcap_interface
+
+	if not interface:
+		log.error('No extcap interface specified')
+		return 1
+	else:
+		log.info(f'Using extcap interface {interface}')
+		if args.extcap_dlts:
+			return extcap_list_dlts(interface)
+		if args.extcap_config:
+			return extcap_list_config(interface)
+
+		if args.capture:
+			fifo: Path = args.fifo
+			interface = interface.split(',')[1]
+
+			log.info(f'Running extcap capture on interface: {interface}')
+			log.info(f'    Capture FIFO: {fifo}')
+
+			return run_capture(fifo, interface, args)
+	return 0
+
+if __name__ == '__main__':
+	sys.exit(main())
