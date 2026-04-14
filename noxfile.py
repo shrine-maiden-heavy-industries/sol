@@ -34,6 +34,8 @@ def test(session: Session) -> None:
 
 	unittest_args = ('-m', 'unittest', 'discover', '-v', '-s', str(ROOT_DIR))
 
+	# XXX(aki): We need to test against the in-dev version of Torii as it has fixes we need
+	session.install('git+https://codeberg.org/shrine-maiden-heavy-industries/torii-hdl.git')
 	session.install('-e', '.')
 	if ENABLE_COVERAGE:
 		session.log('Coverage support enabled')
