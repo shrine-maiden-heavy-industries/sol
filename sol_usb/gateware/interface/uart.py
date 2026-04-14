@@ -7,7 +7,8 @@
 ''' UART interface gateware.'''
 
 from torii.hdl               import Cat, Elaboratable, Module, Signal
-from torii.lib.soc           import memory, wishbone
+from torii.lib.bus           import wishbone
+from torii.lib.mem           import map as memory
 from torii.lib.stream.simple import StreamInterface
 
 class UARTTransmitter(Elaboratable):
